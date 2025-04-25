@@ -45,9 +45,9 @@ pub fn find_chunk_in_file<T: BlfChunk + SerializableBlfChunk + ReadableBlfChunk>
     Err(format!("{} Chunk not found!", T::get_signature().to_string()).into())
 }
 
-pub fn search_for_chunk_in_file<T: BlfChunk + SerializableBlfChunk + ReadableBlfChunk>(path: &str) -> Option<T> {
+pub fn search_for_chunk_in_file<T: BlfChunk + SerializableBlfChunk + ReadableBlfChunk>(path: impl Into<String>) -> Option<T> {
     let mut fileBytes = Vec::<u8>::new();
-    File::open(path).unwrap().read_to_end(&mut fileBytes).unwrap();
+    File::open(path.into()).unwrap().read_to_end(&mut fileBytes).unwrap();
 
     for i in 0..(fileBytes.len() - 0xC) {
         let header_bytes = &fileBytes.as_slice()[i..i+0xC];

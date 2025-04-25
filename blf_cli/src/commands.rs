@@ -3,6 +3,7 @@ pub mod import_variant;
 pub mod export_variant;
 pub mod title_storage;
 pub mod convert_halo3mcc_map_variants;
+pub mod unpack_screenshot;
 
 use clap::Subcommand;
 use crate::commands::title_storage::TitleStorageCommand;
@@ -15,5 +16,10 @@ pub enum Commands {
     ConvertH3MCCMapVariants {
         mcc_maps_folder: String,
         converted_maps_folder: String,
+    },
+    #[command(arg_required_else_help = true)]
+    UnpackScreenshot {
+        screenshot_path: String,
+        output_path: Option<String>,
     },
 }

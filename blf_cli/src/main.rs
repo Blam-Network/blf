@@ -17,6 +17,7 @@ use crate::commands::import_rsa_signatures::import_rsa_signatures;
 use crate::commands::import_variant::import_variant;
 use crate::commands::export_variant::export_variant;
 use crate::commands::title_storage::TitleStorageSubcommands;
+use crate::commands::unpack_screenshot::unpack_screenshot;
 
 mod title_storage;
 mod io;
@@ -69,6 +70,9 @@ fn main() {
         },
         ConvertH3MCCMapVariants { mcc_maps_folder, converted_maps_folder} => {
             convert_halo3mcc_map_variants(mcc_maps_folder, converted_maps_folder);
+        }
+        Commands::UnpackScreenshot { screenshot_path, output_path } => {
+            unpack_screenshot(screenshot_path, output_path);
         }
     }
 }
