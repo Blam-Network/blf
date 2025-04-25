@@ -36,7 +36,7 @@ pub struct c_map_variant {
     pub m_variant_objects: StaticArray<s_variant_object_datum, 640>, // 0x130
     pub m_object_type_start_index: StaticArray<i16, k_object_type_count>, // 0xD330 // Correct
     pub m_quotas: StaticArray<s_variant_quota, 256>,
-    #[brw(pad_after = 4)]
+    // #[brw(pad_after = 4)]
     pub m_gamestate_indices: StaticArray<i32, 80>,
 }
 
