@@ -247,7 +247,8 @@ pub struct s_variant_multiplayer_object_properties_definition {
 #[Size(0x54)]
 pub struct s_variant_object_datum {
     pub flags: u16,
-    // pub reuse_timeout: u16,
+    #[brw(ignore)]
+    pub reuse_timeout: u16,
     pub object_datum_index: i32,
     pub editor_object_index: i32,
     pub variant_quota_index: i32,
