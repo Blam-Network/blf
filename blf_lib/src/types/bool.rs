@@ -2,8 +2,10 @@ use std::fmt;
 use std::io::{Read, Seek, Write};
 use binrw::{BinRead, BinReaderExt, BinResult, BinWrite, Endian};
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
+use wasm_bindgen::prelude::wasm_bindgen;
 
 #[derive(Debug, Clone, PartialEq, Copy)]
+#[wasm_bindgen(getter_with_clone)]
 pub struct s_bool(pub bool);
 
 impl fmt::Display for s_bool {

@@ -7,12 +7,14 @@
 
 use binrw::{BinRead, BinWrite};
 use serde::{Deserialize, Serialize};
+use wasm_bindgen::prelude::wasm_bindgen;
 use blf_lib::blam::common::math::integer_math::int32_point3d;
 use blf_lib_derive::TestSize;
 
 const k_3d_count: usize = 3;
 
 #[derive(Default, PartialEq, Debug, Clone, Copy, Serialize, Deserialize, BinRead, BinWrite)]
+#[wasm_bindgen]
 pub struct real_vector3d {
     pub i: f32,
     pub j: f32,
@@ -20,18 +22,21 @@ pub struct real_vector3d {
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Copy, Serialize, Deserialize, BinRead, BinWrite)]
+#[wasm_bindgen(getter_with_clone)]
 pub struct real_vector2d {
     pub i: f32,
     pub j: f32,
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite, Copy)]
+#[wasm_bindgen(getter_with_clone)]
 pub struct real_bounds {
     pub lower: f32,
     pub upper: f32,
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite, Copy)]
+#[wasm_bindgen(getter_with_clone)]
 pub struct real_rectangle3d {
     pub x: real_bounds,
     pub y: real_bounds,
@@ -39,6 +44,7 @@ pub struct real_rectangle3d {
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite, Copy)]
+#[wasm_bindgen(getter_with_clone)]
 pub struct real_rectangle2d {
     pub x: real_bounds,
     pub y: real_bounds,
@@ -46,6 +52,7 @@ pub struct real_rectangle2d {
 
 #[derive(Default, PartialEq, Debug, Clone, Copy, Serialize, Deserialize, BinRead, BinWrite, TestSize)]
 #[Size(0xC)]
+#[wasm_bindgen(getter_with_clone)]
 pub struct real_point3d {
     pub x: f32,
     pub y: f32,
@@ -54,12 +61,14 @@ pub struct real_point3d {
 
 #[derive(Default, PartialEq, Debug, Clone, Copy, Serialize, Deserialize, BinRead, BinWrite, TestSize)]
 #[Size(0x8)]
+#[wasm_bindgen(getter_with_clone)]
 pub struct real_point2d {
     pub x: f32,
     pub y: f32,
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Copy, Serialize, Deserialize, BinRead, BinWrite)]
+#[wasm_bindgen(getter_with_clone)]
 pub struct real_matrix3x3 {
     pub forward: real_vector3d,
     pub left: real_vector3d,
@@ -67,6 +76,7 @@ pub struct real_matrix3x3 {
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Copy, Serialize, Deserialize, BinRead, BinWrite)]
+#[wasm_bindgen(getter_with_clone)]
 pub struct real_matrix4x3 {
     pub scale: f32,
     pub matrix: real_matrix3x3,
@@ -74,6 +84,7 @@ pub struct real_matrix4x3 {
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Copy, Serialize, Deserialize, BinRead, BinWrite)]
+#[wasm_bindgen(getter_with_clone)]
 pub struct real_plane3d {
     pub n: real_vector3d,
     pub d: f32,

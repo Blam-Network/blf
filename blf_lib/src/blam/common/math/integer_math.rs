@@ -7,8 +7,10 @@
 
 use binrw::{BinRead, BinWrite};
 use serde::{Deserialize, Serialize};
+use wasm_bindgen::prelude::wasm_bindgen;
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite, Copy)]
+#[wasm_bindgen(getter_with_clone)]
 pub struct int32_point3d  {
     pub x: i32,
     pub y: i32,
@@ -16,30 +18,35 @@ pub struct int32_point3d  {
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite, Copy)]
+#[wasm_bindgen(getter_with_clone)]
 pub struct int16_point2d  {
     pub x: i16,
     pub y: i16,
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite, Copy)]
+#[wasm_bindgen(getter_with_clone)]
 pub struct int32_bounds {
     pub lower: i32,
     pub upper: i32,
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite, Copy)]
+#[wasm_bindgen(getter_with_clone)]
 pub struct int32_rectangle2d {
     pub x: int32_bounds,
     pub y: int32_bounds,
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite, Copy)]
+#[wasm_bindgen(getter_with_clone)]
 pub struct int16_bounds {
     pub lower: i16,
     pub upper: i16,
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite, Copy)]
+#[wasm_bindgen(getter_with_clone)]
 pub struct int16_rectangle2d {
     pub x: int16_bounds,
     pub y: int16_bounds,
