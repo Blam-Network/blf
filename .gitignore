@@ -18,3 +18,4 @@ Cargo.lock
 /target
 
 .idea/workspace.xml
+/blf_wasm/pkg/
