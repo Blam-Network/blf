@@ -99,7 +99,7 @@ jobs:
       - name: Build
         working-directory: /home/runner/work/blf_lib/blf_lib
         run: wasm-pack build blf_wasm --target bundler
-      - name: Build
+      - name: Publish
         working-directory: /home/runner/work/blf_lib/blf_lib
         run: wasm-pack publish blf_wasm
         env:
