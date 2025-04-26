@@ -1,6 +1,7 @@
 use std::u32;
 use binrw::{binrw, BinRead, BinWrite};
 use serde::{Deserialize, Serialize};
+use wasm_bindgen::prelude::wasm_bindgen;
 use blf_lib::blam::common::math::integer_math::{int16_point2d, int16_rectangle2d};
 use blf_lib::blam::common::math::real_math::{real_point3d, real_vector3d, real_plane3d, real_point2d, real_matrix4x3, real_vector2d, real_rectangle2d};
 use blf_lib::types::bool::s_bool;
@@ -42,6 +43,7 @@ pub struct render_projection {
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, TestSize)]
 #[Size(0x88)]
+#[wasm_bindgen(getter_with_clone)]
 pub struct render_camera {
     pub position: real_point3d,
     pub forward: real_vector3d,

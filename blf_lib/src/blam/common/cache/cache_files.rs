@@ -2,7 +2,7 @@ use std::error::Error;
 use std::fs::File;
 use std::io::{Cursor, Read};
 use binrw::{BinRead, BinReaderExt, BinWrite};
-use libc::c_char;
+use std::ffi::c_char;
 use blf_lib::types::array::StaticArray;
 use crate::types::c_string::StaticString;
 use crate::types::c_string::to_string;

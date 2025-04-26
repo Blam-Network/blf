@@ -8,4 +8,6 @@ license.workspace = true
 crate-type = ["cdylib"]
 
 [dependencies]
+blf_lib = { path = "../blf_lib", version = "1.4.11" }
 wasm-bindgen = "0.2.100"
+js-sys = "0.3.77"
