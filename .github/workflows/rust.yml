@@ -73,6 +73,7 @@ jobs:
       - name: Install wasm-pack
         run: cargo install wasm-pack
       - name: Build
+        working-directory: ./blf_lib
         run: wasm-pack build blf_wasm --target web
       - name: Upload Wasm Package
         uses: actions/upload-artifact@v4.6.1
