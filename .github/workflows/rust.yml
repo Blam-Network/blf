@@ -70,6 +70,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Install wasm-pack
+        run: cargo install wasm-pack
       - name: Build
         run: wasm-pack build blf_wasm --target web
       - name: Upload Wasm Package
