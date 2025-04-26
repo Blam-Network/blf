@@ -98,7 +98,7 @@ jobs:
         run: cargo install wasm-pack
       - name: Build
         working-directory: /home/runner/work/blf_lib/blf_lib
-        run: wasm-pack build blf_wasm --target bundler
+        run: wasm-pack build blf_wasm --target web
       - name: Publish
         working-directory: /home/runner/work/blf_lib/blf_lib
         run: wasm-pack publish blf_wasm
