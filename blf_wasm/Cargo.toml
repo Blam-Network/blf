@@ -1,6 +1,6 @@
 [package]
 name = "blf_wasm"
-version = "0.0.0-web"
+version.workspace = true
 edition.workspace = true
 license.workspace = true
 
