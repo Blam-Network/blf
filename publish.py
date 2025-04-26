@@ -40,8 +40,8 @@ try:
 except:
     print("Failed to publish blf_cli")
 
-subprocess.call("git add Cargo.toml")
-subprocess.call(f"git commit -m \"Publish {new_version}\"")
-subprocess.call(f"git tag v{new_version}")
-subprocess.call("git push")
-subprocess.call(f"git push origin v{new_version}")
+subprocess.call(['git', 'add', 'Cargo.toml'])
+subprocess.call(['git', 'commit', '-m', f'"Publish {new_version}\"'])
+subprocess.call(['git', 'tag', f'v{new_version}'])
+subprocess.call(['git', 'push'])
+subprocess.call(['git', 'push', 'origin', f'v{new_version}'])
