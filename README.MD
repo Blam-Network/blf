@@ -26,6 +26,39 @@ $ blf_cli
   "C:\Users\john\Desktop\Halo 3 Maps"
 ```
 
+### Unpack Screenshot
+This command allows you to unpack Halo 3 screenshot files and view screenshot metadata.
+#### Arguments
+1. Screenshot File Path
+  - You can use an Xbox360 packed screenshot file or an unpacked "screen.shot" file.
+2. Output JPG Path
+  - This is optional, if no path is provided the screenshot's unique ID will be used.
+#### Example Invocation
+```console
+$ blf_cli
+  unpack-screenshot
+  C:\Users\john\Desktop\screen.shot
+  C:\Users\john\Desktop\screenshot.jpg
+```
+
+#### Example Output
+```console
+Fire by John (E00014A3AEE575CE)
+Taken on 2005-11-22 12:22:33
+Description: "Forge on Narrows, 11/22/05"
+--- File Data ---
+Halo Version: 12070
+Map ID: 380
+Game ID: 9130530598006425134
+Unique ID: 11075891129535089427
+--- Image Data ---
+JPEG length: 245482
+Camera Position: -0.117316686, -1.5790846, 63.775406
+Tick (Game, Film): 6056, 6064
+
+Image saved to C:\Users\john\Desktop\11075891129535089427.jpg
+```
+
 ## Title Storage Commands
 ### Build
 This command builds Title Storage files which are used by Halo for online features such as Matchmaking Playlists and Message of the Day messages.
