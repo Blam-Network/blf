@@ -16,6 +16,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+    - uses: Swatinem/rust-cache@v2
     - name: Build
       working-directory: ./blf_lib
       run: cargo build --verbose
@@ -70,9 +71,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - uses: Swatinem/rust-cache@v2
       - name: Install wasm-pack
         run: cargo install wasm-pack
-      - uses: Swatinem/rust-cache@v2
       - name: Build
         working-directory: ./blf_lib
         run: wasm-pack build blf_wasm --target web
