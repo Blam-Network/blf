@@ -1,6 +1,6 @@
 [workspace]
 resolver = "2"
-members = [ "blf_lib-derivable", "blf_lib-derive", "blf_lib", 'blf_cli' ]
+members = [ "blf_lib-derivable", "blf_lib-derive", "blf_lib", 'blf_cli' , "blf_wasm"]
 
 [workspace.package]
 version = "1.5.4"

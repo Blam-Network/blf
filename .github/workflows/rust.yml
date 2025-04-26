@@ -2,9 +2,9 @@ name: Rust
 
 on:
   push:
-    branches: [ "main", "workflow" ]
+    branches: [ "main", "workflow", "wasm" ]
   pull_request:
-    branches: [ "main", "workflow" ]
+    branches: [ "main", "workflow", "wasm" ]
 
 env:
   CARGO_TERM_COLOR: always
@@ -64,3 +64,16 @@ jobs:
         with:
           name: blf_cli MacOS (x86_64-apple-darwin)
           path: /home/runner/work/blf_lib/blf_lib/target/x86_64-apple-darwin/release/blf_cli
+
+  build_wasm:
+    name: "Build blf_wasm"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Build
+        run: wasm-pack build blf_wasm --target web
+      - name: Upload Wasm Package
+        uses: actions/upload-artifact@v4.6.1
+        with:
+          name: blf_wasm
+          path: /home/runner/work/blf_lib/blf_wasm/pkg
