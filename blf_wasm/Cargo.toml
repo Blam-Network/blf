@@ -3,7 +3,7 @@ name = "blf_wasm"
 version = "0.0.0-web"
 edition.workspace = true
 license.workspace = true
-c
+
 [lib]
 crate-type = ["cdylib"]
 
