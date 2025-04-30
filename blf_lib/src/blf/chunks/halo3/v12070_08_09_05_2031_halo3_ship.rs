@@ -28,3 +28,4 @@ pub mod s_blf_chunk_user_bans;
 pub mod s_blf_chunk_file_transfers;
 pub mod s_blf_chunk_matchmaking_hopper_statistics;
 pub mod s_blf_chunk_map_image;
+pub mod s_blf_chunk_saved_film_header;

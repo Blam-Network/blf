@@ -3,7 +3,6 @@ use wasm_bindgen::prelude::wasm_bindgen;
 use blf_lib::blam::common::math::real_math::real_point3d;
 use blf_lib::blf::chunks::search_for_chunk;
 use blf_lib::blf::versions::halo3::v12070_08_09_05_2031_halo3_ship;
-use blf_lib::blf::versions::halo3::v12070_08_09_05_2031_halo3_ship::s_saved_camera;
 use blf_lib::blf::versions::halo3odst::v13895_09_04_27_2201_atlas_release;
 
 #[wasm_bindgen(getter_with_clone)]

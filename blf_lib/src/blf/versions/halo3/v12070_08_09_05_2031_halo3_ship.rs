@@ -31,6 +31,7 @@ pub use halo3::v12070_08_09_05_2031_halo3_ship::s_blf_chunk_user_bans::*;
 pub use halo3::v12070_08_09_05_2031_halo3_ship::s_blf_chunk_file_transfers::*;
 pub use halo3::v12070_08_09_05_2031_halo3_ship::s_blf_chunk_matchmaking_hopper_statistics::*;
 pub use halo3::v12070_08_09_05_2031_halo3_ship::s_blf_chunk_map_image::*;
+pub use halo3::v12070_08_09_05_2031_halo3_ship::s_blf_chunk_saved_film_header::*;
 
 #[derive(ChunkFactory)]
 #[Title("Halo 3")]
@@ -64,5 +65,6 @@ pub use halo3::v12070_08_09_05_2031_halo3_ship::s_blf_chunk_map_image::*;
     s_blf_chunk_file_transfers,
     s_blf_chunk_matchmaking_hopper_statistics,
     s_blf_chunk_map_image,
+    s_blf_chunk_saved_film_header,
 )]
 pub struct v12070_08_09_05_2031_halo3_ship {}

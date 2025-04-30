@@ -4,6 +4,7 @@ use blf_lib::io::bitstream::{c_bitstream_reader, c_bitstream_writer};
 use crate::types::c_string::StaticString;
 use crate::types::c_string::StaticWcharString;
 use serde_hex::{SerHex,StrictCap};
+use wasm_bindgen::prelude::wasm_bindgen;
 use blf_lib::types::time::time64_t;
 use blf_lib_derive::TestSize;
 use crate::types::bool::s_bool;
@@ -33,7 +34,7 @@ pub struct s_content_item_metadata {
     pub description: StaticString<128>,
     pub author: StaticString<16>,
     pub file_type: u32,
-    #[brw(align_after = 4)]
+    #[brw(pad_after = 3)]
     pub author_is_xuid_online: s_bool,
     #[serde(with = "SerHex::<StrictCap>")]
     pub author_id: u64,

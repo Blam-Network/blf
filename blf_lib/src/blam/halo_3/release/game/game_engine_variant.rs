@@ -1,7 +1,7 @@
 use std::fmt::{Debug};
-use std::io::{Read, Seek, Write};
+use std::io::{Read, Seek, SeekFrom, Write};
 use binrw::{BinRead, BinReaderExt, BinResult, BinWrite, BinWriterExt, Endian};
-use num_derive::FromPrimitive;
+use num_derive::{FromPrimitive, ToPrimitive};
 use serde::{Deserialize, Serialize};
 use blf_lib::blam::halo_3::release::game::game_engine_default::c_game_engine_base_variant;
 use blf_lib::blam::halo_3::release::game::game_engine_slayer::c_game_engine_slayer_variant;
@@ -17,7 +17,7 @@ use blf_lib::blam::halo_3::release::game::game_engine_vip::c_game_engine_vip_var
 use blf_lib::io::bitstream::{c_bitstream_reader, c_bitstream_writer};
 use blf_lib_derive::TestSize;
 
-#[derive(BinRead, BinWrite, Serialize, Deserialize, Default, PartialEq, Debug, Copy, Clone, FromPrimitive)]
+#[derive(BinRead, BinWrite, Serialize, Deserialize, Default, PartialEq, Debug, Copy, Clone, FromPrimitive, ToPrimitive)]
 #[brw(repr = u32)]
 pub enum e_game_engine {
     #[default]
@@ -128,7 +128,8 @@ impl BinRead for c_game_variant {
     type Args<'a> = ();
 
     fn read_options<R: Read + Seek>(reader: &mut R, endian: Endian, args: Self::Args<'_>) -> BinResult<Self> {
-        match endian {
+        let start_offset = reader.stream_position()?;
+        let read_variant = match endian {
             Endian::Big => {
                 let game_engine_index: e_game_engine = reader.read_be()?;
                 let base_game_engine: c_game_engine_base_variant = reader.read_be()?;
@@ -199,7 +200,9 @@ impl BinRead for c_game_variant {
 
                 Ok(game_variant)
             }
-        }
+        };
+        reader.seek(SeekFrom::Start(start_offset + 0x264));
+        read_variant
     }
 }
 

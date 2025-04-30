@@ -5,7 +5,7 @@ use blf_lib_derive::BlfChunk;
 use crate::types::byte_order_mark::byte_order_mark;
 use crate::types::c_string::StaticString;
 
-const k_tag_string_length: usize = 32;
+pub const k_tag_string_length: usize = 32;
 
 #[binrw]
 #[derive(BlfChunk,Default,PartialEq,Debug,Clone,Serialize,Deserialize)]

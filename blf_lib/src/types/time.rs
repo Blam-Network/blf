@@ -22,7 +22,7 @@ impl Display for time64_t {
 impl Serialize for time64_t {
     fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
         let datetime = Utc.timestamp_opt(self.0 as i64, 0).single()
-            .ok_or_else(|| serde::ser::Error::custom("Invalid timestamp"))?;
+            .ok_or_else(|| serde::ser::Error::custom(format!("Invalid timestamp")))?;
         let formatted = datetime.format("%Y-%m-%d %H:%M:%S").to_string();
         serializer.serialize_str(&formatted)
     }

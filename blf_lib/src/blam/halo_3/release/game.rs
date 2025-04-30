@@ -12,3 +12,5 @@ pub mod game_engine_juggernaut;
 pub mod game_engine_territories;
 pub mod game_engine_assault;
 pub mod game_engine_infection;
+pub mod game_options;
+pub mod players;
