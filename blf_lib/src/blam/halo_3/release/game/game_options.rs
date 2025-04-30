@@ -9,7 +9,7 @@ use crate::types::bool::s_bool;
 use crate::types::c_string::{StaticString, StaticWcharString};
 
 #[derive(TestSize,BinRead,BinWrite,PartialEq,Debug,Default,Clone,Serialize,Deserialize)]
-#[Size(0xF814)]
+#[Size(0xF810)]
 #[brw(big)]
 pub struct game_options {
     pub game_mode: i32,
