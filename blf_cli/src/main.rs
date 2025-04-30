@@ -9,6 +9,7 @@ use clap::{command, Parser};
 use crate::commands::Commands;
 use crate::commands::Commands::{ConvertH3MCCMapVariants, TitleStorage};
 use crate::commands::convert_halo3mcc_map_variants::convert_halo3mcc_map_variants;
+use crate::commands::dump_film_data::dump_film_data;
 use crate::commands::import_rsa_signatures::import_rsa_signatures;
 use crate::commands::import_variant::import_variant;
 use crate::commands::export_variant::export_variant;
@@ -69,6 +70,9 @@ fn main() {
         }
         Commands::UnpackScreenshot { screenshot_path, output_path } => {
             unpack_screenshot(screenshot_path, output_path);
+        }
+        Commands::DumpFilmData { film_folder} => {
+            dump_film_data(film_folder);
         }
     }
 }
