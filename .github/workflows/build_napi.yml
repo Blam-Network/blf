@@ -1,4 +1,7 @@
 name: CI
+defaults:
+  run:
+    working-directory: /home/runner/work/blf_lib/blf_lib/blf_lsp-npm
 env:
   DEBUG: napi:*
   APP_NAME: blf_lsp
