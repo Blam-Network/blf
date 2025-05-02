@@ -39,6 +39,7 @@ jobs:
         with:
           node-version: 22
           cache: 'yarn'
+          cache-dependency-path: './blf_lsp-npm'
 
       - name: Install
         uses: dtolnay/rust-toolchain@stable
