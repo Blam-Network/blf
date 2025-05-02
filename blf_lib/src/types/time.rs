@@ -22,7 +22,7 @@ impl Display for time64_t {
 impl Serialize for time64_t {
     fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
         let datetime = Utc.timestamp_opt(self.0 as i64, 0).single()
-            .ok_or_else(|| serde::ser::Error::custom(format!("Invalid timestamp")))?;
+            .ok_or_else(|| serde::ser::Error::custom("Invalid timestamp".to_string()))?;
         let formatted = datetime.format("%Y-%m-%d %H:%M:%S").to_string();
         serializer.serialize_str(&formatted)
     }
@@ -37,21 +37,21 @@ impl<'de> Deserialize<'de> for time64_t {
     }
 }
 
-impl Into<u64> for time64_t {
-    fn into(self) -> u64 {
-        self.0
+impl From<time64_t> for u64 {
+    fn from(val: time64_t) -> Self {
+        val.0
     }
 }
 
 impl From<u64> for time64_t {
     fn from(t: u64) -> Self {
-        Self { 0: t }
+        Self(t)
     }
 }
 
-impl Into<DateTime<Utc>> for time64_t {
-    fn into(self) -> DateTime<Utc> {
-        Utc.timestamp(self.0 as i64, 0)
+impl From<time64_t> for DateTime<Utc> {
+    fn from(val: time64_t) -> Self {
+        Utc.timestamp(val.0 as i64, 0)
     }
 }
 
@@ -89,21 +89,21 @@ impl<'de> Deserialize<'de> for time32_t {
     }
 }
 
-impl Into<u32> for time32_t {
-    fn into(self) -> u32 {
-        self.0
+impl From<time32_t> for u32 {
+    fn from(val: time32_t) -> Self {
+        val.0
     }
 }
 
-impl Into<DateTime<Utc>> for time32_t {
-    fn into(self) -> DateTime<Utc> {
-        Utc.timestamp(self.0 as i64, 0)
+impl From<time32_t> for DateTime<Utc> {
+    fn from(val: time32_t) -> Self {
+        Utc.timestamp(val.0 as i64, 0)
     }
 }
 
 impl From<u32> for time32_t {
     fn from(t: u32) -> Self {
-        Self { 0: t }
+        Self(t)
     }
 }
 

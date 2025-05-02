@@ -42,10 +42,8 @@ pub fn convert_halo3mcc_map_variants(mcc_maps_folder: String, converted_maps_pat
         if map_variant.is_some() {
             let mut map_variant = map_variant.unwrap().clone();
 
-            if map_variant.m_map_variant_version == 13 || map_variant.m_map_variant_version == 14 {
-                if !convert_mcc_map(&mut task, &mut map_variant) {
-                    continue;
-                }
+            if (map_variant.m_map_variant_version == 13 || map_variant.m_map_variant_version == 14) && !convert_mcc_map(&mut task, &mut map_variant) {
+                continue;
             }
 
             let output_file_name = format!("{}.bin", map_variant.m_metadata.name.get_string());

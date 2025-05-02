@@ -1,6 +1,5 @@
 use js_sys::Uint8Array;
 use wasm_bindgen::prelude::wasm_bindgen;
-use blf_lib::blam::halo_3::release::saved_games::saved_game_files::s_content_item_metadata;
 use blf_lib::blf::BlfFileBuilder;
 use blf_lib::blf::chunks::search_for_chunk;
 use blf_lib::blf::versions::halo3::v12070_08_09_05_2031_halo3_ship;

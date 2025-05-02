@@ -88,8 +88,8 @@ impl console_task {
         }
 
         println!("{color_green}done ✓{style_reset}{} {}",
-                 if self.errors.len() > 0 { format!(" ⛔  {} Errors", self.errors.len()) } else { String::new() },
-                 if self.warnings.len() > 0 { format!(" ⚠ {} Warnings", self.warnings.len()) } else { String::new() }
+                 if !self.errors.is_empty() { format!(" ⛔  {} Errors", self.errors.len()) } else { String::new() },
+                 if !self.warnings.is_empty() { format!(" ⚠ {} Warnings", self.warnings.len()) } else { String::new() }
         );
         for error in &self.errors {
             Self::log_error(error);

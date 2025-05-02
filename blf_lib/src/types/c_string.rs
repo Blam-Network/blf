@@ -10,7 +10,7 @@ use serde::de::Error;
 pub fn to_string(chars: &[c_char]) -> String {
     let mut res = String::new();
     for char in chars {
-        let copy: u8 = char.clone() as u8;
+        let copy: u8 = *char as u8;
         if copy == 0 {
             break;
         }
@@ -67,7 +67,7 @@ impl<const N: usize> StaticWcharString<N> {
         }
         let buf = self.buf.get_mut();
         buf.fill(0);
-        buf[0..u16s.len()].copy_from_slice(&u16s);
+        buf[0..u16s.len()].copy_from_slice(u16s);
         Ok(())
     }
 
@@ -84,7 +84,7 @@ impl<const N: usize> Serialize for StaticWcharString<N> {
     where
         S: Serializer
     {
-        serializer.serialize_str(&format!("{}", self.get_string()))
+        serializer.serialize_str(&self.get_string().to_string())
     }
 }
 
@@ -119,7 +119,7 @@ impl<const N: usize> StaticString<N> {
     pub fn set_string(&mut self, value: &String) -> Result<(), String> {
         let mut bytes = value.as_bytes();
         // if a null termination was provided at the end, chop it off
-        if bytes.len() > 0 && bytes[bytes.len() - 1] == 0 {
+        if !bytes.is_empty() && bytes[bytes.len() - 1] == 0 {
             bytes = &bytes[0..bytes.len() - 1];
         }
         if bytes.len() > N {
@@ -149,7 +149,7 @@ impl<const N: usize> Serialize for StaticString<N> {
     where
         S: Serializer
     {
-        serializer.serialize_str(&format!("{}", self.get_string()))
+        serializer.serialize_str(&self.get_string().to_string())
     }
 }
 
