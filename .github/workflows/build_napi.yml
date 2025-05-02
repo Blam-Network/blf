@@ -2,7 +2,7 @@ name: CI
 defaults:
   run:
     shell: bash
-    working-directory: ./blf_lsp-npm
+    working-directory: blf_lsp-npm/
 env:
   DEBUG: napi:*
   APP_NAME: blf_lsp
@@ -55,6 +55,7 @@ jobs:
 
       - name: Cargo fmt
         run: cargo fmt -- --check
+        working-directory: ./blf_lsp
 
       - name: Clippy
         run: cargo clippy
