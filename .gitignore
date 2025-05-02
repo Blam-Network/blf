@@ -19,3 +19,5 @@ Cargo.lock
 
 .idea/workspace.xml
 /blf_wasm/pkg/
+
+.DS_Store
