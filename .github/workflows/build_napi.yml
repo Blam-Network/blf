@@ -6,6 +6,7 @@ defaults:
 env:
   DEBUG: napi:*
   APP_NAME: blf_lsp
+  APP_DIRECTORY: ./blf_lsp-npm
   MACOSX_DEPLOYMENT_TARGET: '10.13'
   CARGO_INCREMENTAL: '1'
 permissions:
@@ -161,7 +162,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: bindings-${{ matrix.settings.target }}
-          path: ${{ env.APP_NAME }}.*.node
+          path: ${{ env.APP_DIRECTORY }}${{ env.APP_NAME }}.*.node
           if-no-files-found: error
   build-freebsd:
     runs-on: ubuntu-latest
@@ -207,7 +208,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: bindings-freebsd
-          path: ${{ env.APP_NAME }}.*.node
+          path: ${{ env.APP_DIRECTORY }}${{ env.APP_NAME }}.*.node
           if-no-files-found: error
   test-macOS-windows-binding:
     name: Test bindings on ${{ matrix.settings.target }} - node@${{ matrix.node }}
