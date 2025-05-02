@@ -70,9 +70,9 @@ jobs:
           - host: windows-latest
             build: yarn build --target x86_64-pc-windows-msvc
             target: x86_64-pc-windows-msvc
-          - host: windows-latest
-            build: yarn build --target i686-pc-windows-msvc
-            target: i686-pc-windows-msvc
+          # - host: windows-latest
+          #   build: yarn build --target i686-pc-windows-msvc
+          #   target: i686-pc-windows-msvc
           - host: ubuntu-latest
             target: x86_64-unknown-linux-gnu
             docker: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-debian
@@ -88,19 +88,19 @@ jobs:
             target: aarch64-unknown-linux-gnu
             docker: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-debian-aarch64
             build: yarn build --target aarch64-unknown-linux-gnu
-          - host: ubuntu-latest
-            target: armv7-unknown-linux-gnueabihf
-            setup: |
-              sudo apt-get update
-              sudo apt-get install gcc-arm-linux-gnueabihf -y
-            build: |
-              yarn build --target armv7-unknown-linux-gnueabihf
-          - host: ubuntu-latest
-            target: aarch64-linux-android
-            build: yarn build --target aarch64-linux-android
-          - host: ubuntu-latest
-            target: armv7-linux-androideabi
-            build: yarn build --target armv7-linux-androideabi
+          # - host: ubuntu-latest
+          #   target: armv7-unknown-linux-gnueabihf
+          #   setup: |
+          #     sudo apt-get update
+          #     sudo apt-get install gcc-arm-linux-gnueabihf -y
+          #   build: |
+          #     yarn build --target armv7-unknown-linux-gnueabihf
+          # - host: ubuntu-latest
+          #   target: aarch64-linux-android
+          #   build: yarn build --target aarch64-linux-android
+          # - host: ubuntu-latest
+          #   target: armv7-linux-androideabi
+          #   build: yarn build --target armv7-linux-androideabi
           - host: ubuntu-latest
             target: aarch64-unknown-linux-musl
             docker: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-alpine
