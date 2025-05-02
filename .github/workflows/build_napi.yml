@@ -119,6 +119,7 @@ jobs:
         with:
           node-version: 22
           cache: yarn
+          cache-dependency-path: './blf_lsp-npm'
       - name: Install
         uses: dtolnay/rust-toolchain@stable
         if: ${{ !matrix.settings.docker }}
@@ -237,6 +238,7 @@ jobs:
           node-version: ${{ matrix.node }}
           cache: yarn
           architecture: ${{ matrix.settings.architecture }}
+          cache-dependency-path: './blf_lsp-npm'
       - name: Install dependencies
         run: yarn install
       - name: Download artifacts
@@ -267,6 +269,7 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
           cache: yarn
+          cache-dependency-path: './blf_lsp-npm'
       - name: Install dependencies
         run: yarn install
       - name: Download artifacts
@@ -297,6 +300,7 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
           cache: yarn
+          cache-dependency-path: './blf_lsp-npm'
       - name: Install dependencies
         run: |
           yarn config set supportedArchitectures.libc "musl"
@@ -431,6 +435,7 @@ jobs:
         with:
           node-version: 22
           cache: yarn
+          cache-dependency-path: './blf_lsp-npm'
       - name: Install dependencies
         run: yarn install
       - name: Download all artifacts
