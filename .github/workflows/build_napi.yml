@@ -2,11 +2,11 @@ name: CI
 defaults:
   run:
     shell: bash
-    working-directory: blf_lsp-npm/
+    working-directory: ./blf_lsp-npm
 env:
   DEBUG: napi:*
   APP_NAME: blf_lsp
-  APP_DIRECTORY: ./blf_lsp-npm
+  APP_DIRECTORY: blf_lsp-npm/
   MACOSX_DEPLOYMENT_TARGET: '10.13'
   CARGO_INCREMENTAL: '1'
 permissions:
