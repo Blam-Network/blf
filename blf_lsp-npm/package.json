@@ -24,18 +24,18 @@
     "access": "public"
   },
   "scripts": {
-    "artifacts": "napi artifacts",
+    "artifacts": "napi artifacts --config ../blf_lsp/config.json",
     "bench": "node --import @oxc-node/core/register benchmark/bench.ts",
     "build": "napi build --platform --release --cargo-cwd ../blf_lsp --config ../blf_lsp/config.json",
-    "build:debug": "napi build --platform",
+    "build:debug": "napi build --platform --config ../blf_lsp/config.json",
     "format": "run-p format:prettier format:rs format:toml",
     "format:prettier": "prettier . -w",
     "format:toml": "taplo format",
     "format:rs": "cargo fmt",
     "lint": "oxlint .",
-    "prepublishOnly": "napi prepublish -t npm",
+    "prepublishOnly": "napi prepublish -t npm --config ../blf_lsp/config.json",
     "test": "ava",
-    "version": "napi version"
+    "version": "napi version --config ../blf_lsp/config.json"
   },
   "devDependencies": {
     "@napi-rs/cli": "^2.18.4",
