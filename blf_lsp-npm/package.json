@@ -84,5 +84,5 @@
     "arrowParens": "always"
   },
   "packageManager": "yarn@4.9.1",
-  "version": "1.7.0-publish-test-8"
+  "version": "1.7.0-pre1"
 }
