@@ -5,16 +5,20 @@ use blf_lib::types::byte_order_mark::byte_order_mark;
 use js_sys::Uint8Array;
 use wasm_bindgen::prelude::*;
 
-pub fn build_user_file(srid: &s_blf_chunk_service_record) -> Uint8Array {
-    Uint8Array::from(
-        BlfFileBuilder::new()
-            .add_chunk(s_blf_chunk_start_of_file::new("halo3 user", byte_order_mark::default()))
-            // not sure if these use athr, we've never seen a bungie-made user file.
-            // .add_chunk(s_blf_chunk_author::for_build::<v12070_08_09_05_2031_halo3_ship>())
-            .add_chunk(s_blf_chunk_player_data::default())
-            .add_chunk(srid.clone())
-            .add_chunk(s_blf_chunk_end_of_file::default())
-            .write()
-            .as_slice()
-    )
+pub fn build_user_file(
+    srid: Option<s_blf_chunk_service_record>,
+    fupd: Option<s_blf_chunk_player_data>,
+) -> Uint8Array {
+    let mut builder = BlfFileBuilder::new();
+
+    builder.add_chunk(s_blf_chunk_start_of_file::new("halo3 user", byte_order_mark::default()));
+    builder.add_chunk(fupd.unwrap_or(s_blf_chunk_player_data::default()));
+
+    if let Some(srid) = srid {
+        builder.add_chunk(srid);
+    }
+
+    builder.add_chunk(s_blf_chunk_end_of_file::default());
+
+    Uint8Array::from(builder.write().as_slice())
 }

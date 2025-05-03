@@ -67,7 +67,7 @@ impl<const N: usize> StaticWcharString<N> {
         let u16Str = U16CString::from_str(value).unwrap();
         let u16s = u16Str.as_slice();
         if u16s.len() > N {
-            return Err(format!("String too long ({} > {}) bytes", N, u16s.len()));
+            return Err(format!("String \"{}\" too long ({} > {}) bytes", value, u16s.len(), N));
         }
         let buf = self.buf.get_mut();
         buf.fill(0);
@@ -205,7 +205,7 @@ impl<const N: usize> FromWasmAbi for StaticWcharString<N> {
     unsafe fn from_abi(js: Self::Abi) -> Self {
         let js_value = JsString::from_abi(js);
         let string = js_value.as_string().unwrap_or_default();
-        StaticWcharString::from_string(&string).unwrap_or_default()
+        Self::from_string(&string).unwrap_or_default()
     }
 }
 

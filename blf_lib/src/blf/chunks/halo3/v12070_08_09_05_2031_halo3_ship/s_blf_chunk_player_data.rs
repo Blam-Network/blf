@@ -1,11 +1,13 @@
 use binrw::binrw;
 use serde::{Deserialize, Serialize};
+use tsify::Tsify;
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
 use blf_lib_derive::BlfChunk;
 use crate::types::c_string::StaticString;
 
 #[binrw]
-#[derive(BlfChunk,PartialEq,Debug,Clone,Serialize,Deserialize)]
+#[derive(BlfChunk,PartialEq,Debug,Clone,Serialize,Deserialize,Tsify)]
+#[tsify(into_wasm_abi, from_wasm_abi, large_number_types_as_bigints)]
 #[Header("fupd", 3.1)]
 #[brw(big)]
 pub struct s_blf_chunk_player_data {

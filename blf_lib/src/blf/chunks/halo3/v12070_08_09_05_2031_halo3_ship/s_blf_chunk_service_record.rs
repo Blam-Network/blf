@@ -11,9 +11,9 @@ use wasm_bindgen::prelude::wasm_bindgen;
 
 #[binrw]
 #[derive(BlfChunk,Default,PartialEq,Debug,Clone,Serialize,Deserialize,Tsify)]
+#[tsify(into_wasm_abi, from_wasm_abi, large_number_types_as_bigints)]
 #[Header("srid", 2.1)]
 #[brw(big)]
-#[tsify(into_wasm_abi, from_wasm_abi)]
 #[Size(0x5C)]
 pub struct s_blf_chunk_service_record
 {
