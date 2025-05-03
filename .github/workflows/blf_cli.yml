@@ -1,4 +1,6 @@
 name: blf_cli
+permissions:
+  contents: write
 on:
   push:
     branches: [ "main", "workflow" ]
