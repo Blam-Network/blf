@@ -8,6 +8,7 @@ license.workspace = true
 crate-type = ["cdylib"]
 
 [dependencies]
+blf_lib = { path = "../blf_lib", version = "1.7.0-pre23" }
 napi        = "2"
 napi-derive = "2"
 
