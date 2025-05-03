@@ -4,6 +4,7 @@ use blf_lib::io::bitstream::{c_bitstream_reader, c_bitstream_writer};
 use crate::types::c_string::StaticString;
 use crate::types::c_string::StaticWcharString;
 use serde_hex::{SerHex,StrictCap};
+use wasm_bindgen::prelude::wasm_bindgen;
 use blf_lib::types::time::time64_t;
 use blf_lib_derive::TestSize;
 use crate::types::bool::s_bool;
@@ -27,6 +28,7 @@ pub const k_saved_game_file_type_count: u32 = 13;
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite, TestSize)]
 #[Size(0xF8)]
+#[wasm_bindgen(getter_with_clone)]
 pub struct s_content_item_metadata {
     pub unique_id: u64,
     pub name: StaticWcharString<0x10>,

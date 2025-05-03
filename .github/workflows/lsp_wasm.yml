@@ -1,4 +1,4 @@
-name: blf_wasm
+name: lsp_wasm
 on:
   push:
     branches: [ "main", "workflow", "wasm" ]
@@ -25,8 +25,8 @@ jobs:
       - name: Install wasm-pack
         run: cargo install wasm-pack
       - name: Build
-        working-directory: /home/runner/work/blf_lib/blf_lib
-        run: wasm-pack build blf_wasm --target web --scope blamnetwork
+        working-directory: /home/runner/work/blf_lib/lsp_wasm
+        run: wasm-pack build lsp_wasm --target nodejs --scope blamnetwork
       # - name: Upload Wasm Package (if needed)
       #   uses: actions/upload-artifact@v4.6.1
       #   with:

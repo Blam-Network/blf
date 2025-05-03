@@ -4,12 +4,16 @@ use serde::{Deserialize, Serialize};
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
 use blf_lib_derive::BlfChunk;
 use num_derive::FromPrimitive;
+use serde_repr::{Deserialize_repr, Serialize_repr};
+use tsify::Tsify;
 use blf_lib::types::c_string::StaticWcharString;
+use wasm_bindgen::prelude::wasm_bindgen;
 
 #[binrw]
-#[derive(BlfChunk,Default,PartialEq,Debug,Clone,Serialize,Deserialize)]
+#[derive(BlfChunk,Default,PartialEq,Debug,Clone,Serialize,Deserialize,Tsify)]
 #[Header("srid", 2.1)]
 #[brw(big)]
+#[tsify(into_wasm_abi, from_wasm_abi)]
 #[Size(0x5C)]
 pub struct s_blf_chunk_service_record
 {
@@ -45,16 +49,20 @@ pub struct s_blf_chunk_service_record
     pub unknown_insignia2: i32,
 }
 
-#[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, FromPrimitive)]
-#[brw(big, repr = u8)]
+#[derive(Clone, PartialEq, Debug, Serialize_repr, Deserialize_repr, BinRead, BinWrite, Default, FromPrimitive)]
+#[brw(big, repr = u32)]
+#[wasm_bindgen]
+#[repr(u8)]
 pub enum PlayerModel {
     #[default]
     Spartan = 0,
     Elite = 1,
 }
 
-#[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, FromPrimitive)]
-#[brw(big, repr = u8)]
+#[derive(Clone, PartialEq, Debug, Serialize_repr, Deserialize_repr, BinRead, BinWrite, Default, FromPrimitive)]
+#[brw(big, repr = u32)]
+#[wasm_bindgen]
+#[repr(u8)]
 pub enum SpartanHelmet {
     #[default]
     Default = 0,
@@ -70,8 +78,10 @@ pub enum SpartanHelmet {
     Rogue,
 }
 
-#[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, FromPrimitive)]
-#[brw(big, repr = u8)]
+#[derive(Clone, PartialEq, Debug, Serialize_repr, Deserialize_repr, BinRead, BinWrite, Default, FromPrimitive)]
+#[brw(big, repr = u32)]
+#[wasm_bindgen]
+#[repr(u8)]
 pub enum SpartanShoulder {
     #[default]
     Default = 0,
@@ -84,8 +94,10 @@ pub enum SpartanShoulder {
     Scout,
 }
 
-#[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, FromPrimitive)]
-#[brw(big, repr = u8)]
+#[derive(Clone, PartialEq, Debug, Serialize_repr, Deserialize_repr, BinRead, BinWrite, Default, FromPrimitive)]
+#[brw(big, repr = u32)]
+#[wasm_bindgen]
+#[repr(u8)]
 pub enum SpartanBody {
     #[default]
     Default = 0,
@@ -99,8 +111,10 @@ pub enum SpartanBody {
     Bungie,
 }
 
-#[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, FromPrimitive)]
-#[brw(big, repr = u8)]
+#[derive(Clone, PartialEq, Debug, Serialize_repr, Deserialize_repr, BinRead, BinWrite, Default, FromPrimitive)]
+#[brw(big, repr = u32)]
+#[wasm_bindgen]
+#[repr(u8)]
 pub enum EliteArmour {
     #[default]
     Default = 0,
@@ -110,8 +124,10 @@ pub enum EliteArmour {
     Scythe,
 }
 
-#[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, FromPrimitive)]
+#[derive(Clone, PartialEq, Debug, Serialize_repr, Deserialize_repr, BinRead, BinWrite, Default, FromPrimitive)]
 #[brw(big, repr = u32)]
+#[wasm_bindgen]
+#[repr(u8)]
 pub enum Rank {
     #[default]
     None = 0,
@@ -130,8 +146,10 @@ pub enum Rank {
     General,
 }
 
-#[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, FromPrimitive)]
+#[derive(Clone, PartialEq, Debug, Serialize_repr, Deserialize_repr, BinRead, BinWrite, Default, FromPrimitive)]
 #[brw(big, repr = u32)]
+#[wasm_bindgen]
+#[repr(u8)]
 pub enum Grade {
     #[default]
     Grade1 = 0,
@@ -140,8 +158,10 @@ pub enum Grade {
     Grade4,
 }
 
-#[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, FromPrimitive)]
-#[brw(big, repr = u8)]
+#[derive(Clone, PartialEq, Debug, Serialize_repr, Deserialize_repr, BinRead, BinWrite, Default, FromPrimitive)]
+#[brw(big, repr = u32)]
+#[wasm_bindgen]
+#[repr(u8)]
 pub enum Color {
     #[default]
     Steel = 0,

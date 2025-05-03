@@ -2,6 +2,10 @@ use std::fmt::Display;
 use binrw::{BinRead, BinWrite};
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use chrono::{DateTime, NaiveDateTime, TimeZone, Utc};
+use js_sys::Date;
+use wasm_bindgen::convert::{FromWasmAbi, IntoWasmAbi, WasmAbi};
+use wasm_bindgen::describe::WasmDescribe;
+use wasm_bindgen::JsValue;
 
 #[derive(Default, Clone, Debug, PartialEq, BinRead, BinWrite, Copy)]
 pub struct time64_t(pub u64);
@@ -52,6 +56,31 @@ impl From<u64> for time64_t {
 impl From<time64_t> for DateTime<Utc> {
     fn from(val: time64_t) -> Self {
         Utc.timestamp(val.0 as i64, 0)
+    }
+}
+
+impl WasmDescribe for time64_t {
+    fn describe() {
+        Date::describe(); // maps to JS `Date` in TypeScript
+    }
+}
+
+impl FromWasmAbi for time64_t {
+    type Abi = <Date as FromWasmAbi>::Abi;
+
+    unsafe fn from_abi(js: Self::Abi) -> Self {
+        let date = Date::from_abi(js);
+        let millis = date.get_time(); // milliseconds since UNIX epoch
+        time64_t((millis / 1000.0) as u64)
+    }
+}
+
+impl IntoWasmAbi for time64_t {
+    type Abi = <Date as IntoWasmAbi>::Abi;
+
+    fn into_abi(self) -> Self::Abi {
+        let millis = self.0 as f64 * 1000.0;
+        Date::new(&JsValue::from_f64(millis)).into_abi()
     }
 }
 
@@ -106,6 +135,32 @@ impl From<u32> for time32_t {
         Self(t)
     }
 }
+
+impl WasmDescribe for time32_t {
+    fn describe() {
+        Date::describe(); // maps to JS `Date` in TypeScript
+    }
+}
+
+impl FromWasmAbi for time32_t {
+    type Abi = <Date as FromWasmAbi>::Abi;
+
+    unsafe fn from_abi(js: Self::Abi) -> Self {
+        let date = Date::from_abi(js);
+        let millis = date.get_time(); // milliseconds since UNIX epoch
+        time32_t((millis / 1000.0) as u32)
+    }
+}
+
+impl IntoWasmAbi for time32_t {
+    type Abi = <Date as IntoWasmAbi>::Abi;
+
+    fn into_abi(self) -> Self::Abi {
+        let millis = self.0 as f64 * 1000.0;
+        Date::new(&JsValue::from_f64(millis)).into_abi()
+    }
+}
+
 
 #[derive(Default, Clone, Debug, PartialEq, BinRead, BinWrite)]
 pub struct filetime(u64);
