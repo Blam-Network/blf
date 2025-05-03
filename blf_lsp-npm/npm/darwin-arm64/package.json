@@ -1,5 +1,5 @@
 {
-  "name": "blf_lsp-darwin-arm64",
+  "name": "@blamnetwork/blf_lsp-darwin-arm64",
   "os": [
     "darwin"
   ],

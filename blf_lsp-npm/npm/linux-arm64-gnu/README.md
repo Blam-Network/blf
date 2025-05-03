@@ -1,3 +1,3 @@
-# `blf_lsp-linux-arm64-gnu`
+# `@blamnetwork/blf_lsp-linux-arm64-gnu`
 
 This is the **aarch64-unknown-linux-gnu** binary for `@napi-rs/blf_lsp`

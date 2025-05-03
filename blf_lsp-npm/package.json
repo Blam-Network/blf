@@ -1,6 +1,6 @@
 {
-  "name": "blf_lsp",
-  "description": "Template project for writing node package with napi-rs",
+  "name": "@blamnetwork/blf_lsp",
+  "description": "BLF utilities for bnet's LSPs",
   "main": "index.js",
   "repository": "https://github.com/Blam-Network/blf_lib",
   "license": "MIT",

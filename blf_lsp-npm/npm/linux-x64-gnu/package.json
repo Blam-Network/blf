@@ -1,5 +1,5 @@
 {
-  "name": "blf_lsp-linux-x64-gnu",
+  "name": "@blamnetwork/blf_lsp-linux-x64-gnu",
   "os": [
     "linux"
   ],

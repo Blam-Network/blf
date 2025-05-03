@@ -1,5 +1,5 @@
 {
-  "name": "blf_lsp-win32-arm64-msvc",
+  "name": "@blamnetwork/blf_lsp-win32-arm64-msvc",
   "os": [
     "win32"
   ],
