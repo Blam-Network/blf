@@ -35,6 +35,6 @@ jobs:
       - name: Publish
         if: startsWith(github.ref, 'refs/tags/')
         working-directory: /home/runner/work/blf_lib/blf_lib
-        run: wasm-pack publish blf_wasm
+        run: wasm-pack publish blf_wasm --access=public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
