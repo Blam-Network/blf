@@ -50,9 +50,9 @@ pub struct s_blf_chunk_service_record
 }
 
 #[derive(Clone, PartialEq, Debug, Serialize_repr, Deserialize_repr, BinRead, BinWrite, Default, FromPrimitive)]
-#[brw(big, repr = u32)]
+#[brw(big, repr = u8)]
 #[wasm_bindgen]
-#[repr(u32)]
+#[repr(u8)]
 pub enum PlayerModel {
     #[default]
     Spartan = 0,
@@ -60,9 +60,9 @@ pub enum PlayerModel {
 }
 
 #[derive(Clone, PartialEq, Debug, Serialize_repr, Deserialize_repr, BinRead, BinWrite, Default, FromPrimitive)]
-#[brw(big, repr = u32)]
+#[brw(big, repr = u8)]
 #[wasm_bindgen]
-#[repr(u32)]
+#[repr(u8)]
 pub enum SpartanHelmet {
     #[default]
     Default = 0,
@@ -79,9 +79,9 @@ pub enum SpartanHelmet {
 }
 
 #[derive(Clone, PartialEq, Debug, Serialize_repr, Deserialize_repr, BinRead, BinWrite, Default, FromPrimitive)]
-#[brw(big, repr = u32)]
+#[brw(big, repr = u8)]
 #[wasm_bindgen]
-#[repr(u32)]
+#[repr(u8)]
 pub enum SpartanShoulder {
     #[default]
     Default = 0,
@@ -95,9 +95,9 @@ pub enum SpartanShoulder {
 }
 
 #[derive(Clone, PartialEq, Debug, Serialize_repr, Deserialize_repr, BinRead, BinWrite, Default, FromPrimitive)]
-#[brw(big, repr = u32)]
+#[brw(big, repr = u8)]
 #[wasm_bindgen]
-#[repr(u32)]
+#[repr(u8)]
 pub enum SpartanBody {
     #[default]
     Default = 0,
@@ -112,9 +112,9 @@ pub enum SpartanBody {
 }
 
 #[derive(Clone, PartialEq, Debug, Serialize_repr, Deserialize_repr, BinRead, BinWrite, Default, FromPrimitive)]
-#[brw(big, repr = u32)]
+#[brw(big, repr = u8)]
 #[wasm_bindgen]
-#[repr(u32)]
+#[repr(u8)]
 pub enum EliteArmour {
     #[default]
     Default = 0,
@@ -159,9 +159,9 @@ pub enum Grade {
 }
 
 #[derive(Clone, PartialEq, Debug, Serialize_repr, Deserialize_repr, BinRead, BinWrite, Default, FromPrimitive)]
-#[brw(big, repr = u32)]
+#[brw(big, repr = u8)]
 #[wasm_bindgen]
-#[repr(u32)]
+#[repr(u8)]
 pub enum Color {
     #[default]
     Steel = 0,
