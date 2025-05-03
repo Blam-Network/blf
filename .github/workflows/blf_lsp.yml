@@ -1,4 +1,4 @@
-name: napi build & publish
+name: blf_lsp
 defaults:
   run:
     shell: bash
