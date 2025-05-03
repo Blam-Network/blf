@@ -18,7 +18,7 @@ subprocess.call(['cargo', 'upgrade', '-p', f'blf_lib-derivable@{new_version}', '
 subprocess.call(['cargo', 'upgrade', '-p', f'blf_lib@{new_version}', '--manifest-path', 'blf_cli/Cargo.toml', '--pinned'])
 
 subprocess.call(['npm', 'version', new_version], cwd='./blf_lsp-npm')
-subprocess.call(['napi', 'version', '--config', '../blf_lsp/config.json'], cwd='./blf_lsp-npm')
+subprocess.call(['napi', 'version'], cwd='./blf_lsp-npm')
 
 subprocess.call(['git', 'add', 'Cargo.toml', '**/Cargo.toml', '**/package.json'])
 subprocess.call(['git', 'commit', '-m', f'{new_version}'])
