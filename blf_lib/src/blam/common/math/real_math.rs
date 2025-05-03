@@ -284,15 +284,15 @@ pub fn quantize_normalized_vector3d(vector: &real_vector3d) -> i32 {
         axis_code = positive_code;
     }
 
-    assert!(u >= -1.0 && u <= 1.0);
-    assert!(v >= -1.0 && v <= 1.0);
+    assert!((-1.0..=1.0).contains(&u));
+    assert!((-1.0..=1.0).contains(&v));
 
     let quantized_u = quantize_real(u, -1.0, 1.0, 8, true, false);
     let quantized_v = quantize_real(v, -1.0, 1.0, 8, true, false);
 
-    let result = axis_code as i32 | (quantized_u << 3) | (quantized_v << 11);
+    
 
-    result
+    axis_code as i32 | (quantized_u << 3) | (quantized_v << 11)
 }
 
 pub fn square_root(value: f32) -> f32 {

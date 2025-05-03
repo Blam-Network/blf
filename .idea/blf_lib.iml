@@ -7,7 +7,9 @@
       <sourceFolder url="file://$MODULE_DIR$/blf_lib-derive/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/blf_lib/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/blf_wasm/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/blf_lsp/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/blf_lsp/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/blf_bnet/src" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/blf_cli/target" />
       <excludeFolder url="file://$MODULE_DIR$/blf_lib-derivable/target" />
       <excludeFolder url="file://$MODULE_DIR$/blf_lib-derive/target" />

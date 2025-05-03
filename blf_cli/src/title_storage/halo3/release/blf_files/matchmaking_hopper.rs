@@ -87,5 +87,5 @@ pub fn read_active_hoppers(hoppers_config_folder: &String) -> Result<Vec<String>
 
     let active_hopper_folders = active_hoppers_string.lines();
 
-    Ok(active_hopper_folders.map(|thing|String::from(thing)).collect::<Vec<String>>())
+    Ok(active_hopper_folders.map(String::from).collect::<Vec<String>>())
 }

@@ -42,13 +42,13 @@ pub fn find_chunk_in_file<T: BlfChunk + SerializableBlfChunk + ReadableBlfChunk>
         }
         file.seek_relative((header.chunk_size - s_blf_header::size() as u32) as i64)?;
     }
-    Err(format!("{} Chunk not found!", T::get_signature().to_string()).into())
+    Err(format!("{} Chunk not found!", T::get_signature()).into())
 }
 
 pub fn search_for_chunk<'a, T: BlfChunk + SerializableBlfChunk + ReadableBlfChunk>(buffer: Vec<u8>) -> Option<T> {
     for i in 0..(buffer.len() - 0xC) {
         let header_bytes = &buffer.as_slice()[i..i+0xC];
-        let header = s_blf_header::decode(&header_bytes);
+        let header = s_blf_header::decode(header_bytes);
 
         if header.signature == T::get_signature() && header.version == T::get_version() {
             let body_bytes = buffer.as_slice()[i+0xC..i+header.chunk_size as usize].to_vec();
@@ -65,7 +65,7 @@ pub fn search_for_chunk_in_file<T: BlfChunk + SerializableBlfChunk + ReadableBlf
 
     for i in 0..(fileBytes.len() - 0xC) {
         let header_bytes = &fileBytes.as_slice()[i..i+0xC];
-        let header = s_blf_header::decode(&header_bytes);
+        let header = s_blf_header::decode(header_bytes);
 
         if header.signature == T::get_signature() && header.version == T::get_version() {
             let body_bytes = fileBytes.as_slice()[i+0xC..i+header.chunk_size as usize].to_vec();

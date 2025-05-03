@@ -106,7 +106,7 @@ impl motd_popup {
     }
 
     pub fn validate_image(path: &String) -> Result<(), Box<dyn Error>> {
-        if !check_file_exists(&path) {
+        if !check_file_exists(path) {
             return Err(Box::from("No image file was found"));
         }
 

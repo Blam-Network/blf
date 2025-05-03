@@ -28,6 +28,7 @@ pub const k_saved_game_file_type_count: u32 = 13;
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite, TestSize)]
 #[Size(0xF8)]
+#[wasm_bindgen(getter_with_clone)]
 pub struct s_content_item_metadata {
     pub unique_id: u64,
     pub name: StaticWcharString<0x10>,

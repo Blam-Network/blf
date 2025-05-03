@@ -1,12 +1,10 @@
 use std::u32;
 use binrw::{binrw, BinRead, BinWrite};
 use serde::{Deserialize, Serialize};
-use blf_lib::types::bool::s_bool;
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
-use blf_lib_derive::{BlfChunk, TestSize};
+use blf_lib_derive::BlfChunk;
 use blf_lib::types::array::StaticArray;
 use blf_lib::types::c_string::StaticWcharString;
-use blf_lib::types::time::time64_t;
 #[binrw]
 #[derive(BlfChunk,Default,PartialEq,Debug,Clone,Serialize,Deserialize)]
 #[Header("filq", 1.1)]
