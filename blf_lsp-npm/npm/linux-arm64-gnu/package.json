@@ -1,6 +1,5 @@
 {
   "name": "blf_lsplinux-arm64-gnu",
-  "version": "1.0.0",
   "os": [
     "linux"
   ],

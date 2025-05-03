@@ -1,6 +1,5 @@
 {
   "name": "blf_lspfreebsd-x64",
-  "version": "1.0.0",
   "os": [
     "freebsd"
   ],

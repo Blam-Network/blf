@@ -83,5 +83,6 @@
     "singleQuote": true,
     "arrowParens": "always"
   },
-  "packageManager": "yarn@4.9.1"
+  "packageManager": "yarn@4.9.1",
+  "version": "1.7.0-publish-test-2"
 }
