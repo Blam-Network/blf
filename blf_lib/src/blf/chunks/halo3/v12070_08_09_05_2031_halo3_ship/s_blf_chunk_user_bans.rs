@@ -1,13 +1,9 @@
 use std::u32;
 use binrw::{binrw, BinRead, BinResult, BinWrite, Endian};
 use serde::{Deserialize, Serialize};
-use blf_lib::blam::common::math::integer_math::{int16_point2d, int16_rectangle2d};
-use blf_lib::blam::common::math::real_math::{real_point3d, real_vector3d, real_plane3d, real_point2d, real_matrix4x3, real_vector2d, real_rectangle2d};
-use blf_lib::types::bool::s_bool;
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
-use blf_lib_derive::{BlfChunk, TestSize};
+use blf_lib_derive::BlfChunk;
 use std::io::{Read, Seek, Write};
-use blf_lib::types::c_string::StaticWcharString;
 use blf_lib::types::time::time64_t;
 
 pub const k_max_bans_count: usize = 32;
@@ -40,14 +36,8 @@ impl BinRead for s_blf_chunk_user_bans_ban {
     fn read_options<R: Read + Seek>(reader: &mut R, endian: Endian, args: Self::Args<'_>) -> BinResult<Self> {
         let ban_type = BanType::read_options(reader, endian, ())?;
         let ban_message_index = u32::read_options(reader, endian, ())?;
-        let start_time = match Option::<u64>::read_options(reader, endian, ())? {
-            Some(val) => Some(time64_t(val)),
-            None => None,
-        };
-        let end_time = match Option::<u64>::read_options(reader, endian, ())? {
-            Some(val) => Some(time64_t(val)),
-            None => None,
-        };
+        let start_time = Option::<u64>::read_options(reader, endian, ())?.map(time64_t);
+        let end_time = Option::<u64>::read_options(reader, endian, ())?.map(time64_t);
         Ok(Self {
             ban_type,
             ban_message_index,

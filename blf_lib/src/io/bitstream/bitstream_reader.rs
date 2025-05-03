@@ -173,7 +173,7 @@ impl<'a> c_bitstream_reader<'a> {
             let current_memory_position = self.m_bitstream_data.current_memory_bit_position / 8;
             let window_bytes_used = self.m_bitstream_data.window_bits_used.div_ceil(8);
             let next_memory_position = current_memory_position + window_bytes_used;
-            let window_value = self.m_bitstream_data.window >> 64 - self.m_bitstream_data.window_bits_used;
+            let window_value = self.m_bitstream_data.window >> (64 - self.m_bitstream_data.window_bits_used);
             let window_bytes = window_value.to_be_bytes();
             output[current_memory_position..next_memory_position].copy_from_slice(&window_bytes[8-window_bytes_used..8]);
             self.m_bitstream_data.current_memory_bit_position += self.m_bitstream_data.window_bits_used;
@@ -381,7 +381,7 @@ impl<'a> c_bitstream_reader<'a> {
             if character == 0 {
                 return U16CString::from_vec(&mut characters[0..i]).unwrap().to_string().unwrap();
             } else {
-                characters[i] = character as u16;
+                characters[i] = character;
             }
         }
 
@@ -549,7 +549,7 @@ impl<'a> c_bitstream_reader<'a> {
         let mut forward_reference: real_vector3d = real_vector3d::default();
         let mut left_reference: real_vector3d = real_vector3d::default();
         c_bitstream_reader::axes_compute_reference_internal(up, &mut forward_reference, &mut left_reference);
-        arctangent(dot_product3d(&left_reference, &forward), dot_product3d(&forward_reference, &forward))
+        arctangent(dot_product3d(&left_reference, forward), dot_product3d(&forward_reference, forward))
     }
 
     // not from blam

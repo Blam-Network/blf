@@ -12,7 +12,7 @@ impl Serialize for s_network_http_request_hash {
     where
         S: Serializer
     {
-        serializer.serialize_str(&format!("{}", hex::encode_upper(self.data)))
+        serializer.serialize_str(&hex::encode_upper(self.data).to_string())
     }
 }
 
@@ -26,8 +26,8 @@ impl TryFrom<Vec<u8>> for s_network_http_request_hash {
     type Error = Box<dyn Error>;
 
     fn try_from(value: Vec<u8>) -> Result<Self, Self::Error> {
-        let data: [u8; 20];
-        data = value.try_into().unwrap();
+        
+        let data: [u8; 20] = value.try_into().unwrap();
 
         Ok(s_network_http_request_hash {
             data

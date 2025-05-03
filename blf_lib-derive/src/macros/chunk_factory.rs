@@ -52,7 +52,7 @@ pub fn chunk_factory_macro(input: TokenStream) -> TokenStream {
             let parsed_idents: Punctuated<Ident, Comma> = list.parse_args_with(Punctuated::<Ident, Token![,]>::parse_terminated)
                 .unwrap();
 
-            chunk_idents = parsed_idents.iter().map(|ident| ident.clone()).collect();
+            chunk_idents = parsed_idents.iter().cloned().collect();
         }
         _ => {
             panic!("Unsupported attribute type for Build. Please use the #[Chunks(s_blf_chunk_author)] syntax.");

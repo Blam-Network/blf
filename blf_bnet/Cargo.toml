@@ -1,5 +1,5 @@
 [package]
-name = "blf_wasm"
+name = "blf_bnet"
 version.workspace = true
 edition.workspace = true
 license.workspace = true
@@ -8,7 +8,7 @@ license.workspace = true
 crate-type = ["cdylib"]
 
 [dependencies]
-blf_lib = { path = "../blf_lib", version = "1.4.11" }
+blf_lib = { path = "../blf_lib" }
 wasm-bindgen = "0.2.100"
 js-sys = "0.3.77"
 num-traits = "0.2.19"
