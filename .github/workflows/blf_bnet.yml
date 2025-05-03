@@ -1,4 +1,4 @@
-name: lsp_wasm
+name: blf_bnet
 on:
   push:
     branches: [ "main", "workflow", "wasm" ]
@@ -25,16 +25,16 @@ jobs:
       - name: Install wasm-pack
         run: cargo install wasm-pack
       - name: Build
-        working-directory: /home/runner/work/blf_lib/lsp_wasm
-        run: wasm-pack build lsp_wasm --target nodejs --scope blamnetwork
+        working-directory: /home/runner/work/blf_lib/blf_lib
+        run: wasm-pack build blf_bnet --target web -s blamnetwork
       # - name: Upload Wasm Package (if needed)
       #   uses: actions/upload-artifact@v4.6.1
       #   with:
-      #     name: blf_wasm
-      #     path: /home/runner/work/blf_lib/blf_lib/blf_wasm/pkg
+      #     name: blf_bnet
+      #     path: /home/runner/work/blf_lib/blf_lib/blf_bnet/pkg
       - name: Publish
         if: startsWith(github.ref, 'refs/tags/')
         working-directory: /home/runner/work/blf_lib/blf_lib
-        run: wasm-pack publish blf_wasm --access=public
+        run: wasm-pack publish blf_bnet --access=public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

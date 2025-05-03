@@ -1,219 +1,40 @@
 name: blf_lsp
-defaults:
-  run:
-    shell: bash
-    working-directory: ./blf_lsp-npm
-env:
-  DEBUG: napi:*
-  APP_NAME: blf_lsp
-  APP_DIRECTORY: blf_lsp-npm/
-  MACOSX_DEPLOYMENT_TARGET: '10.13'
-  CARGO_INCREMENTAL: '1'
-permissions:
-  contents: write
-  id-token: write
-'on':
+on:
   push:
-    branches:
-      - napi
-      - main
+    branches: [ "main", "workflow", "wasm" ]
     tags:
       - '*'
-    paths-ignore:
-      - '**/*.md'
-      - LICENSE
-      - '**/*.gitignore'
-      - .editorconfig
-      - docs/**
-  pull_request: 
-    branches: ['main']
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  pull_request:
+    branches: [ "main", "workflow", "wasm" ]
+
+env:
+  CARGO_TERM_COLOR: always
+
 jobs:
-  lint:
-    name: Lint
-    if: false
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: 'yarn'
-          cache-dependency-path: './blf_lsp-npm'
-
-      - name: Install
-        uses: dtolnay/rust-toolchain@stable
-        with:
-          components: clippy, rustfmt
-
-      - name: Install dependencies
-        run: yarn install
-
-      - name: Oxlint
-        run: yarn lint
-
-      - name: Cargo fmt
-        run: cargo fmt -- --check
-        working-directory: ./blf_lsp
-
-      - name: Clippy
-        run: cargo clippy
   build:
-    strategy:
-      fail-fast: false
-      matrix:
-        settings:
-          - host: macos-latest
-            target: x86_64-apple-darwin
-            build: yarn build --target x86_64-apple-darwin
-          - host: windows-latest
-            build: yarn build --target x86_64-pc-windows-msvc
-            target: x86_64-pc-windows-msvc
-          # - host: windows-latest
-          #   build: yarn build --target i686-pc-windows-msvc
-          #   target: i686-pc-windows-msvc
-          - host: ubuntu-latest
-            target: x86_64-unknown-linux-gnu
-            docker: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-debian
-            build: yarn build --target x86_64-unknown-linux-gnu
-          - host: ubuntu-latest
-            target: x86_64-unknown-linux-musl
-            docker: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-alpine
-            build: yarn build --target x86_64-unknown-linux-musl
-          - host: macos-latest
-            target: aarch64-apple-darwin
-            build: yarn build --target aarch64-apple-darwin
-          - host: ubuntu-latest
-            target: aarch64-unknown-linux-gnu
-            docker: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-debian-aarch64
-            build: yarn build --target aarch64-unknown-linux-gnu
-          # - host: ubuntu-latest
-          #   target: armv7-unknown-linux-gnueabihf
-          #   setup: |
-          #     sudo apt-get update
-          #     sudo apt-get install gcc-arm-linux-gnueabihf -y
-          #   build: |
-          #     yarn build --target armv7-unknown-linux-gnueabihf
-          # - host: ubuntu-latest
-          #   target: aarch64-linux-android
-          #   build: yarn build --target aarch64-linux-android
-          # - host: ubuntu-latest
-          #   target: armv7-linux-androideabi
-          #   build: yarn build --target armv7-linux-androideabi
-          - host: ubuntu-latest
-            target: aarch64-unknown-linux-musl
-            docker: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-alpine
-            build: |-
-              set -e &&
-              rustup target add aarch64-unknown-linux-musl &&
-              yarn build --target aarch64-unknown-linux-musl
-          - host: windows-latest
-            target: aarch64-pc-windows-msvc
-            build: yarn build --target aarch64-pc-windows-msvc
-    name: stable - ${{ matrix.settings.target }} - node@18
-    runs-on: ${{ matrix.settings.host }}
-    steps:
-      - uses: actions/checkout@v4
-      - name: Setup node
-        uses: actions/setup-node@v4
-        if: ${{ !matrix.settings.docker }}
-        with:
-          node-version: 22
-          cache: yarn
-          cache-dependency-path: './blf_lsp-npm'
-      - name: Install
-        uses: dtolnay/rust-toolchain@stable
-        if: ${{ !matrix.settings.docker }}
-        with:
-          toolchain: stable
-          targets: ${{ matrix.settings.target }}
-      - name: Cache cargo
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.cargo/registry/index/
-            ~/.cargo/registry/cache/
-            ~/.cargo/git/db/
-            .cargo-cache
-            target/
-          key: ${{ matrix.settings.target }}-cargo-${{ matrix.settings.host }}
-      - uses: goto-bus-stop/setup-zig@v2
-        if: ${{ matrix.settings.target == 'armv7-unknown-linux-gnueabihf' }}
-        with:
-          version: 0.14.0
-      - name: Setup toolchain
-        run: ${{ matrix.settings.setup }}
-        if: ${{ matrix.settings.setup }}
-        shell: bash
-      - name: Install dependencies
-        run: yarn install
-      - name: Build in docker
-        uses: addnab/docker-run-action@v3
-        if: ${{ matrix.settings.docker }}
-        with:
-          image: ${{ matrix.settings.docker }}
-          options: >-
-            --user 0:0
-            -v ${{ github.workspace }}/.cargo-cache/git/db:/usr/local/cargo/git/db
-            -v ${{ github.workspace }}/.cargo/registry/cache:/usr/local/cargo/registry/cache
-            -v ${{ github.workspace }}/.cargo/registry/index:/usr/local/cargo/registry/index
-            -v ${{ github.workspace }}:/build
-            -w /build/blf_lsp-npm
-          run: ${{ matrix.settings.build }}
-      - name: Build
-        run: ${{ matrix.settings.build }}
-        if: ${{ !matrix.settings.docker }}
-        shell: bash
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: bindings-${{ matrix.settings.target }}
-          path: ${{ env.APP_DIRECTORY }}${{ env.APP_NAME }}.*.node
-          if-no-files-found: error
-  publish:
-    name: Publish
-    if: startsWith(github.ref, 'refs/tags/')
+    name: "Build"
     runs-on: ubuntu-latest
-    needs:
-      - build
+
     steps:
       - uses: actions/checkout@v4
-      - name: Setup node
-        uses: actions/setup-node@v4
+      - uses: Swatinem/rust-cache@v2
+      - uses: actions/setup-node@v4
         with:
-          node-version: 22
-          cache: yarn
-          cache-dependency-path: './blf_lsp-npm'
-      - name: Install dependencies
-        run: yarn install
-      - name: build
-        run: yarn build
-      - name: Download all artifacts
-        uses: actions/download-artifact@v4
-        with:
-          path: blf_lsp-npm/artifacts
-      - name: Move artifacts
-        run: yarn artifacts
-      - name: List packages
-        run: ls -R ./npm
-        shell: bash
+          node-version: '20.x'
+          registry-url: 'https://registry.npmjs.org'
+      - name: Install wasm-pack
+        run: cargo install wasm-pack
+      - name: Build
+        working-directory: /home/runner/work/blf_lib/blf_lib
+        run: wasm-pack build blf_lsp --target nodejs -s blamnetwork
+      # - name: Upload Wasm Package (if needed)
+      #   uses: actions/upload-artifact@v4.6.1
+      #   with:
+      #     name: blf_bnet
+      #     path: /home/runner/work/blf_lib/blf_lib/blf_bnet/pkg
       - name: Publish
-        run: |
-          if git log -1 --pretty=%B | grep "^[0-9]\+\.[0-9]\+\.[0-9]\+$";
-          then
-            echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
-            npm publish --access public
-          elif git log -1 --pretty=%B | grep "^[0-9]\+\.[0-9]\+\.[0-9]\+";
-          then
-            echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
-            npm publish --tag next --access public
-          else
-            echo "Not a release, skipping publish"
-          fi
+        if: startsWith(github.ref, 'refs/tags/')
+        working-directory: /home/runner/work/blf_lib/blf_lib
+        run: wasm-pack publish blf_lsp --access=public
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
