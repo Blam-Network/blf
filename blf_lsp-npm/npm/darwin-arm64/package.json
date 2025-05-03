@@ -1,5 +1,5 @@
 {
-  "name": "blf_lspdarwin-arm64",
+  "name": "blf_lsp-darwin-arm64",
   "os": [
     "darwin"
   ],
@@ -27,5 +27,5 @@
     "registry": "https://registry.npmjs.org/",
     "access": "public"
   },
-  "repository": "https://github.com/Blam-Network/blf_lib"
+  "repository": "https://github.com/Blam-Network/blf_lib",
 }

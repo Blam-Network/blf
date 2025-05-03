@@ -1,5 +1,5 @@
 {
-  "name": "blf_lspwin32-ia32-msvc",
+  "name": "blf_lsp-win32-ia32-msvc",
   "os": [
     "win32"
   ],

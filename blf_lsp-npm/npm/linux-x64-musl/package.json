@@ -1,5 +1,5 @@
 {
-  "name": "blf_lsplinux-x64-musl",
+  "name": "blf_lsp-linux-x64-musl",
   "os": [
     "linux"
   ],

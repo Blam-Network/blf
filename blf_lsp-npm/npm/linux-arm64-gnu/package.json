@@ -1,5 +1,5 @@
 {
-  "name": "blf_lsplinux-arm64-gnu",
+  "name": "blf_lsp-linux-arm64-gnu",
   "os": [
     "linux"
   ],

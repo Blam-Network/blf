@@ -1,5 +1,5 @@
 {
-  "name": "blf_lsplinux-arm-gnueabihf",
+  "name": "blf_lsp-linux-arm-gnueabihf",
   "os": [
     "linux"
   ],
