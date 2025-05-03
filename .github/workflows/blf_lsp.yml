@@ -195,9 +195,9 @@ jobs:
       - name: Download all artifacts
         uses: actions/download-artifact@v4
         with:
-          path: artifacts
+          path: blf_lsp-npm/artifacts
       - name: Move artifacts
-        run: yarn artifacts -d ./npm
+        run: yarn artifacts
       - name: List packages
         run: ls -R ./npm
         shell: bash
