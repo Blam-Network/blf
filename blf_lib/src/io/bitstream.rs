@@ -10,7 +10,7 @@ pub fn create_bitstream_writer(size: usize, endian: e_bitstream_byte_order) -> c
     bitstream
 }
 
-pub fn create_bitstream_reader(buffer: &[u8], endian: e_bitstream_byte_order) -> c_bitstream_reader<'_> {
+pub fn create_bitstream_reader<'a>(buffer: &'a[u8], endian: e_bitstream_byte_order) -> c_bitstream_reader<'a> {
     let mut bitstream = c_bitstream_reader::new(buffer, e_bitstream_byte_order::_bitstream_byte_order_big_endian);
     bitstream.begin_reading();
     bitstream

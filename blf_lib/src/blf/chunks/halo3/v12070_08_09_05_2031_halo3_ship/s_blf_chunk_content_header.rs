@@ -1,6 +1,5 @@
 use binrw::binrw;
 use serde::{Deserialize, Serialize};
-use wasm_bindgen::prelude::wasm_bindgen;
 use blf_lib::blam::halo_3::release::game::game_engine_variant::c_game_variant;
 use blf_lib::blam::halo_3::release::saved_games::saved_game_files::s_content_item_metadata;
 use blf_lib::blam::halo_3::release::saved_games::scenario_map_variant::c_map_variant;
@@ -11,7 +10,6 @@ use blf_lib_derive::BlfChunk;
 #[derive(BlfChunk,Default,PartialEq,Debug,Clone,Serialize,Deserialize)]
 #[Header("chdr", 9.2)]
 #[brw(big)]
-#[wasm_bindgen(getter_with_clone)]
 pub struct s_blf_chunk_content_header
 {
     pub build_number: u16,

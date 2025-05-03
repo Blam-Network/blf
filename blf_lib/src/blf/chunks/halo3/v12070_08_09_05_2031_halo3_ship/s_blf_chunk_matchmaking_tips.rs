@@ -36,7 +36,7 @@ impl s_blf_chunk_matchmaking_tips {
         for tip in tips.iter() {
             let tip = StaticString::<TIP_LENGTH>::from_string(tip);
 
-            if tip.is_err() {
+            if !tip.is_ok() {
                 return Err(format!("Tip: {}", tip.unwrap_err()))
             }
 

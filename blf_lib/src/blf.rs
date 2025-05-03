@@ -19,12 +19,6 @@ pub struct BlfFileBuilder {
     chunks: Vec<Box<dyn SerializableBlfChunk>>,
 }
 
-impl Default for BlfFileBuilder {
-    fn default() -> Self {
-        Self::new()
-    }
-}
-
 impl BlfFileBuilder {
     pub fn new() -> BlfFileBuilder {
         BlfFileBuilder {
@@ -122,8 +116,8 @@ pub fn get_blf_file_hash(path: String) -> Result<s_network_http_request_hash, Bo
     let mut hasher = Sha1::new();
     Update::update(&mut hasher, &k_gen3_salt);
     Update::update(&mut hasher, &bytes);
-    
-    s_network_http_request_hash::try_from(hasher.finalize().to_vec())
+    let parsed = s_network_http_request_hash::try_from(hasher.finalize().to_vec());
+    parsed
 }
 
 #[macro_export]

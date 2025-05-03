@@ -2,10 +2,6 @@ use std::fmt::Display;
 use binrw::{BinRead, BinWrite};
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use chrono::{DateTime, NaiveDateTime, TimeZone, Utc};
-use js_sys::Date;
-use wasm_bindgen::convert::{FromWasmAbi, IntoWasmAbi, WasmAbi};
-use wasm_bindgen::describe::WasmDescribe;
-use wasm_bindgen::JsValue;
 
 #[derive(Default, Clone, Debug, PartialEq, BinRead, BinWrite, Copy)]
 pub struct time64_t(pub u64);
@@ -26,7 +22,7 @@ impl Display for time64_t {
 impl Serialize for time64_t {
     fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
         let datetime = Utc.timestamp_opt(self.0 as i64, 0).single()
-            .ok_or_else(|| serde::ser::Error::custom("Invalid timestamp".to_string()))?;
+            .ok_or_else(|| serde::ser::Error::custom(format!("Invalid timestamp")))?;
         let formatted = datetime.format("%Y-%m-%d %H:%M:%S").to_string();
         serializer.serialize_str(&formatted)
     }
@@ -41,46 +37,21 @@ impl<'de> Deserialize<'de> for time64_t {
     }
 }
 
-impl From<time64_t> for u64 {
-    fn from(val: time64_t) -> Self {
-        val.0
+impl Into<u64> for time64_t {
+    fn into(self) -> u64 {
+        self.0
     }
 }
 
 impl From<u64> for time64_t {
     fn from(t: u64) -> Self {
-        Self(t)
+        Self { 0: t }
     }
 }
 
-impl From<time64_t> for DateTime<Utc> {
-    fn from(val: time64_t) -> Self {
-        Utc.timestamp(val.0 as i64, 0)
-    }
-}
-
-impl WasmDescribe for time64_t {
-    fn describe() {
-        Date::describe(); // maps to JS `Date` in TypeScript
-    }
-}
-
-impl FromWasmAbi for time64_t {
-    type Abi = <Date as FromWasmAbi>::Abi;
-
-    unsafe fn from_abi(js: Self::Abi) -> Self {
-        let date = Date::from_abi(js);
-        let millis = date.get_time(); // milliseconds since UNIX epoch
-        time64_t((millis / 1000.0) as u64)
-    }
-}
-
-impl IntoWasmAbi for time64_t {
-    type Abi = <Date as IntoWasmAbi>::Abi;
-
-    fn into_abi(self) -> Self::Abi {
-        let millis = self.0 as f64 * 1000.0;
-        Date::new(&JsValue::from_f64(millis)).into_abi()
+impl Into<DateTime<Utc>> for time64_t {
+    fn into(self) -> DateTime<Utc> {
+        Utc.timestamp(self.0 as i64, 0)
     }
 }
 
@@ -118,49 +89,23 @@ impl<'de> Deserialize<'de> for time32_t {
     }
 }
 
-impl From<time32_t> for u32 {
-    fn from(val: time32_t) -> Self {
-        val.0
+impl Into<u32> for time32_t {
+    fn into(self) -> u32 {
+        self.0
     }
 }
 
-impl From<time32_t> for DateTime<Utc> {
-    fn from(val: time32_t) -> Self {
-        Utc.timestamp(val.0 as i64, 0)
+impl Into<DateTime<Utc>> for time32_t {
+    fn into(self) -> DateTime<Utc> {
+        Utc.timestamp(self.0 as i64, 0)
     }
 }
 
 impl From<u32> for time32_t {
     fn from(t: u32) -> Self {
-        Self(t)
+        Self { 0: t }
     }
 }
-
-impl WasmDescribe for time32_t {
-    fn describe() {
-        Date::describe(); // maps to JS `Date` in TypeScript
-    }
-}
-
-impl FromWasmAbi for time32_t {
-    type Abi = <Date as FromWasmAbi>::Abi;
-
-    unsafe fn from_abi(js: Self::Abi) -> Self {
-        let date = Date::from_abi(js);
-        let millis = date.get_time(); // milliseconds since UNIX epoch
-        time32_t((millis / 1000.0) as u32)
-    }
-}
-
-impl IntoWasmAbi for time32_t {
-    type Abi = <Date as IntoWasmAbi>::Abi;
-
-    fn into_abi(self) -> Self::Abi {
-        let millis = self.0 as f64 * 1000.0;
-        Date::new(&JsValue::from_f64(millis)).into_abi()
-    }
-}
-
 
 #[derive(Default, Clone, Debug, PartialEq, BinRead, BinWrite)]
 pub struct filetime(u64);

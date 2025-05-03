@@ -33,7 +33,7 @@ impl rsa_manifest {
         let rsa_folder = build_path!(hoppers_config_path, "rsa_signatures");
         let rsa_files = get_files_in_folder(&rsa_folder)?;
 
-        if rsa_files.is_empty() {
+        if rsa_files.len() < 1 {
             return Err(Box::from("No RSA signatures found."))
         }
 
@@ -45,7 +45,7 @@ impl rsa_manifest {
             let mut rsa_signature = Vec::<u8>::with_capacity(0x100);
             rsa_file.read_to_end(&mut rsa_signature).unwrap();
 
-            map_manifest.add_rsa_signature(rsa_signature.as_slice())?;
+            let result = map_manifest.add_rsa_signature(rsa_signature.as_slice())?;
         }
 
         Ok(Self::create(map_manifest))

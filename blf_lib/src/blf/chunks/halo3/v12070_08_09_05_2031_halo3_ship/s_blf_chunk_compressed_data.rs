@@ -1,6 +1,6 @@
 use std::io::{Cursor, Read, Seek, Write};
 use std::u32;
-use binrw::{BinRead, BinReaderExt, BinResult, BinWrite, BinWriterExt, Endian};
+use binrw::{binrw, BinRead, BinReaderExt, BinResult, BinWrite, BinWriterExt, Endian};
 use flate2::Compression;
 use flate2::read::{ZlibDecoder};
 use flate2::write::ZlibEncoder;
@@ -89,7 +89,7 @@ impl<T> BinRead for s_blf_chunk_compressed_data<T> where T: BlfChunk + Serializa
 
         // Read uncompressed chunk
         let (header_buffer, chunk_buffer) = uncompressed_buffer.split_at(s_blf_header::size());
-        let header = s_blf_header::decode(header_buffer);
+        let header = s_blf_header::decode(&header_buffer);
 
         if header.signature != T::get_signature() || header.version != T::get_version() {
             return Err(binrw::error::Error::Custom {

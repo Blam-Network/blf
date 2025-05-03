@@ -150,7 +150,7 @@ impl c_bitstream_writer {
             let bits_to_write_at_position = min(remaining_bits_to_write, remaining_bits_at_output_position);
             let writing_byte = data[0];
             self.m_data[self.m_bitstream_data.current_stream_byte_position]
-                |= writing_byte >> (8 - remaining_bits_at_output_position);
+                |= writing_byte >> 8 - remaining_bits_at_output_position;
 
             remaining_bits_to_write -= min(remaining_bits_at_output_position, remaining_bits_to_write);
             // after writing, how many bits are now left at this byte?
@@ -410,7 +410,7 @@ impl c_bitstream_writer {
         let mut forward_reference: real_vector3d = real_vector3d::default();
         let mut left_reference: real_vector3d = real_vector3d::default();
         c_bitstream_writer::axes_compute_reference_internal(up, &mut forward_reference, &mut left_reference);
-        arctangent(dot_product3d(&left_reference, forward), dot_product3d(&forward_reference, forward))
+        arctangent(dot_product3d(&left_reference, &forward), dot_product3d(&forward_reference, &forward))
     }
 
     pub fn write_axes(
@@ -437,7 +437,7 @@ impl c_bitstream_writer {
             dequantize_unit_vector3d(quantized_up, &mut dequantized_up);
         } else {
             self.write_bool(true); // up-is-global-up3d
-            dequantized_up = global_up3d;
+            dequantized_up = global_up3d.clone();
         }
 
         let forward_angle = c_bitstream_writer::axes_to_angle_internal(forward, &dequantized_up);
@@ -472,7 +472,7 @@ fn left_shift_array(data: &mut Vec<u8>, shift: usize) {
     }
 
     // Shift bits
-    data[0] <<= bit_shift;
+    data[0] = data[0] << bit_shift;
     for i in 1..(len - byte_shift) {
         // use a short for shifting
         let current_byte = data[i];

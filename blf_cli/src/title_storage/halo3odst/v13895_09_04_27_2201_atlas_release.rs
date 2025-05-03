@@ -58,7 +58,7 @@ impl TitleConverter for v13895_09_04_27_2201_atlas_release {
 
         println!("{style_bold}Writing Title Storage BLFs to {blfs_path} {style_reset}");
 
-        let hopper_directories = get_directories_in_folder(config_path).unwrap_or_else(|err|{
+        let hopper_directories = get_directories_in_folder(&config_path).unwrap_or_else(|err|{
             println!("{}", err);
             panic!()
         });
@@ -112,7 +112,7 @@ impl TitleConverter for v13895_09_04_27_2201_atlas_release {
     fn build_config(&mut self, blfs_path: &String, config_path: &String) {
         println!("{style_bold}Writing Title Storage config to {config_path} {style_reset}");
 
-        let hopper_directories = get_directories_in_folder(blfs_path).unwrap_or_else(|err|{
+        let hopper_directories = get_directories_in_folder(&blfs_path).unwrap_or_else(|err|{
             println!("{}", err);
             panic!();
         });

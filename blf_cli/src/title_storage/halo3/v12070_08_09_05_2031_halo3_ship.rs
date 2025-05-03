@@ -87,7 +87,7 @@ impl TitleConverter for v12070_08_09_05_2031_halo3_ship {
 
         println!("{style_bold}Writing Title Storage BLFs to {blfs_path} {style_reset}");
 
-        let hopper_directories = get_directories_in_folder(config_path).unwrap_or_else(|err|{
+        let hopper_directories = get_directories_in_folder(&config_path).unwrap_or_else(|err|{
             println!("{}", err);
             panic!()
         });
@@ -154,7 +154,7 @@ impl TitleConverter for v12070_08_09_05_2031_halo3_ship {
     fn build_config(&mut self, blfs_path: &String, config_path: &String) {
         println!("{style_bold}Writing Title Storage config to {config_path} {style_reset}");
 
-        let hopper_directories = get_directories_in_folder(blfs_path).unwrap_or_else(|err|{
+        let hopper_directories = get_directories_in_folder(&blfs_path).unwrap_or_else(|err|{
             println!("{}", err);
             panic!();
         });
@@ -368,7 +368,7 @@ impl v12070_08_09_05_2031_halo3_ship {
         let mut task = console_task::start("Converting Map Variants");
 
         // Iterate through hopper folders. eg default_hoppers/00101
-        let hopper_directory_subfolders = get_directories_in_folder(hoppers_blf_path)?;
+        let hopper_directory_subfolders = get_directories_in_folder(&hoppers_blf_path)?;
 
         // Keep track of maps we've converted to avoid duplication between different hoppers.
         let mut converted_maps = Vec::<String>::new();
@@ -428,7 +428,7 @@ impl v12070_08_09_05_2031_halo3_ship {
                 }
 
                 map_variant::read_file(&map_variant_blf_file_path)?
-                    .write_to_config(hoppers_config_path, &map_variant_file_name)?;
+                    .write_to_config(&hoppers_config_path, &map_variant_file_name)?;
             }
         }
 
@@ -441,7 +441,7 @@ impl v12070_08_09_05_2031_halo3_ship {
         let mut task = console_task::start("Converting Game Variants");
 
         // Iterate through hopper folders. eg default_hoppers/00101
-        let hopper_directory_subfolders = get_directories_in_folder(hoppers_blf_path)?;
+        let hopper_directory_subfolders = get_directories_in_folder(&hoppers_blf_path)?;
 
         // Keep track of games we've converted to avoid duplication between different hoppers.
         let mut converted_games = Vec::<String>::new();
@@ -499,7 +499,7 @@ impl v12070_08_09_05_2031_halo3_ship {
                 }
 
                 game_variant::read_file(&game_variant_blf_file_path)?
-                    .write_to_config(hoppers_config_path, &game_variant_file_name)?;
+                    .write_to_config(&hoppers_config_path, &game_variant_file_name)?;
             }
         }
 
@@ -512,7 +512,7 @@ impl v12070_08_09_05_2031_halo3_ship {
         let mut task = console_task::start("Converting Game Sets");
 
         // Iterate through hopper folders. eg default_hoppers/00101
-        let hopper_directory_subfolders = get_directories_in_folder(hoppers_blf_path)?;
+        let hopper_directory_subfolders = get_directories_in_folder(&hoppers_blf_path)?;
 
         let mut game_sets_count = 0;
 
@@ -708,7 +708,7 @@ impl v12070_08_09_05_2031_halo3_ship {
         );
 
         let network_config = network_configuration::read_file(&network_configuration_source_path)?;
-        network_config.write_to_config(hoppers_config_path)?;
+        network_config.write_to_config(&hoppers_config_path)?;
 
         やった!(task)
     }
@@ -926,7 +926,7 @@ impl v12070_08_09_05_2031_halo3_ship {
                 continue;
             }
             let hopper_id = hopper_id.unwrap();
-            if hopper_id.get(0).is_none() {
+            if !hopper_id.get(0).is_some() {
                 continue;
             }
             let hopper_id = hopper_id.get(0).unwrap().as_str();
@@ -1117,7 +1117,7 @@ impl v12070_08_09_05_2031_halo3_ship {
     {
         let mut task = console_task::start("Building Map Variants");
 
-        let scenario_crc32s = Arc::new(Self::get_scenario_rsa_crc32s(hoppers_config_path));
+        let scenario_crc32s = Arc::new(Self::get_scenario_rsa_crc32s(&hoppers_config_path));
 
         let map_variants_config_path = build_path!(
             hoppers_config_path,
@@ -1208,7 +1208,7 @@ impl v12070_08_09_05_2031_halo3_ship {
                                 if expected_scenario_crc != &map_variant_json.m_original_map_rsa_signature_hash {
                                     let mut task = task.lock().await;
                                     task.add_error(format!("Map Variant \"{map_variant_file_name}\" has a bad checksum and may not load properly! (got {:08X}, expected {:08X})", &map_variant_json.m_original_map_rsa_signature_hash, expected_scenario_crc));
-                                    map_variant_json.m_original_map_rsa_signature_hash = *expected_scenario_crc;
+                                    map_variant_json.m_original_map_rsa_signature_hash = expected_scenario_crc.clone();
                                 }
                             }
 
@@ -1371,7 +1371,7 @@ impl v12070_08_09_05_2031_halo3_ship {
                 continue;
             }
             let hopper_id = hopper_id.unwrap();
-            if hopper_id.get(0).is_none() {
+            if !hopper_id.get(0).is_some() {
                 continue;
             }
             let hopper_id = hopper_id.get(0).unwrap().as_str();
@@ -1407,7 +1407,7 @@ impl v12070_08_09_05_2031_halo3_ship {
             .collect::<Vec<matchmaking_hopper_category_configuration_and_descriptions>>();
 
         for active_hopper_category in &active_hopper_category_configurations {
-            hopper_configuration_table.add_category_configuration(active_hopper_category.configuration)?;
+            hopper_configuration_table.add_category_configuration(active_hopper_category.configuration.clone())?;
         }
 
         // Initialize language_hopper_descriptions
@@ -1435,7 +1435,7 @@ impl v12070_08_09_05_2031_halo3_ship {
                 }
 
                 language_descriptions.add_description((
-                    *hopper_identifier,
+                    hopper_identifier.clone(),
                     &description.to_string()
                 ))?;
             }
@@ -1463,8 +1463,8 @@ impl v12070_08_09_05_2031_halo3_ship {
                 }
 
                 language_descriptions.add_description((
-                    active_hopper_category.configuration.category_identifier,
-                    description
+                    active_hopper_category.configuration.category_identifier.clone(),
+                    &description
                 ))?;
             }
 
@@ -1495,7 +1495,7 @@ impl v12070_08_09_05_2031_halo3_ship {
     ) -> Result<(), Box<dyn Error>> {
         let mut task = console_task::start("Building Network Configuration");
 
-        let mut network_configuration_blf_file = network_configuration::read_from_config(hoppers_config_path)?;
+        let mut network_configuration_blf_file = network_configuration::read_from_config(&hoppers_config_path)?;
         network_configuration_blf_file.write_file(
             build_path!(
                 hoppers_blfs_path,

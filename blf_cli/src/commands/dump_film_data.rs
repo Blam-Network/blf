@@ -1,5 +1,5 @@
-use blf_lib::blf::chunks::search_for_chunk_in_file;
-use blf_lib::blf::versions::halo3::v12070_08_09_05_2031_halo3_ship::{s_blf_chunk_content_header, s_blf_chunk_saved_film_header};
+use blf_lib::blf::chunks::{find_chunk_in_file, search_for_chunk_in_file};
+use blf_lib::blf::versions::halo3::v12070_08_09_05_2031_halo3_ship::{s_blf_chunk_author, s_blf_chunk_content_header, s_blf_chunk_end_of_file, s_blf_chunk_saved_film_header, s_blf_chunk_screenshot_camera, s_blf_chunk_screenshot_data, s_blf_chunk_start_of_file};
 use blf_lib::io::write_json_file;
 use crate::build_path;
 use crate::console::console_task;
@@ -28,7 +28,7 @@ pub fn dump_film_data(
             let flmh = flmh.unwrap();
             let chdr = chdr.unwrap();
             write_json_file(&flmh, format!("{file_path}.json"));
-            task.add_message(format!("{} - {}", file_name, chdr.metadata.name.get_string()));
+            task.add_message(format!("{} - {}", file_name.to_string(), chdr.metadata.name.get_string()));
         }
     });
 

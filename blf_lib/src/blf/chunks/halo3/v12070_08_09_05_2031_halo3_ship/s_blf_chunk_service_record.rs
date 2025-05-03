@@ -1,19 +1,19 @@
 use std::u32;
 use binrw::{binrw, BinRead, BinWrite};
 use serde::{Deserialize, Serialize};
+use blf_lib::blam::common::math::integer_math::{int16_point2d, int16_rectangle2d};
+use blf_lib::blam::common::math::real_math::{real_point3d, real_vector3d, real_plane3d, real_point2d, real_matrix4x3, real_vector2d, real_rectangle2d};
+use blf_lib::types::bool::s_bool;
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
-use blf_lib_derive::BlfChunk;
+use blf_lib_derive::{BlfChunk, TestSize};
+use std::io::{Write};
 use num_derive::FromPrimitive;
-use serde_repr::{Deserialize_repr, Serialize_repr};
-use tsify::Tsify;
 use blf_lib::types::c_string::StaticWcharString;
-use wasm_bindgen::prelude::wasm_bindgen;
 
 #[binrw]
-#[derive(BlfChunk,Default,PartialEq,Debug,Clone,Serialize,Deserialize,Tsify)]
+#[derive(BlfChunk,Default,PartialEq,Debug,Clone,Serialize,Deserialize)]
 #[Header("srid", 2.1)]
 #[brw(big)]
-#[tsify(into_wasm_abi, from_wasm_abi)]
 #[Size(0x5C)]
 pub struct s_blf_chunk_service_record
 {
@@ -49,20 +49,16 @@ pub struct s_blf_chunk_service_record
     pub unknown_insignia2: i32,
 }
 
-#[derive(Clone, PartialEq, Debug, Serialize_repr, Deserialize_repr, BinRead, BinWrite, Default, FromPrimitive)]
+#[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, FromPrimitive)]
 #[brw(big, repr = u8)]
-#[wasm_bindgen]
-#[repr(u8)]
 pub enum PlayerModel {
     #[default]
     Spartan = 0,
     Elite = 1,
 }
 
-#[derive(Clone, PartialEq, Debug, Serialize_repr, Deserialize_repr, BinRead, BinWrite, Default, FromPrimitive)]
+#[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, FromPrimitive)]
 #[brw(big, repr = u8)]
-#[wasm_bindgen]
-#[repr(u8)]
 pub enum SpartanHelmet {
     #[default]
     Default = 0,
@@ -78,10 +74,8 @@ pub enum SpartanHelmet {
     Rogue,
 }
 
-#[derive(Clone, PartialEq, Debug, Serialize_repr, Deserialize_repr, BinRead, BinWrite, Default, FromPrimitive)]
+#[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, FromPrimitive)]
 #[brw(big, repr = u8)]
-#[wasm_bindgen]
-#[repr(u8)]
 pub enum SpartanShoulder {
     #[default]
     Default = 0,
@@ -94,10 +88,8 @@ pub enum SpartanShoulder {
     Scout,
 }
 
-#[derive(Clone, PartialEq, Debug, Serialize_repr, Deserialize_repr, BinRead, BinWrite, Default, FromPrimitive)]
+#[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, FromPrimitive)]
 #[brw(big, repr = u8)]
-#[wasm_bindgen]
-#[repr(u8)]
 pub enum SpartanBody {
     #[default]
     Default = 0,
@@ -111,10 +103,8 @@ pub enum SpartanBody {
     Bungie,
 }
 
-#[derive(Clone, PartialEq, Debug, Serialize_repr, Deserialize_repr, BinRead, BinWrite, Default, FromPrimitive)]
+#[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, FromPrimitive)]
 #[brw(big, repr = u8)]
-#[wasm_bindgen]
-#[repr(u8)]
 pub enum EliteArmour {
     #[default]
     Default = 0,
@@ -124,10 +114,8 @@ pub enum EliteArmour {
     Scythe,
 }
 
-#[derive(Clone, PartialEq, Debug, Serialize_repr, Deserialize_repr, BinRead, BinWrite, Default, FromPrimitive)]
+#[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, FromPrimitive)]
 #[brw(big, repr = u32)]
-#[wasm_bindgen]
-#[repr(u32)]
 pub enum Rank {
     #[default]
     None = 0,
@@ -146,10 +134,8 @@ pub enum Rank {
     General,
 }
 
-#[derive(Clone, PartialEq, Debug, Serialize_repr, Deserialize_repr, BinRead, BinWrite, Default, FromPrimitive)]
+#[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, FromPrimitive)]
 #[brw(big, repr = u32)]
-#[wasm_bindgen]
-#[repr(u32)]
 pub enum Grade {
     #[default]
     Grade1 = 0,
@@ -158,10 +144,8 @@ pub enum Grade {
     Grade4,
 }
 
-#[derive(Clone, PartialEq, Debug, Serialize_repr, Deserialize_repr, BinRead, BinWrite, Default, FromPrimitive)]
+#[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, FromPrimitive)]
 #[brw(big, repr = u8)]
-#[wasm_bindgen]
-#[repr(u8)]
 pub enum Color {
     #[default]
     Steel = 0,

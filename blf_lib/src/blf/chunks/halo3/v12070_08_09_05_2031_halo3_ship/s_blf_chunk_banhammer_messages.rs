@@ -36,7 +36,7 @@ impl s_blf_chunk_banhammer_messages {
         for message in messages.iter() {
             let message = StaticString::<k_banhammer_message_max_length>::from_string(message);
 
-            if message.is_err() {
+            if !message.is_ok() {
                 return Err(format!("Banhammer message: {}", message.unwrap_err()))
             }
 

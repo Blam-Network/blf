@@ -6,7 +6,6 @@ use wasm_bindgen::prelude::wasm_bindgen;
 
 #[derive(Debug, Clone, PartialEq, Copy)]
 #[wasm_bindgen(getter_with_clone)]
-#[derive(Default)]
 pub struct s_bool(pub bool);
 
 impl fmt::Display for s_bool {
@@ -15,15 +14,17 @@ impl fmt::Display for s_bool {
     }
 }
 
-impl From<s_bool> for bool {
-    fn from(val: s_bool) -> Self {
-        val.0
+impl Into<bool> for s_bool {
+    fn into(self) -> bool {
+        self.0
     }
 }
 
 impl From<bool> for s_bool {
     fn from(val: bool) -> s_bool {
-        s_bool(val)
+        s_bool {
+            0: val
+        }
     }
 }
 
@@ -33,6 +34,11 @@ impl PartialEq<bool> for s_bool {
     }
 }
 
+impl Default for s_bool {
+    fn default() -> Self {
+        s_bool(false) // Default value is false
+    }
+}
 
 // Custom Serialize implementation
 impl Serialize for s_bool {

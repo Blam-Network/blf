@@ -1,7 +1,11 @@
 use std::fs;
 use std::path::Path;
-use blf_lib::blf::chunks::search_for_chunk_in_file;
-use blf_lib::blf::versions::halo3::v12070_08_09_05_2031_halo3_ship::{s_blf_chunk_content_header, s_blf_chunk_screenshot_camera, s_blf_chunk_screenshot_data};
+use blf_lib::blf::BlfFileBuilder;
+use blf_lib::blf::chunks::{find_chunk_in_file, search_for_chunk_in_file};
+use blf_lib::blf::versions::halo3::k_title_halo3;
+use blf_lib::blf::versions::halo3::v12070_08_09_05_2031_halo3_ship::{s_blf_chunk_author, s_blf_chunk_content_header, s_blf_chunk_end_of_file, s_blf_chunk_screenshot_camera, s_blf_chunk_screenshot_data, s_blf_chunk_start_of_file};
+use crate::title_storage::halo3::v12070_08_09_05_2031_halo3_ship;
+use crate::title_storage::halo3::v12070_08_09_05_2031_halo3_ship::k_build_string_halo3_ship_12070;
 
 pub fn unpack_screenshot(
     screenshot_path: String,

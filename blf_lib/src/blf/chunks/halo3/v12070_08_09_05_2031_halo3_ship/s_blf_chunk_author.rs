@@ -38,11 +38,8 @@ impl s_blf_chunk_author {
         let version = env!("CARGO_PKG_VERSION");
         let name = env!("CARGO_PKG_NAME");
 
-        let author_name = format!("{name} v{version}");
-        let author_name = &author_name[..16.min(author_name.len())];
-
         Self {
-            program_name: StaticString::from_string(author_name).unwrap(),
+            program_name: StaticString::from_string(format!("{name} v{version}")).unwrap(),
             build_identifier: build_number_identifier {
                 build_number,
                 build_number_version: 1,

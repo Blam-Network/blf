@@ -209,7 +209,7 @@ impl BinRead for c_game_variant {
 
 impl c_game_variant {
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) {
-        bitstream.write_raw(self.m_game_engine, 4);
+        bitstream.write_raw(&self.m_game_engine, 4);
 
         self.m_base_variant.encode(bitstream);
 

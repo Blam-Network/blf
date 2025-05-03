@@ -1,5 +1,6 @@
 use binrw::{BinRead, BinWrite};
 use serde::{Deserialize, Serialize};
+use blf_lib::io::bitstream::{c_bitstream_reader, c_bitstream_writer};
 use crate::types::c_string::StaticString;
 use crate::types::c_string::StaticWcharString;
 use serde_hex::{SerHex,StrictCap};

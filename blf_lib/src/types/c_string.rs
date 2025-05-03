@@ -5,16 +5,12 @@ use serde::{Deserializer, Serialize, Serializer};
 use widestring::U16CString;
 use std::char::{decode_utf16, REPLACEMENT_CHARACTER};
 use binrw::{BinRead, BinWrite};
-use js_sys::JsString;
 use serde::de::Error;
-use wasm_bindgen::convert::{FromWasmAbi, IntoWasmAbi};
-use wasm_bindgen::describe::WasmDescribe;
-use wasm_bindgen::JsValue;
 
 pub fn to_string(chars: &[c_char]) -> String {
     let mut res = String::new();
     for char in chars {
-        let copy: u8 = *char as u8;
+        let copy: u8 = char.clone() as u8;
         if copy == 0 {
             break;
         }
@@ -71,7 +67,7 @@ impl<const N: usize> StaticWcharString<N> {
         }
         let buf = self.buf.get_mut();
         buf.fill(0);
-        buf[0..u16s.len()].copy_from_slice(u16s);
+        buf[0..u16s.len()].copy_from_slice(&u16s);
         Ok(())
     }
 
@@ -88,7 +84,7 @@ impl<const N: usize> Serialize for StaticWcharString<N> {
     where
         S: Serializer
     {
-        serializer.serialize_str(&self.get_string().to_string())
+        serializer.serialize_str(&format!("{}", self.get_string()))
     }
 }
 
@@ -123,7 +119,7 @@ impl<const N: usize> StaticString<N> {
     pub fn set_string(&mut self, value: &String) -> Result<(), String> {
         let mut bytes = value.as_bytes();
         // if a null termination was provided at the end, chop it off
-        if !bytes.is_empty() && bytes[bytes.len() - 1] == 0 {
+        if bytes.len() > 0 && bytes[bytes.len() - 1] == 0 {
             bytes = &bytes[0..bytes.len() - 1];
         }
         if bytes.len() > N {
@@ -153,7 +149,7 @@ impl<const N: usize> Serialize for StaticString<N> {
     where
         S: Serializer
     {
-        serializer.serialize_str(&self.get_string().to_string())
+        serializer.serialize_str(&format!("{}", self.get_string()))
     }
 }
 
@@ -166,53 +162,5 @@ impl<'de, const N: usize> serde::Deserialize<'de> for StaticString<N> {
         } else {
             Ok(res.unwrap())
         }
-    }
-}
-
-impl<const N: usize> WasmDescribe for StaticString<N> {
-    fn describe() {
-        JsString::describe();
-    }
-}
-
-impl<const N: usize> FromWasmAbi for StaticString<N> {
-    type Abi = <JsString as FromWasmAbi>::Abi;
-
-    unsafe fn from_abi(js: Self::Abi) -> Self {
-        let js_value = JsString::from_abi(js);
-        let string = js_value.as_string().unwrap_or_default();
-        StaticString::from_string(string).unwrap_or_default()
-    }
-}
-
-impl<const N: usize> IntoWasmAbi for StaticString<N> {
-    type Abi = <JsValue as IntoWasmAbi>::Abi;
-
-    fn into_abi(self) -> Self::Abi {
-        JsValue::from(self.get_string()).into_abi()
-    }
-}
-
-impl<const N: usize> WasmDescribe for StaticWcharString<N> {
-    fn describe() {
-        JsString::describe();
-    }
-}
-
-impl<const N: usize> FromWasmAbi for StaticWcharString<N> {
-    type Abi = <JsValue as FromWasmAbi>::Abi;
-
-    unsafe fn from_abi(js: Self::Abi) -> Self {
-        let js_value = JsString::from_abi(js);
-        let string = js_value.as_string().unwrap_or_default();
-        StaticWcharString::from_string(&string).unwrap_or_default()
-    }
-}
-
-impl<const N: usize> IntoWasmAbi for StaticWcharString<N> {
-    type Abi = <JsString as IntoWasmAbi>::Abi;
-
-    fn into_abi(self) -> Self::Abi {
-        JsString::from(self.get_string()).into_abi()
     }
 }
