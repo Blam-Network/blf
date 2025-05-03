@@ -14,9 +14,6 @@
   ],
   "napi": {
     "name": "blf_lsp",
-    "package": {
-      "name": "@blamnetwork/blf_lsp"
-    },
     "triples": {
       "defaults": false,
       "additional": [
