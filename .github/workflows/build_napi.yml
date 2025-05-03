@@ -16,8 +16,9 @@ permissions:
   push:
     branches:
       - napi
-    tags-ignore:
-      - '**'
+      - main
+    tags:
+      - '*'
     paths-ignore:
       - '**/*.md'
       - LICENSE
