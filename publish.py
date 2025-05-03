@@ -22,6 +22,5 @@ subprocess.call(['napi', 'version', '--config', '../blf_lsp/config.json'], cwd='
 
 subprocess.call(['git', 'add', 'Cargo.toml', '**/Cargo.toml', '**/package.json'])
 subprocess.call(['git', 'commit', '-m', f'{new_version}'])
-subprocess.call(['git', 'tag', f'{new_version}'])
-subprocess.call(['git', 'push'])
-subprocess.call(['git', 'push', 'origin', new_version])
+subprocess.call(['git', 'tag', new_version])
+subprocess.call(['git', 'push', '--tags'])
