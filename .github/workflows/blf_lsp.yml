@@ -190,6 +190,8 @@ jobs:
           cache-dependency-path: './blf_lsp-npm'
       - name: Install dependencies
         run: yarn install
+      - name: build
+        run: yarn build
       - name: Download all artifacts
         uses: actions/download-artifact@v4
         with:
