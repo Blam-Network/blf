@@ -199,10 +199,6 @@ jobs:
         shell: bash
       - name: Publish
         run: |
-          VERSION=$(cargo version-util get-version --manifest-path ../Cargo.toml)
-          npm version "$VERSION" --no-git-tag-version
-          npm config set provenance true
-          npx napi version "$VERSION"
           if git log -1 --pretty=%B | grep "^[0-9]\+\.[0-9]\+\.[0-9]\+$";
           then
             echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
