@@ -52,7 +52,7 @@ pub struct s_blf_chunk_service_record
 #[derive(Clone, PartialEq, Debug, Serialize_repr, Deserialize_repr, BinRead, BinWrite, Default, FromPrimitive)]
 #[brw(big, repr = u32)]
 #[wasm_bindgen]
-#[repr(u8)]
+#[repr(u32)]
 pub enum PlayerModel {
     #[default]
     Spartan = 0,
@@ -62,7 +62,7 @@ pub enum PlayerModel {
 #[derive(Clone, PartialEq, Debug, Serialize_repr, Deserialize_repr, BinRead, BinWrite, Default, FromPrimitive)]
 #[brw(big, repr = u32)]
 #[wasm_bindgen]
-#[repr(u8)]
+#[repr(u32)]
 pub enum SpartanHelmet {
     #[default]
     Default = 0,
@@ -81,7 +81,7 @@ pub enum SpartanHelmet {
 #[derive(Clone, PartialEq, Debug, Serialize_repr, Deserialize_repr, BinRead, BinWrite, Default, FromPrimitive)]
 #[brw(big, repr = u32)]
 #[wasm_bindgen]
-#[repr(u8)]
+#[repr(u32)]
 pub enum SpartanShoulder {
     #[default]
     Default = 0,
@@ -97,7 +97,7 @@ pub enum SpartanShoulder {
 #[derive(Clone, PartialEq, Debug, Serialize_repr, Deserialize_repr, BinRead, BinWrite, Default, FromPrimitive)]
 #[brw(big, repr = u32)]
 #[wasm_bindgen]
-#[repr(u8)]
+#[repr(u32)]
 pub enum SpartanBody {
     #[default]
     Default = 0,
@@ -114,7 +114,7 @@ pub enum SpartanBody {
 #[derive(Clone, PartialEq, Debug, Serialize_repr, Deserialize_repr, BinRead, BinWrite, Default, FromPrimitive)]
 #[brw(big, repr = u32)]
 #[wasm_bindgen]
-#[repr(u8)]
+#[repr(u32)]
 pub enum EliteArmour {
     #[default]
     Default = 0,
@@ -127,7 +127,7 @@ pub enum EliteArmour {
 #[derive(Clone, PartialEq, Debug, Serialize_repr, Deserialize_repr, BinRead, BinWrite, Default, FromPrimitive)]
 #[brw(big, repr = u32)]
 #[wasm_bindgen]
-#[repr(u8)]
+#[repr(u32)]
 pub enum Rank {
     #[default]
     None = 0,
@@ -149,7 +149,7 @@ pub enum Rank {
 #[derive(Clone, PartialEq, Debug, Serialize_repr, Deserialize_repr, BinRead, BinWrite, Default, FromPrimitive)]
 #[brw(big, repr = u32)]
 #[wasm_bindgen]
-#[repr(u8)]
+#[repr(u32)]
 pub enum Grade {
     #[default]
     Grade1 = 0,
@@ -161,7 +161,7 @@ pub enum Grade {
 #[derive(Clone, PartialEq, Debug, Serialize_repr, Deserialize_repr, BinRead, BinWrite, Default, FromPrimitive)]
 #[brw(big, repr = u32)]
 #[wasm_bindgen]
-#[repr(u8)]
+#[repr(u32)]
 pub enum Color {
     #[default]
     Steel = 0,
