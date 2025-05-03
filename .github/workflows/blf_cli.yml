@@ -70,5 +70,3 @@ jobs:
             /home/runner/work/blf_lib/blf_lib/target/x86_64-unknown-linux-musl/release/blf_cli
             /home/runner/work/blf_lib/blf_lib/target/aarch64-apple-darwin/release/blf_cli
             /home/runner/work/blf_lib/blf_lib/target/x86_64-apple-darwin/release/blf_cli
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

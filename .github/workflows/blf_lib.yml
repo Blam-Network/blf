@@ -36,9 +36,8 @@ jobs:
     - uses: Swatinem/rust-cache@v2
     - name: Set up cargo registry credentials
       run: |
-        echo "//crates.io/api/v1/packages" >> ~/.cargo/config
-        echo "username = \"${{ secrets.CARGO_USERNAME }}\"" >> ~/.cargo/config
-        echo "token = \"${{ secrets.CARGO_TOKEN }}\"" >> ~/.cargo/config
+        echo "[registry]" >> ~/.cargo/credentials.toml
+        echo "token = \"${{ secrets.CARGO_TOKEN }}\"" >> ~/.cargo/credentials.toml
     - name: Publish crate
       working-directory: ./blf_lib
       run: cargo publish --no-verify
