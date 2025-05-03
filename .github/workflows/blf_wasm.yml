@@ -2,6 +2,8 @@ name: blf_wasm
 on:
   push:
     branches: [ "main", "workflow", "wasm" ]
+    tags:
+      - '*'
   pull_request:
     branches: [ "main", "workflow", "wasm" ]
 
