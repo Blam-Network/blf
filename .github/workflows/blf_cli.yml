@@ -38,28 +38,28 @@ jobs:
         uses: actions/upload-artifact@v4.6.1
         with:
           name: blf_cli Windows (x86_64-pc-windows-gnu)
-          path: /home/runner/work/blf_lib/blf_lib/target/x86_64-pc-windows-gnu/release/blf_cli.exe
+          path: /home/runner/work/blf/blf/target/x86_64-pc-windows-gnu/release/blf_cli.exe
       - name: Upload Linux Binaries
         uses: actions/upload-artifact@v4.6.1
         with:
           name: blf_cli Linux (x86_64-unknown-linux-musl)
-          path: /home/runner/work/blf_lib/blf_lib/target/x86_64-unknown-linux-musl/release/blf_cli
+          path: /home/runner/work/blf/blf/target/x86_64-unknown-linux-musl/release/blf_cli
       - name: Upload MacOS Binaries (Apple Silicon)
         uses: actions/upload-artifact@v4.6.1
         with:
           name: blf_cli MacOS (aarch64-apple-darwin)
-          path: /home/runner/work/blf_lib/blf_lib/target/aarch64-apple-darwin/release/blf_cli
+          path: /home/runner/work/blf/blf/target/aarch64-apple-darwin/release/blf_cli
       - name: Upload MacOS Binaries (x86)
         uses: actions/upload-artifact@v4.6.1
         with:
           name: blf_cli MacOS (x86_64-apple-darwin)
-          path: /home/runner/work/blf_lib/blf_lib/target/x86_64-apple-darwin/release/blf_cli
+          path: /home/runner/work/blf/blf/target/x86_64-apple-darwin/release/blf_cli
       - name: Rename release binaries
         run: |
-          mv /home/runner/work/blf_lib/blf_lib/target/x86_64-pc-windows-gnu/release/blf_cli.exe blf_cli-windows.exe
-          mv /home/runner/work/blf_lib/blf_lib/target/x86_64-unknown-linux-musl/release/blf_cli blf_cli-linux
-          mv /home/runner/work/blf_lib/blf_lib/target/aarch64-apple-darwin/release/blf_cli blf_cli-mac-arm
-          mv /home/runner/work/blf_lib/blf_lib/target/x86_64-apple-darwin/release/blf_cli blf_cli-mac-intel
+          mv /home/runner/work/blf/blf/target/x86_64-pc-windows-gnu/release/blf_cli.exe blf_cli-windows.exe
+          mv /home/runner/work/blf/blf/target/x86_64-unknown-linux-musl/release/blf_cli blf_cli-linux
+          mv /home/runner/work/blf/blf/target/aarch64-apple-darwin/release/blf_cli blf_cli-mac-arm
+          mv /home/runner/work/blf/blf/target/x86_64-apple-darwin/release/blf_cli blf_cli-mac-intel
 
       - name: Create Release
         uses: softprops/action-gh-release@v1

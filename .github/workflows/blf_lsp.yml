@@ -25,16 +25,16 @@ jobs:
       - name: Install wasm-pack
         run: cargo install wasm-pack
       - name: Build
-        working-directory: /home/runner/work/blf_lib/blf_lib
+        working-directory: /home/runner/work/blf/blf
         run: wasm-pack build blf_lsp --target nodejs --scope blamnetwork
       # - name: Upload Wasm Package (if needed)
       #   uses: actions/upload-artifact@v4.6.1
       #   with:
-      #     name: blf_bnet
-      #     path: /home/runner/work/blf_lib/blf_lib/blf_bnet/pkg
+      #     name: blf_lsp
+      #     path: /home/runner/work/blf/blf/blf_lsp/pkg
       - name: Publish
         if: startsWith(github.ref, 'refs/tags/')
-        working-directory: /home/runner/work/blf_lib/blf_lib
+        working-directory: /home/runner/work/blf/blf
         run: wasm-pack publish blf_lsp --access=public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
