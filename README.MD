@@ -28,5 +28,3 @@ To my knowledge, Bungie have never shared the meaning of the BLF acronym, but it
 | 0x4    | 4      | chunk length    |
 | 0x8    | 2      | major version   |
 | 0xA    | 2      | minor version   |
-
-This repository consists of a code library and command-line interface built for reading and writing Blam! Files, used by various Halo games.
