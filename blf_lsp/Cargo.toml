@@ -9,11 +9,11 @@ crate-type = ["cdylib"]
 
 [dependencies]
 blf_lib = { path = "../blf_lib", version = "1.7.0-pre23" }
-napi        = "2"
-napi-derive = "2"
+napi.workspace = true
+napi-derive.workspace = true
 
 [build-dependencies]
-napi-build = "2"
+napi-build.workspace = true
 
 [profile.release]
 lto = true

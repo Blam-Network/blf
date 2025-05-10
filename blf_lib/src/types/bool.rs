@@ -1,6 +1,8 @@
 use std::fmt;
 use std::io::{Read, Seek, Write};
 use binrw::{BinRead, BinReaderExt, BinResult, BinWrite, Endian};
+use napi::bindgen_prelude::{FromNapiValue, ToNapiValue};
+use napi::sys::{napi_env, napi_value};
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use wasm_bindgen::prelude::wasm_bindgen;
 
@@ -101,5 +103,19 @@ impl BinWrite for s_bool {
         }
 
         Ok(())
+    }
+}
+
+impl ToNapiValue for s_bool {
+    unsafe fn to_napi_value(env: napi_env, val: Self) -> napi::Result<napi_value> {
+        bool::to_napi_value(env, val.0)
+    }
+}
+
+impl FromNapiValue for s_bool {
+    unsafe fn from_napi_value(env: napi_env, napi_val: napi_value) -> napi::Result<Self> {
+        Ok(Self {
+            0: bool::from_napi_value(env, napi_val)?,
+        })
     }
 }

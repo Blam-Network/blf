@@ -2,6 +2,9 @@ use std::fmt::Display;
 use binrw::{BinRead, BinWrite};
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use chrono::{DateTime, NaiveDateTime, TimeZone, Utc};
+use napi::bindgen_prelude::{FromNapiValue, ToNapiValue};
+use napi::sys::{napi_env, napi_value};
+use blf_lib::types::bool::s_bool;
 
 #[derive(Default, Clone, Debug, PartialEq, BinRead, BinWrite, Copy)]
 pub struct time64_t(pub u64);
@@ -101,6 +104,12 @@ impl From<time32_t> for DateTime<Utc> {
     }
 }
 
+impl From<time32_t> for NaiveDateTime {
+    fn from(val: time32_t) -> Self {
+        NaiveDateTime::from_timestamp(val.0 as i64, 0)
+    }
+}
+
 impl From<u32> for time32_t {
     fn from(t: u32) -> Self {
         Self(t)
@@ -160,5 +169,20 @@ impl<'de> Deserialize<'de> for filetime {
         let datetime = NaiveDateTime::parse_from_str(&s, "%Y-%m-%d %H:%M:%S")
             .map_err(serde::de::Error::custom)?;
         Ok(Self::from_time_t(datetime.and_utc().timestamp() as u64))
+    }
+}
+
+
+impl ToNapiValue for time32_t {
+    unsafe fn to_napi_value(env: napi_env, val: Self) -> napi::Result<napi_value> {
+        NaiveDateTime::to_napi_value(env, val.into())
+    }
+}
+
+impl FromNapiValue for time32_t {
+    unsafe fn from_napi_value(env: napi_env, napi_val: napi_value) -> napi::Result<Self> {
+        Ok(Self {
+            0: NaiveDateTime::from_napi_value(env, napi_val)?.and_utc().timestamp() as u32,
+        })
     }
 }

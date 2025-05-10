@@ -23,6 +23,8 @@ num-traits = "0.2.19"
 num-derive = "0.4.2"
 flate2 = "1.0.35"
 wasm-bindgen = "0.2.100"
+napi.workspace = true
+napi-derive.workspace = true
 
 [features]
 default = ["derive"]

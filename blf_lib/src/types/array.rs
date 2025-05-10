@@ -1,6 +1,9 @@
 use std::io::{Read, Seek, Write};
 use std::ops::Index;
 use binrw::{BinRead, BinResult, BinWrite, Endian};
+use napi::bindgen_prelude::{Array, FromNapiValue, ToNapiValue};
+use napi::{sys, Env, JsObject, NapiRaw, NapiValue};
+use napi::sys::{napi_env, napi_value};
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 
 #[derive(PartialEq, Debug)]
@@ -95,5 +98,53 @@ impl<'de, E: Deserialize<'de> + Clone, const N: usize> serde::Deserialize<'de> f
         Ok(Self {
             _data: Vec::<E>::deserialize(d)?
         })
+    }
+}
+
+
+
+impl<E: Serialize, const N: usize> ToNapiValue for StaticArray<E, N> {
+    unsafe fn to_napi_value(env: napi_env, val: Self) -> napi::Result<napi::sys::napi_value> {
+        // Serialize the StaticArray to JSON string
+        let json_str = serde_json::to_string(&val._data).map_err(|e| napi::Error::from_reason(e.to_string()))?;
+
+        // Create a JsString from the serialized JSON
+        let env = Env::from_raw(env);
+        let js_str = env.create_string(&json_str)?;
+
+        Ok(js_str.raw())
+    }
+}
+
+impl<E: Serialize, const N: usize> ToNapiValue for &mut StaticArray<E, N> {
+    unsafe fn to_napi_value(env: napi_env, val: Self) -> napi::Result<napi::sys::napi_value> {
+        // Serialize the StaticArray to JSON string
+        let json_str = serde_json::to_string(&val._data).map_err(|e| napi::Error::from_reason(e.to_string()))?;
+
+        // Create a JsString from the serialized JSON
+        let env = Env::from_raw(env);
+        let js_str = env.create_string(&json_str)?;
+
+        Ok(js_str.raw())
+    }
+}
+
+impl<E: FromNapiValue, const N: usize> FromNapiValue for StaticArray<E, N> {
+    unsafe fn from_napi_value(env: sys::napi_env, napi_val: sys::napi_value) -> napi::Result<Self> {
+        let arr = unsafe { Array::from_napi_value(env, napi_val)? };
+        let mut res = StaticArray::<E, N>{ _data: Vec::<E>::new() };
+
+        for i in 0..arr.len() {
+            if let Some(val) = arr.get::<E>(i)? {
+                res._data.push(val);
+            } else {
+                return Err(napi::Error::new(
+                    napi::Status::InvalidArg,
+                    "Found inconsistent data type in Array<T> when converting to Rust Vec<T>".to_owned(),
+                ));
+            }
+        }
+
+        Ok(res)
     }
 }

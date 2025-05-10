@@ -1,5 +1,6 @@
 use std::u32;
 use binrw::{binrw, BinRead, BinWrite};
+use napi_derive::napi;
 use serde::{Deserialize, Serialize};
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
 use blf_lib_derive::BlfChunk;
@@ -11,6 +12,7 @@ use blf_lib::types::c_string::StaticWcharString;
 #[Header("srid", 2.1)]
 #[brw(big)]
 #[Size(0x5C)]
+#[napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship")]
 pub struct s_blf_chunk_service_record
 {
     pub player_name: StaticWcharString<16>, // Wide, 16 characters max
@@ -47,6 +49,8 @@ pub struct s_blf_chunk_service_record
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, FromPrimitive)]
 #[brw(big, repr = u8)]
+#[napi(namespace = "halo3_12070_08_09_05_2031_halo3_ship")]
+#[repr(u8)]
 pub enum PlayerModel {
     #[default]
     Spartan = 0,
@@ -55,6 +59,8 @@ pub enum PlayerModel {
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, FromPrimitive)]
 #[brw(big, repr = u8)]
+#[napi(namespace = "halo3_12070_08_09_05_2031_halo3_ship")]
+#[repr(u8)]
 pub enum SpartanHelmet {
     #[default]
     Default = 0,
@@ -72,6 +78,8 @@ pub enum SpartanHelmet {
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, FromPrimitive)]
 #[brw(big, repr = u8)]
+#[napi(namespace = "halo3_12070_08_09_05_2031_halo3_ship")]
+#[repr(u8)]
 pub enum SpartanShoulder {
     #[default]
     Default = 0,
@@ -86,6 +94,8 @@ pub enum SpartanShoulder {
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, FromPrimitive)]
 #[brw(big, repr = u8)]
+#[napi(namespace = "halo3_12070_08_09_05_2031_halo3_ship")]
+#[repr(u8)]
 pub enum SpartanBody {
     #[default]
     Default = 0,
@@ -101,6 +111,8 @@ pub enum SpartanBody {
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, FromPrimitive)]
 #[brw(big, repr = u8)]
+#[napi(namespace = "halo3_12070_08_09_05_2031_halo3_ship")]
+#[repr(u8)]
 pub enum EliteArmour {
     #[default]
     Default = 0,
@@ -112,6 +124,8 @@ pub enum EliteArmour {
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, FromPrimitive)]
 #[brw(big, repr = u32)]
+#[napi(namespace = "halo3_12070_08_09_05_2031_halo3_ship")]
+#[repr(u32)]
 pub enum Rank {
     #[default]
     None = 0,
@@ -132,6 +146,8 @@ pub enum Rank {
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, FromPrimitive)]
 #[brw(big, repr = u32)]
+#[napi(namespace = "halo3_12070_08_09_05_2031_halo3_ship")]
+#[repr(u32)]
 pub enum Grade {
     #[default]
     Grade1 = 0,
@@ -142,6 +158,8 @@ pub enum Grade {
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, FromPrimitive)]
 #[brw(big, repr = u8)]
+#[napi(namespace = "halo3_12070_08_09_05_2031_halo3_ship")]
+#[repr(u8)]
 pub enum Color {
     #[default]
     Steel = 0,
@@ -174,6 +192,7 @@ pub enum Color {
     Brown,
     Ran,
     Khaki,
+    INVALID_White, // modders use this, it's whiter than the normal white.
 }
 
 impl BlfChunkHooks for s_blf_chunk_service_record {}

@@ -1,5 +1,6 @@
 use std::u32;
 use binrw::{binrw, BinRead, BinWrite};
+use napi_derive::napi;
 use serde::{Deserialize, Serialize};
 use blf_lib::types::bool::s_bool;
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
@@ -13,6 +14,7 @@ use crate::types::array::StaticArray;
 #[Header("srid", 7.1)]
 #[brw(big)]
 #[Size(0xD3C)]
+#[napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual")]
 pub struct s_blf_chunk_service_record
 {
     pub player_name: StaticWcharString<16>, // Wide, 16 characters max
@@ -92,6 +94,7 @@ pub struct s_blf_chunk_service_record
 #[derive(Default,PartialEq,Debug,Clone,Serialize,Deserialize,BinRead,BinWrite,TestSize)]
 #[brw(big)]
 #[Size(0x18)]
+#[napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual")]
 pub struct s_blf_chunk_service_record_campaign_difficulty_stats {
     pub covenant_kills: u32,
     pub vehicles_destroyed: u32,
@@ -104,6 +107,7 @@ pub struct s_blf_chunk_service_record_campaign_difficulty_stats {
 #[derive(Default,PartialEq,Debug,Clone,Serialize,Deserialize,BinRead,BinWrite,TestSize)]
 #[brw(big)]
 #[Size(0x1C)]
+#[napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual")]
 pub struct s_blf_chunk_service_record_firefight_difficulty_stats {
     pub covenant_kills: u32,
     pub vehicles_destroyed: u32,
@@ -118,6 +122,7 @@ pub struct s_blf_chunk_service_record_firefight_difficulty_stats {
 #[derive(Default,PartialEq,Debug,Clone,Serialize,Deserialize,BinRead,BinWrite,TestSize)]
 #[brw(big)]
 #[Size(0x14)]
+#[napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual")]
 pub struct s_blf_chunk_service_record_matchmaking_category_stats {
     pub games_won: u32,
     pub kills: u32,
@@ -129,6 +134,7 @@ pub struct s_blf_chunk_service_record_matchmaking_category_stats {
 #[derive(Default,PartialEq,Debug,Clone,Serialize,Deserialize,BinRead,BinWrite,TestSize)]
 #[brw(big)]
 #[Size(0x348)]
+#[napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual")]
 pub struct s_blf_chunk_service_record_arena_season_stats {
     pub season_number: u32,
     pub hopper_stats_count: u32,
@@ -138,6 +144,7 @@ pub struct s_blf_chunk_service_record_arena_season_stats {
 #[derive(Default,PartialEq,Debug,Clone,Serialize,Deserialize,BinRead,BinWrite,TestSize)]
 #[brw(big)]
 #[Size(0x68)]
+#[napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual")]
 pub struct s_blf_chunk_service_record_arena_hopper_stats {
     pub hopper_name: StaticString<32>,
     pub hames_played_today: u32,
@@ -163,6 +170,7 @@ pub struct s_blf_chunk_service_record_arena_hopper_stats {
 #[derive(Default,PartialEq,Debug,Clone,Serialize,Deserialize,BinRead,BinWrite,TestSize)]
 #[brw(big)]
 #[Size(0x8)]
+#[napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual")]
 pub struct s_blf_chunk_service_record_commendation {
     pub commendation: u32,
     pub progress: u32,

@@ -1,4 +1,5 @@
 use binrw::binrw;
+use napi_derive::napi;
 use serde::{Deserialize, Serialize};
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
 use blf_lib_derive::BlfChunk;
@@ -10,6 +11,7 @@ use crate::types::c_string::StaticString;
 #[Header("fupd", 7.1)]
 #[brw(big)]
 #[Size(0x45)]
+#[napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual")]
 pub struct s_blf_chunk_player_data {
     pub hopper_access: u8,
     pub bungie_user_role: u16,
