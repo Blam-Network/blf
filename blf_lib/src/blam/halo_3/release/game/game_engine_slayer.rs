@@ -1,25 +1,27 @@
 use binrw::{BinRead, BinWrite};
+use napi_derive::napi;
 use serde::{Deserialize, Serialize};
 use blf_lib::io::bitstream::{c_bitstream_reader, c_bitstream_writer};
 use blf_lib::blam::halo_3::release::game::game_engine_player_traits::c_player_traits;
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite)]
+#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 pub struct c_game_engine_slayer_variant {
-    m_score_to_win: i16,
-    m_kill_points: i16,
-    m_assist_points: i8,
-    m_death_points: i8,
-    m_suicide_points: i8,
-    m_betrayal_points: i8,
-    m_leader_killed_points: i8,
-    m_elimination_points: i8,
-    m_assassination_points: i8,
-    m_headshot_points: i8,
-    m_melee_points: i8,
-    m_sticky_points: i8,
-    m_splatter_points: i8,
-    m_killing_spree_points: i8,
-    m_leader_traits: c_player_traits,
+    pub m_score_to_win: i16,
+    pub m_kill_points: i16,
+    pub m_assist_points: i8,
+    pub m_death_points: i8,
+    pub m_suicide_points: i8,
+    pub m_betrayal_points: i8,
+    pub m_leader_killed_points: i8,
+    pub m_elimination_points: i8,
+    pub m_assassination_points: i8,
+    pub m_headshot_points: i8,
+    pub m_melee_points: i8,
+    pub m_sticky_points: i8,
+    pub m_splatter_points: i8,
+    pub m_killing_spree_points: i8,
+    pub m_leader_traits: c_player_traits,
 }
 
 impl c_game_engine_slayer_variant {

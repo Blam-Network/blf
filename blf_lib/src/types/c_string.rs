@@ -5,11 +5,16 @@ use serde::{Deserializer, Serialize, Serializer};
 use widestring::U16CString;
 use std::char::{decode_utf16, REPLACEMENT_CHARACTER};
 use binrw::{BinRead, BinWrite};
-use napi::bindgen_prelude::{FromNapiMutRef, FromNapiValue, ToNapiValue, TypeName, ValidateNapiValue};
-use napi::{Env, JsString, NapiRaw, ValueType};
-use napi::sys::{napi_env, napi_env__, napi_value};
-use napi_derive::napi;
 use serde::de::Error;
+
+#[cfg(feature = "napi")]
+use napi::sys::{napi_env, napi_env__, napi_value};
+#[cfg(feature = "napi")]
+use napi::bindgen_prelude::{FromNapiMutRef, FromNapiValue, ToNapiValue, TypeName, ValidateNapiValue};
+#[cfg(feature = "napi")]
+use napi::{Env, JsString, NapiRaw, ValueType};
+#[cfg(feature = "napi")]
+use napi_derive::napi;
 
 pub fn to_string(chars: &[c_char]) -> String {
     let mut res = String::new();
@@ -52,7 +57,7 @@ pub struct StaticWcharString<const N: usize> {
     buf: StaticArray<u16, N>,
 }
 
-
+#[cfg(feature = "napi")]
 impl<const N: usize> ToNapiValue for StaticWcharString<N> {
     unsafe fn to_napi_value(env: *mut napi_env__, val: Self) -> napi::Result<napi::sys::napi_value> {
         let s = val.get_string();
@@ -60,6 +65,7 @@ impl<const N: usize> ToNapiValue for StaticWcharString<N> {
     }
 }
 
+#[cfg(feature = "napi")]
 impl<const N: usize> FromNapiValue for StaticWcharString<N> {
     unsafe fn from_napi_value(env: napi_env, napi_val: napi::sys::napi_value) -> napi::Result<Self> {
         let js_string = JsString::from_napi_value(env, napi_val)?;
@@ -191,6 +197,7 @@ impl<'de, const N: usize> serde::Deserialize<'de> for StaticString<N> {
     }
 }
 
+#[cfg(feature = "napi")]
 impl<const N: usize> FromNapiValue for StaticString<N> {
     unsafe fn from_napi_value(env: *mut napi_env__, napi_val: napi::sys::napi_value) -> napi::Result<Self> {
         let js_string = JsString::from_napi_value(env, napi_val)?;
@@ -198,6 +205,7 @@ impl<const N: usize> FromNapiValue for StaticString<N> {
     }
 }
 
+#[cfg(feature = "napi")]
 impl<const N: usize> ToNapiValue for StaticString<N> {
     unsafe fn to_napi_value(env: napi_env, val: Self) -> napi::Result<napi_value> {
         let s = val.get_string(); // Assuming this returns a `&str`
@@ -205,34 +213,7 @@ impl<const N: usize> ToNapiValue for StaticString<N> {
     }
 }
 
-// impl<const N: usize> FromNapiMutRef for StaticString<N> {
-//     unsafe fn from_napi_mut_ref(env: napi_env, napi_val: napi_value) -> napi::Result<&'static mut Self> {
-//         // Here, we need to assume `StaticString` is pre-allocated and passed in.
-//         let js_string = JsString::from_napi_value(env, napi_val)?;
-//
-//         // Convert the JsString to a Rust String
-//         let rust_str = js_string.into_utf8()?.as_str()?.to_string();
-//
-//         // Ensure the string length is within the bounds of StaticString
-//         if rust_str.len() > N {
-//             return Err(napi::Error::from_reason("String too long for StaticString".to_string()));
-//         }
-//
-//         // Fill the provided `StaticString`'s buffer with the string data
-//         let mut data = [0u8; N];
-//         for (i, byte) in rust_str.as_bytes().iter().enumerate() {
-//             data[i] = *byte;
-//         }
-//
-//         let wrapped_val =  Ok(StaticString { buf: data });
-//         // You should have a mutable reference to StaticString here
-//         // Assign the new data to the StaticString's buf field.
-//         Ok(&mut *(wrapped_val as *mut StaticString<N>))
-//
-//
-//     }
-// }
-
+#[cfg(feature = "napi")]
 impl<const N: usize> napi::bindgen_prelude::FromNapiMutRef for StaticString<N> {
     unsafe fn from_napi_mut_ref(
         env: napi::bindgen_prelude::sys::napi_env,
@@ -257,6 +238,7 @@ impl<const N: usize> napi::bindgen_prelude::FromNapiMutRef for StaticString<N> {
 }
 
 
+#[cfg(feature = "napi")]
 impl<const N: usize> ToNapiValue for &mut StaticString<N> {
     unsafe fn to_napi_value(env: napi_env, val: Self) -> napi::Result<napi_value> {
         let s = val.get_string(); // Assuming this returns a `&str`
@@ -265,6 +247,8 @@ impl<const N: usize> ToNapiValue for &mut StaticString<N> {
 }
 
 
+// TODO: Refactor
+#[cfg(feature = "napi")]
 impl<const N: usize> napi::bindgen_prelude::FromNapiMutRef for StaticWcharString<N> {
     unsafe fn from_napi_mut_ref(
         env: napi::bindgen_prelude::sys::napi_env,
@@ -289,13 +273,15 @@ impl<const N: usize> napi::bindgen_prelude::FromNapiMutRef for StaticWcharString
 }
 
 
+#[cfg(feature = "napi")]
 impl<const N: usize> ToNapiValue for &mut StaticWcharString<N> {
     unsafe fn to_napi_value(env: napi_env, val: Self) -> napi::Result<napi_value> {
-        let s = val.get_string(); // Assuming this returns a `&str`
-        Env::from_raw(env).create_string(&s).map(|js_str| js_str.raw()) // Convert string to JsString and return raw napi valu    }
+        String::to_napi_value(env, val.get_string())
     }
 }
 
+// TODO: Remove
+#[cfg(feature = "napi")]
 impl<const N: usize> TypeName for StaticString<N> {
     fn type_name() -> &'static str {
         todo!()
@@ -306,6 +292,8 @@ impl<const N: usize> TypeName for StaticString<N> {
     }
 }
 
+// TODO: Remove?
+#[cfg(feature = "napi")]
 impl<const N: usize> ValidateNapiValue for StaticString<N> {
 
 }

@@ -1,26 +1,26 @@
 use binrw::{BinRead, BinWrite};
+use napi_derive::napi;
 use serde::{Deserialize, Serialize};
 use blf_lib::blam::halo_3::release::game::game_engine_player_traits::c_player_traits;
 use blf_lib::io::bitstream::{c_bitstream_reader, c_bitstream_writer};
 use blf_lib::{SET_BIT, TEST_BIT};
 
 #[derive(Default, PartialEq, Debug, Clone, BinRead, BinWrite, Serialize, Deserialize)]
+#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 pub struct c_game_engine_assault_variant {
-    m_variant_flags: u16,
-    m_respawn: u16,
-    m_game_type: u16,
-    m_enemy_bomb_waypoint: u16,
-    m_score_to_win: u16,
-    m_sudden_death_time: i16,
-    m_bomb_reset_time: u16,
-    m_bomb_arming_time: u16,
-    m_bomb_disarming_time: u16,
-    m_bomb_fuse_time: u16,
-    m_carrier_traits: c_player_traits,
+    pub m_variant_flags: u16,
+    pub m_respawn: u16,
+    pub m_game_type: u16,
+    pub m_enemy_bomb_waypoint: u16,
+    pub m_score_to_win: u16,
+    pub m_sudden_death_time: i16,
+    pub m_bomb_reset_time: u16,
+    pub m_bomb_arming_time: u16,
+    pub m_bomb_disarming_time: u16,
+    pub m_bomb_fuse_time: u16,
+    pub m_carrier_traits: c_player_traits,
     #[brw(pad_after = 4)]
-    m_arming_traits: c_player_traits,
-    // #[serde(skip_serializing,skip_deserializing)]
-    // m_pad1: StaticArray<u8, 4>,
+    pub m_arming_traits: c_player_traits,
 }
 
 impl c_game_engine_assault_variant {

@@ -1,10 +1,14 @@
 use std::io::{Read, Seek, Write};
 use std::ops::Index;
 use binrw::{BinRead, BinResult, BinWrite, Endian};
-use napi::bindgen_prelude::{Array, FromNapiValue, ToNapiValue};
-use napi::{sys, Env, JsObject, NapiRaw, NapiValue};
-use napi::sys::{napi_env, napi_value};
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
+
+#[cfg(feature = "napi")]
+use napi::bindgen_prelude::{Array, FromNapiValue, ToNapiValue};
+#[cfg(feature = "napi")]
+use napi::{sys, Env, JsObject, NapiRaw, NapiValue};
+#[cfg(feature = "napi")]
+use napi::sys::{napi_env, napi_value};
 
 #[derive(PartialEq, Debug)]
 pub struct StaticArray<E: 'static, const N: usize> {
@@ -36,6 +40,17 @@ impl<'a, E: BinWrite<Args<'a> = ()> + 'static, const N: usize> BinWrite for Stat
             item.write_options(writer, endian, ())?; // Write each element using BinWrite for E with options
         }
         Ok(())
+    }
+}
+
+impl <E, const N: usize> StaticArray<E, N> {
+    pub fn from_vec(vec: Vec<E>) -> Result<Self, String> {
+        if vec.len() != N {
+            return Err(format!("Expected {N} elements but got {}.", vec.len()));
+        }
+        Ok(Self {
+            _data: vec
+        })
     }
 }
 
@@ -101,50 +116,17 @@ impl<'de, E: Deserialize<'de> + Clone, const N: usize> serde::Deserialize<'de> f
     }
 }
 
-
-
-impl<E: Serialize, const N: usize> ToNapiValue for StaticArray<E, N> {
+#[cfg(feature = "napi")]
+impl<E: ToNapiValue, const N: usize> ToNapiValue for StaticArray<E, N> {
     unsafe fn to_napi_value(env: napi_env, val: Self) -> napi::Result<napi::sys::napi_value> {
-        // Serialize the StaticArray to JSON string
-        let json_str = serde_json::to_string(&val._data).map_err(|e| napi::Error::from_reason(e.to_string()))?;
-
-        // Create a JsString from the serialized JSON
-        let env = Env::from_raw(env);
-        let js_str = env.create_string(&json_str)?;
-
-        Ok(js_str.raw())
+        let vec: Vec<E> = val._data.into();
+        <Vec<E>>::to_napi_value(env, vec)
     }
 }
 
-impl<E: Serialize, const N: usize> ToNapiValue for &mut StaticArray<E, N> {
-    unsafe fn to_napi_value(env: napi_env, val: Self) -> napi::Result<napi::sys::napi_value> {
-        // Serialize the StaticArray to JSON string
-        let json_str = serde_json::to_string(&val._data).map_err(|e| napi::Error::from_reason(e.to_string()))?;
-
-        // Create a JsString from the serialized JSON
-        let env = Env::from_raw(env);
-        let js_str = env.create_string(&json_str)?;
-
-        Ok(js_str.raw())
-    }
-}
-
+#[cfg(feature = "napi")]
 impl<E: FromNapiValue, const N: usize> FromNapiValue for StaticArray<E, N> {
     unsafe fn from_napi_value(env: sys::napi_env, napi_val: sys::napi_value) -> napi::Result<Self> {
-        let arr = unsafe { Array::from_napi_value(env, napi_val)? };
-        let mut res = StaticArray::<E, N>{ _data: Vec::<E>::new() };
-
-        for i in 0..arr.len() {
-            if let Some(val) = arr.get::<E>(i)? {
-                res._data.push(val);
-            } else {
-                return Err(napi::Error::new(
-                    napi::Status::InvalidArg,
-                    "Found inconsistent data type in Array<T> when converting to Rust Vec<T>".to_owned(),
-                ));
-            }
-        }
-
-        Ok(res)
+        Ok(Self::from_vec(Vec::<E>::from_napi_value(env, napi_val)?).map_err(|e| napi::Error::from_reason(e.to_string()))?)
     }
 }

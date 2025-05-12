@@ -5,7 +5,7 @@ use crate::blam::halo_3::release::game::game_engine_variant::c_game_variant;
 use crate::blam::halo_3::release::game::players::{s_player_configuration_from_client, s_player_configuration_from_host};
 use crate::blam::halo_3::release::saved_games::scenario_map_variant::c_map_variant;
 use crate::types::array::StaticArray;
-use crate::types::bool::s_bool;
+use crate::types::bool::Bool;
 use crate::types::c_string::{StaticString, StaticWcharString};
 
 #[derive(TestSize,BinRead,BinWrite,PartialEq,Debug,Default,Clone,Serialize,Deserialize)]
@@ -24,26 +24,26 @@ pub struct game_options {
     pub map_id: i32,
     pub scenario_path: StaticString<260>,
     pub initial_zone_set_index: i16,
-    pub load_level_only: s_bool,
+    pub load_level_only: Bool,
     pub dump_machine_index: u8,
-    pub dump_object_log: s_bool,
-    pub dump_random_seeds: s_bool,
-    pub playtest_mode: s_bool,
+    pub dump_object_log: Bool,
+    pub dump_random_seeds: Bool,
+    pub playtest_mode: Bool,
     #[brw(pad_before=1)]
     pub game_playback: i16,
-    pub record_saved_film: s_bool,
+    pub record_saved_film: Bool,
     #[brw(pad_before=1)]
     pub playback_start_tick: i32,
     pub playback_length_in_ticks: i32,
     pub campaign_difficulty: i16,
     pub campaign_insertion_point: i16,
     pub campaign_metagame_scoring: i16,
-    pub campaign_metagame_enabled: s_bool,
-    pub campaign_allow_persistent_storage: s_bool,
+    pub campaign_metagame_enabled: Bool,
+    pub campaign_allow_persistent_storage: Bool,
     pub campaign_active_primary_skulls: i32,
     pub campaign_active_secondary_skulls: i32,
     pub campaign_armaments: s_campaign_armaments,
-    pub matchmade_game: s_bool, // 0x1c4 Correct
+    pub matchmade_game: Bool, // 0x1c4 Correct
     #[brw(pad_before=7)]
     pub game_matchmaking_options: s_game_matchmaking_options,
     pub multiplayer_variant: c_game_variant, // 0x228 correct
@@ -65,7 +65,7 @@ pub struct s_campaign_armaments {
 #[Size(0x1E)]
 pub struct s_campaign_armaments_player {
     #[brw(pad_after = 1)]
-    pub valid: s_bool,
+    pub valid: Bool,
     pub primary_weapon: s_campaign_armaments_weapon,
     pub backpack_weapon: s_campaign_armaments_weapon,
     pub secondary_weapon: s_campaign_armaments_weapon,
@@ -93,7 +93,7 @@ pub struct s_machine_identifier {
 pub struct game_machine_options {
     pub machine_valid_mask: u32,
     pub machine_identifiers: StaticArray<s_machine_identifier, 16>,
-    pub local_machine_exists: s_bool,
+    pub local_machine_exists: Bool,
     #[brw(pad_before = 1)]
     pub local_machine_identifier: s_machine_identifier,
 }
@@ -101,8 +101,8 @@ pub struct game_machine_options {
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, TestSize)]
 #[Size(0x128)]
 pub struct game_player_options {
-    pub valid: s_bool,
-    pub left_game: s_bool,
+    pub valid: Bool,
+    pub left_game: Bool,
     pub user_inex: i16,
     pub controller_index: i32,
     pub machine_identifier: s_machine_identifier,
@@ -123,8 +123,8 @@ pub struct s_player_configuration {
 pub struct s_game_matchmaking_options {
     pub hopper_identifier: i16,
     pub xlast_index: i8,
-    pub hopper_ranked: s_bool,
-    pub team_game: s_bool,
+    pub hopper_ranked: Bool,
+    pub team_game: Bool,
     #[brw(pad_before = 1)]
     pub hopper_name: StaticWcharString<32>,
     #[brw(pad_before = 2)]

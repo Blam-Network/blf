@@ -4,7 +4,7 @@ use blf_lib_derivable::blf::chunks::BlfChunkHooks;
 use blf_lib_derive::BlfChunk;
 use crate::blam::halo_3::release::game::game_options::game_options;
 use crate::types::array::StaticArray;
-use crate::types::bool::s_bool;
+use crate::types::bool::Bool;
 use crate::types::c_string::StaticString;
 use crate::types::time::time32_t;
 
@@ -20,14 +20,14 @@ pub struct s_blf_chunk_saved_film_header {
     pub network_compatible_version: i32,
     pub map_language: i32, // check
     pub map_minor_version: i32,
-    pub map_minor_version_is_tracked: s_bool,
+    pub map_minor_version_is_tracked: Bool,
     #[brw(pad_before=11)]
     pub map_signature_size: i32,
     pub map_signature_bytes: StaticArray<u8, 60>,
 
-    pub is_host_film: s_bool,
-    pub contains_gamestate: s_bool,
-    pub is_snippet: s_bool,
+    pub is_host_film: Bool,
+    pub contains_gamestate: Bool,
+    pub is_snippet: Bool,
     #[brw(pad_before=5)]
     pub session_id: StaticArray<u8, 128>,
     pub options: game_options,

@@ -5,7 +5,7 @@ use crate::types::c_string::StaticString;
 use binrw::io::{Cursor, Seek};
 use binrw::{binrw, BinRead, BinResult, BinWrite};
 use binrw::BinReaderExt;
-use crate::types::bool::s_bool;
+use crate::types::bool::Bool;
 use serde_hex::{SerHex,StrictCapPfx};
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
 use blf_lib_derive::BlfChunk;
@@ -171,7 +171,7 @@ pub struct s_life_cycle_handler_joining_configuration {
 #[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
 #[brw(big)]
 pub struct s_life_cycle_handler_matchmaking_configuration {
-    pub perform_nat_check: s_bool,
+    pub perform_nat_check: Bool,
     #[brw(align_before = 4)]
     pub matchmaking_strict_nat_host_percentage: f32,
     pub matchmaking_start_failure_wait_time_ms: i32,
@@ -181,7 +181,7 @@ pub struct s_life_cycle_handler_matchmaking_configuration {
     pub matchmaking_gather_join_wait_time_ms: i32,
     pub matchmaking_search_give_up_time_seconds: i32,
     pub join_request_wait_time_ms: i32,
-    pub prepare_map_display_map_during_loading: s_bool,
+    pub prepare_map_display_map_during_loading: Bool,
     #[brw(align_before = 4)]
     pub prepare_map_veto_timer_seconds: i32,
     pub prepare_map_minimum_load_time_seconds: i32,
@@ -191,7 +191,7 @@ pub struct s_life_cycle_handler_matchmaking_configuration {
     pub end_match_write_stats_boot_threshold_seconds: i32,
     pub arbitration_wait_for_establishment_and_connectivity_threshold_seconds: i32,
     pub arbitration_wait_for_completion_threshold_seconds: i32,
-    pub post_match_return_to_pre_game_lobby: s_bool,
+    pub post_match_return_to_pre_game_lobby: Bool,
     #[brw(align_before = 4)]
     pub post_match_stats_refresh_time: i32,
     pub warning_toast_minimum_time_seconds: i32,
@@ -543,7 +543,7 @@ pub struct s_session_configuration {
     pub time_synchronization_retry_msec: i32,
     pub minimum_election_send_interval_msec: i32,
     #[brw(pad_before = 3)]
-    pub allow_third_party_host_elections: s_bool,
+    pub allow_third_party_host_elections: Bool,
 }
 
 #[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
@@ -600,7 +600,7 @@ pub struct s_observer_configuration {
     pub bandwidth_increment_known_bad_threshold_kbps: i32,
     pub bandwidth_increment_kbps: i32,
     #[brw(align_after = 4)]
-    pub generate_stream_events: s_bool,
+    pub generate_stream_events: Bool,
     pub observer_stream_expansion_interval_msec: i32,
     #[serde(with = "SerHex::<StrictCapPfx>")]
     pub stream_minimum_bps: u32,
@@ -688,9 +688,9 @@ pub struct s_observer_configuration {
     pub bandwidth_monitor_constriction_threshold_bps: u32,
     pub client_badness_rating_threshold: i32,
     pub bad_bandwidth_throughput_threshold: i32,
-    pub disable_bad_client_anticheating: s_bool,
-    pub disable_bad_connectivity_anticheating: s_bool,
-    pub disable_bad_bandwidth_anticheating: s_bool,
+    pub disable_bad_client_anticheating: Bool,
+    pub disable_bad_connectivity_anticheating: Bool,
+    pub disable_bad_bandwidth_anticheating: Bool,
     #[brw(align_before = 4)]
     pub initial_timeout: i32,
     pub mini_period_minimum_duration: i32,
@@ -747,14 +747,14 @@ pub struct s_observer_configuration {
     pub maximum_consecutive_probe_successes: i32,
     pub minimum_packet_rate_for_automatic_congestion: i32,
     pub maximum_rtt_for_automatic_congestion: i32,
-    pub do_collateral_last_resort_throttle: s_bool,
-    pub release_throttle_lock_on_first_congest: s_bool,
-    pub round_robin_probes: s_bool,
-    pub fail_all_member_probes_together: s_bool,
-    pub mark_throttled_stream_with_one_failure: s_bool,
-    pub check_single_stream_overprobe: s_bool,
-    pub use_deviation_only_for_related_rtt_timeout: s_bool,
-    pub fast_probe_failed_streams: s_bool,
+    pub do_collateral_last_resort_throttle: Bool,
+    pub release_throttle_lock_on_first_congest: Bool,
+    pub round_robin_probes: Bool,
+    pub fail_all_member_probes_together: Bool,
+    pub mark_throttled_stream_with_one_failure: Bool,
+    pub check_single_stream_overprobe: Bool,
+    pub use_deviation_only_for_related_rtt_timeout: Bool,
+    pub fast_probe_failed_streams: Bool,
     pub packet_loss_spike_threshold: i32,
     pub packet_loss_spike_minimum_packet_count: i32,
     pub packet_loss_spike_skip_averaging_any_spike: i32,
@@ -865,7 +865,7 @@ pub struct s_transport_configuration {
     pub address_resolution_timeout_msec: i32,
     pub qos_probe_count: StaticArray<i32, 2>,
     pub qos_probe_bps: StaticArray<i32, 2>,
-    pub qos_upstream_cap_enabled: s_bool,
+    pub qos_upstream_cap_enabled: Bool,
     #[brw(align_before = 4)]
     pub qos_upstream_cap_upstream_modifier_percentage: i32,
     pub qos_upstream_cap_correction_modifier: i32,
@@ -876,7 +876,7 @@ pub struct s_transport_configuration {
 pub struct s_voice_configuration {
     pub push_to_talk_inactivity_threshold_seconds: f32,
     pub maximum_push_to_talk_time_seconds: f32,
-    pub clients_can_be_preferred_consumers_of_voice_repeater: s_bool,
+    pub clients_can_be_preferred_consumers_of_voice_repeater: Bool,
     #[brw(align_before = 4)]
     pub open_channel_player_count: i32,
 }
@@ -887,7 +887,7 @@ pub struct s_data_mine_configuration {
     pub ui_upload_record_threshold: i32,
     pub ui_upload_time_threshold: i32,
     #[brw(align_after = 4)]
-    pub record_uploads_prevent_game_from_starting: s_bool,
+    pub record_uploads_prevent_game_from_starting: Bool,
 }
 
 #[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
@@ -932,8 +932,8 @@ pub struct s_experience_configuration {
 #[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
 #[brw(big)]
 pub struct s_alpha_configuration {
-    pub disable_game: s_bool,
-    pub disable_custom_games: s_bool,
+    pub disable_game: Bool,
+    pub disable_custom_games: Bool,
     #[brw(align_before = 4)]
     pub ui_level: e_alpha_configuration_ui_level,
     pub maximum_multiplayer_split_screen: i32,
@@ -942,7 +942,7 @@ pub struct s_alpha_configuration {
 #[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
 #[brw(big)]
 pub struct s_crash_handling_configuration {
-    pub display_crash_handling_ui: s_bool,
+    pub display_crash_handling_ui: Bool,
     #[brw(align_before = 4)]
     pub minidump_generation: e_minidump_generation,
 }
@@ -1023,13 +1023,13 @@ impl BinWrite for s_dlc_path {
 #[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
 #[brw(big)]
 pub struct s_chicken_switches {
-    pub allow_no_hdd_network_coop: s_bool,
-    pub allow_matched_hdd_network_coop: s_bool,
-    pub disallow_cross_language_coop: s_bool,
-    pub disable_prefer_good_connection_changes: s_bool,
-    pub allow_vidmaster_alpha_achievement: s_bool,
+    pub allow_no_hdd_network_coop: Bool,
+    pub allow_matched_hdd_network_coop: Bool,
+    pub disallow_cross_language_coop: Bool,
+    pub disable_prefer_good_connection_changes: Bool,
+    pub allow_vidmaster_alpha_achievement: Bool,
     #[brw(align_after = 4)]
-    pub au2_lsp_acquire_fix_only_enable_if_wb2_is_present: s_bool,
+    pub au2_lsp_acquire_fix_only_enable_if_wb2_is_present: Bool,
 }
 
 #[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]

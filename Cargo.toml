@@ -8,6 +8,4 @@ edition = "2021"
 license = "MIT"
 
 [workspace.dependencies]
-napi = { features = ["serde-json", "napi6", "chrono_date"], git = "https://github.com/Blam-Network/napi-rs.git" }
-napi-derive = { git = "https://github.com/Blam-Network/napi-rs.git" }
-napi-build = { git = "https://github.com/Blam-Network/napi-rs.git" }
+serde-hex = { git = "https://github.com/Blam-Network/serde-hex.git", version = "0.1.0" }

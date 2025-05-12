@@ -1,4 +1,5 @@
 use binrw::{binrw};
+use napi_derive::napi;
 use serde::{Deserialize, Serialize};
 use blf_lib_derivable::blf::chunks::{BlfChunkHooks, TitleAndBuild};
 use blf_lib_derive::BlfChunk;
@@ -10,6 +11,7 @@ use crate::types::c_string::StaticString;
 #[Header("athr", 3.1)]
 #[Size(0x44)]
 #[brw(big)]
+#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 pub struct s_blf_chunk_author {
     pub program_name: StaticString<16>,
     pub build_identifier: build_number_identifier,

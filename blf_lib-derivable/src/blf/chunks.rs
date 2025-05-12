@@ -90,7 +90,3 @@ pub trait DynTitleAndBuild {
 
     fn build_string(&self) -> String;
 }
-
-pub trait ChunkFactory {
-    fn decode(&self, signature: chunk_signature, version: chunk_version, buffer: Vec<u8>) -> Result<Box<dyn SerializableBlfChunk>, &str>;
-}

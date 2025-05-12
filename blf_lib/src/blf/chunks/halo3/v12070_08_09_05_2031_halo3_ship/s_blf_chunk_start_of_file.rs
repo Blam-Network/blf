@@ -1,4 +1,5 @@
 use binrw::binrw;
+use napi_derive::napi;
 use serde::{Deserialize, Serialize};
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
 use blf_lib_derive::BlfChunk;
@@ -12,6 +13,7 @@ pub const k_tag_string_length: usize = 32;
 #[Header("_blf", 1.2)]
 #[Size(0x24)]
 #[brw(big)]
+#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 pub struct s_blf_chunk_start_of_file
 {
     pub byte_order_mark: byte_order_mark,

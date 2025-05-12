@@ -9,7 +9,7 @@ use napi_derive::napi;
 #[derive(BlfChunk,PartialEq,Debug,Clone,Serialize,Deserialize)]
 #[Header("fupd", 3.1)]
 #[brw(big)]
-#[napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship")]
+#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 pub struct s_blf_chunk_player_data {
     pub hopper_access: u32,
     pub bungie_user_role: u32,

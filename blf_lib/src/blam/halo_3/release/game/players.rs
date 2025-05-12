@@ -1,12 +1,14 @@
 use binrw::{BinRead, BinWrite};
+use napi_derive::napi;
 use blf_lib::TestSize;
-use blf_lib::types::bool::s_bool;
+use blf_lib::types::bool::Bool;
 use blf_lib::types::c_string::StaticWcharString;
 use serde::{Deserialize, Serialize};
 use serde_hex::{SerHex,StrictCap};
 use crate::types::time::time32_t;
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default)]
+#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 pub struct s_queried_player_global_statistics {
     #[brw(pad_after = 3)]
     pub valid: u8,
@@ -16,6 +18,7 @@ pub struct s_queried_player_global_statistics {
 }
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default)]
+#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 pub struct s_queried_player_hopper_statistics {
     #[brw(pad_after = 1)]
     pub stats_valid: u8,
@@ -29,6 +32,7 @@ pub struct s_queried_player_hopper_statistics {
 }
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default)]
+#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 pub struct s_queried_player_displayed_statistics {
     #[brw(pad_after = 3)]
     pub stats_valid: u8,
@@ -46,6 +50,7 @@ pub struct s_queried_player_displayed_statistics {
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, TestSize)]
 #[Size(88)]
+#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 pub struct s_queried_player_statistics {
     pub queried_player_global_statistics: s_queried_player_global_statistics,
     pub queried_player_displayed_statistics: s_queried_player_displayed_statistics,
@@ -54,6 +59,7 @@ pub struct s_queried_player_statistics {
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, TestSize)]
 #[Size(0x1E)]
+#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 pub struct s_player_appearance {
     pub appearance_flags: u8,
     pub primary_color: u8,
@@ -81,22 +87,23 @@ pub struct s_player_appearance {
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, TestSize)]
 #[Size(0xC8)]
+#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 pub struct s_player_configuration_from_client {
     pub player_name: StaticWcharString<16>,
     pub appearance: s_player_appearance, // correct
     #[brw(pad_before = 2)]
     #[serde(with = "SerHex::<StrictCap>")]
     pub player_xuid: u64,
-    pub is_silver_or_gold_live: s_bool,
-    pub is_online_enabled: s_bool,
-    pub is_controller_attached: s_bool,
+    pub is_silver_or_gold_live: Bool,
+    pub is_online_enabled: Bool,
+    pub is_controller_attached: Bool,
     pub user_selected_team_index: i8,
-    pub desires_veto: s_bool,
-    pub desires_rematch: s_bool,
+    pub desires_veto: Bool,
+    pub desires_rematch: Bool,
     pub hopper_access_flags: u8,
-    pub is_free_live_gold_account: s_bool,
-    pub is_user_created_content_allowed: s_bool,
-    pub is_friend_created_content_allowed: s_bool,
+    pub is_free_live_gold_account: Bool,
+    pub is_user_created_content_allowed: Bool,
+    pub is_friend_created_content_allowed: Bool,
     pub is_griefer: i8, // not a bool?
     pub campaign_difficulty_completed: i8,
     #[serde(with = "SerHex::<StrictCap>")]
@@ -107,23 +114,24 @@ pub struct s_player_configuration_from_client {
     pub ban_flags: u32,
     pub repeated_play_coefficient: i32,
     #[brw(pad_after = 3)]
-    pub experience_growth_banned: s_bool,
+    pub experience_growth_banned: Bool,
     pub queried_player_statistics: s_queried_player_statistics, // good
 }
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, TestSize)]
 #[Size(0x48)]
+#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 pub struct s_player_configuration_from_host {
     pub player_name: StaticWcharString<16>,
     pub player_team: i32,
     pub player_assigned_team: i32,
     #[brw(pad_after = 3)]
-    pub stats_global_valid: s_bool,
+    pub stats_global_valid: Bool,
     pub stats_global_experience: i32,
     pub stats_global_rank: i32,
     pub stats_global_grade: i32,
     #[brw(pad_after = 3)]
-    pub stats_hopper_valid: s_bool,
+    pub stats_hopper_valid: Bool,
     pub stats_hopper_skill: i32,
     pub stats_hopper_skill_display: i32,
     pub stats_hopper_skill_update_weight: i32,
