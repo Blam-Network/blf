@@ -10,6 +10,7 @@ use crate::blam::common::simulation::simulation_encoding::{simulation_read_quant
 use serde_hex::{SerHex,StrictCap};
 use blf_lib_derive::TestSize;
 use crate::types::bool::Bool;
+use crate::types::numbers::Float32;
 
 const k_object_type_count: usize = 14;
 
@@ -24,8 +25,8 @@ pub struct c_map_variant {
     pub m_map_id: u32,
     pub m_world_bounds: real_rectangle3d,
     pub m_game_engine_subtype: u32,
-    pub m_maximum_budget: f32,
-    pub m_spent_budget: f32,
+    pub m_maximum_budget: Float32,
+    pub m_spent_budget: Float32,
     pub m_helpers_enabled: Bool,
     pub m_built_in: Bool,
     // #[serde(skip_serializing,skip_deserializing)]
@@ -224,7 +225,7 @@ pub struct s_variant_quota {
     pub maximum_count: u8,
     pub placed_on_map: u8,
     pub maximum_allowed: i8,
-    pub price_per_item: f32,
+    pub price_per_item: Float32,
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Copy, Serialize, Deserialize, BinRead, BinWrite, TestSize)]
@@ -237,10 +238,10 @@ pub struct s_variant_multiplayer_object_properties_definition {
     pub spawn_time: u8,
     pub object_type: i8,
     pub boundary_shape: u8,
-    pub boundary_size: f32, // width or radius
-    pub boundary_box_length: f32,
-    pub boundary_positive_height: f32,
-    pub boundary_negative_height: f32,
+    pub boundary_size: Float32, // width or radius
+    pub boundary_box_length: Float32,
+    pub boundary_positive_height: Float32,
+    pub boundary_negative_height: Float32,
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Copy, Serialize, Deserialize, BinRead, BinWrite, TestSize)]

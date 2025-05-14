@@ -1,5 +1,6 @@
 use std::u32;
 use binrw::{binrw, BinRead, BinWrite};
+#[cfg(feature = "napi")]
 use napi_derive::napi;
 use serde::{Deserialize, Serialize};
 use blf_lib::types::bool::Bool;
@@ -8,6 +9,7 @@ use blf_lib_derive::{BlfChunk, TestSize};
 use blf_lib::types::c_string::{StaticString, StaticWcharString};
 use blf_lib::types::time::time32_t;
 use crate::types::array::StaticArray;
+use crate::types::numbers::Float32;
 
 #[binrw]
 #[derive(BlfChunk,Default,PartialEq,Debug,Clone,Serialize,Deserialize)]
@@ -163,8 +165,8 @@ pub struct s_blf_chunk_service_record_arena_hopper_stats {
     pub kills: u32,
     pub assists: u32,
     pub deaths: u32,
-    pub last_7_days_kill_and_assist_death_ratio: f32,
-    pub last_7_days_kill_death_ratio: f32
+    pub last_7_days_kill_and_assist_death_ratio: Float32,
+    pub last_7_days_kill_death_ratio: Float32
 }
 
 #[derive(Default,PartialEq,Debug,Clone,Serialize,Deserialize,BinRead,BinWrite,TestSize)]

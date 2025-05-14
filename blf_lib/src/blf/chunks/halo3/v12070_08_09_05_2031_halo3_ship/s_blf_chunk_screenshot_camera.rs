@@ -7,6 +7,7 @@ use blf_lib::blam::common::math::real_math::{real_point3d, real_vector3d, real_p
 use blf_lib::types::bool::Bool;
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
 use blf_lib_derive::{BlfChunk, TestSize};
+use crate::types::numbers::Float32;
 
 #[binrw]
 #[derive(BlfChunk,Default,PartialEq,Debug,Clone,Serialize,Deserialize)]
@@ -36,7 +37,7 @@ pub struct render_projection {
     pub world_to_view: real_matrix4x3,
     pub view_to_world: real_matrix4x3,
     pub projection_bounds: real_rectangle2d,
-    pub projection_matrix: [[f32; 4]; 4],
+    pub projection_matrix: [[Float32; 4]; 4],
     pub world_to_screen_size: real_vector2d,
 }
 
@@ -50,22 +51,22 @@ pub struct render_camera {
     pub up: real_vector3d,
     #[brw(pad_after = 3)]
     pub mirrored: Bool,
-    pub vertical_field_of_view: f32,
-    pub field_of_view_scale: f32,
+    pub vertical_field_of_view: Float32,
+    pub field_of_view_scale: Float32,
     pub window_pixel_bounds: int16_rectangle2d,
     pub window_title_safe_pixel_bounds: int16_rectangle2d,
     pub window_final_location: int16_point2d,
     pub render_pixel_bounds: int16_rectangle2d,
     pub render_title_safe_pixel_bounds: int16_rectangle2d,
     pub display_pixel_bounds: int16_rectangle2d,
-    pub z_near: f32,
-    pub z_far: f32,
+    pub z_near: Float32,
+    pub z_far: Float32,
     pub mirror_plane: real_plane3d,
     #[brw(pad_after = 3)]
     pub enlarge_view: Bool,
     pub enlarge_center: real_point2d,
-    pub enlarge_size_x: f32,
-    pub enlarge_size_y: f32,
+    pub enlarge_size_x: Float32,
+    pub enlarge_size_y: Float32,
 }
 
 

@@ -1,4 +1,5 @@
 use binrw::binrw;
+#[cfg(feature = "napi")]
 use napi_derive::napi;
 use serde::{Deserialize, Serialize};
 use blf_lib::blam::halo_3::release::game::game_engine_variant::c_game_variant;

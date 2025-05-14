@@ -1,5 +1,6 @@
 use std::fmt::{Display, Formatter, Result};
 use binrw::{BinRead, BinWrite};
+#[cfg(feature = "napi")]
 use napi_derive::napi;
 use serde::{Deserialize, Serialize};
 

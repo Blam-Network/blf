@@ -9,6 +9,8 @@ use crate::blam::common::math::integer_math::int32_point3d;
 use crate::blam::common::math::real_math::real_vector3d;
 use crate::blam::common::networking::transport::transport_security::s_transport_secure_address;
 use crate::io::bitstream::{e_bitstream_byte_order, e_bitstream_state, k_bitstream_maximum_position_stack_size, s_bitstream_data};
+use crate::types::numbers::Float32;
+use crate::types::u64::Unsigned64;
 
 pub struct c_bitstream_reader<'a>
 {
@@ -218,15 +220,15 @@ impl<'a> c_bitstream_reader<'a> {
         }
     }
 
-    pub fn read_float(&mut self, size_in_bits: usize) -> f32 {
+    pub fn read_float(&mut self, size_in_bits: usize) -> Float32 {
         assert!(size_in_bits > 0);
         assert!(size_in_bits <= 32);
         let mut bytes = [0u8; 4];
         self.read_bits_internal(&mut bytes, size_in_bits);
 
         match self.m_byte_order {
-            e_bitstream_byte_order::_bitstream_byte_order_little_endian => { f32::from_le_bytes(bytes) }
-            e_bitstream_byte_order::_bitstream_byte_order_big_endian => { f32::from_be_bytes(bytes) }
+            e_bitstream_byte_order::_bitstream_byte_order_little_endian => { Float32::from(f32::from_le_bytes(bytes)) }
+            e_bitstream_byte_order::_bitstream_byte_order_big_endian => { Float32::from(f32::from_be_bytes(bytes)) }
         }
     }
 
@@ -261,15 +263,15 @@ impl<'a> c_bitstream_reader<'a> {
         result as i32
     }
 
-    pub fn read_qword(&mut self, size_in_bits: usize) -> u64 {
+    pub fn read_qword(&mut self, size_in_bits: usize) -> Unsigned64 {
         assert!(size_in_bits > 0);
         assert!(size_in_bits <= 64);
         let mut bytes = [0u8; 8];
         self.read_bits_internal(&mut bytes, size_in_bits);
 
         match self.m_byte_order {
-            e_bitstream_byte_order::_bitstream_byte_order_little_endian => { u64::from_le_bytes(bytes) }
-            e_bitstream_byte_order::_bitstream_byte_order_big_endian => { u64::from_be_bytes(bytes) }
+            e_bitstream_byte_order::_bitstream_byte_order_little_endian => { Unsigned64::from(u64::from_le_bytes(bytes)) }
+            e_bitstream_byte_order::_bitstream_byte_order_big_endian => { Unsigned64::from(u64::from_be_bytes(bytes)) }
         }
     }
 
@@ -285,10 +287,10 @@ impl<'a> c_bitstream_reader<'a> {
         point.z = self.read_integer(axis_encoding_size_in_bits) as i32;
     }
 
-    pub fn read_quantized_real(&mut self, min_value: f32, max_value: f32, size_in_bits: usize, exact_midpoint: bool, exact_endpoints: bool) -> f32 {
+    pub fn read_quantized_real(&mut self, min_value: f32, max_value: f32, size_in_bits: usize, exact_midpoint: bool, exact_endpoints: bool) -> Float32 {
         assert!(self.reading());
         let value = self.read_integer(size_in_bits);
-        dequantize_real(value as i32, min_value, max_value, size_in_bits, exact_midpoint)
+        Float32(dequantize_real(value as i32, min_value, max_value, size_in_bits, exact_midpoint))
     }
 
     pub fn read_qword_internal(size_in_bits: u8) -> u64 {
@@ -316,7 +318,9 @@ impl<'a> c_bitstream_reader<'a> {
         c_bitstream_reader::angle_to_axes_internal(up, forward_angle, forward);
     }
 
-    pub fn angle_to_axes_internal(up: &real_vector3d, angle: f32, forward: &mut real_vector3d) {
+    pub fn angle_to_axes_internal(up: &real_vector3d, angle: impl Into<f32>, forward: &mut real_vector3d) {
+        let angle = angle.into();
+
         let mut forward_reference = real_vector3d::default();
         let mut left_reference = real_vector3d::default();
 

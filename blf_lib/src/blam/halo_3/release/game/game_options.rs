@@ -7,6 +7,8 @@ use crate::blam::halo_3::release::saved_games::scenario_map_variant::c_map_varia
 use crate::types::array::StaticArray;
 use crate::types::bool::Bool;
 use crate::types::c_string::{StaticString, StaticWcharString};
+use crate::types::numbers::Float32;
+use crate::types::u64::Unsigned64;
 
 #[derive(TestSize,BinRead,BinWrite,PartialEq,Debug,Default,Clone,Serialize,Deserialize)]
 #[Size(0xF810)]
@@ -16,7 +18,7 @@ pub struct game_options {
     pub game_simulation: u8,
     pub game_network_type: u8,
     pub game_tick_rate: u16,
-    pub game_instance: u64,
+    pub game_instance: Unsigned64,
     pub random_seed: u32,
     pub language: i32,
     pub determinism_version: i32,
@@ -106,7 +108,7 @@ pub struct game_player_options {
     pub user_inex: i16,
     pub controller_index: i32,
     pub machine_identifier: s_machine_identifier,
-    pub player_identifier: u64,
+    pub player_identifier: Unsigned64,
     #[brw(pad_before = 2)]
     pub configuration: s_player_configuration,
 }
@@ -129,8 +131,8 @@ pub struct s_game_matchmaking_options {
     pub hopper_name: StaticWcharString<32>,
     #[brw(pad_before = 2)]
     pub draw_probability: i32,
-    pub beta: f32,
-    pub tau: f32,
+    pub beta: Float32,
+    pub tau: Float32,
     pub experience_base_increment: i32,
     pub experience_penalty_decrement: i32,
 }

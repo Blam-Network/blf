@@ -1,11 +1,14 @@
 use binrw::{BinRead, BinWrite};
+#[cfg(feature = "napi")]
 use napi_derive::napi;
 use blf_lib::TestSize;
 use blf_lib::types::bool::Bool;
 use blf_lib::types::c_string::StaticWcharString;
 use serde::{Deserialize, Serialize};
 use serde_hex::{SerHex,StrictCap};
+use crate::types::numbers::Float32;
 use crate::types::time::time32_t;
+use crate::types::u64::Unsigned64;
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default)]
 #[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
@@ -23,8 +26,8 @@ pub struct s_queried_player_hopper_statistics {
     #[brw(pad_after = 1)]
     pub stats_valid: u8,
     pub identifier: u16,
-    pub mu: f32,
-    pub sigma: f32,
+    pub mu: Float32,
+    pub sigma: Float32,
     pub hopper_skill: u32,
     pub games_played: u32,
     pub games_completed: u32,
@@ -93,7 +96,7 @@ pub struct s_player_configuration_from_client {
     pub appearance: s_player_appearance, // correct
     #[brw(pad_before = 2)]
     #[serde(with = "SerHex::<StrictCap>")]
-    pub player_xuid: u64,
+    pub player_xuid: Unsigned64,
     pub is_silver_or_gold_live: Bool,
     pub is_online_enabled: Bool,
     pub is_controller_attached: Bool,

@@ -1,6 +1,7 @@
 use std::fmt::{Debug};
 use std::io::{Read, Seek, SeekFrom, Write};
 use binrw::{BinRead, BinReaderExt, BinResult, BinWrite, BinWriterExt, Endian};
+#[cfg(feature = "napi")]
 use napi_derive::napi;
 use num_derive::{FromPrimitive, ToPrimitive};
 use serde::{Deserialize, Serialize};

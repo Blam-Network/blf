@@ -5,34 +5,45 @@
 
 #![allow(dead_code)]
 
+use std::cmp::{Ordering, PartialOrd};
+use std::convert::Into;
+use std::ops::{Mul, MulAssign};
 use binrw::{BinRead, BinWrite};
 use serde::{Deserialize, Serialize};
+use serde::de::Unexpected::Float;
 use wasm_bindgen::prelude::wasm_bindgen;
 use blf_lib::blam::common::math::integer_math::int32_point3d;
 use blf_lib_derive::TestSize;
+use crate::types::numbers::Float32;
 
 const k_3d_count: usize = 3;
 
 #[derive(Default, PartialEq, Debug, Clone, Copy, Serialize, Deserialize, BinRead, BinWrite)]
 #[wasm_bindgen]
 pub struct real_vector3d {
-    pub i: f32,
-    pub j: f32,
-    pub k: f32,
+    pub i: Float32,
+    pub j: Float32,
+    pub k: Float32,
+}
+
+impl real_vector3d {
+    pub const fn new(i: f32, j: f32, k: f32) -> Self {
+        Self { i: Float32(i), j: Float32(j), k: Float32(k) }
+    }
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Copy, Serialize, Deserialize, BinRead, BinWrite)]
 #[wasm_bindgen(getter_with_clone)]
 pub struct real_vector2d {
-    pub i: f32,
-    pub j: f32,
+    pub i: Float32,
+    pub j: Float32,
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite, Copy)]
 #[wasm_bindgen(getter_with_clone)]
 pub struct real_bounds {
-    pub lower: f32,
-    pub upper: f32,
+    pub lower: Float32,
+    pub upper: Float32,
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite, Copy)]
@@ -54,17 +65,17 @@ pub struct real_rectangle2d {
 #[Size(0xC)]
 #[wasm_bindgen(getter_with_clone)]
 pub struct real_point3d {
-    pub x: f32,
-    pub y: f32,
-    pub z: f32,
+    pub x: Float32,
+    pub y: Float32,
+    pub z: Float32,
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Copy, Serialize, Deserialize, BinRead, BinWrite, TestSize)]
 #[Size(0x8)]
 #[wasm_bindgen(getter_with_clone)]
 pub struct real_point2d {
-    pub x: f32,
-    pub y: f32,
+    pub x: Float32,
+    pub y: Float32,
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Copy, Serialize, Deserialize, BinRead, BinWrite)]
@@ -78,7 +89,7 @@ pub struct real_matrix3x3 {
 #[derive(Default, PartialEq, Debug, Clone, Copy, Serialize, Deserialize, BinRead, BinWrite)]
 #[wasm_bindgen(getter_with_clone)]
 pub struct real_matrix4x3 {
-    pub scale: f32,
+    pub scale: Float32,
     pub matrix: real_matrix3x3,
     pub center: real_point3d,
 }
@@ -87,9 +98,8 @@ pub struct real_matrix4x3 {
 #[wasm_bindgen(getter_with_clone)]
 pub struct real_plane3d {
     pub n: real_vector3d,
-    pub d: f32,
+    pub d: Float32,
 }
-
 
 
 pub fn dequantize_real_point3d(
@@ -99,17 +109,20 @@ pub fn dequantize_real_point3d(
     dequantized_point: &mut real_point3d
 ) {
     // I think there's a missing assert here.
-    dequantized_point.x = dequantize_real(point.x, bounds.x.lower, bounds.x.upper, axis_encoding_bit_count, false);
-    dequantized_point.y = dequantize_real(point.y, bounds.y.lower, bounds.y.upper, axis_encoding_bit_count, false);
-    dequantized_point.z = dequantize_real(point.z, bounds.z.lower, bounds.z.upper, axis_encoding_bit_count, false);
+    dequantized_point.x.0 = dequantize_real(point.x, bounds.x.lower, bounds.x.upper, axis_encoding_bit_count, false);
+    dequantized_point.y.0 = dequantize_real(point.y, bounds.y.lower, bounds.y.upper, axis_encoding_bit_count, false);
+    dequantized_point.z.0 = dequantize_real(point.z, bounds.z.lower, bounds.z.upper, axis_encoding_bit_count, false);
 }
 
 pub fn rotate_vector_about_axis(
     forward: &mut real_vector3d,
     up: &real_vector3d,
-    u: f32,
-    v: f32
+    u: impl Into<f32>,
+    v: impl Into<f32>,
 ) {
+    let u = u.into();
+    let v = v.into();
+
     let v1 = (1.0 - v) * (((forward.i * up.i) + (forward.j * up.j)) + (forward.k * up.k));
     let v2 = (forward.k * up.i) - (forward.i * up.k);
     let v3 = (forward.i * up.j) - (forward.j * up.i);
@@ -144,7 +157,11 @@ pub fn quantize_real_point3d(
     quantized_point.z = quantize_real(bounded_z, bounds.z.lower, bounds.z.upper, axis_encoding_bit_count, false, false);
 }
 
-pub fn quantize_real(value: f32, min_value: f32, max_value: f32, size_in_bits: usize, exact_midpoint: bool, a6: bool) -> i32 {
+pub fn quantize_real(value: impl Into<f32>, min_value: impl Into<f32>, max_value: impl Into<f32>, size_in_bits: usize, exact_midpoint: bool, a6: bool) -> i32 {
+    let value = value.into();
+    let min_value = min_value.into();
+    let max_value = max_value.into();
+
     assert!(size_in_bits > 0, "size_in_bits>0");
     assert!(max_value > min_value, "max_value>min_value");
     assert!(!exact_midpoint || size_in_bits > 1, "!exact_midpoint || size_in_bits>1");
@@ -170,7 +187,10 @@ pub fn quantize_real(value: f32, min_value: f32, max_value: f32, size_in_bits: u
     quantized_value
 }
 
-pub fn dequantize_real(quantized: i32, min_value: f32, max_value: f32, size_in_bits: usize, exact_midpoint: bool) -> f32 {
+pub fn dequantize_real(quantized: i32, min_value: impl Into<f32>, max_value: impl Into<f32>, size_in_bits: usize, exact_midpoint: bool) -> f32 {
+    let min_value = min_value.into();
+    let max_value = max_value.into();
+
     assert!(size_in_bits > 0, "size_in_bits>0");
     assert!(max_value > min_value, "max_value>min_value");
     assert!(!exact_midpoint || size_in_bits > 1, "!exact_midpoint || size_in_bits>1");
@@ -219,30 +239,18 @@ pub fn arctangent(a1: f32, a2: f32) -> f32 {
 }
 
 pub fn dot_product3d(a1: &real_vector3d, a2: &real_vector3d) -> f32 {
-    (a1.i * a2.i) + (a1.j * a2.j) + (a1.k * a2.k)
+    ((a1.i * a2.i) + (a1.j * a2.j) + (a1.k * a2.k)).0
 }
 
 pub const k_test_real_epsilon: f32 = 0.001;
 pub const k_real_epsilon: f32 = 0.0001;
 pub const k_pi: f32 = 3.1415927;
 
-pub const global_up3d: real_vector3d = real_vector3d {
-    i: 0f32,
-    j: 0f32,
-    k: 1f32,
-};
+pub const global_up3d: real_vector3d = real_vector3d::new(0f32, 0f32, 1f32);
 
-pub const global_forward3d: real_vector3d = real_vector3d {
-    i: 1f32,
-    j: 0f32,
-    k: 0f32,
-};
+pub const global_forward3d: real_vector3d = real_vector3d::new(1f32, 0f32, 0f32);
 
-pub const global_left3d: real_vector3d = real_vector3d {
-    i: 0f32,
-    j: 1f32,
-    k: 0f32,
-};
+pub const global_left3d: real_vector3d = real_vector3d::new(0f32, 1f32, 0f32);
 
 pub fn quantize_normalized_vector3d(vector: &real_vector3d) -> i32 {
     assert!(assert_valid_real_normal3d(vector));
@@ -290,7 +298,7 @@ pub fn quantize_normalized_vector3d(vector: &real_vector3d) -> i32 {
     let quantized_u = quantize_real(u, -1.0, 1.0, 8, true, false);
     let quantized_v = quantize_real(v, -1.0, 1.0, 8, true, false);
 
-    
+
 
     axis_code as i32 | (quantized_u << 3) | (quantized_v << 11)
 }
@@ -300,7 +308,7 @@ pub fn square_root(value: f32) -> f32 {
 }
 
 pub fn magnitude_squared3d(a1: &real_vector3d) -> f32 {
-    (a1.i * a1.i) + (a1.j * a1.j) + (a1.k * a1.k)
+    ((a1.i * a1.i) + (a1.j * a1.j) + (a1.k * a1.k)).into()
 }
 
 fn magnitude3d(vector: &real_vector3d) -> f32 {
@@ -333,34 +341,34 @@ pub fn dequantize_unit_vector3d(value: i32, vector: &mut real_vector3d) {
 
     match face {
         0 => {
-            vector.i = 1.0;
-            vector.j = x;
-            vector.k = y;
+            vector.i.0 = 1.0;
+            vector.j.0 = x;
+            vector.k.0 = y;
         }
         1 => {
-            vector.i = x;
-            vector.j = 1.0;
-            vector.k = y;
+            vector.i.0 = x;
+            vector.j.0 = 1.0;
+            vector.k.0 = y;
         }
         2 => {
-            vector.i = x;
-            vector.j = y;
-            vector.k = 1.0;
+            vector.i.0 = x;
+            vector.j.0 = y;
+            vector.k.0 = 1.0;
         }
         3 => {
-            vector.i = -1.0;
-            vector.j = x;
-            vector.k = y;
+            vector.i.0 = -1.0;
+            vector.j.0 = x;
+            vector.k.0 = y;
         }
         4 => {
-            vector.i = x;
-            vector.j = -1.0;
-            vector.k = y;
+            vector.i.0 = x;
+            vector.j.0 = -1.0;
+            vector.k.0 = y;
         }
         5 => {
-            vector.i = x;
-            vector.j = y;
-            vector.k = -1.0;
+            vector.i.0 = x;
+            vector.j.0 = y;
+            vector.k.0 = -1.0;
         }
         _ => {
             panic!("dequantize_unit_vector3d: bad face value {face} when reading unit vector");

@@ -15,6 +15,8 @@ use napi::bindgen_prelude::{FromNapiMutRef, FromNapiValue, ToNapiValue, TypeName
 use napi::{Env, JsString, NapiRaw, ValueType};
 #[cfg(feature = "napi")]
 use napi_derive::napi;
+use wasm_bindgen::convert::IntoWasmAbi;
+use wasm_bindgen::describe::WasmDescribe;
 
 pub fn to_string(chars: &[c_char]) -> String {
     let mut res = String::new();
@@ -296,4 +298,30 @@ impl<const N: usize> TypeName for StaticString<N> {
 #[cfg(feature = "napi")]
 impl<const N: usize> ValidateNapiValue for StaticString<N> {
 
+}
+
+impl<const N: usize> WasmDescribe for StaticString<N> {
+    fn describe() {
+        String::describe()
+    }
+}
+
+impl<const N: usize> IntoWasmAbi for StaticString<N> {
+    type Abi = <String as IntoWasmAbi>::Abi;
+    fn into_abi(self) -> Self::Abi {
+        self.get_string().into_abi()
+    }
+}
+
+impl<const N: usize> WasmDescribe for StaticWcharString<N> {
+    fn describe() {
+        String::describe()
+    }
+}
+
+impl<const N: usize> IntoWasmAbi for StaticWcharString<N> {
+    type Abi = <String as IntoWasmAbi>::Abi;
+    fn into_abi(self) -> Self::Abi {
+        self.get_string().into_abi()
+    }
 }

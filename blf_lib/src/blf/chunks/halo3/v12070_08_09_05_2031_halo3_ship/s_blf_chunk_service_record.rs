@@ -1,5 +1,6 @@
 use std::u32;
 use binrw::{binrw, BinRead, BinWrite};
+#[cfg(feature = "napi")]
 use napi_derive::napi;
 use serde::{Deserialize, Serialize};
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
