@@ -2,15 +2,14 @@ use std::fmt::{Display, Formatter, UpperHex};
 use std::io::{Read, Seek, Write};
 use std::ops::{Add, Div, Mul, Sub};
 use binrw::{BinRead, BinReaderExt, BinResult, BinWrite, Endian};
-use hex::FromHexError;
 #[cfg(feature = "napi")]
 use napi::bindgen_prelude::{BigInt, FromNapiValue, ToNapiValue};
 #[cfg(feature = "napi")]
 use napi::sys::{napi_env, napi_value};
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
-use serde_hex::{HexConf, SerHex, StrictCap};
+use serde_hex::{HexConf, SerHex};
 use shrinkwraprs::Shrinkwrap;
-use wasm_bindgen::convert::IntoWasmAbi;
+use wasm_bindgen::convert::{FromWasmAbi, IntoWasmAbi};
 use wasm_bindgen::describe::WasmDescribe;
 
 #[derive(Debug, Clone, PartialEq, Copy, Default, Shrinkwrap)]
@@ -170,5 +169,13 @@ impl IntoWasmAbi for Unsigned64 {
 
     fn into_abi(self) -> Self::Abi {
         u64::into_abi(self.0)
+    }
+}
+
+impl FromWasmAbi for Unsigned64 {
+    type Abi = <u64 as FromWasmAbi>::Abi;
+
+    unsafe fn from_abi(js: Self::Abi) -> Self {
+        Unsigned64(u64::from_abi(js))
     }
 }

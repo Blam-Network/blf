@@ -27,7 +27,7 @@ pub fn dump_film_data(
         if flmh.is_some() && chdr.is_some() {
             let flmh = flmh.unwrap();
             let chdr = chdr.unwrap();
-            write_json_file(&flmh, format!("{file_path}.json"));
+            write_json_file(&flmh, format!("{file_path}.json")).unwrap();
             task.add_message(format!("{} - {}", file_name, chdr.metadata.name.get_string()));
         }
     });

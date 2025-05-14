@@ -206,7 +206,7 @@ impl BinRead for c_game_variant {
                 Ok(game_variant)
             }
         };
-        reader.seek(SeekFrom::Start(start_offset + 0x264));
+        reader.seek(SeekFrom::Start(start_offset + 0x264))?;
         read_variant
     }
 }

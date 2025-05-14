@@ -7,7 +7,7 @@ use chrono::{DateTime, NaiveDateTime, TimeZone, Utc};
 use napi::bindgen_prelude::{FromNapiValue, ToNapiValue};
 #[cfg(feature = "napi")]
 use napi::sys::{napi_env, napi_value};
-use wasm_bindgen::convert::IntoWasmAbi;
+use wasm_bindgen::convert::{FromWasmAbi, IntoWasmAbi};
 use wasm_bindgen::describe::WasmDescribe;
 use blf_lib::types::u64::Unsigned64;
 
@@ -249,5 +249,12 @@ impl IntoWasmAbi for time64_t {
     fn into_abi(self) -> Self::Abi {
         // TODO: Date obj
         u64::into_abi(self.0)
+    }
+}
+
+impl FromWasmAbi for time64_t {
+    type Abi = <u64 as FromWasmAbi>::Abi;
+    unsafe fn from_abi(js: Self::Abi) -> Self {
+        time64_t::from(u64::from_abi(js))
     }
 }

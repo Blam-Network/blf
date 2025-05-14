@@ -5,12 +5,9 @@
 
 #![allow(dead_code)]
 
-use std::cmp::{Ordering, PartialOrd};
 use std::convert::Into;
-use std::ops::{Mul, MulAssign};
 use binrw::{BinRead, BinWrite};
 use serde::{Deserialize, Serialize};
-use serde::de::Unexpected::Float;
 use wasm_bindgen::prelude::wasm_bindgen;
 use blf_lib::blam::common::math::integer_math::int32_point3d;
 use blf_lib_derive::TestSize;
