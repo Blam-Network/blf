@@ -1,17 +1,19 @@
 use binrw::{BinRead, BinWrite};
+use napi_derive::napi;
 use serde::{Deserialize, Serialize};
 use blf_lib::blam::halo_3::release::game::game_engine_player_traits::c_player_traits;
 use blf_lib::io::bitstream::{c_bitstream_reader, c_bitstream_writer};
 use blf_lib::{SET_BIT, TEST_BIT};
 
 #[derive(Default, PartialEq, Debug, Clone, BinRead, BinWrite, Serialize, Deserialize)]
+#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 pub struct c_game_engine_territories_variant {
-    m_variant_flags: u16,
-    m_respawn_on_capture: u16,
-    m_capture_time: u16,
-    m_sudden_death_time: i16,
-    m_defender_traits: c_player_traits,
-    m_attacker_traits: c_player_traits,
+    pub m_variant_flags: u16,
+    pub m_respawn_on_capture: u16,
+    pub m_capture_time: u16,
+    pub m_sudden_death_time: i16,
+    pub m_defender_traits: c_player_traits,
+    pub m_attacker_traits: c_player_traits,
 }
 
 impl c_game_engine_territories_variant {

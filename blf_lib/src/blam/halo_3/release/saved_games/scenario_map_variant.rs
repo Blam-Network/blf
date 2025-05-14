@@ -9,7 +9,7 @@ use crate::blam::common::math::real_math::real_vector3d;
 use crate::blam::common::simulation::simulation_encoding::{simulation_read_quantized_position, simulation_write_quantized_position};
 use serde_hex::{SerHex,StrictCap};
 use blf_lib_derive::TestSize;
-use crate::types::bool::s_bool;
+use crate::types::bool::Bool;
 
 const k_object_type_count: usize = 14;
 
@@ -26,8 +26,8 @@ pub struct c_map_variant {
     pub m_game_engine_subtype: u32,
     pub m_maximum_budget: f32,
     pub m_spent_budget: f32,
-    pub m_helpers_enabled: s_bool,
-    pub m_built_in: s_bool,
+    pub m_helpers_enabled: Bool,
+    pub m_built_in: Bool,
     // #[serde(skip_serializing,skip_deserializing)]
     // __pad12A: [u8; 2],
     #[serde(with = "SerHex::<StrictCap>")]
@@ -141,7 +141,7 @@ impl c_map_variant {
         self.m_number_of_variant_objects = bitstream.read_u16(10);
         self.m_number_of_placeable_object_quotas = bitstream.read_u16(9);
         self.m_map_id = bitstream.read_integer(32);
-        self.m_built_in = s_bool::from(bitstream.read_bool());
+        self.m_built_in = Bool::from(bitstream.read_bool());
         self.m_world_bounds = bitstream.read_raw(0xC0);
         self.m_game_engine_subtype = bitstream.read_integer(4);
         self.m_maximum_budget = bitstream.read_float(32);

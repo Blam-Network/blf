@@ -7,7 +7,7 @@ use blf_lib::blam::halo_3::release::game::game_engine_default::k_game_engine_typ
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
 use blf_lib_derive::BlfChunk;
 use crate::types::c_string::StaticString;
-use crate::types::bool::s_bool;
+use crate::types::bool::Bool;
 
 #[binrw]
 #[derive(BlfChunk,Default,PartialEq,Debug,Clone,Serialize,Deserialize)]
@@ -26,7 +26,7 @@ pub struct s_blf_chunk_scenario
     pub multiplayer_minimum_desired_players: u8,
     pub multiplayer_maximum_desired_players: u8,
     pub engine_maximum_teams: [u8; k_game_engine_type_count],
-    pub allows_saved_films: s_bool,
+    pub allows_saved_films: Bool,
     // __pad112A: [u8; 6],
     #[brw(pad_before = 6)]
     pub insertion_points: StaticArray<s_blf_chunk_scenario_insertion, 4>,
@@ -37,7 +37,7 @@ impl BlfChunkHooks for s_blf_chunk_scenario {}
 #[binrw]
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct s_blf_chunk_scenario_insertion {
-    pub visible: s_bool,
+    pub visible: Bool,
     pub flags: u8,
     pub zone_set: u16,
     // __pad4: [u8;4],

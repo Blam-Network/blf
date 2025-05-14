@@ -1,7 +1,8 @@
 use std::u32;
 use binrw::{binrw, BinRead, BinWrite};
+use napi_derive::napi;
 use serde::{Deserialize, Serialize};
-use blf_lib::types::bool::s_bool;
+use blf_lib::types::bool::Bool;
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
 use blf_lib_derive::{BlfChunk, TestSize};
 use blf_lib::types::c_string::{StaticString, StaticWcharString};
@@ -13,10 +14,11 @@ use crate::types::array::StaticArray;
 #[Header("srid", 7.1)]
 #[brw(big)]
 #[Size(0xD3C)]
+#[cfg_attr(feature = "napi", napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]
 pub struct s_blf_chunk_service_record
 {
     pub player_name: StaticWcharString<16>, // Wide, 16 characters max
-    pub player_info_available: s_bool,
+    pub player_info_available: Bool,
     pub unknown1: StaticArray<u8, 3>,
     pub armour_primary_color: u8, // 0x25
     pub armour_secondary_color: u8, // 0x26
@@ -26,17 +28,17 @@ pub struct s_blf_chunk_service_record
     pub unknown2: StaticArray<u8, 3>,
     pub emblem_primary: u8, // 0x2C
     pub emblem_background: u8,
-    pub emblem_secondary: s_bool,
+    pub emblem_secondary: Bool,
     pub emblem_primary_color: u8,
     pub emblem_secondary_color: u8,
     pub emblem_background_color: u8, // 0x31
     pub unknown3: StaticArray<u8, 14>,
     pub service_tag: StaticWcharString<5>, // 0x40
     pub unknown4: StaticArray<u8, 2>,
-    pub career_overview_stats_available: s_bool,
-    pub credits_available: s_bool,
+    pub career_overview_stats_available: Bool,
+    pub credits_available: Bool,
     pub credits: i32,
-    pub campaign_record_available: s_bool,
+    pub campaign_record_available: Bool,
     pub campaign_completed_at: time32_t,
     pub campaign_completion_difficulty: u32,
     pub campaign_enemies_killed: u32,
@@ -47,7 +49,7 @@ pub struct s_blf_chunk_service_record
     // TODO: simplify this with binrw.
     pub campaign_commendations_count: u32, // 0xAF Correct to here
     pub campaign_commendations: StaticArray<s_blf_chunk_service_record_commendation, 16>,
-    pub firefight_record_available: s_bool,
+    pub firefight_record_available: Bool,
     pub firefight_covenant_kills: u32,
     pub firefight_vehicles_destroyed: u32,
     pub firefight_highest_set_completed: u32,
@@ -58,7 +60,7 @@ pub struct s_blf_chunk_service_record
     pub firefight_difficulty_stats: StaticArray<s_blf_chunk_service_record_firefight_difficulty_stats, 3>,
     pub firefight_commendations_count: u32,
     pub firefight_commendations: StaticArray<s_blf_chunk_service_record_commendation, 16>,
-    pub matchmaking_record_available: s_bool, // 0x228 Correct to here
+    pub matchmaking_record_available: Bool, // 0x228 Correct to here
     pub matchmaking_games_won: u32,
     pub matchmaking_kills: u32,
     pub matchmaking_deaths: u32,
@@ -68,12 +70,12 @@ pub struct s_blf_chunk_service_record
     pub arena_season_stats: StaticArray<s_blf_chunk_service_record_arena_season_stats, 3>,
     pub matchmaking_commendations_count: u32,
     pub matchmaking_commendations: StaticArray<s_blf_chunk_service_record_commendation, 16>,
-    pub custom_games_record_available: s_bool, // 0xCFD
+    pub custom_games_record_available: Bool, // 0xCFD
     pub custom_games_multiplayer_played: u32,
     pub custom_games_multiplayer_kills: u32,
     pub custom_games_firefight_played: u32,
     pub custom_games_firefight_killed: u32,
-    pub legacy_record_available: s_bool,
+    pub legacy_record_available: Bool,
     pub odst_first_played_time: time32_t,
     pub halo3_first_played_time: time32_t,
     pub halo2_first_played_time: time32_t,
@@ -92,6 +94,7 @@ pub struct s_blf_chunk_service_record
 #[derive(Default,PartialEq,Debug,Clone,Serialize,Deserialize,BinRead,BinWrite,TestSize)]
 #[brw(big)]
 #[Size(0x18)]
+#[cfg_attr(feature = "napi", napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]
 pub struct s_blf_chunk_service_record_campaign_difficulty_stats {
     pub covenant_kills: u32,
     pub vehicles_destroyed: u32,
@@ -104,6 +107,7 @@ pub struct s_blf_chunk_service_record_campaign_difficulty_stats {
 #[derive(Default,PartialEq,Debug,Clone,Serialize,Deserialize,BinRead,BinWrite,TestSize)]
 #[brw(big)]
 #[Size(0x1C)]
+#[cfg_attr(feature = "napi", napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]
 pub struct s_blf_chunk_service_record_firefight_difficulty_stats {
     pub covenant_kills: u32,
     pub vehicles_destroyed: u32,
@@ -118,6 +122,7 @@ pub struct s_blf_chunk_service_record_firefight_difficulty_stats {
 #[derive(Default,PartialEq,Debug,Clone,Serialize,Deserialize,BinRead,BinWrite,TestSize)]
 #[brw(big)]
 #[Size(0x14)]
+#[cfg_attr(feature = "napi", napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]
 pub struct s_blf_chunk_service_record_matchmaking_category_stats {
     pub games_won: u32,
     pub kills: u32,
@@ -129,6 +134,7 @@ pub struct s_blf_chunk_service_record_matchmaking_category_stats {
 #[derive(Default,PartialEq,Debug,Clone,Serialize,Deserialize,BinRead,BinWrite,TestSize)]
 #[brw(big)]
 #[Size(0x348)]
+#[cfg_attr(feature = "napi", napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]
 pub struct s_blf_chunk_service_record_arena_season_stats {
     pub season_number: u32,
     pub hopper_stats_count: u32,
@@ -138,6 +144,7 @@ pub struct s_blf_chunk_service_record_arena_season_stats {
 #[derive(Default,PartialEq,Debug,Clone,Serialize,Deserialize,BinRead,BinWrite,TestSize)]
 #[brw(big)]
 #[Size(0x68)]
+#[cfg_attr(feature = "napi", napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]
 pub struct s_blf_chunk_service_record_arena_hopper_stats {
     pub hopper_name: StaticString<32>,
     pub hames_played_today: u32,
@@ -163,6 +170,7 @@ pub struct s_blf_chunk_service_record_arena_hopper_stats {
 #[derive(Default,PartialEq,Debug,Clone,Serialize,Deserialize,BinRead,BinWrite,TestSize)]
 #[brw(big)]
 #[Size(0x8)]
+#[cfg_attr(feature = "napi", napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]
 pub struct s_blf_chunk_service_record_commendation {
     pub commendation: u32,
     pub progress: u32,

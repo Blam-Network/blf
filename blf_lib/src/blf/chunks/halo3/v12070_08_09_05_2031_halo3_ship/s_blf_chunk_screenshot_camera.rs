@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize};
 use wasm_bindgen::prelude::wasm_bindgen;
 use blf_lib::blam::common::math::integer_math::{int16_point2d, int16_rectangle2d};
 use blf_lib::blam::common::math::real_math::{real_point3d, real_vector3d, real_plane3d, real_point2d, real_matrix4x3, real_vector2d, real_rectangle2d};
-use blf_lib::types::bool::s_bool;
+use blf_lib::types::bool::Bool;
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
 use blf_lib_derive::{BlfChunk, TestSize};
 
@@ -49,7 +49,7 @@ pub struct render_camera {
     pub forward: real_vector3d,
     pub up: real_vector3d,
     #[brw(pad_after = 3)]
-    pub mirrored: s_bool,
+    pub mirrored: Bool,
     pub vertical_field_of_view: f32,
     pub field_of_view_scale: f32,
     pub window_pixel_bounds: int16_rectangle2d,
@@ -62,7 +62,7 @@ pub struct render_camera {
     pub z_far: f32,
     pub mirror_plane: real_plane3d,
     #[brw(pad_after = 3)]
-    pub enlarge_view: s_bool,
+    pub enlarge_view: Bool,
     pub enlarge_center: real_point2d,
     pub enlarge_size_x: f32,
     pub enlarge_size_y: f32,

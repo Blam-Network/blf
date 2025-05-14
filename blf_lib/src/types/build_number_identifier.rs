@@ -1,8 +1,10 @@
 use std::fmt::{Display, Formatter, Result};
 use binrw::{BinRead, BinWrite};
+use napi_derive::napi;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Copy, Debug, PartialEq, Default, BinRead, BinWrite, Serialize, Deserialize)]
+#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 pub struct build_number_identifier {
     pub build_number_version: u32,
     pub build_number: u32,

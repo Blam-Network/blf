@@ -1,8 +1,11 @@
 [workspace]
 resolver = "2"
-members = [ "blf_lib-derivable", "blf_lib-derive", "blf_lib", 'blf_cli', "blf_bnet", "blf_lsp"]
+members = [ "blf_lib-derivable", "blf_lib-derive", "blf_lib", 'blf_cli', "blf_bnet"]
 
 [workspace.package]
 version = "1.7.0-rc3"
 edition = "2021"
 license = "MIT"
+
+[workspace.dependencies]
+serde-hex = { git = "https://github.com/Blam-Network/serde-hex.git", version = "0.1.0" }
