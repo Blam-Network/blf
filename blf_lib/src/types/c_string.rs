@@ -4,6 +4,7 @@ use blf_lib::types::array::StaticArray;
 use serde::{Deserializer, Serialize, Serializer};
 use widestring::U16CString;
 use std::char::{decode_utf16, REPLACEMENT_CHARACTER};
+use std::cmp::min;
 use binrw::{BinRead, BinWrite};
 use serde::de::Error;
 
@@ -15,7 +16,7 @@ use napi::bindgen_prelude::{FromNapiMutRef, FromNapiValue, ToNapiValue, TypeName
 use napi::{Env, JsString, NapiRaw, ValueType};
 #[cfg(feature = "napi")]
 use napi_derive::napi;
-use wasm_bindgen::convert::IntoWasmAbi;
+use wasm_bindgen::convert::{FromWasmAbi, IntoWasmAbi};
 use wasm_bindgen::describe::WasmDescribe;
 
 pub fn to_string(chars: &[c_char]) -> String {
@@ -77,9 +78,6 @@ impl<const N: usize> FromNapiValue for StaticWcharString<N> {
     }
 }
 
-
-
-
 impl<const N: usize> StaticWcharString<N> {
     pub fn from_string(value: &String) -> Result<Self, String> {
         let mut new = Self {
@@ -101,6 +99,14 @@ impl<const N: usize> StaticWcharString<N> {
         buf.fill(0);
         buf[0..u16s.len()].copy_from_slice(u16s);
         Ok(())
+    }
+
+    pub fn set_string_trimmed(&mut self, value: &String) {
+        let u16Str = U16CString::from_str(value).unwrap();
+        let u16s = u16Str.as_slice();
+        let buf = self.buf.get_mut();
+        buf.fill(0);
+        buf[0..min(u16s.len(), N - 1)].copy_from_slice(u16s);
     }
 
     pub fn get_string(&self) -> String {
@@ -162,6 +168,16 @@ impl<const N: usize> StaticString<N> {
         self.buf.fill(0);
         self.buf[..bytes.len()].copy_from_slice(bytes);
         Ok(())
+    }
+
+    pub fn set_string_trimmed(&mut self, value: &String) {
+        let mut bytes = value.as_bytes();
+        // if a null termination was provided at the end, chop it off
+        if !bytes.is_empty() && bytes[bytes.len() - 1] == 0 {
+            bytes = &bytes[0..bytes.len() - 1];
+        }
+        self.buf.fill(0);
+        self.buf[..min(bytes.len(), N - 1)].copy_from_slice(bytes);
     }
 
     pub fn get_string(&self) -> String {
@@ -313,6 +329,16 @@ impl<const N: usize> IntoWasmAbi for StaticString<N> {
     }
 }
 
+impl<const N: usize> FromWasmAbi for StaticString<N> {
+    type Abi = <String as IntoWasmAbi>::Abi;
+
+    unsafe fn from_abi(js: Self::Abi) -> Self {
+        let mut res = Self {buf: [0;N]};
+        res.set_string_trimmed(&String::from_abi(js));
+        res
+    }
+}
+
 impl<const N: usize> WasmDescribe for StaticWcharString<N> {
     fn describe() {
         String::describe()
@@ -323,5 +349,15 @@ impl<const N: usize> IntoWasmAbi for StaticWcharString<N> {
     type Abi = <String as IntoWasmAbi>::Abi;
     fn into_abi(self) -> Self::Abi {
         self.get_string().into_abi()
+    }
+}
+
+impl<const N: usize> FromWasmAbi for StaticWcharString<N> {
+    type Abi = <String as IntoWasmAbi>::Abi;
+
+    unsafe fn from_abi(js: Self::Abi) -> Self {
+        let mut res = Self {buf: StaticArray::default()};
+        res.set_string_trimmed(&String::from_abi(js));
+        res
     }
 }
