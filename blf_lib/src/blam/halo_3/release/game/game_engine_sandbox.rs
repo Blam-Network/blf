@@ -1,15 +1,19 @@
 use binrw::{BinRead, BinWrite};
+#[cfg(feature = "napi")]
+use napi_derive::napi;
 use serde::{Deserialize, Serialize};
 use blf_lib::blam::halo_3::release::game::game_engine_player_traits::c_player_traits;
 use blf_lib::io::bitstream::{c_bitstream_reader, c_bitstream_writer};
 use blf_lib::{SET_BIT, TEST_BIT};
 
 #[derive(Default, PartialEq, Debug, Clone, BinRead, BinWrite, Serialize, Deserialize)]
+#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
+
 pub struct c_game_engine_sandbox_variant {
-    m_variant_flags: u8,
-    m_edit_mode: u8,
-    m_respawn_time: u16,
-    m_player_traits: c_player_traits,
+    pub m_variant_flags: u8,
+    pub m_edit_mode: u8,
+    pub m_respawn_time: u16,
+    pub m_player_traits: c_player_traits,
 }
 
 impl c_game_engine_sandbox_variant {

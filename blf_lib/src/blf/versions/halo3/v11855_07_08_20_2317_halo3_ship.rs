@@ -35,5 +35,5 @@ pub use halo3::v12070_08_09_05_2031_halo3_ship::s_blf_chunk_saved_film_header::*
 
 #[derive(TitleAndBuild)]
 #[Title("Halo 3")]
-#[Build("12070.08.09.05.2031.halo3_ship")]
-pub struct v12070_08_09_05_2031_halo3_ship {}
+#[Build("11855.07.08.20.2317.halo3_ship")]
+pub struct v11855_07_08_20_2317_halo3_ship {}

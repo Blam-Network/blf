@@ -1,4 +1,6 @@
 use binrw::{BinRead, BinWrite};
+#[cfg(feature = "napi")]
+use napi_derive::napi;
 use serde::{Deserialize, Serialize};
 use blf_lib::io::bitstream::{c_bitstream_reader, c_bitstream_writer};
 use crate::types::c_string::StaticString;
@@ -7,7 +9,8 @@ use serde_hex::{SerHex,StrictCap};
 use wasm_bindgen::prelude::wasm_bindgen;
 use blf_lib::types::time::time64_t;
 use blf_lib_derive::TestSize;
-use crate::types::bool::s_bool;
+use crate::types::bool::Bool;
+use crate::types::u64::Unsigned64;
 
 pub const e_saved_game_file_type_none: u32 = 0xFFFFFFFF;
 pub const e_saved_game_file_type_personal: u32 = 0;
@@ -28,18 +31,19 @@ pub const k_saved_game_file_type_count: u32 = 13;
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite, TestSize)]
 #[Size(0xF8)]
+#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 #[wasm_bindgen(getter_with_clone)]
 pub struct s_content_item_metadata {
-    pub unique_id: u64,
+    pub unique_id: Unsigned64,
     pub name: StaticWcharString<0x10>,
     pub description: StaticString<128>,
     pub author: StaticString<16>,
     pub file_type: u32,
     #[brw(pad_after = 3)]
-    pub author_is_xuid_online: s_bool,
+    pub author_is_xuid_online: Bool,
     #[serde(with = "SerHex::<StrictCap>")]
-    pub author_id: u64,
-    pub size_in_bytes: u64,
+    pub author_id: Unsigned64,
+    pub size_in_bytes: Unsigned64,
     pub date: time64_t,
     pub length_seconds: u32,
     pub campaign_id: i32,
@@ -48,7 +52,7 @@ pub struct s_content_item_metadata {
     pub campaign_difficulty: i32,
     pub hopper_id: i16,
     #[brw(pad_before = 2)]
-    pub game_id: u64,
+    pub game_id: Unsigned64,
 }
 
 impl s_content_item_metadata {
@@ -61,7 +65,7 @@ impl s_content_item_metadata {
         bitstream.write_bool(self.author_is_xuid_online);
         bitstream.write_qword(self.author_id , 64);
         bitstream.write_qword(self.size_in_bytes, 64);
-        bitstream.write_qword(self.date.into(), 64);
+        bitstream.write_qword(self.date, 64);
         bitstream.write_integer(self.length_seconds, 32);
         bitstream.write_signed_integer(self.campaign_id, 32);
         bitstream.write_signed_integer(self.map_id, 32);
@@ -77,7 +81,7 @@ impl s_content_item_metadata {
         self.description.set_string(&bitstream.read_string_utf8(128)).unwrap();
         self.author.set_string(&bitstream.read_string_utf8(16)).unwrap();
         self.file_type = bitstream.read_integer(5) - 1;
-        self.author_is_xuid_online = s_bool::from(bitstream.read_bool());
+        self.author_is_xuid_online = Bool::from(bitstream.read_bool());
         self.author_id = bitstream.read_qword(64);
         self.size_in_bytes = bitstream.read_qword(64);
         self.date = time64_t::from(bitstream.read_qword(64));

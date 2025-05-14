@@ -5,10 +5,11 @@ use crate::types::c_string::StaticString;
 use binrw::io::{Cursor, Seek};
 use binrw::{binrw, BinRead, BinResult, BinWrite};
 use binrw::BinReaderExt;
-use crate::types::bool::s_bool;
+use crate::types::bool::Bool;
 use serde_hex::{SerHex,StrictCapPfx};
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
 use blf_lib_derive::BlfChunk;
+use crate::types::numbers::Float32;
 
 #[binrw]
 #[derive(BlfChunk,Default,PartialEq,Debug,Clone,Serialize,Deserialize)]
@@ -104,14 +105,14 @@ pub struct s_bandwidth_configuration_host_preference_table {
 #[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
 #[brw(big)]
 pub struct s_bandwidth_configuration {
-    pub bandwidth_outlier_discard_fraction: f32,
+    pub bandwidth_outlier_discard_fraction: Float32,
     pub bandwidth_minimum_measurement_count: i32,
     #[serde(with = "SerHex::<StrictCapPfx>")]
     pub bandwidth_safety_margin_bps: u32,
     #[serde(with = "SerHex::<StrictCapPfx>")]
     pub bandwidth_minimum_known_good_bps: u32,
     pub bandwidth_tracking_minimum_duration_msec: i32,
-    pub bandwidth_tracking_maximum_satiation: f32,
+    pub bandwidth_tracking_maximum_satiation: Float32,
     pub bandwidth_dispute_minimum_count: i32,
     #[serde(with = "SerHex::<StrictCapPfx>")]
     pub bandwidth_dispute_threshold_bps: u32,
@@ -171,9 +172,9 @@ pub struct s_life_cycle_handler_joining_configuration {
 #[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
 #[brw(big)]
 pub struct s_life_cycle_handler_matchmaking_configuration {
-    pub perform_nat_check: s_bool,
+    pub perform_nat_check: Bool,
     #[brw(align_before = 4)]
-    pub matchmaking_strict_nat_host_percentage: f32,
+    pub matchmaking_strict_nat_host_percentage: Float32,
     pub matchmaking_start_failure_wait_time_ms: i32,
     pub matchmaking_find_match_joinable_session_threshold: i32,
     pub matchmaking_find_match_join_wait_time_ms: i32,
@@ -181,7 +182,7 @@ pub struct s_life_cycle_handler_matchmaking_configuration {
     pub matchmaking_gather_join_wait_time_ms: i32,
     pub matchmaking_search_give_up_time_seconds: i32,
     pub join_request_wait_time_ms: i32,
-    pub prepare_map_display_map_during_loading: s_bool,
+    pub prepare_map_display_map_during_loading: Bool,
     #[brw(align_before = 4)]
     pub prepare_map_veto_timer_seconds: i32,
     pub prepare_map_minimum_load_time_seconds: i32,
@@ -191,7 +192,7 @@ pub struct s_life_cycle_handler_matchmaking_configuration {
     pub end_match_write_stats_boot_threshold_seconds: i32,
     pub arbitration_wait_for_establishment_and_connectivity_threshold_seconds: i32,
     pub arbitration_wait_for_completion_threshold_seconds: i32,
-    pub post_match_return_to_pre_game_lobby: s_bool,
+    pub post_match_return_to_pre_game_lobby: Bool,
     #[brw(align_before = 4)]
     pub post_match_stats_refresh_time: i32,
     pub warning_toast_minimum_time_seconds: i32,
@@ -237,7 +238,7 @@ pub struct s_logic_matchmaking_desirability {
     pub search_time_desirability_bonus: i32,
     pub average_skill_range_for_desirability_bonus: i32,
     pub average_skill_desirability_bonus_factor: i32,
-    pub average_mu_range_for_desirability_bonus: f32,
+    pub average_mu_range_for_desirability_bonus: Float32,
     pub average_mu_desirability_bonus_factor: i32,
     pub average_experience_rank_range_for_desirability_bonus: i32,
     pub average_experience_rank_desirability_bonus_factor: i32,
@@ -259,8 +260,8 @@ pub struct s_logic_matchmaking_seeker_configuration {
     pub failed_session_search_wait_time_ms: i32,
     pub final_session_search_query_minimum_time_ms: i32,
     pub search_stage_strict_skill_round_limit: i32,
-    pub search_stage_strict_skill_initial_mu_range: f32,
-    pub search_stage_strict_skill_final_mu_range: f32,
+    pub search_stage_strict_skill_initial_mu_range: Float32,
+    pub search_stage_strict_skill_final_mu_range: Float32,
     pub search_stage_strict_skill_initial_desired_skill_range: i32,
     pub search_stage_strict_skill_final_desired_skill_range: i32,
     pub search_stage_strict_skill_initial_average_skill_range: i32,
@@ -271,7 +272,7 @@ pub struct s_logic_matchmaking_seeker_configuration {
     pub search_stage_skill_connection_threshold_ms: i32,
     pub search_stage_any_round_limit: i32,
     pub search_stage_any_final_connection_threshold_ms: i32,
-    pub search_stage_any_final_mu_range: f32,
+    pub search_stage_any_final_mu_range: Float32,
     pub search_stage_any_final_average_skill_range: i32,
     pub search_stage_any_final_desired_skill_range: i32,
 }
@@ -343,18 +344,18 @@ pub struct s_banhammer_configuration {
 #[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
 #[brw(big)]
 pub struct s_simulation_zoom_relevance {
-    pub zoom_0_tolerance: f32,
-    pub zoom_1_tolerance: f32,
-    pub zoom_0_relevance_bonus: f32,
-    pub zoom_1_relevance_bonus: f32,
+    pub zoom_0_tolerance: Float32,
+    pub zoom_1_tolerance: Float32,
+    pub zoom_0_relevance_bonus: Float32,
+    pub zoom_1_relevance_bonus: Float32,
 }
 
 #[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
 #[brw(big)]
 pub struct s_simulation_control_relevance {
-    pub zero_relevance_distance: f32,
-    pub max_relevance: f32,
-    pub min_relevance: f32,
+    pub zero_relevance_distance: Float32,
+    pub max_relevance: Float32,
+    pub min_relevance: Float32,
     pub min_period: i32,
     pub max_period: i32,
 }
@@ -362,10 +363,10 @@ pub struct s_simulation_control_relevance {
 #[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
 #[brw(big)]
 pub struct s_simulation_position_relevance {
-    pub distance_to_player_threshold: f32,
-    pub aiming_vector_high_tolerance: f32,
-    pub aiming_vector_medium_tolerance: f32,
-    pub distance_to_player_medium_tolerance: f32,
+    pub distance_to_player_threshold: Float32,
+    pub aiming_vector_high_tolerance: Float32,
+    pub aiming_vector_medium_tolerance: Float32,
+    pub distance_to_player_medium_tolerance: Float32,
 }
 
 #[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
@@ -385,8 +386,8 @@ pub struct s_simulation_view_configuration {
 #[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
 #[brw(big)]
 pub struct s_simulation_shared_configuration {
-    pub action_persist_time: f32,
-    pub simulation_event_projectile_supercombine_request_fraction: f32,
+    pub action_persist_time: Float32,
+    pub simulation_event_projectile_supercombine_request_fraction: Float32,
 }
 
 #[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
@@ -397,53 +398,53 @@ pub struct s_simulation_world_configuration {
     pub host_join_minimum_wait_time: i32,
     pub host_join_timeout: i32,
     pub join_total_wait_timeout: i32,
-    pub pause_game_required_machines_fraction: f32,
-    pub join_activation_blocking_machines_fraction: f32,
+    pub pause_game_required_machines_fraction: Float32,
+    pub join_activation_blocking_machines_fraction: Float32,
     pub maximum_catchup_attempts: i32,
     pub catchup_failure_timeout: i32,
     pub client_join_failure_count: i32,
     pub client_activation_failure_timeout: i32,
-    pub game_simulation_queue_danger_allocation_size_percentage: f32,
-    pub game_simulation_queue_danger_allocation_count_percentage: f32,
+    pub game_simulation_queue_danger_allocation_size_percentage: Float32,
+    pub game_simulation_queue_danger_allocation_count_percentage: Float32,
 }
 
 #[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
 #[brw(big)]
 pub struct s_simulation_event_configuration {
-    pub constant_priority: f32,
+    pub constant_priority: Float32,
     pub cancel_timer_milliseconds: i32,
-    pub zero_relevance_distance: f32,
-    pub minimum_priority: f32,
-    pub maximum_priority: f32,
+    pub zero_relevance_distance: Float32,
+    pub minimum_priority: Float32,
+    pub maximum_priority: Float32,
 }
 
 #[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
 #[brw(big)]
 pub struct s_simulation_entity_creation_configuration {
-    pub constant_priority: f32,
-    pub creation_zero_relevance_distance: f32,
-    pub creation_minimum_priority: f32,
-    pub creation_maximum_priority: f32,
+    pub constant_priority: Float32,
+    pub creation_zero_relevance_distance: Float32,
+    pub creation_minimum_priority: Float32,
+    pub creation_maximum_priority: Float32,
 }
 
 #[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
 #[brw(big)]
 pub struct s_simulation_entity_update_configuration {
-    pub constant_priority: f32,
-    pub zero_relevance_distance: f32,
-    pub minimum_relevance: f32,
-    pub maximum_relevance: f32,
+    pub constant_priority: Float32,
+    pub zero_relevance_distance: Float32,
+    pub minimum_relevance: Float32,
+    pub maximum_relevance: Float32,
     pub minimum_period: i32,
     pub maximum_period: i32,
-    pub normal_minimum_priority: f32,
-    pub normal_maximum_priority: f32,
+    pub normal_minimum_priority: Float32,
+    pub normal_maximum_priority: Float32,
     pub delayed_time_threshold: i32,
-    pub delayed_minimum_priority: f32,
-    pub delayed_maximum_priority: f32,
-    pub maximum_priority: f32,
-    pub player_priority: f32,
-    pub dead_priority: f32,
-    pub in_motion_by_unit: f32,
+    pub delayed_minimum_priority: Float32,
+    pub delayed_maximum_priority: Float32,
+    pub maximum_priority: Float32,
+    pub player_priority: Float32,
+    pub dead_priority: Float32,
+    pub in_motion_by_unit: Float32,
 }
 
 #[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
@@ -456,21 +457,21 @@ pub struct s_simulation_entity_configuration {
 #[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
 #[brw(big)]
 pub struct s_simulation_warping_configuration {
-    pub simulation_position_update_object_corrective_accept_tolerance: f32,
-    pub simulation_position_update_object_predicted_accept_tolerance: f32,
-    pub simulation_position_update_vehicle_corrective_accept_tolerance: f32,
-    pub simulation_position_update_vehicle_predicted_accept_tolerance: f32,
-    pub position_update_recent_seconds: f32,
-    pub position_update_minimum_distance: f32,
+    pub simulation_position_update_object_corrective_accept_tolerance: Float32,
+    pub simulation_position_update_object_predicted_accept_tolerance: Float32,
+    pub simulation_position_update_vehicle_corrective_accept_tolerance: Float32,
+    pub simulation_position_update_vehicle_predicted_accept_tolerance: Float32,
+    pub position_update_recent_seconds: Float32,
+    pub position_update_minimum_distance: Float32,
 }
 
 #[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
 #[brw(big)]
 pub struct s_simulation_weapon_configuration {
-    pub trigger_recent_spew_time: f32,
-    pub prediction_delay_timer: f32,
-    pub predicted_fire_allow_ratio: f32,
-    pub predicted_fire_always_allow_threshold: f32,
+    pub trigger_recent_spew_time: Float32,
+    pub prediction_delay_timer: Float32,
+    pub predicted_fire_allow_ratio: Float32,
+    pub predicted_fire_always_allow_threshold: Float32,
 }
 
 #[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
@@ -498,13 +499,13 @@ pub struct s_event_manager_view_configuration {
 #[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
 #[brw(big)]
 pub struct s_replication_control_view {
-    pub base_non_player_motion_priority: f32,
+    pub base_non_player_motion_priority: Float32,
     pub max_priority_threshold: i32,
-    pub max_priority: f32,
-    pub medium_priority_base: f32,
-    pub medium_priority_relevance_scale: f32,
-    pub min_priority_base: f32,
-    pub min_priority_relevance_scale: f32,
+    pub max_priority: Float32,
+    pub medium_priority_base: Float32,
+    pub medium_priority_relevance_scale: Float32,
+    pub min_priority_base: Float32,
+    pub min_priority_relevance_scale: Float32,
 }
 
 #[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
@@ -543,7 +544,7 @@ pub struct s_session_configuration {
     pub time_synchronization_retry_msec: i32,
     pub minimum_election_send_interval_msec: i32,
     #[brw(pad_before = 3)]
-    pub allow_third_party_host_elections: s_bool,
+    pub allow_third_party_host_elections: Bool,
 }
 
 #[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
@@ -568,28 +569,28 @@ pub struct s_observer_configuration {
     pub synchronous_connection_drop_receive_timeout: i32,
     pub minimum_undesired_connection_timeout_msec: i32,
     pub maximum_undesired_connection_timeout_msec: i32,
-    pub safety_window_threshold: f32,
-    pub safety_packet_interval: f32,
-    pub safety_packet_maximum_interval: f32,
+    pub safety_window_threshold: Float32,
+    pub safety_packet_interval: Float32,
+    pub safety_packet_maximum_interval: Float32,
     pub packet_rate_multiplier_count: i32,
-    pub packet_rate_multipliers: StaticArray<f32, 16>,
+    pub packet_rate_multipliers: StaticArray<Float32, 16>,
     pub packet_window_minimum_bytes: i32,
-    pub voice_fraction_authority: f32,
-    pub voice_fraction_client: f32,
-    pub voice_fraction_non_simulation: f32,
-    pub voice_maximum_packet_rate: f32,
+    pub voice_fraction_authority: Float32,
+    pub voice_fraction_client: Float32,
+    pub voice_fraction_non_simulation: Float32,
+    pub voice_maximum_packet_rate: Float32,
     pub voice_receive_fast_acknowledge_time: i32,
     pub bandwidth_interval: i32,
     pub loss_detection_window_size: i32,
     pub flood_max_aperture_msec: i32,
-    pub flood_packet_fraction: f32,
+    pub flood_packet_fraction: Float32,
     pub desired_payload_bytes_out_of_game: i32,
     pub desired_payload_bytes_simulation: i32,
-    pub desired_minimum_packet_rate_multiplier: f32,
+    pub desired_minimum_packet_rate_multiplier: Float32,
     #[serde(with = "SerHex::<StrictCapPfx>")]
     pub minimum_bandwidth_bps: u32,
     pub bandwidth_adjust_interval: i32,
-    pub bandwidth_flood_channel_fraction: f32,
+    pub bandwidth_flood_channel_fraction: Float32,
     pub bandwidth_flood_check_threshold: i32,
     pub bandwidth_flood_backoff_kbps: i32,
     pub bandwidth_flood_backoff_repeat_interval: i32,
@@ -600,7 +601,7 @@ pub struct s_observer_configuration {
     pub bandwidth_increment_known_bad_threshold_kbps: i32,
     pub bandwidth_increment_kbps: i32,
     #[brw(align_after = 4)]
-    pub generate_stream_events: s_bool,
+    pub generate_stream_events: Bool,
     pub observer_stream_expansion_interval_msec: i32,
     #[serde(with = "SerHex::<StrictCapPfx>")]
     pub stream_minimum_bps: u32,
@@ -645,33 +646,33 @@ pub struct s_observer_configuration {
     pub stream_minimum_rtt_msec: i32,
     pub stream_rtt_average_gain_bits: i32,
     pub stream_loss_window_size: i32,
-    pub stream_loss_throttle_fraction: f32,
+    pub stream_loss_throttle_fraction: Float32,
     pub stream_throttle_rtt_multiplier: i32,
-    pub stream_throttle_reduce_multiplier: f32,
+    pub stream_throttle_reduce_multiplier: Float32,
     pub stream_throttle_cookie_event_count: i32,
     pub stream_throttle_cookie_backoff_threshold: i32,
     #[serde(with = "SerHex::<StrictCapPfx>")]
     pub stream_bandwidth_step_bps: u32,
-    pub stream_bandwidth_step_max_fraction: f32,
+    pub stream_bandwidth_step_max_fraction: Float32,
     #[serde(with = "SerHex::<StrictCapPfx>")]
     pub stream_bandwidth_backoff_bps: u32,
-    pub stream_bandwidth_backoff_max_fraction: f32,
+    pub stream_bandwidth_backoff_max_fraction: Float32,
     pub stream_period_maximum_msec: i32,
     pub stream_growth_period_minimum_msec: i32,
     pub stream_throughput_recording_period_minimum_msec: i32,
     #[serde(with = "SerHex::<StrictCapPfx>")]
     pub stream_throughput_satiated_bandwidth_bps: u32,
-    pub stream_throughput_satiated_stream_fraction: f32,
+    pub stream_throughput_satiated_stream_fraction: Float32,
     pub stream_satiation_timeout_msec: i32,
     pub stream_congestion_bandwidth_average_gain_bits: i32,
     #[serde(with = "SerHex::<StrictCapPfx>")]
     pub stream_congestion_offender_bandwidth_increment_bps: u32,
     pub stream_congestion_offender_timeout_msec: i32,
     pub stream_growth_maximum_count: i32,
-    pub stream_growth_maximum_fraction: f32,
-    pub stream_growth_desire_maximum: f32,
+    pub stream_growth_maximum_fraction: Float32,
+    pub stream_growth_desire_maximum: Float32,
     pub stream_growth_desire_delay_multiplier: i32,
-    pub stream_growth_desire_penalty_bandwidth_multiplier: f32,
+    pub stream_growth_desire_penalty_bandwidth_multiplier: Float32,
     pub stream_growth_out_of_game_maximum_rtt_increase_msec: i32,
     pub stream_growth_simulation_maximum_rtt_increase_msec: i32,
     pub stream_non_growth_simulation_maximum_rtt_increase_msec: i32,
@@ -683,14 +684,14 @@ pub struct s_observer_configuration {
     pub bandwidth_monitor_period_count: i32,
     #[serde(with = "SerHex::<StrictCapPfx>")]
     pub bandwidth_monitor_limitation_bps: u32,
-    pub bandwidth_monitor_constriction_fraction: f32,
+    pub bandwidth_monitor_constriction_fraction: Float32,
     #[serde(with = "SerHex::<StrictCapPfx>")]
     pub bandwidth_monitor_constriction_threshold_bps: u32,
     pub client_badness_rating_threshold: i32,
     pub bad_bandwidth_throughput_threshold: i32,
-    pub disable_bad_client_anticheating: s_bool,
-    pub disable_bad_connectivity_anticheating: s_bool,
-    pub disable_bad_bandwidth_anticheating: s_bool,
+    pub disable_bad_client_anticheating: Bool,
+    pub disable_bad_connectivity_anticheating: Bool,
+    pub disable_bad_bandwidth_anticheating: Bool,
     #[brw(align_before = 4)]
     pub initial_timeout: i32,
     pub mini_period_minimum_duration: i32,
@@ -747,14 +748,14 @@ pub struct s_observer_configuration {
     pub maximum_consecutive_probe_successes: i32,
     pub minimum_packet_rate_for_automatic_congestion: i32,
     pub maximum_rtt_for_automatic_congestion: i32,
-    pub do_collateral_last_resort_throttle: s_bool,
-    pub release_throttle_lock_on_first_congest: s_bool,
-    pub round_robin_probes: s_bool,
-    pub fail_all_member_probes_together: s_bool,
-    pub mark_throttled_stream_with_one_failure: s_bool,
-    pub check_single_stream_overprobe: s_bool,
-    pub use_deviation_only_for_related_rtt_timeout: s_bool,
-    pub fast_probe_failed_streams: s_bool,
+    pub do_collateral_last_resort_throttle: Bool,
+    pub release_throttle_lock_on_first_congest: Bool,
+    pub round_robin_probes: Bool,
+    pub fail_all_member_probes_together: Bool,
+    pub mark_throttled_stream_with_one_failure: Bool,
+    pub check_single_stream_overprobe: Bool,
+    pub use_deviation_only_for_related_rtt_timeout: Bool,
+    pub fast_probe_failed_streams: Bool,
     pub packet_loss_spike_threshold: i32,
     pub packet_loss_spike_minimum_packet_count: i32,
     pub packet_loss_spike_skip_averaging_any_spike: i32,
@@ -764,7 +765,7 @@ pub struct s_observer_configuration {
     pub stable_probe_query_time_msec: i32,
     pub stable_probe_query_time_minimum_msec: i32,
     pub stable_probe_settle_time_msec: i32,
-    pub stable_probe_settle_bandwidth_multiplier: f32,
+    pub stable_probe_settle_bandwidth_multiplier: Float32,
     pub stable_probe_throttle_minimum_rollback: i32,
     pub stable_probe_recover_minimum_time_msec: i32,
     #[serde(with = "SerHex::<StrictCapPfx>")]
@@ -778,7 +779,7 @@ pub struct s_observer_configuration {
     pub initial_probe_query_time_msec: i32,
     pub initial_probe_query_time_minimum_msec: i32,
     pub initial_probe_settle_time_msec: i32,
-    pub initial_probe_settle_bandwidth_multiplier: f32,
+    pub initial_probe_settle_bandwidth_multiplier: Float32,
     pub initial_probe_throttle_minimum_rollback: i32,
     pub initial_probe_recover_minimum_time_msec: i32,
     #[serde(with = "SerHex::<StrictCapPfx>")]
@@ -792,7 +793,7 @@ pub struct s_observer_configuration {
     pub fast_probe_query_time_msec: i32,
     pub fast_probe_query_time_minimum_msec: i32,
     pub fast_probe_settle_time_msec: i32,
-    pub fast_probe_settle_bandwidth_multiplier: f32,
+    pub fast_probe_settle_bandwidth_multiplier: Float32,
     pub fast_probe_throttle_minimum_rollback: i32,
     pub fast_probe_recover_minimum_time_msec: i32,
     #[serde(with = "SerHex::<StrictCapPfx>")]
@@ -806,7 +807,7 @@ pub struct s_observer_configuration {
     pub slow_probe_query_time_msec: i32,
     pub slow_probe_query_time_minimum_msec: i32,
     pub slow_probe_settle_time_msec: i32,
-    pub slow_probe_settle_bandwidth_multiplier: f32,
+    pub slow_probe_settle_bandwidth_multiplier: Float32,
     pub slow_probe_throttle_minimum_rollback: i32,
     pub slow_probe_recover_minimum_time_msec: i32,
     #[serde(with = "SerHex::<StrictCapPfx>")]
@@ -848,7 +849,7 @@ pub struct s_connection_configuration {
     pub backoff_increment_msec: i32,
     pub backoff_max_msec: i32,
     pub backoff_decrement_msec: i32,
-    pub bandwidth_warning_latency_multiplier: f32,
+    pub bandwidth_warning_latency_multiplier: Float32,
     pub bandwidth_warning_latency_minimum_increase: i32,
 }
 
@@ -865,7 +866,7 @@ pub struct s_transport_configuration {
     pub address_resolution_timeout_msec: i32,
     pub qos_probe_count: StaticArray<i32, 2>,
     pub qos_probe_bps: StaticArray<i32, 2>,
-    pub qos_upstream_cap_enabled: s_bool,
+    pub qos_upstream_cap_enabled: Bool,
     #[brw(align_before = 4)]
     pub qos_upstream_cap_upstream_modifier_percentage: i32,
     pub qos_upstream_cap_correction_modifier: i32,
@@ -874,9 +875,9 @@ pub struct s_transport_configuration {
 #[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
 #[brw(big)]
 pub struct s_voice_configuration {
-    pub push_to_talk_inactivity_threshold_seconds: f32,
-    pub maximum_push_to_talk_time_seconds: f32,
-    pub clients_can_be_preferred_consumers_of_voice_repeater: s_bool,
+    pub push_to_talk_inactivity_threshold_seconds: Float32,
+    pub maximum_push_to_talk_time_seconds: Float32,
+    pub clients_can_be_preferred_consumers_of_voice_repeater: Bool,
     #[brw(align_before = 4)]
     pub open_channel_player_count: i32,
 }
@@ -887,7 +888,7 @@ pub struct s_data_mine_configuration {
     pub ui_upload_record_threshold: i32,
     pub ui_upload_time_threshold: i32,
     #[brw(align_after = 4)]
-    pub record_uploads_prevent_game_from_starting: s_bool,
+    pub record_uploads_prevent_game_from_starting: Bool,
 }
 
 #[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
@@ -895,9 +896,9 @@ pub struct s_data_mine_configuration {
 pub struct s_griefer_configuration {
     pub betrayal_decrement_time: u32,
     pub eject_decrement_time: u32,
-    pub betrayal_cutoff: f32,
+    pub betrayal_cutoff: Float32,
     pub ejection_cutoff: i32,
-    pub UNUSED_friendly_assist_amount: f32,
+    pub UNUSED_friendly_assist_amount: Float32,
 }
 
 #[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
@@ -932,8 +933,8 @@ pub struct s_experience_configuration {
 #[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
 #[brw(big)]
 pub struct s_alpha_configuration {
-    pub disable_game: s_bool,
-    pub disable_custom_games: s_bool,
+    pub disable_game: Bool,
+    pub disable_custom_games: Bool,
     #[brw(align_before = 4)]
     pub ui_level: e_alpha_configuration_ui_level,
     pub maximum_multiplayer_split_screen: i32,
@@ -942,7 +943,7 @@ pub struct s_alpha_configuration {
 #[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
 #[brw(big)]
 pub struct s_crash_handling_configuration {
-    pub display_crash_handling_ui: s_bool,
+    pub display_crash_handling_ui: Bool,
     #[brw(align_before = 4)]
     pub minidump_generation: e_minidump_generation,
 }
@@ -1023,13 +1024,13 @@ impl BinWrite for s_dlc_path {
 #[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
 #[brw(big)]
 pub struct s_chicken_switches {
-    pub allow_no_hdd_network_coop: s_bool,
-    pub allow_matched_hdd_network_coop: s_bool,
-    pub disallow_cross_language_coop: s_bool,
-    pub disable_prefer_good_connection_changes: s_bool,
-    pub allow_vidmaster_alpha_achievement: s_bool,
+    pub allow_no_hdd_network_coop: Bool,
+    pub allow_matched_hdd_network_coop: Bool,
+    pub disallow_cross_language_coop: Bool,
+    pub disable_prefer_good_connection_changes: Bool,
+    pub allow_vidmaster_alpha_achievement: Bool,
     #[brw(align_after = 4)]
-    pub au2_lsp_acquire_fix_only_enable_if_wb2_is_present: s_bool,
+    pub au2_lsp_acquire_fix_only_enable_if_wb2_is_present: Bool,
 }
 
 #[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]

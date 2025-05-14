@@ -1,61 +1,65 @@
 use binrw::{BinRead, BinWrite};
+#[cfg(feature = "napi")]
+use napi_derive::napi;
 use serde::{Deserialize, Serialize};
 use blf_lib::io::bitstream::{c_bitstream_reader, c_bitstream_writer};
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite)]
+#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 pub struct c_player_trait_weapons {
-    m_initial_grenade_count_setting: u16,
-    m_initial_primary_weapon_absolute_index: i8,
-    m_initial_secondary_weapon_absolute_index: i8,
-    m_damage_modifier_percentage_setting: u8,
-    m_recharging_grenades_setting: u8,
-    m_infinite_ammo_setting: u8,
-    m_weapon_pickup_setting: u8,
+    pub m_initial_grenade_count_setting: u16,
+    pub m_initial_primary_weapon_absolute_index: i8,
+    pub m_initial_secondary_weapon_absolute_index: i8,
+    pub m_damage_modifier_percentage_setting: u8,
+    pub m_recharging_grenades_setting: u8,
+    pub m_infinite_ammo_setting: u8,
+    pub m_weapon_pickup_setting: u8,
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite)]
+#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 pub struct c_player_trait_shield_vitality {
-    m_damage_resistance_percentage_setting: u8,
-    m_shield_recharge_rate_percentage_setting: u8,
-    m_vampirism_percentage_setting: u8,
-    m_headshot_immunity_setting: u8,
-    #[brw(align_after = 4)]
-    m_shield_multiplier_setting: u8,
-    // #[serde(skip_serializing,skip_deserializing)]
-    // pad: [u8;3], // pelican
+    pub m_damage_resistance_percentage_setting: u8,
+    pub m_shield_recharge_rate_percentage_setting: u8,
+    pub m_vampirism_percentage_setting: u8,
+    pub m_headshot_immunity_setting: u8,
+    #[brw(pad_after = 3)]
+    pub m_shield_multiplier_setting: u8,
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite)]
+#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 pub struct c_player_trait_movement {
-    m_speed_setting: u8,
-    m_gravity_setting: u8,
-    #[brw(align_after = 4)]
-    m_vehicle_usage_setting: u8,
-    // #[serde(skip_serializing,skip_deserializing)]
-    // pad: u8, // hornet
+    pub m_speed_setting: u8,
+    pub m_gravity_setting: u8,
+    #[brw(pad_after = 1)]
+    pub m_vehicle_usage_setting: u8,
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite)]
+#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 pub struct c_player_trait_appearance {
-    m_active_camo_setting: u8,
-    m_waypoint_setting: u8,
-    m_aura_setting: u8,
-    m_forced_change_color_setting: u8,
+    pub m_active_camo_setting: u8,
+    pub m_waypoint_setting: u8,
+    pub m_aura_setting: u8,
+    pub m_forced_change_color_setting: u8,
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite)]
+#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 pub struct c_player_trait_sensors {
-    m_motion_tracker_setting: u16,
-    m_motion_tracker_range_setting: u16,
+    pub m_motion_tracker_setting: u16,
+    pub m_motion_tracker_range_setting: u16,
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite)]
+#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 pub struct c_player_traits {
-    m_shield_vitality_traits: c_player_trait_shield_vitality,
-    m_weapon_traits: c_player_trait_weapons,
-    m_movement_traits: c_player_trait_movement,
-    m_appearance_traits: c_player_trait_appearance,
-    m_sensor_traits: c_player_trait_sensors,
+    pub m_shield_vitality_traits: c_player_trait_shield_vitality,
+    pub m_weapon_traits: c_player_trait_weapons,
+    pub m_movement_traits: c_player_trait_movement,
+    pub m_appearance_traits: c_player_trait_appearance,
+    pub m_sensor_traits: c_player_trait_sensors,
 }
 
 impl c_player_traits {

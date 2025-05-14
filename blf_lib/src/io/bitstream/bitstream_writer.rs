@@ -74,13 +74,13 @@ impl c_bitstream_writer {
     }
 
     // Be careful using this.
-    pub fn write_float(&mut self, value: f32, size_in_bits: usize) {
+    pub fn write_float(&mut self, value: impl Into<f32>, size_in_bits: usize) {
         match self.m_byte_order {
             e_bitstream_byte_order::_bitstream_byte_order_little_endian => {
-                self.write_bits_internal(&value.to_le_bytes(), size_in_bits);
+                self.write_bits_internal(&value.into().to_le_bytes(), size_in_bits);
             }
             e_bitstream_byte_order::_bitstream_byte_order_big_endian => {
-                self.write_bits_internal(&value.to_be_bytes(), size_in_bits);
+                self.write_bits_internal(&value.into().to_be_bytes(), size_in_bits);
             }
         }
     }
@@ -108,13 +108,13 @@ impl c_bitstream_writer {
         self.write_bits_internal(value, size_in_bits);
     }
 
-    pub fn write_qword(&mut self, value: u64, size_in_bits: usize) {
+    pub fn write_qword(&mut self, value: impl Into<u64>, size_in_bits: usize) {
         match self.m_byte_order {
             e_bitstream_byte_order::_bitstream_byte_order_little_endian => {
-                self.write_bits_internal(&value.to_le_bytes(), size_in_bits);
+                self.write_bits_internal(&value.into().to_le_bytes(), size_in_bits);
             }
             e_bitstream_byte_order::_bitstream_byte_order_big_endian => {
-                self.write_bits_internal(&value.to_be_bytes(), size_in_bits);
+                self.write_bits_internal(&value.into().to_be_bytes(), size_in_bits);
             }
         }
     }
@@ -200,9 +200,9 @@ impl c_bitstream_writer {
         self.write_integer(point.z as u32, axis_encoding_size_in_bits);
     }
 
-    pub fn write_quantized_real(&mut self, value: f32, min_value: f32, max_value: f32, size_in_bits: usize, exact_midpoint: bool, exact_endpoints: bool) {
+    pub fn write_quantized_real(&mut self, value: impl Into<f32>, min_value: f32, max_value: f32, size_in_bits: usize, exact_midpoint: bool, exact_endpoints: bool) {
         assert!(self.writing());
-        self.write_integer(quantize_real(value, min_value, max_value, size_in_bits, exact_midpoint, exact_endpoints) as u32, size_in_bits);
+        self.write_integer(quantize_real(value.into(), min_value, max_value, size_in_bits, exact_midpoint, exact_endpoints) as u32, size_in_bits);
     }
 
     pub fn write_secure_address(address: &s_transport_secure_address) {

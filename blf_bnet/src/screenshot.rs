@@ -2,25 +2,23 @@ use js_sys::Uint8Array;
 use wasm_bindgen::prelude::wasm_bindgen;
 use blf_lib::blam::common::math::real_math::real_point3d;
 use blf_lib::blf::chunks::search_for_chunk;
-use blf_lib::blf::versions::halo3::v12070_08_09_05_2031_halo3_ship::{self, s_blf_chunk_content_header};
-// use blf_lib::blf::versions::halo3odst::v13895_09_04_27_2201_atlas_release;
-// use blf_lib::blf::versions::halo3odst::v13895_09_04_27_2201_atlas_release::s_blf_chunk_content_header;
-
+use blf_lib::blf::versions::halo3::v12070_08_09_05_2031_halo3_ship;
+use blf_lib::types::u64::Unsigned64;
 #[wasm_bindgen(getter_with_clone)]
 pub struct ScreenshotData {
     pub build_number: u16,
     pub name: String,
     pub author: String,
-    pub author_xuid: u64,
+    pub author_xuid: Unsigned64,
     pub description: String,
-    pub unique_id: u64,
-    pub game_id: u64,
+    pub unique_id: Unsigned64,
+    pub game_id: Unsigned64,
     pub hopper_id: Option<i16>,
     pub camera_position: real_point3d,
     pub game_tick: u32,
     pub film_tick: u32,
     pub jpeg_data: Uint8Array,
-    pub header: s_blf_chunk_content_header,
+    pub header: v12070_08_09_05_2031_halo3_ship::s_blf_chunk_content_header,
 }
 
 fn get_h3_release_screenshot_data(data: Vec<u8>) -> Option<ScreenshotData> {

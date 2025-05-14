@@ -1,4 +1,6 @@
 use binrw::{BinRead, BinWrite};
+#[cfg(feature = "napi")]
+use napi_derive::napi;
 use serde::{Deserialize, Serialize};
 use blf_lib::blam::halo_3::release::game::game_engine_player_traits::c_player_traits;
 use blf_lib::io::bitstream::{c_bitstream_reader, c_bitstream_writer};
@@ -6,25 +8,24 @@ use blf_lib::SET_BIT;
 use crate::TEST_BIT;
 
 #[derive(Default, PartialEq, Debug, Clone, BinRead, BinWrite, Serialize, Deserialize)]
+#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 pub struct c_game_engine_infection_variant {
-    m_variant_flags: u8,
-    m_safe_havens: u8,
-    m_next_zombie: u8,
-    m_initial_zombie_count: u8,
-    m_safe_haven_movement_time: u16,
-    m_zombie_kill_points: i8,
-    m_infection_points: i8,
-    m_safe_haven_arrival_points: i8,
-    m_suicide_points: i8,
-    m_betrayal_points: i8,
-    m_last_man_bonus_points: i8,
-    m_zombie_traits: c_player_traits,
-    m_first_zombie_traits: c_player_traits,
-    m_safe_haven_defender_traits: c_player_traits,
+    pub m_variant_flags: u8,
+    pub m_safe_havens: u8,
+    pub m_next_zombie: u8,
+    pub m_initial_zombie_count: u8,
+    pub m_safe_haven_movement_time: u16,
+    pub m_zombie_kill_points: i8,
+    pub m_infection_points: i8,
+    pub m_safe_haven_arrival_points: i8,
+    pub m_suicide_points: i8,
+    pub m_betrayal_points: i8,
+    pub m_last_man_bonus_points: i8,
+    pub m_zombie_traits: c_player_traits,
+    pub m_first_zombie_traits: c_player_traits,
+    pub m_safe_haven_defender_traits: c_player_traits,
     #[brw(pad_after = 4)]
-    m_last_human_traits: c_player_traits,
-    // #[serde(skip_serializing,skip_deserializing)]
-    // m_pad1: StaticArray<u8, 4>,
+    pub m_last_human_traits: c_player_traits,
 }
 
 impl c_game_engine_infection_variant {

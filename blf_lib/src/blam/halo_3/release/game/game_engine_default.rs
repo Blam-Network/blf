@@ -1,4 +1,6 @@
 use binrw::{BinRead, BinWrite};
+#[cfg(feature = "napi")]
+use napi_derive::napi;
 use serde::{Deserialize, Serialize};
 use blf_lib::blam::halo_3::release::game::game_engine_player_traits::c_player_traits;
 use blf_lib::blam::halo_3::release::game::game_engine_traits::{c_game_engine_miscellaneous_options, c_game_engine_respawn_options};
@@ -9,9 +11,10 @@ use blf_lib::{SET_BIT, TEST_BIT};
 pub const k_game_engine_type_count: usize = 11;
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite)]
+#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 pub struct c_game_engine_social_options {
-    m_flags: u16,
-    m_team_changing: u16,
+    pub m_flags: u16,
+    pub m_team_changing: u16,
 }
 
 impl c_game_engine_social_options {
@@ -37,19 +40,19 @@ impl c_game_engine_social_options {
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite)]
+#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 pub struct c_game_engine_map_override_options {
-    m_flags: u32,
-    m_base_player_traits: c_player_traits,
-    m_weapon_set_absolute_index: i16,
-    m_vehicle_set_absolute_index: i16,
-    m_red_powerup_traits: c_player_traits,
-    m_blue_powerup_traits: c_player_traits,
-    m_yellow_powerup_traits: c_player_traits,
-    m_red_powerup_duration_seconds: u8,
-    m_blue_powerup_duration_seconds: u8,
-    m_yellow_powerup_duration_seconds: u8,
-    #[serde(skip_serializing,skip_deserializing)]
-    pad: u8, // john hold on
+    pub m_flags: u32,
+    pub m_base_player_traits: c_player_traits,
+    pub m_weapon_set_absolute_index: i16,
+    pub m_vehicle_set_absolute_index: i16,
+    pub m_red_powerup_traits: c_player_traits,
+    pub m_blue_powerup_traits: c_player_traits,
+    pub m_yellow_powerup_traits: c_player_traits,
+    pub m_red_powerup_duration_seconds: u8,
+    pub m_blue_powerup_duration_seconds: u8,
+    #[brw(pad_after = 1)]
+    pub m_yellow_powerup_duration_seconds: u8,
 }
 
 impl c_game_engine_map_override_options {
@@ -83,20 +86,19 @@ impl c_game_engine_map_override_options {
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite)]
+#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 pub struct c_game_engine_base_variant {
     #[serde(skip_serializing,skip_deserializing)]
-    m_checksum: u32,
-    // #[serde(skip_serializing,skip_deserializing)]
-    // pad: StaticArray<u32, 1>
+    pub m_checksum: u32,
     #[brw(pad_before = 4)]
     pub m_metadata: s_content_item_metadata,
-    m_miscellaneous_options: c_game_engine_miscellaneous_options,
-    m_respawn_options: c_game_engine_respawn_options,
-    m_social_options: c_game_engine_social_options,
-    m_map_override_options: c_game_engine_map_override_options,
-    pad2: u32,
-    m_flags: u16,
-    m_team_scoring_method: u16,
+    pub m_miscellaneous_options: c_game_engine_miscellaneous_options,
+    pub m_respawn_options: c_game_engine_respawn_options,
+    pub m_social_options: c_game_engine_social_options,
+    pub m_map_override_options: c_game_engine_map_override_options,
+    #[brw(pad_before = 2)]
+    pub m_flags: u16,
+    pub m_team_scoring_method: u16,
 }
 
 impl c_game_engine_base_variant {

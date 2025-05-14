@@ -29,8 +29,3 @@ pub fn blf_file(input: TokenStream) -> TokenStream {
 pub fn test_size(input: TokenStream) -> TokenStream {
     macros::test_size::test_size_macro(input)
 }
-
-#[proc_macro_derive(ChunkFactory, attributes(Title, Build, Chunks))]
-pub fn chunk_factory(input: TokenStream) -> TokenStream {
-    macros::chunk_factory::chunk_factory_macro(input)
-}

@@ -5,6 +5,7 @@ use blf_lib_derivable::blf::chunks::BlfChunkHooks;
 use blf_lib_derive::BlfChunk;
 use std::io::{Read, Seek, Write};
 use blf_lib::types::time::time64_t;
+use crate::types::u64::Unsigned64;
 
 pub const k_max_bans_count: usize = 32;
 
@@ -57,13 +58,13 @@ impl BinWrite for s_blf_chunk_user_bans_ban {
         if let Some(start_time) = &self.start_time {
             Some(start_time.0).write_options(writer, endian, ())?;
         } else {
-            None::<u64>.write_options(writer, endian, ())?;
+            None::<Unsigned64>.write_options(writer, endian, ())?;
         }
 
         if let Some(end_time) = &self.end_time {
             Some(end_time.0).write_options(writer, endian, ())?;
         } else {
-            None::<u64>.write_options(writer, endian, ())?;
+            None::<Unsigned64>.write_options(writer, endian, ())?;
         }
 
         Ok(())

@@ -1,4 +1,6 @@
 use binrw::{binrw, BinRead, BinWrite};
+#[cfg(feature = "napi")]
+use napi_derive::napi;
 use serde::{Deserialize, Serialize};
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
 use blf_lib_derive::BlfChunk;
@@ -8,6 +10,7 @@ use blf_lib_derive::BlfChunk;
 #[Header("_eof", 1.1)]
 #[Size(0x5)]
 #[brw(big)]
+#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 pub struct s_blf_chunk_end_of_file
 {
     pub file_size: u32,
@@ -22,6 +25,8 @@ impl BlfChunkHooks for s_blf_chunk_end_of_file {
 
 #[derive(Debug, Clone, Copy, PartialEq, BinRead, BinWrite, Serialize, Deserialize, Default)]
 #[brw(repr = u8)]
+#[cfg_attr(feature = "napi", napi(namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
+#[repr(u8)]
 pub enum e_blf_file_authentication_type {
     #[default]
     none = 0,

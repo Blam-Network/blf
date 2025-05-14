@@ -4,12 +4,20 @@ use blf_lib::types::array::StaticArray;
 use serde::{Deserializer, Serialize, Serializer};
 use widestring::U16CString;
 use std::char::{decode_utf16, REPLACEMENT_CHARACTER};
+use std::cmp::min;
 use binrw::{BinRead, BinWrite};
-use js_sys::JsString;
 use serde::de::Error;
+
+#[cfg(feature = "napi")]
+use napi::sys::{napi_env, napi_env__, napi_value};
+#[cfg(feature = "napi")]
+use napi::bindgen_prelude::{FromNapiMutRef, FromNapiValue, ToNapiValue, TypeName, ValidateNapiValue};
+#[cfg(feature = "napi")]
+use napi::{Env, JsString, NapiRaw, ValueType};
+#[cfg(feature = "napi")]
+use napi_derive::napi;
 use wasm_bindgen::convert::{FromWasmAbi, IntoWasmAbi};
 use wasm_bindgen::describe::WasmDescribe;
-use wasm_bindgen::JsValue;
 
 pub fn to_string(chars: &[c_char]) -> String {
     let mut res = String::new();
@@ -52,6 +60,24 @@ pub struct StaticWcharString<const N: usize> {
     buf: StaticArray<u16, N>,
 }
 
+#[cfg(feature = "napi")]
+impl<const N: usize> ToNapiValue for StaticWcharString<N> {
+    unsafe fn to_napi_value(env: *mut napi_env__, val: Self) -> napi::Result<napi::sys::napi_value> {
+        let s = val.get_string();
+        Ok(Env::from_raw(env).create_string(&s)?.raw())
+    }
+}
+
+#[cfg(feature = "napi")]
+impl<const N: usize> FromNapiValue for StaticWcharString<N> {
+    unsafe fn from_napi_value(env: napi_env, napi_val: napi::sys::napi_value) -> napi::Result<Self> {
+        let js_string = JsString::from_napi_value(env, napi_val)?;
+        let rust_string = js_string.into_utf8()?.into_owned()?;
+        StaticWcharString::from_string(&rust_string)
+            .map_err(|e| napi::Error::from_reason(e))
+    }
+}
+
 impl<const N: usize> StaticWcharString<N> {
     pub fn from_string(value: &String) -> Result<Self, String> {
         let mut new = Self {
@@ -67,12 +93,20 @@ impl<const N: usize> StaticWcharString<N> {
         let u16Str = U16CString::from_str(value).unwrap();
         let u16s = u16Str.as_slice();
         if u16s.len() > N {
-            return Err(format!("String \"{}\" too long ({} > {}) bytes", value, u16s.len(), N));
+            return Err(format!("String too long ({} > {}) bytes", N, u16s.len()));
         }
         let buf = self.buf.get_mut();
         buf.fill(0);
         buf[0..u16s.len()].copy_from_slice(u16s);
         Ok(())
+    }
+
+    pub fn set_string_trimmed(&mut self, value: &String) {
+        let u16Str = U16CString::from_str(value).unwrap();
+        let u16s = u16Str.as_slice();
+        let buf = self.buf.get_mut();
+        buf.fill(0);
+        buf[0..min(u16s.len(), N - 1)].copy_from_slice(u16s);
     }
 
     pub fn get_string(&self) -> String {
@@ -109,6 +143,8 @@ pub struct StaticString<const N: usize> {
     buf: [u8; N],
 }
 
+
+
 impl<const N: usize> StaticString<N> {
     pub fn from_string(value: impl Into<String>) -> Result<Self, String> {
         let mut new = Self {
@@ -132,6 +168,16 @@ impl<const N: usize> StaticString<N> {
         self.buf.fill(0);
         self.buf[..bytes.len()].copy_from_slice(bytes);
         Ok(())
+    }
+
+    pub fn set_string_trimmed(&mut self, value: &String) {
+        let mut bytes = value.as_bytes();
+        // if a null termination was provided at the end, chop it off
+        if !bytes.is_empty() && bytes[bytes.len() - 1] == 0 {
+            bytes = &bytes[0..bytes.len() - 1];
+        }
+        self.buf.fill(0);
+        self.buf[..min(bytes.len(), N - 1)].copy_from_slice(bytes);
     }
 
     pub fn get_string(&self) -> String {
@@ -169,50 +215,149 @@ impl<'de, const N: usize> serde::Deserialize<'de> for StaticString<N> {
     }
 }
 
-impl<const N: usize> WasmDescribe for StaticString<N> {
-    fn describe() {
-        JsString::describe();
+#[cfg(feature = "napi")]
+impl<const N: usize> FromNapiValue for StaticString<N> {
+    unsafe fn from_napi_value(env: *mut napi_env__, napi_val: napi::sys::napi_value) -> napi::Result<Self> {
+        let js_string = JsString::from_napi_value(env, napi_val)?;
+        Ok(StaticString::from_string(js_string.into_utf8()?.as_str()?).unwrap())
     }
 }
 
-impl<const N: usize> FromWasmAbi for StaticString<N> {
-    type Abi = <JsString as FromWasmAbi>::Abi;
+#[cfg(feature = "napi")]
+impl<const N: usize> ToNapiValue for StaticString<N> {
+    unsafe fn to_napi_value(env: napi_env, val: Self) -> napi::Result<napi_value> {
+        let s = val.get_string(); // Assuming this returns a `&str`
+        Env::from_raw(env).create_string(&s).map(|js_str| js_str.raw()) // Convert string to JsString and return raw napi valu    }
+    }
+}
 
-    unsafe fn from_abi(js: Self::Abi) -> Self {
-        let js_value = JsString::from_abi(js);
-        let string = js_value.as_string().unwrap_or_default();
-        StaticString::from_string(string).unwrap_or_default()
+#[cfg(feature = "napi")]
+impl<const N: usize> napi::bindgen_prelude::FromNapiMutRef for StaticString<N> {
+    unsafe fn from_napi_mut_ref(
+        env: napi::bindgen_prelude::sys::napi_env,
+        napi_val: napi::bindgen_prelude::sys::napi_value,
+    ) -> napi::bindgen_prelude::Result<&'static mut Self> {
+        let mut wrapped_val: *mut std::ffi::c_void = std::ptr::null_mut();
+        {
+            let c = (napi::bindgen_prelude::sys::napi_unwrap(env, napi_val, &mut wrapped_val));
+            match c {
+                napi::sys::Status::napi_ok => Ok(()),
+                _ => Err(napi::Error::new(
+                    napi::Status::from(c),
+                    format!(
+                            "Failed to recover `{}` type from napi value",
+                            "StaticString",
+                   ),
+                )),
+            }
+        }?;
+        Ok(&mut *(wrapped_val as *mut StaticString<N>))
+    }
+}
+
+
+#[cfg(feature = "napi")]
+impl<const N: usize> ToNapiValue for &mut StaticString<N> {
+    unsafe fn to_napi_value(env: napi_env, val: Self) -> napi::Result<napi_value> {
+        let s = val.get_string(); // Assuming this returns a `&str`
+        Env::from_raw(env).create_string(&s).map(|js_str| js_str.raw()) // Convert string to JsString and return raw napi valu    }
+    }
+}
+
+
+// TODO: Refactor
+#[cfg(feature = "napi")]
+impl<const N: usize> napi::bindgen_prelude::FromNapiMutRef for StaticWcharString<N> {
+    unsafe fn from_napi_mut_ref(
+        env: napi::bindgen_prelude::sys::napi_env,
+        napi_val: napi::bindgen_prelude::sys::napi_value,
+    ) -> napi::bindgen_prelude::Result<&'static mut Self> {
+        let mut wrapped_val: *mut std::ffi::c_void = std::ptr::null_mut();
+        {
+            let c = (napi::bindgen_prelude::sys::napi_unwrap(env, napi_val, &mut wrapped_val));
+            match c {
+                napi::sys::Status::napi_ok => Ok(()),
+                _ => Err(napi::Error::new(
+                    napi::Status::from(c),
+                    format!(
+                        "Failed to recover `{}` type from napi value",
+                        "StaticString",
+                    ),
+                )),
+            }
+        }?;
+        Ok(&mut *(wrapped_val as *mut StaticWcharString<N>))
+    }
+}
+
+
+#[cfg(feature = "napi")]
+impl<const N: usize> ToNapiValue for &mut StaticWcharString<N> {
+    unsafe fn to_napi_value(env: napi_env, val: Self) -> napi::Result<napi_value> {
+        String::to_napi_value(env, val.get_string())
+    }
+}
+
+// TODO: Remove
+#[cfg(feature = "napi")]
+impl<const N: usize> TypeName for StaticString<N> {
+    fn type_name() -> &'static str {
+        todo!()
+    }
+
+    fn value_type() -> ValueType {
+        todo!()
+    }
+}
+
+// TODO: Remove?
+#[cfg(feature = "napi")]
+impl<const N: usize> ValidateNapiValue for StaticString<N> {
+
+}
+
+impl<const N: usize> WasmDescribe for StaticString<N> {
+    fn describe() {
+        String::describe()
     }
 }
 
 impl<const N: usize> IntoWasmAbi for StaticString<N> {
-    type Abi = <JsValue as IntoWasmAbi>::Abi;
-
+    type Abi = <String as IntoWasmAbi>::Abi;
     fn into_abi(self) -> Self::Abi {
-        JsValue::from(self.get_string()).into_abi()
+        self.get_string().into_abi()
+    }
+}
+
+impl<const N: usize> FromWasmAbi for StaticString<N> {
+    type Abi = <String as IntoWasmAbi>::Abi;
+
+    unsafe fn from_abi(js: Self::Abi) -> Self {
+        let mut res = Self {buf: [0;N]};
+        res.set_string_trimmed(&String::from_abi(js));
+        res
     }
 }
 
 impl<const N: usize> WasmDescribe for StaticWcharString<N> {
     fn describe() {
-        JsString::describe();
-    }
-}
-
-impl<const N: usize> FromWasmAbi for StaticWcharString<N> {
-    type Abi = <JsValue as FromWasmAbi>::Abi;
-
-    unsafe fn from_abi(js: Self::Abi) -> Self {
-        let js_value = JsString::from_abi(js);
-        let string = js_value.as_string().unwrap_or_default();
-        Self::from_string(&string).unwrap_or_default()
+        String::describe()
     }
 }
 
 impl<const N: usize> IntoWasmAbi for StaticWcharString<N> {
-    type Abi = <JsString as IntoWasmAbi>::Abi;
-
+    type Abi = <String as IntoWasmAbi>::Abi;
     fn into_abi(self) -> Self::Abi {
-        JsString::from(self.get_string()).into_abi()
+        self.get_string().into_abi()
+    }
+}
+
+impl<const N: usize> FromWasmAbi for StaticWcharString<N> {
+    type Abi = <String as IntoWasmAbi>::Abi;
+
+    unsafe fn from_abi(js: Self::Abi) -> Self {
+        let mut res = Self {buf: StaticArray::default()};
+        res.set_string_trimmed(&String::from_abi(js));
+        res
     }
 }

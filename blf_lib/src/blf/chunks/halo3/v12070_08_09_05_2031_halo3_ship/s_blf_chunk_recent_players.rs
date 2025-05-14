@@ -3,6 +3,7 @@ use binrw::{binrw, BinRead, BinWrite};
 use serde::{Deserialize, Serialize};
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
 use blf_lib_derive::BlfChunk;
+use crate::types::u64::Unsigned64;
 
 // const k_recent_players_max_count: usize = -1;
 #[binrw]
@@ -22,7 +23,7 @@ pub struct s_blf_chunk_recent_players_player {
     // We had this down as a u16 in the old blf tool.
     unknown1: u8,
     unknown2: u8,
-    xuid: u64,
+    xuid: Unsigned64,
 }
 
 impl BlfChunkHooks for s_blf_chunk_recent_players {

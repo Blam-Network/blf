@@ -1,33 +1,33 @@
 use binrw::{BinRead, BinWrite};
+#[cfg(feature = "napi")]
+use napi_derive::napi;
 use serde::{Deserialize, Serialize};
 use blf_lib::blam::halo_3::release::game::game_engine_player_traits::c_player_traits;
 use blf_lib::io::bitstream::{c_bitstream_reader, c_bitstream_writer};
 use blf_lib::{SET_BIT, TEST_BIT};
-use crate::types::array::StaticArray;
 
 #[derive(Default, PartialEq, Debug, Clone, BinRead, BinWrite, Serialize, Deserialize)]
+#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 pub struct c_game_engine_vip_variant {
-    m_score_to_win_round: u16,
-    m_variant_flags: u16,
-    m_kill_points: i8,
-    m_takedown_points: i8,
-    m_kill_as_vip_points: i8,
-    m_vip_death_points: i8,
-    m_destination_arrival_points: i8,
-    m_suicide_points: i8,
-    m_betrayal_points: i8,
-    m_vip_suicide_points: i8,
-    m_vip_selection: u8,
-    m_zone_movement: u8,
-    m_zone_order: u8,
-    #[serde(skip_serializing,skip_deserializing)]
-    m_pad1: StaticArray<u8, 1>,
-    m_influence_radius: u16,
-    m_vip_team_traits: c_player_traits,
-    m_vip_influence_traits: c_player_traits,
-    m_vip_traits: c_player_traits,
-    #[serde(skip_serializing,skip_deserializing)]
-    m_pad2: StaticArray<u8, 2>,
+    pub m_score_to_win_round: u16,
+    pub m_variant_flags: u16,
+    pub m_kill_points: i8,
+    pub m_takedown_points: i8,
+    pub m_kill_as_vip_points: i8,
+    pub m_vip_death_points: i8,
+    pub m_destination_arrival_points: i8,
+    pub m_suicide_points: i8,
+    pub m_betrayal_points: i8,
+    pub m_vip_suicide_points: i8,
+    pub m_vip_selection: u8,
+    pub m_zone_movement: u8,
+    #[brw(pad_after = 1)]
+    pub m_zone_order: u8,
+    pub m_influence_radius: u16,
+    pub m_vip_team_traits: c_player_traits,
+    pub m_vip_influence_traits: c_player_traits,
+    #[brw(pad_after = 2)]
+    pub m_vip_traits: c_player_traits,
 }
 
 impl c_game_engine_vip_variant {

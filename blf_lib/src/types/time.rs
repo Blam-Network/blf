@@ -2,10 +2,14 @@ use std::fmt::Display;
 use binrw::{BinRead, BinWrite};
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use chrono::{DateTime, NaiveDateTime, TimeZone, Utc};
-use js_sys::Date;
-use wasm_bindgen::convert::{FromWasmAbi, IntoWasmAbi, WasmAbi};
+
+#[cfg(feature = "napi")]
+use napi::bindgen_prelude::{FromNapiValue, ToNapiValue};
+#[cfg(feature = "napi")]
+use napi::sys::{napi_env, napi_value};
+use wasm_bindgen::convert::{FromWasmAbi, IntoWasmAbi};
 use wasm_bindgen::describe::WasmDescribe;
-use wasm_bindgen::JsValue;
+use blf_lib::types::u64::Unsigned64;
 
 #[derive(Default, Clone, Debug, PartialEq, BinRead, BinWrite, Copy)]
 pub struct time64_t(pub u64);
@@ -53,34 +57,15 @@ impl From<u64> for time64_t {
     }
 }
 
+impl From<Unsigned64> for time64_t {
+    fn from(t: Unsigned64) -> Self {
+        Self(t.into())
+    }
+}
+
 impl From<time64_t> for DateTime<Utc> {
     fn from(val: time64_t) -> Self {
         Utc.timestamp(val.0 as i64, 0)
-    }
-}
-
-impl WasmDescribe for time64_t {
-    fn describe() {
-        Date::describe(); // maps to JS `Date` in TypeScript
-    }
-}
-
-impl FromWasmAbi for time64_t {
-    type Abi = <Date as FromWasmAbi>::Abi;
-
-    unsafe fn from_abi(js: Self::Abi) -> Self {
-        let date = Date::from_abi(js);
-        let millis = date.get_time(); // milliseconds since UNIX epoch
-        time64_t((millis / 1000.0) as u64)
-    }
-}
-
-impl IntoWasmAbi for time64_t {
-    type Abi = <Date as IntoWasmAbi>::Abi;
-
-    fn into_abi(self) -> Self::Abi {
-        let millis = self.0 as f64 * 1000.0;
-        Date::new(&JsValue::from_f64(millis)).into_abi()
     }
 }
 
@@ -130,37 +115,23 @@ impl From<time32_t> for DateTime<Utc> {
     }
 }
 
+impl From<time32_t> for NaiveDateTime {
+    fn from(val: time32_t) -> Self {
+        NaiveDateTime::from_timestamp(val.0 as i64, 0)
+    }
+}
+
+impl From<time64_t> for NaiveDateTime {
+    fn from(val: time64_t) -> Self {
+        NaiveDateTime::from_timestamp(val.0 as i64, 0)
+    }
+}
+
 impl From<u32> for time32_t {
     fn from(t: u32) -> Self {
         Self(t)
     }
 }
-
-impl WasmDescribe for time32_t {
-    fn describe() {
-        Date::describe(); // maps to JS `Date` in TypeScript
-    }
-}
-
-impl FromWasmAbi for time32_t {
-    type Abi = <Date as FromWasmAbi>::Abi;
-
-    unsafe fn from_abi(js: Self::Abi) -> Self {
-        let date = Date::from_abi(js);
-        let millis = date.get_time(); // milliseconds since UNIX epoch
-        time32_t((millis / 1000.0) as u32)
-    }
-}
-
-impl IntoWasmAbi for time32_t {
-    type Abi = <Date as IntoWasmAbi>::Abi;
-
-    fn into_abi(self) -> Self::Abi {
-        let millis = self.0 as f64 * 1000.0;
-        Date::new(&JsValue::from_f64(millis)).into_abi()
-    }
-}
-
 
 #[derive(Default, Clone, Debug, PartialEq, BinRead, BinWrite)]
 pub struct filetime(u64);
@@ -184,8 +155,8 @@ impl filetime {
         self.0
     }
 
-    pub fn from_u64(t: u64) -> Self {
-        Self(t)
+    pub fn from_u64(t: impl Into<u64>) -> Self {
+        Self(t.into())
     }
 }
 
@@ -215,5 +186,75 @@ impl<'de> Deserialize<'de> for filetime {
         let datetime = NaiveDateTime::parse_from_str(&s, "%Y-%m-%d %H:%M:%S")
             .map_err(serde::de::Error::custom)?;
         Ok(Self::from_time_t(datetime.and_utc().timestamp() as u64))
+    }
+}
+
+
+#[cfg(feature = "napi")]
+impl ToNapiValue for time32_t {
+    unsafe fn to_napi_value(env: napi_env, val: Self) -> napi::Result<napi_value> {
+        NaiveDateTime::to_napi_value(env, val.into())
+    }
+}
+
+#[cfg(feature = "napi")]
+impl FromNapiValue for time32_t {
+    unsafe fn from_napi_value(env: napi_env, napi_val: napi_value) -> napi::Result<Self> {
+        Ok(Self {
+            0: NaiveDateTime::from_napi_value(env, napi_val)?.and_utc().timestamp() as u32,
+        })
+    }
+}
+
+#[cfg(feature = "napi")]
+impl ToNapiValue for time64_t {
+    unsafe fn to_napi_value(env: napi_env, val: Self) -> napi::Result<napi_value> {
+        NaiveDateTime::to_napi_value(env, val.into())
+    }
+}
+
+#[cfg(feature = "napi")]
+impl FromNapiValue for time64_t {
+    unsafe fn from_napi_value(env: napi_env, napi_val: napi_value) -> napi::Result<Self> {
+        Ok(Self {
+            0: NaiveDateTime::from_napi_value(env, napi_val)?.and_utc().timestamp() as u64,
+        })
+    }
+}
+
+impl WasmDescribe for time32_t {
+    fn describe() {
+        u32::describe()
+    }
+}
+
+impl IntoWasmAbi for time32_t {
+    type Abi = <u32 as IntoWasmAbi>::Abi;
+
+    fn into_abi(self) -> Self::Abi {
+        // TODO: Date obj
+       u32::into_abi(self.0)
+    }
+}
+
+impl WasmDescribe for time64_t {
+    fn describe() {
+        u64::describe()
+    }
+}
+
+impl IntoWasmAbi for time64_t {
+    type Abi = <u64 as IntoWasmAbi>::Abi;
+
+    fn into_abi(self) -> Self::Abi {
+        // TODO: Date obj
+        u64::into_abi(self.0)
+    }
+}
+
+impl FromWasmAbi for time64_t {
+    type Abi = <u64 as FromWasmAbi>::Abi;
+    unsafe fn from_abi(js: Self::Abi) -> Self {
+        time64_t::from(u64::from_abi(js))
     }
 }

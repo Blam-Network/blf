@@ -3,6 +3,13 @@ use std::ops::Index;
 use binrw::{BinRead, BinResult, BinWrite, Endian};
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 
+#[cfg(feature = "napi")]
+use napi::bindgen_prelude::{Array, FromNapiValue, ToNapiValue};
+#[cfg(feature = "napi")]
+use napi::{sys, Env, JsObject, NapiRaw, NapiValue};
+#[cfg(feature = "napi")]
+use napi::sys::{napi_env, napi_value};
+
 #[derive(PartialEq, Debug)]
 pub struct StaticArray<E: 'static, const N: usize> {
     _data: Vec<E> // 1984
@@ -33,6 +40,17 @@ impl<'a, E: BinWrite<Args<'a> = ()> + 'static, const N: usize> BinWrite for Stat
             item.write_options(writer, endian, ())?; // Write each element using BinWrite for E with options
         }
         Ok(())
+    }
+}
+
+impl <E, const N: usize> StaticArray<E, N> {
+    pub fn from_vec(vec: Vec<E>) -> Result<Self, String> {
+        if vec.len() != N {
+            return Err(format!("Expected {N} elements but got {}.", vec.len()));
+        }
+        Ok(Self {
+            _data: vec
+        })
     }
 }
 
@@ -95,5 +113,20 @@ impl<'de, E: Deserialize<'de> + Clone, const N: usize> serde::Deserialize<'de> f
         Ok(Self {
             _data: Vec::<E>::deserialize(d)?
         })
+    }
+}
+
+#[cfg(feature = "napi")]
+impl<E: ToNapiValue, const N: usize> ToNapiValue for StaticArray<E, N> {
+    unsafe fn to_napi_value(env: napi_env, val: Self) -> napi::Result<napi::sys::napi_value> {
+        let vec: Vec<E> = val._data.into();
+        <Vec<E>>::to_napi_value(env, vec)
+    }
+}
+
+#[cfg(feature = "napi")]
+impl<E: FromNapiValue, const N: usize> FromNapiValue for StaticArray<E, N> {
+    unsafe fn from_napi_value(env: sys::napi_env, napi_val: sys::napi_value) -> napi::Result<Self> {
+        Ok(Self::from_vec(Vec::<E>::from_napi_value(env, napi_val)?).map_err(|e| napi::Error::from_reason(e.to_string()))?)
     }
 }

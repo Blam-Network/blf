@@ -10,6 +10,7 @@ use crate::io::bitstream::close_bitstream_writer;
 use serde_hex::{SerHex,StrictCap};
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
 use blf_lib_derive::BlfChunk;
+use crate::types::numbers::Float32;
 
 #[derive(BlfChunk,Default,PartialEq,Debug,Clone,Serialize,Deserialize)]
 #[Header("mhcf", 11.1)]
@@ -86,11 +87,11 @@ pub struct c_hopper_configuration {
     pub chance_of_gathering: [u8;16],
     pub experience_points_per_win: u8,
     pub experience_penalty_per_drop: u8,
-    pub minimum_mu_per_level: StaticArray<f32, 49>,
+    pub minimum_mu_per_level: StaticArray<Float32, 49>,
     pub maximum_skill_level_match_delta: StaticArray<u8, 50>,
-    pub trueskill_sigma_multiplier: f32,
-    pub trueskill_beta_performance_variation: f32,
-    pub trueskill_tau_dynamics_factor: f32,
+    pub trueskill_sigma_multiplier: Float32,
+    pub trueskill_beta_performance_variation: Float32,
+    pub trueskill_tau_dynamics_factor: Float32,
     pub trueskill_adjust_tau_with_update_weight: bool,
     pub trueskill_draw_probability: u8,
     pub trueskill_hillclimb_w0: u8,
