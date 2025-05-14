@@ -30,4 +30,4 @@ shrinkwraprs = "0.3.0"
 [features]
 default = ["derive"]
 derive = ["blf_lib-derive"]
-napi = ["dep:napi"]
+napi = ["dep:napi", "dep:napi-derive"]
