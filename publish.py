@@ -16,7 +16,6 @@ subprocess.call(['cargo', 'version-util', 'set-version', new_version])
 subprocess.call(['cargo', 'upgrade', '-p', f'blf_lib-derivable@{new_version}', '--manifest-path', 'blf_lib-derive/Cargo.toml', '--pinned'])
 subprocess.call(['cargo', 'upgrade', '-p', f'blf_lib-derivable@{new_version}', '-p', f'blf_lib-derive@{new_version}', '--manifest-path', 'blf_lib/Cargo.toml', '--pinned'])
 subprocess.call(['cargo', 'upgrade', '-p', f'blf_lib@{new_version}', '--manifest-path', 'blf_bnet/Cargo.toml', '--pinned'])
-subprocess.call(['cargo', 'upgrade', '-p', f'blf_lib@{new_version}', '--manifest-path', 'blf_lsp/Cargo.toml', '--pinned'])
 
 subprocess.call(['git', 'add', 'Cargo.toml', '**/Cargo.toml'])
 subprocess.call(['git', 'commit', '-m', f'{new_version}'])
