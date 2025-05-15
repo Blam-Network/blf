@@ -7,6 +7,7 @@
 
 use std::convert::Into;
 use binrw::{BinRead, BinWrite};
+#[cfg(feature = "napi")]
 use napi_derive::napi;
 use serde::{Deserialize, Serialize};
 use wasm_bindgen::prelude::wasm_bindgen;

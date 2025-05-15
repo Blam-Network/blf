@@ -4,11 +4,11 @@ use binrw::{BinRead, BinResult, BinWrite, Endian};
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 
 #[cfg(feature = "napi")]
-use napi::bindgen_prelude::{Array, FromNapiValue, ToNapiValue};
+use napi::bindgen_prelude::{FromNapiValue, ToNapiValue};
 #[cfg(feature = "napi")]
-use napi::{sys, Env, JsObject, NapiRaw, NapiValue};
+use napi::sys;
 #[cfg(feature = "napi")]
-use napi::sys::{napi_env, napi_value};
+use napi::sys::{napi_env};
 
 #[derive(PartialEq, Debug)]
 pub struct StaticArray<E: 'static, const N: usize> {
