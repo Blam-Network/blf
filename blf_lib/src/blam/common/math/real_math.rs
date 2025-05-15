@@ -7,6 +7,7 @@
 
 use std::convert::Into;
 use binrw::{BinRead, BinWrite};
+use napi_derive::napi;
 use serde::{Deserialize, Serialize};
 use wasm_bindgen::prelude::wasm_bindgen;
 use blf_lib::blam::common::math::integer_math::int32_point3d;
@@ -61,6 +62,7 @@ pub struct real_rectangle2d {
 #[derive(Default, PartialEq, Debug, Clone, Copy, Serialize, Deserialize, BinRead, BinWrite, TestSize)]
 #[Size(0xC)]
 #[wasm_bindgen(getter_with_clone)]
+#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 pub struct real_point3d {
     pub x: Float32,
     pub y: Float32,

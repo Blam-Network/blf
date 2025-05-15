@@ -239,7 +239,7 @@ impl<const N: usize> napi::bindgen_prelude::FromNapiMutRef for StaticString<N> {
     ) -> napi::bindgen_prelude::Result<&'static mut Self> {
         let mut wrapped_val: *mut std::ffi::c_void = std::ptr::null_mut();
         {
-            let c = (napi::bindgen_prelude::sys::napi_unwrap(env, napi_val, &mut wrapped_val));
+            let c = napi::bindgen_prelude::sys::napi_unwrap(env, napi_val, &mut wrapped_val);
             match c {
                 napi::sys::Status::napi_ok => Ok(()),
                 _ => Err(napi::Error::new(
@@ -274,7 +274,7 @@ impl<const N: usize> napi::bindgen_prelude::FromNapiMutRef for StaticWcharString
     ) -> napi::bindgen_prelude::Result<&'static mut Self> {
         let mut wrapped_val: *mut std::ffi::c_void = std::ptr::null_mut();
         {
-            let c = (napi::bindgen_prelude::sys::napi_unwrap(env, napi_val, &mut wrapped_val));
+            let c = napi::bindgen_prelude::sys::napi_unwrap(env, napi_val, &mut wrapped_val);
             match c {
                 napi::sys::Status::napi_ok => Ok(()),
                 _ => Err(napi::Error::new(
