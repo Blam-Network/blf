@@ -18,14 +18,14 @@ except:
 
 print("blf_lib-derive: publishing")
 try:
-    subprocess.Popen(f'cargo upgrade -p blf_lib-derivable@{new_version} --manifest-path blf_lib-derive/Cargo.toml --pinned')
+    subprocess.Popen(f'cargo upgrade -p blf_lib-derivable@{new_version} --manifest-path blf_lib-derive/Cargo.toml --pinned', shell=True)
     subprocess.call(['cargo', 'publish', '-p', 'blf_lib-derive', '--allow-dirty'])
 except:
     print("Failed to publish blf_lib-derive")
 
 print("blf_lib: publishing")
 try:
-    subprocess.Popen(f'cargo upgrade -p blf_lib-derivable@{new_version} -p blf_lib-derive@{new_version} --manifest-path blf_lib/Cargo.toml --pinned')
+    subprocess.Popen(f'cargo upgrade -p blf_lib-derivable@{new_version} -p blf_lib-derive@{new_version} --manifest-path blf_lib/Cargo.toml --pinned', shell=True)
     subprocess.call(['cargo', 'publish', '-p', 'blf_lib', '--allow-dirty'])
 except:
     print("Failed to publish blf_lib")
