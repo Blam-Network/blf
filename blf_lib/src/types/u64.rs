@@ -90,7 +90,7 @@ impl UpperHex for Unsigned64 {
 #[cfg(feature = "napi")]
 impl ToNapiValue for Unsigned64 {
     unsafe fn to_napi_value(env: napi_env, val: Self) -> napi::Result<napi_value> {
-        u64::to_napi_value(env, val.0)
+        BigInt::to_napi_value(env, BigInt::from(val.0))
     }
 }
 
