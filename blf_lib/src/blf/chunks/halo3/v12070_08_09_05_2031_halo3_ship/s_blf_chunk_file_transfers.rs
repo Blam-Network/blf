@@ -25,7 +25,7 @@ pub struct s_blf_chunk_file_transfers_transfer {
     pub unknown_c: u32,
     pub server_id: Unsigned64,
     pub file_name: StaticWcharString<16>,
-    pub file_type: u32,
+    pub file_type: i32,
     pub unknown_3c: u32,
     pub map_id: u32,
     pub unknown_44: u32,

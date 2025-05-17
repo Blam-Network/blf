@@ -15,7 +15,7 @@ pub struct s_content_item_metadata {
     pub name: StaticWcharString<0x10>,
     pub description: StaticString<128>,
     pub author: StaticString<16>,
-    pub file_type: u32,
+    pub file_type: i32,
     #[brw(align_after = 4)]
     pub author_is_xuid_online: Bool,
     #[serde(with = "SerHex::<StrictCap>")]

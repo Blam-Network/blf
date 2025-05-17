@@ -38,7 +38,7 @@ pub struct s_content_item_metadata {
     pub name: StaticWcharString<0x10>,
     pub description: StaticString<128>,
     pub author: StaticString<16>,
-    pub file_type: u32,
+    pub file_type: i32,
     #[brw(pad_after = 3)]
     pub author_is_xuid_online: Bool,
     #[serde(with = "SerHex::<StrictCap>")]
@@ -61,7 +61,7 @@ impl s_content_item_metadata {
         bitstream.write_string_wchar(&self.name.get_string(), 32);
         bitstream.write_string_utf8(&self.description.get_string(), 128);
         bitstream.write_string_utf8(&self.author.get_string(), 16);
-        bitstream.write_integer(self.file_type + 1, 5);
+        bitstream.write_signed_integer(self.file_type + 1, 5);
         bitstream.write_bool(self.author_is_xuid_online);
         bitstream.write_qword(self.author_id , 64);
         bitstream.write_qword(self.size_in_bytes, 64);
@@ -80,7 +80,7 @@ impl s_content_item_metadata {
         self.name.set_string(&bitstream.read_string_whar(32)).unwrap();
         self.description.set_string(&bitstream.read_string_utf8(128)).unwrap();
         self.author.set_string(&bitstream.read_string_utf8(16)).unwrap();
-        self.file_type = bitstream.read_integer(5) - 1;
+        self.file_type = bitstream.read_signed_integer(5) - 1;
         self.author_is_xuid_online = Bool::from(bitstream.read_bool());
         self.author_id = bitstream.read_qword(64);
         self.size_in_bytes = bitstream.read_qword(64);
