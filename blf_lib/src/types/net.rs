@@ -1,9 +1,10 @@
+use std::fmt::Debug;
 use std::io::{Read, Seek, Write};
 use binrw::{BinRead, BinReaderExt, BinResult, BinWrite, Endian};
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use shrinkwraprs::Shrinkwrap;
 use std::net::Ipv4Addr as WrappedIpv4Addr;
-
+use std::str::FromStr;
 #[cfg(feature = "napi")]
 use napi::bindgen_prelude::{FromNapiValue, ToNapiValue};
 #[cfg(feature = "napi")]
@@ -22,14 +23,20 @@ impl Default for Ipv4Addr {
 #[cfg(feature = "napi")]
 impl FromNapiValue for Ipv4Addr {
     unsafe fn from_napi_value(env: napi_env, napi_val: napi_value) -> napi::Result<Self> {
-        u32::from_napi_value(env, napi_val).map(|val| Ipv4Addr(WrappedIpv4Addr::from(val)))
+        let ipStr: String = String::from_napi_value(env, napi_val)?;
+        let ip: WrappedIpv4Addr = WrappedIpv4Addr::from_str(&ipStr)
+            .map_err(|e| napi::Error::new(
+                napi::Status::InvalidArg,
+                e.to_string(),
+            ))?;
+        Ok(Ipv4Addr(ip))
     }
 }
 
 #[cfg(feature = "napi")]
 impl ToNapiValue for Ipv4Addr {
     unsafe fn to_napi_value(env: napi_env, val: Self) -> napi::Result<napi_value> {
-        u32::to_napi_value(env, val.0.to_bits())
+        String::to_napi_value(env, val.0.to_string())
     }
 }
 
