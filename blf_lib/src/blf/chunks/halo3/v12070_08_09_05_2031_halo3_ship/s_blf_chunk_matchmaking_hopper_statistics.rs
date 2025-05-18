@@ -3,8 +3,11 @@ use serde::{Deserialize, Serialize};
 use blf_lib::types::array::StaticArray;
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
 use blf_lib_derive::BlfChunk;
+#[cfg(feature = "napi")]
+use napi_derive::napi;
 
 #[binrw]
+#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 #[derive(BlfChunk,PartialEq,Debug,Clone,Serialize,Deserialize,Default)]
 #[Header("mmhs", 3.1)]
 #[brw(big)]
@@ -14,6 +17,7 @@ pub struct s_blf_chunk_matchmaking_hopper_statistics {
     pub data: StaticArray<hopper_population, 32>,
 }
 
+#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 #[derive(PartialEq,Debug,Clone,Serialize,Deserialize,Default,BinRead,BinWrite)]
 pub struct hopper_population {
     pub hopper_identifier: u32,
