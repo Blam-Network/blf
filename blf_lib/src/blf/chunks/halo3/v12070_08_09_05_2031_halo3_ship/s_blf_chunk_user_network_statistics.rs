@@ -5,6 +5,7 @@ use blf_lib_derivable::blf::chunks::BlfChunkHooks;
 use blf_lib_derive::{BlfChunk, TestSize};
 #[cfg(feature = "napi")]
 use napi_derive::napi;
+use blf_lib::types::u64::Unsigned64;
 
 #[binrw]
 #[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
@@ -14,7 +15,7 @@ use napi_derive::napi;
 #[brw(big)]
 pub struct s_blf_chunk_user_network_statistics {
     pub session: StaticArray<s_network_quality_session_statistics, 2>,
-    pub connection_history: StaticArray<u64, 2>,
+    pub connection_history: StaticArray<Unsigned64, 2>,
     #[brw(pad_after = 4)]
     pub bandwidth_data: s_network_bandwidth_persistent_data,
 }
@@ -23,8 +24,8 @@ pub struct s_blf_chunk_user_network_statistics {
 #[derive(Default,PartialEq,Debug,Clone,Serialize,Deserialize,BinRead,BinWrite,TestSize)]
 #[Size(0x20)]
 pub struct s_network_quality_session_statistics {
-    pub client_badness_history: StaticArray<u64, 2>,
-    pub host_badness_history: StaticArray<u64, 2>,
+    pub client_badness_history: StaticArray<Unsigned64, 2>,
+    pub host_badness_history: StaticArray<Unsigned64, 2>,
 }
 
 #[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
