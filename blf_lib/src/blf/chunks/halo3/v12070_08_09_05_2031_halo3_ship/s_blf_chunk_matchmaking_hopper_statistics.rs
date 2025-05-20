@@ -21,7 +21,7 @@ pub struct s_blf_chunk_matchmaking_hopper_statistics {
 #[derive(PartialEq,Debug,Clone,Serialize,Deserialize,Default,BinRead,BinWrite)]
 pub struct hopper_population {
     #[brw(pad_before = 2)]
-    pub hopper_identifier: u16,
+    pub hopper_identifier: i16,
     pub player_count: u32,
 }
 
