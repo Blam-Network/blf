@@ -20,7 +20,8 @@ pub struct s_blf_chunk_matchmaking_hopper_statistics {
 #[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 #[derive(PartialEq,Debug,Clone,Serialize,Deserialize,Default,BinRead,BinWrite)]
 pub struct hopper_population {
-    pub hopper_identifier: u32,
+    #[brw(pad_after = 2)]
+    pub hopper_identifier: u16,
     pub player_count: u32,
 }
 
