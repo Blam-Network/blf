@@ -4,25 +4,30 @@ pub(crate) mod haloreach;
 
 use std::error::Error;
 use std::fs::File;
-use std::io::{Read, Seek};
+use std::io::{Cursor, Read, Seek};
 use serde::Deserialize;
 use blf_lib::blf::s_blf_header;
 pub use blf_lib_derivable::blf::chunks::*;
 
 
-pub fn find_chunk<'a, T: BlfChunk + SerializableBlfChunk + ReadableBlfChunk>(buffer: Vec<u8>) -> Result<T, &'a str> {
-    let mut offset: usize = 0;
-    while offset < buffer.len() {
-        let header = s_blf_header::decode(&buffer[offset..offset + (s_blf_header::size())]);
+pub fn find_chunk<'a, T: BlfChunk + SerializableBlfChunk + ReadableBlfChunk>(buffer: Vec<u8>) -> Result<T, Box<dyn Error>> {
+    let mut cursor = Cursor::new(buffer);
+    let mut headerBytes = [0u8; s_blf_header::size()];
+    let mut header: s_blf_header;
 
+    while cursor.read_exact(&mut headerBytes).is_ok() {
+        header = s_blf_header::decode(&headerBytes);
         if header.signature == T::get_signature() && header.version == T::get_version() {
-            return Ok(T::read(buffer[offset..].to_vec(), Some(header)))
+            let mut body_bytes = vec![0u8; (header.chunk_size as usize) - s_blf_header::size()];
+            cursor.read_exact(body_bytes.as_mut_slice())?;
+            return Ok(T::read(body_bytes, Some(header)));
         }
-
-        offset += header.chunk_size as usize;
+        if header.chunk_size == 0 {
+            break;
+        }
+        cursor.seek_relative((header.chunk_size - s_blf_header::size() as u32) as i64)?;
     }
-
-    Err("Could not find chunk")
+    Err(format!("{} Chunk not found!", T::get_signature()).into())
 }
 
 pub fn find_chunk_in_file<T: BlfChunk + SerializableBlfChunk + ReadableBlfChunk>(path: impl Into<String>) -> Result<T, Box<dyn Error>> {
