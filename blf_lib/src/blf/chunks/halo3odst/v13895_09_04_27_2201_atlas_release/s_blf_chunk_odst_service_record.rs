@@ -1,0 +1,204 @@
+use std::u32;
+use binrw::{binrw, BinRead, BinWrite};
+#[cfg(feature = "napi")]
+use napi_derive::napi;
+use serde::{Deserialize, Serialize};
+use blf_lib_derivable::blf::chunks::BlfChunkHooks;
+use blf_lib_derive::BlfChunk;
+use num_derive::FromPrimitive;
+use blf_lib::types::bool::Bool;
+use blf_lib::types::c_string::StaticWcharString;
+
+#[binrw]
+#[derive(BlfChunk,Default,PartialEq,Debug,Clone,Serialize,Deserialize)]
+#[Header("osri", 2.0)]
+#[brw(big)]
+#[Size(0x60)]
+#[cfg_attr(feature = "napi", napi(object, namespace = "halo3odst_13895_09_04_27_2201_atlas_release"))]
+pub struct s_blf_chunk_odst_service_record
+{
+    pub player_name: StaticWcharString<16>, // Wide, 16 characters max
+    pub appearance_flags: u8,
+    pub primary_color: Color,
+    pub secondary_color: Color,
+    pub tertiary_color: Color,
+    pub is_elite: PlayerModel,
+    pub foreground_emblem: u8,
+    pub background_emblem: u8,
+    pub emblem_flags: u8,
+    #[brw(pad_before = 1)]
+    pub emblem_primary_color: Color,
+    pub emblem_secondary_color: Color,
+    pub emblem_background_color: Color,
+    #[brw(pad_before = 2)]
+    // This stuff needs tidying, looks like they reused a lot of h3 for odst tho
+    pub spartan_helmet: SpartanHelmet,
+    pub spartan_left_shoulder: SpartanShoulder,
+    pub spartan_right_shoulder: SpartanShoulder,
+    pub spartan_body: SpartanBody,
+    pub elite_helmet: EliteArmour,
+    pub elite_left_shoulder: EliteArmour,
+    pub elite_right_shoulder: EliteArmour,
+    pub elite_body: EliteArmour,
+    pub service_tag: StaticWcharString<5>,
+    pub extras_portal_debug: Bool,
+    pub vidmaster: u8,
+    #[brw(pad_before = 2)]
+    pub campaign_progress: i32,
+    pub highest_skill: i32,
+    pub total_exp: i32,
+    pub experience_base: i32,
+    pub rank: Rank,
+    pub grade: Grade,
+    pub games_completed: i32,
+}
+
+#[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, FromPrimitive)]
+#[brw(big, repr = u8)]
+#[cfg_attr(feature = "napi", napi(namespace = "halo3odst_13895_09_04_27_2201_atlas_release"))]
+#[repr(u8)]
+pub enum PlayerModel {
+    #[default]
+    Spartan = 0,
+    Elite = 1,
+}
+
+#[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, FromPrimitive)]
+#[brw(big, repr = u8)]
+#[cfg_attr(feature = "napi", napi(namespace = "halo3odst_13895_09_04_27_2201_atlas_release"))]
+#[repr(u8)]
+pub enum SpartanHelmet {
+    #[default]
+    Default = 0,
+    Cobra,
+    Intruder,
+    Ninja,
+    Regulator,
+    Ryu,
+    Marathon,
+    Scout,
+    Odst,
+    MarkV,
+    Rogue,
+}
+
+#[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, FromPrimitive)]
+#[brw(big, repr = u8)]
+#[cfg_attr(feature = "napi", napi(namespace = "halo3odst_13895_09_04_27_2201_atlas_release"))]
+#[repr(u8)]
+pub enum SpartanShoulder {
+    #[default]
+    Default = 0,
+    Cobra,
+    Intruder,
+    Ninja,
+    Regulator,
+    Ryu,
+    Marathon,
+    Scout,
+}
+
+#[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, FromPrimitive)]
+#[brw(big, repr = u8)]
+#[cfg_attr(feature = "napi", napi(namespace = "halo3odst_13895_09_04_27_2201_atlas_release"))]
+#[repr(u8)]
+pub enum SpartanBody {
+    #[default]
+    Default = 0,
+    Cobra,
+    Intruder,
+    Ninja,
+    Ryu,
+    Regulator,
+    Scout,
+    Katana,
+    Bungie,
+}
+
+#[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, FromPrimitive)]
+#[brw(big, repr = u8)]
+#[cfg_attr(feature = "napi", napi(namespace = "halo3odst_13895_09_04_27_2201_atlas_release"))]
+#[repr(u8)]
+pub enum EliteArmour {
+    #[default]
+    Default = 0,
+    Predator,
+    Raptor,
+    Blades,
+    Scythe,
+}
+
+#[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, FromPrimitive)]
+#[brw(big, repr = u32)]
+#[cfg_attr(feature = "napi", napi(namespace = "halo3odst_13895_09_04_27_2201_atlas_release"))]
+#[repr(u32)]
+pub enum Rank {
+    #[default]
+    None = 0,
+    Recruit,
+    Apprentice,
+    Private,
+    Corporal,
+    Sergeant,
+    GunnerySergeant,
+    Lieutenant,
+    Captain,
+    Major,
+    Commander,
+    Colonel,
+    Brigadier,
+    General,
+}
+
+#[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, FromPrimitive)]
+#[brw(big, repr = u32)]
+#[cfg_attr(feature = "napi", napi(namespace = "halo3odst_13895_09_04_27_2201_atlas_release"))]
+#[repr(u32)]
+pub enum Grade {
+    #[default]
+    Grade1 = 0,
+    Grade2,
+    Grade3,
+    Grade4,
+}
+
+#[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, FromPrimitive)]
+#[brw(big, repr = u8)]
+#[cfg_attr(feature = "napi", napi(namespace = "halo3odst_13895_09_04_27_2201_atlas_release"))]
+#[repr(u8)]
+pub enum Color {
+    #[default]
+    Steel = 0,
+    Silver,
+    White,
+    Red,
+    Mauve,
+    Salmon,
+    Orange,
+    Coral,
+    Peach,
+    Gold,
+    Yellow,
+    Pale,
+    Sage,
+    Green,
+    Olive,
+    Teal,
+    Aqua,
+    Cyan,
+    Blue,
+    Cobalt,
+    Sapphire,
+    Violet,
+    Orchid,
+    Lavender,
+    Crimson,
+    RubyWine,
+    Pink,
+    Brown,
+    Ran,
+    Khaki,
+    INVALID_White, // modders use this, it's whiter than the normal white.
+}
+
+impl BlfChunkHooks for s_blf_chunk_odst_service_record {}
