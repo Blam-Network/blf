@@ -12,6 +12,7 @@ use blf_lib_derive::BlfChunk;
 #[binrw]
 #[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 #[derive(BlfChunk,Default,PartialEq,Debug,Clone,Serialize,Deserialize)]
+#[Size(0xFC)]
 #[Header("chdr", 9.2)]
 #[brw(big)]
 #[wasm_bindgen(getter_with_clone)]

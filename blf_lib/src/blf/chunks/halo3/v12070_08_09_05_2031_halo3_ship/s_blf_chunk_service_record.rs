@@ -42,10 +42,10 @@ pub struct s_blf_chunk_service_record
     pub campaign_progress: i32,
     pub highest_skill: i32,
     pub total_exp: i32,
-    pub unknown_insignia: i32,
+    pub experience_base: i32,
     pub rank: Rank,
     pub grade: Grade,
-    pub unknown_insignia2: i32,
+    pub games_completed: i32,
 }
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, FromPrimitive)]

@@ -7,7 +7,10 @@ use blf_lib::types::time::time64_t;
 use blf_lib_derive::TestSize;
 use crate::types::bool::Bool;
 use crate::types::u64::Unsigned64;
+#[cfg(feature = "napi")]
+use napi_derive::napi;
 
+#[cfg_attr(feature = "napi", napi(object, namespace = "halo3odst_13895_09_04_27_2201_atlas_release"))]
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite, TestSize)]
 #[Size(0xF8)]
 pub struct s_content_item_metadata {
