@@ -8,7 +8,10 @@
 use binrw::{BinRead, BinWrite};
 use serde::{Deserialize, Serialize};
 use wasm_bindgen::prelude::wasm_bindgen;
+#[cfg(feature = "napi")]
+use napi_derive::napi;
 
+#[cfg_attr(feature = "napi", napi(object))]
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite, Copy)]
 #[wasm_bindgen(getter_with_clone)]
 pub struct int32_point3d  {
@@ -17,6 +20,7 @@ pub struct int32_point3d  {
     pub z: i32,
 }
 
+#[cfg_attr(feature = "napi", napi(object))]
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite, Copy)]
 #[wasm_bindgen(getter_with_clone)]
 pub struct int16_point2d  {
@@ -24,6 +28,7 @@ pub struct int16_point2d  {
     pub y: i16,
 }
 
+#[cfg_attr(feature = "napi", napi(object))]
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite, Copy)]
 #[wasm_bindgen(getter_with_clone)]
 pub struct int32_bounds {
@@ -31,6 +36,7 @@ pub struct int32_bounds {
     pub upper: i32,
 }
 
+#[cfg_attr(feature = "napi", napi(object))]
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite, Copy)]
 #[wasm_bindgen(getter_with_clone)]
 pub struct int32_rectangle2d {
@@ -38,6 +44,7 @@ pub struct int32_rectangle2d {
     pub y: int32_bounds,
 }
 
+#[cfg_attr(feature = "napi", napi(object))]
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite, Copy)]
 #[wasm_bindgen(getter_with_clone)]
 pub struct int16_bounds {
@@ -45,6 +52,7 @@ pub struct int16_bounds {
     pub upper: i16,
 }
 
+#[cfg_attr(feature = "napi", napi(object))]
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite, Copy)]
 #[wasm_bindgen(getter_with_clone)]
 pub struct int16_rectangle2d {

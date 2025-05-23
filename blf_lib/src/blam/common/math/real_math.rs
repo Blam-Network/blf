@@ -17,6 +17,7 @@ use crate::types::numbers::Float32;
 
 const k_3d_count: usize = 3;
 
+#[cfg_attr(feature = "napi", napi(object))]
 #[derive(Default, PartialEq, Debug, Clone, Copy, Serialize, Deserialize, BinRead, BinWrite)]
 #[wasm_bindgen]
 pub struct real_vector3d {
@@ -31,6 +32,7 @@ impl real_vector3d {
     }
 }
 
+#[cfg_attr(feature = "napi", napi(object))]
 #[derive(Default, PartialEq, Debug, Clone, Copy, Serialize, Deserialize, BinRead, BinWrite)]
 #[wasm_bindgen(getter_with_clone)]
 pub struct real_vector2d {
@@ -38,6 +40,7 @@ pub struct real_vector2d {
     pub j: Float32,
 }
 
+#[cfg_attr(feature = "napi", napi(object))]
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite, Copy)]
 #[wasm_bindgen(getter_with_clone)]
 pub struct real_bounds {
@@ -45,6 +48,7 @@ pub struct real_bounds {
     pub upper: Float32,
 }
 
+#[cfg_attr(feature = "napi", napi(object))]
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite, Copy)]
 #[wasm_bindgen(getter_with_clone)]
 pub struct real_rectangle3d {
@@ -53,6 +57,7 @@ pub struct real_rectangle3d {
     pub z: real_bounds,
 }
 
+#[cfg_attr(feature = "napi", napi(object))]
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite, Copy)]
 #[wasm_bindgen(getter_with_clone)]
 pub struct real_rectangle2d {
@@ -63,13 +68,14 @@ pub struct real_rectangle2d {
 #[derive(Default, PartialEq, Debug, Clone, Copy, Serialize, Deserialize, BinRead, BinWrite, TestSize)]
 #[Size(0xC)]
 #[wasm_bindgen(getter_with_clone)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
+#[cfg_attr(feature = "napi", napi(object))]
 pub struct real_point3d {
     pub x: Float32,
     pub y: Float32,
     pub z: Float32,
 }
 
+#[cfg_attr(feature = "napi", napi(object))]
 #[derive(Default, PartialEq, Debug, Clone, Copy, Serialize, Deserialize, BinRead, BinWrite, TestSize)]
 #[Size(0x8)]
 #[wasm_bindgen(getter_with_clone)]
@@ -78,6 +84,7 @@ pub struct real_point2d {
     pub y: Float32,
 }
 
+#[cfg_attr(feature = "napi", napi(object))]
 #[derive(Default, PartialEq, Debug, Clone, Copy, Serialize, Deserialize, BinRead, BinWrite)]
 #[wasm_bindgen(getter_with_clone)]
 pub struct real_matrix3x3 {
@@ -86,6 +93,7 @@ pub struct real_matrix3x3 {
     pub up: real_vector3d,
 }
 
+#[cfg_attr(feature = "napi", napi(object))]
 #[derive(Default, PartialEq, Debug, Clone, Copy, Serialize, Deserialize, BinRead, BinWrite)]
 #[wasm_bindgen(getter_with_clone)]
 pub struct real_matrix4x3 {
@@ -94,6 +102,7 @@ pub struct real_matrix4x3 {
     pub center: real_point3d,
 }
 
+#[cfg_attr(feature = "napi", napi(object))]
 #[derive(Default, PartialEq, Debug, Clone, Copy, Serialize, Deserialize, BinRead, BinWrite)]
 #[wasm_bindgen(getter_with_clone)]
 pub struct real_plane3d {
