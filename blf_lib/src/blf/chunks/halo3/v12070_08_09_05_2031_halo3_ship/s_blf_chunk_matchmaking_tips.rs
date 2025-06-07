@@ -1,3 +1,4 @@
+use std::error::Error;
 use std::u32;
 use binrw::binrw;
 use serde::{Deserialize, Serialize};
@@ -27,9 +28,9 @@ impl s_blf_chunk_matchmaking_tips {
         self.tips.iter().map(|tip|tip.get_string()).collect()
     }
 
-    fn set_tips(&mut self, tips: Vec<String>) -> Result<(), String> {
+    fn set_tips(&mut self, tips: Vec<String>) -> Result<(), Box<dyn Error>> {
         if tips.len() > MAX_MATCHMAKING_TIP_COUNT {
-            return Err(format!("Too many tips! {}/{MAX_MATCHMAKING_TIP_COUNT}", tips.len()))
+            return Err(format!("Too many tips! {}/{MAX_MATCHMAKING_TIP_COUNT}", tips.len()).into())
         }
 
         self.tips = Vec::with_capacity(tips.len());
@@ -37,14 +38,14 @@ impl s_blf_chunk_matchmaking_tips {
             let tip = StaticString::<TIP_LENGTH>::from_string(tip);
 
             if tip.is_err() {
-                return Err(format!("Tip: {}", tip.unwrap_err()))
+                return Err(format!("Tip: {}", tip.unwrap_err()).into())
             }
 
             let tip = tip?;
 
             self.tips.push(tip);
         }
-        // self.tip_count = self.tips.len() as u32;
+
         Ok(())
     }
 

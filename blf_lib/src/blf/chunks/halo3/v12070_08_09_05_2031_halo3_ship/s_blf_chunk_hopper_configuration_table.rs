@@ -8,6 +8,7 @@ use crate::types::c_string::StaticString;
 use blf_lib::types::time::{filetime};
 use crate::io::bitstream::close_bitstream_writer;
 use serde_hex::{SerHex,StrictCap};
+use blf_lib::BINRW_ERROR;
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
 use blf_lib_derive::BlfChunk;
 use crate::types::numbers::Float32;
@@ -185,7 +186,7 @@ impl BinRead for s_blf_chunk_hopper_configuration_table {
             let category = &mut mhcf.hopper_categories[i];
             category.category_identifier = bitstream.read_u16(16);
             category.category_image_index = bitstream.read_u8(6);
-            category.category_name.set_string(&bitstream.read_string_utf8(16)).unwrap();
+            BINRW_ERROR!(category.category_name.set_string(&BINRW_ERROR!(bitstream.read_string_utf8(16))?))?;
         }
 
         mhcf.hopper_configuration_count = bitstream.read_u8(6);
@@ -193,7 +194,7 @@ impl BinRead for s_blf_chunk_hopper_configuration_table {
 
         for i in 0..mhcf.hopper_configuration_count as usize {
             let configuration = &mut mhcf.hopper_configurations[i];
-            configuration.hopper_name.set_string(&bitstream.read_string_utf8(16)).unwrap();
+            BINRW_ERROR!(configuration.hopper_name.set_string(&BINRW_ERROR!(bitstream.read_string_utf8(16))?))?;
             configuration.game_set_hash = s_network_http_request_hash::try_from(bitstream.read_raw_data(0xA0)).unwrap();
             configuration.hopper_identifier = bitstream.read_u16(16);
             configuration.hopper_category = bitstream.read_u16(16);

@@ -1,5 +1,6 @@
 
 use std::cmp::min;
+use std::error::Error;
 use std::io::Cursor;
 use binrw::BinRead;
 use num_traits::FromPrimitive;
@@ -79,7 +80,7 @@ impl<'a> c_bitstream_reader<'a> {
         self.read_u8(1) == 1
     }
 
-    pub fn read_bits_internal(&mut self, output: &mut [u8], size_in_bits: usize) {
+    pub fn read_bits_internal(&mut self, output: &mut [u8], size_in_bits: usize) -> Result<(), Box<dyn Error>> {
         let end_memory_position = output.len();
         let end_stream_position = self.m_data.len();
         let remaining_stream_bytes = end_stream_position - (self.m_bitstream_data.current_stream_byte_position + 1);
@@ -87,15 +88,15 @@ impl<'a> c_bitstream_reader<'a> {
 
         let size_in_bytes = size_in_bits.div_ceil(8);
         if end_memory_position < size_in_bytes {
-            panic!("Tried to read {size_in_bytes} bytes ({size_in_bits} bits) into a {end_memory_position} byte buffer!")
+            return Err(format!("Tried to read {size_in_bytes} bytes ({size_in_bits} bits) into a {end_memory_position} byte buffer!").into())
         }
 
         if remaining_stream_bits < size_in_bits {
-            panic!("Tried to read {size_in_bits} bits but the stream only has {remaining_stream_bits} bits left!")
+            return Err(format!("Tried to read {size_in_bits} bits but the stream only has {remaining_stream_bits} bits left!").into())
         }
 
         if size_in_bits == 0 {
-            panic!("Tried to read zero bits.")
+            return Err("Tried to read zero bits.".into())
         }
 
         let mut windows_to_read = (size_in_bits as f32 / 64f32).ceil() as usize;
@@ -191,6 +192,8 @@ impl<'a> c_bitstream_reader<'a> {
         }
 
         self.m_bitstream_data.current_memory_bit_position = 0;
+
+        Ok(())
     }
 
     pub fn read_enum<T: FromPrimitive>(&mut self, size_in_bits: usize) -> T {
@@ -353,7 +356,7 @@ impl<'a> c_bitstream_reader<'a> {
     }
 
     // differs from blam API
-    pub fn read_string_utf8(&mut self, max_string_size: usize) -> String {
+    pub fn read_string_utf8(&mut self, max_string_size: usize) -> Result<String, Box<dyn Error>> {
         assert!(self.reading());
         assert!(max_string_size > 0);
 
@@ -365,15 +368,15 @@ impl<'a> c_bitstream_reader<'a> {
             bytes[i] = byte;
 
             if byte == 0 {
-                return String::from_utf8(bytes).unwrap()
+                return Ok(String::from_utf8(bytes)?)
             }
         }
 
-        panic!("Exceeded max string size reading utf8 string.");
+        Err("Exceeded max string size reading utf8 string.".into())
     }
 
     // differs from blam API
-    pub fn read_string_whar(&mut self, max_string_size: usize) -> String {
+    pub fn read_string_whar(&mut self, max_string_size: usize) -> Result<String, Box<dyn Error>> {
         assert!(self.reading());
         assert!(max_string_size > 0);
 
@@ -383,13 +386,13 @@ impl<'a> c_bitstream_reader<'a> {
             let character = self.read_u16(16);
 
             if character == 0 {
-                return U16CString::from_vec(&mut characters[0..i]).unwrap().to_string().unwrap();
+                return Ok(U16CString::from_vec(&mut characters[0..i])?.to_string()?);
             } else {
                 characters[i] = character;
             }
         }
 
-        panic!("Exceeded max string size reading wchar string.");
+        Err("Exceeded max string size reading wchar string.".into())
     }
 
     pub fn read_unit_vector(unit_vector: &mut real_vector3d, size_in_bits: u8) {

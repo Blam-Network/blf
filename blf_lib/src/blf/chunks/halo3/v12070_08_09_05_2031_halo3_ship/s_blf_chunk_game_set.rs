@@ -1,6 +1,7 @@
 use std::io::{Read, Seek, Write};
 use binrw::{BinRead, BinResult, BinWrite, BinWriterExt, Endian};
 use serde::{Deserialize, Serialize};
+use blf_lib::BINRW_ERROR;
 use blf_lib::blam::common::memory::secure_signature::s_network_http_request_hash;
 use blf_lib::io::bitstream::{c_bitstream_reader, create_bitstream_writer, e_bitstream_byte_order};
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
@@ -71,9 +72,9 @@ impl BinRead for s_blf_chunk_game_set {
             game_entry.skip_after_veto = bitstream.read_bool();
             game_entry.optional = bitstream.read_bool();
             game_entry.map_id = bitstream.read_integer(32);
-            game_entry.game_variant_file_name.set_string(&bitstream.read_string_utf8(32)).unwrap();
+            BINRW_ERROR!(game_entry.game_variant_file_name.set_string(&BINRW_ERROR!(bitstream.read_string_utf8(32))?))?;
             game_entry.game_variant_file_hash = s_network_http_request_hash::try_from(bitstream.read_raw_data(0xA0)).unwrap();
-            game_entry.map_variant_file_name.set_string(&bitstream.read_string_utf8(32)).unwrap();
+            BINRW_ERROR!(game_entry.map_variant_file_name.set_string(&BINRW_ERROR!(bitstream.read_string_utf8(32))?))?;
             game_entry.map_variant_file_hash = s_network_http_request_hash::try_from(bitstream.read_raw_data(0xA0)).unwrap();
         }
 

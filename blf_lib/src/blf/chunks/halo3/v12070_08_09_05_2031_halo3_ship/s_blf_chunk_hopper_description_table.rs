@@ -1,6 +1,8 @@
+use std::error::Error;
 use std::io::{Read, Seek, Write};
 use binrw::{BinRead, BinResult, BinWrite, BinWriterExt, Endian};
 use serde::{Deserialize, Serialize};
+use blf_lib::BINRW_ERROR;
 use blf_lib::io::bitstream::{c_bitstream_reader, create_bitstream_writer, e_bitstream_byte_order};
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
 use blf_lib_derive::BlfChunk;
@@ -31,9 +33,9 @@ impl s_blf_chunk_hopper_description_table {
         self.descriptions.as_slice()[0..self.description_count].to_vec()
     }
 
-    pub fn add_description(&mut self, config: (u16, &String)) -> Result<(), String> {
+    pub fn add_description(&mut self, config: (u16, &String)) -> Result<(), Box<dyn Error>> {
         if self.description_count >= MAX_DESCRIPTIONS {
-            return Err("The hopper desciptions chunk is full!".to_string());
+            return Err("The hopper desciptions chunk is full!".into());
         }
         self.description_count += 1;
         self.descriptions.push(s_game_hopper_description {
@@ -65,7 +67,7 @@ impl BinRead for s_blf_chunk_hopper_description_table {
             let description = &mut mhdf.descriptions[i];
             description.identifier = bitstream.read_integer(16) as u16;
             description.hopper_type = bitstream.read_bool();
-            description.description.set_string(&bitstream.read_string_utf8(256)).unwrap();
+            BINRW_ERROR!(description.description.set_string(&BINRW_ERROR!(bitstream.read_string_utf8(256))?))?;
         }
 
         Ok(mhdf)

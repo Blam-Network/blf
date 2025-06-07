@@ -1,3 +1,4 @@
+use std::error::Error;
 use binrw::{binrw, BinRead, BinWrite};
 use serde::{Deserialize, Serialize};
 use blf_lib::blam::common::memory::secure_signature::s_network_http_request_hash;
@@ -28,9 +29,9 @@ pub struct s_blf_chunk_online_file_manifest
 impl BlfChunkHooks for s_blf_chunk_online_file_manifest {}
 
 impl s_blf_chunk_online_file_manifest {
-    pub fn add_file_hash(&mut self, cache_key: impl Into<String>, hash: s_network_http_request_hash) -> Result<(), String> {
+    pub fn add_file_hash(&mut self, cache_key: impl Into<String>, hash: s_network_http_request_hash) -> Result<(), Box<dyn Error>> {
         if self.data.len() >= k_file_manifest_max_files {
-            return Err(format!("The file manifest is full! {} files max", k_file_manifest_max_files));
+            return Err(format!("The file manifest is full! {} files max", k_file_manifest_max_files).into());
         }
 
         self.data.push(s_online_file {

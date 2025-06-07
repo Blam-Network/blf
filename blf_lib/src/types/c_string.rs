@@ -5,8 +5,9 @@ use serde::{Deserializer, Serialize, Serializer};
 use widestring::U16CString;
 use std::char::{decode_utf16, REPLACEMENT_CHARACTER};
 use std::cmp::min;
+use std::error::Error;
+use std::io;
 use binrw::{BinRead, BinWrite};
-use serde::de::Error;
 
 #[cfg(feature = "napi")]
 use napi::sys::{napi_env, napi_env__, napi_value};
@@ -31,28 +32,28 @@ pub fn to_string(chars: &[c_char]) -> String {
     res
 }
 
-pub fn from_string_with_length(string: String, length: usize) -> Vec<c_char> {
-    let mut vec = from_string(string);
+pub fn from_string_with_length(string: String, length: usize) -> Result<Vec<c_char>, Box<dyn Error>> {
+    let mut vec = from_string(string)?;
 
     vec.resize(length, 0);
 
-    vec
+    Ok(vec)
 }
 
-pub fn from_string(string: String) -> Vec<c_char> {
+pub fn from_string(string: String) -> Result<Vec<c_char>, Box<dyn Error>> {
     let mut vec = Vec::new();
 
     let bytes = string.as_bytes();
 
     if string.len() != bytes.len() {
-        panic!("Invalid string.");
+        return Err("Invalid string.".into());
     }
 
     for i in 0..bytes.len() {
         vec.push(bytes[i] as c_char);
     }
 
-    vec
+    Ok(vec)
 }
 
 #[derive(PartialEq, Debug, Clone, Default, BinRead, BinWrite)]
@@ -131,7 +132,7 @@ impl<'de, const N: usize> serde::Deserialize<'de> for StaticWcharString<N> {
         let s = String::deserialize(d)?;
         let res = Self::from_string(&s);
         if res.is_err() {
-            Err(D::Error::custom(res.unwrap_err()))
+            Err(serde::de::Error::custom(res.unwrap_err()))
         } else {
             Ok(res.unwrap())
         }
@@ -146,24 +147,22 @@ pub struct StaticString<const N: usize> {
 
 
 impl<const N: usize> StaticString<N> {
-    pub fn from_string(value: impl Into<String>) -> Result<Self, String> {
+    pub fn from_string(value: impl Into<String>) -> Result<Self, Box<dyn Error>> {
         let mut new = Self {
             buf: [0; N],
         };
 
-        let result = new.set_string(&value.into());
-        if result.is_ok() { Ok(new) }
-        else { Err(result.unwrap_err()) }
+        new.set_string(&value.into()).map(|_| new)
     }
 
-    pub fn set_string(&mut self, value: &String) -> Result<(), String> {
+    pub fn set_string(&mut self, value: &String) -> Result<(), Box<dyn Error>> {
         let mut bytes = value.as_bytes();
         // if a null termination was provided at the end, chop it off
         if !bytes.is_empty() && bytes[bytes.len() - 1] == 0 {
             bytes = &bytes[0..bytes.len() - 1];
         }
         if bytes.len() > N {
-            return Err(format!("String \"{value}\" too long ({} > {}) bytes", N, bytes.len()));
+            return Err(format!("String \"{value}\" too long ({} > {}) bytes", N, bytes.len()).into());
         }
         self.buf.fill(0);
         self.buf[..bytes.len()].copy_from_slice(bytes);
@@ -208,7 +207,7 @@ impl<'de, const N: usize> serde::Deserialize<'de> for StaticString<N> {
         let s = String::deserialize(d)?;
         let res = Self::from_string(&s);
         if res.is_err() {
-            Err(D::Error::custom(res.unwrap_err()))
+            Err(serde::de::Error::custom(res.unwrap_err()))
         } else {
             Ok(res.unwrap())
         }

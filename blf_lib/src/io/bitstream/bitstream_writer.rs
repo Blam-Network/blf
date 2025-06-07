@@ -1,5 +1,6 @@
 
 use std::cmp::min;
+use std::error::Error;
 use std::io::Cursor;
 use binrw::BinWrite;
 use widestring::U16CString;
@@ -123,9 +124,9 @@ impl c_bitstream_writer {
         self.write_bits_internal(data, size_in_bits);
     }
 
-    fn write_bits_internal(&mut self, data: &[u8], size_in_bits: usize) {
+    fn write_bits_internal(&mut self, data: &[u8], size_in_bits: usize) -> Result<(), Box<dyn Error>> {
         if data.len() < (size_in_bits as f32 / 8f32).ceil() as usize {
-            panic!("Tried to write {size_in_bits} bits but only {} were provided!", (data.len() * 8))
+            return Err(format!("Tried to write {size_in_bits} bits but only {} were provided!", (data.len() * 8)).into())
         }
 
         let bits_available
@@ -182,6 +183,8 @@ impl c_bitstream_writer {
             self.m_bitstream_data.current_stream_bit_position
                 += remaining_bits_to_write;
         }
+
+        Ok(())
     }
 
     pub fn write_identifier(identifier: String) {
@@ -263,10 +266,6 @@ impl c_bitstream_writer {
 
     pub fn begin_consistency_check() -> bool {
         unimplemented!()
-    }
-
-    pub fn begin_reading(&mut self) {
-        panic!("Bitstream writer cannot read!")
     }
 
     pub fn begin_writing(&mut self, data_size_alignment: u32) {

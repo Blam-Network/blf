@@ -6,6 +6,7 @@
 #![allow(dead_code)]
 
 use std::convert::Into;
+use std::error::Error;
 use binrw::{BinRead, BinWrite};
 #[cfg(feature = "napi")]
 use napi_derive::napi;
@@ -343,7 +344,7 @@ pub fn normalize3d(vector: &mut real_vector3d) -> f32 {
     result
 }
 
-pub fn dequantize_unit_vector3d(value: i32, vector: &mut real_vector3d) {
+pub fn dequantize_unit_vector3d(value: i32, vector: &mut real_vector3d) -> Result<(), Box<dyn Error>> {
     let face = value & 7;
     let x = dequantize_real((value >> 3) as u8 as i32, -1.0, 1.0, 8, true);
     let y = dequantize_real((value >> 11) as u8 as i32, -1.0, 1.0, 8, true);
@@ -380,11 +381,13 @@ pub fn dequantize_unit_vector3d(value: i32, vector: &mut real_vector3d) {
             vector.k.0 = -1.0;
         }
         _ => {
-            panic!("dequantize_unit_vector3d: bad face value {face} when reading unit vector");
+            return Err(format!("dequantize_unit_vector3d: bad face value {face} when reading unit vector").into());
         }
     }
 
     normalize3d(vector);
+
+    Ok(())
 }
 
 pub fn cross_product3d(a: &real_vector3d, b: &real_vector3d, out: &mut real_vector3d) {

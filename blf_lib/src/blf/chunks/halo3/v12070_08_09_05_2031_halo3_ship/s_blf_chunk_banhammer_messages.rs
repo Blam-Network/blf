@@ -1,3 +1,4 @@
+use std::error::Error;
 use std::u32;
 use binrw::binrw;
 use serde::{Deserialize, Serialize};
@@ -27,9 +28,9 @@ impl s_blf_chunk_banhammer_messages {
         self.messages.iter().map(|message|message.get_string()).collect()
     }
 
-    fn set_messages(&mut self, messages: Vec<String>) -> Result<(), String> {
+    fn set_messages(&mut self, messages: Vec<String>) -> Result<(), Box<dyn Error>> {
         if messages.len() > k_banhammmer_messages_max_messages {
-            return Err(format!("Too many banhammer messages! {}/{k_banhammmer_messages_max_messages}", messages.len()))
+            return Err(format!("Too many banhammer messages! {}/{k_banhammmer_messages_max_messages}", messages.len()).into())
         }
 
         self.messages = Vec::with_capacity(messages.len());
@@ -37,7 +38,7 @@ impl s_blf_chunk_banhammer_messages {
             let message = StaticString::<k_banhammer_message_max_length>::from_string(message);
 
             if message.is_err() {
-                return Err(format!("Banhammer message: {}", message.unwrap_err()))
+                return Err(format!("Banhammer message: {}", message.unwrap_err()).into())
             }
 
             let message = message?;
