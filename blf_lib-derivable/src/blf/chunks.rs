@@ -1,4 +1,5 @@
 use std::any::Any;
+use std::error::Error;
 use binrw::{BinRead, BinWrite, BinWriterExt};
 use crate::blf::s_blf_header::s_blf_header;
 use crate::types::chunk_signature::chunk_signature;
@@ -20,11 +21,11 @@ pub trait BlfChunkHooks {
 }
 
 pub trait SerializableBlfChunk: DynamicBlfChunk + Any + Send + Sync {
-    fn encode_body(&mut self, previously_written: &Vec<u8>) -> Vec<u8>;
-    fn decode_body(&mut self, buffer: &[u8]);
+    fn encode_body(&mut self, previously_written: &Vec<u8>) -> Result<Vec<u8>, Box<dyn Error>>;
+    fn decode_body(&mut self, buffer: &[u8]) -> Result<(), Box<dyn Error>>;
 
-    fn write(&mut self, previously_written: &Vec<u8>) -> Vec<u8> {
-        let mut encoded_chunk = self.encode_body(previously_written);
+    fn write(&mut self, previously_written: &Vec<u8>) -> Result<Vec<u8>, Box<dyn Error>> {
+        let mut encoded_chunk = self.encode_body(previously_written)?;
         let header = s_blf_header {
             signature: self.signature(),
             version: self.version(),
@@ -35,7 +36,7 @@ pub trait SerializableBlfChunk: DynamicBlfChunk + Any + Send + Sync {
         encoded.append(&mut header.encode());
         encoded.append(&mut encoded_chunk);
 
-        encoded
+        Ok(encoded)
     }
 
     fn as_any(&self) -> &dyn Any;
@@ -43,20 +44,21 @@ pub trait SerializableBlfChunk: DynamicBlfChunk + Any + Send + Sync {
 
 impl<T: DynamicBlfChunk + BinRead + BinWrite + Clone + Any + BlfChunkHooks + Send + Sync> SerializableBlfChunk for T
     where for<'a> <T as BinWrite>::Args<'a>: Default, for<'a> <T as BinRead>::Args<'a>: Default {
-    fn encode_body(&mut self, previously_written: &Vec<u8>) -> Vec<u8> where for<'a> <T as BinWrite>::Args<'a>: Default {
+    fn encode_body(&mut self, previously_written: &Vec<u8>) -> Result<Vec<u8>, Box<dyn Error>> where for<'a> <T as BinWrite>::Args<'a>: Default {
         self.before_write(previously_written);
 
         let mut writer = std::io::Cursor::new(Vec::<u8>::new());
-        writer.write_ne(self).unwrap();
-        writer.get_ref().clone()
+        writer.write_ne(self)?;
+        Ok(writer.get_ref().clone())
     }
 
-    fn decode_body(&mut self, buffer: &[u8]) where for<'b> <T as BinRead>::Args<'b>: Default {
+    fn decode_body(&mut self, buffer: &[u8]) -> Result<(), Box<dyn Error>> where for<'b> <T as BinRead>::Args<'b>: Default {
         let mut reader = std::io::Cursor::new(buffer);
 
-        self.clone_from(&T::read_ne(&mut reader).unwrap());
+        self.clone_from(&T::read_ne(&mut reader)?);
 
         self.after_read();
+        Ok(())
     }
 
     fn as_any(&self) -> &dyn Any {
@@ -65,13 +67,16 @@ impl<T: DynamicBlfChunk + BinRead + BinWrite + Clone + Any + BlfChunkHooks + Sen
 }
 
 pub trait ReadableBlfChunk: BlfChunk + Sized + SerializableBlfChunk + Default {
-    fn read(buffer: Vec<u8>, header: Option<s_blf_header>) -> Self {
+    fn read(buffer: Vec<u8>, header: Option<s_blf_header>) -> Result<Self, Box<dyn Error>> {
         let offset = if header.is_some() { 0 } else { s_blf_header::size() };
-        let header = header.unwrap_or_else(|| s_blf_header::decode(buffer.as_slice()) );
+        let header = match header {
+            None => s_blf_header::decode(buffer.as_slice())?,
+            Some(header) => header
+        };
         let end = (header.chunk_size as usize - s_blf_header::size()) - offset;
         let mut chunk = Self::default();
-        chunk.decode_body(&buffer[offset..end]);
-        chunk
+        chunk.decode_body(&buffer[offset..end])?;
+        Ok(chunk)
     }
 }
 

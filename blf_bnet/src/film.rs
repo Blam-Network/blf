@@ -21,10 +21,10 @@ pub struct FilmVariants {
 pub fn get_film_variants(data: Vec<u8>) -> Option<FilmVariants> {
     let content_header  = search_for_chunk::<
         v12070_08_09_05_2031_halo3_ship::s_blf_chunk_content_header
-    >(data.to_vec())?;
+    >(data.to_vec()).unwrap_or(None)?;
     let film_header  = search_for_chunk::<
         v12070_08_09_05_2031_halo3_ship::s_blf_chunk_saved_film_header
-    >(data.to_vec())?;
+    >(data.to_vec()).unwrap_or(None)?;
 
     let map_chunk = s_blf_chunk_map_variant::create(film_header.options.map_variant);
     let game_chunk = s_blf_chunk_game_variant::create(film_header.options.multiplayer_variant);
@@ -45,10 +45,10 @@ pub fn get_film_variants(data: Vec<u8>) -> Option<FilmVariants> {
         film_name: content_header.metadata.name.get_string(),
         map_name: map_chunk.map_variant.m_metadata.name.get_string(),
         map_author: map_chunk.map_variant.m_metadata.author.get_string(),
-        map_variant: Uint8Array::from(map_variant_blf_file.write().as_slice()),
+        map_variant: Uint8Array::from(map_variant_blf_file.write().ok()?.as_slice()),
         game_name: game_chunk.game_variant.m_base_variant.m_metadata.name.get_string(),
         game_author: game_chunk.game_variant.m_base_variant.m_metadata.author.get_string(),
         game_engine: game_chunk.game_variant.m_game_engine.to_u32()?,
-        game_variant: Uint8Array::from(game_variant_blf_file.write().as_slice())
+        game_variant: Uint8Array::from(game_variant_blf_file.write().ok()?.as_slice())
     })
 }

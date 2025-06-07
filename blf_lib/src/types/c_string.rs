@@ -6,7 +6,6 @@ use widestring::U16CString;
 use std::char::{decode_utf16, REPLACEMENT_CHARACTER};
 use std::cmp::min;
 use std::error::Error;
-use std::io;
 use binrw::{BinRead, BinWrite};
 
 #[cfg(feature = "napi")]

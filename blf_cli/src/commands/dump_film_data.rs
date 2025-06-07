@@ -19,10 +19,10 @@ pub fn dump_film_data(
         let file_path = build_path!(&films_folder, file_name);
         let chdr = search_for_chunk_in_file::<s_blf_chunk_content_header>(
             &file_path,
-        );
+        ).unwrap_or(None);
         let flmh = search_for_chunk_in_file::<s_blf_chunk_saved_film_header>(
             &file_path,
-        );
+        ).unwrap_or(None);
 
         if flmh.is_some() && chdr.is_some() {
             let flmh = flmh.unwrap();

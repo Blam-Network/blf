@@ -1332,7 +1332,7 @@ impl v12070_08_09_05_2031_halo3_ship {
             game_set.write_file(build_path!(
                 &hopper_folder_path,
                 k_game_set_blf_file_name
-            ))
+            ))?;
         }
 
         やった!(task)

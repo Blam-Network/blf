@@ -53,26 +53,26 @@ impl BlfFileBuilder {
             .ok_or_else(|| format!("Chunk {} {} not found", T::get_signature(), T::get_version()).into())
     }
 
-    pub fn write(&mut self) -> Vec<u8> {
+    pub fn write(&mut self) -> Result<Vec<u8>, Box<dyn Error>> {
         let mut data: Vec<u8> = Vec::new();
 
         for chunk in &mut self.chunks.iter_mut()  {
-            data.append(&mut chunk.write(&data));
+            data.append(&mut chunk.write(&data)?);
         }
 
-        data
+        Ok(data)
     }
 
-    pub fn write_file(&mut self, path: impl Into<String>) {
+    pub fn write_file(&mut self, path: impl Into<String>) -> Result<(), Box<dyn Error>> {
         let path = &path.into();
-        let data = self.write();
+        let data = self.write()?;
         
-        let parent_path = Path::new(path).parent().unwrap();
-        create_dir_all(parent_path).unwrap();
+        let parent_path = Path::new(path).parent().ok_or(std::fmt::Error)?;
+        create_dir_all(parent_path)?;
 
-        let file = File::create(path)
-            .unwrap()
-            .write_all(&data);
+        File::create(path)?
+            .write_all(&data)
+            .map_err(|e| e.into())
     }
 
     pub fn read(&mut self, buffer: &Vec<u8>) -> Result<&mut BlfFileBuilder, Box<dyn Error>> {
@@ -82,7 +82,7 @@ impl BlfFileBuilder {
 
         for chunk in &mut self.chunks.iter_mut()  {
             reader.read_exact(&mut headerBytes)?;
-            header = s_blf_header::decode(&headerBytes);
+            header = s_blf_header::decode(&headerBytes)?;
 
             if header.signature != chunk.signature() || header.version != chunk.version() {
                 return Err(Box::from(format!("Failed to read chunk {} {}, found {} {} instead!",

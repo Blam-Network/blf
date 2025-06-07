@@ -1,5 +1,6 @@
 #![allow(non_camel_case_types)]
 
+use std::error::Error;
 use std::ffi::c_char;
 use crate::types::chunk_signature::chunk_signature;
 use crate::types::chunk_version::chunk_version;
@@ -30,7 +31,7 @@ impl s_blf_header {
         result
     }
 
-    pub fn decode(data: &[u8]) -> s_blf_header {
+    pub fn decode(data: &[u8]) -> Result<s_blf_header, Box<dyn Error>> {
         assert_eq!(data.len(), Self::size());
 
         let signature = chunk_signature::new([
@@ -40,18 +41,18 @@ impl s_blf_header {
             data[3] as c_char,
         ]);
 
-        let chunk_size = u32::from_be_bytes(data[4..8].try_into().unwrap());
+        let chunk_size = u32::from_be_bytes(data[4..8].try_into()?);
 
         let version = chunk_version {
-            major: u16::from_be_bytes(data[8..10].try_into().unwrap()),
-            minor: u16::from_be_bytes(data[10..12].try_into().unwrap()),
+            major: u16::from_be_bytes(data[8..10].try_into()?),
+            minor: u16::from_be_bytes(data[10..12].try_into()?),
         };
 
-        Self {
+        Ok(Self {
             signature,
             chunk_size,
             version
-        }
+        })
     }
 
     pub const fn size() -> usize {

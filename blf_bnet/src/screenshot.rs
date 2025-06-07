@@ -24,13 +24,13 @@ pub struct ScreenshotData {
 fn get_h3_release_screenshot_data(data: Vec<u8>) -> Option<ScreenshotData> {
     let content_header  = search_for_chunk::<
         v12070_08_09_05_2031_halo3_ship::s_blf_chunk_content_header
-    >(data.to_vec())?;
+    >(data.to_vec()).unwrap_or(None)?;
     let screenshot_camera  = search_for_chunk::<
         v12070_08_09_05_2031_halo3_ship::s_blf_chunk_screenshot_camera
-    >(data.to_vec())?;
+    >(data.to_vec()).unwrap_or(None)?;
     let screenshot_data  = search_for_chunk::<
         v12070_08_09_05_2031_halo3_ship::s_blf_chunk_screenshot_data
-    >(data.to_vec())?;
+    >(data.to_vec()).unwrap_or(None)?;
 
     Some(ScreenshotData {
         build_number: content_header.build_number,

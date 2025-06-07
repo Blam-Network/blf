@@ -6,6 +6,7 @@ use std::error::Error;
 use std::fs::File;
 use std::io::{Cursor, Read, Seek};
 use serde::Deserialize;
+use blf_lib::BINRW_ERROR;
 use blf_lib::blf::s_blf_header;
 pub use blf_lib_derivable::blf::chunks::*;
 
@@ -16,11 +17,11 @@ pub fn find_chunk<'a, T: BlfChunk + SerializableBlfChunk + ReadableBlfChunk>(buf
     let mut header: s_blf_header;
 
     while cursor.read_exact(&mut headerBytes).is_ok() {
-        header = s_blf_header::decode(&headerBytes);
+        header = s_blf_header::decode(&headerBytes)?;
         if header.signature == T::get_signature() && header.version == T::get_version() {
             let mut body_bytes = vec![0u8; (header.chunk_size as usize) - s_blf_header::size()];
             cursor.read_exact(body_bytes.as_mut_slice())?;
-            return Ok(T::read(body_bytes, Some(header)));
+            return Ok(BINRW_ERROR!(T::read(body_bytes, Some(header)))?);
         }
         if header.chunk_size == 0 {
             break;
@@ -36,11 +37,11 @@ pub fn find_chunk_in_file<T: BlfChunk + SerializableBlfChunk + ReadableBlfChunk>
     let mut header: s_blf_header;
 
     while file.read_exact(&mut headerBytes).is_ok() {
-        header = s_blf_header::decode(&headerBytes);
+        header = s_blf_header::decode(&headerBytes)?;
         if header.signature == T::get_signature() && header.version == T::get_version() {
             let mut body_bytes = vec![0u8; (header.chunk_size as usize) - s_blf_header::size()];
             file.read_exact(body_bytes.as_mut_slice())?;
-            return Ok(T::read(body_bytes, Some(header)));
+            return Ok(T::read(body_bytes, Some(header))?);
         }
         if header.chunk_size == 0 {
             break;
@@ -50,35 +51,35 @@ pub fn find_chunk_in_file<T: BlfChunk + SerializableBlfChunk + ReadableBlfChunk>
     Err(format!("{} Chunk not found!", T::get_signature()).into())
 }
 
-pub fn search_for_chunk<'a, T: BlfChunk + SerializableBlfChunk + ReadableBlfChunk>(buffer: Vec<u8>) -> Option<T> {
+pub fn search_for_chunk<'a, T: BlfChunk + SerializableBlfChunk + ReadableBlfChunk>(buffer: Vec<u8>) -> Result<Option<T>, Box<dyn Error>> {
     for i in 0..(buffer.len() - 0xC) {
         let header_bytes = &buffer.as_slice()[i..i+0xC];
-        let header = s_blf_header::decode(header_bytes);
+        let header = s_blf_header::decode(header_bytes)?;
 
         if header.signature == T::get_signature() && header.version == T::get_version() {
             let body_bytes = buffer.as_slice()[i+0xC..i+header.chunk_size as usize].to_vec();
-            return Some(T::read(body_bytes, Some(header)));
+            return Ok(Some(T::read(body_bytes, Some(header))?));
         }
     }
 
-    None
+    Ok(None)
 }
 
-pub fn search_for_chunk_in_file<T: BlfChunk + SerializableBlfChunk + ReadableBlfChunk>(path: impl Into<String>) -> Option<T> {
+pub fn search_for_chunk_in_file<T: BlfChunk + SerializableBlfChunk + ReadableBlfChunk>(path: impl Into<String>) -> Result<Option<T>, Box<dyn Error>> {
     let mut fileBytes = Vec::<u8>::new();
     File::open(path.into()).unwrap().read_to_end(&mut fileBytes).unwrap();
 
     for i in 0..(fileBytes.len() - 0xC) {
         let header_bytes = &fileBytes.as_slice()[i..i+0xC];
-        let header = s_blf_header::decode(header_bytes);
+        let header = s_blf_header::decode(header_bytes)?;
 
         if header.signature == T::get_signature() && header.version == T::get_version() {
             let body_bytes = fileBytes.as_slice()[i+0xC..i+header.chunk_size as usize].to_vec();
-            return Some(T::read(body_bytes, Some(header)));
+            return Ok(Some(T::read(body_bytes, Some(header))?));
         }
     }
 
-    None
+    Ok(None)
 }
 
 pub fn read_chunk_json<T: BlfChunk + for<'d> Deserialize<'d>>(path: &str) -> Result<T, String> {

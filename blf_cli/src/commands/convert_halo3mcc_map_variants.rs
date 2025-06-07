@@ -31,11 +31,11 @@ pub fn convert_halo3mcc_map_variants(mcc_maps_folder: String, converted_maps_pat
             &mcc_maps_folder,
             variant_file_name
         );
-        let map_variant_chunk = search_for_chunk_in_file::<s_blf_chunk_map_variant>(&variant_file_path);
+        let map_variant_chunk = search_for_chunk_in_file::<s_blf_chunk_map_variant>(&variant_file_path).unwrap_or(None);
         if map_variant_chunk.is_some() {
             map_variant = Some(map_variant_chunk.unwrap().map_variant);
         }
-        let packed_map_variant = search_for_chunk_in_file::<s_blf_chunk_packed_map_variant>(&variant_file_path);
+        let packed_map_variant = search_for_chunk_in_file::<s_blf_chunk_packed_map_variant>(&variant_file_path).unwrap_or(None);
         if packed_map_variant.is_some() {
             map_variant = Some(packed_map_variant.unwrap().map_variant);
         }
@@ -57,7 +57,7 @@ pub fn convert_halo3mcc_map_variants(mcc_maps_folder: String, converted_maps_pat
             blf_file.write_file(build_path!(
                 &converted_maps_path,
                 &output_file_name
-            ));
+            )).unwrap();
         }
     }
     task.complete();

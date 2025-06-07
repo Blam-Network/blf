@@ -7,3 +7,13 @@ macro_rules! BINRW_ERROR {
         })
     };
 }
+
+#[macro_export]
+macro_rules! SOME_OR_ERR {
+    ($opt:expr, $err:expr) => {
+        match $opt {
+            Some(val) => val,
+            None => return Err($err),
+        }
+    };
+}

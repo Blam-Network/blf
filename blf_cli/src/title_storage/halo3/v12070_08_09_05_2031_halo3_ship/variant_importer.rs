@@ -19,11 +19,11 @@ pub fn import_variant(hoppers_config_path: &String, variant_path: &String) {
     let mut task = console_task::start("Importing Variant");
 
     let mut game_variant: Option<c_game_variant> = None;
-    let game_variant_chunk = search_for_chunk_in_file::<s_blf_chunk_game_variant>(variant_path);
+    let game_variant_chunk = search_for_chunk_in_file::<s_blf_chunk_game_variant>(variant_path).unwrap_or(None);
     if game_variant_chunk.is_some() {
         game_variant = Some(game_variant_chunk.unwrap().game_variant);
     }
-    let packed_game_variant_chunk = search_for_chunk_in_file::<s_blf_chunk_packed_game_variant>(variant_path);
+    let packed_game_variant_chunk = search_for_chunk_in_file::<s_blf_chunk_packed_game_variant>(variant_path).unwrap_or(None);
     if packed_game_variant_chunk.is_some() {
         game_variant = Some(packed_game_variant_chunk.unwrap().game_variant);
     }
@@ -45,11 +45,11 @@ pub fn import_variant(hoppers_config_path: &String, variant_path: &String) {
     }
 
     let mut map_variant: Option<c_map_variant> = None;
-    let map_variant_chunk = search_for_chunk_in_file::<s_blf_chunk_map_variant>(variant_path);
+    let map_variant_chunk = search_for_chunk_in_file::<s_blf_chunk_map_variant>(variant_path).unwrap_or(None);
     if map_variant_chunk.is_some() {
         map_variant = Some(map_variant_chunk.unwrap().map_variant);
     }
-    let packed_map_variant = search_for_chunk_in_file::<s_blf_chunk_packed_map_variant>(variant_path);
+    let packed_map_variant = search_for_chunk_in_file::<s_blf_chunk_packed_map_variant>(variant_path).unwrap_or(None);
     if packed_map_variant.is_some() {
         map_variant = Some(packed_map_variant.unwrap().map_variant);
     }
