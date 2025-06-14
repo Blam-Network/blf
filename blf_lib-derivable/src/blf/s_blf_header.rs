@@ -1,7 +1,7 @@
 #![allow(non_camel_case_types)]
 
-use std::error::Error;
 use std::ffi::c_char;
+use crate::result::BLFLibResult;
 use crate::types::chunk_signature::chunk_signature;
 use crate::types::chunk_version::chunk_version;
 
@@ -31,7 +31,7 @@ impl s_blf_header {
         result
     }
 
-    pub fn decode(data: &[u8]) -> Result<s_blf_header, Box<dyn Error>> {
+    pub fn decode(data: &[u8]) -> BLFLibResult<Self> {
         assert_eq!(data.len(), Self::size());
 
         let signature = chunk_signature::new([

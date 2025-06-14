@@ -1,6 +1,7 @@
 use std::u32;
 use binrw::binrw;
 use serde::{Deserialize, Serialize};
+use blf_lib_derivable::result::BLFLibResult;
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
 use blf_lib_derive::BlfChunk;
 use crate::types::c_string::StaticWcharString;
@@ -43,7 +44,7 @@ impl s_blf_chunk_message_of_the_day_popup {
         button_key: String,
         button_key_wait: String,
         message: String,
-    ) -> Result<Self, String> {
+    ) -> BLFLibResult<Self> {
         Ok(s_blf_chunk_message_of_the_day_popup {
             title_index_identifier,
             button_key_wait_time_ms,

@@ -14,6 +14,7 @@ pub mod versions;
 pub use blf_lib_derivable::blf::s_blf_header::s_blf_header;
 
 pub use blf_lib_derivable::blf::BlfFile;
+use blf_lib_derivable::result::BLFLibResult;
 
 pub struct BlfFileBuilder {
     chunks: Vec<Box<dyn SerializableBlfChunk>>,
@@ -112,7 +113,7 @@ lazy_static!{
         .expect("Failed to generate hash salt!");
 }
 
-pub fn get_blf_file_hash(path: String) -> Result<s_network_http_request_hash, Box<dyn Error>> {
+pub fn get_blf_file_hash(path: String) -> BLFLibResult<s_network_http_request_hash> {
     let mut file = File::open(&path).map_err(|err| {
         Box::<dyn Error>::from(format!("get_blf_file_hash(\"{}\"): {}", path, err))
     })?;

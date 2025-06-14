@@ -17,6 +17,8 @@ use blf_lib::blam::halo_3::release::game::game_engine_sandbox::c_game_engine_san
 use blf_lib::blam::halo_3::release::game::game_engine_territories::c_game_engine_territories_variant;
 use blf_lib::blam::halo_3::release::game::game_engine_vip::c_game_engine_vip_variant;
 use blf_lib::io::bitstream::{c_bitstream_reader, c_bitstream_writer};
+use blf_lib::{BINRW_ERROR, OPTION_TO_RESULT};
+use blf_lib_derivable::result::BLFLibResult;
 use blf_lib_derive::TestSize;
 
 #[derive(BinRead, BinWrite, Serialize, Deserialize, Default, PartialEq, Debug, Copy, Clone, FromPrimitive, ToPrimitive)]
@@ -78,16 +80,16 @@ impl BinWrite for c_game_variant {
 
                 match self.m_game_engine {
                     e_game_engine::none => { Ok(()) }
-                    e_game_engine::ctf => { writer.write_be(&self.m_ctf_variant.as_ref().unwrap()) }
-                    e_game_engine::slayer => { writer.write_be(&self.m_slayer_variant.as_ref().unwrap()) }
-                    e_game_engine::oddball => { writer.write_be(&self.m_oddball_variant.as_ref().unwrap()) }
-                    e_game_engine::king => { writer.write_be(&self.m_king_variant.as_ref().unwrap()) }
-                    e_game_engine::sandbox => { writer.write_be(&self.m_sandbox_variant.as_ref().unwrap()) }
-                    e_game_engine::vip => { writer.write_be(&self.m_vip_variant.as_ref().unwrap()) }
-                    e_game_engine::juggernaut => { writer.write_be(&self.m_juggernaut_variant.as_ref().unwrap()) }
-                    e_game_engine::territories => { writer.write_be(&self.m_territories_variant.as_ref().unwrap()) }
-                    e_game_engine::assault => { writer.write_be(&self.m_assault_variant.as_ref().unwrap()) }
-                    e_game_engine::infection => { writer.write_be(&self.m_infection_variant.as_ref().unwrap()) }
+                    e_game_engine::ctf => { writer.write_be(&OPTION_TO_RESULT!(self.m_ctf_variant.as_ref(), BINRW_ERROR!("No CTF variant to write"))?) }
+                    e_game_engine::slayer => { writer.write_be(&OPTION_TO_RESULT!(self.m_slayer_variant.as_ref(), BINRW_ERROR!("No Slayer variant to write"))?) }
+                    e_game_engine::oddball => { writer.write_be(&OPTION_TO_RESULT!(self.m_oddball_variant.as_ref(), BINRW_ERROR!("No Oddball variant to write"))?) }
+                    e_game_engine::king => { writer.write_be(&OPTION_TO_RESULT!(self.m_king_variant.as_ref(), BINRW_ERROR!("No King of the Hill variant to write"))?) }
+                    e_game_engine::sandbox => { writer.write_be(&OPTION_TO_RESULT!(self.m_sandbox_variant.as_ref(), BINRW_ERROR!("No Forge variant to write"))?) }
+                    e_game_engine::vip => { writer.write_be(&OPTION_TO_RESULT!(self.m_vip_variant.as_ref(), BINRW_ERROR!("No VIP variant to write"))?) }
+                    e_game_engine::juggernaut => { writer.write_be(&OPTION_TO_RESULT!(self.m_juggernaut_variant.as_ref(), BINRW_ERROR!("No Juggernaut variant to write"))?) }
+                    e_game_engine::territories => { writer.write_be(&OPTION_TO_RESULT!(self.m_territories_variant.as_ref(), BINRW_ERROR!("No Territories variant to write"))?) }
+                    e_game_engine::assault => { writer.write_be(&OPTION_TO_RESULT!(self.m_assault_variant.as_ref(), BINRW_ERROR!("No Assault variant to write"))?) }
+                    e_game_engine::infection => { writer.write_be(&OPTION_TO_RESULT!(self.m_infection_variant.as_ref(), BINRW_ERROR!("No Infection variant to write"))?) }
                 }?;
 
                 let finished_offset = writer.stream_position()?;
@@ -105,16 +107,16 @@ impl BinWrite for c_game_variant {
 
                 match self.m_game_engine {
                     e_game_engine::none => { Ok(()) }
-                    e_game_engine::ctf => { writer.write_le(&self.m_ctf_variant.as_ref().unwrap()) }
-                    e_game_engine::slayer => { writer.write_le(&self.m_slayer_variant.as_ref().unwrap()) }
-                    e_game_engine::oddball => { writer.write_le(&self.m_oddball_variant.as_ref().unwrap()) }
-                    e_game_engine::king => { writer.write_le(&self.m_king_variant.as_ref().unwrap()) }
-                    e_game_engine::sandbox => { writer.write_le(&self.m_sandbox_variant.as_ref().unwrap()) }
-                    e_game_engine::vip => { writer.write_le(&self.m_vip_variant.as_ref().unwrap()) }
-                    e_game_engine::juggernaut => { writer.write_le(&self.m_juggernaut_variant.as_ref().unwrap()) }
-                    e_game_engine::territories => { writer.write_le(&self.m_territories_variant.as_ref().unwrap()) }
-                    e_game_engine::assault => { writer.write_le(&self.m_assault_variant.as_ref().unwrap()) }
-                    e_game_engine::infection => { writer.write_le(&self.m_infection_variant.as_ref().unwrap()) }
+                    e_game_engine::ctf => { writer.write_le(&OPTION_TO_RESULT!(self.m_ctf_variant.as_ref(), BINRW_ERROR!("No CTF variant to write"))?) }
+                    e_game_engine::slayer => { writer.write_le(&OPTION_TO_RESULT!(self.m_slayer_variant.as_ref(), BINRW_ERROR!("No Slayer variant to write"))?) }
+                    e_game_engine::oddball => { writer.write_le(&OPTION_TO_RESULT!(self.m_oddball_variant.as_ref(), BINRW_ERROR!("No Oddball variant to write"))?) }
+                    e_game_engine::king => { writer.write_le(&OPTION_TO_RESULT!(self.m_king_variant.as_ref(), BINRW_ERROR!("No King of the Hill variant to write"))?) }
+                    e_game_engine::sandbox => { writer.write_le(&OPTION_TO_RESULT!(self.m_sandbox_variant.as_ref(), BINRW_ERROR!("No Forge variant to write"))?) }
+                    e_game_engine::vip => { writer.write_le(&OPTION_TO_RESULT!(self.m_vip_variant.as_ref(), BINRW_ERROR!("No VIP variant to write"))?) }
+                    e_game_engine::juggernaut => { writer.write_le(&OPTION_TO_RESULT!(self.m_juggernaut_variant.as_ref(), BINRW_ERROR!("No Juggernaut variant to write"))?) }
+                    e_game_engine::territories => { writer.write_le(&OPTION_TO_RESULT!(self.m_territories_variant.as_ref(), BINRW_ERROR!("No Territories variant to write"))?) }
+                    e_game_engine::assault => { writer.write_le(&OPTION_TO_RESULT!(self.m_assault_variant.as_ref(), BINRW_ERROR!("No Assault variant to write"))?) }
+                    e_game_engine::infection => { writer.write_le(&OPTION_TO_RESULT!(self.m_infection_variant.as_ref(), BINRW_ERROR!("No Infection variant to write"))?) }
                 }?;
 
                 let finished_offset = writer.stream_position()?;
@@ -213,73 +215,76 @@ impl BinRead for c_game_variant {
 
 
 impl c_game_variant {
-    pub fn encode(&self, bitstream: &mut c_bitstream_writer) {
-        bitstream.write_raw(self.m_game_engine, 4);
+    pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
+        bitstream.write_raw(self.m_game_engine, 4)?;
 
-        self.m_base_variant.encode(bitstream);
+        self.m_base_variant.encode(bitstream)?;
 
         match self.m_game_engine {
             e_game_engine::none => { }
-            e_game_engine::ctf => { self.m_ctf_variant.as_ref().unwrap().encode(bitstream); }
-            e_game_engine::slayer => { self.m_slayer_variant.as_ref().unwrap().encode(bitstream); }
-            e_game_engine::oddball => { self.m_oddball_variant.as_ref().unwrap().encode(bitstream); }
-            e_game_engine::king => { self.m_king_variant.as_ref().unwrap().encode(bitstream); }
-            e_game_engine::sandbox => { self.m_sandbox_variant.as_ref().unwrap().encode(bitstream); }
-            e_game_engine::vip => { self.m_vip_variant.as_ref().unwrap().encode(bitstream); }
-            e_game_engine::juggernaut => { self.m_juggernaut_variant.as_ref().unwrap().encode(bitstream); }
-            e_game_engine::territories => { self.m_territories_variant.as_ref().unwrap().encode(bitstream); }
-            e_game_engine::assault => { self.m_assault_variant.as_ref().unwrap().encode(bitstream); }
-            e_game_engine::infection => { self.m_infection_variant.as_ref().unwrap().encode(bitstream); }
+            e_game_engine::ctf => { OPTION_TO_RESULT!(self.m_ctf_variant.as_ref(), "Can't write - CTF variant is None")?.encode(bitstream)?; }
+            e_game_engine::slayer => { OPTION_TO_RESULT!(self.m_slayer_variant.as_ref(), "Can't write - Slayer variant is None")?.encode(bitstream)?; }
+            e_game_engine::oddball => { OPTION_TO_RESULT!(self.m_oddball_variant.as_ref(), "Can't write - Oddball variant is None")?.encode(bitstream)?; }
+            e_game_engine::king => { OPTION_TO_RESULT!(self.m_king_variant.as_ref(), "Can't write - King of the Hill variant is None")?.encode(bitstream)?; }
+            e_game_engine::sandbox => { OPTION_TO_RESULT!(self.m_sandbox_variant.as_ref(), "Can't write - Forge variant is None")?.encode(bitstream)?; }
+            e_game_engine::vip => { OPTION_TO_RESULT!(self.m_vip_variant.as_ref(), "Can't write - VIP variant is None")?.encode(bitstream)?; }
+            e_game_engine::juggernaut => { OPTION_TO_RESULT!(self.m_juggernaut_variant.as_ref(), "Can't write - Juggernaut variant is None")?.encode(bitstream)?; }
+            e_game_engine::territories => { OPTION_TO_RESULT!(self.m_territories_variant.as_ref(), "Can't write - Territories variant is None")?.encode(bitstream)?; }
+            e_game_engine::assault => { OPTION_TO_RESULT!(self.m_assault_variant.as_ref(), "Can't write - Assault variant is None")?.encode(bitstream)?; }
+            e_game_engine::infection => { OPTION_TO_RESULT!(self.m_infection_variant.as_ref(), "Can't write - Infection variant is None")?.encode(bitstream)?; }
         }
 
+        Ok(())
     }
 
-    pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) {
-        self.m_game_engine = bitstream.read_enum(4);
-        self.m_base_variant.decode(bitstream);
+    pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
+        self.m_game_engine = bitstream.read_enum(4)?;
+        self.m_base_variant.decode(bitstream)?;
 
         match self.m_game_engine {
             e_game_engine::none => { }
             e_game_engine::ctf => {
                 self.m_ctf_variant = Some(c_game_engine_ctf_variant::default());
-                self.m_ctf_variant.as_mut().unwrap().decode(bitstream);
+                self.m_ctf_variant.as_mut().expect("Variant should never be None").decode(bitstream)?;
             }
             e_game_engine::slayer => {
                 self.m_slayer_variant = Some(c_game_engine_slayer_variant::default());
-                self.m_slayer_variant.as_mut().unwrap().decode(bitstream);
+                self.m_slayer_variant.as_mut().expect("Variant should never be None").decode(bitstream)?;
             }
             e_game_engine::oddball => {
                 self.m_oddball_variant = Some(c_game_engine_oddball_variant::default());
-                self.m_oddball_variant.as_mut().unwrap().decode(bitstream);
+                self.m_oddball_variant.as_mut().expect("Variant should never be None").decode(bitstream)?;
             }
             e_game_engine::king => {
                 self.m_king_variant = Some(c_game_engine_king_variant::default());
-                self.m_king_variant.as_mut().unwrap().decode(bitstream);
+                self.m_king_variant.as_mut().expect("Variant should never be None").decode(bitstream)?;
             }
             e_game_engine::sandbox => {
                 self.m_sandbox_variant = Some(c_game_engine_sandbox_variant::default());
-                self.m_sandbox_variant.as_mut().unwrap().decode(bitstream);
+                self.m_sandbox_variant.as_mut().expect("Variant should never be None").decode(bitstream)?;
             }
             e_game_engine::vip => {
                 self.m_vip_variant = Some(c_game_engine_vip_variant::default());
-                self.m_vip_variant.as_mut().unwrap().decode(bitstream);
+                self.m_vip_variant.as_mut().expect("Variant should never be None").decode(bitstream)?;
             }
             e_game_engine::juggernaut => {
                 self.m_juggernaut_variant = Some(c_game_engine_juggernaut_variant::default());
-                self.m_juggernaut_variant.as_mut().unwrap().decode(bitstream);
+                self.m_juggernaut_variant.as_mut().expect("Variant should never be None").decode(bitstream)?;
             }
             e_game_engine::territories => {
                 self.m_territories_variant = Some(c_game_engine_territories_variant::default());
-                self.m_territories_variant.as_mut().unwrap().decode(bitstream);
+                self.m_territories_variant.as_mut().expect("Variant should never be None").decode(bitstream)?;
             }
             e_game_engine::assault => {
                 self.m_assault_variant = Some(c_game_engine_assault_variant::default());
-                self.m_assault_variant.as_mut().unwrap().decode(bitstream);
+                self.m_assault_variant.as_mut().expect("Variant should never be None").decode(bitstream)?;
             }
             e_game_engine::infection => {
                 self.m_infection_variant = Some(c_game_engine_infection_variant::default());
-                self.m_infection_variant.as_mut().unwrap().decode(bitstream);
+                self.m_infection_variant.as_mut().expect("Variant should never be None").decode(bitstream)?;
             }
         }
+
+        Ok(())
     }
 }

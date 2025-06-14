@@ -11,9 +11,9 @@ lazy_static! {
 }
 
 pub fn crc32(mut crc: u32, buffer: &Vec<u8>) -> u32 {
-    let mut initialized = CRC_TABLE_INITIALIZED.lock().unwrap();
+    let mut initialized = CRC_TABLE_INITIALIZED.lock().expect("Failed to lock CRC_TABLE_INITIALIZED, possible double-lock");
     if !*initialized {
-        let mut table = CRC_TABLE.lock().unwrap();
+        let mut table = CRC_TABLE.lock().expect("Failed to lock CRC_TABLE, possible double-lock");
         for byte in 0..256 {
             let mut crc = byte as u32;
             for _ in 0..8 {
@@ -29,7 +29,7 @@ pub fn crc32(mut crc: u32, buffer: &Vec<u8>) -> u32 {
     }
     drop(initialized);
 
-    let table = CRC_TABLE.lock().unwrap();
+    let table = CRC_TABLE.lock().expect("Failed to lock CRC_TABLE, possible double-lock");
     for &byte in buffer {
         crc = table[((crc ^ byte as u32) & 0xFF) as usize] ^ (crc >> 8);
     }

@@ -1,7 +1,7 @@
 use std::io::{Read, Seek, Write};
 use binrw::{BinRead, BinResult, BinWrite, BinWriterExt, Endian};
 use serde::{Deserialize, Serialize};
-use blf_lib::BINRW_ERROR;
+use blf_lib::BINRW_RESULT;
 use blf_lib::blam::common::memory::secure_signature::s_network_http_request_hash;
 use blf_lib::io::bitstream::{c_bitstream_reader, create_bitstream_writer, e_bitstream_byte_order};
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
@@ -62,20 +62,20 @@ impl BinRead for s_blf_chunk_game_set {
 
         let mut game_set = Self::default();
 
-        game_set.game_entry_count = bitstream.read_integer(6) as usize;
+        game_set.game_entry_count = BINRW_RESULT!(bitstream.read_integer(6))? as usize;
         game_set.game_entries.resize(game_set.game_entry_count, s_blf_chunk_game_set_entry::default());
 
         for i in 0..game_set.game_entry_count {
             let game_entry = &mut game_set.game_entries.as_mut_slice()[i];
-            game_entry.weight = bitstream.read_integer(32);
-            game_entry.minimum_player_count = bitstream.read_integer(4) as u8;
-            game_entry.skip_after_veto = bitstream.read_bool();
-            game_entry.optional = bitstream.read_bool();
-            game_entry.map_id = bitstream.read_integer(32);
-            BINRW_ERROR!(game_entry.game_variant_file_name.set_string(&BINRW_ERROR!(bitstream.read_string_utf8(32))?))?;
-            game_entry.game_variant_file_hash = s_network_http_request_hash::try_from(bitstream.read_raw_data(0xA0)).unwrap();
-            BINRW_ERROR!(game_entry.map_variant_file_name.set_string(&BINRW_ERROR!(bitstream.read_string_utf8(32))?))?;
-            game_entry.map_variant_file_hash = s_network_http_request_hash::try_from(bitstream.read_raw_data(0xA0)).unwrap();
+            game_entry.weight = BINRW_RESULT!(bitstream.read_integer(32))?;
+            game_entry.minimum_player_count = BINRW_RESULT!(bitstream.read_integer(4))? as u8;
+            game_entry.skip_after_veto = BINRW_RESULT!(bitstream.read_bool())?;
+            game_entry.optional = BINRW_RESULT!(bitstream.read_bool())?;
+            game_entry.map_id = BINRW_RESULT!(bitstream.read_integer(32))?;
+            BINRW_RESULT!(game_entry.game_variant_file_name.set_string(&BINRW_RESULT!(bitstream.read_string_utf8(32))?))?;
+            game_entry.game_variant_file_hash = BINRW_RESULT!(s_network_http_request_hash::try_from(BINRW_RESULT!(bitstream.read_raw_data(0xA0))?))?;
+            BINRW_RESULT!(game_entry.map_variant_file_name.set_string(&BINRW_RESULT!(bitstream.read_string_utf8(32))?))?;
+            game_entry.map_variant_file_hash = BINRW_RESULT!(s_network_http_request_hash::try_from(BINRW_RESULT!(bitstream.read_raw_data(0xA0))?))?;
         }
 
         Ok(game_set)
@@ -88,19 +88,19 @@ impl BinWrite for s_blf_chunk_game_set {
     fn write_options<W: Write + Seek>(&self, writer: &mut W, endian: Endian, args: Self::Args<'_>) -> BinResult<()> {
         let mut bitstream = create_bitstream_writer(0x1BC0, e_bitstream_byte_order::_bitstream_byte_order_big_endian);
 
-        bitstream.write_integer(self.game_entry_count as u32, 6);
+        BINRW_RESULT!(bitstream.write_integer(self.game_entry_count as u32, 6))?;
 
         for i in 0..self.game_entry_count {
             let game_entry = self.game_entries[i];
-            bitstream.write_integer(game_entry.weight, 32);
-            bitstream.write_integer(game_entry.minimum_player_count as u32, 4);
-            bitstream.write_bool(game_entry.skip_after_veto);
-            bitstream.write_bool(game_entry.optional);
-            bitstream.write_integer(game_entry.map_id, 32);
-            bitstream.write_string_utf8(&game_entry.game_variant_file_name.get_string(), 32);
-            bitstream.write_raw_data(&game_entry.game_variant_file_hash.data, 0xA0);
-            bitstream.write_string_utf8(&game_entry.map_variant_file_name.get_string(), 32);
-            bitstream.write_raw_data(&game_entry.map_variant_file_hash.data, 0xA0);
+            BINRW_RESULT!(bitstream.write_integer(game_entry.weight, 32))?;
+            BINRW_RESULT!(bitstream.write_integer(game_entry.minimum_player_count as u32, 4))?;
+            BINRW_RESULT!(bitstream.write_bool(game_entry.skip_after_veto))?;
+            BINRW_RESULT!(bitstream.write_bool(game_entry.optional))?;
+            BINRW_RESULT!(bitstream.write_integer(game_entry.map_id, 32))?;
+            BINRW_RESULT!(bitstream.write_string_utf8(&BINRW_RESULT!(game_entry.game_variant_file_name.get_string())?, 32))?;
+            BINRW_RESULT!(bitstream.write_raw_data(&game_entry.game_variant_file_hash.data, 0xA0))?;
+            BINRW_RESULT!(bitstream.write_string_utf8(&BINRW_RESULT!(game_entry.map_variant_file_name.get_string())?, 32))?;
+            BINRW_RESULT!(bitstream.write_raw_data(&game_entry.map_variant_file_hash.data, 0xA0))?;
         }
 
         writer.write_ne(&close_bitstream_writer(&mut bitstream))

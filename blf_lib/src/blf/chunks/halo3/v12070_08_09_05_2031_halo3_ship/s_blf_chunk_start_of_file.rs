@@ -2,6 +2,7 @@ use binrw::binrw;
 #[cfg(feature = "napi")]
 use napi_derive::napi;
 use serde::{Deserialize, Serialize};
+use blf_lib_derivable::result::BLFLibResult;
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
 use blf_lib_derive::BlfChunk;
 use crate::types::byte_order_mark::byte_order_mark;
@@ -25,10 +26,10 @@ pub struct s_blf_chunk_start_of_file
 impl BlfChunkHooks for s_blf_chunk_start_of_file {}
 
 impl s_blf_chunk_start_of_file {
-    pub fn new(name: &str, byte_order_mark: byte_order_mark) -> s_blf_chunk_start_of_file {
-        s_blf_chunk_start_of_file {
+    pub fn new(name: &str, byte_order_mark: byte_order_mark) -> BLFLibResult<s_blf_chunk_start_of_file> {
+        Ok(s_blf_chunk_start_of_file {
             byte_order_mark,
-            name: StaticString::from_string(name.to_string()).unwrap(),
-        }
+            name: StaticString::from_string(name.to_string())?,
+        })
     }
 }

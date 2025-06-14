@@ -1,9 +1,10 @@
 use std::error::Error;
 use std::u32;
-use binrw::binrw;
+use binrw::{binrw, BinResult};
 use serde::{Deserialize, Serialize};
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
 use blf_lib_derive::BlfChunk;
+use blf_lib_derivable::result::BLFLibResult;
 use crate::types::c_string::StaticString;
 
 const MAX_MATCHMAKING_TIP_COUNT: usize = 32usize;
@@ -24,11 +25,11 @@ pub struct s_blf_chunk_matchmaking_tips
 impl BlfChunkHooks for s_blf_chunk_matchmaking_tips {}
 
 impl s_blf_chunk_matchmaking_tips {
-    pub fn get_tips(&self) -> Vec<String> {
+    pub fn get_tips(&self) -> BLFLibResult<Vec<String>> {
         self.tips.iter().map(|tip|tip.get_string()).collect()
     }
 
-    fn set_tips(&mut self, tips: Vec<String>) -> Result<(), Box<dyn Error>> {
+    fn set_tips(&mut self, tips: Vec<String>) -> BLFLibResult{
         if tips.len() > MAX_MATCHMAKING_TIP_COUNT {
             return Err(format!("Too many tips! {}/{MAX_MATCHMAKING_TIP_COUNT}", tips.len()).into())
         }
@@ -49,9 +50,9 @@ impl s_blf_chunk_matchmaking_tips {
         Ok(())
     }
 
-    pub fn create(tips: Vec<String>) -> s_blf_chunk_matchmaking_tips {
+    pub fn create(tips: Vec<String>) -> BLFLibResult<s_blf_chunk_matchmaking_tips> {
         let mut new = Self::default();
-        new.set_tips(tips).unwrap();
-        new
+        new.set_tips(tips)?;
+        Ok(new)
     }
 }

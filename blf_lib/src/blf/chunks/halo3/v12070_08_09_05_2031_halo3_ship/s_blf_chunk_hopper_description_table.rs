@@ -2,7 +2,7 @@ use std::error::Error;
 use std::io::{Read, Seek, Write};
 use binrw::{BinRead, BinResult, BinWrite, BinWriterExt, Endian};
 use serde::{Deserialize, Serialize};
-use blf_lib::BINRW_ERROR;
+use blf_lib::BINRW_RESULT;
 use blf_lib::io::bitstream::{c_bitstream_reader, create_bitstream_writer, e_bitstream_byte_order};
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
 use blf_lib_derive::BlfChunk;
@@ -60,14 +60,14 @@ impl BinRead for s_blf_chunk_hopper_description_table {
 
         let mut mhdf = Self::default();
 
-        mhdf.description_count = bitstream.read_integer(6) as usize;
+        mhdf.description_count = bitstream.read_integer(6)? as usize;
         mhdf.descriptions.resize(mhdf.description_count, s_game_hopper_description::default());
 
         for i in 0..mhdf.description_count {
             let description = &mut mhdf.descriptions[i];
-            description.identifier = bitstream.read_integer(16) as u16;
-            description.hopper_type = bitstream.read_bool();
-            BINRW_ERROR!(description.description.set_string(&BINRW_ERROR!(bitstream.read_string_utf8(256))?))?;
+            description.identifier = bitstream.read_integer(16)? as u16;
+            description.hopper_type = bitstream.read_bool()?;
+            BINRW_RESULT!(description.description.set_string(&BINRW_RESULT!(bitstream.read_string_utf8(256))?))?;
         }
 
         Ok(mhdf)
@@ -86,7 +86,7 @@ impl BinWrite for s_blf_chunk_hopper_description_table {
             let description = &self.descriptions[i];
             bitstream.write_integer(description.identifier as u32, 16);
             bitstream.write_bool(description.hopper_type);
-            bitstream.write_string_utf8(&description.description.get_string(), 256);
+            bitstream.write_string_utf8(&description.description.get_string()?, 256);
         }
 
         writer.write_ne(&close_bitstream_writer(&mut bitstream))

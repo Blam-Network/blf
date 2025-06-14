@@ -1,4 +1,3 @@
-use std::error::Error;
 use binrw::{BinRead, BinWrite};
 #[cfg(feature = "napi")]
 use napi_derive::napi;
@@ -8,6 +7,7 @@ use crate::types::c_string::StaticString;
 use crate::types::c_string::StaticWcharString;
 use serde_hex::{SerHex,StrictCap};
 use wasm_bindgen::prelude::wasm_bindgen;
+use blf_lib_derivable::result::BLFLibResult;
 use blf_lib::types::time::time64_t;
 use blf_lib_derive::TestSize;
 use crate::types::bool::Bool;
@@ -57,42 +57,44 @@ pub struct s_content_item_metadata {
 }
 
 impl s_content_item_metadata {
-    pub fn encode(&self, bitstream: &mut c_bitstream_writer) {
-        bitstream.write_qword(self.unique_id, 64);
-        bitstream.write_string_wchar(&self.name.get_string(), 32);
-        bitstream.write_string_utf8(&self.description.get_string(), 128);
-        bitstream.write_string_utf8(&self.author.get_string(), 16);
-        bitstream.write_signed_integer(self.file_type + 1, 5);
-        bitstream.write_bool(self.author_is_xuid_online);
-        bitstream.write_qword(self.author_id , 64);
-        bitstream.write_qword(self.size_in_bytes, 64);
-        bitstream.write_qword(self.date, 64);
-        bitstream.write_integer(self.length_seconds, 32);
-        bitstream.write_signed_integer(self.campaign_id, 32);
-        bitstream.write_signed_integer(self.map_id, 32);
-        bitstream.write_integer(self.game_engine_type, 4);
-        bitstream.write_signed_integer(self.campaign_difficulty + 1, 3);
-        bitstream.write_signed_integer(self.hopper_id as i32, 16);
-        bitstream.write_qword(self.game_id, 64);
+    pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
+        bitstream.write_qword(self.unique_id, 64)?;
+        bitstream.write_string_wchar(&self.name.get_string(), 32)?;
+        bitstream.write_string_utf8(&self.description.get_string()?, 128)?;
+        bitstream.write_string_utf8(&self.author.get_string()?, 16)?;
+        bitstream.write_signed_integer(self.file_type + 1, 5)?;
+        bitstream.write_bool(self.author_is_xuid_online)?;
+        bitstream.write_qword(self.author_id , 64)?;
+        bitstream.write_qword(self.size_in_bytes, 64)?;
+        bitstream.write_qword(self.date, 64)?;
+        bitstream.write_integer(self.length_seconds, 32)?;
+        bitstream.write_signed_integer(self.campaign_id, 32)?;
+        bitstream.write_signed_integer(self.map_id, 32)?;
+        bitstream.write_integer(self.game_engine_type, 4)?;
+        bitstream.write_signed_integer(self.campaign_difficulty + 1, 3)?;
+        bitstream.write_signed_integer(self.hopper_id as i32, 16)?;
+        bitstream.write_qword(self.game_id, 64)?;
+
+        Ok(())
     }
 
-    pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> Result<(), Box<dyn Error>> {
-        self.unique_id = bitstream.read_qword(64);
+    pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
+        self.unique_id = bitstream.read_qword(64)?;
         self.name.set_string(&bitstream.read_string_whar(32)?)?;
         self.description.set_string(&bitstream.read_string_utf8(128)?)?;
         self.author.set_string(&bitstream.read_string_utf8(16)?)?;
-        self.file_type = bitstream.read_signed_integer(5) - 1;
-        self.author_is_xuid_online = Bool::from(bitstream.read_bool());
-        self.author_id = bitstream.read_qword(64);
-        self.size_in_bytes = bitstream.read_qword(64);
-        self.date = time64_t::from(bitstream.read_qword(64));
-        self.length_seconds = bitstream.read_integer(32);
-        self.campaign_id = bitstream.read_signed_integer(32);
-        self.map_id = bitstream.read_signed_integer(32);
-        self.game_engine_type = bitstream.read_integer(4);
-        self.campaign_difficulty = bitstream.read_signed_integer(3) - 1;
-        self.hopper_id = bitstream.read_i16(16);
-        self.game_id = bitstream.read_qword(64);
+        self.file_type = bitstream.read_signed_integer(5)? - 1;
+        self.author_is_xuid_online = Bool::from(bitstream.read_bool()?);
+        self.author_id = bitstream.read_qword(64)?;
+        self.size_in_bytes = bitstream.read_qword(64)?;
+        self.date = time64_t::from(bitstream.read_qword(64)?);
+        self.length_seconds = bitstream.read_integer(32)?;
+        self.campaign_id = bitstream.read_signed_integer(32)?;
+        self.map_id = bitstream.read_signed_integer(32)?;
+        self.game_engine_type = bitstream.read_integer(4)?;
+        self.campaign_difficulty = bitstream.read_signed_integer(3)? - 1;
+        self.hopper_id = bitstream.read_i16(16)?;
+        self.game_id = bitstream.read_qword(64)?;
 
         Ok(())
     }

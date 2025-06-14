@@ -6,7 +6,7 @@ use flate2::read::{ZlibDecoder};
 use flate2::write::ZlibEncoder;
 use lazy_static::lazy_static;
 use serde::{Deserialize, Serialize};
-use blf_lib::BINRW_ERROR;
+use blf_lib::BINRW_RESULT;
 use blf_lib_derivable::blf::chunks::{BlfChunk, BlfChunkHooks, ReadableBlfChunk, SerializableBlfChunk};
 use blf_lib_derivable::blf::s_blf_header::s_blf_header;
 use blf_lib_derivable::types::chunk_signature::chunk_signature;
@@ -59,7 +59,7 @@ impl<T> BinWrite for s_blf_chunk_compressed_data<T> where T: BlfChunk + Serializ
     type Args<'a> = ();
 
     fn write_options<W: Write + Seek>(&self, writer: &mut W, endian: Endian, args: Self::Args<'_>) -> BinResult<()> {
-        let data = BINRW_ERROR!(self.chunk.clone().write(&Vec::new()))?;
+        let data = BINRW_RESULT!(self.chunk.clone().write(&Vec::new()))?;
         let mut e = ZlibEncoder::new(Vec::new(), Compression::new(9));
         e.write_all(data.as_slice())?;
         let compressed_data = e.finish()?;
@@ -90,7 +90,7 @@ impl<T> BinRead for s_blf_chunk_compressed_data<T> where T: BlfChunk + Serializa
 
         // Read uncompressed chunk
         let (header_buffer, chunk_buffer) = uncompressed_buffer.split_at(s_blf_header::size());
-        let header = BINRW_ERROR!(s_blf_header::decode(header_buffer))?;
+        let header = BINRW_RESULT!(s_blf_header::decode(header_buffer))?;
 
         if header.signature != T::get_signature() || header.version != T::get_version() {
             return Err(binrw::error::Error::Custom {
@@ -102,7 +102,7 @@ impl<T> BinRead for s_blf_chunk_compressed_data<T> where T: BlfChunk + Serializa
             })
         }
 
-        let chunk = BINRW_ERROR!(T::read(chunk_buffer.into(), Some(header)))?;
+        let chunk = BINRW_RESULT!(T::read(chunk_buffer.into(), Some(header)))?;
 
         Ok(Self {
             compression_type,

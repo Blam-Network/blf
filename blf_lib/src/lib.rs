@@ -12,7 +12,7 @@ pub mod blam;
 pub mod blf;
 pub mod types;
 pub mod io;
-mod result;
+pub mod result;
 
 pub use blf_lib_derive::*;
 

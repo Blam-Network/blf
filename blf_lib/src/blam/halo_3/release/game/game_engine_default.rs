@@ -7,6 +7,7 @@ use blf_lib::blam::halo_3::release::game::game_engine_traits::{c_game_engine_mis
 use crate::blam::halo_3::release::saved_games::saved_game_files::s_content_item_metadata;
 use blf_lib::io::bitstream::{c_bitstream_reader, c_bitstream_writer};
 use blf_lib::{SET_BIT, TEST_BIT};
+use blf_lib_derivable::result::BLFLibResult;
 
 pub const k_game_engine_type_count: usize = 11;
 
@@ -18,24 +19,28 @@ pub struct c_game_engine_social_options {
 }
 
 impl c_game_engine_social_options {
-    pub fn encode(&self, bitstream: &mut c_bitstream_writer) {
-        bitstream.write_bool(false);
-        bitstream.write_integer(self.m_team_changing as u32, 2);
-        bitstream.write_bool(TEST_BIT!(self.m_flags, 0));
-        bitstream.write_bool(TEST_BIT!(self.m_flags, 1));
-        bitstream.write_bool(TEST_BIT!(self.m_flags, 2));
-        bitstream.write_bool(TEST_BIT!(self.m_flags, 3));
-        bitstream.write_bool(TEST_BIT!(self.m_flags, 4));
+    pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
+        bitstream.write_bool(false)?; // TODO: what is this
+        bitstream.write_integer(self.m_team_changing as u32, 2)?;
+        bitstream.write_bool(TEST_BIT!(self.m_flags, 0))?;
+        bitstream.write_bool(TEST_BIT!(self.m_flags, 1))?;
+        bitstream.write_bool(TEST_BIT!(self.m_flags, 2))?;
+        bitstream.write_bool(TEST_BIT!(self.m_flags, 3))?;
+        bitstream.write_bool(TEST_BIT!(self.m_flags, 4))?;
+
+        Ok(())
     }
 
-    pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) {
-        bitstream.read_bool();
-        self.m_team_changing = bitstream.read_integer(2) as u16;
-        SET_BIT!(self.m_flags, 0, bitstream.read_bool());
-        SET_BIT!(self.m_flags, 1, bitstream.read_bool());
-        SET_BIT!(self.m_flags, 2, bitstream.read_bool());
-        SET_BIT!(self.m_flags, 3, bitstream.read_bool());
-        SET_BIT!(self.m_flags, 4, bitstream.read_bool());
+    pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
+        bitstream.read_bool()?;
+        self.m_team_changing = bitstream.read_integer(2)? as u16;
+        SET_BIT!(self.m_flags, 0, bitstream.read_bool()?);
+        SET_BIT!(self.m_flags, 1, bitstream.read_bool()?);
+        SET_BIT!(self.m_flags, 2, bitstream.read_bool()?);
+        SET_BIT!(self.m_flags, 3, bitstream.read_bool()?);
+        SET_BIT!(self.m_flags, 4, bitstream.read_bool()?);
+
+        Ok(())
     }
 }
 
@@ -56,32 +61,36 @@ pub struct c_game_engine_map_override_options {
 }
 
 impl c_game_engine_map_override_options {
-    pub fn encode(&self, bitstream: &mut c_bitstream_writer) {
-        bitstream.write_bool(TEST_BIT!(self.m_flags, 0));
-        bitstream.write_bool(TEST_BIT!(self.m_flags, 1));
-        self.m_base_player_traits.encode(bitstream);
-        bitstream.write_signed_integer(self.m_weapon_set_absolute_index as i32, 8);
-        bitstream.write_signed_integer(self.m_vehicle_set_absolute_index as i32, 8);
-        self.m_red_powerup_traits.encode(bitstream);
-        self.m_blue_powerup_traits.encode(bitstream);
-        self.m_yellow_powerup_traits.encode(bitstream);
-        bitstream.write_integer(self.m_red_powerup_duration_seconds as u32, 7);
-        bitstream.write_integer(self.m_blue_powerup_duration_seconds as u32, 7);
-        bitstream.write_integer(self.m_yellow_powerup_duration_seconds as u32, 7);
+    pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
+        bitstream.write_bool(TEST_BIT!(self.m_flags, 0))?;
+        bitstream.write_bool(TEST_BIT!(self.m_flags, 1))?;
+        self.m_base_player_traits.encode(bitstream)?;
+        bitstream.write_signed_integer(self.m_weapon_set_absolute_index as i32, 8)?;
+        bitstream.write_signed_integer(self.m_vehicle_set_absolute_index as i32, 8)?;
+        self.m_red_powerup_traits.encode(bitstream)?;
+        self.m_blue_powerup_traits.encode(bitstream)?;
+        self.m_yellow_powerup_traits.encode(bitstream)?;
+        bitstream.write_integer(self.m_red_powerup_duration_seconds as u32, 7)?;
+        bitstream.write_integer(self.m_blue_powerup_duration_seconds as u32, 7)?;
+        bitstream.write_integer(self.m_yellow_powerup_duration_seconds as u32, 7)?;
+
+        Ok(())
     }
 
-    pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) {
-        SET_BIT!(self.m_flags, 0, bitstream.read_bool());
-        SET_BIT!(self.m_flags, 1, bitstream.read_bool());
-        self.m_base_player_traits.decode(bitstream);
-        self.m_weapon_set_absolute_index = bitstream.read_signed_integer(8) as i16;
-        self.m_vehicle_set_absolute_index = bitstream.read_signed_integer(8) as i16;
-        self.m_red_powerup_traits.decode(bitstream);
-        self.m_blue_powerup_traits.decode(bitstream);
-        self.m_yellow_powerup_traits.decode(bitstream);
-        self.m_red_powerup_duration_seconds = bitstream.read_integer(7) as u8;
-        self.m_blue_powerup_duration_seconds = bitstream.read_integer(7) as u8;
-        self.m_yellow_powerup_duration_seconds = bitstream.read_integer(7) as u8;
+    pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
+        SET_BIT!(self.m_flags, 0, bitstream.read_bool()?);
+        SET_BIT!(self.m_flags, 1, bitstream.read_bool()?);
+        self.m_base_player_traits.decode(bitstream)?;
+        self.m_weapon_set_absolute_index = bitstream.read_signed_integer(8)? as i16;
+        self.m_vehicle_set_absolute_index = bitstream.read_signed_integer(8)? as i16;
+        self.m_red_powerup_traits.decode(bitstream)?;
+        self.m_blue_powerup_traits.decode(bitstream)?;
+        self.m_yellow_powerup_traits.decode(bitstream)?;
+        self.m_red_powerup_duration_seconds = bitstream.read_integer(7)? as u8;
+        self.m_blue_powerup_duration_seconds = bitstream.read_integer(7)? as u8;
+        self.m_yellow_powerup_duration_seconds = bitstream.read_integer(7)? as u8;
+
+        Ok(())
     }
 }
 
@@ -102,23 +111,27 @@ pub struct c_game_engine_base_variant {
 }
 
 impl c_game_engine_base_variant {
-    pub fn encode(&self, bitstream: &mut c_bitstream_writer) {
-        self.m_metadata.encode(bitstream);
-        bitstream.write_integer(self.m_flags as u32, 1);
-        self.m_miscellaneous_options.encode(bitstream);
-        self.m_respawn_options.encode(bitstream);
-        self.m_social_options.encode(bitstream);
-        self.m_map_override_options.encode(bitstream);
-        bitstream.write_integer(self.m_team_scoring_method as u32, 3);
+    pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult<()> {
+        self.m_metadata.encode(bitstream)?;
+        bitstream.write_integer(self.m_flags as u32, 1)?;
+        self.m_miscellaneous_options.encode(bitstream)?;
+        self.m_respawn_options.encode(bitstream)?;
+        self.m_social_options.encode(bitstream)?;
+        self.m_map_override_options.encode(bitstream)?;
+        bitstream.write_integer(self.m_team_scoring_method as u32, 3)?;
+
+        Ok(())
     }
 
-    pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) {
-        self.m_metadata.decode(bitstream);
-        self.m_flags = bitstream.read_u16(1);
+    pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult<()> {
+        self.m_metadata.decode(bitstream)?;
+        self.m_flags = bitstream.read_u16(1)?;
         self.m_miscellaneous_options.decode(bitstream);
         self.m_respawn_options.decode(bitstream);
         self.m_social_options.decode(bitstream);
         self.m_map_override_options.decode(bitstream);
-        self.m_team_scoring_method = bitstream.read_u16(3);
+        self.m_team_scoring_method = bitstream.read_u16(3)?;
+
+        Ok(())
     }
 }

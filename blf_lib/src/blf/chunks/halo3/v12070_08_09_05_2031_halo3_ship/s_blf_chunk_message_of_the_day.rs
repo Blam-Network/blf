@@ -3,6 +3,7 @@ use binrw::{BinRead, BinReaderExt, BinResult, BinWrite, BinWriterExt, Endian};
 use serde::{Deserialize, Serialize};
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
 use blf_lib_derive::BlfChunk;
+use crate::BINRW_RESULT;
 
 #[derive(BlfChunk,Default,PartialEq,Debug,Clone,Serialize,Deserialize)]
 #[Header("motd", 1.1)]
@@ -31,7 +32,7 @@ impl BinRead for s_blf_chunk_message_of_the_day {
         let length: u32 = reader.read_be()?;
         let mut bytes = Vec::new();
         reader.read_to_end(&mut bytes)?;
-        let message = String::from_utf8(bytes).unwrap();
+        let message = BINRW_RESULT!(String::from_utf8(bytes))?;
 
         Ok(Self {
             motd_length: length,

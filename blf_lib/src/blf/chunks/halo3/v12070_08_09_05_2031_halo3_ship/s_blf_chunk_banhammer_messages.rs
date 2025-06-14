@@ -4,6 +4,7 @@ use binrw::binrw;
 use serde::{Deserialize, Serialize};
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
 use blf_lib_derive::BlfChunk;
+use blf_lib_derivable::result::BLFLibResult;
 use crate::types::c_string::StaticString;
 
 const k_banhammmer_messages_max_messages: usize = 32usize;
@@ -24,11 +25,11 @@ pub struct s_blf_chunk_banhammer_messages
 impl BlfChunkHooks for s_blf_chunk_banhammer_messages {}
 
 impl s_blf_chunk_banhammer_messages {
-    pub fn get_messages(&self) -> Vec<String> {
+    pub fn get_messages(&self) -> BLFLibResult<Vec<String>> {
         self.messages.iter().map(|message|message.get_string()).collect()
     }
 
-    fn set_messages(&mut self, messages: Vec<String>) -> Result<(), Box<dyn Error>> {
+    fn set_messages(&mut self, messages: Vec<String>) -> BLFLibResult {
         if messages.len() > k_banhammmer_messages_max_messages {
             return Err(format!("Too many banhammer messages! {}/{k_banhammmer_messages_max_messages}", messages.len()).into())
         }
@@ -45,13 +46,13 @@ impl s_blf_chunk_banhammer_messages {
 
             self.messages.push(message);
         }
-        // self.message_count = self.messages.len() as u32;
+
         Ok(())
     }
 
-    pub fn create(messages: Vec<String>) -> s_blf_chunk_banhammer_messages {
+    pub fn create(messages: Vec<String>) -> BLFLibResult<s_blf_chunk_banhammer_messages> {
         let mut new = Self::default();
-        new.set_messages(messages).unwrap();
-        new
+        new.set_messages(messages)?;
+        Ok(new)
     }
 }

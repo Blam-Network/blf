@@ -35,9 +35,9 @@ fn get_h3_release_screenshot_data(data: Vec<u8>) -> Option<ScreenshotData> {
     Some(ScreenshotData {
         build_number: content_header.build_number,
         name: content_header.metadata.name.get_string(),
-        author: content_header.metadata.author.get_string(),
+        author: content_header.metadata.author.get_string().ok()?,
         author_xuid: content_header.metadata.author_id,
-        description: content_header.metadata.description.get_string(),
+        description: content_header.metadata.description.get_string().ok()?,
         unique_id: content_header.metadata.unique_id,
         game_id: content_header.metadata.game_id,
         hopper_id:

@@ -3,6 +3,7 @@ use std::fs::File;
 use std::io::{Cursor, Read};
 use binrw::{BinRead, BinReaderExt, BinWrite};
 use std::ffi::c_char;
+use blf_lib_derivable::result::BLFLibResult;
 use blf_lib::types::array::StaticArray;
 use crate::types::c_string::StaticString;
 use crate::types::c_string::to_string;
@@ -23,18 +24,18 @@ pub struct s_cache_file_header_v11 {
 }
 
 impl s_cache_file_header_v11 {
-    pub fn read(path: String) -> Result<Self, Box<dyn Error>> {
+    pub fn read(path: String) -> BLFLibResult<Self> {
         let mut input_file = File::open(path)?;
         let mut buffer = [0u8; 0x3000];
         input_file.read_exact(buffer.as_mut_slice()).expect("Failed to read cache file.");
         let mut reader = Cursor::new(buffer);
         let cache_file: s_cache_file_header_v11 = reader.read_ne()?;
 
-        if to_string(&cache_file.head) != "head" {
+        if to_string(&cache_file.head)? != "head" {
             return Err("Invalid cache file: Missing head.".into())
         }
 
-        if to_string(&cache_file.foot) != "foot" {
+        if to_string(&cache_file.foot)? != "foot" {
             return Err("Invalid cache file: Missing foot.".into())
         }
 

@@ -30,7 +30,8 @@ impl Default for s_blf_chunk_player_data {
             hopper_access: 0,
             bungie_user_role: 0xffff,
             unknown1: 0,
-            hopper_directory: StaticString::from_string("default_hoppers").unwrap(),
+            hopper_directory: StaticString::from_string("default_hoppers")
+                .expect("Default hopper_directory must be valid."),
             unknown2: StaticArray::default(),
             unknown3: 1,
         }

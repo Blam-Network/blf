@@ -6,10 +6,10 @@ use std::error::Error;
 use std::fs::File;
 use std::io::{Cursor, Read, Seek};
 use serde::Deserialize;
-use blf_lib::BINRW_ERROR;
+use blf_lib::BINRW_RESULT;
 use blf_lib::blf::s_blf_header;
 pub use blf_lib_derivable::blf::chunks::*;
-
+use blf_lib_derivable::result::BLFLibResult;
 
 pub fn find_chunk<'a, T: BlfChunk + SerializableBlfChunk + ReadableBlfChunk>(buffer: Vec<u8>) -> Result<T, Box<dyn Error>> {
     let mut cursor = Cursor::new(buffer);
@@ -21,7 +21,7 @@ pub fn find_chunk<'a, T: BlfChunk + SerializableBlfChunk + ReadableBlfChunk>(buf
         if header.signature == T::get_signature() && header.version == T::get_version() {
             let mut body_bytes = vec![0u8; (header.chunk_size as usize) - s_blf_header::size()];
             cursor.read_exact(body_bytes.as_mut_slice())?;
-            return Ok(BINRW_ERROR!(T::read(body_bytes, Some(header)))?);
+            return Ok(BINRW_RESULT!(T::read(body_bytes, Some(header)))?);
         }
         if header.chunk_size == 0 {
             break;
@@ -65,9 +65,9 @@ pub fn search_for_chunk<'a, T: BlfChunk + SerializableBlfChunk + ReadableBlfChun
     Ok(None)
 }
 
-pub fn search_for_chunk_in_file<T: BlfChunk + SerializableBlfChunk + ReadableBlfChunk>(path: impl Into<String>) -> Result<Option<T>, Box<dyn Error>> {
+pub fn search_for_chunk_in_file<T: BlfChunk + SerializableBlfChunk + ReadableBlfChunk>(path: impl Into<String>) -> BLFLibResult<Option<T>> {
     let mut fileBytes = Vec::<u8>::new();
-    File::open(path.into()).unwrap().read_to_end(&mut fileBytes).unwrap();
+    File::open(path.into())?.read_to_end(&mut fileBytes)?;
 
     for i in 0..(fileBytes.len() - 0xC) {
         let header_bytes = &fileBytes.as_slice()[i..i+0xC];
@@ -82,11 +82,7 @@ pub fn search_for_chunk_in_file<T: BlfChunk + SerializableBlfChunk + ReadableBlf
     Ok(None)
 }
 
-pub fn read_chunk_json<T: BlfChunk + for<'d> Deserialize<'d>>(path: &str) -> Result<T, String> {
-    let mut file = File::open(path).unwrap();
-    let parsed = serde_json::from_reader(&mut file);
-    if parsed.is_err() {
-        return Err(parsed.err().unwrap().to_string());
-    }
-    Ok(parsed.unwrap())
+pub fn read_chunk_json<T: BlfChunk + for<'d> Deserialize<'d>>(path: &str) -> BLFLibResult<T> {
+    let mut file = File::open(path)?;
+    Ok(serde_json::from_reader(&mut file)?)
 }

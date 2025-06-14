@@ -1,5 +1,7 @@
+pub use blf_lib_derivable::result::*;
+
 #[macro_export]
-macro_rules! BINRW_ERROR {
+macro_rules! BINRW_RESULT {
     ($task:expr) => {
         $task.map_err(|e| binrw::error::Error::Custom {
             pos: u64::MAX,
@@ -9,11 +11,35 @@ macro_rules! BINRW_ERROR {
 }
 
 #[macro_export]
-macro_rules! SOME_OR_ERR {
+macro_rules! BINRW_ERROR {
+    ($err:expr) => {
+        binrw::error::Error::Custom {
+            pos: u64::MAX,
+            err: Box::new($err),
+        }
+    };
+}
+
+#[macro_export]
+macro_rules! SERDE_DESERIALIZE_RESULT {
+    ($task:expr) => {
+        $task.map_err(|e|serde::de::Error::custom(e))
+    };
+}
+
+#[macro_export]
+macro_rules! SERDE_SERIALIZE_RESULT {
+    ($task:expr) => {
+        $task.map_err(|e|serde::ser::Error::custom(e))
+    };
+}
+
+#[macro_export]
+macro_rules! OPTION_TO_RESULT {
     ($opt:expr, $err:expr) => {
         match $opt {
-            Some(val) => val,
-            None => return Err($err),
+            Some(val) => Ok(val),
+            None => Err($err),
         }
     };
 }

@@ -23,8 +23,8 @@ pub fn read_json_file<T: DeserializeOwned>(path: impl Into<String>) -> Result<T,
 }
 
 pub fn write_json_file<T: Serialize>(value: &T, path: impl Into<String>) -> Result<(), Box<dyn Error>> {
-    let json = serde_json::to_string_pretty(value).unwrap();
-    let mut text_file = File::create(path.into()).unwrap();
+    let json = serde_json::to_string_pretty(value)?;
+    let mut text_file = File::create(path.into())?;
     text_file.write_all(json.as_bytes())?;
     Ok(())
 }

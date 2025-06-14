@@ -5,6 +5,7 @@ use std::io::Cursor;
 use binrw::BinWrite;
 use widestring::U16CString;
 use blf_lib::blam::common::math::real_math::{assert_valid_real_normal3d, cross_product3d, dequantize_unit_vector3d, dot_product3d, k_real_epsilon, global_forward3d, global_left3d, global_up3d, normalize3d, valid_real_vector3d_axes3, arctangent, quantize_normalized_vector3d, k_pi};
+use blf_lib_derivable::result::BLFLibResult;
 use crate::blam::common::math::integer_math::int32_point3d;
 use crate::blam::common::math::real_math::{quantize_real, real_vector3d};
 use crate::blam::common::networking::transport::transport_security::s_transport_secure_address;
@@ -49,79 +50,93 @@ impl c_bitstream_writer {
 
     // WRITES
 
-    pub fn write_integer(&mut self, value: u32, size_in_bits: usize) {
+    pub fn write_integer(&mut self, value: u32, size_in_bits: usize) -> BLFLibResult {
         match self.m_byte_order {
             e_bitstream_byte_order::_bitstream_byte_order_little_endian => {
-                self.write_bits_internal(&value.to_le_bytes(), size_in_bits);
+                self.write_bits_internal(&value.to_le_bytes(), size_in_bits)?;
             }
             e_bitstream_byte_order::_bitstream_byte_order_big_endian => {
-                self.write_bits_internal(&value.to_be_bytes(), size_in_bits);
+                self.write_bits_internal(&value.to_be_bytes(), size_in_bits)?;
             }
         }
+
+        Ok(())
     }
 
-    pub fn write_signed_integer(&mut self, value: i32, size_in_bits: usize) {
+    pub fn write_signed_integer(&mut self, value: i32, size_in_bits: usize) -> BLFLibResult {
         let max_value = ((1u32 << (size_in_bits - 1)) - 1) as i32; // Maximum positive value
 
         assert!(self.writing(), "writing()");
         assert!(size_in_bits <= 32, "size_in_bits>0 && size_in_bits<=LONG_BITS");
         assert!(value > !max_value, "value>=minimum");
         assert!(value < max_value, "value<=maximum");
-        self.write_integer(value as u32, size_in_bits);
+        self.write_integer(value as u32, size_in_bits)?;
+
+        Ok(())
     }
 
-    pub fn write_bool<B: Sized + Into<bool>>(&mut self, value: B) {
-        self.write_integer(if value.into() { 1 } else { 0 }, 1);
+    pub fn write_bool<B: Sized + Into<bool>>(&mut self, value: B) -> BLFLibResult {
+        self.write_integer(if value.into() { 1 } else { 0 }, 1)?;
+        Ok(())
     }
 
     // Be careful using this.
-    pub fn write_float(&mut self, value: impl Into<f32>, size_in_bits: usize) {
+    pub fn write_float(&mut self, value: impl Into<f32>, size_in_bits: usize) -> BLFLibResult {
         match self.m_byte_order {
             e_bitstream_byte_order::_bitstream_byte_order_little_endian => {
-                self.write_bits_internal(&value.into().to_le_bytes(), size_in_bits);
+                self.write_bits_internal(&value.into().to_le_bytes(), size_in_bits)?;
             }
             e_bitstream_byte_order::_bitstream_byte_order_big_endian => {
-                self.write_bits_internal(&value.into().to_be_bytes(), size_in_bits);
+                self.write_bits_internal(&value.into().to_be_bytes(), size_in_bits)?;
             }
         }
+
+        Ok(())
     }
 
-    pub fn write_raw_data(&mut self, value: &[u8], size_in_bits: usize) {
+    pub fn write_raw_data(&mut self, value: &[u8], size_in_bits: usize) -> BLFLibResult {
         assert!(value.len() >= size_in_bits / 8);
-        self.write_bits_internal(value, size_in_bits);
+        self.write_bits_internal(value, size_in_bits)?;
+
+        Ok(())
     }
 
-    pub fn write_raw<T: BinWrite>(&mut self, value: T, size_in_bits: usize) where for<'a> <T as BinWrite>::Args<'a>: Default {
+    pub fn write_raw<T: BinWrite>(&mut self, value: T, size_in_bits: usize) -> BLFLibResult where for<'a> <T as BinWrite>::Args<'a>: Default {
         let mut writer = Cursor::new(Vec::new());
 
         match self.m_byte_order {
             e_bitstream_byte_order::_bitstream_byte_order_little_endian => {
-                T::write_le(&value, &mut writer).unwrap();
+                T::write_le(&value, &mut writer)?;
             }
             e_bitstream_byte_order::_bitstream_byte_order_big_endian => {
-                T::write_be(&value, &mut writer).unwrap();
+                T::write_be(&value, &mut writer)?;
             }
         }
 
         let value = writer.get_ref().clone();
         let value = value.as_slice();
         assert!(value.len() >= size_in_bits / 8);
-        self.write_bits_internal(value, size_in_bits);
+        self.write_bits_internal(value, size_in_bits)?;
+
+        Ok(())
     }
 
-    pub fn write_qword(&mut self, value: impl Into<u64>, size_in_bits: usize) {
+    pub fn write_qword(&mut self, value: impl Into<u64>, size_in_bits: usize) -> BLFLibResult {
         match self.m_byte_order {
             e_bitstream_byte_order::_bitstream_byte_order_little_endian => {
-                self.write_bits_internal(&value.into().to_le_bytes(), size_in_bits);
+                self.write_bits_internal(&value.into().to_le_bytes(), size_in_bits)?;
             }
             e_bitstream_byte_order::_bitstream_byte_order_big_endian => {
-                self.write_bits_internal(&value.into().to_be_bytes(), size_in_bits);
+                self.write_bits_internal(&value.into().to_be_bytes(), size_in_bits)?;
             }
         }
+
+        Ok(())
     }
 
-    fn write_value_internal(&mut self, data: &[u8], size_in_bits: usize) {
-        self.write_bits_internal(data, size_in_bits);
+    fn write_value_internal(&mut self, data: &[u8], size_in_bits: usize) -> BLFLibResult {
+        self.write_bits_internal(data, size_in_bits)?;
+        Ok(())
     }
 
     fn write_bits_internal(&mut self, data: &[u8], size_in_bits: usize) -> Result<(), Box<dyn Error>> {
@@ -203,60 +218,82 @@ impl c_bitstream_writer {
         self.write_integer(point.z as u32, axis_encoding_size_in_bits);
     }
 
-    pub fn write_quantized_real(&mut self, value: impl Into<f32>, min_value: f32, max_value: f32, size_in_bits: usize, exact_midpoint: bool, exact_endpoints: bool) {
+    pub fn write_quantized_real(
+        &mut self,
+        value: impl Into<f32>,
+        min_value: f32,
+        max_value: f32,
+        size_in_bits: usize,
+        exact_midpoint: bool,
+        exact_endpoints: bool
+    ) -> BLFLibResult {
         assert!(self.writing());
-        self.write_integer(quantize_real(value.into(), min_value, max_value, size_in_bits, exact_midpoint, exact_endpoints) as u32, size_in_bits);
+        self.write_integer(
+            quantize_real(
+                value.into(),
+                min_value,
+                max_value,
+                size_in_bits,
+                exact_midpoint,
+                exact_endpoints
+            ) as u32,
+            size_in_bits
+        )
     }
 
-    pub fn write_secure_address(address: &s_transport_secure_address) {
+    pub fn write_secure_address(address: &s_transport_secure_address) -> BLFLibResult {
         unimplemented!()
     }
 
-    pub fn write_string(_string: &String, max_string_size: u32) {
+    pub fn write_string(_string: &String, max_string_size: u32) -> BLFLibResult {
         unimplemented!()
     }
 
-    pub fn write_string_utf8(&mut self, char_string: &String, max_string_size: u32) {
+    pub fn write_string_utf8(&mut self, char_string: &String, max_string_size: u32) -> BLFLibResult {
         assert!(self.writing());
         assert!(max_string_size > 0);
         assert!(char_string.len() <= max_string_size as usize);
 
         for byte in char_string.as_bytes() {
-            self.write_value_internal(&[*byte], 8);
+            self.write_value_internal(&[*byte], 8)?;
         }
 
         // null terminate
-        self.write_value_internal(&0u8.to_ne_bytes(), 8);
+        self.write_value_internal(&0u8.to_ne_bytes(), 8)?;
+
+        Ok(())
     }
 
-    pub fn write_string_wchar(&mut self, value: &String, max_string_size: usize) {
+    pub fn write_string_wchar(&mut self, value: &String, max_string_size: usize) -> BLFLibResult {
         assert!(self.writing());
         assert!(value.len() <= max_string_size);
         assert!(max_string_size > 0);
 
-        let wchar_string = U16CString::from_str(value).unwrap();
+        let wchar_string = U16CString::from_str(value).map_err(|e|e.to_string())?;
         let characters = wchar_string.as_slice();
 
         for char in characters {
             match self.m_byte_order {
                 e_bitstream_byte_order::_bitstream_byte_order_little_endian => {
-                    self.write_value_internal(&char.to_le_bytes(), 16);
+                    self.write_value_internal(&char.to_le_bytes(), 16)?;
                 }
                 e_bitstream_byte_order::_bitstream_byte_order_big_endian => {
-                    self.write_value_internal(&char.to_be_bytes(), 16);
+                    self.write_value_internal(&char.to_be_bytes(), 16)?;
                 }
             }
         }
 
         // null terminate
-        self.write_value_internal(&0u16.to_ne_bytes(), 16);
+        self.write_value_internal(&0u16.to_ne_bytes(), 16)?;
+
+        Ok(())
     }
 
     pub fn write_unit_vector(unit_vector: &real_vector3d, size_in_bits: u8) {
         unimplemented!()
     }
 
-    pub fn write_vector(vector: &real_vector3d, min_value: f32, max_value: f32, step_count_size_in_bits: u32, size_in_bits: u8) {}
+    pub fn write_vector(vector: &real_vector3d, min_value: f32, max_value: f32, step_count_size_in_bits: u32, size_in_bits: u8) { unimplemented!() }
 
     // GUTS
 

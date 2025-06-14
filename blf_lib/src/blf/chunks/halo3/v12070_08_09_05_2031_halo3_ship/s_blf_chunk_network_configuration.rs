@@ -7,6 +7,7 @@ use binrw::{binrw, BinRead, BinResult, BinWrite};
 use binrw::BinReaderExt;
 use crate::types::bool::Bool;
 use serde_hex::{SerHex,StrictCapPfx};
+use blf_lib::BINRW_RESULT;
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
 use blf_lib_derive::BlfChunk;
 use crate::types::numbers::Float32;
@@ -1008,7 +1009,7 @@ impl BinWrite for s_dlc_path {
 
     fn write_options<W: Write + Seek>(&self, writer: &mut W, endian: binrw::Endian, _args: Self::Args<'_>) -> BinResult<()> {
         // Convert the StaticString to bytes
-        let string: String = self.path.get_string();
+        let string: String = BINRW_RESULT!(self.path.get_string())?;
         let mut buffer = string.into_bytes();
         buffer.resize(0x80, 0);
 

@@ -23,11 +23,7 @@ pub fn test_size_macro(input: TokenStream) -> TokenStream {
             let size_literal = parsed_ints.first().unwrap();
 
             if size_literal.to_string().starts_with("0x") {
-
                 expected_size = usize::from_str_radix(&size_literal.to_string()[2..], 16).unwrap();
-
-                // panic!("HEX {} EXPECTED {}", size_literal.to_string(), expected_size);
-
             } else {
                 expected_size = size_literal.base10_parse().expect("Size value is invalid");
             }

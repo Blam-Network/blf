@@ -18,17 +18,19 @@ use napi::{Env, JsString, NapiRaw, ValueType};
 use napi_derive::napi;
 use wasm_bindgen::convert::{FromWasmAbi, IntoWasmAbi};
 use wasm_bindgen::describe::WasmDescribe;
+use blf_lib_derivable::result::BLFLibResult;
+use blf_lib::{SERDE_DESERIALIZE_RESULT, SERDE_SERIALIZE_RESULT};
 
-pub fn to_string(chars: &[c_char]) -> String {
+pub fn to_string(chars: &[c_char]) -> BLFLibResult<String> {
     let mut res = String::new();
     for char in chars {
         let copy: u8 = *char as u8;
         if copy == 0 {
             break;
         }
-        res.write_char(char::from(copy)).unwrap();
+        res.write_char(char::from(copy))?;
     }
-    res
+    Ok(res)
 }
 
 pub fn from_string_with_length(string: String, length: usize) -> Result<Vec<c_char>, Box<dyn Error>> {
@@ -79,21 +81,20 @@ impl<const N: usize> FromNapiValue for StaticWcharString<N> {
 }
 
 impl<const N: usize> StaticWcharString<N> {
-    pub fn from_string(value: &String) -> Result<Self, String> {
+    pub fn from_string(value: &String) -> BLFLibResult<Self> {
         let mut new = Self {
             buf: StaticArray::default()
         };
+        new.set_string(value)?;
 
-        let result = new.set_string(value);
-        if result.is_ok() { Ok(new) }
-        else { Err(result.unwrap_err()) }
+        Ok(new)
     }
 
-    pub fn set_string(&mut self, value: &String) -> Result<(), String> {
-        let u16Str = U16CString::from_str(value).unwrap();
+    pub fn set_string(&mut self, value: &String) -> BLFLibResult {
+        let u16Str = U16CString::from_str(value).map_err(|e|e.to_string())?;
         let u16s = u16Str.as_slice();
         if u16s.len() > N {
-            return Err(format!("String too long ({} > {}) bytes", N, u16s.len()));
+            return Err(format!("String too long ({} > {}) bytes", N, u16s.len()).into());
         }
         let buf = self.buf.get_mut();
         buf.fill(0);
@@ -101,8 +102,18 @@ impl<const N: usize> StaticWcharString<N> {
         Ok(())
     }
 
-    pub fn set_string_trimmed(&mut self, value: &String) {
-        let u16Str = U16CString::from_str(value).unwrap();
+    pub fn set_string_trimmed(&mut self, value: &String) -> BLFLibResult {
+        let u16Str = U16CString::from_str(value).map_err(|e|e.to_string())?;
+        let u16s = u16Str.as_slice();
+        let buf = self.buf.get_mut();
+        buf.fill(0);
+        buf[0..min(u16s.len(), N - 1)].copy_from_slice(u16s);
+
+        Ok(())
+    }
+
+    pub unsafe fn set_string_trimmed_unchecked(&mut self, value: &String) {
+        let u16Str = U16CString::from_str_unchecked(value);
         let u16s = u16Str.as_slice();
         let buf = self.buf.get_mut();
         buf.fill(0);
@@ -129,12 +140,7 @@ impl<const N: usize> Serialize for StaticWcharString<N> {
 impl<'de, const N: usize> serde::Deserialize<'de> for StaticWcharString<N> {
     fn deserialize<D: Deserializer<'de>>(d: D) -> Result<Self, D::Error> {
         let s = String::deserialize(d)?;
-        let res = Self::from_string(&s);
-        if res.is_err() {
-            Err(serde::de::Error::custom(res.unwrap_err()))
-        } else {
-            Ok(res.unwrap())
-        }
+        SERDE_DESERIALIZE_RESULT!(Self::from_string(&s))
     }
 }
 
@@ -146,7 +152,7 @@ pub struct StaticString<const N: usize> {
 
 
 impl<const N: usize> StaticString<N> {
-    pub fn from_string(value: impl Into<String>) -> Result<Self, Box<dyn Error>> {
+    pub fn from_string(value: impl Into<String>) -> BLFLibResult<Self> {
         let mut new = Self {
             buf: [0; N],
         };
@@ -154,14 +160,14 @@ impl<const N: usize> StaticString<N> {
         new.set_string(&value.into()).map(|_| new)
     }
 
-    pub fn set_string(&mut self, value: &String) -> Result<(), Box<dyn Error>> {
+    pub fn set_string(&mut self, value: &String) -> BLFLibResult {
         let mut bytes = value.as_bytes();
         // if a null termination was provided at the end, chop it off
         if !bytes.is_empty() && bytes[bytes.len() - 1] == 0 {
             bytes = &bytes[0..bytes.len() - 1];
         }
         if bytes.len() > N {
-            return Err(format!("String \"{value}\" too long ({} > {}) bytes", N, bytes.len()).into());
+            return Err(format!("String \"{value}\" too long ({} > {}) bytes", bytes.len(), N).into());
         }
         self.buf.fill(0);
         self.buf[..bytes.len()].copy_from_slice(bytes);
@@ -178,9 +184,14 @@ impl<const N: usize> StaticString<N> {
         self.buf[..min(bytes.len(), N - 1)].copy_from_slice(bytes);
     }
 
-    pub fn get_string(&self) -> String {
+    pub fn get_string(&self) -> BLFLibResult<String> {
         let null_index = self.buf.iter().position(|c|c == &0u8).unwrap_or(N);
-        String::from_utf8(self.buf.as_slice()[0..null_index].to_vec()).unwrap()
+        Ok(String::from_utf8(self.buf.as_slice()[0..null_index].to_vec())?)
+    }
+
+    pub unsafe fn get_string_unchecked(&self) -> String {
+        let null_index = self.buf.iter().position(|c|c == &0u8).unwrap_or(N);
+        String::from_utf8_unchecked(self.buf.as_slice()[0..null_index].to_vec())
     }
 }
 
@@ -197,19 +208,14 @@ impl<const N: usize> Serialize for StaticString<N> {
     where
         S: Serializer
     {
-        serializer.serialize_str(&self.get_string().to_string())
+        serializer.serialize_str(&SERDE_SERIALIZE_RESULT!(self.get_string())?.to_string())
     }
 }
 
 impl<'de, const N: usize> serde::Deserialize<'de> for StaticString<N> {
     fn deserialize<D: Deserializer<'de>>(d: D) -> Result<Self, D::Error> {
         let s = String::deserialize(d)?;
-        let res = Self::from_string(&s);
-        if res.is_err() {
-            Err(serde::de::Error::custom(res.unwrap_err()))
-        } else {
-            Ok(res.unwrap())
-        }
+        SERDE_DESERIALIZE_RESULT!(Self::from_string(&s))
     }
 }
 
@@ -217,7 +223,7 @@ impl<'de, const N: usize> serde::Deserialize<'de> for StaticString<N> {
 impl<const N: usize> FromNapiValue for StaticString<N> {
     unsafe fn from_napi_value(env: *mut napi_env__, napi_val: napi::sys::napi_value) -> napi::Result<Self> {
         let js_string = JsString::from_napi_value(env, napi_val)?;
-        Ok(StaticString::from_string(js_string.into_utf8()?.as_str()?).unwrap())
+        Ok(StaticString::from_string(js_string.into_utf8()?.as_str()?)?)
     }
 }
 
@@ -323,7 +329,7 @@ impl<const N: usize> WasmDescribe for StaticString<N> {
 impl<const N: usize> IntoWasmAbi for StaticString<N> {
     type Abi = <String as IntoWasmAbi>::Abi;
     fn into_abi(self) -> Self::Abi {
-        self.get_string().into_abi()
+        unsafe { self.get_string_unchecked().into_abi() }
     }
 }
 
