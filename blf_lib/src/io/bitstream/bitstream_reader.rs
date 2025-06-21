@@ -5,7 +5,7 @@ use binrw::BinRead;
 use num_traits::FromPrimitive;
 use widestring::U16CString;
 use blf_lib::blam::common::math::real_math::{assert_valid_real_normal3d, cross_product3d, dequantize_unit_vector3d, dot_product3d, k_real_epsilon, global_forward3d, global_left3d, global_up3d, normalize3d, valid_real_vector3d_axes3, arctangent, k_pi, dequantize_real, rotate_vector_about_axis, valid_real_vector3d_axes2};
-use blf_lib::OPTION_TO_RESULT;
+use blf_lib::{assert_ok, OPTION_TO_RESULT};
 use blf_lib_derivable::result::BLFLibResult;
 use crate::blam::common::math::integer_math::int32_point3d;
 use crate::blam::common::math::real_math::real_vector3d;
@@ -203,8 +203,8 @@ impl<'a> c_bitstream_reader<'a> {
     }
 
     pub fn read_integer(&mut self, size_in_bits: usize) -> BLFLibResult<u32> {
-        assert!(size_in_bits > 0);
-        assert!(size_in_bits <= 32);
+        assert_ok!(size_in_bits > 0);
+        assert_ok!(size_in_bits <= 32);
         let size_in_bytes = (size_in_bits as f32 / 8f32 ).ceil() as usize;
         let mut bytes_vec = vec![0u8; size_in_bytes];
         self.read_bits_internal(&mut bytes_vec, size_in_bits)?;
@@ -225,8 +225,8 @@ impl<'a> c_bitstream_reader<'a> {
     }
 
     pub fn read_float(&mut self, size_in_bits: usize) -> BLFLibResult<Float32> {
-        assert!(size_in_bits > 0);
-        assert!(size_in_bits <= 32);
+        assert_ok!(size_in_bits > 0);
+        assert_ok!(size_in_bits <= 32);
         let mut bytes = [0u8; 4];
         self.read_bits_internal(&mut bytes, size_in_bits)?;
 
@@ -237,8 +237,8 @@ impl<'a> c_bitstream_reader<'a> {
     }
 
     pub fn read_i16(&mut self, size_in_bits: usize) -> BLFLibResult<i16> {
-        assert!(size_in_bits > 0);
-        assert!(size_in_bits <= 16);
+        assert_ok!(size_in_bits > 0);
+        assert_ok!(size_in_bits <= 16);
         let mut bytes = [0u8; 2];
         self.read_bits_internal(&mut bytes, size_in_bits)?;
 
@@ -267,8 +267,8 @@ impl<'a> c_bitstream_reader<'a> {
     }
 
     pub fn read_qword(&mut self, size_in_bits: usize) -> BLFLibResult<Unsigned64> {
-        assert!(size_in_bits > 0);
-        assert!(size_in_bits <= 64);
+        assert_ok!(size_in_bits > 0);
+        assert_ok!(size_in_bits <= 64);
         let mut bytes = [0u8; 8];
         self.read_bits_internal(&mut bytes, size_in_bits)?;
 
@@ -283,7 +283,7 @@ impl<'a> c_bitstream_reader<'a> {
     }
 
     pub fn read_point3d(&mut self, point: &mut int32_point3d, axis_encoding_size_in_bits: usize) -> BLFLibResult {
-        assert!(0 < axis_encoding_size_in_bits && axis_encoding_size_in_bits <= 32);
+        assert_ok!(0 < axis_encoding_size_in_bits && axis_encoding_size_in_bits <= 32);
 
         point.x = self.read_integer(axis_encoding_size_in_bits)? as i32;
         point.y = self.read_integer(axis_encoding_size_in_bits)? as i32;
@@ -293,7 +293,7 @@ impl<'a> c_bitstream_reader<'a> {
     }
 
     pub fn read_quantized_real(&mut self, min_value: f32, max_value: f32, size_in_bits: usize, exact_midpoint: bool, exact_endpoints: bool) -> BLFLibResult<Float32> {
-        assert!(self.reading());
+        assert_ok!(self.reading());
         let value = self.read_integer(size_in_bits)?;
         Ok(Float32(dequantize_real(value as i32, min_value, max_value, size_in_bits, exact_midpoint)))
     }
@@ -320,17 +320,17 @@ impl<'a> c_bitstream_reader<'a> {
         }
 
         let forward_angle = self.read_quantized_real(-k_pi, k_pi, 8, true, false)?;
-        c_bitstream_reader::angle_to_axes_internal(up, forward_angle, forward);
+        c_bitstream_reader::angle_to_axes_internal(up, forward_angle, forward)?;
         Ok(())
     }
 
-    pub fn angle_to_axes_internal(up: &real_vector3d, angle: impl Into<f32>, forward: &mut real_vector3d) {
+    pub fn angle_to_axes_internal(up: &real_vector3d, angle: impl Into<f32>, forward: &mut real_vector3d) -> BLFLibResult {
         let angle = angle.into();
 
         let mut forward_reference = real_vector3d::default();
         let mut left_reference = real_vector3d::default();
 
-        c_bitstream_reader::axes_compute_reference_internal(up, &mut forward_reference, &mut left_reference);
+        c_bitstream_reader::axes_compute_reference_internal(up, &mut forward_reference, &mut left_reference)?;
 
         forward.i = forward_reference.i;
         forward.j = forward_reference.j;
@@ -351,7 +351,9 @@ impl<'a> c_bitstream_reader<'a> {
         rotate_vector_about_axis(forward, up, u, v);
         normalize3d(forward);
 
-        assert!(valid_real_vector3d_axes2(forward, up));
+        assert_ok!(valid_real_vector3d_axes2(forward, up));
+
+        Ok(())
     }
 
     pub fn read_string(_string: &mut String, max_string_size: u8) {
@@ -360,8 +362,8 @@ impl<'a> c_bitstream_reader<'a> {
 
     // differs from blam API
     pub fn read_string_utf8(&mut self, max_string_size: usize) -> BLFLibResult<String> {
-        assert!(self.reading());
-        assert!(max_string_size > 0);
+        assert_ok!(self.reading());
+        assert_ok!(max_string_size > 0);
 
 
         let mut bytes = vec![0u8; max_string_size];
@@ -380,8 +382,8 @@ impl<'a> c_bitstream_reader<'a> {
 
     // differs from blam API
     pub fn read_string_whar(&mut self, max_string_size: usize) -> BLFLibResult<String> {
-        assert!(self.reading());
-        assert!(max_string_size > 0);
+        assert_ok!(self.reading());
+        assert_ok!(max_string_size > 0);
 
         let mut characters = vec![0u16; max_string_size];
 
@@ -474,11 +476,11 @@ impl<'a> c_bitstream_reader<'a> {
         unimplemented!()
     }
 
-    pub fn get_data(&self, data_length: &mut usize) -> &[u8] {
-        assert!(!self.writing());
+    pub fn get_data(&self, data_length: &mut usize) -> BLFLibResult<&[u8]> {
+        assert_ok!(!self.writing());
 
         *data_length = self.m_data_size_bytes;
-        self.m_data
+        Ok(self.m_data)
     }
 
     pub fn push_position() {
@@ -532,8 +534,8 @@ impl<'a> c_bitstream_reader<'a> {
         up: &real_vector3d,
         forward_reference: &mut real_vector3d,
         left_reference: &mut real_vector3d
-    ) {
-        assert!(assert_valid_real_normal3d(up));
+    ) -> BLFLibResult {
+        assert_ok!(assert_valid_real_normal3d(up));
 
         let v10 = dot_product3d(up, &global_forward3d).abs();
         let v9 = dot_product3d(up, &global_left3d).abs();
@@ -545,21 +547,23 @@ impl<'a> c_bitstream_reader<'a> {
         }
 
         let forward_magnitude = normalize3d(forward_reference);
-        assert!(forward_magnitude > k_real_epsilon, "forward_magnitude>k_real_epsilon");
+        assert_ok!(forward_magnitude > k_real_epsilon, "forward_magnitude>k_real_epsilon");
 
         cross_product3d(up, forward_reference, left_reference);
 
         let left_magnitude = normalize3d(left_reference);
-        assert!(left_magnitude > k_real_epsilon, "left_magnitude>k_real_epsilon");
+        assert_ok!(left_magnitude > k_real_epsilon, "left_magnitude>k_real_epsilon");
 
-        assert!(valid_real_vector3d_axes3(forward_reference, left_reference, up)); // Failing
+        assert_ok!(valid_real_vector3d_axes3(forward_reference, left_reference, up)); // Failing
+
+        Ok(())
     }
 
-    fn axes_to_angle_internal(forward: &real_vector3d, up: &real_vector3d) -> f32 {
+    fn axes_to_angle_internal(forward: &real_vector3d, up: &real_vector3d) -> BLFLibResult<f32> {
         let mut forward_reference: real_vector3d = real_vector3d::default();
         let mut left_reference: real_vector3d = real_vector3d::default();
-        c_bitstream_reader::axes_compute_reference_internal(up, &mut forward_reference, &mut left_reference);
-        arctangent(dot_product3d(&left_reference, forward), dot_product3d(&forward_reference, forward))
+        c_bitstream_reader::axes_compute_reference_internal(up, &mut forward_reference, &mut left_reference)?;
+        Ok(arctangent(dot_product3d(&left_reference, forward), dot_product3d(&forward_reference, forward)))
     }
 
     // not from blam

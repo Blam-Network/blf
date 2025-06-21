@@ -47,6 +47,6 @@ impl BinWrite for s_blf_chunk_packed_game_variant {
     fn write_options<W: Write + Seek>(&self, writer: &mut W, endian: Endian, args: Self::Args<'_>) -> BinResult<()> {
         let mut bitstream = create_bitstream_writer(0x264, e_bitstream_byte_order::_bitstream_byte_order_big_endian);
         self.game_variant.encode(&mut bitstream)?;
-        writer.write_ne(&close_bitstream_writer(&mut bitstream))
+        writer.write_ne(&close_bitstream_writer(&mut bitstream)?)
     }
 }

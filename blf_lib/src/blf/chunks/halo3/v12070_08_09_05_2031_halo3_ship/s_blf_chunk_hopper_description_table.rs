@@ -89,6 +89,6 @@ impl BinWrite for s_blf_chunk_hopper_description_table {
             bitstream.write_string_utf8(&description.description.get_string()?, 256)?;
         }
 
-        writer.write_ne(&close_bitstream_writer(&mut bitstream))
+        writer.write_ne(&close_bitstream_writer(&mut bitstream)?)
     }
 }

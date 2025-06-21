@@ -436,6 +436,6 @@ impl BinWrite for s_blf_chunk_hopper_configuration_table {
                 }
             }
         }
-        writer.write_ne(&close_bitstream_writer(&mut bitstream))
+        writer.write_ne(&close_bitstream_writer(&mut bitstream)?)
     }
 }

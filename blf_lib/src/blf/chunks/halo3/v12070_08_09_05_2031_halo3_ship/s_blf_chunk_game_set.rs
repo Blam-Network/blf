@@ -103,6 +103,6 @@ impl BinWrite for s_blf_chunk_game_set {
             BINRW_RESULT!(bitstream.write_raw_data(&game_entry.map_variant_file_hash.data, 0xA0))?;
         }
 
-        writer.write_ne(&close_bitstream_writer(&mut bitstream))
+        writer.write_ne(&close_bitstream_writer(&mut bitstream)?)
     }
 }

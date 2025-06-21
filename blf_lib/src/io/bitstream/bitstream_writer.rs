@@ -364,11 +364,11 @@ impl c_bitstream_writer {
         unimplemented!()
     }
 
-    pub fn get_data(&self, data_length: &mut usize) -> &[u8] {
-        assert!(!self.writing());
+    pub fn get_data(&self, data_length: &mut usize) -> BLFLibResult<&[u8]> {
+        assert_ok!(!self.writing());
 
         *data_length = self.m_data_size_bytes;
-        self.m_data.as_slice()
+        Ok(self.m_data.as_slice())
     }
 
     pub fn push_position() {
