@@ -56,7 +56,9 @@ pub fn import_rsa_signatures(
 
             // Multiplayer or Mainmenu
             if TEST_BIT!(scenario_chunk.map_flags, 6) || TEST_BIT!(scenario_chunk.map_flags, 4) {
-                multiplayer_maps.push((scenario_chunk.map_id ,scenario_chunk.scenario_path.get_string()))
+                multiplayer_maps.push((scenario_chunk.map_id, scenario_chunk.scenario_path.get_string().expect(
+                    &format!("Failed to get scenario path string for map {}", scenario_chunk.map_id)
+                )))
             }
         }
 

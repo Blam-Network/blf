@@ -160,6 +160,16 @@ impl<const N: usize> StaticString<N> {
         new.set_string(&value.into()).map(|_| new)
     }
 
+    pub fn from_string_trimmed(value: impl Into<String>) -> Self {
+        let mut new = Self {
+            buf: [0; N],
+        };
+
+        new.set_string_trimmed(&value.into());
+
+        new
+    }
+
     pub fn set_string(&mut self, value: &String) -> BLFLibResult {
         let mut bytes = value.as_bytes();
         // if a null termination was provided at the end, chop it off

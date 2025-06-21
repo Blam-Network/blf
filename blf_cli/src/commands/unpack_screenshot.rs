@@ -7,13 +7,19 @@ pub fn unpack_screenshot(
     screenshot_path: String,
     output_path: Option<String>,
 ) {
-    let header: s_blf_chunk_content_header = search_for_chunk_in_file(&screenshot_path).unwrap_or(None).expect("Could not find Screenshot header.");
-    let camera: s_blf_chunk_screenshot_camera = search_for_chunk_in_file(&screenshot_path).unwrap_or(None).expect("Could not find Screenshot camera.");
-    let data: s_blf_chunk_screenshot_data = search_for_chunk_in_file(&screenshot_path).unwrap_or(None).expect("Could not find Screenshot data.");
+    let header: s_blf_chunk_content_header = search_for_chunk_in_file(&screenshot_path)
+        .unwrap()
+        .expect("Could not find Screenshot header.");
+    let camera: s_blf_chunk_screenshot_camera = search_for_chunk_in_file(&screenshot_path)
+        .unwrap()
+        .expect("Could not find Screenshot camera.");
+    let data: s_blf_chunk_screenshot_data = search_for_chunk_in_file(&screenshot_path)
+        .unwrap()
+        .expect("Could not find Screenshot data.");
 
-    println!("{} by {} ({:X})", header.metadata.name.get_string(), header.metadata.author.get_string(), header.metadata.author_id);
+    println!("{} by {} ({:X})", header.metadata.name.get_string(), header.metadata.author.get_string().unwrap(), header.metadata.author_id);
     println!("Taken on {}", header.metadata.date);
-    println!("Description: \"{}\"", header.metadata.description.get_string());
+    println!("Description: \"{}\"", header.metadata.description.get_string().unwrap());
     println!("--- File Data ---");
     println!("Halo Version: {}", header.build_number);
     println!("Map ID: {}", header.metadata.map_id);

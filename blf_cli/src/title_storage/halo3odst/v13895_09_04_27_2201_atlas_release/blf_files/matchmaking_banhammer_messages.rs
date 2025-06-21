@@ -6,6 +6,7 @@ use blf_lib::blf_file;
 use crate::build_path;
 use crate::io::create_parent_folders;
 use std::fs::File;
+use blf_lib::result::BLFLibResult;
 
 pub const k_matchmaking_banhammer_messages_file_name: &str = "matchmaking_banhammer_messages.bin";
 pub const k_matchmaking_banhammer_messages_config_folder_name: &str = "banhammer_messages";
@@ -20,19 +21,19 @@ blf_file! {
 }
 
 impl matchmaking_banhammer_messages {
-    fn create(banhammer_messages: Vec<String>) -> matchmaking_banhammer_messages {
-        matchmaking_banhammer_messages {
+    fn create(banhammer_messages: Vec<String>) -> BLFLibResult<matchmaking_banhammer_messages> {
+        Ok(matchmaking_banhammer_messages {
             _blf: s_blf_chunk_start_of_file::default(),
             athr: s_blf_chunk_author::for_build::<v12070_08_09_05_2031_halo3_ship>(),
-            bhms: s_blf_chunk_banhammer_messages::create(banhammer_messages),
+            bhms: s_blf_chunk_banhammer_messages::create(banhammer_messages)?,
             _eof: s_blf_chunk_end_of_file::default(),
-        }
+        })
     }
 
     pub fn read_from_config(
         hoppers_config_path: &String,
         language_code: &str,
-    ) -> Result<matchmaking_banhammer_messages, Box<dyn Error>> {
+    ) -> BLFLibResult<matchmaking_banhammer_messages> {
         let config_file_path = build_path!(
             hoppers_config_path,
             k_matchmaking_banhammer_messages_config_folder_name,
@@ -46,7 +47,8 @@ impl matchmaking_banhammer_messages {
             .lines()
             .map(String::from)
             .collect();
-        Ok(matchmaking_banhammer_messages::create(matchmaking_banhammer_messages))
+
+        matchmaking_banhammer_messages::create(matchmaking_banhammer_messages)
     }
 
     pub fn write_to_config(&self, hoppers_config_path: &String, language_code: &str) -> Result<(), Box<dyn Error>> {
@@ -56,7 +58,7 @@ impl matchmaking_banhammer_messages {
             format!("{language_code}.txt")
         );
 
-        let messages_text = self.bhms.get_messages()
+        let messages_text = self.bhms.get_messages()?
             .join("\r\n");
 
         create_parent_folders(&config_file_path)?;

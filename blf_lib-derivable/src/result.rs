@@ -57,6 +57,12 @@ impl From<binrw::Error> for BLFLibError {
     }
 }
 
+impl From<csv::Error> for BLFLibError {
+    fn from(e: csv::Error) -> BLFLibError {
+        BLFLibError(e.into())
+    }
+}
+
 impl From<serde_json::Error> for BLFLibError {
     fn from(e: serde_json::Error) -> BLFLibError {
         BLFLibError(e.into())

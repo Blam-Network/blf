@@ -26,7 +26,10 @@ fn get_title_converters() -> Vec<Box<dyn TitleConverter>> {
     ]
 }
 
-pub fn get_title_converter (title: String, build: String) -> Option<Box<dyn TitleConverter>> {
+pub fn get_title_converter (title: impl Into<String>, build: impl Into<String>) -> Option<Box<dyn TitleConverter>> {
+    let title = title.into();
+    let build = build.into();
+
     get_title_converters()
         .into_iter()
         .find(|title_converter| 

@@ -12,6 +12,7 @@ use blf_lib::types::c_string::StaticString;
 use crate::build_path;
 use crate::io::create_parent_folders;
 use std::fs::File;
+use blf_lib::result::BLFLibResult;
 
 pub const k_game_set_blf_file_name: &str = "game_set_006.bin";
 pub const k_game_set_config_file_name: &str = "game_set.csv";
@@ -40,15 +41,15 @@ pub struct game_set_config {
 }
 
 impl game_set_config {
-    pub fn read(path: String) -> Result<game_set_config, Box<dyn Error>> {
-        let mut reader = ReaderBuilder::new().from_path(&path).unwrap();
+    pub fn read(path: String) -> BLFLibResult<game_set_config> {
+        let mut reader = ReaderBuilder::new().from_path(&path)?;
         let mut rows = Vec::<game_set_config_row>::new();
         for row in reader.deserialize() {
             if let Ok(row) = row {
                 let row: game_set_config_row = row;
                 rows.push(row);
             } else {
-                return Err(Box::from(format!("Failed to parse game set CSV: {path}")));
+                return Err(format!("Failed to parse game set CSV: {path}").into());
             }
         }
 
@@ -70,16 +71,16 @@ impl game_set {
         let mut writer = WriterBuilder::new().from_writer(vec![]);
         let game_set = &self.gset;
 
-        game_set.get_entries().iter().for_each(|game_entry| {
+        for game_set_entry in game_set.get_entries() {
             writer.serialize(game_set_config_row {
-                map_variant_file_name: game_entry.map_variant_file_name.get_string(),
-                game_variant_file_name: game_entry.game_variant_file_name.get_string(),
-                weight: game_entry.weight,
-                minimum_player_count: game_entry.minimum_player_count,
-                skip_after_veto: game_entry.skip_after_veto,
-                optional: game_entry.optional,
-            }).unwrap()
-        });
+                map_variant_file_name: game_set_entry.map_variant_file_name.get_string()?,
+                game_variant_file_name: game_set_entry.game_variant_file_name.get_string()?,
+                weight: game_set_entry.weight,
+                minimum_player_count: game_set_entry.minimum_player_count,
+                skip_after_veto: game_set_entry.skip_after_veto,
+                optional: game_set_entry.optional,
+            })?
+        }
 
         let game_set_config_path = build_path!(
             hopper_config_path,

@@ -40,6 +40,8 @@ use crate::title_storage::halo3::release::blf_files::map_variant::{k_map_variant
 use crate::title_storage::halo3::release::blf_files::matchmaking_hopper::{k_active_hoppers_config_file_name, k_categories_config_file_name, k_hopper_config_file_name, k_hoppers_config_folder_name, k_matchmaking_hopper_file_name, matchmaking_hopper, matchmaking_hopper_categories_config, matchmaking_hopper_category_configuration_and_descriptions, matchmaking_hopper_config, read_active_hoppers};
 use crate::title_storage::halo3::release::blf_files::matchmaking_hopper_descriptions::{k_matchmaking_hopper_descriptions_file_name, matchmaking_hopper_descriptions};
 use blf_files::network_configuration::network_configuration;
+use blf_lib::OPTION_TO_RESULT;
+use blf_lib::result::BLFLibResult;
 use crate::title_storage::halo3::release::blf_files::game_set::{k_game_set_blf_file_name, game_set_config, game_set, k_game_set_config_file_name};
 use crate::title_storage::halo3::release::blf_files::{k_hopper_directory_name_max_length};
 use crate::title_storage::halo3::v12070_08_09_05_2031_halo3_ship::blf_files::network_configuration::k_network_configuration_file_name;
@@ -555,7 +557,7 @@ impl v12070_08_09_05_2031_halo3_ship {
     fn read_hopper_description_blfs(
         hoppers_blfs_folder: &String,
         task: &mut console_task
-    ) -> HashMap<String, HashMap<u16, String>>
+    ) -> BLFLibResult<HashMap<String, HashMap<u16, String>>>
     {
         let mut language_descriptions_map = HashMap::<String, HashMap<u16, String>>::new();
 
@@ -576,31 +578,26 @@ impl v12070_08_09_05_2031_halo3_ship {
                 continue;
             }
 
-            let hopper_description_table =
-                find_chunk_in_file::<s_blf_chunk_hopper_description_table>(&hopper_descriptions_path);
-
-            if hopper_description_table.is_err() {
-                task.fail_with_error(format!("Failed to read hopper descriptions file at: {hopper_descriptions_path}"));
-                panic!()
-            }
+            let hopper_description_table = find_chunk_in_file::<s_blf_chunk_hopper_description_table>(&hopper_descriptions_path)
+                .expect("Could not find hopper description table");
 
             let mut hoppers_description_map = HashMap::<u16, String>::new();
 
-            hopper_description_table.unwrap().get_descriptions().iter().for_each(|hopper_description| {
-                hoppers_description_map.insert(hopper_description.identifier, hopper_description.description.get_string());
-            });
+            for hopper_description in hopper_description_table.get_descriptions() {
+                hoppers_description_map.insert(hopper_description.identifier, hopper_description.description.get_string()?);
+            }
 
             language_descriptions_map.insert(String::from(language_code), hoppers_description_map);
         }
 
-        language_descriptions_map
+        Ok(language_descriptions_map)
     }
 
-    fn build_config_hoppers(hoppers_blfs_path: &String, hoppers_config_path: &String) {
+    fn build_config_hoppers(hoppers_blfs_path: &String, hoppers_config_path: &String) -> BLFLibResult {
         let mut task = console_task::start("Converting Hopper Configuration...");
 
         let language_hopper_descriptions
-            = Self::read_hopper_description_blfs(hoppers_blfs_path, &mut task);
+            = Self::read_hopper_description_blfs(hoppers_blfs_path, &mut task)?;
 
         let hopper_configuration_blf_path = build_path!(
             hoppers_blfs_path,
@@ -695,7 +692,7 @@ impl v12070_08_09_05_2031_halo3_ship {
 
         task.add_message(format!("Converted {} hopper configurations.", hopper_configuration_table.hopper_configuration_count()));
 
-        task.complete();
+        やった!(task)
     }
 
     fn build_config_network_configuration(hoppers_blfs_path: &String, hoppers_config_path: &String) -> Result<(), Box<dyn Error>> {
@@ -1419,7 +1416,7 @@ impl v12070_08_09_05_2031_halo3_ship {
                     task.add_warning(format!(
                         "No {} description was found for hopper {hopper_identifier} ({})",
                         get_language_string(language_code),
-                        hopper_configuration_json.configuration.hopper_name.get_string(),
+                        hopper_configuration_json.configuration.hopper_name.get_string()?,
                     ));
                     continue;
                 }
@@ -1429,7 +1426,7 @@ impl v12070_08_09_05_2031_halo3_ship {
                     task.add_warning(format!(
                         "No {} description was found for hopper {hopper_identifier} ({})",
                         get_language_string(language_code),
-                        hopper_configuration_json.configuration.hopper_name.get_string(),
+                        hopper_configuration_json.configuration.hopper_name.get_string()?,
                     ));
                     continue;
                 }
@@ -1446,7 +1443,7 @@ impl v12070_08_09_05_2031_halo3_ship {
                         "No {} description was found for category {} ({})",
                         get_language_string(language_code),
                         active_hopper_category.configuration.category_identifier,
-                        active_hopper_category.configuration.category_name.get_string(),
+                        active_hopper_category.configuration.category_name.get_string()?,
                     ));
                     continue;
                 }
@@ -1457,7 +1454,7 @@ impl v12070_08_09_05_2031_halo3_ship {
                         "No {} description was found for category {} ({})",
                         get_language_string(language_code),
                         active_hopper_category.configuration.category_identifier,
-                        active_hopper_category.configuration.category_name.get_string(),
+                        active_hopper_category.configuration.category_name.get_string()?,
                     ));
                     continue;
                 }

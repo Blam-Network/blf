@@ -37,8 +37,8 @@ fn main() {
         TitleStorage(title_storage_command) => match title_storage_command.command {
             TitleStorageSubcommands::Build { config_input_path, blf_output_path, title, version } => {
                 let mut title_converter =
-                    title_storage::get_title_converter(title, version)
-                        .expect("No title converter was found for the provided title and version.");
+                    title_storage::get_title_converter(&title, &version)
+                        .expect(&format!("No title converter was found for the provided title and version: {title}, {version}"));
 
                 title_converter.build_blfs(
                     &config_input_path,
