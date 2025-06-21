@@ -18,6 +18,7 @@ use tempdir::TempDir;
 use crate::title_storage::halo3odst::v13895_09_04_27_2201_atlas_release::blf_files::manifest::{k_manifest_file_name, manifest};
 use blf_files::network_configuration::network_configuration;
 use blf_lib::blf::versions::halo3odst::v13895_09_04_27_2201_atlas_release::s_blf_chunk_network_configuration;
+use blf_lib::result::BLFLibResult;
 use crate::title_storage::halo3odst::v13895_09_04_27_2201_atlas_release::blf_files::k_hopper_directory_name_max_length;
 use crate::title_storage::halo3odst::v13895_09_04_27_2201_atlas_release::blf_files::network_configuration::k_network_configuration_file_name;
 use crate::title_storage::halo3odst::v13895_09_04_27_2201_atlas_release::blf_files::rsa_manifest::{k_rsa_manifest_file_name, rsa_manifest};
@@ -306,7 +307,7 @@ impl v13895_09_04_27_2201_atlas_release {
 
         // We read and rewrite to tidy any padding and the headers.
         let mut network_config = network_configuration::read_file(&network_configuration_source_path)?;
-        network_config.write_file(&network_configuration_dest_path);
+        network_config.write_file(&network_configuration_dest_path)?;
 
         fs::copy(network_configuration_source_path, network_configuration_dest_path)?;
 
@@ -331,7 +332,7 @@ impl v13895_09_04_27_2201_atlas_release {
                 hoppers_blf_folder,
                 language_code,
                 k_matchmaking_banhammer_messages_file_name
-            ));
+            ))?;
         }
 
         やった!(task)
@@ -364,7 +365,7 @@ impl v13895_09_04_27_2201_atlas_release {
                 hoppers_blf_path,
                 language_code,
                 k_motd_file_name
-            ));
+            ))?;
         }
 
         for language_code in k_language_suffixes {
@@ -398,7 +399,7 @@ impl v13895_09_04_27_2201_atlas_release {
         やった!(task)
     }
 
-    fn build_blf_motd_popups(hoppers_config_folder: &String, hoppers_blf_folder: &String, vidmaster: bool) -> Result<(), Box<dyn Error>>{
+    fn build_blf_motd_popups(hoppers_config_folder: &String, hoppers_blf_folder: &String, vidmaster: bool) -> BLFLibResult {
         let mut task = console_task::start(format!(
             "Building {} Popups",
             if vidmaster { "Vidmaster" } else { "MOTD" }
@@ -422,7 +423,7 @@ impl v13895_09_04_27_2201_atlas_release {
                 hoppers_blf_folder,
                 language_code,
                 if vidmaster { k_vidmaster_popup_file_name } else { k_motd_popup_file_name }
-            ));
+            ))?;
         }
 
         for language_code in k_language_suffixes {
@@ -467,7 +468,7 @@ impl v13895_09_04_27_2201_atlas_release {
         rsa_manifest.write_file(build_path!(
             hoppers_blf_path,
             k_rsa_manifest_file_name
-        ));
+        ))?;
 
         やった!(task)
     }
@@ -488,7 +489,7 @@ impl v13895_09_04_27_2201_atlas_release {
                 hoppers_blfs_path,
                 k_network_configuration_file_name
             )
-        );
+        )?;
 
         やった!(task)
     }
@@ -505,7 +506,7 @@ impl v13895_09_04_27_2201_atlas_release {
         manifest_blf_file.write_file(build_path!(
             hoppers_blfs_path,
             k_manifest_file_name
-        ));
+        ))?;
 
         やった!(task)
     }

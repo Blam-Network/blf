@@ -1,4 +1,3 @@
-use std::error::Error;
 use std::u32;
 use binrw::binrw;
 use serde::{Deserialize, Serialize};

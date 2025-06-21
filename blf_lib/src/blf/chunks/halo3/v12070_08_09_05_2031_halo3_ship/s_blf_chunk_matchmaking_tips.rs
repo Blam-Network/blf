@@ -1,6 +1,5 @@
-use std::error::Error;
 use std::u32;
-use binrw::{binrw, BinResult};
+use binrw::{binrw};
 use serde::{Deserialize, Serialize};
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
 use blf_lib_derive::BlfChunk;

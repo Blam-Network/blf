@@ -1,4 +1,3 @@
-use std::error::Error;
 use std::fmt::{Debug, Display};
 
 pub struct BLFLibError(Box<dyn std::error::Error>);

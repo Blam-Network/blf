@@ -40,7 +40,6 @@ use crate::title_storage::halo3::release::blf_files::map_variant::{k_map_variant
 use crate::title_storage::halo3::release::blf_files::matchmaking_hopper::{k_active_hoppers_config_file_name, k_categories_config_file_name, k_hopper_config_file_name, k_hoppers_config_folder_name, k_matchmaking_hopper_file_name, matchmaking_hopper, matchmaking_hopper_categories_config, matchmaking_hopper_category_configuration_and_descriptions, matchmaking_hopper_config, read_active_hoppers};
 use crate::title_storage::halo3::release::blf_files::matchmaking_hopper_descriptions::{k_matchmaking_hopper_descriptions_file_name, matchmaking_hopper_descriptions};
 use blf_files::network_configuration::network_configuration;
-use blf_lib::OPTION_TO_RESULT;
 use blf_lib::result::BLFLibResult;
 use crate::title_storage::halo3::release::blf_files::game_set::{k_game_set_blf_file_name, game_set_config, game_set, k_game_set_config_file_name};
 use crate::title_storage::halo3::release::blf_files::{k_hopper_directory_name_max_length};
@@ -187,7 +186,7 @@ impl TitleConverter for v12070_08_09_05_2031_halo3_ship {
                 Self::build_config_map_variants(&hoppers_blf_path, &hoppers_config_path)?;
                 Self::build_config_game_variants(&hoppers_blf_path, &hoppers_config_path)?;
                 Self::build_config_game_sets(&hoppers_blf_path, &hoppers_config_path)?;
-                Self::build_config_hoppers(&hoppers_blf_path, &hoppers_config_path);
+                Self::build_config_hoppers(&hoppers_blf_path, &hoppers_config_path)?;
                 Self::build_config_network_configuration(&hoppers_blf_path, &hoppers_config_path)?;
                 Ok(())
             }();
@@ -725,7 +724,7 @@ impl v12070_08_09_05_2031_halo3_ship {
                 hoppers_blf_folder,
                 language_code,
                 k_matchmaking_banhammer_messages_file_name
-            ));
+            ))?;
         }
 
         やった!(task)
@@ -746,7 +745,7 @@ impl v12070_08_09_05_2031_halo3_ship {
                 hoppers_blf_folder,
                 language_code,
                 k_matchmaking_tips_file_name
-            ));
+            ))?;
         }
 
         やった!(task)
@@ -784,7 +783,7 @@ impl v12070_08_09_05_2031_halo3_ship {
                 hoppers_blf_path,
                 language_code,
                 if mythic { k_mythic_motd_file_name } else { k_mythic_motd_file_name }
-            ));
+            ))?;
         }
 
         for language_code in k_language_suffixes {
@@ -843,7 +842,7 @@ impl v12070_08_09_05_2031_halo3_ship {
                 hoppers_blf_folder,
                 language_code,
                 if mythic { k_mythic_motd_popup_file_name } else { k_motd_popup_file_name }
-            ));
+            ))?;
         }
 
         for language_code in k_language_suffixes {
@@ -888,7 +887,7 @@ impl v12070_08_09_05_2031_halo3_ship {
         rsa_manifest.write_file(build_path!(
             hoppers_blf_path,
             k_rsa_manifest_file_name
-        ));
+        ))?;
 
         やった!(task)
     }
@@ -1037,8 +1036,8 @@ impl v12070_08_09_05_2031_halo3_ship {
 
                             let game_variant_json: c_game_variant = serde_json::from_str(&json).unwrap();
 
-                            let mut map_variant_blf_file = game_variant::create(game_variant_json);
-                            map_variant_blf_file.write_file(&game_variant_blf_path);
+                            let mut game_variant_blf_file = game_variant::create(game_variant_json);
+                            game_variant_blf_file.write_file(&game_variant_blf_path).expect(&format!("Failed to write game variant {}", game_variant_file_name));
 
                             let hash = get_blf_file_hash(game_variant_blf_path).unwrap();
                             let mut hashes = shared_variant_hashes.lock().await;
@@ -1213,7 +1212,7 @@ impl v12070_08_09_05_2031_halo3_ship {
                             map_ids.insert(map_variant_file_name.clone(), map_variant_json.m_map_id);
 
                             let mut map_variant_blf_file = map_variant::create(map_variant_json);
-                            map_variant_blf_file.write_file(&map_variant_blf_path);
+                            map_variant_blf_file.write_file(&map_variant_blf_path).unwrap();
 
                             let hash = get_blf_file_hash(map_variant_blf_path).unwrap();
                             let mut hashes = shared_variant_hashes.lock().await;
@@ -1473,7 +1472,7 @@ impl v12070_08_09_05_2031_halo3_ship {
             );
 
             let mut matchmaking_hopper_descriptions = matchmaking_hopper_descriptions::create(language_descriptions);
-            matchmaking_hopper_descriptions.write_file(&descriptions_blf_path);
+            matchmaking_hopper_descriptions.write_file(&descriptions_blf_path)?;
         }
 
         // Write the hopper config file.
@@ -1481,7 +1480,7 @@ impl v12070_08_09_05_2031_halo3_ship {
         matchmaking_hopper_blf.write_file(build_path!(
             hoppers_blfs_path,
             k_matchmaking_hopper_file_name
-        ));
+        ))?;
 
         やった!(task)
     }
@@ -1498,7 +1497,7 @@ impl v12070_08_09_05_2031_halo3_ship {
                 hoppers_blfs_path,
                 k_network_configuration_file_name
             )
-        );
+        )?;
 
         やった!(task)
     }
@@ -1515,7 +1514,7 @@ impl v12070_08_09_05_2031_halo3_ship {
         manifest_blf_file.write_file(build_path!(
             hoppers_blfs_path,
             k_manifest_file_name
-        ));
+        ))?;
 
         やった!(task)
     }

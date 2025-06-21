@@ -96,7 +96,7 @@ impl BlfFileBuilder {
 
             let mut body_bytes = vec![0u8; (header.chunk_size as usize) - s_blf_header::size()];
             reader.read_exact(&mut body_bytes)?;
-            chunk.decode_body(&body_bytes);
+            chunk.decode_body(&body_bytes)?;
         }
 
         Ok(self)

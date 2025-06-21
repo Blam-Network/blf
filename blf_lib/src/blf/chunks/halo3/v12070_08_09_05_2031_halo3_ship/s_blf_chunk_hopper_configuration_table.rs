@@ -8,7 +8,6 @@ use crate::types::c_string::StaticString;
 use blf_lib::types::time::{filetime};
 use crate::io::bitstream::close_bitstream_writer;
 use serde_hex::{SerHex,StrictCap};
-use blf_lib::BINRW_RESULT;
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
 use blf_lib_derive::BlfChunk;
 use crate::types::numbers::Float32;

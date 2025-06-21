@@ -87,8 +87,8 @@ impl c_map_variant {
                 else
                 {
                     bitstream.write_bool(true)?;
-                    simulation_write_quantized_position(bitstream, &variant_object.position, 16, false, &self.m_world_bounds);
-                    bitstream.write_axes(&variant_object.forward, &variant_object.up);
+                    simulation_write_quantized_position(bitstream, &variant_object.position, 16, false, &self.m_world_bounds)?;
+                    bitstream.write_axes(&variant_object.forward, &variant_object.up)?;
                     bitstream.write_integer(variant_object.multiplayer_game_object_properties.object_type as u32, 8)?;
                     bitstream.write_integer(variant_object.multiplayer_game_object_properties.symmetry_placement_flags as u32, 8)?;
                     bitstream.write_integer(variant_object.multiplayer_game_object_properties.game_engine_flags as u32, 16)?;
@@ -120,7 +120,7 @@ impl c_map_variant {
         }
 
         for i in 0..k_object_type_count {
-            bitstream.write_integer((self.m_object_type_start_index[i] + 1) as u32, 9);
+            bitstream.write_integer((self.m_object_type_start_index[i] + 1) as u32, 9)?;
         }
 
         for i in 0..self.m_number_of_placeable_object_quotas as usize {
@@ -173,7 +173,7 @@ impl c_map_variant {
                 continue;
             }
 
-            simulation_read_quantized_position(bitstream, &mut variant_object.position, 16, &self.m_world_bounds);
+            simulation_read_quantized_position(bitstream, &mut variant_object.position, 16, &self.m_world_bounds)?;
             bitstream.read_axis(&mut variant_object.forward, &mut variant_object.up)?;
             variant_object.multiplayer_game_object_properties.object_type = bitstream.read_signed_integer(8)? as i8;
             variant_object.multiplayer_game_object_properties.symmetry_placement_flags = bitstream.read_u8(8)?;

@@ -80,13 +80,13 @@ impl BinWrite for s_blf_chunk_hopper_description_table {
     fn write_options<W: Write + Seek>(&self, writer: &mut W, endian: Endian, args: Self::Args<'_>) -> BinResult<()> {
         let mut bitstream = create_bitstream_writer(0x4000, e_bitstream_byte_order::_bitstream_byte_order_big_endian);
 
-        bitstream.write_integer(self.description_count as u32, 6);
+        bitstream.write_integer(self.description_count as u32, 6)?;
 
         for i in 0..self.description_count {
             let description = &self.descriptions[i];
-            bitstream.write_integer(description.identifier as u32, 16);
-            bitstream.write_bool(description.hopper_type);
-            bitstream.write_string_utf8(&description.description.get_string()?, 256);
+            bitstream.write_integer(description.identifier as u32, 16)?;
+            bitstream.write_bool(description.hopper_type)?;
+            bitstream.write_string_utf8(&description.description.get_string()?, 256)?;
         }
 
         writer.write_ne(&close_bitstream_writer(&mut bitstream))

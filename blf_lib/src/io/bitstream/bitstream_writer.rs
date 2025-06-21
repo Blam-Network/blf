@@ -4,6 +4,7 @@ use std::error::Error;
 use std::io::Cursor;
 use binrw::BinWrite;
 use widestring::U16CString;
+use blf_lib::assert_ok;
 use blf_lib::blam::common::math::real_math::{assert_valid_real_normal3d, cross_product3d, dequantize_unit_vector3d, dot_product3d, k_real_epsilon, global_forward3d, global_left3d, global_up3d, normalize3d, valid_real_vector3d_axes3, arctangent, quantize_normalized_vector3d, k_pi};
 use blf_lib_derivable::result::BLFLibResult;
 use crate::blam::common::math::integer_math::int32_point3d;
@@ -66,10 +67,10 @@ impl c_bitstream_writer {
     pub fn write_signed_integer(&mut self, value: i32, size_in_bits: usize) -> BLFLibResult {
         let max_value = ((1u32 << (size_in_bits - 1)) - 1) as i32; // Maximum positive value
 
-        assert!(self.writing(), "writing()");
-        assert!(size_in_bits <= 32, "size_in_bits>0 && size_in_bits<=LONG_BITS");
-        assert!(value > !max_value, "value>=minimum");
-        assert!(value < max_value, "value<=maximum");
+        assert_ok!(self.writing(), "writing()");
+        assert_ok!(size_in_bits <= 32, "size_in_bits>0 && size_in_bits<=LONG_BITS");
+        assert_ok!(value > !max_value, "value>=minimum");
+        assert_ok!(value < max_value, "value<=maximum");
         self.write_integer(value as u32, size_in_bits)?;
 
         Ok(())
@@ -95,7 +96,7 @@ impl c_bitstream_writer {
     }
 
     pub fn write_raw_data(&mut self, value: &[u8], size_in_bits: usize) -> BLFLibResult {
-        assert!(value.len() >= size_in_bits / 8);
+        assert_ok!(value.len() >= size_in_bits / 8);
         self.write_bits_internal(value, size_in_bits)?;
 
         Ok(())
@@ -115,7 +116,7 @@ impl c_bitstream_writer {
 
         let value = writer.get_ref().clone();
         let value = value.as_slice();
-        assert!(value.len() >= size_in_bits / 8);
+        assert_ok!(value.len() >= size_in_bits / 8);
         self.write_bits_internal(value, size_in_bits)?;
 
         Ok(())
@@ -206,16 +207,18 @@ impl c_bitstream_writer {
         unimplemented!()
     }
 
-    pub fn write_point3d(&mut self, point: &int32_point3d, axis_encoding_size_in_bits: usize) {
-        assert!(axis_encoding_size_in_bits > 0 && axis_encoding_size_in_bits <= 32);
+    pub fn write_point3d(&mut self, point: &int32_point3d, axis_encoding_size_in_bits: usize) -> BLFLibResult {
+        assert_ok!(axis_encoding_size_in_bits > 0 && axis_encoding_size_in_bits <= 32);
 
-        assert!(point.x < 1 << axis_encoding_size_in_bits);
-        assert!(point.y < 1 << axis_encoding_size_in_bits);
-        assert!(point.z < 1 << axis_encoding_size_in_bits);
+        assert_ok!(point.x < 1 << axis_encoding_size_in_bits);
+        assert_ok!(point.y < 1 << axis_encoding_size_in_bits);
+        assert_ok!(point.z < 1 << axis_encoding_size_in_bits);
 
-        self.write_integer(point.x as u32, axis_encoding_size_in_bits);
-        self.write_integer(point.y as u32, axis_encoding_size_in_bits);
-        self.write_integer(point.z as u32, axis_encoding_size_in_bits);
+        self.write_integer(point.x as u32, axis_encoding_size_in_bits)?;
+        self.write_integer(point.y as u32, axis_encoding_size_in_bits)?;
+        self.write_integer(point.z as u32, axis_encoding_size_in_bits)?;
+
+        Ok(())
     }
 
     pub fn write_quantized_real(
@@ -227,7 +230,7 @@ impl c_bitstream_writer {
         exact_midpoint: bool,
         exact_endpoints: bool
     ) -> BLFLibResult {
-        assert!(self.writing());
+        assert_ok!(self.writing());
         self.write_integer(
             quantize_real(
                 value.into(),
@@ -250,9 +253,9 @@ impl c_bitstream_writer {
     }
 
     pub fn write_string_utf8(&mut self, char_string: &String, max_string_size: u32) -> BLFLibResult {
-        assert!(self.writing());
-        assert!(max_string_size > 0);
-        assert!(char_string.len() <= max_string_size as usize);
+        assert_ok!(self.writing());
+        assert_ok!(max_string_size > 0);
+        assert_ok!(char_string.len() <= max_string_size as usize);
 
         for byte in char_string.as_bytes() {
             self.write_value_internal(&[*byte], 8)?;
@@ -265,9 +268,9 @@ impl c_bitstream_writer {
     }
 
     pub fn write_string_wchar(&mut self, value: &String, max_string_size: usize) -> BLFLibResult {
-        assert!(self.writing());
-        assert!(value.len() <= max_string_size);
-        assert!(max_string_size > 0);
+        assert_ok!(self.writing());
+        assert_ok!(value.len() <= max_string_size);
+        assert_ok!(max_string_size > 0);
 
         let wchar_string = U16CString::from_str(value).map_err(|e|e.to_string())?;
         let characters = wchar_string.as_slice();
@@ -419,8 +422,8 @@ impl c_bitstream_writer {
         up: &real_vector3d,
         forward_reference: &mut real_vector3d,
         left_reference: &mut real_vector3d
-    ) {
-        assert!(assert_valid_real_normal3d(up));
+    ) -> BLFLibResult {
+        assert_ok!(assert_valid_real_normal3d(up));
 
         let v10 = dot_product3d(up, &global_forward3d).abs();
         let v9 = dot_product3d(up, &global_left3d).abs();
@@ -432,30 +435,32 @@ impl c_bitstream_writer {
         }
 
         let forward_magnitude = normalize3d(forward_reference);
-        assert!(forward_magnitude > k_real_epsilon, "forward_magnitude>k_real_epsilon");
+        assert_ok!(forward_magnitude > k_real_epsilon, "forward_magnitude>k_real_epsilon");
 
         cross_product3d(up, forward_reference, left_reference);
 
         let left_magnitude = normalize3d(left_reference);
-        assert!(left_magnitude > k_real_epsilon, "left_magnitude>k_real_epsilon");
+        assert_ok!(left_magnitude > k_real_epsilon, "left_magnitude>k_real_epsilon");
 
-        assert!(valid_real_vector3d_axes3(forward_reference, left_reference, up)); // Failing
+        assert_ok!(valid_real_vector3d_axes3(forward_reference, left_reference, up));
+
+        Ok(())
     }
 
-    fn axes_to_angle_internal(forward: &real_vector3d, up: &real_vector3d) -> f32 {
+    fn axes_to_angle_internal(forward: &real_vector3d, up: &real_vector3d) -> BLFLibResult<f32> {
         let mut forward_reference: real_vector3d = real_vector3d::default();
         let mut left_reference: real_vector3d = real_vector3d::default();
-        c_bitstream_writer::axes_compute_reference_internal(up, &mut forward_reference, &mut left_reference);
-        arctangent(dot_product3d(&left_reference, forward), dot_product3d(&forward_reference, forward))
+        c_bitstream_writer::axes_compute_reference_internal(up, &mut forward_reference, &mut left_reference)?;
+        Ok(arctangent(dot_product3d(&left_reference, forward), dot_product3d(&forward_reference, forward)))
     }
 
     pub fn write_axes(
         &mut self,
         forward: &real_vector3d,
         up: &real_vector3d,
-    ) {
-        assert!(assert_valid_real_normal3d(up));
-        assert!(assert_valid_real_normal3d(forward));
+    ) -> BLFLibResult {
+        assert_ok!(assert_valid_real_normal3d(up));
+        assert_ok!(assert_valid_real_normal3d(forward));
 
         let mut dequantized_up: real_vector3d = real_vector3d::default();
 
@@ -468,16 +473,18 @@ impl c_bitstream_writer {
             || k_abs > k_real_epsilon
         {
             let quantized_up = quantize_normalized_vector3d(up);
-            self.write_bool(false); // up-is-global-up3d
-            self.write_integer(quantized_up as u32, 19);
-            dequantize_unit_vector3d(quantized_up, &mut dequantized_up);
+            self.write_bool(false)?; // up-is-global-up3d
+            self.write_integer(quantized_up as u32, 19)?;
+            dequantize_unit_vector3d(quantized_up, &mut dequantized_up)?;
         } else {
-            self.write_bool(true); // up-is-global-up3d
+            self.write_bool(true)?; // up-is-global-up3d
             dequantized_up = global_up3d;
         }
 
-        let forward_angle = c_bitstream_writer::axes_to_angle_internal(forward, &dequantized_up);
-        self.write_quantized_real(forward_angle, -k_pi, k_pi, 8, true, false);
+        let forward_angle = c_bitstream_writer::axes_to_angle_internal(forward, &dequantized_up)?;
+        self.write_quantized_real(forward_angle, -k_pi, k_pi, 8, true, false)?;
+
+        Ok(())
     }
 
     // not from blam

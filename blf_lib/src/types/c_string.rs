@@ -371,7 +371,7 @@ impl<const N: usize> FromWasmAbi for StaticWcharString<N> {
 
     unsafe fn from_abi(js: Self::Abi) -> Self {
         let mut res = Self {buf: StaticArray::default()};
-        res.set_string_trimmed(&String::from_abi(js));
+        res.set_string_trimmed_unchecked(&String::from_abi(js));
         res
     }
 }

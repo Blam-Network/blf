@@ -12,7 +12,6 @@ use crate::build_path;
 use crate::io::create_parent_folders;
 use crate::title_storage::check_file_exists;
 use std::fs::File;
-use blf_lib::result::BLFLibResult;
 
 pub const k_motd_file_name: &str = "motd.bin";
 pub const k_mythic_motd_file_name: &str = "blue_motd.bin";

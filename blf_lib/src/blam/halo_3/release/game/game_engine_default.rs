@@ -126,10 +126,10 @@ impl c_game_engine_base_variant {
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult<()> {
         self.m_metadata.decode(bitstream)?;
         self.m_flags = bitstream.read_u16(1)?;
-        self.m_miscellaneous_options.decode(bitstream);
-        self.m_respawn_options.decode(bitstream);
-        self.m_social_options.decode(bitstream);
-        self.m_map_override_options.decode(bitstream);
+        self.m_miscellaneous_options.decode(bitstream)?;
+        self.m_respawn_options.decode(bitstream)?;
+        self.m_social_options.decode(bitstream)?;
+        self.m_map_override_options.decode(bitstream)?;
         self.m_team_scoring_method = bitstream.read_u16(3)?;
 
         Ok(())

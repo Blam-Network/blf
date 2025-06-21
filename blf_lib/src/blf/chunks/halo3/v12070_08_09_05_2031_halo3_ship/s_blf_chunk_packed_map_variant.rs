@@ -43,7 +43,7 @@ impl BinRead for s_blf_chunk_packed_map_variant {
 
         let mut packed_map_variant = Self::default();
 
-        packed_map_variant.map_variant.decode(&mut bitstream);
+        packed_map_variant.map_variant.decode(&mut bitstream)?;
 
         Ok(packed_map_variant)
     }
@@ -54,7 +54,7 @@ impl BinWrite for s_blf_chunk_packed_map_variant {
 
     fn write_options<W: Write + Seek>(&self, writer: &mut W, endian: Endian, args: Self::Args<'_>) -> BinResult<()> {
         let mut bitstream = create_bitstream_writer(0xE0A0, e_bitstream_byte_order::_bitstream_byte_order_big_endian);
-        self.map_variant.encode(&mut bitstream);
+        self.map_variant.encode(&mut bitstream)?;
         writer.write_ne(&close_bitstream_writer(&mut bitstream))
     }
 }

@@ -43,3 +43,17 @@ macro_rules! OPTION_TO_RESULT {
         }
     };
 }
+
+#[macro_export]
+macro_rules! assert_ok {
+    ($cond:expr, $arg:expr) => {
+        if (!$cond) {
+            return Err(blf_lib::result::BLFLibError::from($arg))
+        }
+    };
+    ($($cond:tt)*) => {
+        if (!($($cond)*)) {
+            return Err(blf_lib::result::BLFLibError::from(format!("{:?}", String::from(stringify!($($cond)*)))));
+        }
+    };
+}

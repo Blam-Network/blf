@@ -2,7 +2,6 @@ use binrw::binrw;
 #[cfg(feature = "napi")]
 use napi_derive::napi;
 use serde::{Deserialize, Serialize};
-use blf_lib_derivable::result::BLFLibResult;
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
 use blf_lib_derive::BlfChunk;
 use crate::types::byte_order_mark::byte_order_mark;
