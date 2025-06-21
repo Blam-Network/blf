@@ -1,11 +1,11 @@
 name: blf_bnet
 on:
   push:
-    branches: [ "main", "workflow", "wasm" ]
+    branches: [ "main", "workflow", "wasm", "beta" ]
     tags:
       - '*'
   pull_request:
-    branches: [ "main", "workflow", "wasm" ]
+    branches: [ "main", "workflow", "wasm", "beta" ]
 
 env:
   CARGO_TERM_COLOR: always

@@ -1,11 +1,11 @@
 name: blf_lib
 on:
   push:
-    branches: [ "main", "workflow" ]
+    branches: [ "main", "workflow", "beta" ]
     tags:
       - '*'
   pull_request:
-    branches: [ "main", "workflow" ]
+    branches: [ "main", "workflow", "beta" ]
 
 env:
   CARGO_TERM_COLOR: always
