@@ -9,6 +9,7 @@ use napi::bindgen_prelude::{FromNapiValue, ToNapiValue};
 use napi::sys;
 #[cfg(feature = "napi")]
 use napi::sys::{napi_env};
+use blf_lib::result::BLFLibResult;
 
 #[derive(PartialEq, Debug)]
 pub struct StaticArray<E: 'static, const N: usize> {
@@ -43,17 +44,6 @@ impl<'a, E: BinWrite<Args<'a> = ()> + 'static, const N: usize> BinWrite for Stat
     }
 }
 
-impl <E, const N: usize> StaticArray<E, N> {
-    pub fn from_vec(vec: Vec<E>) -> Result<Self, String> {
-        if vec.len() != N {
-            return Err(format!("Expected {N} elements but got {}.", vec.len()));
-        }
-        Ok(Self {
-            _data: vec
-        })
-    }
-}
-
 impl<E: Clone, const N: usize> Clone for StaticArray<E, N> {
     fn clone(&self) -> Self {
         StaticArray {
@@ -79,6 +69,16 @@ impl<E: Default + Clone, const N: usize> StaticArray<E, N> {
             _data: vec![E::default(); N],
         };
         new._data.clone_from_slice(slice);
+        Ok(new)
+    }
+
+    pub fn from_vec(vec: &Vec<E>) -> BLFLibResult<Self> {
+        if vec.len() > N {
+            return Err(format!("Expected {N} elements but got {}.", vec.len()).into());
+        }
+        let mut new = Self::default();
+        new._data.clone_from(vec);
+        new._data.extend_from_slice(&vec![E::default(); N - vec.len()]);
         Ok(new)
     }
 }

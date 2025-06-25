@@ -1,9 +1,11 @@
 use std::io::{Cursor, Read, Seek, Write};
 use binrw::{BinRead, BinResult, BinWrite, BinWriterExt, Endian};
+use flate2::Compression;
 use flate2::read::ZlibDecoder;
+use flate2::write::ZlibEncoder;
 use serde::{Deserialize, Serialize};
 use blf_lib::blam::common::memory::secure_signature::s_network_http_request_hash;
-use blf_lib::io::bitstream::{c_bitstream_reader, create_bitstream_writer, e_bitstream_byte_order};
+use blf_lib::io::bitstream::{c_bitstream_reader, close_bitstream_writer, create_bitstream_writer, e_bitstream_byte_order};
 use blf_lib::types::array::StaticArray;
 use crate::types::c_string::StaticString;
 use blf_lib::types::time::{filetime};
@@ -46,7 +48,7 @@ impl BinRead for s_blf_chunk_hopper_configuration_table {
         let mut decoder = ZlibDecoder::new(Cursor::new(compressed_hopper_table_data));
         decoder.read_to_end(&mut decompressed_hopper_table_data)?;
 
-        // Parse the unpacked, decompressed chunk.
+        // Read the unpacked, decompressed chunk.
         let mut decompressed_hopper_reader = Cursor::new(decompressed_hopper_table_data);
         let mut hopper_table = Self::default();
         let hopper_configuration_count: u32 = BinRead::read_options(&mut decompressed_hopper_reader, endian, args)?;
@@ -71,7 +73,44 @@ impl BinWrite for s_blf_chunk_hopper_configuration_table {
     type Args<'a> = ();
 
     fn write_options<W: Write + Seek>(&self, writer: &mut W, endian: Endian, args: Self::Args<'_>) -> BinResult<()> {
-        unimplemented!()
+        // 2. Deflate via zlib
+        // 3. Write packed chunk
+
+        // this chunk in this version is BE
+        let endian = Endian::Big;
+
+        // 1. Encode chunk
+        let mut encoded_chunk = Vec::<u8>::new();
+        let mut encoded_writer = Cursor::new(&mut encoded_chunk);
+
+        let configurations_count = self.hopper_configurations.len() as u32;
+        let categories_count = self.hopper_categories.len() as u32;
+        let categories: StaticArray<s_game_hopper_custom_category, k_maximum_hopper_categories>
+            = StaticArray::from_vec(&self.hopper_categories)?;
+        let configurations: StaticArray<c_hopper_configuration, k_maximum_hopper_configurations>
+            = StaticArray::from_vec(&self.hopper_configurations)?;
+
+        configurations_count.write_options(&mut encoded_writer, endian, args)?;
+        categories_count.write_options(&mut encoded_writer, endian, args)?;
+        categories.write_options(&mut encoded_writer, endian, args)?;
+        configurations.write_options(&mut encoded_writer, endian, args)?;
+
+        // 2. Deflate
+        let mut e = ZlibEncoder::new(Vec::new(), Compression::new(9));
+        e.write_all(encoded_chunk.as_slice())?;
+        let compressed_data = e.finish()?;
+
+        // 3. Pack
+        let compressed_length: u16 = compressed_data.len() as u16;
+        let uncompressed_length: u32 = encoded_chunk.len() as u32;
+        // TODO: allow the writer to grow if it runs out of space.
+        let mut packed_writer = create_bitstream_writer(0x8F48, e_bitstream_byte_order::from_binrw_endian(endian));
+        packed_writer.write_integer((compressed_length + 4) as u32, 14)?;
+        packed_writer.write_integer(uncompressed_length, 32)?;
+        packed_writer.write_raw_data(&compressed_data, (compressed_length * 8) as usize)?;
+        writer.write_ne(&close_bitstream_writer(&mut packed_writer)?)?;
+
+        Ok(())
     }
 }
 
