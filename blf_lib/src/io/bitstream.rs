@@ -33,6 +33,16 @@ pub enum e_bitstream_byte_order
     _bitstream_byte_order_big_endian
 }
 
+impl e_bitstream_byte_order
+{
+    pub fn from_binrw_endian(endian: binrw::endian::Endian) -> e_bitstream_byte_order {
+        match endian {
+            binrw::endian::Endian::Big => e_bitstream_byte_order::_bitstream_byte_order_big_endian,
+            binrw::endian::Endian::Little => e_bitstream_byte_order::_bitstream_byte_order_little_endian
+        }
+    }
+}
+
 #[derive(Default, PartialEq, Eq, Debug)]
 pub enum e_bitstream_state
 {
