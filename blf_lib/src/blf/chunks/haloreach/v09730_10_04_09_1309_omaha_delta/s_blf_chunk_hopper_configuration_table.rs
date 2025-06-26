@@ -19,7 +19,7 @@ pub const k_hopper_maximum_category_count: usize = 16;
 pub const k_hopper_maximum_hopper_count: usize = 32; // TODO: Check, this seems low.
 
 #[derive(BlfChunk,Default,PartialEq,Debug,Clone,Serialize,Deserialize)]
-#[Header("mhcf", 27.1)]
+#[Header("mhcf", 25.1)]
 pub struct s_blf_chunk_hopper_configuration_table
 {
     pub hopper_categories: Vec<s_game_hopper_custom_category>,
@@ -104,7 +104,7 @@ impl BinWrite for s_blf_chunk_hopper_configuration_table {
         let compressed_length: u16 = compressed_data.len() as u16;
         let uncompressed_length: u32 = encoded_chunk.len() as u32;
         // TODO: allow the writer to grow if it runs out of space.
-        let mut packed_writer = create_bitstream_writer(0x8F48, e_bitstream_byte_order::from_binrw_endian(endian));
+        let mut packed_writer = create_bitstream_writer(0x8A48, e_bitstream_byte_order::from_binrw_endian(endian));
         packed_writer.write_integer((compressed_length + 4) as u32, 14)?;
         packed_writer.write_integer(uncompressed_length, 32)?;
         packed_writer.write_raw_data(&compressed_data, (compressed_length * 8) as usize)?;
@@ -156,13 +156,6 @@ pub struct s_hopper_configuration_per_team_data {
     pub maximum_team_size: u32,
     pub team_model_override: u32,
     pub team_allegiance: u32,
-}
-
-#[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
-pub struct s_hopper_jackpot_configuration {
-    pub unknown1: u32,
-    pub unknown2: u32,
-    pub unknown3: u32,
 }
 
 #[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, TestSize)]
@@ -265,6 +258,4 @@ pub struct c_hopper_configuration {
     pub dword424: u32,
     pub gap428: u32, // unsure
     pub undersized_party_split_permissions: u32,
-    pub jackpot_minimum_time_seconds: u32,
-    pub jackpot_configurations: StaticArray<s_hopper_jackpot_configuration, 3>,
 }
