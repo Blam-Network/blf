@@ -13,6 +13,7 @@ pub use haloreach::v12065_11_08_24_1738_tu1actual::s_blf_chunk_rewards_persistan
 pub use haloreach::v12065_11_08_24_1738_tu1actual::s_blf_chunk_service_record::*;
 pub use haloreach::v12065_11_08_24_1738_tu1actual::s_blf_chunk_hopper_configuration_table::*;
 pub use haloreach::v12065_11_08_24_1738_tu1actual::s_blf_chunk_game_set::*;
+pub use haloreach::v12065_11_08_24_1738_tu1actual::s_blf_chunk_nag_message::*;
 
 #[derive(TitleAndBuild)]
 #[Title("Halo: Reach")]
