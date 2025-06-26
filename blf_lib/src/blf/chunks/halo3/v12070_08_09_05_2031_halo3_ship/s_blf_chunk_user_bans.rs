@@ -5,6 +5,7 @@ use blf_lib_derivable::blf::chunks::BlfChunkHooks;
 use blf_lib_derive::BlfChunk;
 use std::io::{Read, Seek, Write};
 use blf_lib::types::time::time64_t;
+use blf_lib_derivable::result::BLFLibResult;
 use crate::types::u64::Unsigned64;
 
 pub const k_max_bans_count: usize = 32;
@@ -89,10 +90,11 @@ pub enum BanType {
 }
 
 impl BlfChunkHooks for s_blf_chunk_user_bans {
-    fn before_write(&mut self, _previously_written: &Vec<u8>) {
+    fn before_write(&mut self, _previously_written: &Vec<u8>) -> BLFLibResult {
         if self.bans.len() > k_max_bans_count {
-            println!("Tried to write a bans file with too many bans! ({}/{})", k_max_bans_count, self.bans.len());
-            self.bans.resize(32, s_blf_chunk_user_bans_ban::default());
+            return Err(format!("Tried to write a bans file with too many bans! ({}/{})", k_max_bans_count, self.bans.len()).into())
         }
+
+        Ok(())
     }
 }

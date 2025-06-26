@@ -3,6 +3,7 @@ use binrw::{binrw, BinRead, BinWrite};
 use napi_derive::napi;
 use serde::{Deserialize, Serialize};
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
+use blf_lib_derivable::result::BLFLibResult;
 use blf_lib_derive::BlfChunk;
 
 #[binrw]
@@ -18,8 +19,10 @@ pub struct s_blf_chunk_end_of_file
 }
 
 impl BlfChunkHooks for s_blf_chunk_end_of_file {
-    fn before_write(&mut self, previously_written: &Vec<u8>) {
+    fn before_write(&mut self, previously_written: &Vec<u8>) -> BLFLibResult {
         self.file_size = previously_written.len() as u32;
+
+        Ok(())
     }
 }
 

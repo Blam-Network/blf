@@ -2,6 +2,7 @@ use std::any::Any;
 use std::error::Error;
 use binrw::{BinRead, BinWrite, BinWriterExt};
 use crate::blf::s_blf_header::s_blf_header;
+use crate::result::BLFLibResult;
 use crate::types::chunk_signature::chunk_signature;
 use crate::types::chunk_version::chunk_version;
 
@@ -16,8 +17,8 @@ pub trait DynamicBlfChunk {
 }
 
 pub trait BlfChunkHooks {
-    fn before_write(&mut self, _previously_written: &Vec<u8>) {}
-    fn after_read(&mut self) {}
+    fn before_write(&mut self, _previously_written: &Vec<u8>) -> BLFLibResult { Ok(()) }
+    fn after_read(&mut self) -> BLFLibResult { Ok(()) }
 }
 
 pub trait SerializableBlfChunk: DynamicBlfChunk + Any + Send + Sync {

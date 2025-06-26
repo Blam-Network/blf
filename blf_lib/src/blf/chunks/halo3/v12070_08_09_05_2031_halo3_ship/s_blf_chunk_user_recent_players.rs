@@ -28,11 +28,7 @@ pub struct s_files_user_recent_players_entry {
     pub xuid: Unsigned64,
 }
 
-impl BlfChunkHooks for s_blf_chunk_user_recent_players {
-    fn before_write(&mut self, _previously_written: &Vec<u8>) {
-        // Check user count?
-    }
-}
+impl BlfChunkHooks for s_blf_chunk_user_recent_players {}
 
 impl s_blf_chunk_user_recent_players {
     pub fn create() -> Self {
