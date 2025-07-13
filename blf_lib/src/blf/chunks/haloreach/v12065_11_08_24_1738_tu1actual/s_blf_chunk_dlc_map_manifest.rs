@@ -55,5 +55,6 @@ pub struct s_blf_chunk_dlc_map_manifest_entry {
     pub description_pt: StaticWcharString<0x100>,
     pub small_image_file_name: StaticString<32>,
     pub large_image_file_name: StaticString<32>,
+    #[serde(with = "SerHex::<StrictCap>")]
     pub dlc_offer_id: Unsigned64,
 }
