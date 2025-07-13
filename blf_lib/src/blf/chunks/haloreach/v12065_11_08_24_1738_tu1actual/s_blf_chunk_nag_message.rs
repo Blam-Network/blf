@@ -57,6 +57,9 @@ impl s_blf_chunk_nag_message {
         button_key: String,
         button_key_wait: String,
         message: String,
+        unknown1: u32,
+        unknown2: u32,
+        unknown3: u32,
     ) -> BLFLibResult<Self> {
         Ok(s_blf_chunk_nag_message {
             title_index_identifier,
@@ -71,9 +74,9 @@ impl s_blf_chunk_nag_message {
             button_key_wait: StaticWcharString::from_string(&button_key_wait)?,
             message_size: 0,
             message: StaticWcharString::from_string(&message)?,
-            unknown1: 0,
-            unknown2: 0,
-            unknown3: 0,
+            unknown1,
+            unknown2,
+            unknown3,
         })
     }
 }

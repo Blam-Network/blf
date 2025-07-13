@@ -27,7 +27,7 @@ impl map_variant {
         map_variant {
             _blf: s_blf_chunk_start_of_file::new("map variant", byte_order_mark::default()),
             athr: s_blf_chunk_author::for_build::<v12070_08_09_05_2031_halo3_ship>(),
-            mpvr: s_blf_chunk_packed_map_variant::create(map_variant),
+            mpvr: s_blf_chunk_packed_map_variant { map_variant },
             _eof: s_blf_chunk_end_of_file::default(),
         }
     }

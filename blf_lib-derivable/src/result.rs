@@ -1,4 +1,5 @@
 use std::fmt::{Debug, Display};
+use std::num::ParseIntError;
 
 pub struct BLFLibError(Box<dyn std::error::Error>);
 
@@ -16,6 +17,12 @@ impl From<&str> for BLFLibError {
 
 impl From<std::io::Error> for BLFLibError {
     fn from(e: std::io::Error) -> BLFLibError {
+        BLFLibError(e.into())
+    }
+}
+
+impl From<ParseIntError> for BLFLibError {
+    fn from(e: ParseIntError) -> BLFLibError {
         BLFLibError(e.into())
     }
 }

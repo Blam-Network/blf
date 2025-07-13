@@ -1,8 +1,12 @@
 use std::error::Error;
-use std::fs::File;
+use std::ffi::{OsStr, OsString};
+use std::fs::{create_dir_all, File};
 use std::io::{Read, Write};
+use std::path::Path;
 use serde::de::DeserializeOwned;
 use serde::Serialize;
+use blf_lib::OPTION_TO_RESULT;
+use blf_lib_derivable::result::BLFLibResult;
 
 pub mod bitstream;
 
@@ -17,12 +21,14 @@ pub fn read_file_to_string(path: impl Into<String>) -> Result<String, Box<dyn Er
     Ok(contents)
 }
 
-pub fn read_json_file<T: DeserializeOwned>(path: impl Into<String>) -> Result<T, Box<dyn Error>> {
+pub fn read_json_file<T: DeserializeOwned>(path: impl Into<String>) -> BLFLibResult<T> {
     let json = read_file_to_string(path)?;
     serde_json::from_str(&json).map_err(|e| e.into())
 }
 
-pub fn write_json_file<T: Serialize>(value: &T, path: impl Into<String>) -> Result<(), Box<dyn Error>> {
+pub fn write_json_file<T: Serialize>(value: &T, path: impl Into<String> + AsRef<OsStr>) -> BLFLibResult {
+    let directory = OPTION_TO_RESULT!(Path::new(&path).parent(), "Invalid path: No directory")?;
+    create_dir_all(&directory)?;
     let json = serde_json::to_string_pretty(value)?;
     let mut text_file = File::create(path.into())?;
     text_file.write_all(json.as_bytes())?;

@@ -16,7 +16,7 @@ use blf_lib_derivable::result::BLFLibResult;
 use blf_lib_derive::{BlfChunk, TestSize};
 use crate::types::numbers::Float32;
 
-pub const k_maximum_game_entries: usize = 100;
+pub const k_maximum_game_entries: usize = 128;
 
 #[derive(BlfChunk,Default,PartialEq,Debug,Clone,Serialize,Deserialize)]
 #[Header("gset", 15.1)]
@@ -131,14 +131,23 @@ pub struct s_game_set_entry {
     pub float3c: Float32,
     #[brw(pad_after = 3)]
     pub byte40: u8,
+    // #[serde(skip_serializing,skip_deserializing)]
     pub map_id: u32,
+    #[serde(skip_serializing,skip_deserializing)]
     has_game_variant: Bool,  // set before write via hook
+    #[serde(skip_serializing_if = "StaticString::is_empty", default)]
     pub game_name: StaticString<16>,
+    #[serde(skip_serializing_if = "StaticString::is_empty", default)]
     pub game_variant_file_name: StaticString<32>,
+    #[serde(skip_serializing,skip_deserializing)]
     pub game_variant_hash: s_network_http_request_hash,
+    #[serde(skip_serializing,skip_deserializing)]
     has_map_variant: Bool, // set before write via hook
+    #[serde(skip_serializing_if = "StaticString::is_empty", default)]
     pub map_name: StaticString<16>,
+    #[serde(skip_serializing_if = "StaticString::is_empty", default)]
     pub map_variant_file_name: StaticString<32>,
+    #[serde(skip_serializing,skip_deserializing)]
     pub map_variant_hash: s_network_http_request_hash,
     pub unknown3: u16,
 }

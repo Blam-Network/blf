@@ -149,9 +149,11 @@ pub struct StaticString<const N: usize> {
     buf: [u8; N],
 }
 
-
-
 impl<const N: usize> StaticString<N> {
+    pub fn is_empty(&self) -> bool {
+        self.buf[0] == 0x00
+    }
+
     pub fn from_string(value: impl Into<String>) -> BLFLibResult<Self> {
         let mut new = Self {
             buf: [0; N],

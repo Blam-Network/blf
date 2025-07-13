@@ -12,7 +12,6 @@ use blf_lib::blam::common::cseries::language::{get_language_string, k_language_s
 use blf_lib::blf::BlfFile;
 use blf_lib::blf::chunks::find_chunk_in_file;
 use crate::console::console_task;
-use crate::title_storage::halo3::release::blf_files::matchmaking_banhammer_messages::{k_matchmaking_banhammer_messages_file_name, matchmaking_banhammer_messages};
 use regex::Regex;
 use tempdir::TempDir;
 use crate::title_storage::halo3odst::v13895_09_04_27_2201_atlas_release::blf_files::manifest::{k_manifest_file_name, manifest};
@@ -20,12 +19,11 @@ use blf_files::network_configuration::network_configuration;
 use blf_lib::blf::versions::halo3odst::v13895_09_04_27_2201_atlas_release::s_blf_chunk_network_configuration;
 use blf_lib::result::BLFLibResult;
 use crate::title_storage::halo3odst::v13895_09_04_27_2201_atlas_release::blf_files::k_hopper_directory_name_max_length;
+use crate::title_storage::halo3odst::v13895_09_04_27_2201_atlas_release::blf_files::matchmaking_banhammer_messages::{k_matchmaking_banhammer_messages_file_name, matchmaking_banhammer_messages};
 use crate::title_storage::halo3odst::v13895_09_04_27_2201_atlas_release::blf_files::network_configuration::k_network_configuration_file_name;
 use crate::title_storage::halo3odst::v13895_09_04_27_2201_atlas_release::blf_files::rsa_manifest::{k_rsa_manifest_file_name, rsa_manifest};
 use crate::title_storage::halo3odst::v13895_09_04_27_2201_atlas_release::blf_files::motd::{k_motd_config_folder, k_motd_file_name, k_motd_image_file_name, motd};
 use crate::title_storage::halo3odst::v13895_09_04_27_2201_atlas_release::blf_files::motd_popup::{k_motd_popup_config_folder, k_motd_popup_file_name, k_motd_popup_image_file_name, k_vidmaster_popup_config_folder, k_vidmaster_popup_file_name, k_vidmaster_popup_image_file_name, motd_popup};
-
-pub const k_build_string_halo3_ship_12070: &str = "13895.09.04.27.2201.atlas_release";
 
 title_converter! (
     #[Title("Halo 3: ODST")]
