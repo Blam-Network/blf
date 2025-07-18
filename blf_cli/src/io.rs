@@ -1,9 +1,11 @@
 use std::collections::{BTreeMap, HashMap};
 use std::error::Error;
 use std::fs;
-use std::fs::create_dir_all;
+use std::fs::{create_dir_all, File};
+use std::io::{Read, Write};
 use std::path::{Path, MAIN_SEPARATOR_STR};
 use serde::{Serialize, Serializer};
+use blf_lib::result::BLFLibResult;
 use crate::title_storage::check_file_exists;
 
 pub fn get_directories_in_folder(path: &String) -> Result<Vec<String>, String> {
@@ -60,4 +62,29 @@ where
 {
     let ordered: BTreeMap<_, _> = value.iter().collect();
     ordered.serialize(serializer)
+}
+
+pub fn read_text_file_lines(path: String) -> BLFLibResult<Vec<String>> {
+    let mut file = File::open(path)?;
+    let mut text: String = String::new();
+    file.read_to_string(&mut text)?;
+
+    Ok(
+        text
+            .lines()
+            .map(String::from)
+            .collect()
+    )
+}
+
+pub fn write_text_file_lines(path: String, lines: &Vec<String>) -> BLFLibResult {
+    let messages_text = lines.join("\r\n");
+
+    create_parent_folders(&path)?;
+
+    let mut text_file = File::create(&path)?;
+
+    text_file.write_all(messages_text.as_bytes())?;
+
+    Ok(())
 }

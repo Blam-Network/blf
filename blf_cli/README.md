@@ -6,6 +6,8 @@
   - 12070.08.09.05.2031.halo3_ship (Title Update 2)
 - Halo 3: ODST
   - 13895.09.04.27.2201.atlas_release
+- Halo: Reach
+  - 12065.11.08.24.1738.tu1actual (Title Update 1)
 
 ## General Commands
 ### Convert Halo 3 MCC Map Variants

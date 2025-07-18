@@ -75,6 +75,12 @@ impl From<serde_json::Error> for BLFLibError {
     }
 }
 
+impl From<regex::Error> for BLFLibError {
+    fn from(e: regex::Error) -> BLFLibError {
+        BLFLibError(e.into())
+    }
+}
+
 impl From<BLFLibError> for binrw::Error {
     fn from(err: BLFLibError) -> Self {
         binrw::error::Error::Custom {

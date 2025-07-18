@@ -1,7 +1,6 @@
-mod blf_files;
-
 use std::collections::{HashMap, HashSet, VecDeque};
 use std::error::Error;
+use std::fmt::format;
 use std::fs;
 use std::fs::{create_dir_all, exists, remove_file, File};
 use std::io::{Read, Write};
@@ -9,9 +8,9 @@ use std::path::Path;
 use std::str::FromStr;
 use std::sync::Arc;
 use std::time::SystemTime;
-use crate::io::{get_directories_in_folder, get_files_in_folder, FILE_SEPARATOR};
+use crate::io::{create_parent_folders, get_directories_in_folder, get_files_in_folder, read_text_file_lines, write_text_file_lines};
 use crate::{build_path, debug_log, title_converter, やった};
-use crate::title_storage::{check_file_exists, TitleConverter};
+use crate::title_storage::{check_file_exists, validate_jpeg, TitleConverter};
 use inline_colorization::*;
 use lazy_static::lazy_static;
 use blf_lib::blam::common::cseries::language::{get_language_string, k_language_suffix_chinese_traditional, k_language_suffix_english, k_language_suffix_french, k_language_suffix_german, k_language_suffix_italian, k_language_suffix_japanese, k_language_suffix_korean, k_language_suffix_mexican, k_language_suffix_portuguese, k_language_suffix_spanish};
@@ -23,24 +22,16 @@ use tempdir::TempDir;
 use tokio::runtime;
 use tokio::sync::Mutex;
 use tokio::task::JoinHandle;
-use blf_files::{k_rsa_manifest_file_name, k_rsa_signatures_config_folder_name};
 use blf_lib::blam::common::memory::secure_signature::s_network_http_request_hash;
-use blf_lib::blf::versions::halo3::v11855_07_08_20_2317_halo3_ship::s_blf_chunk_map_manifest;
-use blf_lib::blf::versions::haloreach::v12065_11_08_24_1738_tu1actual::{s_blf_chunk_author, s_blf_chunk_end_of_file, s_blf_chunk_game_set, s_blf_chunk_hopper_configuration_table, s_blf_chunk_hopper_description_table, s_blf_chunk_map_variant, s_blf_chunk_matchmaking_game_variant, s_blf_chunk_megalo_categories, s_blf_chunk_network_configuration, s_blf_chunk_online_file_manifest, s_blf_chunk_predefined_queries, s_blf_chunk_start_of_file};
+use blf_lib::blf::versions::haloreach::v12065_11_08_24_1738_tu1actual::{s_blf_chunk_author, s_blf_chunk_banhammer_messages, s_blf_chunk_end_of_file, s_blf_chunk_game_set, s_blf_chunk_hopper_configuration_table, s_blf_chunk_hopper_description_table, s_blf_chunk_map_manifest, s_blf_chunk_map_variant, s_blf_chunk_matchmaking_game_variant, s_blf_chunk_matchmaking_tips, s_blf_chunk_megalo_categories, s_blf_chunk_nag_message, s_blf_chunk_network_configuration, s_blf_chunk_online_file_manifest, s_blf_chunk_predefined_queries, s_blf_chunk_start_of_file};
 use blf_lib::blf::versions::haloreach::v12065_11_08_24_1738_tu1actual::s_blf_chunk_dlc_map_manifest;
 use blf_lib::io::{read_json_file, write_json_file};
-use blf_lib::result::BLFLibResult;
+use blf_lib::OPTION_TO_RESULT;
+use blf_lib::result::{BLFLibError, BLFLibResult};
 use blf_lib::types::byte_order_mark::byte_order_mark;
-use crate::title_storage::haloreach::v12065_11_08_24_1738_tu1actual::blf_files::{k_game_set_blf_file_name, k_game_set_config_file_name};
-use crate::title_storage::haloreach::v12065_11_08_24_1738_tu1actual::blf_files::k_hopper_directory_name_max_length;
-use crate::title_storage::haloreach::v12065_11_08_24_1738_tu1actual::blf_files::k_game_variants_config_folder_name;
-use crate::title_storage::haloreach::v12065_11_08_24_1738_tu1actual::blf_files::{k_map_variants_blf_folder_name, k_map_variants_config_folder_name};
-use crate::title_storage::haloreach::v12065_11_08_24_1738_tu1actual::blf_files::matchmaking_banhammer_messages::{k_matchmaking_banhammer_messages_file_name, matchmaking_banhammer_messages};
-use crate::title_storage::haloreach::v12065_11_08_24_1738_tu1actual::blf_files::matchmaking_hopper::{k_active_hoppers_config_file_name, k_categories_config_file_name, k_hopper_config_file_name, k_hoppers_config_folder_name, k_matchmaking_hopper_file_name, k_matchmaking_hopper_image_filename, k_matchmaking_hopper_images_folder, matchmaking_hopper, matchmaking_hopper_categories_config, matchmaking_hopper_category_configuration_and_descriptions, matchmaking_hopper_config, read_active_hoppers};
-use crate::title_storage::haloreach::v12065_11_08_24_1738_tu1actual::blf_files::matchmaking_hopper_descriptions::{k_matchmaking_hopper_descriptions_file_name, matchmaking_hopper_descriptions};
-use crate::title_storage::haloreach::v12065_11_08_24_1738_tu1actual::blf_files::matchmaking_tips::{k_matchmaking_tips_file_name, k_tangerine_matchmaking_tips_file_name, matchmaking_tips};
-use crate::title_storage::haloreach::v12065_11_08_24_1738_tu1actual::blf_files::nag_message::{k_cea_nag_message_config_folder, k_cea_nag_message_file_name, k_cea_nag_message_image_file_name, k_nag_message_config_folder, k_nag_message_file_name, k_nag_message_image_file_name, nag_message};
-use crate::title_storage::haloreach::v12065_11_08_24_1738_tu1actual::blf_files::k_network_configuration_file_name;
+use crate::title_storage::haloreach::v12065_11_08_24_1738_tu1actual::title_storage_config::get_hopper_id_from_hopper_folder_name;
+use crate::title_storage::haloreach::v12065_11_08_24_1738_tu1actual::title_storage_output::{hopper_image_height, hopper_image_width, global_nag_message_image_height, global_nag_message_image_width, user_nag_message_image_width, user_nag_message_image_height};
+
 title_converter! (
     #[Title("Halo: Reach")]
     #[Build("12065.11.08.24.1738.tu1actual")]
@@ -64,14 +55,449 @@ pub const k_language_suffixes: [&str; 10] = [
 
 lazy_static! {
     static ref hopper_folder_regex: Regex = Regex::new(r"^[0-9]{5}.*").unwrap();
-    static ref config_hopper_folder_identifier_regex: Regex = Regex::new(r"^[0-9]{1,5}").unwrap();
     static ref map_variant_file_regex: Regex = Regex::new(&format!("_{:0>3}.bin$", s_blf_chunk_map_variant::get_version().major)).unwrap();
     static ref game_variant_file_regex: Regex = Regex::new(&format!("_{:0>3}.bin$", s_blf_chunk_matchmaking_game_variant::get_version().major)).unwrap();
     static ref config_rsa_signature_file_map_id_regex: Regex = Regex::new(r"^[0-9]{1,}").unwrap();
 }
 
-const k_build_temp_maps_folder_name: &str = "map_variants";
-const k_build_temp_games_folder_name: &str = "game_variants";
+mod title_storage_output {
+    use blf_lib::blf::chunks::BlfChunk;
+    use blf_lib::blf::versions::haloreach::v12065_11_08_24_1738_tu1actual::{s_blf_chunk_banhammer_messages, s_blf_chunk_dlc_map_manifest, s_blf_chunk_end_of_file, s_blf_chunk_game_set, s_blf_chunk_hopper_configuration_table, s_blf_chunk_hopper_description_table, s_blf_chunk_map_manifest, s_blf_chunk_map_variant, s_blf_chunk_matchmaking_game_variant, s_blf_chunk_network_configuration, s_blf_chunk_online_file_manifest};
+    use crate::build_path;
+
+    // applies to the root folder, eg "default_hoppers"
+    pub const hopper_directory_name_max_length: usize = 64;
+    pub const global_nag_message_image_width: usize = 442;
+    pub const global_nag_message_image_height: usize = 540;
+    pub const user_nag_message_image_width: usize = 375;
+    pub const user_nag_message_image_height: usize = 540;
+    pub const dlc_map_small_image_width: usize = 229;
+    pub const dlc_map_small_image_height: usize = 141;
+    pub const dlc_map_large_image_width: usize = 400;
+    pub const dlc_map_large_image_height: usize = 160;
+    pub const hopper_image_width: usize = 430;
+    pub const hopper_image_height: usize = 177;
+
+    // Root Directory
+    // storage/title/4d53085bf0/12065/default_hoppers/
+    pub const dlc_map_manifest_file_name: &str = "dlc_map_manifest.bin";
+    pub fn dlc_map_manifest_file_path(hoppers_path: &String) -> String {
+        build_path!(
+            hoppers_path,
+            dlc_map_manifest_file_name
+        )
+    }
+    pub const dlc_map_manifest_images_folder_name: &str = "dlc";
+    pub fn dlc_map_manifest_image_file_path(hoppers_path: &String, image_name: &String) -> String {
+        build_path!(
+            hoppers_path,
+            dlc_map_manifest_images_folder_name,
+            format!("{image_name}")
+        )
+    }
+    pub const megalo_categories_file_name: &str = "file_megalo_categories.bin";
+    pub fn megalo_categories_file_path(hoppers_path: &String, language_code: &str) -> String {
+        build_path!(
+            hoppers_path,
+            language_code,
+            megalo_categories_file_name
+        )
+    }
+    pub fn network_configuration_file_name() -> String {
+        format!("network_configuration_{:0>3}.bin", s_blf_chunk_network_configuration::get_version().major)
+    }
+    pub fn network_configuration_file_path(hoppers_path: &String) -> String {
+        build_path!(
+            hoppers_path,
+            network_configuration_file_name()
+        )
+    }
+    pub fn manifest_file_name() -> String {
+        format!("manifest_{:0>3}.bin", s_blf_chunk_online_file_manifest::get_version().major)
+    }
+    pub fn matchmaking_hopper_file_name() -> String {
+        format!("matchmaking_hopper_{:0>3}.bin", s_blf_chunk_hopper_configuration_table::get_version().major)
+    }
+    pub fn matchmaking_hopper_file_path(hoppers_path: &String) -> String {
+        build_path!(
+            hoppers_path,
+            matchmaking_hopper_file_name()
+        )
+    }
+
+    // Languages
+    // storage/title/4d53085bf0/12065/default_hoppers/en/
+    pub const rsa_manifest_file_name: &str = "rsa_manifest.bin";
+    pub fn rsa_manifest_file_path(hoppers_path: &String, language_code: &str) -> String {
+        build_path!(
+            hoppers_path,
+            language_code,
+            rsa_manifest_file_name
+        )
+    }
+    pub const banhammer_messages_file_name: &str = "matchmaking_banhammer_messages.bin";
+    pub fn banhammer_messages_file_path(hoppers_path: &String, language_code: &str) -> String {
+        build_path!(
+            hoppers_path,
+            language_code,
+            banhammer_messages_file_name
+        )
+    }
+
+    pub fn matchmaking_tips_file_name(tangerine: bool) -> String {
+        if tangerine { "tangerine_matchmaking_tips.bin".to_string() }
+        else { "matchmaking_tips.bin".to_string() }
+    }
+    pub fn matchmaking_tips_file_path(hoppers_path: &String, language_code: &str, tangerine: bool) -> String {
+        build_path!(
+            hoppers_path,
+            language_code,
+            matchmaking_tips_file_name(tangerine)
+        )
+    }
+    pub fn global_nag_message_file_name(tangerine: bool) -> String {
+        if tangerine { "tangerine_dynamic_global_nag.bin".to_string() }
+        else { "dynamic_global_nag.bin".to_string() }
+    }
+    pub fn global_nag_message_file_path(hoppers_path: &String, language_code: &str, tangerine: bool) -> String {
+        build_path!(
+            hoppers_path,
+            language_code,
+            global_nag_message_file_name(tangerine)
+        )
+    }
+    pub fn global_nag_message_image_file_name(tangerine: bool) -> String {
+        if tangerine { "tangerine_dynamic_global_nag_image.jpg".to_string() }
+        else { "dynamic_global_nag_image.jpg".to_string() }
+    }
+    pub fn global_nag_message_image_file_path(hoppers_path: &String, language_code: &str, tangerine: bool) -> String {
+        build_path!(
+            hoppers_path,
+            language_code,
+            global_nag_message_image_file_name(tangerine)
+        )
+    }
+
+    pub fn user_nag_message_file_path(hoppers_path: &String, language_code: &str, message_id: u16) -> String {
+        build_path!(
+            hoppers_path,
+            language_code,
+            format!("user_nag_{message_id:0>5}.bin")
+        )
+    }
+
+    pub fn user_nag_message_image_file_path(hoppers_path: &String, language_code: &str, message_id: u16) -> String {
+        build_path!(
+            hoppers_path,
+            language_code,
+            format!("user_nag_image_{message_id:0>5}.jpg")
+        )
+    }
+
+    pub fn predefined_queries_file_name(tangerine: bool) -> String {
+        if tangerine { "tangerine_file_predefined_queries.bin".to_string() }
+        else { "file_predefined_queries.bin".to_string() }
+    }
+    pub fn predefined_queries_file_path(hoppers_path: &String, language_code: &str, tangerine: bool) -> String {
+        build_path!(
+            hoppers_path,
+            language_code,
+            predefined_queries_file_name(tangerine)
+        )
+    }
+
+    pub fn hopper_descriptions_file_name() -> String {
+        format!("matchmaking_hopper_descriptions_{:0>3}.bin", s_blf_chunk_hopper_description_table::get_version().major)
+    }
+
+    pub fn hopper_descriptions_file_path(hoppers_path: &String, language_code: &str) -> String {
+        build_path!(
+            hoppers_path,
+            language_code,
+            hopper_descriptions_file_name()
+        )
+    }
+
+    // Hoppers
+    // storage/title/4d53085bf0/12065/default_hoppers/00101/
+    pub fn game_set_file_name() -> String {
+        format!("game_set_{:0>3}.bin", s_blf_chunk_game_set::get_version().major)
+    }
+    pub fn game_set_file_path(hoppers_path: &String, hopper_identifier: u16) -> String {
+        build_path!(
+            hoppers_path,
+            format!("{:0>5}", hopper_identifier),
+            game_set_file_name()
+        )
+    }
+
+    pub fn game_variant_file_path(hoppers_path: &String, hopper_identifier: u16, game_variant_file_name: &String) -> String {
+        build_path!(
+            hoppers_path,
+            format!("{:0>5}", hopper_identifier),
+            format!(
+                "{game_variant_file_name}_{:0>3}.bin",
+                s_blf_chunk_matchmaking_game_variant::get_version().major
+            )
+        )
+    }
+
+    pub const map_variants_folder_name: &str = "map_variants";
+    pub fn map_variant_file_path(hoppers_path: &String, hopper_identifier: u16, map_variant_file_name: &String) -> String {
+        build_path!(
+            hoppers_path,
+            format!("{:0>5}", hopper_identifier),
+            map_variants_folder_name,
+            format!(
+                "{map_variant_file_name}_{:0>3}.bin",
+                s_blf_chunk_map_variant::get_version().major
+            )
+        )
+    }
+    /// eg. default_hoppers/001/images
+    pub const hopper_images_folder_name: &str = "images";
+    /// eg. default_hoppers/001/images/hopper.jpg
+    pub const hopper_image_file_name: &str = "hopper.jpg";
+    pub fn hopper_image_file_path(hoppers_path: &String, hopper_identifier: u16) -> String {
+        build_path!(
+            hoppers_path,
+            format!("{:0>5}", hopper_identifier),
+            hopper_images_folder_name,
+            hopper_image_file_name
+        )
+    }
+}
+
+mod title_storage_config {
+    use std::collections::HashMap;
+    use regex::Regex;
+    use serde::{Deserialize, Serialize};
+    use blf_lib::blf::versions::haloreach::v12065_11_08_24_1738_tu1actual::{c_hopper_configuration, s_blf_chunk_network_configuration, s_game_hopper_custom_category};
+    use blf_lib::OPTION_TO_RESULT;
+    use blf_lib::result::BLFLibResult;
+    use crate::build_path;
+    use crate::io::ordered_map;
+    use blf_lib::blf::chunks::BlfChunk;
+
+    pub const banhammer_messages_folder_name: &str = "banhammer_messages";
+    pub fn banhammer_messages_file_path(config_folder: &String, language_code: &str) -> String {
+        build_path!(
+            config_folder,
+            banhammer_messages_folder_name,
+            format!("{language_code}.txt")
+        )
+    }
+
+    pub const rsa_signatures_folder_name: &str = "rsa_signatures";
+    pub fn rsa_signatures_folder_path(config_folder: &String, language_code: &str) -> String {
+        build_path!(
+            config_folder,
+            rsa_signatures_folder_name,
+            format!("{language_code}")
+        )
+    }
+
+    pub fn matchmaking_tips_folder_name(tangerine: bool) -> String {
+        if tangerine {"matchmaking_tips_cea".into()}
+        else {"matchmaking_tips".into()}
+    }
+
+    pub fn matchmaking_tips_file_path(config_folder: &String, language_code: &str, tangerine: bool) -> String {
+        build_path!(
+            config_folder,
+            matchmaking_tips_folder_name(tangerine),
+            format!("{language_code}.txt")
+        )
+    }
+
+    pub fn global_nag_messages_folder_name(tangerine: bool) -> String {
+        if tangerine { "global_nag_messaeges_cea".into() }
+        else { "global_nag_messaeges".into() }
+    }
+
+    pub fn global_nag_message_file_path(config_folder: &String, language_code: &str, tangerine: bool) -> String {
+        build_path!(
+            config_folder,
+            global_nag_messages_folder_name(tangerine),
+            format!("{language_code}.json")
+        )
+    }
+
+    pub fn global_nag_message_image_file_path(config_folder: &String, language_code: &str, tangerine: bool) -> String {
+        build_path!(
+            config_folder,
+            global_nag_messages_folder_name(tangerine),
+            format!("{language_code}.jpg")
+        )
+    }
+
+    pub const user_nag_messages_folder_name: &str = "user_nag_messages";
+
+    pub fn user_nag_message_file_path(config_folder: &String, language_code: &str, message_id: u16) -> String {
+        build_path!(
+            config_folder,
+            user_nag_messages_folder_name,
+            format!("{message_id:0>5}"),
+            format!("{language_code}.json")
+        )
+    }
+
+    pub fn user_nag_message_image_file_path(config_folder: &String, language_code: &str, message_id: u16) -> String {
+        build_path!(
+            config_folder,
+            user_nag_messages_folder_name,
+            format!("{message_id:0>5}"),
+            format!("{language_code}.jpg")
+        )
+    }
+
+    pub const megalo_categories_folder_name: &str = "megalo_categories";
+
+    pub fn megalo_categories_file_path(config_folder: &String, language_code: &str) -> String {
+        build_path!(
+            config_folder,
+            megalo_categories_folder_name,
+            format!("{language_code}.json")
+        )
+    }
+
+    pub fn predefined_queries_folder_name(tangerine: bool) -> String {
+        if tangerine { "predefined_queries_cea".into() }
+        else { "predefined_queries".into() }
+    }
+
+    pub fn predefined_queries_file_path(config_folder: &String, language_code: &str, tangerine: bool) -> String {
+        build_path!(
+            config_folder,
+            predefined_queries_folder_name(tangerine),
+            format!("{language_code}.json")
+        )
+    }
+
+    pub const dlc_folder_name: &str = "dlc";
+    pub const dlc_map_manifest_file_name: &str = "manifest.json";
+    pub fn dlc_map_manifest_file_path(config_folder: &String) -> String {
+        build_path!(
+            config_folder,
+            dlc_folder_name,
+            dlc_map_manifest_file_name
+        )
+    }
+
+    pub fn dlc_map_manifest_image_file_path(config_folder: &String, image_name: &String) -> String {
+        build_path!(
+            config_folder,
+            dlc_folder_name,
+            format!("{image_name}.jpg")
+        )
+    }
+
+    pub const active_hoppers_file_name: &str = "active_hoppers";
+    pub fn active_hoppers_file_path(config_folder: &String) -> String {
+        build_path!(
+            config_folder,
+            active_hoppers_file_name
+        )
+    }
+
+    pub const game_set_file_name: &str = "game_set.json";
+    pub fn game_set_file_path(config_folder: &String, hopper_folder: &String) -> String {
+        build_path!(
+            config_folder,
+            matchmaking_hoppers_folder_name,
+            hopper_folder,
+            game_set_file_name
+        )
+    }
+
+    pub fn get_hopper_id_from_hopper_folder_name(hopper_folder: &String) -> BLFLibResult<u16> {
+        OPTION_TO_RESULT!(
+            OPTION_TO_RESULT!(
+                Regex::new(r"^[0-9]{1,5}")?.captures(hopper_folder),
+                format!("No hopper ID found in folder {hopper_folder}")
+            )?.get(0),
+            format!("No hopper ID found in folder {hopper_folder}")
+        )?.as_str().parse::<u16>().map_err(From::from)
+    }
+
+    pub const game_variants_folder_name: &str = "game_variants";
+    pub fn game_variant_file_path(config_folder: &String, variant_file_name: &String) -> String {
+        build_path!(
+            config_folder,
+            game_variants_folder_name,
+            format!("{variant_file_name}.bin")
+        )
+    }
+
+    pub const map_variants_folder_name: &str = "map_variants";
+    pub fn map_variant_file_path(config_folder: &String, variant_file_name: &String) -> String {
+        build_path!(
+            config_folder,
+            map_variants_folder_name,
+            format!("{variant_file_name}.bin")
+        )
+    }
+
+
+    pub const matchmaking_hoppers_folder_name: &str = "hoppers";
+    pub const matchmaking_hopper_configuration_file_name: &str = "configuration.json";
+    pub fn matchmaking_hopper_configuration_file_path(config_folder: &String, hopper_folder: &String) -> String {
+        build_path!(
+            config_folder,
+            matchmaking_hoppers_folder_name,
+            hopper_folder,
+            matchmaking_hopper_configuration_file_name
+        )
+    }
+
+    pub const matchmaking_hopper_image_file_name: &str = "image.jpg";
+    pub fn matchmaking_hopper_image_file_path(config_folder: &String, hopper_folder: &String) -> String {
+        build_path!(
+            config_folder,
+            matchmaking_hoppers_folder_name,
+            hopper_folder,
+            matchmaking_hopper_image_file_name
+        )
+    }
+
+    pub const matchmaking_hopper_categories_file_name: &str = "hopper_categories.json";
+    pub fn matchmaking_hopper_categories_file_path(config_folder: &String) -> String {
+        build_path!(
+            config_folder,
+            matchmaking_hopper_configuration_file_name
+        )
+    }
+
+    pub fn network_configuration_file_name() -> String {
+        format!("network_configuration_{:0>3}.bin", s_blf_chunk_network_configuration::get_version().major)
+    }
+    pub fn network_configuration_file_path(config_folder: &String) -> String {
+        build_path!(
+            config_folder,
+            network_configuration_file_name()
+        )
+    }
+
+
+    #[derive(Serialize, Deserialize)]
+    pub struct matchmaking_hopper {
+        #[serde(serialize_with = "ordered_map")]
+        pub descriptions: HashMap<String, String>,
+        pub configuration: c_hopper_configuration,
+    }
+
+    #[derive(Serialize, Deserialize, Default, Clone)]
+    pub struct matchmaking_hopper_category_configuration_and_descriptions {
+        pub configuration: s_game_hopper_custom_category,
+        #[serde(serialize_with = "ordered_map")]
+        pub descriptions: HashMap<String, String>,
+    }
+
+    #[derive(Serialize, Deserialize, Default)]
+    pub struct matchmaking_hopper_categories {
+        pub categories: Vec<matchmaking_hopper_category_configuration_and_descriptions>,
+    }
+}
 
 impl TitleConverter for v12065_11_08_24_1738_tu1actual {
     fn build_blfs(&mut self, config_path: &String, blfs_path: &String) {
@@ -86,11 +512,11 @@ impl TitleConverter for v12065_11_08_24_1738_tu1actual {
 
         for hopper_directory in hopper_directories {
             let result = || -> Result<(), Box<dyn Error>> {
-                if hopper_directory.len() > k_hopper_directory_name_max_length {
+                if hopper_directory.len() > title_storage_output::hopper_directory_name_max_length {
                     return Err(Box::from(format!(
                         "Hoppers folder \"{hopper_directory}\" is too long and will be skipped. ({} > {} characters)",
                         hopper_directory.len(),
-                        k_hopper_directory_name_max_length
+                        title_storage_output::hopper_directory_name_max_length
                     )))
                 }
 
@@ -110,28 +536,28 @@ impl TitleConverter for v12065_11_08_24_1738_tu1actual {
                 );
 
                 println!("{style_bold}Converting {color_bright_white}{}{style_reset}...", hopper_directory);
-                Self::build_blf_banhammer_messages(&hopper_config_path, &hopper_blfs_path)?;
-                Self::build_blf_matchmaking_tips(&hopper_config_path, &hopper_blfs_path, false)?;
-                Self::build_blf_matchmaking_tips(&hopper_config_path, &hopper_blfs_path, true)?;
-                Self::build_blf_nag_messages(&hopper_config_path, &hopper_blfs_path, false)?;
-                Self::build_blf_nag_messages(&hopper_config_path, &hopper_blfs_path, true)?;
-                Self::build_blf_map_manifest(&hopper_config_path, &hopper_blfs_path)?;
-                Self::build_blf_megalo_categories(&hopper_config_path, &hopper_blfs_path)?;
-                Self::build_blf_predefined_queries(&hopper_config_path, &hopper_blfs_path)?;
-                Self::build_blf_dlc_manifest(&hopper_config_path, &hopper_blfs_path)?;
 
-                let active_hoppers = Self::read_active_hopper_configuration(&hopper_config_path);
+                let active_hoppers = Self::read_active_hopper_configuration(&hopper_config_path)?;
                 let game_sets = Self::read_game_set_configuration(&hopper_config_path, &active_hoppers)?;
                 let mut game_variant_hashes = HashMap::<String, s_network_http_request_hash>::new();
                 let mut map_variant_hashes = HashMap::<String, s_network_http_request_hash>::new();
                 let mut map_variant_map_ids = HashMap::<String, u32>::new();
 
-                Self::build_blf_game_variants(&hopper_config_path, &hopper_blfs_path, &build_temp_dir_path, &game_sets, &mut game_variant_hashes);
-                Self::build_blf_map_variants(&hopper_config_path, &hopper_blfs_path, &build_temp_dir_path, &game_sets, &mut map_variant_hashes);
+                Self::build_blf_banhammer_messages(&hopper_config_path, &hopper_blfs_path)?;
+                Self::build_blf_matchmaking_tips(&hopper_config_path, &hopper_blfs_path)?;
+                Self::build_blf_global_nag_messages(&hopper_config_path, &hopper_blfs_path)?;
+                Self::build_blf_user_nag_messages(&hopper_config_path, &hopper_blfs_path)?;
+                Self::build_blf_map_manifests(&hopper_config_path, &hopper_blfs_path)?;
+                Self::build_blf_megalo_categories(&hopper_config_path, &hopper_blfs_path)?;
+                Self::build_blf_predefined_queries(&hopper_config_path, &hopper_blfs_path)?;
+                Self::build_blf_dlc_manifest(&hopper_config_path, &hopper_blfs_path)?;
+                Self::build_blf_game_variants(&hopper_config_path, &hopper_blfs_path, &build_temp_dir_path, &game_sets, &mut game_variant_hashes)?;
+                Self::build_blf_map_variants(&hopper_config_path, &hopper_blfs_path, &build_temp_dir_path, &game_sets, &mut map_variant_hashes)?;
                 Self::build_blf_game_sets(&hopper_blfs_path, game_sets, &game_variant_hashes, &map_variant_hashes, &build_temp_dir_path)?;
                 Self::build_blf_hoppers(&hopper_config_path, &hopper_blfs_path, &active_hoppers)?;
                 Self::build_blf_network_configuration(&hopper_config_path, &hopper_blfs_path)?;
                 Self::build_blf_manifest(&hopper_blfs_path)?;
+
                 Ok(())
             }();
 
@@ -155,10 +581,6 @@ impl TitleConverter for v12065_11_08_24_1738_tu1actual {
 
         for hopper_directory in hopper_directories {
             let result = || -> Result<(), Box<dyn Error>> {
-                if hopper_directory.len() > k_hopper_directory_name_max_length {
-                    return Err(Box::<dyn Error>::from(format!("Skipping \"{hopper_directory}\" as it's name is too long. ({k_hopper_directory_name_max_length} characters MAX)")))
-                }
-
                 let hoppers_config_path = build_path!(
                     config_path,
                     &hopper_directory
@@ -175,8 +597,8 @@ impl TitleConverter for v12065_11_08_24_1738_tu1actual {
                 Self::build_config_predefined_queries(&hoppers_blf_path, &hoppers_config_path)?;
                 Self::build_config_matchmaking_tips(&hoppers_blf_path, &hoppers_config_path)?;
                 Self::build_config_dlc_manifest(&hoppers_blf_path, &hoppers_config_path)?;
-                Self::build_config_motd_popups(&hoppers_blf_path, &hoppers_config_path, false)?;
-                Self::build_config_motd_popups(&hoppers_blf_path, &hoppers_config_path, true)?;
+                Self::build_config_global_nag_messages(&hoppers_blf_path, &hoppers_config_path)?;
+                Self::build_config_user_nag_messages(&hoppers_blf_path, &hoppers_config_path)?;
                 Self::build_config_map_variants(&hoppers_blf_path, &hoppers_config_path)?;
                 Self::build_config_game_variants(&hoppers_blf_path, &hoppers_config_path)?;
                 Self::build_config_game_sets(&hoppers_blf_path, &hoppers_config_path)?;
@@ -198,9 +620,12 @@ impl v12065_11_08_24_1738_tu1actual {
         let mut task = console_task::start("Converting Banhammer Messages");
 
         for language_code in k_language_suffixes {
-            let blf_file_path = build_path!(hoppers_blf_path, language_code, k_matchmaking_banhammer_messages_file_name);
+            let blf_file_path = title_storage_output::banhammer_messages_file_path(
+                &hoppers_blf_path,
+                language_code
+            );
 
-            if !check_file_exists(&blf_file_path) {
+            if !exists(&blf_file_path)? {
                 task.add_warning(format!(
                     "No {} banhammer messages are present.",
                     get_language_string(language_code),
@@ -209,7 +634,14 @@ impl v12065_11_08_24_1738_tu1actual {
                 continue;
             }
 
-            matchmaking_banhammer_messages::read_file(&blf_file_path)?.write_to_config(hoppers_config_path, language_code)?;
+            let bhms = find_chunk_in_file::<s_blf_chunk_banhammer_messages>(blf_file_path)?;
+            write_text_file_lines(
+                title_storage_config::banhammer_messages_file_path(
+                    hoppers_config_path,
+                    language_code
+                ),
+                &bhms.get_messages()?
+            )?;
         }
 
         やった!(task)
@@ -219,7 +651,10 @@ impl v12065_11_08_24_1738_tu1actual {
         let mut task = console_task::start("Converting Megalo Categories");
 
         for language_code in k_language_suffixes {
-            let blf_file_path = build_path!(hoppers_blf_path, language_code, "file_megalo_categories.bin");
+            let blf_file_path = title_storage_output::megalo_categories_file_path(
+                hoppers_blf_path,
+                language_code,
+            );
 
             if !exists(&blf_file_path)? {
                 task.add_warning(format!(
@@ -231,132 +666,140 @@ impl v12065_11_08_24_1738_tu1actual {
             }
 
             let megalo_categories = find_chunk_in_file::<s_blf_chunk_megalo_categories>(blf_file_path)?;
-            write_json_file(&megalo_categories, build_path!(
+            write_json_file(&megalo_categories, title_storage_config::megalo_categories_file_path(
                 hoppers_config_path,
-                "megalo_categories",
-                format!("{}.json", language_code)
+                language_code,
             ))?;
         }
 
         やった!(task)
     }
 
-    fn build_config_predefined_queries(hoppers_blf_path: &String, hoppers_config_path: &String) -> Result<(), Box<dyn Error>> {
-        let mut task = console_task::start("Converting Predefined Queries");
+    fn build_config_predefined_queries(hoppers_blf_path: &String, hoppers_config_path: &String) -> BLFLibResult {
 
-        for language_code in k_language_suffixes {
-            let blf_file_path = build_path!(hoppers_blf_path, language_code, "file_predefined_queries.bin");
+        for tangerine in [false, true] {
+            let mut task = console_task::start(
+                if tangerine { "Converting CEA Predefined Queries" }
+                else { "Converting Predefined Queries" }
+            );
 
-            if !exists(&blf_file_path)? {
-                task.add_warning(format!(
-                    "No {} predefined queries are present.",
-                    get_language_string(language_code),
-                ));
+            for language_code in k_language_suffixes {
+                let blf_file_path = title_storage_output::predefined_queries_file_path(
+                    hoppers_blf_path,
+                    language_code,
+                    tangerine
+                );
 
-                continue;
+                if !exists(&blf_file_path)? {
+                    task.add_warning(format!(
+                        "No {} predefined queries are present.",
+                        get_language_string(language_code),
+                    ));
+
+                    continue;
+                }
+
+                let predefined_queries = find_chunk_in_file::<s_blf_chunk_predefined_queries>(blf_file_path)?;
+                write_json_file(&predefined_queries, title_storage_config::predefined_queries_file_path(
+                    hoppers_config_path,
+                    language_code,
+                    tangerine,
+                ))?;
             }
 
-            let megalo_categories = find_chunk_in_file::<s_blf_chunk_predefined_queries>(blf_file_path)?;
-            write_json_file(&megalo_categories, build_path!(
-                hoppers_config_path,
-                "predefined_queries",
-                format!("{}.json", language_code)
-            ))?;
+            task.complete();
         }
 
-        task.complete();
-
-        let mut task = console_task::start("Converting CEA Predefined Queries");
-
-        for language_code in k_language_suffixes {
-            let blf_file_path = build_path!(hoppers_blf_path, language_code, "tangerine_file_predefined_queries.bin");
-
-            if !exists(&blf_file_path)? {
-                task.add_warning(format!(
-                    "No {} CEA predefined queries are present.",
-                    get_language_string(language_code),
-                ));
-
-                continue;
-            }
-
-            let megalo_categories = find_chunk_in_file::<s_blf_chunk_predefined_queries>(blf_file_path)?;
-            write_json_file(&megalo_categories, build_path!(
-                hoppers_config_path,
-                "predefined_queries_cea",
-                format!("{}.json", language_code)
-            ))?;
-        }
-
-        やった!(task)
+        やった!()
     }
 
-    fn build_config_matchmaking_tips(hoppers_blf_path: &String, hoppers_config_path: &String) -> Result<(), Box<dyn Error>> {
-        let mut task = console_task::start("Converting Matchmaking Tips");
+    fn build_config_matchmaking_tips(hoppers_blf_path: &String, hoppers_config_path: &String) -> BLFLibResult {
+        for tangerine in [false, true] {
+            let mut task = console_task::start(
+                if tangerine { "Converting CEA Matchmaking Tips" }
+                else{ "Converting Matchmaking Tips" }
+            );
 
-        for language_code in k_language_suffixes {
-            let blf_file_path = build_path!(hoppers_blf_path, language_code, k_matchmaking_tips_file_name);
+            for language_code in k_language_suffixes {
+                let blf_file_path = title_storage_output::matchmaking_tips_file_path(
+                    hoppers_blf_path,
+                    language_code,
+                    tangerine
+                );
 
-            if !exists(&blf_file_path)? {
-                task.add_warning(format!(
-                    "No {} matchmaking tips are present.",
-                    get_language_string(language_code),
-                ));
+                if !exists(&blf_file_path)? {
+                    task.add_warning(format!(
+                        "No {} matchmaking tips are present.",
+                        get_language_string(language_code),
+                    ));
 
-                continue;
+                    continue;
+                }
+
+                let mmtp = find_chunk_in_file::<s_blf_chunk_matchmaking_tips>(blf_file_path)?;
+
+                write_text_file_lines(
+                    title_storage_config::matchmaking_tips_file_path(
+                        hoppers_config_path,
+                        language_code,
+                        tangerine
+                    ),
+                    &mmtp.tips.iter().map(|tip|tip.get_string()).collect::<Result<Vec<String>, BLFLibError>>()?
+                )?
             }
 
-            matchmaking_tips::read_file(&blf_file_path)?.write_to_config(hoppers_config_path, language_code, false)?;
+            task.complete();
         }
 
-        task.complete();
-
-        let mut task = console_task::start("Converting CEA Matchmaking Tips");
-
-        for language_code in k_language_suffixes {
-            let blf_file_path = build_path!(hoppers_blf_path, language_code, k_tangerine_matchmaking_tips_file_name);
-
-            if !exists(&blf_file_path)? {
-                task.add_warning(format!(
-                    "No {} CEA matchmaking tips are present.",
-                    get_language_string(language_code),
-                ));
-
-                continue;
-            }
-
-            matchmaking_tips::read_file(&blf_file_path)?.write_to_config(hoppers_config_path, language_code, true)?;
-        }
-
-        やった!(task)
+        やった!()
     }
 
     fn build_config_dlc_manifest(hoppers_blf_path: &String, hoppers_config_path: &String) -> Result<(), Box<dyn Error>> {
         let mut task = console_task::start("Converting DLC Manifest");
 
-        let blf_file_path = build_path!(hoppers_blf_path, "dlc_map_manifest.bin");
-        let dlc_manifest = find_chunk_in_file::<s_blf_chunk_dlc_map_manifest>(blf_file_path)?;
-        let dlc_config_folder = build_path!(hoppers_config_path, "dlc");
-        let config_file_path = build_path!(&dlc_config_folder, "manifest.json");
-        write_json_file(&dlc_manifest, config_file_path)?;
-        let dlc_images_folder = build_path!(hoppers_blf_path, "dlc");
+        let dlc_manifest_blf_path = title_storage_output::dlc_map_manifest_file_path(hoppers_blf_path);
+        if !exists(&dlc_manifest_blf_path)? {
+            task.fail_with_error("No DLC manifest file was found.");
+            return Ok(())
+        }
 
-        for map in dlc_manifest.maps.get() {
+        let dlcd = find_chunk_in_file::<s_blf_chunk_dlc_map_manifest>(
+            title_storage_output::dlc_map_manifest_file_path(hoppers_blf_path)
+        )?;
+
+        write_json_file(&dlcd,
+            title_storage_config::dlc_map_manifest_file_path(&hoppers_config_path)
+        )?;
+
+        for map in dlcd.maps.get() {
             if !map.small_image_file_name.is_empty() {
-                let small_image_path = build_path!(&dlc_images_folder, map.small_image_file_name.get_string()?);
-                let small_image_destination = build_path!(&dlc_config_folder, map.small_image_file_name.get_string()?);
-                if exists(&small_image_path)? {
-                    fs::copy(&small_image_path, small_image_destination)?;
+                let small_image_src_path = title_storage_output::dlc_map_manifest_image_file_path(
+                    hoppers_blf_path,
+                    &map.small_image_file_name.get_string()?
+                );
+                let small_image_dst_path = title_storage_config::dlc_map_manifest_image_file_path(
+                    hoppers_config_path,
+                    &map.small_image_file_name.get_string()?
+                );
+
+                if exists(&small_image_src_path)? {
+                    fs::copy(&small_image_src_path, small_image_dst_path)?;
                 } else {
                     task.add_warning(format!("No small image was found for map {}", map.name_en.get_string()))
                 }
             }
 
             if !map.large_image_file_name.is_empty() {
-                let large_image_path = build_path!(&dlc_images_folder, map.large_image_file_name.get_string()?);
-                let large_image_destination = build_path!(&dlc_config_folder, map.large_image_file_name.get_string()?);
-                if exists(&large_image_path)? {
-                    fs::copy(&large_image_path, large_image_destination)?;
+                let large_image_src_path = title_storage_output::dlc_map_manifest_image_file_path(
+                    hoppers_blf_path,
+                    &map.large_image_file_name.get_string()?
+                );
+                let large_image_dst_path = title_storage_config::dlc_map_manifest_image_file_path(
+                    hoppers_config_path,
+                    &map.large_image_file_name.get_string()?
+                );
+                if exists(&large_image_src_path)? {
+                    fs::copy(&large_image_src_path, large_image_dst_path)?;
                 } else {
                     task.add_warning(format!("No large image was found for map {}", map.name_en.get_string()))
                 }
@@ -366,70 +809,129 @@ impl v12065_11_08_24_1738_tu1actual {
         やった!(task)
     }
 
-    fn build_config_motd_popups(hoppers_blf_path: &String, hoppers_config_path: &String, cea: bool) -> Result<(), Box<dyn Error>> {
-        let mut task = console_task::start(
-            if cea { "Converting CEA MOTD Popups" }
-            else { "Converting MOTD Popups" }
-        );
+    fn build_config_global_nag_messages(hoppers_blf_path: &String, hoppers_config_path: &String) -> BLFLibResult {
+        for tangerine in [false, true] {
+            let mut task = console_task::start(
+                if tangerine { "Converting CEA Global Nag Messages" }
+                else { "Converting Global Nag Messages" }
+            );
+
+            // BLFs
+            for language_code in k_language_suffixes {
+                let blf_file_path = title_storage_output::global_nag_message_file_path(
+                    hoppers_blf_path,
+                    language_code,
+                    tangerine
+                );
+
+                if !exists(&blf_file_path)? {
+                    task.add_warning(format!(
+                        "No {} Global Nag Message is present.",
+                        get_language_string(language_code),
+                    ));
+
+                    continue;
+                }
+
+                write_json_file(
+                    &find_chunk_in_file::<s_blf_chunk_nag_message>(blf_file_path)?,
+                    title_storage_config::global_nag_message_file_path(
+                        hoppers_config_path,
+                        language_code,
+                        tangerine
+                    )
+                )?;
+
+                let image_path = title_storage_output::global_nag_message_image_file_path(
+                    hoppers_blf_path,
+                    language_code,
+                    tangerine
+                );
+
+                if exists(&image_path)? {
+                    fs::copy(&image_path, title_storage_config::global_nag_message_image_file_path(
+                        hoppers_config_path,
+                        language_code,
+                        tangerine
+                    ))?;
+                }
+                else {
+                    task.add_warning(format!("No image was found for {} Global Nag Message", language_code));
+                }
+            }
+
+            task.complete();
+        }
+
+        やった!()
+    }
+
+    fn build_config_user_nag_messages(hoppers_blf_path: &String, hoppers_config_path: &String) -> BLFLibResult {
+        let mut task = console_task::start( "Converting User Nag Messages");
+
+        let user_nag_file_regex: Regex = Regex::new(r"^user_nag_([0-9]{5}).bin")?;
 
         // BLFs
         for language_code in k_language_suffixes {
-            let file_path = build_path!(
+            let language_folder_path = build_path!(
                 hoppers_blf_path,
-                language_code,
-                if cea { k_cea_nag_message_file_name } else { k_nag_message_file_name }
+                language_code
             );
 
-            if !check_file_exists(&file_path) {
-                task.add_warning(format!(
-                    "No {} {}MOTD Popup is present.",
-                    get_language_string(language_code),
-                    if cea { "CEA " } else { "" }
-                ));
-
+            if !exists(&language_folder_path)? {
                 continue;
             }
 
-            nag_message::read_file(&file_path)?.write_to_config(hoppers_config_path, language_code, cea)?;
-        }
+            for filename in get_files_in_folder(&language_folder_path)? {
+                // if it's not a user nag, skip.
+                if !user_nag_file_regex.is_match(&filename) {
+                    continue;
+                }
 
-        // JPEGs
-        for language_code in k_language_suffixes {
-            let relative_file_path = format!("{language_code}{FILE_SEPARATOR}{}motd_popup_image.jpg", if cea { "blue_" } else { "" });
-            let file_path = format!("{hoppers_blf_path}{FILE_SEPARATOR}{relative_file_path}");
-            let output_path = build_path!(
-                hoppers_blf_path,
-                language_code,
-                format!("{language_code}.jpg")
-            );
+                // grab the nag id
+                let nag_id = OPTION_TO_RESULT!(
+                    OPTION_TO_RESULT!(
+                        user_nag_file_regex.captures(&filename),
+                        format!("No message ID found in folder {filename}")
+                    )?.get(1),
+                    format!("No message ID found in folder {filename}")
+                )?.as_str().parse::<u16>()?;
 
-            let file_path = build_path!(
-                hoppers_blf_path,
-                language_code,
-                if cea { k_cea_nag_message_image_file_name } else { k_nag_message_image_file_name }
-            );
+                write_json_file(
+                    &find_chunk_in_file::<s_blf_chunk_nag_message>(title_storage_output::user_nag_message_file_path(
+                        hoppers_blf_path,
+                        language_code,
+                        nag_id
+                    ))?,
+                    title_storage_config::user_nag_message_file_path(
+                        hoppers_config_path,
+                        language_code,
+                        nag_id
+                    )
+                )?;
 
-            let output_path = build_path!(
-                hoppers_config_path,
-                if cea { k_cea_nag_message_config_folder } else { k_nag_message_config_folder },
-                format!("{language_code}.jpg")
-            );
-
-            if !check_file_exists(&file_path) {
-                task.add_warning(format!(
-                    "No {} {}MOTD Popup image is present.",
-                    get_language_string(language_code),
-                    if cea { "CEA " } else { "" }
-                ));
-
-                continue;
+                let user_nag_img_src_path = title_storage_output::user_nag_message_image_file_path(
+                    hoppers_blf_path,
+                    language_code,
+                    nag_id,
+                );
+                let user_nag_img_dst_path = title_storage_config::user_nag_message_image_file_path(
+                    hoppers_blf_path,
+                    language_code,
+                    nag_id,
+                );
+                if !exists(&user_nag_img_src_path)? {
+                    task.add_warning(format!("No image is present for {language_code} user nag {nag_id}"));
+                }
+                else {
+                    fs::copy(user_nag_img_src_path, user_nag_img_dst_path)?;
+                }
             }
-
-            fs::copy(file_path, output_path).unwrap();
         }
 
         やった!(task)
     }
+
 
     fn build_config_map_variants(hoppers_blf_path: &String, hoppers_config_path: &String) -> BLFLibResult {
         let mut task = console_task::start("Converting Map Variants");
@@ -439,7 +941,7 @@ impl v12065_11_08_24_1738_tu1actual {
 
         create_dir_all(build_path!(
             hoppers_config_path,
-            k_map_variants_config_folder_name
+            title_storage_config::map_variants_folder_name
         ))?;
 
         // Keep track of maps we've converted to avoid duplication between different hoppers.
@@ -450,10 +952,12 @@ impl v12065_11_08_24_1738_tu1actual {
                 continue;
             }
 
+            let hopper_id = get_hopper_id_from_hopper_folder_name(&subfolder)?;
+
             let map_variant_blfs_folder = build_path!(
                 hoppers_blf_path,
                 &subfolder,
-                k_map_variants_blf_folder_name
+                title_storage_output::map_variants_folder_name
             );
 
             // if this hoppers folder has no maps (perhaps incomplete), skip it.
@@ -475,15 +979,15 @@ impl v12065_11_08_24_1738_tu1actual {
 
                 let map_variant_config_file_name = format!("{map_variant_file_name}.bin");
 
-                let map_variant_blf_file_path = build_path!(
-                    &map_variant_blfs_folder,
-                    &map_variant_blf_file_name
+                let map_variant_blf_file_path = title_storage_output::map_variant_file_path(
+                    hoppers_blf_path,
+                    hopper_id,
+                    &map_variant_file_name,
                 );
 
-                let map_variant_config_file_path = build_path!(
+                let map_variant_config_file_path = title_storage_config::map_variant_file_path(
                     hoppers_config_path,
-                    k_map_variants_config_folder_name,
-                    map_variant_config_file_name
+                    &map_variant_file_name,
                 );
 
                 // If we've already converted this map from a different hopper folder, we skip it.
@@ -523,11 +1027,6 @@ impl v12065_11_08_24_1738_tu1actual {
         // Iterate through hopper folders. eg default_hoppers/00101
         let hopper_directory_subfolders = get_directories_in_folder(hoppers_blf_path)?;
 
-        create_dir_all(build_path!(
-            hoppers_config_path,
-            k_game_variants_config_folder_name
-        ))?;
-
         // Keep track of games we've converted to avoid duplication between different hoppers.
         let mut converted_games = Vec::<String>::new();
 
@@ -535,6 +1034,8 @@ impl v12065_11_08_24_1738_tu1actual {
             if !hopper_folder_regex.is_match(&subfolder) {
                 continue;
             }
+
+            let hopper_id = get_hopper_id_from_hopper_folder_name(&subfolder)?;
 
             let game_variant_blfs_folder = build_path!(
                 hoppers_blf_path,
@@ -559,15 +1060,15 @@ impl v12065_11_08_24_1738_tu1actual {
 
                 let game_variant_config_file_name = format!("{game_variant_file_name}.bin");
 
-                let game_variant_blf_file_path = build_path!(
-                    &game_variant_blfs_folder,
-                    &game_variant_blf_file_name
+                let game_variant_blf_file_path = title_storage_output::game_variant_file_path(
+                    hoppers_blf_path,
+                    hopper_id,
+                    &game_variant_file_name,
                 );
 
-                let game_variant_config_file_path = build_path!(
+                let game_variant_config_file_path = title_storage_config::game_variant_file_path(
                     hoppers_config_path,
-                    k_game_variants_config_folder_name,
-                    &game_variant_config_file_name
+                    &game_variant_file_name
                 );
 
                 // If we've already converted this game from a different hopper folder, we skip it.
@@ -614,23 +1115,22 @@ impl v12065_11_08_24_1738_tu1actual {
                 continue;
             }
 
-            let game_set_blf_path = build_path!(
+            let hopper_id = get_hopper_id_from_hopper_folder_name(&hopper_folder)?;
+
+            let game_set_blf_path = title_storage_output::game_set_file_path(
                 hoppers_blf_path,
-                &hopper_folder,
-                k_game_set_blf_file_name
+                hopper_id,
             );
 
-            if !exists(&game_set_blf_path).unwrap() {
+            if !exists(&game_set_blf_path)? {
                 task.add_warning(format!("No game set was found for hopper \"{hopper_folder}\""));
                 continue;
             }
 
             let game_set = find_chunk_in_file::<s_blf_chunk_game_set>(&game_set_blf_path)?;
-            let game_set_config_path = build_path!(
+            let game_set_config_path = title_storage_config::game_set_file_path(
                 hoppers_config_path,
-                k_hoppers_config_folder_name,
                 &hopper_folder,
-                k_game_set_config_file_name
             );
 
             write_json_file(&game_set, &game_set_config_path)?;
@@ -644,7 +1144,7 @@ impl v12065_11_08_24_1738_tu1actual {
     }
 
     // Ideally, we'd separate hopper and category descriptions separately to avoid ID conflicts...
-    // But Foreunner doesn't seem to make this distinction, so why should I?
+    // But Omaha doesn't seem to make this distinction, so why should I?
     fn read_hopper_description_blfs(
         hoppers_blfs_folder: &String,
         task: &mut console_task
@@ -653,14 +1153,12 @@ impl v12065_11_08_24_1738_tu1actual {
         let mut language_descriptions_map = HashMap::<String, HashMap<u16, String>>::new();
 
         for language_code in k_language_suffixes {
-            let hopper_descriptions_path = build_path!(
+            let hopper_descriptions_path = title_storage_output::hopper_descriptions_file_path(
                 hoppers_blfs_folder,
-                language_code,
-                k_matchmaking_hopper_descriptions_file_name
+                &language_code,
             );
 
-
-            if !check_file_exists(&hopper_descriptions_path) {
+            if !exists(&hopper_descriptions_path)? {
                 task.add_warning(format!(
                     "No {} hopper descriptions are present.",
                     get_language_string(language_code),
@@ -690,10 +1188,7 @@ impl v12065_11_08_24_1738_tu1actual {
         let language_hopper_descriptions
             = Self::read_hopper_description_blfs(hoppers_blfs_path, &mut task)?;
 
-        let hopper_configuration_blf_path = build_path!(
-            hoppers_blfs_path,
-            k_matchmaking_hopper_file_name
-        );
+        let hopper_configuration_blf_path = title_storage_output::matchmaking_hopper_file_path(&hoppers_blfs_path);
 
         let mut hopper_configuration_table = find_chunk_in_file::<s_blf_chunk_hopper_configuration_table>(&hopper_configuration_blf_path)?;
         let mut hopper_configurations = &mut hopper_configuration_table.hopper_configurations;
@@ -701,18 +1196,15 @@ impl v12065_11_08_24_1738_tu1actual {
 
         // Generate active_hoppers.txt
         let active_hopper_ids = hopper_configurations.iter().map(|config|config.identifier);
-        let active_hoppers_txt_path = build_path!(
-            hoppers_config_path,
-            k_active_hoppers_config_file_name
-        );
-        let mut active_hoppers_txt_file = File::create(active_hoppers_txt_path)?;
-        active_hoppers_txt_file.write_all(
-            active_hopper_ids.map(|id|format!("{id:0>5}")).collect::<Vec<_>>().join("\r\n").as_bytes()
+        let active_hoppers_txt_path = title_storage_config::active_hoppers_file_path(&hoppers_config_path);
+        write_text_file_lines(
+            active_hoppers_txt_path,
+            &active_hopper_ids.map(|id|format!("{id:0>5}")).collect(),
         )?;
 
         // Build hopper configuration json
         for hopper_configuration in hopper_configurations.iter_mut() {
-            let mut hopper_configuration_json = matchmaking_hopper_config {
+            let mut hopper_configuration_json = title_storage_config::matchmaking_hopper {
                 descriptions: HashMap::new(),
                 configuration: hopper_configuration.clone(),
             };
@@ -731,51 +1223,34 @@ impl v12065_11_08_24_1738_tu1actual {
                 }
             }
 
-            let hopper_configuration_json_folder = build_path!(
+            write_json_file(&hopper_configuration_json, title_storage_config::matchmaking_hopper_configuration_file_path(
                 hoppers_config_path,
-                k_hoppers_config_folder_name,
-                format!("{:0>5}", hopper_configuration_json.configuration.identifier)
-            );
-            create_dir_all(&hopper_configuration_json_folder)?;
+                &format!("{:0>5}", hopper_configuration_json.configuration.identifier),
+            ))?;
 
-            let hopper_configuration_json_file = build_path!(
-                &hopper_configuration_json_folder,
-                k_hopper_config_file_name
-            );
-            let mut hopper_configuration_json_file = File::create(hopper_configuration_json_file)?;
-            serde_json::to_writer_pretty(&mut hopper_configuration_json_file, &hopper_configuration_json)?;
-
-            let hopper_image_file_path = build_path!(
+            let hopper_image_src_path = title_storage_output::hopper_image_file_path(
                 hoppers_blfs_path,
-                format!("{:0>5}", &hopper_configuration.identifier),
-                k_matchmaking_hopper_images_folder,
-                k_matchmaking_hopper_image_filename
+                hopper_configuration_json.configuration.identifier
             );
 
-            let hopper_image_file_path = build_path!(
-                hoppers_blfs_path,
-                format!("{:0>5}", &hopper_configuration.identifier),
-                k_matchmaking_hopper_images_folder,
-                k_matchmaking_hopper_image_filename
+            let hopper_image_dst_path = title_storage_config::matchmaking_hopper_image_file_path(
+                hoppers_config_path,
+                &format!("{:0>5}", hopper_configuration_json.configuration.identifier),
             );
 
-            let hopper_image_file_destination_path = build_path!(
-                hopper_configuration_json_folder,
-                k_matchmaking_hopper_image_filename
-            );
-
-            if !exists(&hopper_image_file_path)? {
+            if !exists(&hopper_image_src_path)? {
                 task.add_warning(format!("No hopper image was found for {} ({})", &hopper_configuration.hopper_name.get_string()?, &hopper_configuration.identifier))
-            } else {
-                fs::copy(hopper_image_file_path, hopper_image_file_destination_path).unwrap();
+            }
+            else {
+                fs::copy(hopper_image_src_path, hopper_image_dst_path).unwrap();
             }
         }
 
         // Build categories json
-        let mut categories_config = matchmaking_hopper_categories_config::default();
+        let mut categories_config = title_storage_config::matchmaking_hopper_categories::default();
 
         for &mut category_configuration in category_configurations.iter_mut() {
-            let mut category_configuration_and_description = matchmaking_hopper_category_configuration_and_descriptions {
+            let mut category_configuration_and_description = title_storage_config::matchmaking_hopper_category_configuration_and_descriptions {
                 descriptions: HashMap::new(),
                 configuration: category_configuration,
             };
@@ -798,9 +1273,8 @@ impl v12065_11_08_24_1738_tu1actual {
         }
 
 
-        let categories_json_file = build_path!(
+        let categories_json_file = title_storage_config::matchmaking_hopper_categories_file_path(
             hoppers_config_path,
-            k_categories_config_file_name
         );
 
         let mut categories_json_file = File::create(categories_json_file).unwrap();
@@ -815,17 +1289,21 @@ impl v12065_11_08_24_1738_tu1actual {
         // For now we just copy it as is. But we do check that it contains a netc.
         let mut task = console_task::start("Converting Network Configuration");
 
-        let network_configuration_source_path = build_path!(
+        let network_configuration_source_path = title_storage_output::network_configuration_file_path(
             hoppers_blfs_path,
-            k_network_configuration_file_name
         );
 
-        let network_configuration_dest_path = build_path!(
+        if !exists(&network_configuration_source_path)? {
+            task.fail_with_error(String::from("Network configuration does not exist"));
+            return Ok(())
+        }
+
+        let network_configuration_dest_path = title_storage_config::network_configuration_file_path(
             hoppers_config_path,
-            k_network_configuration_file_name
         );
 
         let netc = find_chunk_in_file::<s_blf_chunk_network_configuration>(network_configuration_source_path)?;
+
         BlfFileBuilder::new()
             .add_chunk(s_blf_chunk_start_of_file::new("reach net config", byte_order_mark::big_endian))
             .add_chunk(s_blf_chunk_author::for_build::<v12065_11_08_24_1738_tu1actual>())
@@ -836,25 +1314,22 @@ impl v12065_11_08_24_1738_tu1actual {
         やった!(task)
     }
 
-    fn build_blf_banhammer_messages(hoppers_config_folder: &String, hoppers_blf_folder: &String) -> Result<(), Box<dyn Error>> {
+    fn build_blf_banhammer_messages(hoppers_config_folder: &String, hoppers_blf_folder: &String) -> BLFLibResult {
         let mut task = console_task::start("Building Banhammer Messages");
 
         for language_code in k_language_suffixes {
-            let matchmaking_banhammer_messages = matchmaking_banhammer_messages::read_from_config(
-                hoppers_config_folder,
-                language_code,
-            );
+            let matchmaking_banhammer_messages = read_text_file_lines(
+                title_storage_config::banhammer_messages_file_path(hoppers_config_folder, language_code)
+            )?;
 
-            if matchmaking_banhammer_messages.is_err() {
-                task.add_warning(format!("Failed to build {} banhammer messages.", get_language_string(language_code)));
-                continue;
-            }
+            let bhms = s_blf_chunk_banhammer_messages::create(matchmaking_banhammer_messages)?;
 
-            matchmaking_banhammer_messages?.write_file(build_path!(
-                hoppers_blf_folder,
-                language_code,
-                k_matchmaking_banhammer_messages_file_name
-            ))?;
+            BlfFileBuilder::new()
+                .add_chunk(s_blf_chunk_start_of_file::default())
+                .add_chunk(s_blf_chunk_author::for_build::<v12065_11_08_24_1738_tu1actual>())
+                .add_chunk(bhms)
+                .add_chunk(s_blf_chunk_end_of_file::default())
+                .write_file(title_storage_output::banhammer_messages_file_path(hoppers_blf_folder, language_code))?;
         }
 
         やった!(task)
@@ -863,46 +1338,84 @@ impl v12065_11_08_24_1738_tu1actual {
     fn build_blf_dlc_manifest(hoppers_config_folder: &String, hoppers_blf_folder: &String) -> Result<(), Box<dyn Error>> {
         let mut task = console_task::start("Building DLC Manifest");
 
-        let dlc_manifest = read_json_file::<s_blf_chunk_dlc_map_manifest>(build_path!(
-            hoppers_config_folder,
-            "dlc",
-            "manifest.json"
-        ))?;
+        let dlcd = read_json_file::<s_blf_chunk_dlc_map_manifest>(
+            title_storage_config::dlc_map_manifest_file_path(hoppers_config_folder)
+        )?;
 
-        let dlc_config_folder = build_path!(hoppers_config_folder, "dlc");
-        let dlc_images_folder = build_path!(hoppers_blf_folder, "dlc");
-
-        create_dir_all(&dlc_images_folder)?;
-
-        for map in dlc_manifest.maps.get() {
+        for map in dlcd.maps.get() {
             if !map.small_image_file_name.is_empty() {
-                let small_image_path = build_path!(&dlc_config_folder, map.small_image_file_name.get_string()?);
-                let small_image_destination = build_path!(&dlc_images_folder, map.small_image_file_name.get_string()?);
-                if exists(&small_image_path)? {
-                    fs::copy(&small_image_path, small_image_destination)?;
-                } else {
-                    task.add_warning(format!("No small image was found for map {}", map.name_en.get_string()))
+                let small_image_file_name = map.small_image_file_name.get_string()?;
+                let small_image_src_path = title_storage_config::dlc_map_manifest_image_file_path(
+                    hoppers_config_folder,
+                    &small_image_file_name
+                );
+
+                let small_image_valid = validate_jpeg(
+                    &small_image_src_path,
+                    title_storage_output::dlc_map_small_image_width,
+                    title_storage_output::dlc_map_small_image_height,
+                    None
+                );
+
+                match small_image_valid {
+                    Ok(_) => {
+                        let small_image_dst_path = title_storage_output::dlc_map_manifest_image_file_path(
+                            hoppers_blf_folder,
+                            &small_image_file_name
+                        );
+                        create_parent_folders(&small_image_dst_path)?;
+                        fs::copy(small_image_src_path, small_image_dst_path)?;
+                    }
+                    Err(err) => {
+                        task.add_warning(format!(
+                            "{} has an invalid Small image - {}",
+                            map.name_en,
+                            err
+                        ));
+                    }
                 }
             }
 
             if !map.large_image_file_name.is_empty() {
-                let large_image_path = build_path!(&dlc_config_folder, map.large_image_file_name.get_string()?);
-                let large_image_destination = build_path!(&dlc_images_folder, map.large_image_file_name.get_string()?);
-                if exists(&large_image_path)? {
-                    fs::copy(&large_image_path, large_image_destination)?;
-                } else {
-                    task.add_warning(format!("No large image was found for map {}", map.name_en.get_string()))
+                let large_image_file_name = map.large_image_file_name.get_string()?;
+                let large_image_src_path = title_storage_config::dlc_map_manifest_image_file_path(
+                    hoppers_config_folder,
+                    &large_image_file_name
+                );
+
+                let large_image_valid = validate_jpeg(
+                    &large_image_src_path,
+                    title_storage_output::dlc_map_large_image_width,
+                    title_storage_output::dlc_map_large_image_height,
+                    None
+                );
+
+                match large_image_valid {
+                    Ok(_) => {
+                        let large_image_dst_path = title_storage_output::dlc_map_manifest_image_file_path(
+                            hoppers_blf_folder,
+                            &large_image_file_name
+                        );
+                        create_parent_folders(&large_image_dst_path)?;
+                        fs::copy(large_image_src_path, large_image_dst_path)?;
+                    }
+                    Err(err) => {
+                        task.add_warning(format!(
+                            "{} has an invalid Large image - {}",
+                            map.name_en,
+                            err
+                        ));
+                    }
                 }
             }
         }
 
         BlfFileBuilder::new()
             .add_chunk(s_blf_chunk_start_of_file::default())
-            .add_chunk(dlc_manifest)
+            .add_chunk(dlcd)
             .add_chunk(s_blf_chunk_end_of_file::default())
-            .write_file(build_path!(
-                hoppers_blf_folder,
-                "dlc_map_manifest.bin"
+            .write_file(title_storage_output::dlc_map_manifest_file_path(
+                hoppers_blf_folder
             ))?;
 
         やった!(task)
@@ -912,20 +1425,17 @@ impl v12065_11_08_24_1738_tu1actual {
         let mut task = console_task::start("Building Megalo Categories");
 
         for language_code in k_language_suffixes {
-            let megalo_categories = read_json_file::<s_blf_chunk_megalo_categories>(build_path!(
-                hoppers_config_folder,
-                "megalo_categories",
-                format!("{}.json", language_code)
-            ))?;
+            let megalo_categories = read_json_file::<s_blf_chunk_megalo_categories>(
+                title_storage_config::megalo_categories_file_path(hoppers_config_folder, language_code)
+            )?;
 
             BlfFileBuilder::new()
                 .add_chunk(s_blf_chunk_start_of_file::default())
                 .add_chunk(megalo_categories)
                 .add_chunk(s_blf_chunk_end_of_file::default())
-                .write_file(build_path!(
+                .write_file(title_storage_output::megalo_categories_file_path(
                     hoppers_blf_folder,
                     language_code,
-                    "file_megalo_categories.bin"
                 ))?;
         }
 
@@ -933,219 +1443,279 @@ impl v12065_11_08_24_1738_tu1actual {
     }
 
     fn build_blf_predefined_queries(hoppers_config_folder: &String, hoppers_blf_folder: &String) -> Result<(), Box<dyn Error>> {
-        let mut task = console_task::start("Building Predefined Queries");
+        for tangerine in [false, true] {
+            let mut task = console_task::start(
+                if tangerine { "Building CEA Predefined Queries" }
+                else { "Building Predefined Queries" }
+            );
 
-        for language_code in k_language_suffixes {
-            let predefined_queries = read_json_file::<s_blf_chunk_predefined_queries>(build_path!(
-                hoppers_config_folder,
-                "predefined_queries",
-                format!("{}.json", language_code)
-            ))?;
+            for language_code in k_language_suffixes {
+                let predefined_queries = read_json_file::<s_blf_chunk_predefined_queries>(
+                    title_storage_config::predefined_queries_file_path(
+                        hoppers_config_folder,
+                        language_code,
+                        tangerine,
+                    ))?;
 
-            BlfFileBuilder::new()
-                .add_chunk(s_blf_chunk_start_of_file::default())
-                .add_chunk(predefined_queries)
-                .add_chunk(s_blf_chunk_end_of_file::default())
-                .write_file(build_path!(
-                    hoppers_blf_folder,
-                    language_code,
-                    "file_predefined_queries.bin"
-                ))?;
+                BlfFileBuilder::new()
+                    .add_chunk(s_blf_chunk_start_of_file::default())
+                    .add_chunk(predefined_queries)
+                    .add_chunk(s_blf_chunk_end_of_file::default())
+                    .write_file(title_storage_output::predefined_queries_file_path(
+                        hoppers_blf_folder,
+                        language_code,
+                        tangerine
+                    ))?;
+            }
+
+            task.complete();
         }
 
-        task.complete();
-
-        let mut task = console_task::start("Building CEA Predefined Queries");
-
-        for language_code in k_language_suffixes {
-            let predefined_queries = read_json_file::<s_blf_chunk_predefined_queries>(build_path!(
-                hoppers_config_folder,
-                "predefined_queries_cea",
-                format!("{}.json", language_code)
-            ))?;
-
-            BlfFileBuilder::new()
-                .add_chunk(s_blf_chunk_start_of_file::default())
-                .add_chunk(predefined_queries)
-                .add_chunk(s_blf_chunk_end_of_file::default())
-                .write_file(build_path!(
-                    hoppers_blf_folder,
-                    language_code,
-                    "tangerine_file_predefined_queries.bin"
-                ))?;
-        }
-
-        やった!(task)
+        やった!()
     }
 
-    fn build_blf_matchmaking_tips(hoppers_config_folder: &String, hoppers_blf_folder: &String, tangerine: bool) -> BLFLibResult {
-        let mut task = console_task::start(
-            if tangerine { "Building CEA Matchmaking Tips" }
-            else { "Building Matchmaking Tips" }
+    fn build_blf_matchmaking_tips(hoppers_config_folder: &String, hoppers_blf_folder: &String) -> BLFLibResult {
+        for tangerine in [false, true] {
+            let mut task = console_task::start(
+                if tangerine { "Building CEA Matchmaking Tips" }
+                else { "Building Matchmaking Tips" }
+            );
+
+            for language_code in k_language_suffixes {
+                let matchmaking_tips = read_text_file_lines(
+                    title_storage_config::matchmaking_tips_file_path(
+                        hoppers_config_folder,
+                        language_code,
+                        tangerine
+                    )
+                )?;
+
+                BlfFileBuilder::new()
+                    .add_chunk(s_blf_chunk_start_of_file::default())
+                    .add_chunk(s_blf_chunk_author::for_build::<v12065_11_08_24_1738_tu1actual>())
+                    .add_chunk(s_blf_chunk_matchmaking_tips::create(matchmaking_tips)?)
+                    .add_chunk(s_blf_chunk_end_of_file::default())
+                    .write_file(title_storage_output::matchmaking_tips_file_path(
+                        hoppers_blf_folder,
+                        language_code,
+                        tangerine
+                    ))?
+            }
+
+            task.complete();
+        }
+        Ok(())
+    }
+
+    fn build_blf_global_nag_messages(hoppers_config_folder: &String, hoppers_blf_folder: &String) -> BLFLibResult {
+        for tangerine in [false, true] {
+            let mut task = console_task::start(
+                if tangerine { "Building CEA Nag Messages" }
+                else { "Building Nag Messages" }
+            );
+
+            for language_code in k_language_suffixes {
+                // write the nagm blf
+                let nagm_config_path = title_storage_config::global_nag_message_file_path(
+                    hoppers_config_folder,
+                    language_code,
+                    tangerine
+                );
+
+                if !exists(&nagm_config_path)? {
+                    task.add_warning(format!(
+                        "No {} Global Nag Message is present.",
+                        get_language_string(language_code),
+                    ));
+                    continue;
+                }
+
+                let nagm = read_json_file::<s_blf_chunk_nag_message>(
+                    &nagm_config_path
+                )?;
+
+                BlfFileBuilder::new()
+                    .add_chunk(s_blf_chunk_start_of_file::default())
+                    .add_chunk(s_blf_chunk_author::for_build::<v12065_11_08_24_1738_tu1actual>())
+                    .add_chunk(nagm)
+                    .add_chunk(s_blf_chunk_end_of_file::default())
+                    .write_file(title_storage_output::global_nag_message_file_path(hoppers_config_folder, language_code, tangerine))?;
+
+                // copy images.
+                let image_source = title_storage_config::global_nag_message_image_file_path(
+                    hoppers_config_folder,
+                    language_code,
+                    tangerine
+                );
+
+                let image_valid = validate_jpeg(
+                    &image_source,
+                    title_storage_output::global_nag_message_image_width,
+                    title_storage_output::global_nag_message_image_height,
+                    None
+                );
+                if image_valid.is_err() {
+                    task.add_warning(format!(
+                        "{} Nag Message has an invalid Image: {}",
+                        get_language_string(language_code),
+                        image_valid.unwrap_err()
+                    ));
+
+                    continue;
+                }
+
+                fs::copy(image_source, title_storage_output::global_nag_message_image_file_path(
+                    hoppers_blf_folder,
+                    language_code,
+                    tangerine
+                ))?;
+
+            }
+
+            task.complete();
+        }
+
+        Ok(())
+    }
+
+    fn build_blf_user_nag_messages(hoppers_config_folder: &String, hoppers_blf_folder: &String) -> BLFLibResult {
+        let mut task = console_task::start("Building User Nag Messages");
+
+        let user_nags_folder = build_path!(
+            hoppers_config_folder,
+            title_storage_config::user_nag_messages_folder_name
         );
 
-        for language_code in k_language_suffixes {
-            let mut matchmaking_tips = matchmaking_tips::read_from_config(
-                hoppers_config_folder,
-                language_code,
-                tangerine
-            ).inspect_err(|err|{
-                task.fail();
-            })?;
-
-            matchmaking_tips.write_file(build_path!(
-                hoppers_blf_folder,
-                language_code,
-                if tangerine { k_tangerine_matchmaking_tips_file_name }
-                else { k_matchmaking_tips_file_name }
-            ))?;
+        if !exists(&user_nags_folder)? {
+            task.add_message("No user nags found. Skipping.");
+            task.complete();
+            return Ok(());
         }
 
-        やった!(task)
-    }
+        for folder in get_directories_in_folder(&user_nags_folder)? {
+            for language_code in k_language_suffixes {
+                let nag_message_id: u16 = folder.parse()?;
+                let nag_message_config_path = title_storage_config::user_nag_message_file_path(
+                    hoppers_config_folder,
+                    language_code,
+                    nag_message_id
+                );
+                if !exists(&nag_message_config_path)? {
+                    continue;
+                }
+                let nagm = read_json_file::<s_blf_chunk_nag_message>(&nag_message_config_path)?;
 
-    fn build_blf_nag_messages(hoppers_config_folder: &String, hoppers_blf_folder: &String, tangerine: bool) -> BLFLibResult {
-        let mut task = console_task::start(format!(
-            "Building {}Nag Messages",
-            if tangerine { "CEA " } else { "" }
-        ));
+                BlfFileBuilder::new()
+                    .add_chunk(s_blf_chunk_start_of_file::default())
+                    .add_chunk(s_blf_chunk_author::for_build::<v12065_11_08_24_1738_tu1actual>())
+                    .add_chunk(nagm)
+                    .add_chunk(s_blf_chunk_end_of_file::default())
+                    .write_file(title_storage_output::user_nag_message_file_path(
+                        hoppers_blf_folder,
+                        language_code,
+                        nag_message_id
+                    ))?;
 
-        for language_code in k_language_suffixes {
-            let nag_message = nag_message::read_from_config(hoppers_config_folder, language_code, tangerine);
+                let nag_message_img_src_path = title_storage_config::user_nag_message_image_file_path(
+                    hoppers_config_folder,
+                    language_code,
+                    nag_message_id
+                );
 
-            if nag_message.is_err() {
-                task.add_warning(format!(
-                    "Failed to build {} {}Nag Message: {}",
-                    get_language_string(language_code),
-                    if tangerine { "CEA " } else { "" },
-                    nag_message.unwrap_err()
-                ));
+                let nag_message_img_dst_path = title_storage_config::user_nag_message_image_file_path(
+                    hoppers_config_folder,
+                    language_code,
+                    nag_message_id
+                );
 
-                continue;
+                if !exists(&nag_message_img_src_path)? {
+                    task.add_warning(format!("No image is present for {language_code} user nag {nag_message_id}"));
+                }
+                else if validate_jpeg(&nag_message_img_src_path, user_nag_message_image_width, user_nag_message_image_height, None).is_err() {
+                    task.add_warning(format!("{language_code} user nag {nag_message_id} has an invalid image"));
+                }
+                else {
+                    fs::copy(nag_message_img_src_path, nag_message_img_dst_path)?;
+                }
             }
 
-            nag_message?.write_file(build_path!(
-                hoppers_blf_folder,
-                language_code,
-                if tangerine { k_cea_nag_message_file_name } else { k_nag_message_file_name }
-            ))?;
         }
 
-        for language_code in k_language_suffixes {
-            let jpeg_file_path = build_path!(
-                hoppers_config_folder,
-                if tangerine { k_cea_nag_message_config_folder } else { k_nag_message_config_folder },
-                format!("{}.jpg", language_code)
-            );
 
-            let destination_path = build_path!(
-                hoppers_blf_folder,
-                language_code,
-                if tangerine { k_cea_nag_message_image_file_name } else { k_nag_message_image_file_name }
-            );
-
-            let validated = nag_message::validate_image(&jpeg_file_path);
-
-            if validated.is_err() {
-                task.add_warning(format!(
-                    "Failed to convert {}{} Nag Message Image: {}",
-                    get_language_string(language_code),
-                    if tangerine { "CEA " } else { "" },
-                    validated.unwrap_err()
-                ));
-
-                continue;
-            }
-
-            fs::copy(jpeg_file_path, destination_path).unwrap();
-        }
-
-        やった!(task)
+        Ok(())
     }
 
-    fn build_blf_map_manifest(hoppers_config_path: &String, hoppers_blf_path: &String) -> Result<(), Box<dyn Error>>
+    fn build_blf_map_manifests(hoppers_config_path: &String, hoppers_blf_path: &String) -> Result<(), Box<dyn Error>>
     {
-        let mut task = console_task::start("Building Map Manifest");
+        let mut task = console_task::start("Building Map Manifests");
 
-        let rsa_folder = build_path!(hoppers_config_path, k_rsa_signatures_config_folder_name);
-        let rsa_files = get_files_in_folder(&rsa_folder)?;
+        for language_code in k_language_suffixes {
+            let rsa_folder = title_storage_config::rsa_signatures_folder_path(
+                hoppers_config_path,
+                language_code,
+            );
 
-        if rsa_files.is_empty() {
-            task.add_error("No RSA signatures were found.")
+            let mut rsa_files = Vec::<String>::new();
+
+            if exists(&rsa_folder)? {
+                rsa_files = get_files_in_folder(&rsa_folder)?;
+            }
+
+            if rsa_files.is_empty() {
+                task.add_error(format!("No {} RSA signatures were found", get_language_string(language_code)))
+            }
+
+            let mut map_manifest = s_blf_chunk_map_manifest::default();
+
+            for rsa_file_name in rsa_files {
+                let rsa_file_path = build_path!(&rsa_folder, &rsa_file_name);
+                let mut rsa_file = File::open(&rsa_file_path)?;
+                let mut rsa_signature = Vec::<u8>::with_capacity(0x100);
+                rsa_file.read_to_end(&mut rsa_signature).unwrap();
+
+                map_manifest.add_rsa_signature(rsa_signature.as_slice())?;
+            }
+
+            BlfFileBuilder::new()
+                .add_chunk(s_blf_chunk_start_of_file::new("rsa manifest", byte_order_mark::big_endian))
+                .add_chunk(s_blf_chunk_author::for_build::<v12065_11_08_24_1738_tu1actual>())
+                .add_chunk(map_manifest)
+                .add_chunk(s_blf_chunk_end_of_file::default())
+                .write_file(title_storage_output::rsa_manifest_file_path(
+                    &hoppers_blf_path,
+                    language_code
+                ))?;
         }
-
-        let mut map_manifest = s_blf_chunk_map_manifest::default();
-
-        for rsa_file_name in rsa_files {
-            let rsa_file_path = build_path!(&rsa_folder, &rsa_file_name);
-            let mut rsa_file = File::open(&rsa_file_path)?;
-            let mut rsa_signature = Vec::<u8>::with_capacity(0x100);
-            rsa_file.read_to_end(&mut rsa_signature).unwrap();
-
-            map_manifest.add_rsa_signature(rsa_signature.as_slice())?;
-        }
-
-        BlfFileBuilder::new()
-            .add_chunk(s_blf_chunk_author::for_build::<v12065_11_08_24_1738_tu1actual>())
-            .add_chunk(s_blf_chunk_start_of_file::new("rsa manifest", byte_order_mark::big_endian))
-            .add_chunk(map_manifest)
-            .add_chunk(s_blf_chunk_end_of_file::default())
-            .write_file(build_path!(
-                hoppers_blf_path,
-                k_rsa_manifest_file_name
-            ))?;
 
         やった!(task)
     }
 
-    fn read_active_hopper_configuration(hoppers_config_path: &String) -> Vec<String> {
+    fn read_active_hopper_configuration(hoppers_config_path: &String) -> BLFLibResult<Vec<String>> {
         let mut task = console_task::start("Reading Active Hoppers");
 
-        let active_hoppers_folders = read_active_hoppers(hoppers_config_path).unwrap_or_else(|err| {
-            task.fail_with_error(err);
-            panic!();
-        });
+        let active_hoppers_folders = read_text_file_lines(
+            title_storage_config::active_hoppers_file_path(hoppers_config_path)
+        )?;
 
         task.complete();
 
-        active_hoppers_folders
+        Ok(active_hoppers_folders)
     }
 
     fn read_game_set_configuration(hoppers_config_path: &String, active_hopper_folders: &Vec<String>) -> BLFLibResult<HashMap<u16, s_blf_chunk_game_set>>
     {
         let mut task = console_task::start("Reading Game Set Config");
-
         let mut game_sets = HashMap::<u16, s_blf_chunk_game_set>::new();
 
-        let hopper_tables_config_path = build_path!(
-            hoppers_config_path,
-            k_hoppers_config_folder_name
-        );
+        for hopper_folder in active_hopper_folders {
+            let hopper_id = title_storage_config::get_hopper_id_from_hopper_folder_name(hopper_folder)?;
 
-        for subfolder in active_hopper_folders {
-            let hopper_id= config_hopper_folder_identifier_regex.captures(subfolder);
-            if !&hopper_id.is_some() {
-                continue;
-            }
-            let hopper_id = hopper_id.unwrap();
-            if hopper_id.get(0).is_none() {
-                continue;
-            }
-            let hopper_id = hopper_id.get(0).unwrap().as_str();
-            let hopper_id = u16::from_str(hopper_id)?;
-
-            let game_set_json_path = build_path!(
-                &hopper_tables_config_path,
-                subfolder,
-                k_game_set_config_file_name
-            );
-
-            if !exists(&game_set_json_path)? {
-                task.fail_with_error(format!("No game set was found for hopper \"{subfolder}\""));
-                panic!();
-            }
-
-            let game_set = read_json_file::<s_blf_chunk_game_set>(game_set_json_path)?;
+            let game_set = read_json_file::<s_blf_chunk_game_set>(
+                title_storage_config::game_set_file_path(
+                    hoppers_config_path,
+                    hopper_folder
+                )
+            )?;
 
             game_sets.insert(hopper_id, game_set);
         }
@@ -1161,21 +1731,16 @@ impl v12065_11_08_24_1738_tu1actual {
         build_temp_dir: &String,
         game_sets: &HashMap<u16, s_blf_chunk_game_set>,
         variant_hashes: &mut HashMap<String, s_network_http_request_hash>
-    )
+    ) -> BLFLibResult
     {
         let mut task = console_task::start("Building Game Variants");
 
-        let game_variants_config_path = build_path!(
-            hoppers_config_path,
-            k_game_variants_config_folder_name
-        );
-
         let game_variants_temp_build_path = build_path!(
             build_temp_dir,
-            k_build_temp_games_folder_name
+            title_storage_config::game_variants_folder_name
         );
 
-        create_dir_all(&game_variants_temp_build_path).unwrap();
+        create_dir_all(&game_variants_temp_build_path)?;
 
         let game_variants_to_convert: Vec<String> = game_sets.iter().flat_map(|(_, game_set)|
             game_set.entries.iter()
@@ -1187,10 +1752,7 @@ impl v12065_11_08_24_1738_tu1actual {
 
         let mut json_queue: Vec<(String, s_blf_chunk_matchmaking_game_variant)> = Vec::new();
         for game_variant in game_variants_to_convert {
-            let game_variant_json_path = build_path!(
-                &game_variants_config_path,
-                format!("{game_variant}.bin")
-            );
+            let game_variant_json_path = title_storage_config::game_variant_file_path(hoppers_config_path, &game_variant);
 
             if !Path::new(&game_variant_json_path).exists() {
                 task.fail_with_error(format!("Game variant \"{}\" could not be found.", game_variant));
@@ -1221,7 +1783,6 @@ impl v12065_11_08_24_1738_tu1actual {
 
             for n in 0..cpu_cores {
                 let shared_variant_hashes = Arc::clone(&shared_variant_hashes);
-                let game_variants_config_path = game_variants_config_path.clone();
                 let game_variants_temp_build_path = game_variants_temp_build_path.clone();
                 let task = Arc::clone(&task);
                 let json_queue = Arc::clone(&json_queue);
@@ -1277,6 +1838,8 @@ impl v12065_11_08_24_1738_tu1actual {
             task.add_message(format!("Built {} variants.", variant_hashes.len()));
             task.complete();
         });
+
+        Ok(())
     }
 
     fn build_blf_map_variants(
@@ -1285,21 +1848,16 @@ impl v12065_11_08_24_1738_tu1actual {
         build_temp_dir: &String,
         game_sets: &HashMap<u16, s_blf_chunk_game_set>,
         variant_hashes: &mut HashMap<String, s_network_http_request_hash>,
-    )
+    ) -> BLFLibResult
     {
         let mut task = console_task::start("Building Map Variants");
 
-        let map_variants_config_path = build_path!(
-            hoppers_config_path,
-            k_map_variants_config_folder_name
-        );
-
         let map_variants_temp_build_path = build_path!(
             build_temp_dir,
-            k_build_temp_maps_folder_name
+            title_storage_config::map_variants_folder_name
         );
 
-        create_dir_all(&map_variants_temp_build_path).unwrap();
+        create_dir_all(&map_variants_temp_build_path)?;
 
         let map_variants_to_convert: Vec<String> = game_sets.iter().flat_map(|(_, game_set)|
             game_set.entries.iter()
@@ -1310,9 +1868,9 @@ impl v12065_11_08_24_1738_tu1actual {
 
         let mut json_queue: Vec<(String, s_blf_chunk_map_variant)> = Vec::new();
         for map_variant in map_variants_to_convert {
-            let map_variant_json_path = build_path!(
-                &map_variants_config_path,
-                format!("{map_variant}.bin")
+            let map_variant_json_path = title_storage_config::map_variant_file_path(
+                hoppers_config_path,
+                &map_variant,
             );
 
             if !Path::new(&map_variant_json_path).exists() {
@@ -1343,7 +1901,6 @@ impl v12065_11_08_24_1738_tu1actual {
 
             for n in 0..cpu_cores {
                 let shared_variant_hashes = Arc::clone(&shared_variant_hashes);
-                let map_variants_config_path = map_variants_config_path.clone();
                 let map_variants_temp_build_path = map_variants_temp_build_path.clone();
                 let task = Arc::clone(&task);
                 let json_queue = Arc::clone(&json_queue);
@@ -1396,6 +1953,8 @@ impl v12065_11_08_24_1738_tu1actual {
             task.add_message(format!("Built {} variants.", variant_hashes.len()));
             task.complete();
         });
+
+        Ok(())
     }
 
     fn build_blf_game_sets(
@@ -1409,27 +1968,15 @@ impl v12065_11_08_24_1738_tu1actual {
         let mut task = console_task::start("Building Game Sets");
 
         for (hopper_id, mut game_set_config) in active_game_sets {
-            let hopper_folder_path = build_path!(
-                hoppers_blf_path,
-                format!("{hopper_id:0>5}")
-            );
-
-            let hopper_folder_map_variants_path = build_path!(
-                &hopper_folder_path,
-                k_map_variants_blf_folder_name
-            );
-
             let game_variants_temp_build_path = build_path!(
                 build_temp_dir_path,
-                k_build_temp_games_folder_name
+                title_storage_config::game_variants_folder_name
             );
 
             let map_variants_temp_build_path = build_path!(
                 build_temp_dir_path,
-                k_build_temp_maps_folder_name
+                title_storage_config::map_variants_folder_name
             );
-
-            create_dir_all(&hopper_folder_map_variants_path).unwrap();
 
             let copied_maps = HashSet::<String>::new();
             let copied_games = HashSet::<String>::new();
@@ -1439,39 +1986,47 @@ impl v12065_11_08_24_1738_tu1actual {
                 if !game_set_row.game_variant_file_name.is_empty()
                     && !copied_games.contains(&game_set_row.game_variant_file_name.get_string()?)
                 {
-                    let game_variant_file_name = format!(
-                        "{}_{:0>3}.bin",
-                        game_set_row.game_variant_file_name.get_string()?,
-                        s_blf_chunk_matchmaking_game_variant::get_version().major,
+                    let game_variant_file_name = game_set_row.game_variant_file_name.get_string()?;
+
+                    let game_variant_dst_path = title_storage_output::game_variant_file_path(
+                        hoppers_blf_path,
+                        hopper_id,
+                        &game_set_row.game_variant_file_name.get_string()?,
                     );
+                    create_parent_folders(&game_variant_dst_path)?;
+
                     fs::copy(
                         build_path!(
                             &game_variants_temp_build_path,
-                            &game_variant_file_name
+                            format!(
+                                "{game_variant_file_name}_{:0>3}.bin",
+                                s_blf_chunk_matchmaking_game_variant::get_version().major
+                            )
                         ),
-                        build_path!(
-                            &hopper_folder_path,
-                            &game_variant_file_name
-                        )
+                        game_variant_dst_path,
                     )?;
                 }
 
                 if !game_set_row.map_variant_file_name.is_empty()
                     && !copied_maps.contains(&game_set_row.map_variant_file_name.get_string()?) {
-                    let map_variant_file_name = format!(
-                        "{}_{:0>3}.bin",
-                        game_set_row.map_variant_file_name.get_string()?,
-                        s_blf_chunk_map_variant::get_version().major,
+                    let map_variant_file_name = game_set_row.map_variant_file_name.get_string()?;
+
+                    let map_variant_dst_path = title_storage_output::map_variant_file_path(
+                        hoppers_blf_path,
+                        hopper_id,
+                        &map_variant_file_name
                     );
+                    create_parent_folders(&map_variant_dst_path)?;
+
                     fs::copy(
                         build_path!(
                             &map_variants_temp_build_path,
-                            &map_variant_file_name
+                            format!(
+                                "{map_variant_file_name}_{:0>3}.bin",
+                                s_blf_chunk_map_variant::get_version().major
+                            )
                         ),
-                        build_path!(
-                            &hopper_folder_map_variants_path,
-                            &map_variant_file_name
-                        )
+                        map_variant_dst_path,
                     )?;
                 }
             }
@@ -1490,9 +2045,9 @@ impl v12065_11_08_24_1738_tu1actual {
                 .add_chunk(s_blf_chunk_author::for_build::<v12065_11_08_24_1738_tu1actual>())
                 .add_chunk(game_set_config)
                 .add_chunk(s_blf_chunk_end_of_file::default())
-                .write_file(build_path!(
-                    &hopper_folder_path,
-                    k_game_set_blf_file_name
+                .write_file(title_storage_output::game_set_file_path(
+                    hoppers_blf_path,
+                    hopper_id,
                 ))?;
         }
 
@@ -1503,77 +2058,85 @@ impl v12065_11_08_24_1738_tu1actual {
         hoppers_config_path: &String,
         hoppers_blfs_path: &String,
         active_hopper_folders: &Vec<String>,
-    ) -> Result<(), Box<dyn Error>>
+    ) -> BLFLibResult
     {
         let mut task = console_task::start("Building Hopper Configuration");
 
-        let mut hopper_configuration_table = s_blf_chunk_hopper_configuration_table::default();
+        let mut mhcf = s_blf_chunk_hopper_configuration_table::default();
 
         // Load the configuration.json files for each hopper
-        let mut hopper_configuration_jsons = Vec::<(u16, matchmaking_hopper_config)>::new();
+        let mut hopper_configuration_jsons = Vec::<(u16, title_storage_config::matchmaking_hopper)>::new();
         for active_hopper_folder in active_hopper_folders {
-            let configuration_path = build_path!(
+            let configuration_path = title_storage_config::matchmaking_hopper_configuration_file_path(
                 hoppers_config_path,
-                k_hoppers_config_folder_name,
-                active_hopper_folder,
-                k_hopper_config_file_name
+                &active_hopper_folder,
             );
 
             if !exists(&configuration_path).unwrap() {
                 task.fail_with_error(format!("Couldn't find a configuration file for hopper {active_hopper_folder}!"));
-                panic!();
+                return Err(BLFLibError::from("Failed to build hoppers."));
             }
 
-            let mut configuration_file = File::open(&configuration_path).unwrap();
-
-            // TODO: Refactor out
-            let hopper_id= config_hopper_folder_identifier_regex.captures(active_hopper_folder);
-            if !&hopper_id.is_some() {
-                continue;
-            }
-            let hopper_id = hopper_id.unwrap();
-            if hopper_id.get(0).is_none() {
-                continue;
-            }
-            let hopper_id = hopper_id.get(0).unwrap().as_str();
-            let hopper_id = u16::from_str(hopper_id).unwrap();
+            let hopper_id = get_hopper_id_from_hopper_folder_name(active_hopper_folder)?;
 
             hopper_configuration_jsons.push((
                 hopper_id,
-                serde_json::from_reader(&mut configuration_file).unwrap()
+                read_json_file(configuration_path)?,
             ));
+
+            let hopper_image_src_path = title_storage_config::matchmaking_hopper_image_file_path(
+                hoppers_config_path,
+                active_hopper_folder,
+            );
+
+            let hopper_image_dst_path = title_storage_output::hopper_image_file_path(
+                hoppers_config_path,
+                hopper_id,
+            );
+
+            if !exists(&hopper_image_src_path)? {
+                task.add_warning(format!("No image was found for hopper {}", hopper_id))
+            }
+            else if validate_jpeg(&hopper_image_src_path, hopper_image_width, hopper_image_height, None).is_err() {
+                task.add_warning(format!("Hopper {} has an invalid image.", hopper_id))
+            }
+            else {
+                create_parent_folders(&hopper_image_dst_path)?;
+                fs::copy(hopper_image_src_path, hopper_image_dst_path)?;
+            }
         }
 
         for (hopper_identifier, hopper_configuration_json) in &hopper_configuration_jsons {
             let mut hopper_config = hopper_configuration_json.configuration.clone();
-            let game_set_blf_file_path = build_path!(
+            let game_set_blf_file_path = title_storage_output::game_set_file_path(
                 hoppers_blfs_path,
-                format!("{hopper_identifier:0>5}"),
-                k_game_set_blf_file_name
+                hopper_identifier.clone(),
             );
             hopper_config.game_set_hash = get_blf_file_hash(game_set_blf_file_path)?;
-            hopper_configuration_table.hopper_configurations.push(hopper_config);
+            mhcf.hopper_configurations.push(hopper_config);
         }
 
-        // Load category configuration
-        let categories_configuration = matchmaking_hopper_categories_config::read(hoppers_config_path)?;
+        let categories_configuration =
+            read_json_file::<title_storage_config::matchmaking_hopper_categories>(
+                title_storage_config::matchmaking_hopper_categories_file_path(hoppers_config_path)
+            )?;
 
-        let active_hopper_categories = hopper_configuration_table
+        let active_hopper_categories = mhcf
             .hopper_configurations
             .iter().map(|hopper|hopper.category_identifier)
             .collect::<HashSet<_>>();
         let active_hopper_category_configurations = categories_configuration.categories
             .iter().filter(|category_configuration|active_hopper_categories.contains(&category_configuration.configuration.category_identifier))
             .cloned()
-            .collect::<Vec<matchmaking_hopper_category_configuration_and_descriptions>>();
+            .collect::<Vec<title_storage_config::matchmaking_hopper_category_configuration_and_descriptions>>();
 
         for active_hopper_category in &active_hopper_category_configurations {
-            hopper_configuration_table.hopper_categories.push(active_hopper_category.configuration);
+            mhcf.hopper_categories.push(active_hopper_category.configuration);
         }
 
         // Initialize language_hopper_descriptions
         for language_code in k_language_suffixes {
-            let mut language_descriptions = s_blf_chunk_hopper_description_table::default();
+            let mut mhdf = s_blf_chunk_hopper_description_table::default();
 
             for (hopper_identifier, hopper_configuration_json) in &hopper_configuration_jsons {
                 if !hopper_configuration_json.descriptions.contains_key(&language_code.to_string()) {
@@ -1595,7 +2158,7 @@ impl v12065_11_08_24_1738_tu1actual {
                     continue;
                 }
 
-                language_descriptions.add_description((
+                mhdf.add_description((
                     *hopper_identifier,
                     &description.to_string()
                 ))?;
@@ -1623,29 +2186,31 @@ impl v12065_11_08_24_1738_tu1actual {
                     continue;
                 }
 
-                language_descriptions.add_description((
+                mhdf.add_description((
                     active_hopper_category.configuration.category_identifier,
                     description
                 ))?;
             }
 
-            // Write description file
-            let descriptions_blf_path = build_path!(
-                hoppers_blfs_path,
-                language_code,
-                k_matchmaking_hopper_descriptions_file_name
-            );
-
-            let mut matchmaking_hopper_descriptions = matchmaking_hopper_descriptions::create(language_descriptions);
-            matchmaking_hopper_descriptions.write_file(&descriptions_blf_path)?;
+            BlfFileBuilder::new()
+                .add_chunk(s_blf_chunk_start_of_file::default())
+                .add_chunk(s_blf_chunk_author::for_build::<v12065_11_08_24_1738_tu1actual>())
+                .add_chunk(mhdf)
+                .add_chunk(s_blf_chunk_start_of_file::default())
+                .write_file(title_storage_output::hopper_descriptions_file_path(
+                    hoppers_blfs_path,
+                    language_code,
+                ))?;
         }
 
-        // Write the hopper config file.
-        let mut matchmaking_hopper_blf = matchmaking_hopper::create(hopper_configuration_table);
-        matchmaking_hopper_blf.write_file(build_path!(
-            hoppers_blfs_path,
-            k_matchmaking_hopper_file_name
-        ))?;
+        BlfFileBuilder::new()
+            .add_chunk(s_blf_chunk_start_of_file::new("hopper config", byte_order_mark::big_endian))
+            .add_chunk(s_blf_chunk_author::for_build::<v12065_11_08_24_1738_tu1actual>())
+            .add_chunk(mhcf)
+            .add_chunk(s_blf_chunk_start_of_file::default())
+            .write_file(title_storage_output::matchmaking_hopper_file_path(
+                hoppers_blfs_path,
+            ))?;
 
         やった!(task)
     }
@@ -1655,19 +2220,18 @@ impl v12065_11_08_24_1738_tu1actual {
         hoppers_blfs_path: &String,
     ) -> Result<(), Box<dyn Error>> {
         let mut task = console_task::start("Building Network Configuration");
-        let netc = find_chunk_in_file::<s_blf_chunk_network_configuration>(build_path!(
-            hoppers_config_path,
-            k_network_configuration_file_name
-        ))?;
+        let netc =
+            find_chunk_in_file::<s_blf_chunk_network_configuration>(
+                title_storage_config::network_configuration_file_path(&hoppers_config_path)
+            )?;
 
         BlfFileBuilder::new()
             .add_chunk(s_blf_chunk_start_of_file::new("reach net config", byte_order_mark::big_endian))
             .add_chunk(s_blf_chunk_author::for_build::<v12065_11_08_24_1738_tu1actual>())
             .add_chunk(netc)
             .add_chunk(s_blf_chunk_end_of_file::default())
-            .write_file(build_path!(
+            .write_file(title_storage_output::network_configuration_file_path(
                 hoppers_blfs_path,
-                k_network_configuration_file_name
             ))?;
 
         やった!(task)
@@ -1681,121 +2245,136 @@ impl v12065_11_08_24_1738_tu1actual {
         let mut manifest_chunk = s_blf_chunk_online_file_manifest::default();
         let hopper_directory_name = Path::new(hoppers_blfs_path).file_name().unwrap().to_str().unwrap();
 
-        let dlc_manifest_file_hash = get_blf_file_hash(build_path!(
-            hoppers_blfs_path,
-            "dlc_map_manifest.bin"
-        ))?;
+        let dlc_manifest_file_hash = get_blf_file_hash(
+            title_storage_output::dlc_map_manifest_file_path(hoppers_blfs_path)
+        )?;
 
-        let hopper_config_file_hash = get_blf_file_hash(build_path!(
-            hoppers_blfs_path,
-            k_matchmaking_hopper_file_name
-        ))?;
+        let hopper_config_file_hash = get_blf_file_hash(
+            title_storage_output::matchmaking_hopper_file_path(hoppers_blfs_path)
+        )?;
 
-        let network_config_file_hash = get_blf_file_hash(build_path!(
-            hoppers_blfs_path,
-            format!("network_configuration_{:0>3}.bin", s_blf_chunk_network_configuration::get_version().major)
-        ))?;
-
-        let rsa_manifest_file_hash = get_blf_file_hash(build_path!(
-            hoppers_blfs_path,
-            k_rsa_manifest_file_name
-        ))?;
+        let network_config_file_hash = get_blf_file_hash(
+            title_storage_output::network_configuration_file_path(hoppers_blfs_path)
+        )?;
 
         manifest_chunk.add_file_hash(
-            format!("/title/{hopper_directory_name}/dlc_map_manifest.bin"),
+            format!(
+                "/title/{hopper_directory_name}/{}",
+                title_storage_output::dlc_map_manifest_file_name
+            ),
             dlc_manifest_file_hash,
         )?;
 
         manifest_chunk.add_file_hash(
-            format!("/title/{hopper_directory_name}/{k_matchmaking_hopper_file_name}"),
+            format!(
+                "/title/{hopper_directory_name}/{}",
+                title_storage_output::matchmaking_hopper_file_name()
+            ),
             hopper_config_file_hash,
         )?;
 
         manifest_chunk.add_file_hash(
-            format!("/title/{hopper_directory_name}/network_configuration_{:0>3}.bin", s_blf_chunk_network_configuration::get_version().major),
+            format!(
+                "/title/{hopper_directory_name}/{}",
+                title_storage_output::network_configuration_file_name(),
+            ),
             network_config_file_hash,
         )?;
 
-        manifest_chunk.add_file_hash(
-            format!("/title/{hopper_directory_name}/{k_rsa_manifest_file_name}"),
-            rsa_manifest_file_hash,
-        )?;
-
         for language_code in crate::title_storage::halo3::v12070_08_09_05_2031_halo3_ship::k_language_suffixes {
-            let megalo_categories_file_hash = get_blf_file_hash(build_path!(
-                hoppers_blfs_path,
-                language_code,
-                "file_megalo_categories.bin"
-            ))?;
+            let rsa_manifest_file_hash = get_blf_file_hash(
+                title_storage_output::rsa_manifest_file_path(hoppers_blfs_path, language_code)
+            )?;
 
-            let predefined_queries_file_hash = get_blf_file_hash(build_path!(
-                hoppers_blfs_path,
-                language_code,
-                "file_predefined_queries.bin"
-            ))?;
+            let megalo_categories_file_hash = get_blf_file_hash(
+                title_storage_output::megalo_categories_file_path(hoppers_blfs_path, language_code)
+            )?;
 
-            let tangerine_predefined_queries_file_hash = get_blf_file_hash(build_path!(
-                hoppers_blfs_path,
-                language_code,
-                "tangerine_file_predefined_queries.bin"
-            ))?;
+            let predefined_queries_file_hash = get_blf_file_hash(
+                title_storage_output::predefined_queries_file_path(hoppers_blfs_path, language_code, false)
+            )?;
 
-            let banhammer_messages_file_hash = get_blf_file_hash(build_path!(
-                hoppers_blfs_path,
-                language_code,
-                k_matchmaking_banhammer_messages_file_name
-            ))?;
+            let tangerine_predefined_queries_file_hash = get_blf_file_hash(
+                title_storage_output::predefined_queries_file_path(hoppers_blfs_path, language_code, true)
+            )?;
 
-            let hopper_descriptions_file_hash = get_blf_file_hash(build_path!(
-                hoppers_blfs_path,
-                language_code,
-                k_matchmaking_hopper_descriptions_file_name.clone()
-            ))?;
+            let banhammer_messages_file_hash = get_blf_file_hash(
+                title_storage_output::banhammer_messages_file_path(hoppers_blfs_path, language_code)
+            )?;
 
-            let matchmaking_tips_file_hash = get_blf_file_hash(build_path!(
-                hoppers_blfs_path,
-                language_code,
-                k_matchmaking_tips_file_name
-            ))?;
+            let hopper_descriptions_file_hash = get_blf_file_hash(
+                title_storage_output::hopper_descriptions_file_path(hoppers_blfs_path, language_code)
+            )?;
 
-            let tangerine_matchmaking_tips_file_hash = get_blf_file_hash(build_path!(
-                hoppers_blfs_path,
-                language_code,
-                k_tangerine_matchmaking_tips_file_name
-            ))?;
+            let matchmaking_tips_file_hash = get_blf_file_hash(
+                title_storage_output::matchmaking_tips_file_path(hoppers_blfs_path, language_code, false)
+            )?;
+
+            let tangerine_matchmaking_tips_file_hash = get_blf_file_hash(
+                title_storage_output::matchmaking_tips_file_path(hoppers_blfs_path, language_code, true)
+            )?;
 
             manifest_chunk.add_file_hash(
-                format!("/title/{hopper_directory_name}/{language_code}/file_megalo_categories.bin"),
+                format!(
+                    "/title/{hopper_directory_name}/{language_code}/{}",
+                    title_storage_output::rsa_manifest_file_name
+                ),
+                rsa_manifest_file_hash,
+            )?;
+
+            manifest_chunk.add_file_hash(
+                format!(
+                    "/title/{hopper_directory_name}/{language_code}/{}",
+                    title_storage_output::megalo_categories_file_name
+                ),
                 megalo_categories_file_hash,
             )?;
 
             manifest_chunk.add_file_hash(
-                format!("/title/{hopper_directory_name}/{language_code}/file_predefined_queries.bin"),
+                format!(
+                    "/title/{hopper_directory_name}/{language_code}/{}",
+                    title_storage_output::predefined_queries_file_name(false)
+                ),
                 predefined_queries_file_hash,
             )?;
 
             manifest_chunk.add_file_hash(
-                format!("/title/{hopper_directory_name}/{language_code}/tangerine_file_predefined_queries.bin"),
+                format!(
+                    "/title/{hopper_directory_name}/{language_code}/{}",
+                    title_storage_output::predefined_queries_file_name(true)
+                ),
                 tangerine_predefined_queries_file_hash,
             )?;
 
             manifest_chunk.add_file_hash(
-                format!("/title/{hopper_directory_name}/{language_code}/{k_matchmaking_banhammer_messages_file_name}"),
+                format!(
+                    "/title/{hopper_directory_name}/{language_code}/{}",
+                    title_storage_output::banhammer_messages_file_name
+                ),
                 banhammer_messages_file_hash,
             )?;
 
             manifest_chunk.add_file_hash(
-                format!("/title/{hopper_directory_name}/{language_code}/{k_matchmaking_hopper_descriptions_file_name}"),
+                format!(
+                    "/title/{hopper_directory_name}/{language_code}/{}",
+                    title_storage_output::hopper_descriptions_file_name()
+                ),
                 hopper_descriptions_file_hash,
             )?;
 
             manifest_chunk.add_file_hash(
-                format!("/title/{hopper_directory_name}/{language_code}/{k_matchmaking_tips_file_name}"),
+                format!(
+                    "/title/{hopper_directory_name}/{language_code}/{}",
+                    title_storage_output::matchmaking_tips_file_name(false)
+                ),
                 matchmaking_tips_file_hash,
             )?;
 
             manifest_chunk.add_file_hash(
-                format!("/title/{hopper_directory_name}/{language_code}/{k_tangerine_matchmaking_tips_file_name}"),
+                format!(
+                    "/title/{hopper_directory_name}/{language_code}/{}",
+                    title_storage_output::matchmaking_tips_file_name(true)
+                ),
                 tangerine_matchmaking_tips_file_hash,
             )?;
         }

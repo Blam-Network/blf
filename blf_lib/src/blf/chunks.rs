@@ -32,7 +32,8 @@ pub fn find_chunk<'a, T: BlfChunk + SerializableBlfChunk + ReadableBlfChunk>(buf
 }
 
 pub fn find_chunk_in_file<T: BlfChunk + SerializableBlfChunk + ReadableBlfChunk>(path: impl Into<String>) -> BLFLibResult<T> {
-    let mut file = File::open(path.into())?;
+    let path = path.into();
+    let mut file = File::open(&path)?;
     let mut headerBytes = [0u8; s_blf_header::size()];
     let mut header: s_blf_header;
 
@@ -48,7 +49,7 @@ pub fn find_chunk_in_file<T: BlfChunk + SerializableBlfChunk + ReadableBlfChunk>
         }
         file.seek_relative((header.chunk_size - s_blf_header::size() as u32) as i64)?;
     }
-    Err(format!("{} Chunk not found!", T::get_signature()).into())
+    Err(format!("{} chunk not found in file {}", T::get_signature(), &path).into())
 }
 
 pub fn search_for_chunk<'a, T: BlfChunk + SerializableBlfChunk + ReadableBlfChunk>(buffer: Vec<u8>) -> BLFLibResult<Option<T>> {

@@ -38,11 +38,6 @@ impl BlfFileBuilder {
         self
     }
 
-    fn add_dyn_chunk(&mut self, chunk: Box<dyn SerializableBlfChunk>) -> &mut BlfFileBuilder {
-        self.chunks.push(chunk);
-        self
-    }
-
     pub fn get_chunks(&self) -> &Vec<Box<dyn SerializableBlfChunk>> {
         &self.chunks
     }
@@ -64,7 +59,7 @@ impl BlfFileBuilder {
         Ok(data)
     }
 
-    pub fn write_file(&mut self, path: impl Into<String>) -> Result<(), Box<dyn Error>> {
+    pub fn write_file(&mut self, path: impl Into<String>) -> BLFLibResult {
         let path = &path.into();
         let data = self.write()?;
         
@@ -76,7 +71,7 @@ impl BlfFileBuilder {
             .map_err(|e| e.into())
     }
 
-    pub fn read(&mut self, buffer: &Vec<u8>) -> Result<&mut BlfFileBuilder, Box<dyn Error>> {
+    pub fn read(&mut self, buffer: &Vec<u8>) -> BLFLibResult<&mut BlfFileBuilder> {
         let mut reader = Cursor::new(buffer);
         let mut headerBytes = [0u8; s_blf_header::size()];
         let mut header: s_blf_header;
@@ -86,12 +81,12 @@ impl BlfFileBuilder {
             header = s_blf_header::decode(&headerBytes)?;
 
             if header.signature != chunk.signature() || header.version != chunk.version() {
-                return Err(Box::from(format!("Failed to read chunk {} {}, found {} {} instead!",
+                return Err(format!("Failed to read chunk {} {}, found {} {} instead!",
                                              chunk.signature(),
                                              chunk.version(),
                                              header.signature,
                                              header.version
-                )))
+                ).into())
             }
 
             let mut body_bytes = vec![0u8; (header.chunk_size as usize) - s_blf_header::size()];

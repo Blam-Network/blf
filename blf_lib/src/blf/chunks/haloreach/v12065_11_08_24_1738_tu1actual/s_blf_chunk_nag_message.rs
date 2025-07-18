@@ -14,14 +14,19 @@ pub struct s_blf_chunk_nag_message
 {
     pub title_index_identifier: u32,
     pub button_key_wait_time_ms: u32,
+    #[serde(skip_serializing,skip_deserializing)]
     title_size: u32,
     pub title: StaticWcharString<k_nag_message_title_max_length>,
+    #[serde(skip_serializing,skip_deserializing)]
     header_size: u32,
     pub header: StaticWcharString<k_nag_message_header_max_length>,
+    #[serde(skip_serializing,skip_deserializing)]
     button_key_size: u32,
     pub button_key: StaticWcharString<k_nag_message_button_key_max_length>,
+    #[serde(skip_serializing,skip_deserializing)]
     button_key_wait_size: u32,
     pub button_key_wait: StaticWcharString<k_nag_message_button_key_max_length>,
+    #[serde(skip_serializing,skip_deserializing)]
     message_size: u32,
     pub message: StaticWcharString<k_nag_message_body_max_length>,
     pub unknown1: u32,

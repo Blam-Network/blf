@@ -1,5 +1,5 @@
 use std::ffi::c_char;
-use std::fmt::Write;
+use std::fmt::{Display, Formatter, Write};
 use blf_lib::types::array::StaticArray;
 use serde::{Deserializer, Serialize, Serializer};
 use widestring::U16CString;
@@ -60,6 +60,12 @@ pub fn from_string(string: String) -> Result<Vec<c_char>, Box<dyn Error>> {
 #[derive(PartialEq, Debug, Clone, Default, BinRead, BinWrite)]
 pub struct StaticWcharString<const N: usize> {
     buf: StaticArray<u16, N>,
+}
+
+impl<const N: usize> Display for StaticWcharString<N> {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        self.get_string().fmt(f)
+    }
 }
 
 #[cfg(feature = "napi")]
