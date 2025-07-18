@@ -392,7 +392,7 @@ mod title_storage_config {
         )
     }
 
-    pub const active_hoppers_file_name: &str = "active_hoppers";
+    pub const active_hoppers_file_name: &str = "active_hoppers.txt";
     pub fn active_hoppers_file_path(config_folder: &String) -> String {
         build_path!(
             config_folder,
