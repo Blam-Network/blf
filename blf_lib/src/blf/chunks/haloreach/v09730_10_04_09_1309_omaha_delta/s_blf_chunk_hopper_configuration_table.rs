@@ -158,7 +158,7 @@ pub struct s_hopper_configuration_per_team_data {
     pub team_allegiance: u32,
 }
 
-#[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, TestSize)]
+#[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
 pub struct c_hopper_configuration {
     pub hopper_name: StaticString<32>,
     #[serde(skip_serializing,skip_deserializing)]
