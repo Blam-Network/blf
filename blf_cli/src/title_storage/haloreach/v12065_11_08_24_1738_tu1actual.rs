@@ -916,10 +916,11 @@ impl v12065_11_08_24_1738_tu1actual {
                     nag_id,
                 );
                 let user_nag_img_dst_path = title_storage_config::user_nag_message_image_file_path(
-                    hoppers_blf_path,
+                    hoppers_config_path,
                     language_code,
                     nag_id,
                 );
+
                 if !exists(&user_nag_img_src_path)? {
                     task.add_warning(format!("No image is present for {language_code} user nag {nag_id}"));
                 }
@@ -1318,8 +1319,15 @@ impl v12065_11_08_24_1738_tu1actual {
         let mut task = console_task::start("Building Banhammer Messages");
 
         for language_code in k_language_suffixes {
+            let config_path = title_storage_config::banhammer_messages_file_path(hoppers_config_folder, language_code);
+
+            if !exists(&config_path)? {
+                task.add_warning(format!("{} banhammer messages are missing.", get_language_string(language_code)));
+                continue;
+            }
+
             let matchmaking_banhammer_messages = read_text_file_lines(
-                title_storage_config::banhammer_messages_file_path(hoppers_config_folder, language_code)
+                config_path,
             )?;
 
             let bhms = s_blf_chunk_banhammer_messages::create(matchmaking_banhammer_messages)?;
@@ -1337,6 +1345,12 @@ impl v12065_11_08_24_1738_tu1actual {
 
     fn build_blf_dlc_manifest(hoppers_config_folder: &String, hoppers_blf_folder: &String) -> Result<(), Box<dyn Error>> {
         let mut task = console_task::start("Building DLC Manifest");
+
+        if !exists(title_storage_config::dlc_map_manifest_file_path(hoppers_config_folder))? {
+            task.add_warning("No DLC manifest was found.");
+            task.complete();
+            return Ok(());
+        }
 
         let dlcd = read_json_file::<s_blf_chunk_dlc_map_manifest>(
             title_storage_config::dlc_map_manifest_file_path(hoppers_config_folder)
@@ -1425,9 +1439,14 @@ impl v12065_11_08_24_1738_tu1actual {
         let mut task = console_task::start("Building Megalo Categories");
 
         for language_code in k_language_suffixes {
-            let megalo_categories = read_json_file::<s_blf_chunk_megalo_categories>(
-                title_storage_config::megalo_categories_file_path(hoppers_config_folder, language_code)
-            )?;
+            let config_path = title_storage_config::megalo_categories_file_path(hoppers_config_folder, language_code);
+
+            if !exists(&config_path)? {
+                task.add_warning(format!("No {} Megalo Categories were found", get_language_string(language_code)));
+                continue;
+            }
+
+            let megalo_categories = read_json_file::<s_blf_chunk_megalo_categories>(&config_path)?;
 
             BlfFileBuilder::new()
                 .add_chunk(s_blf_chunk_start_of_file::default())
@@ -1450,12 +1469,14 @@ impl v12065_11_08_24_1738_tu1actual {
             );
 
             for language_code in k_language_suffixes {
-                let predefined_queries = read_json_file::<s_blf_chunk_predefined_queries>(
-                    title_storage_config::predefined_queries_file_path(
-                        hoppers_config_folder,
-                        language_code,
-                        tangerine,
-                    ))?;
+                let config_path = title_storage_config::predefined_queries_file_path(hoppers_config_folder, language_code, tangerine);
+
+                if !exists(&config_path)? {
+                    task.add_warning(format!("No {} Predefined Queries were found", get_language_string(language_code)));
+                    continue;
+                }
+
+                let predefined_queries = read_json_file::<s_blf_chunk_predefined_queries>(config_path)?;
 
                 BlfFileBuilder::new()
                     .add_chunk(s_blf_chunk_start_of_file::default())
@@ -1482,13 +1503,14 @@ impl v12065_11_08_24_1738_tu1actual {
             );
 
             for language_code in k_language_suffixes {
-                let matchmaking_tips = read_text_file_lines(
-                    title_storage_config::matchmaking_tips_file_path(
-                        hoppers_config_folder,
-                        language_code,
-                        tangerine
-                    )
-                )?;
+                let config_path = title_storage_config::matchmaking_tips_file_path(hoppers_config_folder, language_code, tangerine);
+
+                if !exists(&config_path)? {
+                    task.add_warning(format!("{} matchmaking tips are missing.", get_language_string(language_code)));
+                    continue;
+                }
+
+                let matchmaking_tips = read_text_file_lines(config_path)?;
 
                 BlfFileBuilder::new()
                     .add_chunk(s_blf_chunk_start_of_file::default())
@@ -1539,7 +1561,7 @@ impl v12065_11_08_24_1738_tu1actual {
                     .add_chunk(s_blf_chunk_author::for_build::<v12065_11_08_24_1738_tu1actual>())
                     .add_chunk(nagm)
                     .add_chunk(s_blf_chunk_end_of_file::default())
-                    .write_file(title_storage_output::global_nag_message_file_path(hoppers_config_folder, language_code, tangerine))?;
+                    .write_file(title_storage_output::global_nag_message_file_path(hoppers_blf_folder, language_code, tangerine))?;
 
                 // copy images.
                 let image_source = title_storage_config::global_nag_message_image_file_path(
@@ -2090,7 +2112,7 @@ impl v12065_11_08_24_1738_tu1actual {
             );
 
             let hopper_image_dst_path = title_storage_output::hopper_image_file_path(
-                hoppers_config_path,
+                hoppers_blfs_path,
                 hopper_id,
             );
 
