@@ -39,19 +39,6 @@ struct Cli {
 }
 
 fn main() {
-    let fpre = search_for_chunk_in_file::<s_blf_chunk_predefined_queries>(
-        "/Users/codiestella/Downloads/RawGames-Halo/Halo Reach/11860.10.07.24.0147.omaha_relea/title storage/tu1_hoppers/en/file_predefined_queries.bin"
-    ).unwrap().unwrap();
-
-    BlfFileBuilder::new()
-        .add_chunk(s_blf_chunk_start_of_file::new("file_predefined_queries", byte_order_mark::big_endian))
-        .add_chunk(s_blf_chunk_author::for_build::<v12065_11_08_24_1738_tu1actual>())
-        .add_chunk(fpre.clone())
-        .add_chunk(s_blf_chunk_end_of_file::default())
-        .write_file("/Users/codiestella/Desktop/file_predefined_queries.bin").unwrap();
-
-    write_json_file(&fpre, "/Users/codiestella/Desktop/file_predefined_queries.json").unwrap();
-
     let args = Cli::parse();
 
     match args.command {
