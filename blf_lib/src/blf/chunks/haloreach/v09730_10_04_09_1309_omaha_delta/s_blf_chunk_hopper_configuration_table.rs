@@ -159,7 +159,6 @@ pub struct s_hopper_configuration_per_team_data {
 }
 
 #[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, TestSize)]
-#[Size(0x458)]
 pub struct c_hopper_configuration {
     pub hopper_name: StaticString<32>,
     #[serde(skip_serializing,skip_deserializing)]
