@@ -2267,137 +2267,103 @@ impl v12065_11_08_24_1738_tu1actual {
         let mut manifest_chunk = s_blf_chunk_online_file_manifest::default();
         let hopper_directory_name = Path::new(hoppers_blfs_path).file_name().unwrap().to_str().unwrap();
 
-        let dlc_manifest_file_hash = get_blf_file_hash(
-            title_storage_output::dlc_map_manifest_file_path(hoppers_blfs_path)
-        )?;
+        let mut add_hash_if_file_exists = |manifest_path: String, file_path: String| -> BLFLibResult {
+            if exists(&file_path)? {
+                manifest_chunk.add_file_hash(
+                    manifest_path,
+                    get_blf_file_hash(file_path)?,
+                )?;
+            }
+            Ok(())
+        };
 
-        let hopper_config_file_hash = get_blf_file_hash(
-            title_storage_output::matchmaking_hopper_file_path(hoppers_blfs_path)
-        )?;
-
-        let network_config_file_hash = get_blf_file_hash(
-            title_storage_output::network_configuration_file_path(hoppers_blfs_path)
-        )?;
-
-        manifest_chunk.add_file_hash(
-            format!(
-                "/title/{hopper_directory_name}/{}",
-                title_storage_output::dlc_map_manifest_file_name
-            ),
-            dlc_manifest_file_hash,
-        )?;
-
-        manifest_chunk.add_file_hash(
+        add_hash_if_file_exists(
             format!(
                 "/title/{hopper_directory_name}/{}",
                 title_storage_output::matchmaking_hopper_file_name()
             ),
-            hopper_config_file_hash,
+            title_storage_output::matchmaking_hopper_file_path(hoppers_blfs_path)
         )?;
 
-        manifest_chunk.add_file_hash(
+        add_hash_if_file_exists(
             format!(
                 "/title/{hopper_directory_name}/{}",
-                title_storage_output::network_configuration_file_name(),
+                title_storage_output::network_configuration_file_name()
             ),
-            network_config_file_hash,
+            title_storage_output::network_configuration_file_path(hoppers_blfs_path)
+        )?;
+
+        add_hash_if_file_exists(
+            format!(
+                "/title/{hopper_directory_name}/{}",
+                title_storage_output::dlc_map_manifest_file_name
+            ),
+            title_storage_output::dlc_map_manifest_file_path(hoppers_blfs_path)
         )?;
 
         for language_code in crate::title_storage::halo3::v12070_08_09_05_2031_halo3_ship::k_language_suffixes {
-            let rsa_manifest_file_hash = get_blf_file_hash(
-                title_storage_output::rsa_manifest_file_path(hoppers_blfs_path, language_code)
-            )?;
-
-            let megalo_categories_file_hash = get_blf_file_hash(
-                title_storage_output::megalo_categories_file_path(hoppers_blfs_path, language_code)
-            )?;
-
-            let predefined_queries_file_hash = get_blf_file_hash(
-                title_storage_output::predefined_queries_file_path(hoppers_blfs_path, language_code, false)
-            )?;
-
-            let tangerine_predefined_queries_file_hash = get_blf_file_hash(
-                title_storage_output::predefined_queries_file_path(hoppers_blfs_path, language_code, true)
-            )?;
-
-            let banhammer_messages_file_hash = get_blf_file_hash(
-                title_storage_output::banhammer_messages_file_path(hoppers_blfs_path, language_code)
-            )?;
-
-            let hopper_descriptions_file_hash = get_blf_file_hash(
-                title_storage_output::hopper_descriptions_file_path(hoppers_blfs_path, language_code)
-            )?;
-
-            let matchmaking_tips_file_hash = get_blf_file_hash(
-                title_storage_output::matchmaking_tips_file_path(hoppers_blfs_path, language_code, false)
-            )?;
-
-            let tangerine_matchmaking_tips_file_hash = get_blf_file_hash(
-                title_storage_output::matchmaking_tips_file_path(hoppers_blfs_path, language_code, true)
-            )?;
-
-            manifest_chunk.add_file_hash(
+            add_hash_if_file_exists(
                 format!(
                     "/title/{hopper_directory_name}/{language_code}/{}",
                     title_storage_output::rsa_manifest_file_name
                 ),
-                rsa_manifest_file_hash,
+                title_storage_output::rsa_manifest_file_path(hoppers_blfs_path, language_code)
             )?;
 
-            manifest_chunk.add_file_hash(
+            add_hash_if_file_exists(
                 format!(
                     "/title/{hopper_directory_name}/{language_code}/{}",
                     title_storage_output::megalo_categories_file_name
                 ),
-                megalo_categories_file_hash,
+                title_storage_output::megalo_categories_file_path(hoppers_blfs_path, language_code)
             )?;
 
-            manifest_chunk.add_file_hash(
+            add_hash_if_file_exists(
                 format!(
                     "/title/{hopper_directory_name}/{language_code}/{}",
                     title_storage_output::predefined_queries_file_name(false)
                 ),
-                predefined_queries_file_hash,
+                title_storage_output::predefined_queries_file_path(hoppers_blfs_path, language_code, false)
             )?;
 
-            manifest_chunk.add_file_hash(
+            add_hash_if_file_exists(
                 format!(
                     "/title/{hopper_directory_name}/{language_code}/{}",
                     title_storage_output::predefined_queries_file_name(true)
                 ),
-                tangerine_predefined_queries_file_hash,
+                title_storage_output::predefined_queries_file_path(hoppers_blfs_path, language_code, true)
             )?;
 
-            manifest_chunk.add_file_hash(
+            add_hash_if_file_exists(
                 format!(
                     "/title/{hopper_directory_name}/{language_code}/{}",
                     title_storage_output::banhammer_messages_file_name
                 ),
-                banhammer_messages_file_hash,
+                title_storage_output::banhammer_messages_file_path(hoppers_blfs_path, language_code)
             )?;
 
-            manifest_chunk.add_file_hash(
+            add_hash_if_file_exists(
                 format!(
                     "/title/{hopper_directory_name}/{language_code}/{}",
                     title_storage_output::hopper_descriptions_file_name()
                 ),
-                hopper_descriptions_file_hash,
+                title_storage_output::hopper_descriptions_file_path(hoppers_blfs_path, language_code)
             )?;
 
-            manifest_chunk.add_file_hash(
+            add_hash_if_file_exists(
                 format!(
                     "/title/{hopper_directory_name}/{language_code}/{}",
                     title_storage_output::matchmaking_tips_file_name(false)
                 ),
-                matchmaking_tips_file_hash,
+                title_storage_output::matchmaking_tips_file_path(hoppers_blfs_path, language_code, false)
             )?;
 
-            manifest_chunk.add_file_hash(
+            add_hash_if_file_exists(
                 format!(
                     "/title/{hopper_directory_name}/{language_code}/{}",
                     title_storage_output::matchmaking_tips_file_name(true)
                 ),
-                tangerine_matchmaking_tips_file_hash,
+                title_storage_output::matchmaking_tips_file_path(hoppers_blfs_path, language_code, true)
             )?;
         }
 
