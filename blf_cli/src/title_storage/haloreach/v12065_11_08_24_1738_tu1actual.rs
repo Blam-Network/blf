@@ -2218,7 +2218,7 @@ impl v12065_11_08_24_1738_tu1actual {
                 .add_chunk(s_blf_chunk_start_of_file::default())
                 .add_chunk(s_blf_chunk_author::for_build::<v12065_11_08_24_1738_tu1actual>())
                 .add_chunk(mhdf)
-                .add_chunk(s_blf_chunk_start_of_file::default())
+                .add_chunk(s_blf_chunk_end_of_file::default())
                 .write_file(title_storage_output::hopper_descriptions_file_path(
                     hoppers_blfs_path,
                     language_code,
@@ -2229,7 +2229,7 @@ impl v12065_11_08_24_1738_tu1actual {
             .add_chunk(s_blf_chunk_start_of_file::new("hopper config", byte_order_mark::big_endian))
             .add_chunk(s_blf_chunk_author::for_build::<v12065_11_08_24_1738_tu1actual>())
             .add_chunk(mhcf)
-            .add_chunk(s_blf_chunk_start_of_file::default())
+            .add_chunk(s_blf_chunk_end_of_file::default())
             .write_file(title_storage_output::matchmaking_hopper_file_path(
                 hoppers_blfs_path,
             ))?;
