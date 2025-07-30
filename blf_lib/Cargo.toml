@@ -8,7 +8,7 @@ license.workspace = true
 [dependencies]
 libc = "0.2"
 blf_lib-derivable = { path = "../blf_lib-derivable", version = "1.8.0-test-4" }
-blf_lib-derive = { path = "../blf_lib-derive", optional = true, version = "1.8.0-rc1" }
+blf_lib-derive = { path = "../blf_lib-derive", optional = true, version = "1.8.0-test-4" }
 serde_json = "1.0.128"
 serde = {  version = "1.0.210", features = ["serde_derive"] }
 serde-big-array = "0.5.1"
@@ -23,8 +23,8 @@ num-traits = "0.2.19"
 num-derive = "0.4.2"
 flate2 = "1.0.35"
 wasm-bindgen = "0.2.100"
-napi = { features = ["serde-json", "napi6","napi1","napi2","napi3","napi4","napi5", "chrono_date"], git = "https://github.com/Blam-Network/napi-rs.git", optional = true }
-napi-derive = { git = "https://github.com/Blam-Network/napi-rs.git", optional = true }
+napi = { features = ["serde-json", "napi6","napi1","napi2","napi3","napi4","napi5", "chrono_date"], optional = true, version = "3.1.3" }
+napi-derive = { version = "3.1.2", optional = true }
 shrinkwraprs = "0.3.0"
 
 [features]

@@ -30,7 +30,7 @@ try:
 except:
     print("Failed to publish blf_lib")
 
-subprocess.call(['git', 'add', 'Cargo.toml', '**/Cargo.toml'])
+subprocess.call(['git', 'add', 'Cargo.toml', '*/Cargo.toml'])
 subprocess.call(['git', 'commit', '-m', f'{new_version}'])
 subprocess.call(['git', 'tag', new_version])
 subprocess.call(['git', 'push'])
