@@ -23,7 +23,7 @@ num-traits = "0.2.19"
 num-derive = "0.4.2"
 flate2 = "1.0.35"
 wasm-bindgen = "0.2.100"
-napi = { features = ["serde-json", "napi6","napi1","napi2","napi3","napi4","napi5", "chrono_date"], optional = true, version = "3.1.3" }
+napi = { features = ["serde-json", "napi6","napi1","napi2","napi3","napi4","napi5", "chrono_date"], optional = true, git = "https://github.com/Blam-Network/napi-rs.git" }
 napi-derive = { version = "3.1.2", optional = true }
 shrinkwraprs = "0.3.0"
 

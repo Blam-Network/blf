@@ -14,6 +14,7 @@ use napi::sys::{napi_env, napi_env__, napi_value};
 use napi::bindgen_prelude::{FromNapiMutRef, FromNapiValue, ToNapiValue, TypeName, ValidateNapiValue};
 #[cfg(feature = "napi")]
 use napi::{Env, JsString, ValueType};
+#[cfg(feature = "napi")]
 use napi::JsValue;
 #[cfg(feature = "napi")]
 use napi_derive::napi;
