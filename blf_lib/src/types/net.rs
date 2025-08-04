@@ -4,6 +4,7 @@ use binrw::{BinRead, BinReaderExt, BinResult, BinWrite, Endian};
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use shrinkwraprs::Shrinkwrap;
 use std::net::Ipv4Addr as WrappedIpv4Addr;
+use std::str::FromStr;
 #[cfg(feature = "napi")]
 use napi::bindgen_prelude::{FromNapiValue, ToNapiValue};
 #[cfg(feature = "napi")]
