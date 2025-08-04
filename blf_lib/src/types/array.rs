@@ -119,7 +119,7 @@ impl<'de, E: Deserialize<'de> + Clone, const N: usize> serde::Deserialize<'de> f
 #[cfg(feature = "napi")]
 impl<E: ToNapiValue, const N: usize> ToNapiValue for StaticArray<E, N> {
     unsafe fn to_napi_value(env: napi_env, val: Self) -> napi::Result<napi::sys::napi_value> {
-        let vec: Vec<E> = val._data.into();
+        let vec: Vec<E> = val._data;
         <Vec<E>>::to_napi_value(env, vec)
     }
 }
@@ -127,6 +127,6 @@ impl<E: ToNapiValue, const N: usize> ToNapiValue for StaticArray<E, N> {
 #[cfg(feature = "napi")]
 impl<E: FromNapiValue + Default + Clone, const N: usize> FromNapiValue for StaticArray<E, N> {
     unsafe fn from_napi_value(env: sys::napi_env, napi_val: sys::napi_value) -> napi::Result<Self> {
-        Ok(Self::from_vec(&Vec::<E>::from_napi_value(env, napi_val)?).map_err(|e| napi::Error::from_reason(e.to_string()))?)
+        Self::from_vec(&Vec::<E>::from_napi_value(env, napi_val)?).map_err(|e| napi::Error::from_reason(e.to_string()))
     }
 }

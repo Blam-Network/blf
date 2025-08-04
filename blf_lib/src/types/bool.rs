@@ -120,8 +120,6 @@ impl ToNapiValue for Bool {
 #[cfg(feature = "napi")]
 impl FromNapiValue for Bool {
     unsafe fn from_napi_value(env: napi_env, napi_val: napi_value) -> napi::Result<Self> {
-        Ok(Self {
-            0: bool::from_napi_value(env, napi_val)?,
-        })
+        Ok(Self(bool::from_napi_value(env, napi_val)?))
     }
 }

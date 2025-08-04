@@ -5,8 +5,6 @@ use crate::types::c_string::StaticWcharString;
 use blf_lib::types::time::time64_t;
 use crate::types::bool::Bool;
 use crate::types::u64::Unsigned64;
-#[cfg(feature = "napi")]
-use napi_derive::napi;
 use blf_lib::types::array::StaticArray;
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite)]

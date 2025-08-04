@@ -3,8 +3,6 @@ use serde::{Deserialize, Serialize};
 use blf_lib::blam::haloreach::release::saved_games::saved_game_files::s_content_item_metadata;
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
 use blf_lib_derive::BlfChunk;
-#[cfg(feature = "napi")]
-use napi_derive::napi;
 
 #[binrw]
 #[derive(BlfChunk,Default,PartialEq,Debug,Clone,Serialize,Deserialize)]

@@ -11,13 +11,11 @@ use binrw::{BinRead, BinWrite};
 #[cfg(feature = "napi")]
 use napi::sys::{napi_env, napi_env__, napi_value};
 #[cfg(feature = "napi")]
-use napi::bindgen_prelude::{FromNapiMutRef, FromNapiValue, ToNapiValue, TypeName, ValidateNapiValue};
+use napi::bindgen_prelude::{FromNapiValue, ToNapiValue, TypeName, ValidateNapiValue};
 #[cfg(feature = "napi")]
 use napi::{Env, JsString, ValueType};
 #[cfg(feature = "napi")]
 use napi::JsValue;
-#[cfg(feature = "napi")]
-use napi_derive::napi;
 use wasm_bindgen::convert::{FromWasmAbi, IntoWasmAbi};
 use wasm_bindgen::describe::WasmDescribe;
 use blf_lib_derivable::result::BLFLibResult;
@@ -243,13 +241,11 @@ impl<'de, const N: usize> serde::Deserialize<'de> for StaticString<N> {
 impl<const N: usize> FromNapiValue for StaticString<N> {
     unsafe fn from_napi_value(env: *mut napi_env__, napi_val: napi::sys::napi_value) -> napi::Result<Self> {
         let js_string = JsString::from_napi_value(env, napi_val)?;
-        Ok(
-            StaticString::from_string(
+        StaticString::from_string(
             js_string
                 .into_utf8()?
                 .as_str()?)
-                .map_err(|e|napi::Error::from_reason(e.to_string()))?
-        )
+                .map_err(|e|napi::Error::from_reason(e.to_string()))
     }
 }
 
