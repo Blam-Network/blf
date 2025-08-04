@@ -22,10 +22,10 @@ pub trait BlfChunkHooks {
 }
 
 pub trait SerializableBlfChunk: DynamicBlfChunk + Any + Send + Sync {
-    fn encode_body(&mut self, previously_written: &Vec<u8>) -> Result<Vec<u8>, Box<dyn Error>>;
+    fn encode_body(&mut self, previously_written: &Vec<u8>) -> BLFLibResult<Vec<u8>>;
     fn decode_body(&mut self, buffer: &[u8]) -> Result<(), Box<dyn Error>>;
 
-    fn write(&mut self, previously_written: &Vec<u8>) -> Result<Vec<u8>, Box<dyn Error>> {
+    fn write(&mut self, previously_written: &Vec<u8>) -> BLFLibResult<Vec<u8>> {
         let mut encoded_chunk = self.encode_body(previously_written)?;
         let header = s_blf_header {
             signature: self.signature(),
@@ -45,8 +45,8 @@ pub trait SerializableBlfChunk: DynamicBlfChunk + Any + Send + Sync {
 
 impl<T: DynamicBlfChunk + BinRead + BinWrite + Clone + Any + BlfChunkHooks + Send + Sync> SerializableBlfChunk for T
     where for<'a> <T as BinWrite>::Args<'a>: Default, for<'a> <T as BinRead>::Args<'a>: Default {
-    fn encode_body(&mut self, previously_written: &Vec<u8>) -> Result<Vec<u8>, Box<dyn Error>> where for<'a> <T as BinWrite>::Args<'a>: Default {
-        self.before_write(previously_written);
+    fn encode_body(&mut self, previously_written: &Vec<u8>) -> BLFLibResult<Vec<u8>> where for<'a> <T as BinWrite>::Args<'a>: Default {
+        self.before_write(previously_written)?;
 
         let mut writer = std::io::Cursor::new(Vec::<u8>::new());
         writer.write_ne(self)?;

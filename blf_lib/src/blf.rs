@@ -49,7 +49,7 @@ impl BlfFileBuilder {
             .ok_or_else(|| format!("Chunk {} {} not found", T::get_signature(), T::get_version()).into())
     }
 
-    pub fn write(&mut self) -> Result<Vec<u8>, Box<dyn Error>> {
+    pub fn write(&mut self) -> BLFLibResult<Vec<u8>> {
         let mut data: Vec<u8> = Vec::new();
 
         for chunk in &mut self.chunks.iter_mut()  {
