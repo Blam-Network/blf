@@ -1,16 +1,14 @@
 use std::io::{Read, Seek};
-use binrw::{binrw, BinRead, BinResult, BinWrite, Endian};
+use binrw::{BinRead, BinResult, BinWrite, Endian};
 use serde::{Deserialize, Serialize};
-use blf_lib::blam::common::memory::secure_signature::s_network_http_request_hash;
-use blf_lib::types::array::StaticArray;
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
-use crate::blam::halo_3::release::saved_games::scenario_map_variant::c_map_variant;
 use blf_lib_derive::BlfChunk;
 
 #[derive(BlfChunk,PartialEq,Debug,Clone,Serialize,Deserialize,BinWrite)]
 #[Header("gvar", 54.1)]
 #[brw(big)]
 // Not sure what this chunk is called
+#[derive(Default)]
 pub struct s_blf_chunk_matchmaking_game_variant
 {
     // these two fields are in MPVR
@@ -34,12 +32,5 @@ impl BinRead for s_blf_chunk_matchmaking_game_variant {
     }
 }
 
-impl Default for s_blf_chunk_matchmaking_game_variant {
-    fn default() -> Self {
-        Self {
-            data: Vec::new()
-        }
-    }
-}
 
 impl BlfChunkHooks for s_blf_chunk_matchmaking_game_variant {}

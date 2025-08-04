@@ -1,16 +1,14 @@
 use std::collections::{HashMap, HashSet, VecDeque};
 use std::error::Error;
-use std::fmt::format;
 use std::fs;
 use std::fs::{create_dir_all, exists, remove_file, File};
-use std::io::{Read, Write};
+use std::io::Read;
 use std::path::Path;
-use std::str::FromStr;
 use std::sync::Arc;
 use std::time::SystemTime;
 use crate::io::{create_parent_folders, get_directories_in_folder, get_files_in_folder, read_text_file_lines, write_text_file_lines};
 use crate::{build_path, debug_log, title_converter, やった};
-use crate::title_storage::{check_file_exists, validate_jpeg, TitleConverter};
+use crate::title_storage::{validate_jpeg, TitleConverter};
 use inline_colorization::*;
 use lazy_static::lazy_static;
 use blf_lib::blam::common::cseries::language::{get_language_string, k_language_suffix_chinese_traditional, k_language_suffix_english, k_language_suffix_french, k_language_suffix_german, k_language_suffix_italian, k_language_suffix_japanese, k_language_suffix_korean, k_language_suffix_mexican, k_language_suffix_portuguese, k_language_suffix_spanish};
@@ -30,7 +28,7 @@ use blf_lib::OPTION_TO_RESULT;
 use blf_lib::result::{BLFLibError, BLFLibResult};
 use blf_lib::types::byte_order_mark::byte_order_mark;
 use crate::title_storage::haloreach::v12065_11_08_24_1738_tu1actual::title_storage_config::get_hopper_id_from_hopper_folder_name;
-use crate::title_storage::haloreach::v12065_11_08_24_1738_tu1actual::title_storage_output::{hopper_image_height, hopper_image_width, global_nag_message_image_height, global_nag_message_image_width, user_nag_message_image_width, user_nag_message_image_height};
+use crate::title_storage::haloreach::v12065_11_08_24_1738_tu1actual::title_storage_output::{hopper_image_height, hopper_image_width, user_nag_message_image_width, user_nag_message_image_height};
 
 title_converter! (
     #[Title("Halo: Reach")]
@@ -62,7 +60,7 @@ lazy_static! {
 
 mod title_storage_output {
     use blf_lib::blf::chunks::BlfChunk;
-    use blf_lib::blf::versions::haloreach::v12065_11_08_24_1738_tu1actual::{s_blf_chunk_banhammer_messages, s_blf_chunk_dlc_map_manifest, s_blf_chunk_end_of_file, s_blf_chunk_game_set, s_blf_chunk_hopper_configuration_table, s_blf_chunk_hopper_description_table, s_blf_chunk_map_manifest, s_blf_chunk_map_variant, s_blf_chunk_matchmaking_game_variant, s_blf_chunk_network_configuration, s_blf_chunk_online_file_manifest};
+    use blf_lib::blf::versions::haloreach::v12065_11_08_24_1738_tu1actual::{s_blf_chunk_game_set, s_blf_chunk_hopper_configuration_table, s_blf_chunk_hopper_description_table, s_blf_chunk_map_variant, s_blf_chunk_matchmaking_game_variant, s_blf_chunk_network_configuration, s_blf_chunk_online_file_manifest};
     use crate::build_path;
 
     // applies to the root folder, eg "default_hoppers"
@@ -541,7 +539,7 @@ impl TitleConverter for v12065_11_08_24_1738_tu1actual {
                 let game_sets = Self::read_game_set_configuration(&hopper_config_path, &active_hoppers)?;
                 let mut game_variant_hashes = HashMap::<String, s_network_http_request_hash>::new();
                 let mut map_variant_hashes = HashMap::<String, s_network_http_request_hash>::new();
-                let mut map_variant_map_ids = HashMap::<String, u32>::new();
+                let map_variant_map_ids = HashMap::<String, u32>::new();
 
                 Self::build_blf_banhammer_messages(&hopper_config_path, &hopper_blfs_path)?;
                 Self::build_blf_matchmaking_tips(&hopper_config_path, &hopper_blfs_path)?;
@@ -621,7 +619,7 @@ impl v12065_11_08_24_1738_tu1actual {
 
         for language_code in k_language_suffixes {
             let blf_file_path = title_storage_output::banhammer_messages_file_path(
-                &hoppers_blf_path,
+                hoppers_blf_path,
                 language_code
             );
 
@@ -768,7 +766,7 @@ impl v12065_11_08_24_1738_tu1actual {
         )?;
 
         write_json_file(&dlcd,
-            title_storage_config::dlc_map_manifest_file_path(&hoppers_config_path)
+            title_storage_config::dlc_map_manifest_file_path(hoppers_config_path)
         )?;
 
         for map in dlcd.maps.get() {
@@ -1156,7 +1154,7 @@ impl v12065_11_08_24_1738_tu1actual {
         for language_code in k_language_suffixes {
             let hopper_descriptions_path = title_storage_output::hopper_descriptions_file_path(
                 hoppers_blfs_folder,
-                &language_code,
+                language_code,
             );
 
             if !exists(&hopper_descriptions_path)? {
@@ -1189,15 +1187,15 @@ impl v12065_11_08_24_1738_tu1actual {
         let language_hopper_descriptions
             = Self::read_hopper_description_blfs(hoppers_blfs_path, &mut task)?;
 
-        let hopper_configuration_blf_path = title_storage_output::matchmaking_hopper_file_path(&hoppers_blfs_path);
+        let hopper_configuration_blf_path = title_storage_output::matchmaking_hopper_file_path(hoppers_blfs_path);
 
         let mut hopper_configuration_table = find_chunk_in_file::<s_blf_chunk_hopper_configuration_table>(&hopper_configuration_blf_path)?;
-        let mut hopper_configurations = &mut hopper_configuration_table.hopper_configurations;
-        let mut category_configurations = &mut hopper_configuration_table.hopper_categories;
+        let hopper_configurations = &mut hopper_configuration_table.hopper_configurations;
+        let category_configurations = &mut hopper_configuration_table.hopper_categories;
 
         // Generate active_hoppers.txt
         let active_hopper_ids = hopper_configurations.iter().map(|config|config.identifier);
-        let active_hoppers_txt_path = title_storage_config::active_hoppers_file_path(&hoppers_config_path);
+        let active_hoppers_txt_path = title_storage_config::active_hoppers_file_path(hoppers_config_path);
         write_text_file_lines(
             active_hoppers_txt_path,
             &active_hopper_ids.map(|id|format!("{id:0>5}")).collect(),
@@ -1704,7 +1702,7 @@ impl v12065_11_08_24_1738_tu1actual {
                 .add_chunk(map_manifest)
                 .add_chunk(s_blf_chunk_end_of_file::default())
                 .write_file(title_storage_output::rsa_manifest_file_path(
-                    &hoppers_blf_path,
+                    hoppers_blf_path,
                     language_code
                 ))?;
         }
@@ -2053,12 +2051,12 @@ impl v12065_11_08_24_1738_tu1actual {
                 }
             }
 
-            for mut entry in game_set_config.entries.iter_mut() {
+            for entry in game_set_config.entries.iter_mut() {
                 if !entry.map_variant_file_name.is_empty() {
-                    entry.map_variant_hash = map_variant_hashes.get(&entry.map_variant_file_name.get_string()?).unwrap().clone();
+                    entry.map_variant_hash = *map_variant_hashes.get(&entry.map_variant_file_name.get_string()?).unwrap();
                 }
                 if !entry.game_variant_file_name.is_empty() {
-                    entry.game_variant_hash = game_variant_hashes.get(&entry.game_variant_file_name.get_string()?).unwrap().clone();
+                    entry.game_variant_hash = *game_variant_hashes.get(&entry.game_variant_file_name.get_string()?).unwrap();
                 }
             }
 
@@ -2091,7 +2089,7 @@ impl v12065_11_08_24_1738_tu1actual {
         for active_hopper_folder in active_hopper_folders {
             let configuration_path = title_storage_config::matchmaking_hopper_configuration_file_path(
                 hoppers_config_path,
-                &active_hopper_folder,
+                active_hopper_folder,
             );
 
             if !exists(&configuration_path).unwrap() {
@@ -2132,7 +2130,7 @@ impl v12065_11_08_24_1738_tu1actual {
             let mut hopper_config = hopper_configuration_json.configuration.clone();
             let game_set_blf_file_path = title_storage_output::game_set_file_path(
                 hoppers_blfs_path,
-                hopper_identifier.clone(),
+                *hopper_identifier,
             );
             hopper_config.game_set_hash = get_blf_file_hash(game_set_blf_file_path)?;
             mhcf.hopper_configurations.push(hopper_config);
@@ -2244,7 +2242,7 @@ impl v12065_11_08_24_1738_tu1actual {
         let mut task = console_task::start("Building Network Configuration");
         let netc =
             find_chunk_in_file::<s_blf_chunk_network_configuration>(
-                title_storage_config::network_configuration_file_path(&hoppers_config_path)
+                title_storage_config::network_configuration_file_path(hoppers_config_path)
             )?;
 
         BlfFileBuilder::new()

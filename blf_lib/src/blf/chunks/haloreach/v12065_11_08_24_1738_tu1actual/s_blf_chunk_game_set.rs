@@ -1,5 +1,5 @@
 use std::io::{Cursor, Read, Seek, Write};
-use binrw::{binrw, binwrite, BinRead, BinResult, BinWrite, BinWriterExt, Endian};
+use binrw::{binrw, BinRead, BinResult, BinWrite, BinWriterExt, Endian};
 use flate2::Compression;
 use flate2::read::ZlibDecoder;
 use flate2::write::ZlibEncoder;
@@ -8,12 +8,10 @@ use blf_lib::blam::common::memory::secure_signature::s_network_http_request_hash
 use blf_lib::io::bitstream::{c_bitstream_reader, close_bitstream_writer, create_bitstream_writer, e_bitstream_byte_order};
 use blf_lib::types::array::StaticArray;
 use crate::types::c_string::StaticString;
-use blf_lib::types::time::{filetime};
-use serde_hex::{SerHex,StrictCap};
 use blf_lib::types::bool::Bool;
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
 use blf_lib_derivable::result::BLFLibResult;
-use blf_lib_derive::{BlfChunk, TestSize};
+use blf_lib_derive::BlfChunk;
 use crate::types::numbers::Float32;
 
 pub const k_maximum_game_entries: usize = 128;
@@ -28,8 +26,8 @@ pub struct s_blf_chunk_game_set
 impl BlfChunkHooks for s_blf_chunk_game_set {
     fn before_write(&mut self, _previously_written: &Vec<u8>) -> BLFLibResult {
         for entry in self.entries.iter_mut() {
-            entry.has_game_variant = Bool::from(entry.game_variant_file_name.get_string()?.len() > 0);
-            entry.has_map_variant = Bool::from(entry.map_variant_file_name.get_string()?.len() > 0);
+            entry.has_game_variant = Bool::from(!entry.game_variant_file_name.get_string()?.is_empty());
+            entry.has_map_variant = Bool::from(!entry.map_variant_file_name.get_string()?.is_empty());
         }
 
         Ok(())

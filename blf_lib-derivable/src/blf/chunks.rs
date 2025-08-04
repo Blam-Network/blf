@@ -58,7 +58,7 @@ impl<T: DynamicBlfChunk + BinRead + BinWrite + Clone + Any + BlfChunkHooks + Sen
 
         self.clone_from(&T::read_ne(&mut reader)?);
 
-        self.after_read();
+        self.after_read()?;
         Ok(())
     }
 

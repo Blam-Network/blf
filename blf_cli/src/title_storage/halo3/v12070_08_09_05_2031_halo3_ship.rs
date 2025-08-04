@@ -1037,7 +1037,7 @@ impl v12070_08_09_05_2031_halo3_ship {
                             let game_variant_json: c_game_variant = serde_json::from_str(&json).unwrap();
 
                             let mut game_variant_blf_file = game_variant::create(game_variant_json);
-                            game_variant_blf_file.write_file(&game_variant_blf_path).expect(&format!("Failed to write game variant {}", game_variant_file_name));
+                            game_variant_blf_file.write_file(&game_variant_blf_path).unwrap_or_else(|_| panic!("Failed to write game variant {}", game_variant_file_name));
 
                             let hash = get_blf_file_hash(game_variant_blf_path).unwrap();
                             let mut hashes = shared_variant_hashes.lock().await;

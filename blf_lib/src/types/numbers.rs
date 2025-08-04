@@ -23,9 +23,9 @@ impl Display for Float32 {
     }
 }
 
-impl Into<f32> for Float32 {
-    fn into(self) -> f32 {
-        self.0
+impl From<Float32> for f32 {
+    fn from(val: Float32) -> Self {
+        val.0
     }
 }
 

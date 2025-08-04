@@ -54,18 +54,15 @@ pub fn validate_jpeg(path: impl Into<String>, width: usize, height: usize, max_f
     let path = path.into();
     let path = Path::new(&path);
 
-    if !exists(&path)? {
+    if !exists(path)? {
         return Err(BLFLibError::from("Does not exist."))
     }
 
-    match max_filesize {
-        Some(max_filesize) => {
-            let image_filesize = path.size_on_disk()?;
-            if image_filesize > max_filesize as u64 {
-                return Err(format!("Image file size is too large ({}B > {}B)", image_filesize, max_filesize).into());
-            }
+    if let Some(max_filesize) = max_filesize {
+        let image_filesize = path.size_on_disk()?;
+        if image_filesize > max_filesize as u64 {
+            return Err(format!("Image file size is too large ({}B > {}B)", image_filesize, max_filesize).into());
         }
-        None => {}
     }
 
     let jpeg_data = read(path)?;

@@ -34,7 +34,7 @@ impl s_blf_chunk_author {
     }
 
     pub fn for_build<T: TitleAndBuild>() -> s_blf_chunk_author {
-        let build_number = T::get_build_string()[..5].parse().unwrap_or_else(|_| 0xFFFFFFFF);
+        let build_number = T::get_build_string()[..5].parse().unwrap_or(0xFFFFFFFF);
 
         let version = env!("CARGO_PKG_VERSION");
         let name = env!("CARGO_PKG_NAME");

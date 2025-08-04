@@ -28,9 +28,9 @@ impl From<u64> for Unsigned64 {
     }
 }
 
-impl Into<u64> for Unsigned64 {
-    fn into(self) -> u64 {
-        self.0
+impl From<Unsigned64> for u64 {
+    fn from(val: Unsigned64) -> Self {
+        val.0
     }
 }
 

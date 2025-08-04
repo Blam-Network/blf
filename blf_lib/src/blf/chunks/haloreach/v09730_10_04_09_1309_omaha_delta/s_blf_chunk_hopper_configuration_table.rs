@@ -9,10 +9,9 @@ use blf_lib::io::bitstream::{c_bitstream_reader, close_bitstream_writer, create_
 use blf_lib::types::array::StaticArray;
 use crate::types::c_string::StaticString;
 use blf_lib::types::time::{filetime};
-use serde_hex::{SerHex,StrictCap};
 use blf_lib::types::bool::Bool;
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
-use blf_lib_derive::{BlfChunk, TestSize};
+use blf_lib_derive::BlfChunk;
 use crate::types::numbers::Float32;
 
 pub const k_hopper_maximum_category_count: usize = 16;
