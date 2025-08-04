@@ -57,3 +57,8 @@ macro_rules! assert_ok {
         }
     };
 }
+
+#[cfg(feature = "napi")]
+pub fn create_napi_error(error: BLFLibError) -> napi::Error {
+    napi::Error::from_reason(error.to_string())
+}
