@@ -125,8 +125,8 @@ impl<E: ToNapiValue, const N: usize> ToNapiValue for StaticArray<E, N> {
 }
 
 #[cfg(feature = "napi")]
-impl<E: FromNapiValue, const N: usize> FromNapiValue for StaticArray<E, N> {
+impl<E: FromNapiValue + Default + Clone, const N: usize> FromNapiValue for StaticArray<E, N> {
     unsafe fn from_napi_value(env: sys::napi_env, napi_val: sys::napi_value) -> napi::Result<Self> {
-        Ok(Self::from_vec(Vec::<E>::from_napi_value(env, napi_val)?).map_err(|e| napi::Error::from_reason(e.to_string()))?)
+        Ok(Self::from_vec(&Vec::<E>::from_napi_value(env, napi_val)?).map_err(|e| napi::Error::from_reason(e.to_string()))?)
     }
 }

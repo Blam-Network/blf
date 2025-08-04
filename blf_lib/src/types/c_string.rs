@@ -13,7 +13,8 @@ use napi::sys::{napi_env, napi_env__, napi_value};
 #[cfg(feature = "napi")]
 use napi::bindgen_prelude::{FromNapiMutRef, FromNapiValue, ToNapiValue, TypeName, ValidateNapiValue};
 #[cfg(feature = "napi")]
-use napi::{Env, JsString, NapiRaw, ValueType};
+use napi::{Env, JsString, ValueType};
+use napi::JsValue;
 #[cfg(feature = "napi")]
 use napi_derive::napi;
 use wasm_bindgen::convert::{FromWasmAbi, IntoWasmAbi};
@@ -82,7 +83,7 @@ impl<const N: usize> FromNapiValue for StaticWcharString<N> {
         let js_string = JsString::from_napi_value(env, napi_val)?;
         let rust_string = js_string.into_utf8()?.into_owned()?;
         StaticWcharString::from_string(&rust_string)
-            .map_err(|e| napi::Error::from_reason(e))
+            .map_err(|e| napi::Error::from_reason(e.to_string()))
     }
 }
 
@@ -241,15 +242,23 @@ impl<'de, const N: usize> serde::Deserialize<'de> for StaticString<N> {
 impl<const N: usize> FromNapiValue for StaticString<N> {
     unsafe fn from_napi_value(env: *mut napi_env__, napi_val: napi::sys::napi_value) -> napi::Result<Self> {
         let js_string = JsString::from_napi_value(env, napi_val)?;
-        Ok(StaticString::from_string(js_string.into_utf8()?.as_str()?)?)
+        Ok(
+            StaticString::from_string(
+            js_string
+                .into_utf8()?
+                .as_str()?)
+                .map_err(|e|napi::Error::from_reason(e.to_string()))?
+        )
     }
 }
 
 #[cfg(feature = "napi")]
 impl<const N: usize> ToNapiValue for StaticString<N> {
     unsafe fn to_napi_value(env: napi_env, val: Self) -> napi::Result<napi_value> {
-        let s = val.get_string(); // Assuming this returns a `&str`
-        Env::from_raw(env).create_string(&s).map(|js_str| js_str.raw()) // Convert string to JsString and return raw napi valu    }
+        let s = val.get_string()
+            .map_err(|e|napi::Error::from_reason(e.to_string()))?;
+        Env::from_raw(env).create_string(&s)
+            .map(|js_str| js_str.raw())
     }
 }
 
@@ -281,8 +290,9 @@ impl<const N: usize> napi::bindgen_prelude::FromNapiMutRef for StaticString<N> {
 #[cfg(feature = "napi")]
 impl<const N: usize> ToNapiValue for &mut StaticString<N> {
     unsafe fn to_napi_value(env: napi_env, val: Self) -> napi::Result<napi_value> {
-        let s = val.get_string(); // Assuming this returns a `&str`
-        Env::from_raw(env).create_string(&s).map(|js_str| js_str.raw()) // Convert string to JsString and return raw napi valu    }
+        let s = val.get_string()
+            .map_err(|e|napi::Error::from_reason(e.to_string()))?;
+        Env::from_raw(env).create_string(&s).map(|js_str| js_str.raw())
     }
 }
 
