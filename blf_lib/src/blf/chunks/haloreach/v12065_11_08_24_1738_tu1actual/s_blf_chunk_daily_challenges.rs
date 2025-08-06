@@ -3,11 +3,14 @@ use blf_lib::blf::chunks::BlfChunkHooks;
 use blf_lib::BlfChunk;
 use serde::{Deserialize, Serialize};
 use blf_lib::types::array::StaticArray;
+#[cfg(feature = "napi")]
+use napi_derive::napi;
 
 #[binrw]
 #[derive(BlfChunk,PartialEq,Debug,Clone,Serialize,Deserialize,Default)]
 #[Header("dcha", 3.1)]
 #[brw(big)]
+#[cfg_attr(feature = "napi", napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]
 pub struct s_blf_chunk_daily_challenges {
     pub unknown1: StaticArray<u8, 24>,
     #[bw(try_calc(u8::try_from(daily_challenges.len())))]
