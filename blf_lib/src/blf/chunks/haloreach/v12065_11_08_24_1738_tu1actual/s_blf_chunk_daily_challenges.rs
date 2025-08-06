@@ -22,6 +22,7 @@ pub struct s_blf_chunk_daily_challenges {
 
 #[derive(PartialEq,Debug,Clone,Serialize,Deserialize,Default,BinRead,BinWrite)]
 #[brw(big)]
+#[cfg_attr(feature = "napi", napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]
 pub struct s_blf_chunk_daily_challenges_challenge {
     pub category: u8,
     pub index: u8,
