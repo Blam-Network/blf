@@ -462,7 +462,7 @@ mod title_storage_config {
     pub fn matchmaking_hopper_categories_file_path(config_folder: &String) -> String {
         build_path!(
             config_folder,
-            matchmaking_hopper_configuration_file_name
+            matchmaking_hopper_categories_file_name
         )
     }
 
@@ -1341,10 +1341,18 @@ impl v12065_11_08_24_1738_tu1actual {
         やった!(task)
     }
 
-    fn build_blf_dlc_manifest(hoppers_config_folder: &String, hoppers_blf_folder: &String) -> Result<(), Box<dyn Error>> {
+    fn build_blf_dlc_manifest(hoppers_config_folder: &String, hoppers_blf_folder: &String) -> BLFLibResult{
         let mut task = console_task::start("Building DLC Manifest");
 
         if !exists(title_storage_config::dlc_map_manifest_file_path(hoppers_config_folder))? {
+            BlfFileBuilder::new()
+                .add_chunk(s_blf_chunk_start_of_file::default())
+                .add_chunk(s_blf_chunk_dlc_map_manifest::default())
+                .add_chunk(s_blf_chunk_end_of_file::default())
+                .write_file(title_storage_output::dlc_map_manifest_file_path(
+                    hoppers_blf_folder
+                ))?;
+
             task.add_warning("No DLC manifest was found.");
             task.complete();
             return Ok(());
