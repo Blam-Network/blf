@@ -12,7 +12,7 @@ This binary crate is a a very simple command-line-interface (CLI) for interactin
 ### [blf_bnet](./blf_bnet/README.MD)
 This crate contains BLF functions used by the client-side TypeScript code of [blam.network](https://www.blam.network/). It is compiled to [WebAssembly](https://webassembly.org/) using [wasm-pack](https://github.com/rustwasm/wasm-pack).
 
-### blf_lsp-private <kbd>Private</kbd>
+### blf_lib-private <kbd>Private</kbd>
 A closed-source counterpart to blf_lib held in the blf_private workspace. This package currently is only used for handling game data relating to online services.
 
 
