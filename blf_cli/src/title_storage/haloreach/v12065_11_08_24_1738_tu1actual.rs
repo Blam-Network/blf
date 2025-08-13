@@ -113,6 +113,14 @@ mod title_storage_output {
     pub fn manifest_file_name() -> String {
         format!("manifest_{:0>3}.bin", s_blf_chunk_online_file_manifest::get_version().major)
     }
+
+    pub fn manifest_file_path(hoppers_path: &String) -> String {
+        build_path!(
+            hoppers_path,
+            manifest_file_name()
+        )
+    }
+
     pub fn matchmaking_hopper_file_name() -> String {
         format!("matchmaking_hopper_{:0>3}.bin", s_blf_chunk_hopper_configuration_table::get_version().major)
     }
@@ -2372,6 +2380,15 @@ impl v12065_11_08_24_1738_tu1actual {
                 title_storage_output::matchmaking_tips_file_path(hoppers_blfs_path, language_code, true)
             )?;
         }
+
+        BlfFileBuilder::new()
+            .add_chunk(s_blf_chunk_start_of_file::default())
+            .add_chunk(manifest_chunk)
+            // OG omaha manifests have an RSA _eof, but we're skipping that
+            .add_chunk(s_blf_chunk_end_of_file::default())
+            .write_file(title_storage_output::manifest_file_path(
+                hoppers_blfs_path,
+            ))?;
 
         やった!(task)
     }
