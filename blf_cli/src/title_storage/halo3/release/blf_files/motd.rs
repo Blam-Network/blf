@@ -36,7 +36,7 @@ blf_file! {
 impl motd {
     pub fn create(motd: String) -> Self {
         Self {
-            _blf: s_blf_chunk_start_of_file::new("halo3 motd", byte_order_mark::little_endian),
+            _blf: s_blf_chunk_start_of_file::new("halo3 motd", byte_order_mark::big_endian),
             athr: s_blf_chunk_author::for_build::<v12070_08_09_05_2031_halo3_ship>(),
             motd: s_blf_chunk_message_of_the_day::new(motd),
             _eof: s_blf_chunk_end_of_file::default(),
