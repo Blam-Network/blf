@@ -12,13 +12,13 @@ use crate::types::c_string::StaticString;
 #[Header("athr", 3.1)]
 #[Size(0x44)]
 #[brw(big)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
+#[cfg_attr(feature = "napi", napi(object, namespace = "halo3odst_13895_09_04_27_2201_atlas_release"))]
 pub struct s_blf_chunk_author {
-    pub program_name: StaticString<16>, // eg GameData.Halo3
-    pub build_number_sequence: u32,     // eg 1
-    pub build_number: u32,              // eg 12070
-    pub build_string: StaticString<28>, // eg 12070.08.09.05.2031.halo3_s
-    pub author_name: StaticString<16>,  // eg sameling
+    pub program_name: StaticString<16>, // eg GameData.Halo3, GameData.Reach
+    pub build_number: u32,              // eg 0, 11860, 12065
+    pub build_number_sequence: u32,     // eg 1, 2
+    pub build_string: StaticString<28>, // eg 11860.10.07.24.0147.omaha_r, untracked
+    pub author_name: StaticString<16>,  // eg davidav, dagasca
 }
 
 impl BlfChunkHooks for s_blf_chunk_author {}
@@ -37,7 +37,7 @@ impl s_blf_chunk_author {
             program_name: StaticString::from_string(author_name)
                 .expect("s_blf_chunk_author::for_build has a bad program name! This should never happen"),
             build_number,
-            build_number_sequence: 1,
+            build_number_sequence: 2,
             build_string: StaticString::from_string(T::get_build_string()[..28].to_string())
                 .expect("s_blf_chunk_author::for_build has a bad build string! This should never happen"),
             author_name: Default::default(),
