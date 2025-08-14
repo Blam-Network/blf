@@ -1,4 +1,6 @@
 use binrw::binrw;
+#[cfg(feature = "napi")]
+use napi_derive::napi;
 use blf_lib::blf::chunks::BlfChunkHooks;
 use blf_lib::BlfChunk;
 use serde::{Deserialize, Serialize};
@@ -9,6 +11,7 @@ use blf_lib::types::array::StaticArray;
 #[Header("phbr", 2.1)]
 #[Size(0x93)]
 #[brw(big)]
+#[cfg_attr(feature = "napi", napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]
 pub struct s_blf_chunk_player_heartbeat_response {
     // TODO: Map
     pub unknown1: StaticArray<u8, 0x93>,
