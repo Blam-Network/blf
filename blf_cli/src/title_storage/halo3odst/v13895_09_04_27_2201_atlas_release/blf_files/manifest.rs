@@ -49,12 +49,12 @@ impl manifest {
         ))?;
 
         manifest_chunk.add_file_hash(
-            format!("/title/{hopper_directory_name}/{network_configuration_file_name}"),
+            format!("/{network_configuration_file_name}"),
             network_config_file_hash,
         )?;
 
         manifest_chunk.add_file_hash(
-            format!("/title/{hopper_directory_name}/{k_rsa_manifest_file_name}"),
+            format!("/{k_rsa_manifest_file_name}"),
             rsa_manifest_file_hash,
         )?;
 
@@ -70,7 +70,7 @@ impl manifest {
             }
 
             manifest_chunk.add_file_hash(
-                format!("/title/{hopper_directory_name}/{language_code}/{k_matchmaking_banhammer_messages_file_name}"),
+                format!("/{language_code}/{k_matchmaking_banhammer_messages_file_name}"),
                 banhammer_messages_file_hash?,
             )?;
         }
