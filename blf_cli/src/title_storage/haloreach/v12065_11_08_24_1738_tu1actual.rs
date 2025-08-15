@@ -2293,7 +2293,7 @@ impl v12065_11_08_24_1738_tu1actual {
 
         add_hash_if_file_exists(
             format!(
-                "/title/{hopper_directory_name}/{}",
+                "/{}",
                 title_storage_output::matchmaking_hopper_file_name()
             ),
             title_storage_output::matchmaking_hopper_file_path(hoppers_blfs_path)
@@ -2301,7 +2301,7 @@ impl v12065_11_08_24_1738_tu1actual {
 
         add_hash_if_file_exists(
             format!(
-                "/title/{hopper_directory_name}/{}",
+                "/{}",
                 title_storage_output::network_configuration_file_name()
             ),
             title_storage_output::network_configuration_file_path(hoppers_blfs_path)
@@ -2309,7 +2309,7 @@ impl v12065_11_08_24_1738_tu1actual {
 
         add_hash_if_file_exists(
             format!(
-                "/title/{hopper_directory_name}/{}",
+                "/{}",
                 title_storage_output::dlc_map_manifest_file_name
             ),
             title_storage_output::dlc_map_manifest_file_path(hoppers_blfs_path)
@@ -2318,7 +2318,7 @@ impl v12065_11_08_24_1738_tu1actual {
         for language_code in crate::title_storage::halo3::v12070_08_09_05_2031_halo3_ship::k_language_suffixes {
             add_hash_if_file_exists(
                 format!(
-                    "/title/{hopper_directory_name}/{language_code}/{}",
+                    "/{language_code}/{}",
                     title_storage_output::rsa_manifest_file_name
                 ),
                 title_storage_output::rsa_manifest_file_path(hoppers_blfs_path, language_code)
@@ -2326,7 +2326,7 @@ impl v12065_11_08_24_1738_tu1actual {
 
             add_hash_if_file_exists(
                 format!(
-                    "/title/{hopper_directory_name}/{language_code}/{}",
+                    "/{language_code}/{}",
                     title_storage_output::megalo_categories_file_name
                 ),
                 title_storage_output::megalo_categories_file_path(hoppers_blfs_path, language_code)
@@ -2334,7 +2334,7 @@ impl v12065_11_08_24_1738_tu1actual {
 
             add_hash_if_file_exists(
                 format!(
-                    "/title/{hopper_directory_name}/{language_code}/{}",
+                    "/{language_code}/{}",
                     title_storage_output::predefined_queries_file_name(false)
                 ),
                 title_storage_output::predefined_queries_file_path(hoppers_blfs_path, language_code, false)
@@ -2342,7 +2342,7 @@ impl v12065_11_08_24_1738_tu1actual {
 
             add_hash_if_file_exists(
                 format!(
-                    "/title/{hopper_directory_name}/{language_code}/{}",
+                    "/{language_code}/{}",
                     title_storage_output::predefined_queries_file_name(true)
                 ),
                 title_storage_output::predefined_queries_file_path(hoppers_blfs_path, language_code, true)
@@ -2350,7 +2350,7 @@ impl v12065_11_08_24_1738_tu1actual {
 
             add_hash_if_file_exists(
                 format!(
-                    "/title/{hopper_directory_name}/{language_code}/{}",
+                    "/{language_code}/{}",
                     title_storage_output::banhammer_messages_file_name
                 ),
                 title_storage_output::banhammer_messages_file_path(hoppers_blfs_path, language_code)
@@ -2358,7 +2358,7 @@ impl v12065_11_08_24_1738_tu1actual {
 
             add_hash_if_file_exists(
                 format!(
-                    "/title/{hopper_directory_name}/{language_code}/{}",
+                    "/{language_code}/{}",
                     title_storage_output::hopper_descriptions_file_name()
                 ),
                 title_storage_output::hopper_descriptions_file_path(hoppers_blfs_path, language_code)
@@ -2366,7 +2366,7 @@ impl v12065_11_08_24_1738_tu1actual {
 
             add_hash_if_file_exists(
                 format!(
-                    "/title/{hopper_directory_name}/{language_code}/{}",
+                    "/{language_code}/{}",
                     title_storage_output::matchmaking_tips_file_name(false)
                 ),
                 title_storage_output::matchmaking_tips_file_path(hoppers_blfs_path, language_code, false)
@@ -2374,7 +2374,7 @@ impl v12065_11_08_24_1738_tu1actual {
 
             add_hash_if_file_exists(
                 format!(
-                    "/title/{hopper_directory_name}/{language_code}/{}",
+                    "/{language_code}/{}",
                     title_storage_output::matchmaking_tips_file_name(true)
                 ),
                 title_storage_output::matchmaking_tips_file_path(hoppers_blfs_path, language_code, true)
