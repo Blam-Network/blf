@@ -1,6 +1,6 @@
 use std::io::{Cursor, Read, Seek, Write};
 use binrw::{BinRead, BinResult, BinWrite, BinWriterExt, Endian};
-use flate2::Compression;
+use flate2::{Compress, Compression};
 use flate2::read::ZlibDecoder;
 use flate2::write::ZlibEncoder;
 use serde::{Deserialize, Serialize};
@@ -95,10 +95,9 @@ impl BinWrite for s_blf_chunk_hopper_configuration_table {
         configurations.write_options(&mut encoded_writer, endian, args)?;
 
         // 2. Deflate
-        let mut e = ZlibEncoder::new(Vec::new(), Compression::new(9));
+        let mut e = ZlibEncoder::new_with_compress(Vec::new(), Compress::new_with_window_bits(Compression::new(9), true, 15));
         e.write_all(encoded_chunk.as_slice())?;
-        let compressed_data = e.finish()?;
-
+        let compressed_data = e.flush_finish()?;
         // 3. Pack
         let compressed_length: u16 = compressed_data.len() as u16;
         let uncompressed_length: u32 = encoded_chunk.len() as u32;
