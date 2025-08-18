@@ -22,7 +22,17 @@ jobs:
       - uses: Swatinem/rust-cache@v2
 
       - name: Install Linux and Windows Cross Compilers
-        run: sudo apt-get install --yes --no-install-recommends musl-tools gcc-mingw-w64-x86-64-win32
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes --no-install-recommends \
+          musl-tools \
+          gcc-mingw-w64-x86-64-win32
+      - name: Install zlib
+        run: |
+          sudo apt-get install --yes --no-install-recommends \
+            musl-dev \
+            zlib1g-dev \
+            libz-mingw-w64-dev
 
       - name: Set up MacOS Cross Compiler
         uses: Timmmm/setup-osxcross@v2
