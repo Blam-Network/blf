@@ -45,8 +45,11 @@ jobs:
       - name: Configure cross-compilers
         run: |
           echo "LIBZ_SYS_STATIC=1" >> $GITHUB_ENV
-          echo "CC=o64-clang" >> $GITHUB_ENV
-          echo "CXX=o64-clang++" >> $GITHUB_ENV
+          echo "CC_aarch64_apple_darwin=oa64-clang" >> $GITHUB_ENV
+          echo "CXX_aarch64_apple_darwin=oa64-clang++" >> $GITHUB_ENV
+          echo "CC_x86_64_apple_darwin=o64-clang" >> $GITHUB_ENV
+          echo "CXX_x86_64_apple_darwin=o64-clang++" >> $GITHUB_ENV
+          echo "MACOSX_DEPLOYMENT_TARGET=12.3" >> $GITHUB_ENV
 
       - name: Build
         working-directory: ./blf_cli
