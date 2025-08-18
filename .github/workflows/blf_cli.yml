@@ -18,48 +18,70 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - uses: actions/checkout@v4
+      - uses: Swatinem/rust-cache@v2
+
       - name: Install Linux and Windows Cross Compilers
         run: sudo apt-get install --yes --no-install-recommends musl-tools gcc-mingw-w64-x86-64-win32
+
       - name: Set up MacOS Cross Compiler
         uses: Timmmm/setup-osxcross@v2
         with:
           osx-version: "12.3"
+
       - name: Install Rustup targets
         run: rustup target add x86_64-unknown-linux-musl x86_64-pc-windows-gnu x86_64-apple-darwin aarch64-apple-darwin
-      - uses: actions/checkout@v4
-      - uses: Swatinem/rust-cache@v2
+
+      - name: Configure cross-compilers
+        run: |
+          echo "CC_aarch64_apple_darwin=aarch64-apple-darwin21.4-clang" >> $GITHUB_ENV
+          echo "AR_aarch64_apple_darwin=aarch64-apple-darwin21.4-ar" >> $GITHUB_ENV
+          echo "CC_x86_64_apple_darwin=o64-clang" >> $GITHUB_ENV
+          echo "AR_x86_64_apple_darwin=o64-ar" >> $GITHUB_ENV
+          echo "MACOSX_DEPLOYMENT_TARGET=12.3" >> $GITHUB_ENV
+
       - name: Build
         working-directory: ./blf_cli
-        run: cargo build --target x86_64-unknown-linux-musl --target x86_64-pc-windows-gnu --target x86_64-apple-darwin --target aarch64-apple-darwin --verbose --release
+        run: |
+          cargo build --release --target x86_64-unknown-linux-musl
+          cargo build --release --target x86_64-pc-windows-gnu
+          cargo build --release --target x86_64-apple-darwin
+          cargo build --release --target aarch64-apple-darwin
+
       - name: Run tests
         working-directory: ./blf_cli
         run: cargo test --verbose
+
       - name: Upload Windows Binaries
         uses: actions/upload-artifact@v4.6.1
         with:
           name: blf_cli Windows (x86_64-pc-windows-gnu)
-          path: /home/runner/work/blf/blf/target/x86_64-pc-windows-gnu/release/blf_cli.exe
+          path: ./target/x86_64-pc-windows-gnu/release/blf_cli.exe
+
       - name: Upload Linux Binaries
         uses: actions/upload-artifact@v4.6.1
         with:
           name: blf_cli Linux (x86_64-unknown-linux-musl)
-          path: /home/runner/work/blf/blf/target/x86_64-unknown-linux-musl/release/blf_cli
+          path: ./target/x86_64-unknown-linux-musl/release/blf_cli
+
       - name: Upload MacOS Binaries (Apple Silicon)
         uses: actions/upload-artifact@v4.6.1
         with:
           name: blf_cli MacOS (aarch64-apple-darwin)
-          path: /home/runner/work/blf/blf/target/aarch64-apple-darwin/release/blf_cli
+          path: ./target/aarch64-apple-darwin/release/blf_cli
+
       - name: Upload MacOS Binaries (x86)
         uses: actions/upload-artifact@v4.6.1
         with:
           name: blf_cli MacOS (x86_64-apple-darwin)
-          path: /home/runner/work/blf/blf/target/x86_64-apple-darwin/release/blf_cli
+          path: ./target/x86_64-apple-darwin/release/blf_cli
+
       - name: Rename release binaries
         run: |
-          mv /home/runner/work/blf/blf/target/x86_64-pc-windows-gnu/release/blf_cli.exe blf_cli-windows.exe
-          mv /home/runner/work/blf/blf/target/x86_64-unknown-linux-musl/release/blf_cli blf_cli-linux
-          mv /home/runner/work/blf/blf/target/aarch64-apple-darwin/release/blf_cli blf_cli-mac-arm
-          mv /home/runner/work/blf/blf/target/x86_64-apple-darwin/release/blf_cli blf_cli-mac-intel
+          mv ./target/x86_64-pc-windows-gnu/release/blf_cli.exe blf_cli-windows.exe
+          mv ./target/x86_64-unknown-linux-musl/release/blf_cli blf_cli-linux
+          mv ./target/aarch64-apple-darwin/release/blf_cli blf_cli-mac-arm
+          mv ./target/x86_64-apple-darwin/release/blf_cli blf_cli-mac-intel
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
