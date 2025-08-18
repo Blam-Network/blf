@@ -199,7 +199,7 @@ impl<const N: usize> StaticString<N> {
             bytes = &bytes[0..bytes.len() - 1];
         }
         self.buf.fill(0);
-        self.buf[..min(bytes.len(), N - 1)].copy_from_slice(bytes);
+        self.buf[..min(bytes.len(), N - 1)].copy_from_slice(&bytes[..min(bytes.len(), N - 1)]);
     }
 
     pub fn get_string(&self) -> BLFLibResult<String> {

@@ -95,7 +95,7 @@ impl BinWrite for s_blf_chunk_hopper_configuration_table {
         configurations.write_options(&mut encoded_writer, endian, args)?;
 
         // 2. Deflate
-        let mut e = ZlibEncoder::new_with_compress(Vec::new(), Compress::new(Compression::new(9), true));
+        let mut e = ZlibEncoder::new_with_compress(Vec::new(), Compress::new_with_window_bits(Compression::new(9), true, 15));
         e.write_all(encoded_chunk.as_slice())?;
         let compressed_data = e.flush_finish()?;
         // 3. Pack
