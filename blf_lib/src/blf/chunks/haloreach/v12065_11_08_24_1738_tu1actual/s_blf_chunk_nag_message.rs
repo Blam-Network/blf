@@ -37,10 +37,10 @@ pub struct s_blf_chunk_nag_message
 impl BlfChunkHooks for s_blf_chunk_nag_message {
     fn before_write(&mut self, _previously_written: &Vec<u8>) -> BLFLibResult {
         self.title_size = self.title.get_string().len() as u32 * 2;
-        self.header_size = self.title.get_string().len() as u32 * 2;
-        self.button_key_size = self.title.get_string().len() as u32 * 2;
-        self.button_key_wait_size = self.title.get_string().len() as u32 * 2;
-        self.message_size = self.title.get_string().len() as u32 * 2;
+        self.header_size = self.header.get_string().len() as u32 * 2;
+        self.button_key_size = self.button_key.get_string().len() as u32 * 2;
+        self.button_key_wait_size = self.button_key_wait.get_string().len() as u32 * 2;
+        self.message_size = self.message.get_string().len() as u32 * 2;
 
         Ok(())
     }
