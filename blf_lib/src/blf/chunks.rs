@@ -1,6 +1,7 @@
 pub(crate) mod halo3;
 pub(crate) mod halo3odst;
 pub(crate) mod haloreach;
+pub(crate) mod ares;
 
 use std::error::Error;
 use std::fs::File;

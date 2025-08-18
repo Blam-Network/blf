@@ -1,6 +1,7 @@
 pub mod halo3;
 pub mod halo3odst;
 pub mod haloreach;
+pub mod ares;
 
 
 pub use halo3::v12070_08_09_05_2031_halo3_ship::v12070_08_09_05_2031_halo3_ship;

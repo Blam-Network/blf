@@ -3,6 +3,7 @@ use std::path::Path;
 use filesize::PathExt;
 use blf_lib::blf::chunks::DynTitleAndBuild;
 use blf_lib::result::{BLFLibError, BLFLibResult};
+use crate::title_storage::ares::v_untracked_ares::v_untracked_ares;
 use crate::title_storage::halo3::v12070_08_09_05_2031_halo3_ship::v12070_08_09_05_2031_halo3_ship;
 use crate::title_storage::halo3odst::v13895_09_04_27_2201_atlas_release::v13895_09_04_27_2201_atlas_release;
 use crate::title_storage::haloreach::v12065_11_08_24_1738_tu1actual::v12065_11_08_24_1738_tu1actual;
@@ -10,6 +11,7 @@ use crate::title_storage::haloreach::v12065_11_08_24_1738_tu1actual::v12065_11_0
 pub mod halo3;
 pub mod halo3odst;
 pub mod haloreach;
+pub mod ares;
 
 pub trait TitleConverter: DynTitleAndBuild {
     fn build_blfs(&mut self, config_path: &String, blfs_path: &String);
@@ -30,6 +32,8 @@ fn get_title_converters() -> Vec<Box<dyn TitleConverter>> {
         Box::new(v12070_08_09_05_2031_halo3_ship::default()),       // Halo 3 (TU2)
         Box::new(v13895_09_04_27_2201_atlas_release::default()),    // Halo 3: ODST
         Box::new(v12065_11_08_24_1738_tu1actual::default()),        // Halo: Reach (TU1)
+
+        Box::new(v_untracked_ares::default()),
     ]
 }
 
