@@ -14,7 +14,7 @@ use blf_lib_derivable::result::BLFLibResult;
 use blf_lib_derive::BlfChunk;
 use crate::types::numbers::Float32;
 
-pub const k_maximum_game_entries: usize = 128;
+pub const k_maximum_game_entries: usize = 256;
 
 #[derive(BlfChunk,Default,PartialEq,Debug,Clone,Serialize,Deserialize)]
 #[Header("gset", 15.1)]
