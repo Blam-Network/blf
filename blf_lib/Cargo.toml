@@ -22,6 +22,7 @@ binrw = "0.14.1"
 num-traits = "0.2.19"
 num-derive = "0.4.2"
 flate2 = { version = "1.1.2", features = ["zlib"] }
+libz-sys = { version = "1.1.22" }
 wasm-bindgen = "0.2.100"
 napi = { features = ["serde-json", "napi6","napi1","napi2","napi3","napi4","napi5", "chrono_date"], optional = true, git = "https://github.com/Blam-Network/napi-rs.git" }
 napi-derive = { git = "https://github.com/Blam-Network/napi-rs.git", optional = true }
@@ -31,3 +32,4 @@ shrinkwraprs = "0.3.0"
 default = ["derive"]
 derive = ["dep:blf_lib-derive"]
 napi = ["dep:napi", "dep:napi-derive"]
+static = ["libz-sys/static"]
