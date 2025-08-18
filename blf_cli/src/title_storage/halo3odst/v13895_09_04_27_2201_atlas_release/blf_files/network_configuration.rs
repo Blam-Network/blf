@@ -18,7 +18,7 @@ blf_file! {
 impl network_configuration {
     pub fn create(netc: s_blf_chunk_network_configuration) -> Self {
         Self {
-            _blf: s_blf_chunk_start_of_file::new("halo3 net config", byte_order_mark::big_endian),
+            _blf: s_blf_chunk_start_of_file::new("halo3 net config"),
             athr: s_blf_chunk_author::for_build::<v13895_09_04_27_2201_atlas_release>(),
             netc,
             _eof: s_blf_chunk_end_of_file::default(),

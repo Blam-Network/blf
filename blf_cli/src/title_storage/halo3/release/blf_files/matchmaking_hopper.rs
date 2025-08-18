@@ -59,7 +59,7 @@ impl matchmaking_hopper_categories_config {
 impl matchmaking_hopper {
     pub fn create(hopper_table: s_blf_chunk_hopper_configuration_table) -> matchmaking_hopper {
         matchmaking_hopper {
-            _blf: s_blf_chunk_start_of_file::new("hopper config", byte_order_mark::default()),
+            _blf: s_blf_chunk_start_of_file::new("hopper config"),
             athr: s_blf_chunk_author::for_build::<v12070_08_09_05_2031_halo3_ship>(),
             mhcf: hopper_table,
             _eof: s_blf_chunk_end_of_file::default(),

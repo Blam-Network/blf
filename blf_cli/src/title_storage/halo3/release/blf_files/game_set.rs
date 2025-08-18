@@ -60,7 +60,7 @@ impl game_set_config {
 impl game_set {
     pub fn create(game_set: s_blf_chunk_game_set) -> game_set {
         game_set {
-            _blf: s_blf_chunk_start_of_file::new("game set", byte_order_mark::default()),
+            _blf: s_blf_chunk_start_of_file::new("game set"),
             athr: s_blf_chunk_author::for_build::<v12070_08_09_05_2031_halo3_ship>(),
             gset: game_set,
             _eof: s_blf_chunk_end_of_file::default(),

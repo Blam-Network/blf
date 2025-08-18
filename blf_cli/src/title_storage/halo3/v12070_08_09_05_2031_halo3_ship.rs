@@ -593,7 +593,7 @@ impl v12070_08_09_05_2031_halo3_ship {
     }
 
     fn build_config_hoppers(hoppers_blfs_path: &String, hoppers_config_path: &String) -> BLFLibResult {
-        let mut task = console_task::start("Converting Hopper Configuration...");
+        let mut task = console_task::start("Converting Hopper Configuration");
 
         let language_hopper_descriptions
             = Self::read_hopper_description_blfs(hoppers_blfs_path, &mut task)?;

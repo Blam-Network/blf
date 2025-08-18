@@ -9,7 +9,7 @@ use napi_derive::napi;
 #[cfg_attr(feature = "napi", napi(namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 #[repr(u16)]
 pub enum byte_order_mark {
-    little_endian = 0xFFFE,
     #[default]
+    little_endian = 0xFFFE,
     big_endian = 0xFEFF
 }

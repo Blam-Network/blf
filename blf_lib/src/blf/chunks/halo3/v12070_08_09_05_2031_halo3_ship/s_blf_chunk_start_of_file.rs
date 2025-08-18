@@ -25,9 +25,9 @@ pub struct s_blf_chunk_start_of_file
 impl BlfChunkHooks for s_blf_chunk_start_of_file {}
 
 impl s_blf_chunk_start_of_file {
-    pub fn new(name: &str, byte_order_mark: byte_order_mark) -> s_blf_chunk_start_of_file {
+    pub fn new(name: &str) -> s_blf_chunk_start_of_file {
         s_blf_chunk_start_of_file {
-            byte_order_mark,
+            byte_order_mark: byte_order_mark::default(),
             name: StaticString::from_string_trimmed(name.to_string()),
         }
     }

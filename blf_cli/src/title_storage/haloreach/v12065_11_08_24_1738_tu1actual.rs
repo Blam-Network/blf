@@ -1190,7 +1190,7 @@ impl v12065_11_08_24_1738_tu1actual {
     }
 
     fn build_config_hoppers(hoppers_blfs_path: &String, hoppers_config_path: &String) -> BLFLibResult {
-        let mut task = console_task::start("Converting Hopper Configuration...");
+        let mut task = console_task::start("Converting Hopper Configuration");
 
         let language_hopper_descriptions
             = Self::read_hopper_description_blfs(hoppers_blfs_path, &mut task)?;
@@ -1312,7 +1312,7 @@ impl v12065_11_08_24_1738_tu1actual {
         let netc = find_chunk_in_file::<s_blf_chunk_network_configuration>(network_configuration_source_path)?;
 
         BlfFileBuilder::new()
-            .add_chunk(s_blf_chunk_start_of_file::new("reach net config", byte_order_mark::big_endian))
+            .add_chunk(s_blf_chunk_start_of_file::new("reach net config"))
             .add_chunk(s_blf_chunk_author::for_build::<v12065_11_08_24_1738_tu1actual>())
             .add_chunk(netc)
             .add_chunk(s_blf_chunk_end_of_file::default())
@@ -1713,7 +1713,7 @@ impl v12065_11_08_24_1738_tu1actual {
             }
 
             BlfFileBuilder::new()
-                .add_chunk(s_blf_chunk_start_of_file::new("rsa manifest", byte_order_mark::big_endian))
+                .add_chunk(s_blf_chunk_start_of_file::new("rsa manifest"))
                 .add_chunk(s_blf_chunk_author::for_build::<v12065_11_08_24_1738_tu1actual>())
                 .add_chunk(map_manifest)
                 .add_chunk(s_blf_chunk_end_of_file::default())
@@ -1846,7 +1846,7 @@ impl v12065_11_08_24_1738_tu1actual {
                             // game_variant_blf_file.write_file(&game_variant_blf_path).expect(&format!("Failed to write game variant {}", game_variant_file_name));
 
                             BlfFileBuilder::new()
-                                .add_chunk(s_blf_chunk_start_of_file::new("game var", byte_order_mark::big_endian))
+                                .add_chunk(s_blf_chunk_start_of_file::new("game var"))
                                 .add_chunk(s_blf_chunk_author::for_build::<v12065_11_08_24_1738_tu1actual>())
                                 .add_chunk(json)
                                 .add_chunk(s_blf_chunk_end_of_file::default())
@@ -2077,7 +2077,7 @@ impl v12065_11_08_24_1738_tu1actual {
             }
 
             BlfFileBuilder::new()
-                .add_chunk(s_blf_chunk_start_of_file::new("game set", byte_order_mark::big_endian))
+                .add_chunk(s_blf_chunk_start_of_file::new("game set"))
                 .add_chunk(s_blf_chunk_author::for_build::<v12065_11_08_24_1738_tu1actual>())
                 .add_chunk(game_set_config)
                 .add_chunk(s_blf_chunk_end_of_file::default())
@@ -2240,7 +2240,7 @@ impl v12065_11_08_24_1738_tu1actual {
         }
 
         BlfFileBuilder::new()
-            .add_chunk(s_blf_chunk_start_of_file::new("hopper config", byte_order_mark::big_endian))
+            .add_chunk(s_blf_chunk_start_of_file::new("hopper config"))
             .add_chunk(s_blf_chunk_author::for_build::<v12065_11_08_24_1738_tu1actual>())
             .add_chunk(mhcf)
             .add_chunk(s_blf_chunk_end_of_file::default())
@@ -2262,7 +2262,7 @@ impl v12065_11_08_24_1738_tu1actual {
             )?;
 
         BlfFileBuilder::new()
-            .add_chunk(s_blf_chunk_start_of_file::new("reach net config", byte_order_mark::big_endian))
+            .add_chunk(s_blf_chunk_start_of_file::new("reach net config"))
             .add_chunk(s_blf_chunk_author::for_build::<v12065_11_08_24_1738_tu1actual>())
             .add_chunk(netc)
             .add_chunk(s_blf_chunk_end_of_file::default())
@@ -2315,7 +2315,7 @@ impl v12065_11_08_24_1738_tu1actual {
             title_storage_output::dlc_map_manifest_file_path(hoppers_blfs_path)
         )?;
 
-        for language_code in crate::title_storage::halo3::v12070_08_09_05_2031_halo3_ship::k_language_suffixes {
+        for language_code in k_language_suffixes {
             add_hash_if_file_exists(
                 format!(
                     "/{language_code}/{}",
