@@ -25,11 +25,8 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install --yes --no-install-recommends \
-          musl-tools \
-          gcc-mingw-w64-x86-64-win32
-      - name: Install zlib
-        run: |
-          sudo apt-get install --yes --no-install-recommends \
+            musl-tools \
+            gcc-mingw-w64-x86-64-win32 \
             musl-dev \
             zlib1g-dev \
             libz-mingw-w64-dev
@@ -39,15 +36,18 @@ jobs:
         with:
           osx-version: "12.3"
 
+      - name: Add osxcross to PATH
+        run: echo "${HOME}/osxcross/target/bin" >> $GITHUB_PATH
+
       - name: Install Rustup targets
         run: rustup target add x86_64-unknown-linux-musl x86_64-pc-windows-gnu x86_64-apple-darwin aarch64-apple-darwin
 
       - name: Configure cross-compilers
         run: |
-          echo "CC_aarch64_apple_darwin=aarch64-apple-darwin21.4-clang" >> $GITHUB_ENV
-          echo "AR_aarch64_apple_darwin=aarch64-apple-darwin21.4-ar" >> $GITHUB_ENV
-          echo "CC_x86_64_apple_darwin=o64-clang" >> $GITHUB_ENV
-          echo "AR_x86_64_apple_darwin=o64-ar" >> $GITHUB_ENV
+          echo "CC_aarch64_apple_darwin=aarch64-apple-darwin21-clang" >> $GITHUB_ENV
+          echo "AR_aarch64_apple_darwin=aarch64-apple-darwin21-ar" >> $GITHUB_ENV
+          echo "CC_x86_64_apple_darwin=x86_64-apple-darwin21-clang" >> $GITHUB_ENV
+          echo "AR_x86_64_apple_darwin=x86_64-apple-darwin21-ar" >> $GITHUB_ENV
           echo "MACOSX_DEPLOYMENT_TARGET=12.3" >> $GITHUB_ENV
 
       - name: Build
