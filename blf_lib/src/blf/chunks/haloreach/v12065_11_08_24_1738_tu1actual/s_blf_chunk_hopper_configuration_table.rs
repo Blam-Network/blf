@@ -212,13 +212,15 @@ pub struct c_hopper_configuration {
     pub dworda4: u32,
     pub dworda8: u32,
     pub dwordac: u32,
-    pub dwordb0: u32, // originally had this as a gap, but it does hold data. Might be noise.
+    #[brw(pad_after = 3)] // Not 100% confident on this, should check game code.
+    pub byteb0: u8,
     pub is_ranked: u8,
     pub is_arbitrated: u8,
     pub are_guests_allowed: u8,
     pub are_opponents_visible: u8,
-    #[brw(pad_after = 3)]
     pub uses_arena_lsp_stats: u8,
+    #[brw(pad_after = 2)]
+    pub byteb9:u8,
     pub dwordbc: u32,
     pub dwordc0: u32,
     pub gapc4: u8, // unsure
