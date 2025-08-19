@@ -15,7 +15,7 @@ use crate::types::numbers::Float32;
 #[binrw]
 #[derive(BlfChunk,Default,PartialEq,Debug,Clone,Serialize,Deserialize)]
 #[Header("netc", 135.1)]
-#[Size(6776)]
+#[Size(6764)]
 #[brw(little)]
 pub struct s_blf_chunk_network_configuration
 {
@@ -1011,7 +1011,7 @@ impl BinWrite for s_dlc_path {
         // Convert the StaticString to bytes
         let string: String = BINRW_RESULT!(self.path.get_string())?;
         let mut buffer = string.into_bytes();
-        buffer.resize(0x80, 0);
+        buffer.resize(32, 0);
 
         // Ensure the first bit is set in the first byte
         buffer[0] |= 0b1000_0000;
