@@ -97,7 +97,7 @@ impl BinWrite for s_blf_chunk_hopper_configuration_table {
         // 2. Deflate
         let mut e = ZlibEncoder::new_with_compress(Vec::new(), Compress::new_with_window_bits(Compression::new(9), true, 15));
         e.write_all(encoded_chunk.as_slice())?;
-        let compressed_data = e.flush_finish()?;
+        let compressed_data = e.finish()?;
         // 3. Pack
         let compressed_length: u16 = compressed_data.len() as u16;
         let uncompressed_length: u32 = encoded_chunk.len() as u32;
