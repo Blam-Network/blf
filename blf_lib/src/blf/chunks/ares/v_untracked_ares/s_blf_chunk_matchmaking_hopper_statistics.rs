@@ -17,7 +17,7 @@ pub struct s_blf_chunk_matchmaking_hopper_statistics {
     pub data: StaticArray<hopper_population, 32>,
 }
 
-#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
+#[cfg_attr(feature = "napi", napi(object, namespace = "ares_untracked"))]
 #[derive(PartialEq,Debug,Clone,Serialize,Deserialize,Default,BinRead,BinWrite)]
 pub struct hopper_population {
     #[brw(pad_before = 2)]
