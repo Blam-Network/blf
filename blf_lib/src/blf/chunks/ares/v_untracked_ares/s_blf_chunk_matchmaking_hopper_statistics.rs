@@ -7,7 +7,7 @@ use blf_lib_derive::BlfChunk;
 use napi_derive::napi;
 
 #[binrw]
-#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
+#[cfg_attr(feature = "napi", napi(object, namespace = "ares_untracked"))]
 #[derive(BlfChunk,PartialEq,Debug,Clone,Serialize,Deserialize,Default)]
 #[Header("mmhs", 3.1)]
 #[brw(little)]
