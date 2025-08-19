@@ -36,7 +36,8 @@ impl s_blf_chunk_online_file_manifest {
 
         self.data.push(s_online_file {
             cache_key: StaticString::from_string(cache_key)?,
-            hash,
+            // Ares doesn't support hashes yet.
+            hash: s_network_http_request_hash::default(),
         });
 
         Ok(())

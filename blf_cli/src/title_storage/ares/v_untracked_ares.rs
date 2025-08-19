@@ -17,11 +17,11 @@ use lazy_static::lazy_static;
 use blf_lib::blam::common::cseries::language::{get_language_string, k_language_suffix_chinese_traditional, k_language_suffix_english, k_language_suffix_french, k_language_suffix_german, k_language_suffix_italian, k_language_suffix_japanese, k_language_suffix_korean, k_language_suffix_mexican, k_language_suffix_portuguese, k_language_suffix_spanish};
 use blf_lib::blf::{get_blf_file_hash, BlfFile};
 use blf_lib::blf::chunks::{find_chunk_in_file, BlfChunk};
-use blf_lib::blf::versions::halo3::v12070_08_09_05_2031_halo3_ship::{s_blf_chunk_hopper_description_table, s_blf_chunk_network_configuration, s_blf_chunk_packed_game_variant, s_blf_chunk_packed_map_variant};
+use blf_lib::blf::versions::ares::v_untracked_ares::{s_blf_chunk_hopper_description_table, s_blf_chunk_network_configuration, s_blf_chunk_packed_game_variant, s_blf_chunk_packed_map_variant};
 use crate::console::console_task;
-use crate::title_storage::halo3::release::blf_files::motd_popup::{k_motd_popup_config_folder, k_motd_popup_file_name, k_motd_popup_image_file_name, k_mythic_motd_popup_config_folder, k_mythic_motd_popup_file_name, k_mythic_motd_popup_image_file_name, motd_popup};
-use crate::title_storage::halo3::release::blf_files::matchmaking_banhammer_messages::{k_matchmaking_banhammer_messages_file_name, matchmaking_banhammer_messages};
-use crate::title_storage::halo3::release::blf_files::matchmaking_tips::{k_matchmaking_tips_file_name, matchmaking_tips};
+use crate::title_storage::ares::v_untracked_ares::blf_files::motd_popup::{k_motd_popup_config_folder, k_motd_popup_file_name, k_motd_popup_image_file_name, k_mythic_motd_popup_config_folder, k_mythic_motd_popup_file_name, k_mythic_motd_popup_image_file_name, motd_popup};
+use crate::title_storage::ares::v_untracked_ares::blf_files::matchmaking_banhammer_messages::{k_matchmaking_banhammer_messages_file_name, matchmaking_banhammer_messages};
+use crate::title_storage::ares::v_untracked_ares::blf_files::matchmaking_tips::{k_matchmaking_tips_file_name, matchmaking_tips};
 use regex::Regex;
 use tempdir::TempDir;
 use tokio::runtime;
@@ -31,23 +31,23 @@ use blf_lib::blam::common::memory::crc::crc32;
 use blf_lib::blam::common::memory::secure_signature::s_network_http_request_hash;
 use blf_lib::blam::halo_3::release::game::game_engine_variant::c_game_variant;
 use blf_lib::blam::halo_3::release::saved_games::scenario_map_variant::c_map_variant;
-use blf_lib::blf::versions::halo3::v12070_08_09_05_2031_halo3_ship::s_blf_chunk_hopper_configuration_table;
-use crate::title_storage::halo3::release::blf_files::game_variant::{game_variant, k_game_variants_config_folder_name};
-use crate::title_storage::halo3::release::blf_files::manifest::{k_manifest_file_name, manifest};
-use crate::title_storage::halo3::release::blf_files::map_variant::{k_map_variants_blf_folder_name, k_map_variants_config_folder_name, map_variant};
-use crate::title_storage::halo3::release::blf_files::matchmaking_hopper::{k_active_hoppers_config_file_name, k_categories_config_file_name, k_hopper_config_file_name, k_hoppers_config_folder_name, k_matchmaking_hopper_file_name, matchmaking_hopper, matchmaking_hopper_categories_config, matchmaking_hopper_category_configuration_and_descriptions, matchmaking_hopper_config, read_active_hoppers};
-use crate::title_storage::halo3::release::blf_files::matchmaking_hopper_descriptions::{k_matchmaking_hopper_descriptions_file_name, matchmaking_hopper_descriptions};
+use blf_lib::blf::versions::ares::v_untracked_ares::s_blf_chunk_hopper_configuration_table;
+use crate::title_storage::ares::v_untracked_ares::blf_files::game_variant::{game_variant, k_game_variants_config_folder_name};
+use crate::title_storage::ares::v_untracked_ares::blf_files::manifest::{k_manifest_file_name, manifest};
+use crate::title_storage::ares::v_untracked_ares::blf_files::map_variant::{k_map_variants_blf_folder_name, k_map_variants_config_folder_name, map_variant};
+use crate::title_storage::ares::v_untracked_ares::blf_files::matchmaking_hopper::{k_active_hoppers_config_file_name, k_categories_config_file_name, k_hopper_config_file_name, k_hoppers_config_folder_name, k_matchmaking_hopper_file_name, matchmaking_hopper, matchmaking_hopper_categories_config, matchmaking_hopper_category_configuration_and_descriptions, matchmaking_hopper_config, read_active_hoppers};
+use crate::title_storage::ares::v_untracked_ares::blf_files::matchmaking_hopper_descriptions::{k_matchmaking_hopper_descriptions_file_name, matchmaking_hopper_descriptions};
 use blf_files::network_configuration::network_configuration;
 use blf_lib::result::BLFLibResult;
-use crate::title_storage::halo3::release::blf_files::game_set::{k_game_set_blf_file_name, game_set_config, game_set, k_game_set_config_file_name};
-use crate::title_storage::halo3::release::blf_files::{k_hopper_directory_name_max_length};
+use crate::title_storage::ares::v_untracked_ares::blf_files::game_set::{k_game_set_blf_file_name, game_set_config, game_set, k_game_set_config_file_name};
+use crate::title_storage::ares::v_untracked_ares::blf_files::{k_hopper_directory_name_max_length};
 use crate::title_storage::ares::v_untracked_ares::blf_files::network_configuration::k_network_configuration_file_name;
-use crate::title_storage::halo3::release::blf_files::motd::{k_motd_config_folder, k_motd_file_name, k_motd_image_file_name, k_mythic_motd_config_folder, k_mythic_motd_file_name, k_mythic_motd_image_file_name, motd};
-use crate::title_storage::halo3::release::blf_files::rsa_manifest::{k_rsa_manifest_file_name, k_rsa_signatures_config_folder_name, rsa_manifest};
+use crate::title_storage::ares::v_untracked_ares::blf_files::motd::{k_motd_config_folder, k_motd_file_name, k_motd_image_file_name, k_mythic_motd_config_folder, k_mythic_motd_file_name, k_mythic_motd_image_file_name, motd};
+use crate::title_storage::ares::v_untracked_ares::blf_files::rsa_manifest::{k_rsa_manifest_file_name, k_rsa_signatures_config_folder_name, rsa_manifest};
 
 title_converter! (
     #[Title("Ares")]
-    #[Build("Untracked")]
+    #[Build("untracked")]
     pub struct v_untracked_ares {}
 );
 
@@ -1381,7 +1381,7 @@ impl v_untracked_ares {
                 format!("{hopper_identifier:0>5}"),
                 k_game_set_blf_file_name
             );
-            hopper_config.game_set_hash = get_blf_file_hash(game_set_blf_file_path).unwrap();
+            hopper_config.game_set_hash = s_network_http_request_hash::default();
             hopper_configuration_table.add_hopper_configuration(hopper_config).unwrap()
         }
 

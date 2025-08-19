@@ -1,13 +1,13 @@
 use std::error::Error;
 use std::io::Write;
-use blf_lib::blf::versions::halo3::v12070_08_09_05_2031_halo3_ship::{s_blf_chunk_author, s_blf_chunk_end_of_file, s_blf_chunk_network_configuration, s_blf_chunk_start_of_file, s_network_configuration};
-use blf_lib::blf::versions::v12070_08_09_05_2031_halo3_ship;
+use blf_lib::blf::versions::ares::v_untracked_ares::{s_blf_chunk_author, s_blf_chunk_end_of_file, s_blf_chunk_network_configuration, s_blf_chunk_start_of_file, s_network_configuration};
 use blf_lib::blf_file;
 use blf_lib::io::read_json_file;
 use blf_lib::types::byte_order_mark::byte_order_mark;
 use crate::build_path;
 use crate::io::create_parent_folders;
 use std::fs::File;
+use crate::title_storage::ares::v_untracked_ares::v_untracked_ares;
 
 pub const k_network_configuration_file_name: &str = "network_configuration_135.bin";
 pub const k_network_configuration_json_file_name: &str = "network_configuration_135.json";
@@ -25,7 +25,7 @@ impl network_configuration {
     pub fn create(netc: s_blf_chunk_network_configuration) -> Self {
         Self {
             _blf: s_blf_chunk_start_of_file::new("halo3 net config"),
-            athr: s_blf_chunk_author::for_build::<v12070_08_09_05_2031_halo3_ship>(),
+            athr: s_blf_chunk_author::for_build::<v_untracked_ares>(),
             netc,
             _eof: s_blf_chunk_end_of_file::default(),
         }
