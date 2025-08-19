@@ -1,4 +1,3 @@
-mod blf_files;
 pub mod variant_importer;
 pub mod variant_exporter;
 
@@ -20,7 +19,7 @@ use lazy_static::lazy_static;
 use blf_lib::blam::common::cseries::language::{get_language_string, k_language_suffix_chinese_traditional, k_language_suffix_english, k_language_suffix_french, k_language_suffix_german, k_language_suffix_italian, k_language_suffix_japanese, k_language_suffix_korean, k_language_suffix_mexican, k_language_suffix_portuguese, k_language_suffix_spanish};
 use blf_lib::blf::{get_blf_file_hash, BlfFile, BlfFileBuilder};
 use blf_lib::blf::chunks::{find_chunk_in_file, BlfChunk};
-use blf_lib::blf::versions::halo3::v12070_08_09_05_2031_halo3_ship::{s_blf_chunk_hopper_description_table, s_blf_chunk_matchmaking_tips, s_blf_chunk_message_of_the_day, s_blf_chunk_message_of_the_day_popup, s_blf_chunk_network_configuration, s_blf_chunk_packed_game_variant, s_blf_chunk_packed_map_variant, s_blf_chunk_game_set};
+use blf_lib::blf::versions::halo3::v12070_08_09_05_2031_halo3_ship::{s_blf_chunk_hopper_description_table, s_blf_chunk_matchmaking_tips, s_blf_chunk_message_of_the_day, s_blf_chunk_message_of_the_day_popup, s_blf_chunk_network_configuration, s_blf_chunk_packed_game_variant, s_blf_chunk_packed_map_variant, s_blf_chunk_game_set, s_blf_chunk_author};
 use crate::console::console_task;
 use regex::Regex;
 use tempdir::TempDir;
@@ -33,8 +32,7 @@ use blf_lib::blam::halo_3::release::game::game_engine_variant::c_game_variant;
 use blf_lib::blam::halo_3::release::saved_games::scenario_map_variant::c_map_variant;
 use blf_lib::blf::versions::halo3::v12070_08_09_05_2031_halo3_ship::s_blf_chunk_hopper_configuration_table;
 use blf_lib::blf::versions::halo3::v11855_07_08_20_2317_halo3_ship::{s_blf_chunk_banhammer_messages, s_blf_chunk_online_file_manifest};
-use blf_lib::blf::versions::haloreach::v09730_10_04_09_1309_omaha_delta::s_blf_chunk_author;
-use blf_lib::blf::versions::v_untracked_ares::{s_blf_chunk_end_of_file, s_blf_chunk_game_set_entry, s_blf_chunk_map_manifest, s_blf_chunk_start_of_file};
+use blf_lib::blf::versions::halo3::v12070_08_09_05_2031_halo3_ship::{s_blf_chunk_end_of_file, s_blf_chunk_game_set_entry, s_blf_chunk_map_manifest, s_blf_chunk_start_of_file};
 use blf_lib::io::{read_file_to_string, read_json_file, write_json_file};
 use blf_lib::result::{BLFLibError, BLFLibResult};
 use blf_lib::types::c_string::StaticString;
@@ -107,8 +105,7 @@ pub fn get_map_budget(map_id: u32) -> f32 {
 
 mod title_storage_output {
     use blf_lib::blf::chunks::BlfChunk;
-    use blf_lib::blf::versions::halo3::v12070_08_09_05_2031_halo3_ship::{s_blf_chunk_game_set, s_blf_chunk_hopper_configuration_table, s_blf_chunk_hopper_description_table, s_blf_chunk_map_variant, s_blf_chunk_network_configuration, s_blf_chunk_online_file_manifest};
-    use blf_lib::blf::versions::v_untracked_ares::{s_blf_chunk_packed_game_variant, s_blf_chunk_packed_map_variant};
+    use blf_lib::blf::versions::halo3::v12070_08_09_05_2031_halo3_ship::{s_blf_chunk_game_set, s_blf_chunk_hopper_configuration_table, s_blf_chunk_hopper_description_table, s_blf_chunk_network_configuration, s_blf_chunk_online_file_manifest, s_blf_chunk_packed_game_variant, s_blf_chunk_packed_map_variant};
     use crate::build_path;
 
     // applies to the root folder, eg "default_hoppers"
@@ -282,12 +279,12 @@ mod title_storage_config {
     use std::collections::HashMap;
     use regex::Regex;
     use serde::{Deserialize, Serialize};
-    use blf_lib::blf::versions::ares::v_untracked_ares::{c_hopper_configuration, s_blf_chunk_network_configuration, s_game_hopper_custom_category};
     use blf_lib::OPTION_TO_RESULT;
     use blf_lib::result::BLFLibResult;
     use crate::build_path;
     use crate::io::ordered_map;
     use blf_lib::blf::chunks::BlfChunk;
+    use blf_lib::blf::versions::halo3::v12070_08_09_05_2031_halo3_ship::{c_hopper_configuration, s_game_hopper_custom_category};
 
     pub const banhammer_messages_folder_name: &str = "banhammer_messages";
     pub fn banhammer_messages_file_path(config_folder: &String, language_code: &str) -> String {
@@ -686,10 +683,7 @@ impl v12070_08_09_05_2031_halo3_ship {
                     ),
                     motd.get_message()
                 )?;
-            }
 
-            // JPEGs
-            for language_code in k_language_suffixes {
                 let jpg_file_path = title_storage_output::motd_image_file_path(
                     hoppers_blf_path,
                     language_code,
@@ -767,7 +761,7 @@ impl v12070_08_09_05_2031_halo3_ship {
                     ))?;
                 }
                 else {
-                    task.add_warning(format!("No image was found for {} Global Nag Message", language_code));
+                    task.add_warning(format!("No image was found for {} Popup", language_code));
                 }
             }
 

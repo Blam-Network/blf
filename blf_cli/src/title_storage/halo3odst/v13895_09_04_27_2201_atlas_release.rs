@@ -1,29 +1,25 @@
-mod blf_files;
-
 use std::error::Error;
 use std::fs;
+use std::fs::{exists, File};
+use std::io::Read;
+use std::path::Path;
 use std::time::SystemTime;
-use crate::io::{get_directories_in_folder, FILE_SEPARATOR};
+use crate::io::{get_directories_in_folder, get_files_in_folder, read_text_file_lines, write_text_file, write_text_file_lines, FILE_SEPARATOR};
 use crate::{build_path, debug_log, title_converter, やった};
-use crate::title_storage::{check_file_exists, TitleConverter};
+use crate::title_storage::{check_file_exists, validate_jpeg, TitleConverter};
 use inline_colorization::*;
 use lazy_static::lazy_static;
 use blf_lib::blam::common::cseries::language::{get_language_string, k_language_suffix_chinese_traditional, k_language_suffix_english, k_language_suffix_french, k_language_suffix_german, k_language_suffix_italian, k_language_suffix_japanese, k_language_suffix_korean, k_language_suffix_mexican, k_language_suffix_portuguese, k_language_suffix_spanish};
-use blf_lib::blf::BlfFile;
+use blf_lib::blf::{get_blf_file_hash, BlfFile, BlfFileBuilder};
 use blf_lib::blf::chunks::find_chunk_in_file;
 use crate::console::console_task;
 use regex::Regex;
-use tempdir::TempDir;
-use crate::title_storage::halo3odst::v13895_09_04_27_2201_atlas_release::blf_files::manifest::{k_manifest_file_name, manifest};
-use blf_files::network_configuration::network_configuration;
-use blf_lib::blf::versions::halo3odst::v13895_09_04_27_2201_atlas_release::s_blf_chunk_network_configuration;
+use blf_lib::blf::versions::ares::v_untracked_ares::{s_blf_chunk_end_of_file, s_blf_chunk_map_manifest, s_blf_chunk_start_of_file};
+use blf_lib::blf::versions::halo3odst::v13895_09_04_27_2201_atlas_release::{s_blf_chunk_banhammer_messages, s_blf_chunk_message_of_the_day, s_blf_chunk_message_of_the_day_popup, s_blf_chunk_online_file_manifest, s_blf_chunk_network_configuration};
+use blf_lib::blf::versions::haloreach::v09730_10_04_09_1309_omaha_delta::s_blf_chunk_author;
+use blf_lib::io::{read_file_to_string, read_json_file, write_json_file};
 use blf_lib::result::BLFLibResult;
-use crate::title_storage::halo3odst::v13895_09_04_27_2201_atlas_release::blf_files::k_hopper_directory_name_max_length;
-use crate::title_storage::halo3odst::v13895_09_04_27_2201_atlas_release::blf_files::matchmaking_banhammer_messages::{k_matchmaking_banhammer_messages_file_name, matchmaking_banhammer_messages};
-use crate::title_storage::halo3odst::v13895_09_04_27_2201_atlas_release::blf_files::network_configuration::k_network_configuration_file_name;
-use crate::title_storage::halo3odst::v13895_09_04_27_2201_atlas_release::blf_files::rsa_manifest::{k_rsa_manifest_file_name, rsa_manifest};
-use crate::title_storage::halo3odst::v13895_09_04_27_2201_atlas_release::blf_files::motd::{k_motd_config_folder, k_motd_file_name, k_motd_image_file_name, motd};
-use crate::title_storage::halo3odst::v13895_09_04_27_2201_atlas_release::blf_files::motd_popup::{k_motd_popup_config_folder, k_motd_popup_file_name, k_motd_popup_image_file_name, k_vidmaster_popup_config_folder, k_vidmaster_popup_file_name, k_vidmaster_popup_image_file_name, motd_popup};
+use crate::title_storage::halo3odst::v13895_09_04_27_2201_atlas_release::title_storage_output::hopper_directory_name_max_length;
 
 title_converter! (
     #[Title("Halo 3: ODST")]
@@ -51,6 +47,176 @@ lazy_static! {
     static ref config_rsa_signature_file_map_id_regex: Regex = Regex::new(r"^[0-9]{1,}").unwrap();
 }
 
+mod title_storage_output {
+    use blf_lib::blf::chunks::BlfChunk;
+    use blf_lib::blf::versions::halo3odst::v13895_09_04_27_2201_atlas_release::{s_blf_chunk_network_configuration, s_blf_chunk_online_file_manifest};
+    use crate::build_path;
+
+    // applies to the root folder, eg "default_hoppers"
+    pub const hopper_directory_name_max_length: usize = 64;
+
+    pub const motd_image_max_size: usize = 61440;
+    pub const motd_image_width: usize = 476;
+    pub const motd_image_height: usize = 190;
+
+    pub const motd_popup_image_max_size: usize = 61440;
+    pub const motd_popup_image_width: usize = 308;
+    pub const motd_popup_image_height: usize = 466;
+
+    // Root Directory
+    // storage/title/tracked/12070/default_hoppers/
+    pub fn network_configuration_file_name() -> String {
+        format!("network_configuration_{:0>3}.bin", s_blf_chunk_network_configuration::get_version().major)
+    }
+    pub fn network_configuration_file_path(hoppers_path: &String) -> String {
+        build_path!(
+            hoppers_path,
+            network_configuration_file_name()
+        )
+    }
+    pub fn manifest_file_name() -> String {
+        format!("manifest_{:0>3}.bin", s_blf_chunk_online_file_manifest::get_version().major)
+    }
+
+    pub fn manifest_file_path(hoppers_path: &String) -> String {
+        build_path!(
+            hoppers_path,
+            manifest_file_name()
+        )
+    }
+
+    // Languages
+    // storage/title/4d53085bf0/12065/default_hoppers/en/
+    pub const rsa_manifest_file_name: &str = "rsa_manifest.bin";
+    pub fn rsa_manifest_file_path(hoppers_path: &String) -> String {
+        build_path!(
+            hoppers_path,
+            rsa_manifest_file_name
+        )
+    }
+    pub const banhammer_messages_file_name: &str = "matchmaking_banhammer_messages.bin";
+    pub fn banhammer_messages_file_path(hoppers_path: &String, language_code: &str) -> String {
+        build_path!(
+            hoppers_path,
+            language_code,
+            banhammer_messages_file_name
+        )
+    }
+
+    pub const motd_file_name: &str = "black_motd.bin";
+    pub fn motd_file_path(hoppers_path: &String, language_code: &str) -> String {
+        build_path!(
+            hoppers_path,
+            language_code,
+            motd_file_name
+        )
+    }
+
+    pub const motd_image_file_name: &str = "black_motd_image.jpg";
+    pub fn motd_image_file_path(hoppers_path: &String, language_code: &str) -> String {
+        build_path!(
+            hoppers_path,
+            language_code,
+            motd_image_file_name
+        )
+    }
+
+    pub fn motd_popup_file_name(vidmaster: bool) -> String {
+        if vidmaster { "blue_vidmaster_popup.bin".to_string() }
+        else { "black_motd_popup.bin".to_string() }
+    }
+    pub fn motd_popup_file_path(hoppers_path: &String, language_code: &str, vidmaster: bool) -> String {
+        build_path!(
+            hoppers_path,
+            language_code,
+            motd_popup_file_name(vidmaster)
+        )
+    }
+    pub fn motd_popup_image_file_name(vidmaster: bool) -> String {
+        if vidmaster { "blue_vidmaster_image.jpg".to_string() }
+        else { "black_motd_popup_image.jpg".to_string() }
+    }
+    pub fn motd_popup_image_file_path(hoppers_path: &String, language_code: &str, vidmaster: bool) -> String {
+        build_path!(
+            hoppers_path,
+            language_code,
+            motd_popup_image_file_name(vidmaster)
+        )
+    }
+}
+
+mod title_storage_config {
+    use blf_lib::blf::chunks::BlfChunk;
+    use blf_lib::blf::versions::halo3odst::v13895_09_04_27_2201_atlas_release::s_blf_chunk_network_configuration;
+    use crate::build_path;
+
+    pub const banhammer_messages_folder_name: &str = "banhammer_messages";
+    pub fn banhammer_messages_file_path(config_folder: &String, language_code: &str) -> String {
+        build_path!(
+            config_folder,
+            banhammer_messages_folder_name,
+            format!("{language_code}.txt")
+        )
+    }
+
+    pub const rsa_signatures_folder_name: &str = "rsa_signatures";
+    pub fn rsa_signatures_folder_path(config_folder: &String) -> String {
+        build_path!(
+            config_folder,
+            rsa_signatures_folder_name
+        )
+    }
+
+    pub const motd_folder_name: &str = "motd";
+
+    pub fn motd_file_path(config_folder: &String, language_code: &str) -> String {
+        build_path!(
+            config_folder,
+            motd_folder_name,
+            format!("{language_code}.txt")
+        )
+    }
+
+    pub fn motd_image_file_path(config_folder: &String, language_code: &str) -> String {
+        build_path!(
+            config_folder,
+            motd_folder_name,
+            format!("{language_code}.jpg")
+        )
+    }
+
+    pub fn motd_popup_folder_name(blue: bool) -> String {
+        if blue { "popup_mythic".into() }
+        else { "popup".into() }
+    }
+
+    pub fn motd_popup_file_path(config_folder: &String, language_code: &str, blue: bool) -> String {
+        build_path!(
+            config_folder,
+            motd_popup_folder_name(blue),
+            format!("{language_code}.json")
+        )
+    }
+
+    pub fn motd_popup_image_file_path(config_folder: &String, language_code: &str, blue: bool) -> String {
+        build_path!(
+            config_folder,
+            motd_popup_folder_name(blue),
+            format!("{language_code}.jpg")
+        )
+    }
+
+    pub fn network_configuration_file_name() -> String {
+        format!("network_configuration_{:0>3}.bin", s_blf_chunk_network_configuration::get_version().major)
+    }
+    pub fn network_configuration_file_path(config_folder: &String) -> String {
+        build_path!(
+            config_folder,
+            network_configuration_file_name()
+        )
+    }
+}
+
 impl TitleConverter for v13895_09_04_27_2201_atlas_release {
     fn build_blfs(&mut self, config_path: &String, blfs_path: &String) {
         let start_time = SystemTime::now();
@@ -64,18 +230,13 @@ impl TitleConverter for v13895_09_04_27_2201_atlas_release {
 
         for hopper_directory in hopper_directories {
             let result = || -> Result<(), Box<dyn Error>> {
-                if hopper_directory.len() > k_hopper_directory_name_max_length {
+                if hopper_directory.len() > hopper_directory_name_max_length {
                     return Err(Box::from(format!(
                         "Hoppers folder \"{hopper_directory}\" is too long and will be skipped. ({} > {} characters)",
                         hopper_directory.len(),
-                        k_hopper_directory_name_max_length
+                        hopper_directory_name_max_length
                     )))
                 }
-
-                let build_temp_dir = TempDir::new("blf_cli")?;
-                let build_temp_dir_path = String::from(build_temp_dir.path().to_str().unwrap());
-
-                debug_log!("Using temp directory: {build_temp_dir_path}");
 
                 let hopper_config_path = build_path!(
                     config_path,
@@ -90,8 +251,7 @@ impl TitleConverter for v13895_09_04_27_2201_atlas_release {
                 println!("{style_bold}Converting {color_bright_white}{}{style_reset}...", hopper_directory);
                 Self::build_blf_banhammer_messages(&hopper_config_path, &hopper_blfs_path)?;
                 Self::build_blf_motds(&hopper_config_path, &hopper_blfs_path)?;
-                Self::build_blf_motd_popups(&hopper_config_path, &hopper_blfs_path, false)?;
-                Self::build_blf_motd_popups(&hopper_config_path, &hopper_blfs_path, true)?;
+                Self::build_blf_motd_popups(&hopper_config_path, &hopper_blfs_path)?;
                 Self::build_blf_map_manifest(&hopper_config_path, &hopper_blfs_path)?;
                 Self::build_blf_network_configuration(&hopper_config_path, &hopper_blfs_path)?;
                 Self::build_blf_manifest(&hopper_blfs_path)?;
@@ -118,8 +278,8 @@ impl TitleConverter for v13895_09_04_27_2201_atlas_release {
 
         for hopper_directory in hopper_directories {
             let result = || -> Result<(), Box<dyn Error>> {
-                if hopper_directory.len() > k_hopper_directory_name_max_length {
-                    return Err(Box::<dyn Error>::from(format!("Skipping \"{hopper_directory}\" as it's name is too long. ({k_hopper_directory_name_max_length} characters MAX)")))
+                if hopper_directory.len() > hopper_directory_name_max_length {
+                    return Err(Box::<dyn Error>::from(format!("Skipping \"{hopper_directory}\" as it's name is too long. ({hopper_directory_name_max_length} characters MAX)")))
                 }
 
                 let hoppers_config_path = build_path!(
@@ -135,8 +295,7 @@ impl TitleConverter for v13895_09_04_27_2201_atlas_release {
                 println!("{style_bold}Converting {color_bright_white}{}{style_reset}...", hopper_directory);
                 Self::build_config_banhammer_messages(&hoppers_blf_path, &hoppers_config_path)?;
                 Self::build_config_motds(&hoppers_blf_path, &hoppers_config_path)?;
-                Self::build_config_popups(&hoppers_blf_path, &hoppers_config_path, false)?;
-                Self::build_config_popups(&hoppers_blf_path, &hoppers_config_path, true)?;
+                Self::build_config_popups(&hoppers_blf_path, &hoppers_config_path)?;
                 Self::build_config_network_configuration(&hoppers_blf_path, &hoppers_config_path)?;
                 Ok(())
             }();
@@ -150,13 +309,16 @@ impl TitleConverter for v13895_09_04_27_2201_atlas_release {
 }
 
 impl v13895_09_04_27_2201_atlas_release {
-    fn build_config_banhammer_messages(hoppers_blf_path: &String, hoppers_config_path: &String) -> Result<(), Box<dyn Error>> {
+    fn build_config_banhammer_messages(hoppers_blf_path: &String, hoppers_config_path: &String) -> BLFLibResult {
         let mut task = console_task::start("Converting Banhammer Messages");
 
         for language_code in k_language_suffixes {
-            let blf_file_path = build_path!(hoppers_blf_path, language_code, k_matchmaking_banhammer_messages_file_name);
+            let blf_file_path = title_storage_output::banhammer_messages_file_path(
+                hoppers_blf_path,
+                language_code
+            );
 
-            if !check_file_exists(&blf_file_path) {
+            if !exists(&blf_file_path)? {
                 task.add_warning(format!(
                     "No {} banhammer messages are present.",
                     get_language_string(language_code),
@@ -165,7 +327,14 @@ impl v13895_09_04_27_2201_atlas_release {
                 continue;
             }
 
-            matchmaking_banhammer_messages::read_file(&blf_file_path)?.write_to_config(hoppers_config_path, language_code)?;
+            let bhms = find_chunk_in_file::<s_blf_chunk_banhammer_messages>(blf_file_path)?;
+            write_text_file_lines(
+                title_storage_config::banhammer_messages_file_path(
+                    hoppers_config_path,
+                    language_code
+                ),
+                &bhms.get_messages()?
+            )?;
         }
 
         やった!(task)
@@ -176,40 +345,46 @@ impl v13895_09_04_27_2201_atlas_release {
 
         // BLFs
         for language_code in k_language_suffixes {
-            let file_path = build_path!(
+            let blf_file_path = title_storage_output::motd_file_path(
                 hoppers_blf_path,
                 language_code,
-                k_motd_file_name
             );
 
-
-            if !check_file_exists(&file_path) {
+            if !exists(&blf_file_path)? {
                 task.add_warning(format!(
                     "No {} MOTD is present.",
-                    get_language_string(language_code)
+                    get_language_string(language_code),
                 ));
 
                 continue;
             }
 
-            motd::read_file(&file_path)?.write_to_config(hoppers_config_path, language_code)?;
-        }
+            let motd = find_chunk_in_file::<s_blf_chunk_message_of_the_day>(
+                title_storage_output::motd_file_path(
+                    hoppers_blf_path,
+                    language_code,
+                )
+            )?;
 
-        // JPEGs
-        for language_code in k_language_suffixes {
-            let file_path = build_path!(
+            write_text_file(
+                title_storage_config::motd_file_path(
+                    hoppers_config_path,
+                    language_code,
+                ),
+                motd.get_message()
+            )?;
+
+            let jpg_file_path = title_storage_output::motd_image_file_path(
                 hoppers_blf_path,
                 language_code,
-                k_motd_image_file_name
             );
 
-            let output_path = build_path!(
+            let output_path = title_storage_config::motd_image_file_path(
                 hoppers_config_path,
-                k_motd_config_folder,
-                format!("{language_code}.jpg")
+                language_code,
             );
 
-            if !check_file_exists(&file_path) {
+            if !exists(&jpg_file_path)? {
                 task.add_warning(format!(
                     "No {} MOTD image is present.",
                     get_language_string(language_code),
@@ -218,255 +393,285 @@ impl v13895_09_04_27_2201_atlas_release {
                 continue;
             }
 
-            fs::copy(file_path, output_path)?;
+            fs::copy(jpg_file_path, output_path)?;
         }
 
         やった!(task)
     }
 
-    fn build_config_popups(hoppers_blf_path: &String, hoppers_config_path: &String, vidmaster: bool) -> Result<(), Box<dyn Error>> {
-        let mut task = console_task::start(
-            if vidmaster { "Converting Vidmaster Popups" }
-            else { "Converting MOTD Popups" }
-        );
-
-        // BLFs
-        for language_code in k_language_suffixes {
-            let file_path = build_path!(
-                hoppers_blf_path,
-                language_code,
-                if vidmaster { k_vidmaster_popup_file_name } else { k_motd_popup_file_name }
+    fn build_config_popups(hoppers_blf_path: &String, hoppers_config_path: &String) -> BLFLibResult {
+        for vidmaster in [false, true] {
+            let mut task = console_task::start(
+                if vidmaster { "Converting Vidmaster Popups" } else { "Converting MOTD Popups" }
             );
 
-            if !check_file_exists(&file_path) {
-                task.add_warning(format!(
-                    "No {} {} Popup is present.",
-                    get_language_string(language_code),
-                    if vidmaster { "Vidmaster " } else { "MOTD" }
-                ));
+            // BLFs
+            for language_code in k_language_suffixes {
+                let blf_file_path = title_storage_output::motd_popup_file_path(
+                    hoppers_blf_path,
+                    language_code,
+                    vidmaster
+                );
 
-                continue;
+                if !exists(&blf_file_path)? {
+                    task.add_warning(format!(
+                        "No {} Popup is present.",
+                        get_language_string(language_code),
+                    ));
+
+                    continue;
+                }
+
+                write_json_file(
+                    &find_chunk_in_file::<s_blf_chunk_message_of_the_day_popup>(blf_file_path)?,
+                    title_storage_config::motd_popup_file_path(
+                        hoppers_config_path,
+                        language_code,
+                        vidmaster
+                    )
+                )?;
+
+                let image_path = title_storage_output::motd_popup_image_file_path(
+                    hoppers_blf_path,
+                    language_code,
+                    vidmaster
+                );
+
+                if exists(&image_path)? {
+                    fs::copy(&image_path, title_storage_config::motd_popup_image_file_path(
+                        hoppers_config_path,
+                        language_code,
+                        vidmaster
+                    ))?;
+                }
+                else {
+                    task.add_warning(format!("No image was found for {} Popup", language_code));
+                }
             }
 
-            motd_popup::read_file(&file_path)?.write_to_config(hoppers_config_path, language_code, vidmaster)?;
+            task.complete();
         }
 
-        // JPEGs
-        for language_code in k_language_suffixes {
-            let relative_file_path = format!("{language_code}{FILE_SEPARATOR}{}motd_popup_image.jpg", if vidmaster { "blue_" } else { "" });
-            let file_path = format!("{hoppers_blf_path}{FILE_SEPARATOR}{relative_file_path}");
-            let output_path = build_path!(
-                hoppers_blf_path,
-                language_code,
-                format!("{language_code}.jpg")
-            );
-
-            let file_path = build_path!(
-                hoppers_blf_path,
-                language_code,
-                if vidmaster { k_vidmaster_popup_image_file_name } else { k_motd_popup_image_file_name }
-            );
-
-            let output_path = build_path!(
-                hoppers_config_path,
-                if vidmaster { k_vidmaster_popup_config_folder } else { k_motd_popup_config_folder },
-                format!("{language_code}.jpg")
-            );
-
-            if !check_file_exists(&file_path) {
-                task.add_warning(format!(
-                    "No {} {} Popup image is present.",
-                    get_language_string(language_code),
-                    if vidmaster { "Vidmaster " } else { "MOTD" }
-                ));
-
-                continue;
-            }
-
-            fs::copy(file_path, output_path).unwrap();
-        }
-
-        やった!(task)
+        やった!()
     }
 
     fn build_config_network_configuration(hoppers_blfs_path: &String, hoppers_config_path: &String) -> Result<(), Box<dyn Error>> {
         // For now we just copy it as is. But we do check that it contains a netc.
         let mut task = console_task::start("Converting Network Configuration");
 
-        let network_configuration_source_path = build_path!(
+        let network_configuration_source_path = title_storage_output::network_configuration_file_path(
             hoppers_blfs_path,
-            k_network_configuration_file_name
         );
 
-        let network_configuration_dest_path = build_path!(
+        let network_configuration_dest_path = title_storage_config::network_configuration_file_path(
             hoppers_config_path,
-            k_network_configuration_file_name
         );
-
-        // We read and rewrite to tidy any padding and the headers.
-        let mut network_config = network_configuration::read_file(&network_configuration_source_path)?;
-        network_config.write_file(&network_configuration_dest_path)?;
 
         fs::copy(network_configuration_source_path, network_configuration_dest_path)?;
 
         やった!(task)
     }
 
-    fn build_blf_banhammer_messages(hoppers_config_folder: &String, hoppers_blf_folder: &String) -> Result<(), Box<dyn Error>> {
+    fn build_blf_banhammer_messages(hoppers_config_folder: &String, hoppers_blf_folder: &String) -> BLFLibResult {
         let mut task = console_task::start("Building Banhammer Messages");
 
         for language_code in k_language_suffixes {
-            let matchmaking_banhammer_messages = matchmaking_banhammer_messages::read_from_config(
-                hoppers_config_folder,
-                language_code,
-            );
+            let config_path = title_storage_config::banhammer_messages_file_path(hoppers_config_folder, language_code);
 
-            if matchmaking_banhammer_messages.is_err() {
-                task.add_warning(format!("Failed to build {} banhammer messages.", get_language_string(language_code)));
+            if !exists(&config_path)? {
+                task.add_warning(format!("{} banhammer messages are missing.", get_language_string(language_code)));
                 continue;
             }
 
-            matchmaking_banhammer_messages?.write_file(build_path!(
-                hoppers_blf_folder,
-                language_code,
-                k_matchmaking_banhammer_messages_file_name
-            ))?;
+            let matchmaking_banhammer_messages = read_text_file_lines(
+                config_path,
+            )?;
+
+            let bhms = s_blf_chunk_banhammer_messages::create(matchmaking_banhammer_messages)?;
+
+            BlfFileBuilder::new()
+                .add_chunk(s_blf_chunk_start_of_file::default())
+                .add_chunk(s_blf_chunk_author::for_build::<v13895_09_04_27_2201_atlas_release>())
+                .add_chunk(bhms)
+                .add_chunk(s_blf_chunk_end_of_file::default())
+                .write_file(title_storage_output::banhammer_messages_file_path(hoppers_blf_folder, language_code))?;
         }
 
         やった!(task)
     }
 
     fn build_blf_motds(
-        hoppers_config_path: &String,
-        hoppers_blf_path: &String,
-    ) -> Result<(), Box<dyn Error>>
+        hoppers_config_folder: &String,
+        hoppers_blf_folder: &String,
+    ) -> BLFLibResult
     {
         let mut task = console_task::start("Building MOTDs");
 
         for language_code in k_language_suffixes {
-            let motd = motd::read_from_config(
-                hoppers_config_path,
-                language_code
-            );
-
-            if motd.is_err() {
-                task.add_warning(format!(
-                    "Failed to build {} MOTD: {}",
-                    get_language_string(language_code),
-                    motd.unwrap_err()
-                ));
-
-                continue;
-            }
-
-            motd?.write_file(build_path!(
-                hoppers_blf_path,
-                language_code,
-                k_motd_file_name
-            ))?;
-        }
-
-        for language_code in k_language_suffixes {
-            let jpeg_file_path = build_path!(
-                hoppers_config_path,
-                k_motd_config_folder,
-                format!("{}.jpg", language_code)
-            );
-
-            let destination_path = build_path!(
-                hoppers_blf_path,
-                language_code,
-                k_motd_image_file_name
-            );
-
-            let validated = motd::validate_image(&jpeg_file_path);
-
-            if validated.is_err() {
-                task.add_warning(format!(
-                    "Failed to convert {} MOTD Image: {}",
-                    get_language_string(language_code),
-                    validated.unwrap_err()
-                ));
-
-                continue;
-            }
-
-            fs::copy(jpeg_file_path, destination_path).unwrap();
-        }
-
-        やった!(task)
-    }
-
-    fn build_blf_motd_popups(hoppers_config_folder: &String, hoppers_blf_folder: &String, vidmaster: bool) -> BLFLibResult {
-        let mut task = console_task::start(format!(
-            "Building {} Popups",
-            if vidmaster { "Vidmaster" } else { "MOTD" }
-        ));
-
-        for language_code in k_language_suffixes {
-            let motd_popup = motd_popup::read_from_config(hoppers_config_folder, language_code, vidmaster);
-
-            if motd_popup.is_err() {
-                task.add_warning(format!(
-                    "Failed to build {} {} Popup: {}",
-                    get_language_string(language_code),
-                    if vidmaster { "Vidmaster" } else { "MOTD" },
-                    motd_popup.unwrap_err()
-                ));
-
-                continue;
-            }
-
-            motd_popup?.write_file(build_path!(
-                hoppers_blf_folder,
-                language_code,
-                if vidmaster { k_vidmaster_popup_file_name } else { k_motd_popup_file_name }
-            ))?;
-        }
-
-        for language_code in k_language_suffixes {
-            let jpeg_file_path = build_path!(
+            let motd_config_path = title_storage_config::motd_file_path(
                 hoppers_config_folder,
-                if vidmaster { k_vidmaster_popup_config_folder } else { k_motd_popup_config_folder },
-                format!("{}.jpg", language_code)
-            );
-
-            let destination_path = build_path!(
-                hoppers_blf_folder,
                 language_code,
-                if vidmaster { k_vidmaster_popup_image_file_name } else { k_motd_popup_image_file_name }
             );
-            
-            let validated = motd_popup::validate_image(&jpeg_file_path);
 
-            if validated.is_err() {
+            if !exists(&motd_config_path)? {
                 task.add_warning(format!(
-                    "Failed to convert {} {} Popup Image: {}",
+                    "No {} MOTD is present.",
                     get_language_string(language_code),
-                    if vidmaster { "Vidmaster" } else { "MOTD" },
-                    validated.unwrap_err()
+                ));
+                continue;
+            }
+
+            let motd = s_blf_chunk_message_of_the_day::new(read_file_to_string(
+                &motd_config_path
+            )?);
+
+            BlfFileBuilder::new()
+                .add_chunk(s_blf_chunk_start_of_file::default())
+                .add_chunk(s_blf_chunk_author::for_build::<v13895_09_04_27_2201_atlas_release>())
+                .add_chunk(motd)
+                .add_chunk(s_blf_chunk_end_of_file::default())
+                .write_file(title_storage_output::motd_file_path(hoppers_blf_folder, language_code))?;
+
+            // copy images.
+            let image_source = title_storage_config::motd_image_file_path(
+                hoppers_config_folder,
+                language_code,
+            );
+
+            let image_valid = validate_jpeg(
+                &image_source,
+                title_storage_output::motd_image_width,
+                title_storage_output::motd_image_height,
+                Some(title_storage_output::motd_image_max_size)
+            );
+
+            if image_valid.is_err() {
+                task.add_warning(format!(
+                    "{} MOTD has an invalid Image: {}",
+                    get_language_string(language_code),
+                    image_valid.unwrap_err()
                 ));
 
                 continue;
             }
 
-            fs::copy(jpeg_file_path, destination_path).unwrap();
+            fs::copy(image_source, title_storage_output::motd_image_file_path(
+                hoppers_blf_folder,
+                language_code,
+            ))?;
         }
 
-        やった!(task)
+        やった!(task);
     }
 
-    fn build_blf_map_manifest(hoppers_config_path: &String, hoppers_blf_path: &String) -> Result<(), Box<dyn Error>>
+    fn build_blf_motd_popups(
+        hoppers_config_folder: &String,
+        hoppers_blf_folder: &String,
+    ) -> BLFLibResult {
+        for vidmaster in [false, true] {
+            let mut task = console_task::start(
+                if vidmaster { "Building Vidmaster Popups" } else { "Building MOTD Popups" }
+            );
+
+            for language_code in k_language_suffixes {
+                let motd_popup_config_path = title_storage_config::motd_popup_file_path(
+                    hoppers_config_folder,
+                    language_code,
+                    vidmaster
+                );
+
+                if !exists(&motd_popup_config_path)? {
+                    task.add_warning(format!(
+                        "No {} Popup is present.",
+                        get_language_string(language_code),
+                    ));
+                    continue;
+                }
+
+                let mtdp = read_json_file::<s_blf_chunk_message_of_the_day_popup>(
+                    &motd_popup_config_path
+                )?;
+
+                BlfFileBuilder::new()
+                    .add_chunk(s_blf_chunk_start_of_file::default())
+                    .add_chunk(s_blf_chunk_author::for_build::<v13895_09_04_27_2201_atlas_release>())
+                    .add_chunk(mtdp)
+                    .add_chunk(s_blf_chunk_end_of_file::default())
+                    .write_file(title_storage_output::motd_popup_file_path(hoppers_blf_folder, language_code, vidmaster))?;
+
+                // copy images.
+                let image_source = title_storage_config::motd_popup_image_file_path(
+                    hoppers_config_folder,
+                    language_code,
+                    vidmaster
+                );
+
+                let image_valid = validate_jpeg(
+                    &image_source,
+                    title_storage_output::motd_popup_image_width,
+                    title_storage_output::motd_popup_image_height,
+                    Some(title_storage_output::motd_popup_image_max_size)
+                );
+
+                if image_valid.is_err() {
+                    task.add_warning(format!(
+                        "{} MOTD Popup has an invalid Image: {}",
+                        get_language_string(language_code),
+                        image_valid.unwrap_err()
+                    ));
+
+                    continue;
+                }
+
+                fs::copy(image_source, title_storage_output::motd_popup_image_file_path(
+                    hoppers_blf_folder,
+                    language_code,
+                    vidmaster
+                ))?;
+            }
+
+            task.complete();
+        }
+        Ok(())
+    }
+
+    fn build_blf_map_manifest(hoppers_config_path: &String, hoppers_blf_path: &String) -> BLFLibResult
     {
         let mut task = console_task::start("Building Map Manifest");
 
-        let mut rsa_manifest = rsa_manifest::build_for_hoppers(hoppers_config_path)
-            .inspect_err(|_| { task.fail() })?;
+        let rsa_folder = title_storage_config::rsa_signatures_folder_path(
+            hoppers_config_path,
+        );
 
-        rsa_manifest.write_file(build_path!(
-            hoppers_blf_path,
-            k_rsa_manifest_file_name
-        ))?;
+        let mut rsa_files = Vec::<String>::new();
+
+        if exists(&rsa_folder)? {
+            rsa_files = get_files_in_folder(&rsa_folder)?;
+        }
+
+        if rsa_files.is_empty() {
+            task.add_error(format!("No RSA signatures were found"))
+        }
+
+        let mut map_manifest = s_blf_chunk_map_manifest::default();
+
+        for rsa_file_name in rsa_files {
+            let rsa_file_path = build_path!(&rsa_folder, &rsa_file_name);
+            let mut rsa_file = File::open(&rsa_file_path)?;
+            let mut rsa_signature = Vec::<u8>::with_capacity(0x100);
+            rsa_file.read_to_end(&mut rsa_signature).unwrap();
+
+            map_manifest.add_rsa_signature(rsa_signature.as_slice())?;
+        }
+
+        BlfFileBuilder::new()
+            .add_chunk(s_blf_chunk_start_of_file::new("rsa manifest"))
+            .add_chunk(s_blf_chunk_author::for_build::<v13895_09_04_27_2201_atlas_release>())
+            .add_chunk(map_manifest)
+            .add_chunk(s_blf_chunk_end_of_file::default())
+            .write_file(title_storage_output::rsa_manifest_file_path(
+                hoppers_blf_path,
+            ))?;
 
         やった!(task)
     }
@@ -476,35 +681,72 @@ impl v13895_09_04_27_2201_atlas_release {
         hoppers_blfs_path: &String,
     ) -> Result<(), Box<dyn Error>> {
         let mut task = console_task::start("Building Network Configuration");
-        let netc = find_chunk_in_file(build_path!(
-            hoppers_config_path,
-            k_network_configuration_file_name
-        ))?;
-
-        let mut network_configuration_blf_file = network_configuration::create(netc);
-        network_configuration_blf_file.write_file(
-            build_path!(
-                hoppers_blfs_path,
-                k_network_configuration_file_name
-            )
+        let netc = find_chunk_in_file::<s_blf_chunk_network_configuration>(
+            title_storage_config::network_configuration_file_path(hoppers_config_path)
         )?;
+
+        BlfFileBuilder::new()
+            .add_chunk(s_blf_chunk_start_of_file::new("atlas net config"))
+            .add_chunk(s_blf_chunk_author::for_build::<v13895_09_04_27_2201_atlas_release>())
+            .add_chunk(netc)
+            .add_chunk(s_blf_chunk_end_of_file::default())
+            .write_file(title_storage_output::network_configuration_file_path(hoppers_blfs_path))?;
 
         やった!(task)
     }
 
     fn build_blf_manifest(
         hoppers_blfs_path: &String,
-    ) -> Result<(), Box<dyn Error>> {
+    ) -> BLFLibResult {
         let mut task = console_task::start("Building Manifest File");
 
-        let mut manifest_blf_file = manifest::build_for_hoppers::<s_blf_chunk_network_configuration>(hoppers_blfs_path).inspect_err(|err|{
-            task.fail();
-        })?;
+        let mut manifest_chunk = s_blf_chunk_online_file_manifest::default();
+        let hopper_directory_name = Path::new(hoppers_blfs_path).file_name().unwrap().to_str().unwrap();
 
-        manifest_blf_file.write_file(build_path!(
-            hoppers_blfs_path,
-            k_manifest_file_name
-        ))?;
+        let mut add_hash_if_file_exists = |manifest_path: String, file_path: String| -> BLFLibResult {
+            if exists(&file_path)? {
+                manifest_chunk.add_file_hash(
+                    manifest_path,
+                    get_blf_file_hash(file_path)?,
+                )?;
+            }
+            Ok(())
+        };
+
+        add_hash_if_file_exists(
+            format!(
+                "/{}",
+                title_storage_output::network_configuration_file_name()
+            ),
+            title_storage_output::network_configuration_file_path(hoppers_blfs_path)
+        )?;
+
+        add_hash_if_file_exists(
+            format!(
+                "/{}",
+                title_storage_output::rsa_manifest_file_name
+            ),
+            title_storage_output::rsa_manifest_file_path(hoppers_blfs_path)
+        )?;
+
+        for language_code in k_language_suffixes {
+            add_hash_if_file_exists(
+                format!(
+                    "/{language_code}/{}",
+                    title_storage_output::banhammer_messages_file_name
+                ),
+                title_storage_output::banhammer_messages_file_path(hoppers_blfs_path, language_code)
+            )?;
+        }
+
+        BlfFileBuilder::new()
+            .add_chunk(s_blf_chunk_start_of_file::default())
+            .add_chunk(manifest_chunk)
+            // OG omaha manifests have an RSA _eof, but we're skipping that
+            .add_chunk(s_blf_chunk_end_of_file::default())
+            .write_file(title_storage_output::manifest_file_path(
+                hoppers_blfs_path,
+            ))?;
 
         やった!(task)
     }
