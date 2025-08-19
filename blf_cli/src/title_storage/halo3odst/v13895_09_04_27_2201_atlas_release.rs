@@ -19,6 +19,7 @@ use blf_lib::blf::versions::halo3odst::v13895_09_04_27_2201_atlas_release::{s_bl
 use blf_lib::blf::versions::haloreach::v09730_10_04_09_1309_omaha_delta::s_blf_chunk_author;
 use blf_lib::io::{read_file_to_string, read_json_file, write_json_file};
 use blf_lib::result::BLFLibResult;
+use crate::title_storage::halo3::v12070_08_09_05_2031_halo3_ship::v12070_08_09_05_2031_halo3_ship;
 use crate::title_storage::halo3odst::v13895_09_04_27_2201_atlas_release::title_storage_output::hopper_directory_name_max_length;
 
 title_converter! (
@@ -206,13 +207,12 @@ mod title_storage_config {
         )
     }
 
-    pub fn network_configuration_file_name() -> String {
-        format!("network_configuration_{:0>3}.bin", s_blf_chunk_network_configuration::get_version().major)
-    }
+    pub const network_configuration_file_name: &str = "network_configuration.json";
+
     pub fn network_configuration_file_path(config_folder: &String) -> String {
         build_path!(
             config_folder,
-            network_configuration_file_name()
+            network_configuration_file_name
         )
     }
 }
@@ -455,19 +455,14 @@ impl v13895_09_04_27_2201_atlas_release {
         やった!()
     }
 
-    fn build_config_network_configuration(hoppers_blfs_path: &String, hoppers_config_path: &String) -> Result<(), Box<dyn Error>> {
-        // For now we just copy it as is. But we do check that it contains a netc.
+    fn build_config_network_configuration(hoppers_blfs_path: &String, hoppers_config_path: &String) -> BLFLibResult {
         let mut task = console_task::start("Converting Network Configuration");
 
-        let network_configuration_source_path = title_storage_output::network_configuration_file_path(
-            hoppers_blfs_path,
-        );
+        let netc = find_chunk_in_file::<s_blf_chunk_network_configuration>(
+            title_storage_output::network_configuration_file_path(hoppers_blfs_path)
+        )?;
 
-        let network_configuration_dest_path = title_storage_config::network_configuration_file_path(
-            hoppers_config_path,
-        );
-
-        fs::copy(network_configuration_source_path, network_configuration_dest_path)?;
+        write_json_file(&netc.config, title_storage_config::network_configuration_file_path(hoppers_config_path))?;
 
         やった!(task)
     }
@@ -679,18 +674,23 @@ impl v13895_09_04_27_2201_atlas_release {
     fn build_blf_network_configuration(
         hoppers_config_path: &String,
         hoppers_blfs_path: &String,
-    ) -> Result<(), Box<dyn Error>> {
+    ) -> BLFLibResult {
         let mut task = console_task::start("Building Network Configuration");
-        let netc = find_chunk_in_file::<s_blf_chunk_network_configuration>(
-            title_storage_config::network_configuration_file_path(hoppers_config_path)
-        )?;
+
+        let netc = s_blf_chunk_network_configuration {
+            config: read_json_file(
+                title_storage_config::network_configuration_file_path(hoppers_config_path)
+            )?,
+        };
 
         BlfFileBuilder::new()
             .add_chunk(s_blf_chunk_start_of_file::new("atlas net config"))
             .add_chunk(s_blf_chunk_author::for_build::<v13895_09_04_27_2201_atlas_release>())
             .add_chunk(netc)
             .add_chunk(s_blf_chunk_end_of_file::default())
-            .write_file(title_storage_output::network_configuration_file_path(hoppers_blfs_path))?;
+            .write_file(title_storage_output::network_configuration_file_path(
+                hoppers_blfs_path,
+            ))?;
 
         やった!(task)
     }

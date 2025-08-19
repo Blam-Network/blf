@@ -1107,7 +1107,6 @@ impl v12070_08_09_05_2031_halo3_ship {
     }
 
     fn build_config_network_configuration(hoppers_blfs_path: &String, hoppers_config_path: &String) -> BLFLibResult {
-        // For now we just copy it as is. But we do check that it contains a netc.
         let mut task = console_task::start("Converting Network Configuration");
 
         let netc = find_chunk_in_file::<s_blf_chunk_network_configuration>(
