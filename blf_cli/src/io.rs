@@ -77,6 +77,17 @@ pub fn read_text_file_lines(path: String) -> BLFLibResult<Vec<String>> {
     )
 }
 
+pub fn write_text_file(path: String, messages_text: &String) -> BLFLibResult {
+    create_parent_folders(&path)?;
+
+    let mut text_file = File::create(&path)?;
+
+    text_file.write_all(messages_text.as_bytes())?;
+
+    Ok(())
+}
+
+
 pub fn write_text_file_lines(path: String, lines: &Vec<String>) -> BLFLibResult {
     let messages_text = lines.join("\r\n");
 

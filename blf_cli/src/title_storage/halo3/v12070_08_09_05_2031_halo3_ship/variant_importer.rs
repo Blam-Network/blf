@@ -11,9 +11,8 @@ use blf_lib::blf::versions::halo3::v12070_08_09_05_2031_halo3_ship::{s_blf_chunk
 use crate::{build_path, debug_log};
 use crate::console::console_task;
 use crate::io::get_files_in_folder;
-use crate::title_storage::halo3::v12070_08_09_05_2031_halo3_ship::config_rsa_signature_file_map_id_regex;
+use crate::title_storage::halo3::v12070_08_09_05_2031_halo3_ship::{config_rsa_signature_file_map_id_regex, get_map_budget};
 use crate::title_storage::halo3::v12070_08_09_05_2031_halo3_ship::variant_importer::mcc::object_indexes::get_h3_index_for_mcc_object;
-use crate::title_storage::halo3::release::blf_files::map_variant::get_map_budget;
 
 pub fn import_variant(hoppers_config_path: &String, variant_path: &String) {
     let mut task = console_task::start("Importing Variant");

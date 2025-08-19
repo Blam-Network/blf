@@ -4,11 +4,11 @@ use blf_lib::blf::get_blf_file_hash;
 use blf_lib::blf::versions::ares::v_untracked_ares::{s_blf_chunk_end_of_file, s_blf_chunk_online_file_manifest, s_blf_chunk_start_of_file};
 use blf_lib::blf_file;
 use crate::build_path;
-use crate::title_storage::halo3::release::blf_files::matchmaking_banhammer_messages::k_matchmaking_banhammer_messages_file_name;
-use crate::title_storage::halo3::release::blf_files::matchmaking_hopper::k_matchmaking_hopper_file_name;
-use crate::title_storage::halo3::release::blf_files::matchmaking_hopper_descriptions::k_matchmaking_hopper_descriptions_file_name;
-use crate::title_storage::halo3::release::blf_files::matchmaking_tips::k_matchmaking_tips_file_name;
-use crate::title_storage::halo3::release::blf_files::rsa_manifest::k_rsa_manifest_file_name;
+use crate::title_storage::ares::v_untracked_ares::blf_files::matchmaking_banhammer_messages::k_matchmaking_banhammer_messages_file_name;
+use crate::title_storage::ares::v_untracked_ares::blf_files::matchmaking_hopper::k_matchmaking_hopper_file_name;
+use crate::title_storage::ares::v_untracked_ares::blf_files::matchmaking_hopper_descriptions::k_matchmaking_hopper_descriptions_file_name;
+use crate::title_storage::ares::v_untracked_ares::blf_files::matchmaking_tips::k_matchmaking_tips_file_name;
+use crate::title_storage::ares::v_untracked_ares::blf_files::rsa_manifest::k_rsa_manifest_file_name;
 use crate::title_storage::halo3::v12070_08_09_05_2031_halo3_ship::k_language_suffixes;
 use blf_lib::blf::chunks::BlfChunk;
 

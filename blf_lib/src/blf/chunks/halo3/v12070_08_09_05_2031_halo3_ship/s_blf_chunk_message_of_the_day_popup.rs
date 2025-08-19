@@ -14,14 +14,24 @@ pub struct s_blf_chunk_message_of_the_day_popup
 {
     pub title_index_identifier: u32,
     pub button_key_wait_time_ms: u32,
+    #[bw(try_calc(u32::try_from(title.get_string().len())))]
+    #[br(temp)]
     title_size: u32,
     pub title: StaticWcharString<k_motd_popup_title_max_length>,
+    #[bw(try_calc(u32::try_from(header.get_string().len())))]
+    #[br(temp)]
     header_size: u32,
     pub header: StaticWcharString<k_motd_popup_header_max_length>,
+    #[bw(try_calc(u32::try_from(button_key.get_string().len())))]
+    #[br(temp)]
     button_key_size: u32,
     pub button_key: StaticWcharString<k_motd_popup_button_key_max_length>,
+    #[bw(try_calc(u32::try_from(button_key_wait.get_string().len())))]
+    #[br(temp)]
     button_key_wait_size: u32,
     pub button_key_wait: StaticWcharString<k_motd_popup_button_key_max_length>,
+    #[bw(try_calc(u32::try_from(message.get_string().len())))]
+    #[br(temp)]
     message_size: u32,
     pub message: StaticWcharString<k_motd_popup_message_max_length>,
 }
@@ -33,31 +43,3 @@ const k_motd_popup_header_max_length: usize = 48;
 const k_motd_popup_button_key_max_length: usize = 48;
 const k_motd_popup_button_key_wait_max_length: usize = 48;
 const k_motd_popup_message_max_length: usize = 1024;
-
-
-impl s_blf_chunk_message_of_the_day_popup {
-    pub fn create(
-        title_index_identifier: u32,
-        button_key_wait_time_ms: u32,
-        title: String,
-        header: String,
-        button_key: String,
-        button_key_wait: String,
-        message: String,
-    ) -> BLFLibResult<Self> {
-        Ok(s_blf_chunk_message_of_the_day_popup {
-            title_index_identifier,
-            button_key_wait_time_ms,
-            title_size: (title.chars().count() * 2) as u32,
-            header_size: (header.chars().count() * 2) as u32,
-            button_key_size: (button_key.chars().count() * 2) as u32,
-            button_key_wait_size: (button_key_wait.chars().count() * 2) as u32,
-            message_size: (message.chars().count() * 2) as u32,
-            title: StaticWcharString::from_string(&title)?,
-            header: StaticWcharString::from_string(&header)?,
-            button_key: StaticWcharString::from_string(&button_key)?,
-            button_key_wait: StaticWcharString::from_string(&button_key_wait)?,
-            message: StaticWcharString::from_string(&message)?
-        })
-    }
-}

@@ -1279,13 +1279,7 @@ impl v12065_11_08_24_1738_tu1actual {
             categories_config.categories.push(category_configuration_and_description);
         }
 
-
-        let categories_json_file = title_storage_config::matchmaking_hopper_categories_file_path(
-            hoppers_config_path,
-        );
-
-        let mut categories_json_file = File::create(categories_json_file).unwrap();
-        serde_json::to_writer_pretty(&mut categories_json_file, &categories_config).unwrap();
+        write_json_file(&categories_config, title_storage_config::matchmaking_hopper_categories_file_path(hoppers_config_path))?;
 
         task.add_message(format!("Converted {} hopper configurations.", hopper_configuration_table.hopper_configurations.len()));
 

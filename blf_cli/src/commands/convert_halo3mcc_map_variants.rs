@@ -8,7 +8,7 @@ use crate::build_path;
 use crate::console::console_task;
 use crate::io::get_files_in_folder;
 use crate::title_storage::check_file_exists;
-use crate::title_storage::halo3::release::blf_files::map_variant::get_map_budget;
+use crate::title_storage::halo3::v12070_08_09_05_2031_halo3_ship::get_map_budget;
 
 pub fn convert_halo3mcc_map_variants(mcc_maps_folder: String, converted_maps_path: String) {
     let mut task = console_task::start(String::from("Converting MCC map variants to 360"));

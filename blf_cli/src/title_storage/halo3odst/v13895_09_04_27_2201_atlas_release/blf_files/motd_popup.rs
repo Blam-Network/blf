@@ -67,15 +67,7 @@ impl motd_popup {
 
         let config = read_json_file::<motd_popup_config>(&motd_popup_json_path)?;
 
-        Ok(Self::create(s_blf_chunk_message_of_the_day_popup::create(
-            config.motdIdentifier,
-            config.acceptWaitMilliseconds,
-            config.title,
-            config.heading,
-            config.accept,
-            config.wait,
-            config.body,
-        )?))
+        Ok(Self::default())
     }
 
     pub fn write_to_config(&self, hoppers_config_path: &String, language_code: &str, vidmaster: bool) -> Result<(), Box<dyn Error>> {
