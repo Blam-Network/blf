@@ -962,7 +962,7 @@ pub struct s_lsp_configuration {
 #[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
 #[brw(big)]
 pub struct s_map_information {
-    pub map_id: u32,
+    pub map_id: i32,
     pub map_status: e_map_status,
     pub dlc_path_index: i32,
     pub dlc_pack: e_dlc_pack,

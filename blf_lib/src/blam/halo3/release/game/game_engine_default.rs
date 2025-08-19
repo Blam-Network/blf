@@ -2,9 +2,9 @@ use binrw::{BinRead, BinWrite};
 #[cfg(feature = "napi")]
 use napi_derive::napi;
 use serde::{Deserialize, Serialize};
-use blf_lib::blam::halo_3::release::game::game_engine_player_traits::c_player_traits;
-use blf_lib::blam::halo_3::release::game::game_engine_traits::{c_game_engine_miscellaneous_options, c_game_engine_respawn_options};
-use crate::blam::halo_3::release::saved_games::saved_game_files::s_content_item_metadata;
+use blf_lib::blam::halo3::release::game::game_engine_player_traits::c_player_traits;
+use blf_lib::blam::halo3::release::game::game_engine_traits::{c_game_engine_miscellaneous_options, c_game_engine_respawn_options};
+use crate::blam::halo3::release::saved_games::saved_game_files::s_content_item_metadata;
 use blf_lib::io::bitstream::{c_bitstream_reader, c_bitstream_writer};
 use blf_lib::{SET_BIT, TEST_BIT};
 use blf_lib_derivable::result::BLFLibResult;

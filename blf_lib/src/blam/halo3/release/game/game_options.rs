@@ -1,9 +1,9 @@
 use binrw::{BinRead, BinWrite};
 use serde::{Deserialize, Serialize};
 use blf_lib_derive::TestSize;
-use crate::blam::halo_3::release::game::game_engine_variant::c_game_variant;
-use crate::blam::halo_3::release::game::players::{s_player_configuration_from_client, s_player_configuration_from_host};
-use crate::blam::halo_3::release::saved_games::scenario_map_variant::c_map_variant;
+use crate::blam::halo3::release::game::game_engine_variant::c_game_variant;
+use crate::blam::halo3::release::game::players::{s_player_configuration_from_client, s_player_configuration_from_host};
+use crate::blam::halo3::release::saved_games::scenario_map_variant::c_map_variant;
 use crate::types::array::StaticArray;
 use crate::types::bool::Bool;
 use crate::types::c_string::{StaticString, StaticWcharString};

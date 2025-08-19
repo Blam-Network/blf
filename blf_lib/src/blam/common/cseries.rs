@@ -1,5 +1,3 @@
-pub mod language;
-
 #[macro_export]
 macro_rules! FLAG {
     ($bit:expr) => {

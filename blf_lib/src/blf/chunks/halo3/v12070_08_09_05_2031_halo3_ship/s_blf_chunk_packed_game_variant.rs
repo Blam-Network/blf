@@ -1,7 +1,7 @@
 use std::io::{Read, Seek, Write};
 use binrw::{BinRead, BinResult, BinWrite, BinWriterExt, Endian};
 use serde::{Deserialize, Serialize};
-use blf_lib::blam::halo_3::release::game::game_engine_variant::c_game_variant;
+use blf_lib::blam::halo3::release::game::game_engine_variant::c_game_variant;
 use blf_lib::io::bitstream::{c_bitstream_reader, close_bitstream_writer, create_bitstream_writer, e_bitstream_byte_order};
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
 use blf_lib_derive::BlfChunk;
