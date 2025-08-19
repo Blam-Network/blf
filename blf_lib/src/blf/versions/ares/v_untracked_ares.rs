@@ -22,7 +22,7 @@ pub use halo3::v12070_08_09_05_2031_halo3_ship::s_blf_chunk_scenario::*;
 pub use ares::v_untracked_ares::s_blf_chunk_online_file_manifest::*;
 pub use halo3::v12070_08_09_05_2031_halo3_ship::s_blf_chunk_content_header::*;
 pub use halo3::v12070_08_09_05_2031_halo3_ship::s_blf_chunk_user_recent_players::*;
-pub use halo3::v12070_08_09_05_2031_halo3_ship::s_blf_chunk_player_data::*;
+pub use ares::v_untracked_ares::s_blf_chunk_player_data::*;
 pub use halo3::v12070_08_09_05_2031_halo3_ship::s_blf_chunk_user_network_statistics::*;
 pub use halo3::v12070_08_09_05_2031_halo3_ship::s_blf_chunk_screenshot_data::*;
 pub use halo3::v12070_08_09_05_2031_halo3_ship::s_blf_chunk_screenshot_camera::*;
@@ -30,7 +30,7 @@ pub use halo3::v12070_08_09_05_2031_halo3_ship::s_blf_chunk_compressed_data::*;
 pub use halo3::v12070_08_09_05_2031_halo3_ship::s_blf_chunk_service_record::*;
 pub use halo3::v12070_08_09_05_2031_halo3_ship::s_blf_chunk_user_bans::*;
 pub use halo3::v12070_08_09_05_2031_halo3_ship::s_blf_chunk_file_transfers::*;
-pub use halo3::v12070_08_09_05_2031_halo3_ship::s_blf_chunk_matchmaking_hopper_statistics::*;
+pub use ares::v_untracked_ares::s_blf_chunk_matchmaking_hopper_statistics::*;
 pub use halo3::v12070_08_09_05_2031_halo3_ship::s_blf_chunk_map_image::*;
 pub use halo3::v12070_08_09_05_2031_halo3_ship::s_blf_chunk_saved_film_header::*;
 
