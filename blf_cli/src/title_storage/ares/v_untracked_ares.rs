@@ -1809,7 +1809,7 @@ impl v_untracked_ares {
                 hoppers_blfs_path,
                 *hopper_identifier,
             );
-            hopper_config.game_set_hash = get_blf_file_hash(game_set_blf_file_path)?;
+            hopper_config.game_set_hash = s_network_http_request_hash::default();
             mhcf.add_hopper_configuration(hopper_config)?
         }
 
@@ -1954,7 +1954,7 @@ impl v_untracked_ares {
             if exists(&file_path)? {
                 manifest_chunk.add_file_hash(
                     manifest_path,
-                    get_blf_file_hash(file_path)?,
+                    s_network_http_request_hash::default(),
                 )?;
             }
             Ok(())
