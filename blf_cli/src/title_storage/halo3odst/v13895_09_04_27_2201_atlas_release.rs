@@ -4,10 +4,10 @@ use std::fs::{exists, File};
 use std::io::Read;
 use std::path::Path;
 use std::time::SystemTime;
+use colored::Colorize;
 use crate::io::{get_directories_in_folder, get_files_in_folder, read_text_file_lines, write_text_file, write_text_file_lines, FILE_SEPARATOR};
 use crate::{build_path, debug_log, title_converter, やった};
 use crate::title_storage::{check_file_exists, validate_jpeg, TitleConverter};
-use inline_colorization::*;
 use lazy_static::lazy_static;
 use blf_lib::blam::halo3::release::cseries::language::{get_language_string, k_language_suffix_chinese_traditional, k_language_suffix_english, k_language_suffix_french, k_language_suffix_german, k_language_suffix_italian, k_language_suffix_japanese, k_language_suffix_korean, k_language_suffix_mexican, k_language_suffix_portuguese, k_language_suffix_spanish};
 use blf_lib::blf::{get_blf_file_hash, BlfFile, BlfFileBuilder};
@@ -221,7 +221,7 @@ impl TitleConverter for v13895_09_04_27_2201_atlas_release {
     fn build_blfs(&mut self, config_path: &String, blfs_path: &String) {
         let start_time = SystemTime::now();
 
-        println!("{style_bold}Writing Title Storage BLFs to {blfs_path} {style_reset}");
+        println!("{}", format!("Writing Title Storage BLFs to {blfs_path}").bold());
 
         let hopper_directories = get_directories_in_folder(config_path).unwrap_or_else(|err|{
             println!("{}", err);
@@ -248,7 +248,7 @@ impl TitleConverter for v13895_09_04_27_2201_atlas_release {
                     &hopper_directory
                 );
 
-                println!("{style_bold}Converting {color_bright_white}{}{style_reset}...", hopper_directory);
+                println!("{} {}...", "Converting".bold(), hopper_directory.bold().bright_white());
                 Self::build_blf_banhammer_messages(&hopper_config_path, &hopper_blfs_path)?;
                 Self::build_blf_motds(&hopper_config_path, &hopper_blfs_path)?;
                 Self::build_blf_motd_popups(&hopper_config_path, &hopper_blfs_path)?;
@@ -259,8 +259,8 @@ impl TitleConverter for v13895_09_04_27_2201_atlas_release {
             }();
 
             if result.is_err() {
-                println!("{color_red}Failed to build title storage for hoppers {hopper_directory}{style_reset}");
-                println!("{color_red}{}{style_reset}", result.err().unwrap());
+                println!("{}", "Failed to build title storage for hoppers".bright_white().on_red());
+                println!("{}", result.err().unwrap().to_string().on_red());
             }
         }
 
@@ -269,7 +269,7 @@ impl TitleConverter for v13895_09_04_27_2201_atlas_release {
     }
 
     fn build_config(&mut self, blfs_path: &String, config_path: &String) {
-        println!("{style_bold}Writing Title Storage config to {config_path} {style_reset}");
+        println!("{} {}", "Writing Title Storage config to ".bold(), config_path.bold());
 
         let hopper_directories = get_directories_in_folder(blfs_path).unwrap_or_else(|err|{
             println!("{}", err);
@@ -292,7 +292,7 @@ impl TitleConverter for v13895_09_04_27_2201_atlas_release {
                     &hopper_directory
                 );
 
-                println!("{style_bold}Converting {color_bright_white}{}{style_reset}...", hopper_directory);
+                println!("{} {}...", "Converting".bold(), hopper_directory.bold().bright_white());
                 Self::build_config_banhammer_messages(&hoppers_blf_path, &hoppers_config_path)?;
                 Self::build_config_motds(&hoppers_blf_path, &hoppers_config_path)?;
                 Self::build_config_popups(&hoppers_blf_path, &hoppers_config_path)?;
@@ -301,8 +301,8 @@ impl TitleConverter for v13895_09_04_27_2201_atlas_release {
             }();
 
             if result.is_err() {
-                println!("{color_red}Failed to build title storage for hoppers {hopper_directory}{style_reset}");
-                println!("{color_red}{}{style_reset}", result.err().unwrap());
+                println!("{}", "Failed to build title storage config for hoppers".bright_white().on_red());
+                println!("{}", result.err().unwrap().to_string().on_red());
             }
         }
     }

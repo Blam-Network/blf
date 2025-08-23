@@ -1,5 +1,5 @@
 use std::time::SystemTime;
-use inline_colorization::*;
+use colored::Colorize;
 
 pub struct console_task {
     name: String,
@@ -34,9 +34,9 @@ macro_rules! debug_warning {
     ($($arg:tt)*) => {{
         #[cfg(debug_assertions)]
         {
-            print!("{color_yellow}### WARNING: ");
-            print!($($arg)*);
-            print!(" ###{style_reset}");
+            print!("{}", "### WARNING: ".black().on_yellow());
+            print!($($arg)*.black().on_yellow());
+            print!("{}", " ###".black().on_yellow());
             println!();
         }
     }};
@@ -64,7 +64,7 @@ impl console_task {
             return;
         }
 
-        println!("{color_red}failed{style_reset}.");
+        println!("{}.", "failed".bright_red());
 
         self.finished = true;
     }
@@ -75,7 +75,7 @@ impl console_task {
             return;
         }
 
-        println!("{color_red}failed{style_reset}.");
+        println!("{}.", "failed".bright_red());
         Self::log_error(&error.into());
 
         self.finished = true;
@@ -87,7 +87,7 @@ impl console_task {
             return;
         }
 
-        println!("{color_green}done ✓{style_reset}{} {}",
+        println!("{} {} {}", "done ✓".bright_green(),
                  if !self.errors.is_empty() { format!(" ⛔  {} Errors", self.errors.len()) } else { String::new() },
                  if !self.warnings.is_empty() { format!(" ⚠ {} Warnings", self.warnings.len()) } else { String::new() }
         );
@@ -118,7 +118,7 @@ impl console_task {
     }
 
     fn log_error(message: &String) {
-        println!("  ⛔  {style_bold}{color_black}{bg_bright_red}{message}{style_reset}");
+        println!("  ⛔  {}", message.bold().black().on_bright_red());
     }
 
     pub fn add_message(&mut self, message: impl Into<String>) {
@@ -134,6 +134,6 @@ impl console_task {
     }
 
     fn log_warning(message: &String) {
-        println!("  ⚠ {style_bold}{color_black}{bg_bright_yellow}{message}{style_reset}");
+        println!("  ⚠ {}", message.bold().black().on_bright_yellow());
     }
 }
