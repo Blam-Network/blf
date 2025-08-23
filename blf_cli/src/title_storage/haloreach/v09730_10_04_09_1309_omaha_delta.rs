@@ -21,19 +21,19 @@ use tokio::runtime;
 use tokio::sync::Mutex;
 use tokio::task::JoinHandle;
 use blf_lib::blam::common::memory::secure_signature::s_network_http_request_hash;
-use blf_lib::blf::versions::haloreach::v12065_11_08_24_1738_tu1actual::{s_blf_chunk_author, s_blf_chunk_banhammer_messages, s_blf_chunk_end_of_file, s_blf_chunk_game_set, s_blf_chunk_hopper_configuration_table, s_blf_chunk_hopper_description_table, s_blf_chunk_map_manifest, s_blf_chunk_map_variant, s_blf_chunk_matchmaking_game_variant, s_blf_chunk_matchmaking_tips, s_blf_chunk_megalo_categories, s_blf_chunk_nag_message, s_blf_chunk_network_configuration, s_blf_chunk_online_file_manifest, s_blf_chunk_predefined_queries, s_blf_chunk_start_of_file};
-use blf_lib::blf::versions::haloreach::v12065_11_08_24_1738_tu1actual::s_blf_chunk_dlc_map_manifest;
+use blf_lib::blf::versions::haloreach::v09730_10_04_09_1309_omaha_delta::{s_blf_chunk_author, s_blf_chunk_banhammer_messages, s_blf_chunk_end_of_file, s_blf_chunk_game_set, s_blf_chunk_hopper_configuration_table, s_blf_chunk_hopper_description_table, s_blf_chunk_map_manifest, s_blf_chunk_map_variant, s_blf_chunk_matchmaking_game_variant, s_blf_chunk_matchmaking_tips, s_blf_chunk_megalo_categories, s_blf_chunk_nag_message, s_blf_chunk_network_configuration, s_blf_chunk_online_file_manifest, s_blf_chunk_predefined_queries, s_blf_chunk_start_of_file};
+use blf_lib::blf::versions::haloreach::v09730_10_04_09_1309_omaha_delta::s_blf_chunk_dlc_map_manifest;
 use blf_lib::io::{read_json_file, write_json_file};
 use blf_lib::OPTION_TO_RESULT;
 use blf_lib::result::{BLFLibError, BLFLibResult};
 use blf_lib::types::byte_order_mark::byte_order_mark;
-use crate::title_storage::haloreach::v12065_11_08_24_1738_tu1actual::title_storage_config::get_hopper_id_from_hopper_folder_name;
-use crate::title_storage::haloreach::v12065_11_08_24_1738_tu1actual::title_storage_output::{hopper_image_height, hopper_image_width, user_nag_message_image_width, user_nag_message_image_height};
+use crate::title_storage::haloreach::v09730_10_04_09_1309_omaha_delta::title_storage_config::get_hopper_id_from_hopper_folder_name;
+use crate::title_storage::haloreach::v09730_10_04_09_1309_omaha_delta::title_storage_output::{hopper_image_height, hopper_image_width, user_nag_message_image_width, user_nag_message_image_height};
 
 title_converter! (
     #[Title("Halo: Reach")]
-    #[Build("12065.11.08.24.1738.tu1actual")]
-    pub struct v12065_11_08_24_1738_tu1actual {}
+    #[Build("09730.10.04.09.1309.omaha_delta")]
+    pub struct v09730_10_04_09_1309_omaha_delta {}
 );
 
 pub const k_language_suffixes: [&str; 10] = [
@@ -60,7 +60,7 @@ lazy_static! {
 
 mod title_storage_output {
     use blf_lib::blf::chunks::BlfChunk;
-    use blf_lib::blf::versions::haloreach::v12065_11_08_24_1738_tu1actual::{s_blf_chunk_game_set, s_blf_chunk_hopper_configuration_table, s_blf_chunk_hopper_description_table, s_blf_chunk_map_variant, s_blf_chunk_matchmaking_game_variant, s_blf_chunk_network_configuration, s_blf_chunk_online_file_manifest};
+    use blf_lib::blf::versions::haloreach::v09730_10_04_09_1309_omaha_delta::{s_blf_chunk_game_set, s_blf_chunk_hopper_configuration_table, s_blf_chunk_hopper_description_table, s_blf_chunk_map_variant, s_blf_chunk_matchmaking_game_variant, s_blf_chunk_network_configuration, s_blf_chunk_online_file_manifest};
     use crate::build_path;
 
     // applies to the root folder, eg "default_hoppers"
@@ -150,37 +150,31 @@ mod title_storage_output {
         )
     }
 
-    pub fn matchmaking_tips_file_name(tangerine: bool) -> String {
-        if tangerine { "tangerine_matchmaking_tips.bin".to_string() }
-        else { "matchmaking_tips.bin".to_string() }
-    }
-    pub fn matchmaking_tips_file_path(hoppers_path: &String, language_code: &str, tangerine: bool) -> String {
+
+    pub const matchmaking_tips_file_name: &str = "matchmaking_tips.bin";
+    pub fn matchmaking_tips_file_path(hoppers_path: &String, language_code: &str) -> String {
         build_path!(
             hoppers_path,
             language_code,
-            matchmaking_tips_file_name(tangerine)
+            matchmaking_tips_file_name
         )
     }
-    pub fn global_nag_message_file_name(tangerine: bool) -> String {
-        if tangerine { "tangerine_dynamic_global_nag.bin".to_string() }
-        else { "dynamic_global_nag.bin".to_string() }
-    }
-    pub fn global_nag_message_file_path(hoppers_path: &String, language_code: &str, tangerine: bool) -> String {
+
+    pub const global_nag_message_file_name: &str = "dynamic_global_nag.bin";
+    pub fn global_nag_message_file_path(hoppers_path: &String, language_code: &str) -> String {
         build_path!(
             hoppers_path,
             language_code,
-            global_nag_message_file_name(tangerine)
+            global_nag_message_file_name
         )
     }
-    pub fn global_nag_message_image_file_name(tangerine: bool) -> String {
-        if tangerine { "tangerine_dynamic_global_nag_image.jpg".to_string() }
-        else { "dynamic_global_nag_image.jpg".to_string() }
-    }
-    pub fn global_nag_message_image_file_path(hoppers_path: &String, language_code: &str, tangerine: bool) -> String {
+
+    pub const global_nag_message_image_file_name: &str = "dynamic_global_nag_image.jpg";
+    pub fn global_nag_message_image_file_path(hoppers_path: &String, language_code: &str) -> String {
         build_path!(
             hoppers_path,
             language_code,
-            global_nag_message_image_file_name(tangerine)
+            global_nag_message_image_file_name
         )
     }
 
@@ -200,15 +194,12 @@ mod title_storage_output {
         )
     }
 
-    pub fn predefined_queries_file_name(tangerine: bool) -> String {
-        if tangerine { "tangerine_file_predefined_queries.bin".to_string() }
-        else { "file_predefined_queries.bin".to_string() }
-    }
-    pub fn predefined_queries_file_path(hoppers_path: &String, language_code: &str, tangerine: bool) -> String {
+    pub const predefined_queries_file_name: &str = "file_predefined_queries.bin";
+    pub fn predefined_queries_file_path(hoppers_path: &String, language_code: &str) -> String {
         build_path!(
             hoppers_path,
             language_code,
-            predefined_queries_file_name(tangerine)
+            predefined_queries_file_name
         )
     }
 
@@ -278,7 +269,7 @@ mod title_storage_config {
     use std::collections::HashMap;
     use regex::Regex;
     use serde::{Deserialize, Serialize};
-    use blf_lib::blf::versions::haloreach::v12065_11_08_24_1738_tu1actual::{c_hopper_configuration, s_blf_chunk_network_configuration, s_game_hopper_custom_category};
+    use blf_lib::blf::versions::haloreach::v09730_10_04_09_1309_omaha_delta::{c_hopper_configuration, s_blf_chunk_network_configuration, s_game_hopper_custom_category};
     use blf_lib::OPTION_TO_RESULT;
     use blf_lib::result::BLFLibResult;
     use crate::build_path;
@@ -303,36 +294,29 @@ mod title_storage_config {
         )
     }
 
-    pub fn matchmaking_tips_folder_name(tangerine: bool) -> String {
-        if tangerine {"matchmaking_tips_cea".into()}
-        else {"matchmaking_tips".into()}
-    }
+    pub const matchmaking_tips_folder_name: &str = "matchmaking_tips";
 
-    pub fn matchmaking_tips_file_path(config_folder: &String, language_code: &str, tangerine: bool) -> String {
+    pub fn matchmaking_tips_file_path(config_folder: &String, language_code: &str) -> String {
         build_path!(
             config_folder,
-            matchmaking_tips_folder_name(tangerine),
+            matchmaking_tips_folder_name,
             format!("{language_code}.txt")
         )
     }
 
-    pub fn global_nag_messages_folder_name(tangerine: bool) -> String {
-        if tangerine { "global_nag_messages_cea".into() }
-        else { "global_nag_messages".into() }
-    }
-
-    pub fn global_nag_message_file_path(config_folder: &String, language_code: &str, tangerine: bool) -> String {
+    pub const global_nag_messages_folder_name: &str = "global_nag_messages";
+    pub fn global_nag_message_file_path(config_folder: &String, language_code: &str) -> String {
         build_path!(
             config_folder,
-            global_nag_messages_folder_name(tangerine),
+            global_nag_messages_folder_name,
             format!("{language_code}.json")
         )
     }
 
-    pub fn global_nag_message_image_file_path(config_folder: &String, language_code: &str, tangerine: bool) -> String {
+    pub fn global_nag_message_image_file_path(config_folder: &String, language_code: &str) -> String {
         build_path!(
             config_folder,
-            global_nag_messages_folder_name(tangerine),
+            global_nag_messages_folder_name,
             format!("{language_code}.jpg")
         )
     }
@@ -367,15 +351,12 @@ mod title_storage_config {
         )
     }
 
-    pub fn predefined_queries_folder_name(tangerine: bool) -> String {
-        if tangerine { "predefined_queries_cea".into() }
-        else { "predefined_queries".into() }
-    }
+    pub const predefined_queries_folder_name: &str = "predefined_queries";
 
-    pub fn predefined_queries_file_path(config_folder: &String, language_code: &str, tangerine: bool) -> String {
+    pub fn predefined_queries_file_path(config_folder: &String, language_code: &str) -> String {
         build_path!(
             config_folder,
-            predefined_queries_folder_name(tangerine),
+            predefined_queries_folder_name,
             format!("{language_code}.json")
         )
     }
@@ -505,7 +486,7 @@ mod title_storage_config {
     }
 }
 
-impl TitleConverter for v12065_11_08_24_1738_tu1actual {
+impl TitleConverter for v09730_10_04_09_1309_omaha_delta {
     fn build_blfs(&mut self, config_path: &String, blfs_path: &String) {
         let start_time = SystemTime::now();
 
@@ -621,7 +602,7 @@ impl TitleConverter for v12065_11_08_24_1738_tu1actual {
     }
 }
 
-impl v12065_11_08_24_1738_tu1actual {
+impl v09730_10_04_09_1309_omaha_delta {
     fn build_config_banhammer_messages(hoppers_blf_path: &String, hoppers_config_path: &String) -> Result<(), Box<dyn Error>> {
         let mut task = console_task::start("Converting Banhammer Messages");
 
@@ -682,82 +663,62 @@ impl v12065_11_08_24_1738_tu1actual {
     }
 
     fn build_config_predefined_queries(hoppers_blf_path: &String, hoppers_config_path: &String) -> BLFLibResult {
-
-        for tangerine in [false, true] {
-            let mut task = console_task::start(
-                if tangerine { "Converting CEA Predefined Queries" }
-                else { "Converting Predefined Queries" }
+        let mut task = console_task::start("Converting Predefined Queries");
+        for language_code in k_language_suffixes {
+            let blf_file_path = title_storage_output::predefined_queries_file_path(
+                hoppers_blf_path,
+                language_code,
             );
 
-            for language_code in k_language_suffixes {
-                let blf_file_path = title_storage_output::predefined_queries_file_path(
-                    hoppers_blf_path,
-                    language_code,
-                    tangerine
-                );
+            if !exists(&blf_file_path)? {
+                task.add_warning(format!(
+                    "No {} predefined queries are present.",
+                    get_language_string(language_code),
+                ));
 
-                if !exists(&blf_file_path)? {
-                    task.add_warning(format!(
-                        "No {} predefined queries are present.",
-                        get_language_string(language_code),
-                    ));
+                continue;
+            }
 
-                    continue;
-                }
+            let predefined_queries = find_chunk_in_file::<s_blf_chunk_predefined_queries>(blf_file_path)?;
+            write_json_file(&predefined_queries, title_storage_config::predefined_queries_file_path(
+                hoppers_config_path,
+                language_code,
+            ))?;
+        }
 
-                let predefined_queries = find_chunk_in_file::<s_blf_chunk_predefined_queries>(blf_file_path)?;
-                write_json_file(&predefined_queries, title_storage_config::predefined_queries_file_path(
+        やった!(task)
+    }
+    fn build_config_matchmaking_tips(hoppers_blf_path: &String, hoppers_config_path: &String) -> BLFLibResult {
+        let mut task = console_task::start("Converting Matchmaking Tips");
+
+        for language_code in k_language_suffixes {
+            let blf_file_path = title_storage_output::matchmaking_tips_file_path(
+                hoppers_blf_path,
+                language_code,
+            );
+
+            if !exists(&blf_file_path)? {
+                task.add_warning(format!(
+                    "No {} matchmaking tips are present.",
+                    get_language_string(language_code),
+                ));
+
+                continue;
+            }
+
+            let mmtp = find_chunk_in_file::<s_blf_chunk_matchmaking_tips>(blf_file_path)?;
+
+            write_text_file_lines(
+                title_storage_config::matchmaking_tips_file_path(
                     hoppers_config_path,
                     language_code,
-                    tangerine,
-                ))?;
-            }
-
-            task.complete();
+                ),
+                &mmtp.tips.iter().map(|tip| tip.get_string()).collect::<Result<Vec<String>, BLFLibError>>()?
+            )?
         }
 
-        やった!()
-    }
 
-    fn build_config_matchmaking_tips(hoppers_blf_path: &String, hoppers_config_path: &String) -> BLFLibResult {
-        for tangerine in [false, true] {
-            let mut task = console_task::start(
-                if tangerine { "Converting CEA Matchmaking Tips" }
-                else{ "Converting Matchmaking Tips" }
-            );
-
-            for language_code in k_language_suffixes {
-                let blf_file_path = title_storage_output::matchmaking_tips_file_path(
-                    hoppers_blf_path,
-                    language_code,
-                    tangerine
-                );
-
-                if !exists(&blf_file_path)? {
-                    task.add_warning(format!(
-                        "No {} matchmaking tips are present.",
-                        get_language_string(language_code),
-                    ));
-
-                    continue;
-                }
-
-                let mmtp = find_chunk_in_file::<s_blf_chunk_matchmaking_tips>(blf_file_path)?;
-
-                write_text_file_lines(
-                    title_storage_config::matchmaking_tips_file_path(
-                        hoppers_config_path,
-                        language_code,
-                        tangerine
-                    ),
-                    &mmtp.tips.iter().map(|tip|tip.get_string()).collect::<Result<Vec<String>, BLFLibError>>()?
-                )?
-            }
-
-            task.complete();
-        }
-
-        やった!()
+        やった!(task)
     }
 
     fn build_config_dlc_manifest(hoppers_blf_path: &String, hoppers_config_path: &String) -> Result<(), Box<dyn Error>> {
@@ -816,60 +777,49 @@ impl v12065_11_08_24_1738_tu1actual {
     }
 
     fn build_config_global_nag_messages(hoppers_blf_path: &String, hoppers_config_path: &String) -> BLFLibResult {
-        for tangerine in [false, true] {
-            let mut task = console_task::start(
-                if tangerine { "Converting CEA Global Nag Messages" }
-                else { "Converting Global Nag Messages" }
+        let mut task = console_task::start("Converting Global Nag Messages");
+
+        // BLFs
+        for language_code in k_language_suffixes {
+            let blf_file_path = title_storage_output::global_nag_message_file_path(
+                hoppers_blf_path,
+                language_code,
             );
 
-            // BLFs
-            for language_code in k_language_suffixes {
-                let blf_file_path = title_storage_output::global_nag_message_file_path(
-                    hoppers_blf_path,
-                    language_code,
-                    tangerine
-                );
+            if !exists(&blf_file_path)? {
+                task.add_warning(format!(
+                    "No {} Global Nag Message is present.",
+                    get_language_string(language_code),
+                ));
 
-                if !exists(&blf_file_path)? {
-                    task.add_warning(format!(
-                        "No {} Global Nag Message is present.",
-                        get_language_string(language_code),
-                    ));
-
-                    continue;
-                }
-
-                write_json_file(
-                    &find_chunk_in_file::<s_blf_chunk_nag_message>(blf_file_path)?,
-                    title_storage_config::global_nag_message_file_path(
-                        hoppers_config_path,
-                        language_code,
-                        tangerine
-                    )
-                )?;
-
-                let image_path = title_storage_output::global_nag_message_image_file_path(
-                    hoppers_blf_path,
-                    language_code,
-                    tangerine
-                );
-
-                if exists(&image_path)? {
-                    fs::copy(&image_path, title_storage_config::global_nag_message_image_file_path(
-                        hoppers_config_path,
-                        language_code,
-                        tangerine
-                    ))?;
-                }
-                else {
-                    task.add_warning(format!("No image was found for {} Global Nag Message", language_code));
-                }
+                continue;
             }
 
-            task.complete();
+            write_json_file(
+                &find_chunk_in_file::<s_blf_chunk_nag_message>(blf_file_path)?,
+                title_storage_config::global_nag_message_file_path(
+                    hoppers_config_path,
+                    language_code,
+                )
+            )?;
+
+            let image_path = title_storage_output::global_nag_message_image_file_path(
+                hoppers_blf_path,
+                language_code,
+            );
+
+            if exists(&image_path)? {
+                fs::copy(&image_path, title_storage_config::global_nag_message_image_file_path(
+                    hoppers_config_path,
+                    language_code,
+                ))?;
+            }
+            else {
+                task.add_warning(format!("No image was found for {} Global Nag Message", language_code));
+            }
         }
 
-        やった!()
+        やった!(task)
     }
 
     fn build_config_user_nag_messages(hoppers_blf_path: &String, hoppers_config_path: &String) -> BLFLibResult {
@@ -1307,7 +1257,7 @@ impl v12065_11_08_24_1738_tu1actual {
 
         BlfFileBuilder::new()
             .add_chunk(s_blf_chunk_start_of_file::new("omaha net config"))
-            .add_chunk(s_blf_chunk_author::for_build::<v12065_11_08_24_1738_tu1actual>())
+            .add_chunk(s_blf_chunk_author::for_build::<v09730_10_04_09_1309_omaha_delta>())
             .add_chunk(netc)
             .add_chunk(s_blf_chunk_end_of_file::default())
             .write_file(network_configuration_dest_path)?;
@@ -1334,7 +1284,7 @@ impl v12065_11_08_24_1738_tu1actual {
 
             BlfFileBuilder::new()
                 .add_chunk(s_blf_chunk_start_of_file::default())
-                .add_chunk(s_blf_chunk_author::for_build::<v12065_11_08_24_1738_tu1actual>())
+                .add_chunk(s_blf_chunk_author::for_build::<v09730_10_04_09_1309_omaha_delta>())
                 .add_chunk(bhms)
                 .add_chunk(s_blf_chunk_end_of_file::default())
                 .write_file(title_storage_output::banhammer_messages_file_path(hoppers_blf_folder, language_code))?;
@@ -1470,142 +1420,116 @@ impl v12065_11_08_24_1738_tu1actual {
     }
 
     fn build_blf_predefined_queries(hoppers_config_folder: &String, hoppers_blf_folder: &String) -> Result<(), Box<dyn Error>> {
-        for tangerine in [false, true] {
-            let mut task = console_task::start(
-                if tangerine { "Building CEA Predefined Queries" }
-                else { "Building Predefined Queries" }
-            );
+        let mut task = console_task::start("Building Predefined Queries");
 
-            for language_code in k_language_suffixes {
-                let config_path = title_storage_config::predefined_queries_file_path(hoppers_config_folder, language_code, tangerine);
+        for language_code in k_language_suffixes {
+            let config_path = title_storage_config::predefined_queries_file_path(hoppers_config_folder, language_code);
 
-                if !exists(&config_path)? {
-                    task.add_warning(format!("No {} Predefined Queries were found", get_language_string(language_code)));
-                    continue;
-                }
-
-                let predefined_queries = read_json_file::<s_blf_chunk_predefined_queries>(config_path)?;
-
-                BlfFileBuilder::new()
-                    .add_chunk(s_blf_chunk_start_of_file::default())
-                    .add_chunk(predefined_queries)
-                    .add_chunk(s_blf_chunk_end_of_file::default())
-                    .write_file(title_storage_output::predefined_queries_file_path(
-                        hoppers_blf_folder,
-                        language_code,
-                        tangerine
-                    ))?;
+            if !exists(&config_path)? {
+                task.add_warning(format!("No {} Predefined Queries were found", get_language_string(language_code)));
+                continue;
             }
 
-            task.complete();
+            let predefined_queries = read_json_file::<s_blf_chunk_predefined_queries>(config_path)?;
+
+            BlfFileBuilder::new()
+                .add_chunk(s_blf_chunk_start_of_file::default())
+                .add_chunk(predefined_queries)
+                .add_chunk(s_blf_chunk_end_of_file::default())
+                .write_file(title_storage_output::predefined_queries_file_path(
+                    hoppers_blf_folder,
+                    language_code,
+                ))?;
         }
 
-        やった!()
+        やった!(task)
     }
 
     fn build_blf_matchmaking_tips(hoppers_config_folder: &String, hoppers_blf_folder: &String) -> BLFLibResult {
-        for tangerine in [false, true] {
-            let mut task = console_task::start(
-                if tangerine { "Building CEA Matchmaking Tips" }
-                else { "Building Matchmaking Tips" }
-            );
+        let mut task = console_task::start("Building Matchmaking Tips");
 
-            for language_code in k_language_suffixes {
-                let config_path = title_storage_config::matchmaking_tips_file_path(hoppers_config_folder, language_code, tangerine);
+        for language_code in k_language_suffixes {
+            let config_path = title_storage_config::matchmaking_tips_file_path(hoppers_config_folder, language_code);
 
-                if !exists(&config_path)? {
-                    task.add_warning(format!("{} matchmaking tips are missing.", get_language_string(language_code)));
-                    continue;
-                }
-
-                let matchmaking_tips = read_text_file_lines(config_path)?;
-
-                BlfFileBuilder::new()
-                    .add_chunk(s_blf_chunk_start_of_file::default())
-                    .add_chunk(s_blf_chunk_author::for_build::<v12065_11_08_24_1738_tu1actual>())
-                    .add_chunk(s_blf_chunk_matchmaking_tips::create(matchmaking_tips)?)
-                    .add_chunk(s_blf_chunk_end_of_file::default())
-                    .write_file(title_storage_output::matchmaking_tips_file_path(
-                        hoppers_blf_folder,
-                        language_code,
-                        tangerine
-                    ))?
+            if !exists(&config_path)? {
+                task.add_warning(format!("{} matchmaking tips are missing.", get_language_string(language_code)));
+                continue;
             }
 
-            task.complete();
+            let matchmaking_tips = read_text_file_lines(config_path)?;
+
+            BlfFileBuilder::new()
+                .add_chunk(s_blf_chunk_start_of_file::default())
+                .add_chunk(s_blf_chunk_author::for_build::<v09730_10_04_09_1309_omaha_delta>())
+                .add_chunk(s_blf_chunk_matchmaking_tips::create(matchmaking_tips)?)
+                .add_chunk(s_blf_chunk_end_of_file::default())
+                .write_file(title_storage_output::matchmaking_tips_file_path(
+                    hoppers_blf_folder,
+                    language_code,
+                ))?
         }
-        Ok(())
+
+        やった!(task)
     }
 
     fn build_blf_global_nag_messages(hoppers_config_folder: &String, hoppers_blf_folder: &String) -> BLFLibResult {
-        for tangerine in [false, true] {
-            let mut task = console_task::start(
-                if tangerine { "Building CEA Nag Messages" }
-                else { "Building Nag Messages" }
+        let mut task = console_task::start("Building Nag Messages");
+
+        for language_code in k_language_suffixes {
+            // write the nagm blf
+            let nagm_config_path = title_storage_config::global_nag_message_file_path(
+                hoppers_config_folder,
+                language_code,
             );
 
-            for language_code in k_language_suffixes {
-                // write the nagm blf
-                let nagm_config_path = title_storage_config::global_nag_message_file_path(
-                    hoppers_config_folder,
-                    language_code,
-                    tangerine
-                );
-
-                if !exists(&nagm_config_path)? {
-                    task.add_warning(format!(
-                        "No {} Global Nag Message is present.",
-                        get_language_string(language_code),
-                    ));
-                    continue;
-                }
-
-                let nagm = read_json_file::<s_blf_chunk_nag_message>(
-                    &nagm_config_path
-                )?;
-
-                BlfFileBuilder::new()
-                    .add_chunk(s_blf_chunk_start_of_file::default())
-                    .add_chunk(s_blf_chunk_author::for_build::<v12065_11_08_24_1738_tu1actual>())
-                    .add_chunk(nagm)
-                    .add_chunk(s_blf_chunk_end_of_file::default())
-                    .write_file(title_storage_output::global_nag_message_file_path(hoppers_blf_folder, language_code, tangerine))?;
-
-                // copy images.
-                let image_source = title_storage_config::global_nag_message_image_file_path(
-                    hoppers_config_folder,
-                    language_code,
-                    tangerine
-                );
-
-                let image_valid = validate_jpeg(
-                    &image_source,
-                    title_storage_output::global_nag_message_image_width,
-                    title_storage_output::global_nag_message_image_height,
-                    None
-                );
-                if image_valid.is_err() {
-                    task.add_warning(format!(
-                        "{} Nag Message has an invalid Image: {}",
-                        get_language_string(language_code),
-                        image_valid.unwrap_err()
-                    ));
-
-                    continue;
-                }
-
-                fs::copy(image_source, title_storage_output::global_nag_message_image_file_path(
-                    hoppers_blf_folder,
-                    language_code,
-                    tangerine
-                ))?;
-
+            if !exists(&nagm_config_path)? {
+                task.add_warning(format!(
+                    "No {} Global Nag Message is present.",
+                    get_language_string(language_code),
+                ));
+                continue;
             }
 
-            task.complete();
+            let nagm = read_json_file::<s_blf_chunk_nag_message>(
+                &nagm_config_path
+            )?;
+
+            BlfFileBuilder::new()
+                .add_chunk(s_blf_chunk_start_of_file::default())
+                .add_chunk(s_blf_chunk_author::for_build::<v09730_10_04_09_1309_omaha_delta>())
+                .add_chunk(nagm)
+                .add_chunk(s_blf_chunk_end_of_file::default())
+                .write_file(title_storage_output::global_nag_message_file_path(hoppers_blf_folder, language_code))?;
+
+            // copy images.
+            let image_source = title_storage_config::global_nag_message_image_file_path(
+                hoppers_config_folder,
+                language_code,
+            );
+
+            let image_valid = validate_jpeg(
+                &image_source,
+                title_storage_output::global_nag_message_image_width,
+                title_storage_output::global_nag_message_image_height,
+                None
+            );
+            if image_valid.is_err() {
+                task.add_warning(format!(
+                    "{} Nag Message has an invalid Image: {}",
+                    get_language_string(language_code),
+                    image_valid.unwrap_err()
+                ));
+
+                continue;
+            }
+
+            fs::copy(image_source, title_storage_output::global_nag_message_image_file_path(
+                hoppers_blf_folder,
+                language_code,
+            ))?;
         }
 
-        Ok(())
+        やった!(task)
     }
 
     fn build_blf_user_nag_messages(hoppers_config_folder: &String, hoppers_blf_folder: &String) -> BLFLibResult {
@@ -1637,7 +1561,7 @@ impl v12065_11_08_24_1738_tu1actual {
 
                 BlfFileBuilder::new()
                     .add_chunk(s_blf_chunk_start_of_file::default())
-                    .add_chunk(s_blf_chunk_author::for_build::<v12065_11_08_24_1738_tu1actual>())
+                    .add_chunk(s_blf_chunk_author::for_build::<v09730_10_04_09_1309_omaha_delta>())
                     .add_chunk(nagm)
                     .add_chunk(s_blf_chunk_end_of_file::default())
                     .write_file(title_storage_output::user_nag_message_file_path(
@@ -1708,7 +1632,7 @@ impl v12065_11_08_24_1738_tu1actual {
 
             BlfFileBuilder::new()
                 .add_chunk(s_blf_chunk_start_of_file::new("rsa manifest"))
-                .add_chunk(s_blf_chunk_author::for_build::<v12065_11_08_24_1738_tu1actual>())
+                .add_chunk(s_blf_chunk_author::for_build::<v09730_10_04_09_1309_omaha_delta>())
                 .add_chunk(map_manifest)
                 .add_chunk(s_blf_chunk_end_of_file::default())
                 .write_file(title_storage_output::rsa_manifest_file_path(
@@ -1841,7 +1765,7 @@ impl v12065_11_08_24_1738_tu1actual {
 
                             BlfFileBuilder::new()
                                 .add_chunk(s_blf_chunk_start_of_file::new("game var"))
-                                .add_chunk(s_blf_chunk_author::for_build::<v12065_11_08_24_1738_tu1actual>())
+                                .add_chunk(s_blf_chunk_author::for_build::<v09730_10_04_09_1309_omaha_delta>())
                                 .add_chunk(json)
                                 .add_chunk(s_blf_chunk_end_of_file::default())
                                 .write_file(&game_variant_blf_path)
@@ -2072,7 +1996,7 @@ impl v12065_11_08_24_1738_tu1actual {
 
             BlfFileBuilder::new()
                 .add_chunk(s_blf_chunk_start_of_file::new("game set"))
-                .add_chunk(s_blf_chunk_author::for_build::<v12065_11_08_24_1738_tu1actual>())
+                .add_chunk(s_blf_chunk_author::for_build::<v09730_10_04_09_1309_omaha_delta>())
                 .add_chunk(game_set_config)
                 .add_chunk(s_blf_chunk_end_of_file::default())
                 .write_file(title_storage_output::game_set_file_path(
@@ -2224,7 +2148,7 @@ impl v12065_11_08_24_1738_tu1actual {
 
             BlfFileBuilder::new()
                 .add_chunk(s_blf_chunk_start_of_file::default())
-                .add_chunk(s_blf_chunk_author::for_build::<v12065_11_08_24_1738_tu1actual>())
+                .add_chunk(s_blf_chunk_author::for_build::<v09730_10_04_09_1309_omaha_delta>())
                 .add_chunk(mhdf)
                 .add_chunk(s_blf_chunk_end_of_file::default())
                 .write_file(title_storage_output::hopper_descriptions_file_path(
@@ -2235,7 +2159,7 @@ impl v12065_11_08_24_1738_tu1actual {
 
         BlfFileBuilder::new()
             .add_chunk(s_blf_chunk_start_of_file::new("hopper config"))
-            .add_chunk(s_blf_chunk_author::for_build::<v12065_11_08_24_1738_tu1actual>())
+            .add_chunk(s_blf_chunk_author::for_build::<v09730_10_04_09_1309_omaha_delta>())
             .add_chunk(mhcf)
             .add_chunk(s_blf_chunk_end_of_file::default())
             .write_file(title_storage_output::matchmaking_hopper_file_path(
@@ -2257,7 +2181,7 @@ impl v12065_11_08_24_1738_tu1actual {
 
         BlfFileBuilder::new()
             .add_chunk(s_blf_chunk_start_of_file::new("reach net config"))
-            .add_chunk(s_blf_chunk_author::for_build::<v12065_11_08_24_1738_tu1actual>())
+            .add_chunk(s_blf_chunk_author::for_build::<v09730_10_04_09_1309_omaha_delta>())
             .add_chunk(netc)
             .add_chunk(s_blf_chunk_end_of_file::default())
             .write_file(title_storage_output::network_configuration_file_path(
@@ -2329,17 +2253,9 @@ impl v12065_11_08_24_1738_tu1actual {
             add_hash_if_file_exists(
                 format!(
                     "/{language_code}/{}",
-                    title_storage_output::predefined_queries_file_name(false)
+                    title_storage_output::predefined_queries_file_name
                 ),
-                title_storage_output::predefined_queries_file_path(hoppers_blfs_path, language_code, false)
-            )?;
-
-            add_hash_if_file_exists(
-                format!(
-                    "/{language_code}/{}",
-                    title_storage_output::predefined_queries_file_name(true)
-                ),
-                title_storage_output::predefined_queries_file_path(hoppers_blfs_path, language_code, true)
+                title_storage_output::predefined_queries_file_path(hoppers_blfs_path, language_code)
             )?;
 
             add_hash_if_file_exists(
@@ -2361,17 +2277,9 @@ impl v12065_11_08_24_1738_tu1actual {
             add_hash_if_file_exists(
                 format!(
                     "/{language_code}/{}",
-                    title_storage_output::matchmaking_tips_file_name(false)
+                    title_storage_output::matchmaking_tips_file_name
                 ),
-                title_storage_output::matchmaking_tips_file_path(hoppers_blfs_path, language_code, false)
-            )?;
-
-            add_hash_if_file_exists(
-                format!(
-                    "/{language_code}/{}",
-                    title_storage_output::matchmaking_tips_file_name(true)
-                ),
-                title_storage_output::matchmaking_tips_file_path(hoppers_blfs_path, language_code, true)
+                title_storage_output::matchmaking_tips_file_path(hoppers_blfs_path, language_code)
             )?;
         }
 

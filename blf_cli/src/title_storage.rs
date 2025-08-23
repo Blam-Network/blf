@@ -7,6 +7,7 @@ use crate::title_storage::ares::v_untracked_ares::v_untracked_ares;
 use crate::title_storage::halo3::v12070_08_09_05_2031_halo3_ship::v12070_08_09_05_2031_halo3_ship;
 use crate::title_storage::halo3odst::v13895_09_04_27_2201_atlas_release::v13895_09_04_27_2201_atlas_release;
 use crate::title_storage::haloonline::v1_106708_cert_ms23___release::v1_106708_cert_ms23___release;
+use crate::title_storage::haloreach::v09730_10_04_09_1309_omaha_delta::v09730_10_04_09_1309_omaha_delta;
 use crate::title_storage::haloreach::v12065_11_08_24_1738_tu1actual::v12065_11_08_24_1738_tu1actual;
 
 pub mod halo3;
@@ -31,12 +32,17 @@ macro_rules! title_converter {
 // These are the titles we support.
 fn get_title_converters() -> Vec<Box<dyn TitleConverter>> {
     vec![
+        // Releases
         Box::new(v12070_08_09_05_2031_halo3_ship::default()),       // Halo 3 (TU2)
         Box::new(v13895_09_04_27_2201_atlas_release::default()),    // Halo 3: ODST
         Box::new(v12065_11_08_24_1738_tu1actual::default()),        // Halo: Reach (TU1)
 
-        Box::new(v_untracked_ares::default()),
-        Box::new(v1_106708_cert_ms23___release::default()),
+        // Pre-Releases
+        Box::new(v09730_10_04_09_1309_omaha_delta::default()),      // Halo: Reach (Public Beta)
+
+        // Mods & Others
+        Box::new(v_untracked_ares::default()),                      //
+        Box::new(v1_106708_cert_ms23___release::default()),         // Halo: Online (ms23)
     ]
 }
 
