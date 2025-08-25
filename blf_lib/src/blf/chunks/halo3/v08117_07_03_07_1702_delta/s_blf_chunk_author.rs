@@ -18,8 +18,8 @@ pub struct s_blf_chunk_author {
     pub program_name: StaticString<16>, // eg GameData.Halo3
     pub build_number_sequence: u32,     // eg 1
     pub build_number: u32,              // eg 12070
-    pub build_string: StaticString<24>, // eg 08117.07.03.07.
-    pub author_name: StaticString<16>,  // eg sameling
+    pub build_string: StaticString<16>, // eg 08117.07.03.07.
+    pub author_name: StaticString<20>,  // eg sameling
 }
 
 impl BlfChunkHooks for s_blf_chunk_author {}
