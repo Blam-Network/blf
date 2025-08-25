@@ -601,21 +601,21 @@ pub struct s_observer_configuration {
     pub packet_rate_multiplier_count: i32,
     pub packet_rate_multipliers: StaticArray<Float32, 16>,
     pub packet_window_minimum_bytes: i32,
-    // pub unknown4: Float32,
+    pub unknown4: Float32,
     // // pub voice_fraction_authority: Float32,
     // // pub voice_fraction_client: Float32,
     // // pub voice_fraction_non_simulation: Float32,
     // // pub voice_maximum_packet_rate: Float32,
-    // pub voice_receive_fast_acknowledge_time: i32,
-    // pub bandwidth_interval: i32,
-    // pub loss_detection_window_size: i32,
+    pub voice_receive_fast_acknowledge_time: i32,
+    pub bandwidth_interval: i32,
+    pub loss_detection_window_size: i32,
     // // pub flood_max_aperture_msec: i32,
     // // pub flood_packet_fraction: Float32,
-    // pub desired_payload_bytes_out_of_game: i32,
-    // pub desired_payload_bytes_simulation: i32,
-    // pub desired_minimum_packet_rate_multiplier: Float32,
-    // #[serde(with = "SerHex::<StrictCapPfx>")]
-    // pub minimum_bandwidth_bps: u32,
+    pub desired_payload_bytes_out_of_game: i32,
+    pub desired_payload_bytes_simulation: i32,
+    pub desired_minimum_packet_rate_multiplier: Float32,
+    #[serde(with = "SerHex::<StrictCapPfx>")]
+    pub minimum_bandwidth_bps: u32,
     // // pub bandwidth_adjust_interval: i32,
     // // pub bandwidth_flood_channel_fraction: Float32,
     // // pub bandwidth_flood_check_threshold: i32,
@@ -623,52 +623,57 @@ pub struct s_observer_configuration {
     // // pub bandwidth_flood_backoff_repeat_interval: i32,
     // // pub bandwidth_clear_check_threshold: i32,
     // // pub bandwidth_check_threshold_maximum: i32,
-    // pub bandwidth_initial_backoff_kbps: i32,
-    // pub bandwidth_known_good_minimum_kbps: i32,
+    pub bandwidth_initial_backoff_kbps: i32,
+    pub bandwidth_known_good_minimum_kbps: i32,
+    #[serde(with = "SerHex::<StrictCapPfx>")]
+    pub unknown5: u32,
     // pub bandwidth_increment_known_bad_threshold_kbps: i32,
     // pub bandwidth_increment_kbps: i32,
     // #[brw(align_after = 4)]
     // pub generate_stream_events: Bool,
     // pub observer_stream_expansion_interval_msec: i32,
-    // #[serde(with = "SerHex::<StrictCapPfx>")]
-    // pub stream_minimum_bps: u32,
-    // #[serde(with = "SerHex::<StrictCapPfx>")]
-    // pub stream_maximum_bps: u32,
+    #[serde(with = "SerHex::<StrictCapPfx>")]
+    pub stream_minimum_bps: u32,
+    #[serde(with = "SerHex::<StrictCapPfx>")]
+    pub stream_maximum_bps: u32,
     // pub stream_initial_startup_msec: i32,
-    // #[serde(with = "SerHex::<StrictCapPfx>")]
-    // pub stream_initial_bps: u32,
-    // #[serde(with = "SerHex::<StrictCapPfx>")]
-    // pub stream_initial_total_bps_unreliable: u32,
-    // #[serde(with = "SerHex::<StrictCapPfx>")]
-    // pub stream_initial_total_bps_reliable: u32,
+    #[serde(with = "SerHex::<StrictCapPfx>")]
+    pub stream_initial_bps: u32,
+    #[serde(with = "SerHex::<StrictCapPfx>")]
+    pub stream_initial_total_bps_unreliable: u32,
+    #[serde(with = "SerHex::<StrictCapPfx>")]
+    pub stream_initial_total_bps_reliable: u32,
+    pub unknown6: u32,
+    pub unknown7: u32,
+    pub unknown8: u32,
     // #[serde(with = "SerHex::<StrictCapPfx>")]
     // pub stream_initial_minimum_bps_per_stream: u32,
-    // #[serde(with = "SerHex::<StrictCapPfx>")]
-    // pub stream_minimum_great_bandwidth_bps: u32,
-    // #[serde(with = "SerHex::<StrictCapPfx>")]
-    // pub stream_out_of_game_upstream_bandwidth_bps: u32,
-    // #[serde(with = "SerHex::<StrictCapPfx>")]
-    // pub stream_distributed_client_upstream_bandwidth_bps: u32,
-    // #[serde(with = "SerHex::<StrictCapPfx>")]
-    // pub stream_distributed_host_upstream_bandwidth_bps: u32,
-    // #[serde(with = "SerHex::<StrictCapPfx>")]
-    // pub stream_synchronous_client_initial_upstream_bandwidth_bps: u32,
-    // #[serde(with = "SerHex::<StrictCapPfx>")]
-    // pub stream_synchronous_host_initial_upstream_bandwidth_bps: u32,
-    // #[serde(with = "SerHex::<StrictCapPfx>")]
-    // pub stream_synchronous_joining_host_initial_upstream_bandwidth_bps: u32,
-    // #[serde(with = "SerHex::<StrictCapPfx>")]
-    // pub stream_synchronous_client_upstream_bandwidth_bps: u32,
-    // #[serde(with = "SerHex::<StrictCapPfx>")]
-    // pub stream_synchronous_host_upstream_bandwidth_bps: u32,
-    // #[serde(with = "SerHex::<StrictCapPfx>")]
-    // pub stream_synchronous_joining_host_upstream_bandwidth_bps: u32,
-    // #[serde(with = "SerHex::<StrictCapPfx>")]
-    // pub stream_synchronous_non_joining_host_upstream_bandwidth_bps: u32,
-    // #[serde(with = "SerHex::<StrictCapPfx>")]
-    // pub stream_synchronous_client_minimum_upstream_bandwidth_bps: u32,
-    // #[serde(with = "SerHex::<StrictCapPfx>")]
-    // pub stream_synchronous_host_minimum_upstream_bandwidth_bps: u32,
+    #[serde(with = "SerHex::<StrictCapPfx>")]
+    pub stream_minimum_great_bandwidth_bps: u32,
+    #[serde(with = "SerHex::<StrictCapPfx>")]
+    pub stream_out_of_game_upstream_bandwidth_bps: u32,
+    #[serde(with = "SerHex::<StrictCapPfx>")]
+    pub stream_distributed_client_upstream_bandwidth_bps: u32,
+    #[serde(with = "SerHex::<StrictCapPfx>")]
+    pub stream_distributed_host_upstream_bandwidth_bps: u32,
+    #[serde(with = "SerHex::<StrictCapPfx>")]
+    pub stream_synchronous_client_initial_upstream_bandwidth_bps: u32,
+    #[serde(with = "SerHex::<StrictCapPfx>")]
+    pub stream_synchronous_host_initial_upstream_bandwidth_bps: u32,
+    #[serde(with = "SerHex::<StrictCapPfx>")]
+    pub stream_synchronous_joining_host_initial_upstream_bandwidth_bps: u32,
+    #[serde(with = "SerHex::<StrictCapPfx>")]
+    pub stream_synchronous_client_upstream_bandwidth_bps: u32,
+    #[serde(with = "SerHex::<StrictCapPfx>")]
+    pub stream_synchronous_host_upstream_bandwidth_bps: u32,
+    #[serde(with = "SerHex::<StrictCapPfx>")]
+    pub stream_synchronous_joining_host_upstream_bandwidth_bps: u32,
+    #[serde(with = "SerHex::<StrictCapPfx>")]
+    pub stream_synchronous_non_joining_host_upstream_bandwidth_bps: u32,
+    #[serde(with = "SerHex::<StrictCapPfx>")]
+    pub stream_synchronous_client_minimum_upstream_bandwidth_bps: u32,
+    #[serde(with = "SerHex::<StrictCapPfx>")]
+    pub stream_synchronous_host_minimum_upstream_bandwidth_bps: u32,
     // pub stream_rtt_noise_msec: i32,
     // pub stream_minimum_rtt_msec: i32,
     // pub stream_rtt_average_gain_bits: i32,
@@ -708,25 +713,26 @@ pub struct s_observer_configuration {
     // pub stream_growth_incremental_rtt_increase_msec: i32,
     // pub stream_cautious_expansion_limited_periods_count: i32,
     // pub stream_cautious_expansion_instability_timeout_msec: i32,
-    // pub bandwidth_monitor_period_count: i32,
-    // #[serde(with = "SerHex::<StrictCapPfx>")]
-    // pub bandwidth_monitor_limitation_bps: u32,
-    // pub bandwidth_monitor_constriction_fraction: Float32,
-    // #[serde(with = "SerHex::<StrictCapPfx>")]
-    // pub bandwidth_monitor_constriction_threshold_bps: u32,
-    // pub client_badness_rating_threshold: i32,
+    pub unknown_data1: StaticArray<i32, 9>,
+    pub bandwidth_monitor_period_count: i32,
+    #[serde(with = "SerHex::<StrictCapPfx>")]
+    pub bandwidth_monitor_limitation_bps: u32,
+    pub bandwidth_monitor_constriction_fraction: Float32,
+    #[serde(with = "SerHex::<StrictCapPfx>")]
+    pub bandwidth_monitor_constriction_threshold_bps: u32,
+    pub client_badness_rating_threshold: i32,
     // pub bad_bandwidth_throughput_threshold: i32,
-    // pub disable_bad_client_anticheating: Bool,
-    // pub disable_bad_connectivity_anticheating: Bool,
-    // pub disable_bad_bandwidth_anticheating: Bool,
-    // #[brw(align_before = 4)]
-    // pub initial_timeout: i32,
-    // pub mini_period_minimum_duration: i32,
-    // pub mini_period_minimum_rtt_deviation: i32,
-    // pub stream_wants_more_bandwidth_fudge_factor: i32,
-    // pub stream_wants_more_bandwidth_fudge_factor_small: i32,
-    // pub stream_wants_more_allocation_fudge_factor: i32,
-    // pub stream_wants_more_allocation_fudge_factor_small: i32,
+    pub disable_bad_client_anticheating: Bool,
+    pub disable_bad_connectivity_anticheating: Bool,
+    pub disable_bad_bandwidth_anticheating: Bool,
+    #[brw(align_before = 4)]
+    pub initial_timeout: i32,
+    pub mini_period_minimum_duration: i32,
+    pub mini_period_minimum_rtt_deviation: i32,
+    pub stream_wants_more_bandwidth_fudge_factor: i32,
+    pub stream_wants_more_bandwidth_fudge_factor_small: i32,
+    pub stream_wants_more_allocation_fudge_factor: i32,
+    pub stream_wants_more_allocation_fudge_factor_small: i32,
     // pub stream_maximum_instability_value: i32,
     // pub stream_probe_failure_limit: i32,
     // pub stream_rebalance_interval_msec: i32,
@@ -734,9 +740,9 @@ pub struct s_observer_configuration {
     // pub packet_loss_rate_deviation_gain_bits: i32,
     // pub maximum_rtt_increase_msec: i32,
     // pub maximum_lost_packet_rate_increase: i32,
-    // pub minimum_packet_loss_deviation: i32,
-    // pub minimum_probe_packet_loss_deviation: i32,
-    pub unknown_data1: StaticArray<i32, 63>,
+    pub unknown_data2: StaticArray<i32, 7>,
+    pub minimum_packet_loss_deviation: i32,
+    pub minimum_probe_packet_loss_deviation: i32,
     pub stream_maximum_bandwidth_maximum_delta: i32,
     pub stream_maximum_bandwidth_skip_max: i32,
     pub packet_loss_deviation_adjustment: i32,
@@ -784,7 +790,7 @@ pub struct s_observer_configuration {
     // pub check_single_stream_overprobe: Bool,
     // pub use_deviation_only_for_related_rtt_timeout: Bool,
     // pub fast_probe_failed_streams: Bool,
-    pub unknown_data2: StaticArray<i32, 5>,
+    pub unknown_data3: StaticArray<i32, 5>,
     pub packet_loss_spike_threshold: i32,
     pub packet_loss_spike_minimum_packet_count: i32,
     pub packet_loss_spike_skip_averaging_any_spike: i32,
@@ -844,7 +850,7 @@ pub struct s_observer_configuration {
     #[serde(with = "SerHex::<StrictCapPfx>")]
     pub slow_probe_overprobe_maximum_bps: u32,
     pub slow_probe_overprobe_transmit_ratio: i32,
-    pub unknown_data3: StaticArray<i32, 20>,
+    pub unknown_data4: StaticArray<i32, 20>,
 }
 
 #[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
@@ -1059,13 +1065,22 @@ pub struct s_replication_configuration {
 
 #[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
 #[brw(big)]
+pub struct s_griefer_configuration {
+    pub betrayal_decrement_time: Float32,
+    pub eject_decrement_time: Float32,
+    pub betrayal_cutoff: Float32,
+    pub ejection_cutoff: Float32,
+}
+
+#[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
+#[brw(big)]
 pub struct s_network_configuration {
     pub config_download: s_network_file_download_configuration,
-    pub unknown_data: StaticArray<i32, 261>,
+        pub unknown_data: StaticArray<i32, 261>,
     pub bandwidth: s_bandwidth_configuration,
     pub life_cycle: s_life_cycle_configuration,
     pub logic: s_logic_configuration,
-    pub unknown_data2: StaticArray<i32, 50>, // may contain s_banhammer_configuration
+    pub unknown_data2: StaticArray<i32, 50>, // may contain s_banhammer_configuration, zoom_relevance
     // pub banhammer: s_banhammer_configuration,
     pub simulation: s_simulation_configuration,
     pub replication: s_replication_configuration,
@@ -1076,8 +1091,9 @@ pub struct s_network_configuration {
     pub voice: s_voice_configuration,
     pub unknown_data5: StaticArray<Float32, 6>,
     pub data_mine: s_data_mine_configuration,
-    pub unknown_data6: StaticArray<i32, 20>, // may contain s_griefer_configuration,
-    // pub griefer_config: s_griefer_configuration,
+    pub unknown1: StaticArray<i32, 2>, // may contain s_griefer_configuration,
+    pub unknown2: StaticArray<Float32, 14>, // may contain s_griefer_configuration,
+    pub griefer_config: s_griefer_configuration,
     pub memory: s_network_memory_configuration,
     pub user_interface: s_user_interface,
     pub alpha_configuration: s_alpha_configuration,
@@ -1085,10 +1101,16 @@ pub struct s_network_configuration {
     pub lsp_configuration: s_lsp_configuration,
     pub unknown_data7: StaticArray<s_unknown_data_struct_1, 8>,
     pub map_configuration: s_map_configuration,
-    pub unknown_data8: StaticArray<i32, 66>,
+    pub unknown_data8: StaticArray<i32, 66>, // // use lsp leaderboard is in here, near the start
     pub unknown_domain: StaticWcharString<128>,
-    pub unknown_data9: StaticArray<i32, 214>,
-    pub unknown_data10: u16,
+    pub unknown3: i32,
+    pub unknown4: i32,
+    pub unknown5: i32,
+    pub unknown6: i32,
+    pub unknown7: StaticArray<Float32, 105>,
+    pub unknown8: StaticArray<i32, 105>,
+    pub unknown9: Bool,
+    pub unknown10: Bool,
     pub unknown_domains: StaticArray<StaticWcharString<64>, 4>,
     #[brw(pad_after = 2)]
     pub dlc_paths: s_dlc_paths,
