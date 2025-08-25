@@ -7,7 +7,7 @@ pub use halo3::v12070_08_09_05_2031_halo3_ship::s_blf_chunk_end_of_file::*;
 pub use halo3::v12070_08_09_05_2031_halo3_ship::s_blf_chunk_message_of_the_day::*;
 pub use halo3::v12070_08_09_05_2031_halo3_ship::s_blf_chunk_banhammer_messages::*;
 pub use halo3::v12070_08_09_05_2031_halo3_ship::s_blf_chunk_matchmaking_tips::*;
-pub use halo3::v11855_07_08_20_2317_halo3_ship::s_blf_chunk_network_configuration::*;
+pub use halo3::v11729_07_08_10_0021_main::s_blf_chunk_network_configuration::*;
 pub use halo3::v12070_08_09_05_2031_halo3_ship::s_blf_chunk_map_manifest::*;
 pub use halo3::v12070_08_09_05_2031_halo3_ship::s_blf_chunk_map_variant::*;
 pub use halo3::v12070_08_09_05_2031_halo3_ship::s_blf_chunk_packed_map_variant::*;
@@ -34,5 +34,5 @@ pub use halo3::v12070_08_09_05_2031_halo3_ship::s_blf_chunk_saved_film_header::*
 
 #[derive(TitleAndBuild)]
 #[Title("Halo 3")]
-#[Build("11855.07.08.20.2317.halo3_ship")]
-pub struct v11855_07_08_20_2317_halo3_ship {}
+#[Build("11729.07.08.10.0021.main")]
+pub struct v11729_07_08_10_0021_main {}
