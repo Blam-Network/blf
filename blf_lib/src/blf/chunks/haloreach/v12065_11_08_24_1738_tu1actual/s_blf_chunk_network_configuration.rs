@@ -9,7 +9,6 @@ use blf_lib_derivable::blf::chunks::BlfChunkHooks;
 use blf_lib_derive::{BlfChunk, TestSize};
 use crate::types::c_string::StaticWcharString;
 use serde_hex::{SerHex,StrictCapPfx};
-use blf_lib::blf::versions::halo3::v11902_08_01_16_1426_halo3_ship::e_alpha_configuration_ui_level;
 use blf_lib::types::bool::Bool;
 
 #[binrw]
@@ -150,7 +149,7 @@ pub struct s_simulation_world_configuration {
 #[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
 #[brw(big)]
 pub struct s_simulation_event_configuration {
-    pub unknown1: i32,
+    pub family: i32,
     pub constant_priority: Float32,
     pub cancel_timer_milliseconds: i32,
     pub zero_relevance_distance: Float32,
@@ -485,54 +484,6 @@ pub struct s_bandwidth_unknown_struct_1 {
 #[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
 #[brw(big)]
 pub struct s_bandwidth_configuration {
-    // pub bandwidth_outlier_discard_fraction: Float32,
-    // pub bandwidth_minimum_measurement_count: i32,
-    // #[serde(with = "SerHex::<StrictCapPfx>")]
-    // pub bandwidth_safety_margin_bps: u32,
-    // #[serde(with = "SerHex::<StrictCapPfx>")]
-    // pub bandwidth_minimum_known_good_bps: u32,
-    // pub bandwidth_tracking_minimum_duration_msec: i32,
-    // pub bandwidth_tracking_maximum_satiation: Float32,
-    // pub bandwidth_dispute_minimum_count: i32,
-    // #[serde(with = "SerHex::<StrictCapPfx>")]
-    // pub bandwidth_dispute_threshold_bps: u32,
-    // #[serde(with = "SerHex::<StrictCapPfx>")]
-    // pub bandwidth_dispute_increase_bps: u32,
-    // pub host_speculative_migration_check_interval_msec: i32,
-    // pub host_speculative_migration_check_interval_custom_msec: i32,
-    // pub host_speculative_migration_check_interval_matchmaking_msec: i32,
-    // pub host_speculative_migration_remigrate_interval_msec: i32,
-    // pub host_speculative_migration_required_lobby_peer_connectivity_difference: i32,
-    // pub host_speculative_migration_required_match_host_rating_difference: i32,
-    // pub host_speculative_migration_required_match_host_bandwidth_difference: i32,
-    // pub host_speculative_migration_required_custom_host_rating_difference: i32,
-    // pub host_speculative_migration_required_custom_host_bandwidth_difference: i32,
-    // pub host_preference_latency_table: StaticArray<u8, 20>,
-    // pub host_preference_local_user_table: StaticArray<u8, 5>,
-    // #[brw(align_before = 4)]
-    // pub host_preferences: StaticArray<blf_lib::blf::versions::halo3::v11902_08_01_16_1426_halo3_ship::s_bandwidth_configuration_host_preference_table, 4>,
-    // pub host_preference_connectivity_rankings_spread: i32,
-    // pub host_preference_host_rankings_spread: i32,
-    // pub upstream_bandwidth_absolute_minimum_bps: StaticArray<i32, 17>,
-    // pub upstream_bandwidth_requirement_bps: StaticArray<i32, 17>,
-    // pub upstream_bandwidth_desired_bps: StaticArray<i32, 17>,
-    // pub minimum_player_restricted_count: i32,
-    // #[serde(with = "SerHex::<StrictCapPfx>")]
-    // pub minimum_host_upstream_bandwidth_bps: u32,
-    // #[serde(with = "SerHex::<StrictCapPfx>")]
-    // pub minimum_host_downstream_bandwidth_bps: u32,
-    // #[serde(with = "SerHex::<StrictCapPfx>")]
-    // pub minimum_host_delegation_advantage_bps: u32,
-    // #[serde(with = "SerHex::<StrictCapPfx>")]
-    // pub good_host_upstream_bandwidth_bps: u32,
-    // #[serde(with = "SerHex::<StrictCapPfx>")]
-    // pub good_host_downstream_bandwidth_bps: u32,
-    // #[serde(with = "SerHex::<StrictCapPfx>")]
-    // pub minimum_voice_repeater_upstream_bandwidth_bps: u32,
-    // #[serde(with = "SerHex::<StrictCapPfx>")]
-    // pub minimum_voice_repeater_downstream_bandwidth_bps: u32,
-    // #[serde(with = "SerHex::<StrictCapPfx>")]
-    // pub voice_channel_bandwidth_bps: u32,
     pub unknown1: StaticArray<s_bandwidth_unknown_struct_1, 5>,
 }
 
@@ -983,6 +934,16 @@ pub struct s_map_configuration {
     pub map_list: StaticArray<s_map_information, 64>,
 }
 
+#[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default)]
+#[brw(big, repr = u32)]
+pub enum e_alpha_configuration_ui_level {
+    alpha_ui_level_locked = 0,
+    #[default]
+    alpha_ui_level_main = 1,
+    alpha_ui_level_internal_beta = 2,
+    alpha_ui_level_external_beta = 3,
+}
+
 #[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
 #[brw(big)]
 pub struct s_alpha_configuration {
@@ -1000,20 +961,20 @@ pub struct s_alpha_configuration {
 pub struct s_lsp_configuration {
     pub port_range_start: i32,
     pub port_range_count: i32,
-    // pub server_retry_count: i32,
     pub search_results_fresh_milliseconds: i32,
-    // pub recent_activity_milliseconds: i32,
+    // One for each e_online_lsp_service_type
+    pub service_configuration: StaticArray<s_lsp_service_configuration, 8>,
 }
 
 #[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
 #[brw(big)]
-pub struct s_unknown_data_struct_1 {
+pub struct s_lsp_service_configuration {
     pub unknown1: Bool,
     pub unknown2: Bool,
     #[brw(pad_after = 1)]
     pub unknown3: Bool,
     pub unknown4: i32,
-    pub unknown5: i32,
+    pub recent_activity_milliseconds: i32,
 }
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default)]
@@ -1066,6 +1027,20 @@ pub struct s_replication_configuration {
 #[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
 #[brw(big)]
 pub struct s_griefer_configuration {
+    pub unknown_griefer_multiplier_1: Float32,
+    pub unknown_griefer_multiplier_2: Float32,
+    pub unknown_griefer_multiplier_3: Float32,
+    pub ai_griefer_multiplier: Float32,
+    pub unknown_griefer_multiplier_5: Float32,
+    pub unknown_griefer_multiplier_6: Float32,
+    pub same_squad_griefer_multiplier: Float32,
+    pub ai_nearby_griefer_multiplier: Float32,
+    pub enemy_player_nearby_griefer_multiplier: Float32,
+    pub unknown_griefer_multiplier_10: Float32,
+    pub objects_in_sphere_radius_griefer_multiplier: Float32,
+    pub shield_damage_griefer_multiplier: Float32,
+    pub body_damage_griefer_multiplier: Float32,
+    pub betrayal_griefer_multiplier: Float32,
     pub betrayal_decrement_time: Float32,
     pub eject_decrement_time: Float32,
     pub betrayal_cutoff: Float32,
@@ -1074,14 +1049,58 @@ pub struct s_griefer_configuration {
 
 #[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
 #[brw(big)]
+pub struct s_determinism_configuration {
+    pub determinism_version: i32,
+    pub determinism_compatible_version: i32,
+    pub unknown1: Bool,
+    #[brw(pad_after = 2)]
+    pub unknown2: Bool,
+}
+
+#[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
+#[brw(big)]
+pub struct s_banhammer_upload_failure_configuration {
+    pub unknown1: i32,
+    pub unknown2: i32,
+}
+
+#[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
+#[brw(big)]
+pub struct s_banhammer_configuration {
+    pub host_chance_reduction_percentage: i32,
+    pub idle_controller_timeout_seconds: i32,
+    #[serde(with = "SerHex::<StrictCapPfx>")]
+    pub unknown1: u32,
+    pub unknown2: i32,
+    // one per e_network_banhammer_upload_failure_type
+    pub failure_configuration: StaticArray<s_banhammer_upload_failure_configuration, 4>,
+}
+
+#[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
+#[brw(big)]
+pub struct s_files_refresh_configuration {
+    pub map_manifest_refresh_seconds: i32,
+    pub map_manifest_refresh_threshold_seconds: i32,
+    pub file_manifest_refresh_seconds: i32,
+    pub file_manifest_refresh_threshold_seconds: i32,
+    pub machine_file_refresh_seconds: i32,
+    pub machine_file_refresh_threshold_seconds: i32,
+    pub user_file_refresh_seconds: i32,
+    pub user_file_refresh_threshold_seconds: i32,
+    pub title_files_refresh_seconds: i32,
+    pub title_files_refresh_threshold_seconds: i32,
+}
+
+#[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
+#[brw(big)]
 pub struct s_network_configuration {
     pub config_download: s_network_file_download_configuration,
-        pub unknown_data: StaticArray<i32, 261>,
+    pub unknown_data: StaticArray<i32, 261>, // some bandwidth in here.
     pub bandwidth: s_bandwidth_configuration,
     pub life_cycle: s_life_cycle_configuration,
     pub logic: s_logic_configuration,
-    pub unknown_data2: StaticArray<i32, 50>, // may contain s_banhammer_configuration, zoom_relevance
-    // pub banhammer: s_banhammer_configuration,
+    pub banhammer: s_banhammer_configuration,
+    pub unknown_data2: StaticArray<i32, 38>, // may contain s_banhammer_configuration, zoom_relevance
     pub simulation: s_simulation_configuration,
     pub replication: s_replication_configuration,
     pub session: s_session_configuration,
@@ -1091,27 +1110,40 @@ pub struct s_network_configuration {
     pub voice: s_voice_configuration,
     pub unknown_data5: StaticArray<Float32, 6>,
     pub data_mine: s_data_mine_configuration,
-    pub unknown1: StaticArray<i32, 2>, // may contain s_griefer_configuration,
-    pub unknown2: StaticArray<Float32, 14>, // may contain s_griefer_configuration,
+    pub unknown1: StaticArray<i32, 2>,
     pub griefer_config: s_griefer_configuration,
     pub memory: s_network_memory_configuration,
     pub user_interface: s_user_interface,
     pub alpha_configuration: s_alpha_configuration,
     pub crash_handling_configuration: s_crash_handling_configuration,
     pub lsp_configuration: s_lsp_configuration,
-    pub unknown_data7: StaticArray<s_unknown_data_struct_1, 8>,
     pub map_configuration: s_map_configuration,
-    pub unknown_data8: StaticArray<i32, 66>, // // use lsp leaderboard is in here, near the start
+    pub unknown_data8: StaticArray<i32, 2>, // // use lsp leaderboard is in here, near the start
+    pub unknown3: Bool,
+    pub spartan_image_upload_enabled: Bool,
+    pub unknown5: Bool,
+    pub unknown6: Bool,
+    pub unknown4: Bool,
+    #[brw(pad_after = 2)]
+    pub lsp_leaderboard_enabled: Bool,
+    pub unknown_data9: StaticArray<i32, 35>,  // contains active roster and user file refetch times
+    pub determinism_configuration: s_determinism_configuration,
+    pub file_invalidation_configuration: s_files_refresh_configuration,
+    pub unknown_data10: StaticArray<Float32, 14>,
     pub unknown_domain: StaticWcharString<128>,
-    pub unknown3: i32,
-    pub unknown4: i32,
-    pub unknown5: i32,
-    pub unknown6: i32,
-    pub unknown7: StaticArray<Float32, 105>,
-    pub unknown8: StaticArray<i32, 105>,
-    pub unknown9: Bool,
-    pub unknown10: Bool,
-    pub unknown_domains: StaticArray<StaticWcharString<64>, 4>,
+    pub unknown7: i32, // rank cap
+    pub unknown8: i32, // grade cap
+    pub unknown9: i32,
+    pub unknown10: i32, // may be daily cookie cap.
+    // by grade, subgrade
+    pub unknown_rank_1: StaticArray<StaticArray<Float32, 5>, 21>,
+    pub unknown_rank_2: StaticArray<StaticArray<i32, 5>, 21>,
+    pub unknown11: Bool,
+    pub unknown12: Bool,  // seems upload queue related.
+    pub router_url: StaticWcharString<64>,
+    pub arena_url: StaticWcharString<64>,
+    pub invasion_url: StaticWcharString<64>,
+    pub network_details_url: StaticWcharString<64>,
     #[brw(pad_after = 2)]
     pub dlc_paths: s_dlc_paths,
 }

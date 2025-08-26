@@ -108,6 +108,7 @@ pub struct s_bandwidth_configuration {
     pub host_speculative_migration_check_interval_msec: i32,
     pub host_speculative_migration_remigrate_interval_msec: i32,
     pub unknown5: StaticArray<u8, 23>,
+    // it looks like host_preference_latency_table might be in here, but a bit different from 08117
     pub unknown6: StaticArray<i32, 20>,
     pub unknown7: StaticArray<u8, 33>,
     pub upstream_bandwidth_absolute_minimum_bps: StaticArray<i32, 17>,
