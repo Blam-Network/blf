@@ -7,7 +7,7 @@ use blf_lib_derivable::result::BLFLibResult;
 
 pub fn create_bitstream_writer(size: usize, endian: e_bitstream_byte_order) -> c_bitstream_writer {
     let mut bitstream = c_bitstream_writer::new(size, endian);
-    bitstream.begin_writing(1);
+    bitstream.begin_writing();
     bitstream
 }
 
@@ -25,7 +25,7 @@ pub fn close_bitstream_writer(bitstream: &mut c_bitstream_writer) -> BLFLibResul
     Ok(data[0..data_length].to_vec())
 }
 
-#[derive(Default, PartialEq, Eq, Debug)]
+#[derive(Default, PartialEq, Eq, Debug, Copy, Clone)]
 pub enum e_bitstream_byte_order
 {
     #[default]
@@ -33,8 +33,27 @@ pub enum e_bitstream_byte_order
     _bitstream_byte_order_big_endian
 }
 
+#[derive(Default, PartialEq, Eq, Debug)]
+pub enum e_bitstream_byte_fill_direction
+{
+    #[default]
+    _bitstream_byte_fill_direction_msb_to_lsb,
+    _bitstream_byte_fill_direction_lsb_to_msb // Used by pre-release h3
+}
+
 impl e_bitstream_byte_order
 {
+    pub fn swap(&self) -> e_bitstream_byte_order {
+        match self {
+            e_bitstream_byte_order::_bitstream_byte_order_little_endian => {
+                e_bitstream_byte_order::_bitstream_byte_order_big_endian
+            }
+            e_bitstream_byte_order::_bitstream_byte_order_big_endian => {
+                e_bitstream_byte_order::_bitstream_byte_order_little_endian
+            }
+        }
+    }
+
     pub fn from_binrw_endian(endian: binrw::endian::Endian) -> e_bitstream_byte_order {
         match endian {
             binrw::endian::Endian::Big => e_bitstream_byte_order::_bitstream_byte_order_big_endian,
@@ -55,15 +74,4 @@ pub enum e_bitstream_state
     _bitstream_state_read_finished,
 
     k_bitstream_state_count
-}
-
-pub const k_bitstream_maximum_position_stack_size: usize = 4;
-
-#[derive(Default)]
-pub struct s_bitstream_data {
-    current_memory_bit_position: usize,
-    current_stream_bit_position: usize,
-    window: u64,
-    window_bits_used: usize,
-    current_stream_byte_position: usize, // aka current_memory_byte_position
 }

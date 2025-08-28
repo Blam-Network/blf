@@ -6,52 +6,77 @@ use num_traits::FromPrimitive;
 use widestring::U16CString;
 use blf_lib::blam::common::math::real_math::{assert_valid_real_normal3d, cross_product3d, dequantize_unit_vector3d, dot_product3d, k_real_epsilon, global_forward3d, global_left3d, global_up3d, normalize3d, valid_real_vector3d_axes3, arctangent, k_pi, dequantize_real, rotate_vector_about_axis, valid_real_vector3d_axes2};
 use blf_lib::{assert_ok, OPTION_TO_RESULT};
+use blf_lib::io::bitstream::{e_bitstream_byte_fill_direction};
 use blf_lib_derivable::result::BLFLibResult;
 use crate::blam::common::math::integer_math::int32_point3d;
 use crate::blam::common::math::real_math::real_vector3d;
-use crate::blam::common::networking::transport::transport_security::s_transport_secure_address;
-use crate::io::bitstream::{e_bitstream_byte_order, e_bitstream_state, k_bitstream_maximum_position_stack_size, s_bitstream_data};
+use crate::blam::halo3::release::networking::transport::transport_security::s_transport_secure_address;
+use crate::io::bitstream::{e_bitstream_byte_order, e_bitstream_state};
+use crate::io::bitstream::e_bitstream_byte_fill_direction::{_bitstream_byte_fill_direction_msb_to_lsb, _bitstream_byte_fill_direction_lsb_to_msb};
 use crate::types::numbers::Float32;
 use crate::types::u64::Unsigned64;
 
 pub struct c_bitstream_reader<'a>
 {
     m_data: &'a [u8],
-    // m_data_max: u32, REMOVED
     m_data_size_bytes: usize,
-    m_data_size_alignment: u32, // not sure if this is used
     m_state: e_bitstream_state,
-    __unknown14: u32, // might be debug mode
-    m_bitstream_data: s_bitstream_data,
-    m_position_stack_depth: u32,
-    __unknown34: u32,
-    m_position_stack: [s_bitstream_data; k_bitstream_maximum_position_stack_size],
-    __unknown98: u32,
-    __unknown9C: u32,
+    /// Some old versions of halo will pack BE values in LE and visa versa.
+    /// We keep "packed" byte order which is swapped when using legacy settings.
+    /// This allows BE consumers (ie xenon builds) to pass BE and legacy config will swap if necessary.
+    m_packed_byte_order: e_bitstream_byte_order,
+    /// This is the direction in which bytes within the bitstream are filled.
+    /// For example, when writing 5 bits 11111 then 3 bits 000 to a bitstream,
+    /// this could be expressed as:
+    /// 11111000 (most significant bit to least significant bit)
+    /// 00011111 (least significant bit to most significant bit)
+    /// In most cases, MSB to LSB is used, bit LSB to MSB is notably used in Halo 3 Beta and prior.
+    m_byte_pack_direction: e_bitstream_byte_fill_direction,
+    /// This is the direction in which bytes within the bitstream are put back together.
+    /// Eg, given a buffer of 2 bytes, and an offset of bit 3
+    /// when reading 8 bits, we will read 5 11111 from byte 1, 3 000 from byte 2.
+    /// We can then return this as a byte
+    /// When using MSB to LSB, the 5 bits read first would go first
+    /// 11111000
+    /// When using LSB to MSB, the 5 bits read first go last
+    /// 00011111
+    m_byte_unpack_direction: e_bitstream_byte_fill_direction,
 
-    m_byte_order: e_bitstream_byte_order // new
-
+    current_stream_bit_position: usize,
+    current_stream_byte_position: usize,
 }
 
 impl<'a> c_bitstream_reader<'a> {
-
-    // pub fn new() {}
-
     pub fn new(data: &[u8], byte_order: e_bitstream_byte_order) -> c_bitstream_reader {
         let length = data.len();
         c_bitstream_reader {
             m_data: data,
             m_data_size_bytes: length,
-            m_data_size_alignment: 1,
             m_state: e_bitstream_state::_bitstream_state_initial,
-            __unknown14: Default::default(),
-            m_bitstream_data: Default::default(),
-            m_position_stack_depth: 0,
-            __unknown34: Default::default(),
-            m_position_stack: Default::default(),
-            __unknown98: Default::default(),
-            __unknown9C: Default::default(),
-            m_byte_order: byte_order,
+            m_packed_byte_order: byte_order,
+            m_byte_pack_direction: e_bitstream_byte_fill_direction::default(),
+            m_byte_unpack_direction: e_bitstream_byte_fill_direction::default(),
+
+            current_stream_bit_position: 0,
+            current_stream_byte_position: 0,
+        }
+    }
+
+    /// Use this when dealing with bitstream data from the Halo 3 Beta or prior.
+    pub fn new_with_legacy_settings(data: &[u8], byte_order: e_bitstream_byte_order) -> c_bitstream_reader {
+        let length = data.len();
+        c_bitstream_reader {
+            m_data: data,
+            m_data_size_bytes: length,
+            m_state: e_bitstream_state::_bitstream_state_initial,
+
+            // Legacy shiz
+            m_packed_byte_order: byte_order.swap(),
+            m_byte_pack_direction: _bitstream_byte_fill_direction_lsb_to_msb,
+            m_byte_unpack_direction: _bitstream_byte_fill_direction_lsb_to_msb,
+
+            current_stream_byte_position: 0,
+            current_stream_bit_position: 0,
         }
     }
 
@@ -67,7 +92,7 @@ impl<'a> c_bitstream_reader<'a> {
         let data = self.read_raw_data(size_in_bits)?;
         let mut reader = Cursor::new(data);
 
-        Ok(match self.m_byte_order {
+        Ok(match self.m_packed_byte_order {
             e_bitstream_byte_order::_bitstream_byte_order_little_endian => {
                 T::read_le(&mut reader)?
             }
@@ -84,8 +109,10 @@ impl<'a> c_bitstream_reader<'a> {
     pub fn read_bits_internal(&mut self, output: &mut [u8], size_in_bits: usize) -> BLFLibResult {
         let end_memory_position = output.len();
         let end_stream_position = self.m_data.len();
-        let remaining_stream_bytes = end_stream_position - (self.m_bitstream_data.current_stream_byte_position + 1);
-        let remaining_stream_bits = (8 - self.m_bitstream_data.current_stream_bit_position) + (remaining_stream_bytes * 8);
+        let remaining_stream_bytes = end_stream_position - (self.current_stream_byte_position + 1);
+        let remaining_stream_bits = (8 - self.current_stream_bit_position) + (remaining_stream_bytes * 8);
+
+        // println!("io:bitstream:bitstream_reader read_bits_internal: reading {size_in_bits} bits");
 
         let size_in_bytes = size_in_bits.div_ceil(8);
         if end_memory_position < size_in_bytes {
@@ -100,99 +127,114 @@ impl<'a> c_bitstream_reader<'a> {
             return Err("Tried to read zero bits.".into())
         }
 
-        let mut windows_to_read = (size_in_bits as f32 / 64f32).ceil() as usize;
         let mut remaining_bits_to_read = size_in_bits;
-        while windows_to_read > 0 {
-            let mut window_bits_to_read = min(remaining_bits_to_read, 64);
-            self.m_bitstream_data.window = 0;
-            self.m_bitstream_data.window_bits_used = 0;
+
+        let mut byte_index = 0;
+        while remaining_bits_to_read > 0 {
+            // println!("io:bitstream:bitstream_reader reading byte {byte_index}");
+
+            let mut output_byte = 0u8;
+            let mut bits_read = 0;
 
             // 1. Read any remaining bits on the current byte.
-            let remaining_bits_at_position = 8 - self.m_bitstream_data.current_stream_bit_position;
-            if remaining_bits_at_position < 8 {
-                let current_byte_index = self.m_bitstream_data.current_stream_byte_position;
+            if self.current_stream_bit_position != 0 {
+                let remaining_bits_at_position = 8 - self.current_stream_bit_position;
+                let reading_bits_at_position = min(remaining_bits_at_position, remaining_bits_to_read);
 
-                let mut bits = self.m_data[current_byte_index];
-                // Of the remaining bits at the current byte, how many are we reading?
-                let reading_bits_at_position = min(size_in_bits, remaining_bits_at_position);
+                // 1.1 Grab the next 8 bits.
+                let mut bits = self.m_data[self.current_stream_byte_position];
 
-                // shift the byte to remove previously read bits.
-                bits <<= self.m_bitstream_data.current_stream_bit_position;
+                // 1.2. We shift the bits we've read to the MSB and discard any previously read.
+                match self.m_byte_pack_direction {
+                    _bitstream_byte_fill_direction_msb_to_lsb => {
+                        bits <<= self.current_stream_bit_position;
+                    }
+                    _bitstream_byte_fill_direction_lsb_to_msb => {
+                        bits <<= remaining_bits_at_position - reading_bits_at_position;
+                    }
+                }
 
-                if reading_bits_at_position < remaining_bits_at_position {
-                    // Mask off the excess
-                    let mask = 0xff << (8 - size_in_bits);
-                    bits &= mask;
+                // 1.3. Mask off any excess
+                bits &= 0xff << (8 - reading_bits_at_position);
+
+                // println!("io:bitstream:bitstream_reader 1. Read {:0width$b}", bits >> 8 - reading_bits_at_position, width=reading_bits_at_position);
+
+                // 1.4 If we're unpacking LSB to MSB, we need to shift what we've read.
+                if self.m_byte_unpack_direction == _bitstream_byte_fill_direction_lsb_to_msb {
+                    bits >>= 8 - reading_bits_at_position;
                 }
 
                 // push the byte onto the window.
-                self.m_bitstream_data.window = u64::from(bits) << (64 - 8);
-                self.m_bitstream_data.window_bits_used = reading_bits_at_position;
+                output_byte = bits;
+                bits_read += reading_bits_at_position;
+
                 // If we read all the remaining bits at this byte, move to the next.
-                if reading_bits_at_position == remaining_bits_at_position {
-                    self.m_bitstream_data.current_stream_bit_position = 0;
-                    self.m_bitstream_data.current_stream_byte_position += 1;
+                if remaining_bits_at_position > remaining_bits_at_position {
+                    panic!("bitstream reader believes it has read more bits than available. This should never happen.")
+                } else if reading_bits_at_position == remaining_bits_at_position {
+                    self.current_stream_bit_position = 0;
+                    self.current_stream_byte_position += 1;
                 } else {
-                    self.m_bitstream_data.current_stream_bit_position += reading_bits_at_position;
+                    self.current_stream_bit_position += reading_bits_at_position;
                 }
-                window_bits_to_read -= reading_bits_at_position;
+
+                remaining_bits_to_read -= reading_bits_at_position;
             }
 
-            // 2. Read any full bytes.
-            if window_bits_to_read >= 8 {
-                let current_byte_index = self.m_bitstream_data.current_stream_byte_position;
+            // 2. Read more bits from the next byte.
+            if remaining_bits_to_read > 0 {
+                let reading_bits_at_position = min(8 - bits_read, remaining_bits_to_read);
+                // 2.1 Grab the next 8 bits.
+                let mut bits = self.m_data[self.current_stream_byte_position];
 
-                let bytes_to_read = window_bits_to_read / 8;
-                let window_shift = 64 - (bytes_to_read * 8) - self.m_bitstream_data.window_bits_used;
-                let mut window_bytes = [0u8; 8];
-                let unused_bytes = 8 - bytes_to_read;
-                window_bytes[unused_bytes..8].copy_from_slice(&self.m_data[current_byte_index..current_byte_index + bytes_to_read]);
-                window_bytes.reverse();
-                // Add em to the window...
-                self.m_bitstream_data.window |= u64::from_le_bytes(window_bytes) << window_shift;
-                self.m_bitstream_data.window_bits_used += bytes_to_read * 8;
-                self.m_bitstream_data.current_stream_byte_position += bytes_to_read;
-                self.m_bitstream_data.current_stream_bit_position = 0;
-                window_bits_to_read -= bytes_to_read * 8;
+                // 2.2. If we're reading LSB to MSB, we push the bits we've read to the MSB
+                //      If reading MSB to LSB, they're already there.
+                if self.m_byte_pack_direction == _bitstream_byte_fill_direction_lsb_to_msb {
+                    bits <<= 8 - reading_bits_at_position;
+                }
+
+                // 2.3. Mask off any excess
+                bits &= 0xff << (8 - reading_bits_at_position);
+
+                // println!("io:bitstream:bitstream_reader 2. Read {:0width$b}", bits >> 8 - reading_bits_at_position, width=reading_bits_at_position);
+
+                // 2.4 Shift what we've read according to unpacking order.
+                match self.m_byte_unpack_direction {
+                    _bitstream_byte_fill_direction_msb_to_lsb => {
+                        // BBB----- >> AABBB---
+                        bits >>= bits_read
+                    }
+                    _bitstream_byte_fill_direction_lsb_to_msb => {
+                        // BBB---AA >> ---AABBB
+                        bits >>= 8 - (bits_read + reading_bits_at_position)
+                    }
+                }
+
+                // Stick it on the output.
+                output_byte |= bits;
+                bits_read += reading_bits_at_position;
+
+                remaining_bits_to_read -= reading_bits_at_position;
+
+                // If we read a full byte, move onto the next
+                if reading_bits_at_position == 8 {
+                    self.current_stream_bit_position = 0;
+                    self.current_stream_byte_position += 1;
+                } else {
+                    self.current_stream_bit_position += reading_bits_at_position;
+                }
             }
 
-            // 3. Read any remaining bits.
-            if window_bits_to_read > 0 {
-                let current_byte_index = self.m_bitstream_data.current_stream_byte_position;
-
-                let mut bits = self.m_data[current_byte_index];
-
-                // Shift off the excess
-                bits >>= 8 - window_bits_to_read;
-
-
-                let window_shift = 64 - window_bits_to_read - self.m_bitstream_data.window_bits_used;
-                self.m_bitstream_data.window |= u64::from(bits) << window_shift;
-                self.m_bitstream_data.window_bits_used += window_bits_to_read;
-                self.m_bitstream_data.current_stream_bit_position = window_bits_to_read;
-                self.m_bitstream_data.current_stream_byte_position = current_byte_index;
+            // If we read less than a byte and we've unpacked MSB to LSB, we shift the bits to the LSB.
+            if bits_read < 8 && self.m_byte_unpack_direction == _bitstream_byte_fill_direction_msb_to_lsb {
+                output_byte >>= 8 - bits_read;
             }
 
-            // Write to output.
-            let current_memory_position = self.m_bitstream_data.current_memory_bit_position / 8;
-            let window_bytes_used = self.m_bitstream_data.window_bits_used.div_ceil(8);
-            let next_memory_position = current_memory_position + window_bytes_used;
-            let window_value = self.m_bitstream_data.window >> (64 - self.m_bitstream_data.window_bits_used);
-            let window_bytes = window_value.to_be_bytes();
-            output[current_memory_position..next_memory_position].copy_from_slice(&window_bytes[8-window_bytes_used..8]);
-            self.m_bitstream_data.current_memory_bit_position += self.m_bitstream_data.window_bits_used;
+            // println!("io:bitstream:bitstream_reader byte {byte_index} is {output_byte:08b}");
+            output[byte_index] = output_byte;
 
-            windows_to_read -= 1;
-            self.m_bitstream_data.current_memory_bit_position = next_memory_position * 8;
-
-            if remaining_bits_to_read >= 64 {
-                remaining_bits_to_read -= 64;
-            } else {
-                remaining_bits_to_read = 0;
-            }
+            byte_index += 1;
         }
-
-        self.m_bitstream_data.current_memory_bit_position = 0;
 
         Ok(())
     }
@@ -212,7 +254,7 @@ impl<'a> c_bitstream_reader<'a> {
 
         let mut byte_array = [0u8; 4];
 
-        match self.m_byte_order {
+        match self.m_packed_byte_order {
             e_bitstream_byte_order::_bitstream_byte_order_little_endian => {
                 byte_array[0..bytes_slice.len()].copy_from_slice(bytes_slice);
                 Ok(u32::from_le_bytes(byte_array))
@@ -230,7 +272,7 @@ impl<'a> c_bitstream_reader<'a> {
         let mut bytes = [0u8; 4];
         self.read_bits_internal(&mut bytes, size_in_bits)?;
 
-        Ok(match self.m_byte_order {
+        Ok(match self.m_packed_byte_order {
             e_bitstream_byte_order::_bitstream_byte_order_little_endian => { Float32::from(f32::from_le_bytes(bytes)) }
             e_bitstream_byte_order::_bitstream_byte_order_big_endian => { Float32::from(f32::from_be_bytes(bytes)) }
         })
@@ -242,7 +284,7 @@ impl<'a> c_bitstream_reader<'a> {
         let mut bytes = [0u8; 2];
         self.read_bits_internal(&mut bytes, size_in_bits)?;
 
-        Ok(match self.m_byte_order {
+        Ok(match self.m_packed_byte_order {
             e_bitstream_byte_order::_bitstream_byte_order_little_endian => { i16::from_le_bytes(bytes) }
             e_bitstream_byte_order::_bitstream_byte_order_big_endian => { i16::from_be_bytes(bytes) }
         })
@@ -272,7 +314,7 @@ impl<'a> c_bitstream_reader<'a> {
         let mut bytes = [0u8; 8];
         self.read_bits_internal(&mut bytes, size_in_bits)?;
 
-        match self.m_byte_order {
+        match self.m_packed_byte_order {
             e_bitstream_byte_order::_bitstream_byte_order_little_endian => { Ok(Unsigned64::from(u64::from_le_bytes(bytes))) }
             e_bitstream_byte_order::_bitstream_byte_order_big_endian => { Ok(Unsigned64::from(u64::from_be_bytes(bytes))) }
         }
@@ -422,11 +464,6 @@ impl<'a> c_bitstream_reader<'a> {
         self.reset(e_bitstream_state::_bitstream_state_reading);
     }
 
-    pub fn begin_writing(&mut self, data_size_alignment: u32) {
-        self.m_data_size_alignment = data_size_alignment;
-        self.reset(e_bitstream_state::_bitstream_state_writing);
-    }
-
     pub fn data_is_untrusted(is_untrusted: bool) {
         unimplemented!()
     }
@@ -452,20 +489,12 @@ impl<'a> c_bitstream_reader<'a> {
         self.m_state == e_bitstream_state::_bitstream_state_read_only_for_consistency
     }
 
-    pub fn writing(&self) -> bool {
-        self.m_state == e_bitstream_state::_bitstream_state_writing
-    }
-
     pub fn finish_consistency_check() {
         unimplemented!()
     }
 
     pub fn finish_reading() {
         unimplemented!()
-    }
-
-    pub fn finish_writing(&mut self, out_bits_remaining: &mut usize) {
-        unreachable!()
     }
 
     pub fn get_current_stream_bit_position() -> u32 {
@@ -477,8 +506,6 @@ impl<'a> c_bitstream_reader<'a> {
     }
 
     pub fn get_data(&self, data_length: &mut usize) -> BLFLibResult<&[u8]> {
-        assert_ok!(!self.writing());
-
         *data_length = self.m_data_size_bytes;
         Ok(self.m_data)
     }
@@ -497,18 +524,8 @@ impl<'a> c_bitstream_reader<'a> {
 
     fn reset(&mut self, state: e_bitstream_state) {
         self.m_state = state;
-        self.m_bitstream_data.current_memory_bit_position = 0;
-        self.m_bitstream_data.current_stream_bit_position = 0;
-        self.m_position_stack_depth = 0;
-        self.__unknown14 = 0;
-        self.m_bitstream_data.current_stream_byte_position = 0;
-        self.m_bitstream_data.window = 0;
-        self.m_bitstream_data.window_bits_used = 0;
-
-        if self.writing() {
-            self.__unknown98 = 0;
-            self.__unknown9C = 0;
-        }
+        self.current_stream_bit_position = 0;
+        self.current_stream_byte_position = 0;
     }
 
     fn set_data(&mut self, data: &'a [u8]) {
@@ -565,9 +582,85 @@ impl<'a> c_bitstream_reader<'a> {
         c_bitstream_reader::axes_compute_reference_internal(up, &mut forward_reference, &mut left_reference)?;
         Ok(arctangent(dot_product3d(&left_reference, forward), dot_product3d(&forward_reference, forward)))
     }
+}
 
-    // not from blam
-    pub fn get_current_offset(&self) -> usize {
-        self.m_bitstream_data.current_stream_byte_position
+#[cfg(test)]
+mod bitstream_reader_tests {
+    use super::*;
+
+    #[test]
+    fn read_with_msb_to_lsb_byte_pack_direction() {
+        let test_data: [u8; 1] = [
+            0b00011111
+        ];
+
+        let mut sut = c_bitstream_reader::new(&test_data, e_bitstream_byte_order::_bitstream_byte_order_big_endian);
+        sut.begin_reading();
+
+        assert_eq!(sut.read_integer(3).unwrap(), 0b000);
+        assert_eq!(sut.read_integer(5).unwrap(), 0b11111);
+    }
+
+    #[test]
+    fn read_with_lsb_to_msb_byte_pack_direction() {
+        let test_data: [u8; 1] = [
+            0b10010100
+        ];
+
+        let mut sut = c_bitstream_reader::new_with_legacy_settings(&test_data, e_bitstream_byte_order::_bitstream_byte_order_big_endian);
+        sut.begin_reading();
+
+        assert_eq!(sut.read_integer(6).unwrap(), 20);
+        assert_eq!(sut.read_integer(2).unwrap(), 0b10);
+    }
+
+    #[test]
+    fn read_h3_06481_game_set_data() {
+        let test_data: [u8; 13] = [
+            0b10010100, 0b00000001, 0b00000000, 0b00000000,
+            0b00000000, 0b10110001, 0b00001001, 0b00000000,
+            0b00000000, 0b10010000, 0b10101011, 0b00000_011, 0
+        ];
+
+        let mut sut = c_bitstream_reader::new_with_legacy_settings(&test_data, e_bitstream_byte_order::_bitstream_byte_order_big_endian);
+        sut.begin_reading();
+        // game entries count
+        assert_eq!(sut.read_integer(6).unwrap(), 20);
+        // game entry 1 weight
+        assert_eq!(sut.read_integer(32).unwrap(), 6);
+        // game entry 1 minimum players
+        assert_eq!(sut.read_integer(4).unwrap(), 4);
+        // game entry 1 skip after veto
+        assert_eq!(sut.read_bool().unwrap(), false);
+        // game entry 1 map id
+        assert_eq!(sut.read_integer(32).unwrap(), 310);
+        // game entry 1 game variant (truncated)
+        assert_eq!(sut.read_string_utf8(3).unwrap(), "ru\0");
+    }
+
+    #[test]
+    fn read_h3_12070_game_set_data() {
+        let test_data: [u8; 13] = [
+            0b11011100, 0b00000000, 0b00000000, 0b00000000,
+            0b00000100, 0b01000000, 0b00000000, 0b00000000,
+            0b00100000, 0b10000011, 0b01010101, 0b1111_0000, 0
+        ];
+
+        let mut sut = c_bitstream_reader::new(&test_data, e_bitstream_byte_order::_bitstream_byte_order_big_endian);
+        sut.begin_reading();
+        // game entries count
+        assert_eq!(sut.read_integer(6).unwrap(), 55);
+        // game entry 1 weight
+        assert_eq!(sut.read_integer(32).unwrap(), 1);
+        // game entry 1 minimum players
+        assert_eq!(sut.read_integer(4).unwrap(), 1);
+        // game entry 1 skip after veto
+        assert_eq!(sut.read_bool().unwrap(), false);
+        // game entry 1 optional
+        assert_eq!(sut.read_bool().unwrap(), false);
+        // game entry 1 map id
+        assert_eq!(sut.read_integer(32).unwrap(), 520);
+        // game entry 1 game variant (truncated)
+        assert_eq!(sut.read_string_utf8(3).unwrap(), "5_\0");
     }
 }
