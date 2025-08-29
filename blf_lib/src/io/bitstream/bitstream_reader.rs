@@ -589,6 +589,59 @@ mod bitstream_reader_tests {
     use super::*;
 
     #[test]
+    fn read_be() {
+        let test_data: [u8; 2] = [
+            0b001_10000, 0b10000001
+        ];
+
+        let mut sut = c_bitstream_reader::new(&test_data, e_bitstream_byte_order::_bitstream_byte_order_big_endian);
+        sut.begin_reading();
+
+        assert_eq!(sut.read_integer(3).unwrap(), 0b001);
+        assert_eq!(sut.read_integer(13).unwrap(), 33793);
+    }
+
+    #[test]
+    fn read_le() {
+        let test_data: [u8; 2] = [
+            0b001_10000, 0b10000001
+        ];
+
+        let mut sut = c_bitstream_reader::new(&test_data, e_bitstream_byte_order::_bitstream_byte_order_little_endian);
+        sut.begin_reading();
+
+        assert_eq!(sut.read_integer(3).unwrap(), 0b001);
+        assert_eq!(sut.read_integer(13).unwrap(), 388);
+    }
+
+    #[test]
+    fn read_legacy_be() {
+        let test_data: [u8; 2] = [
+            0b10110_001, 0b00001001
+        ];
+
+        let mut sut = c_bitstream_reader::new_with_legacy_settings(&test_data, e_bitstream_byte_order::_bitstream_byte_order_big_endian);
+        sut.begin_reading();
+
+        assert_eq!(sut.read_integer(3).unwrap(), 0b001);
+        assert_eq!(sut.read_integer(13).unwrap(), 310);
+    }
+
+    #[test]
+    fn read_legacy_le() {
+        let test_data: [u8; 2] = [
+            0b10110_001, 0b00001001
+        ];
+
+        let mut sut = c_bitstream_reader::new_with_legacy_settings(&test_data, e_bitstream_byte_order::_bitstream_byte_order_little_endian);
+        sut.begin_reading();
+
+        assert_eq!(sut.read_integer(3).unwrap(), 0b001);
+        assert_eq!(sut.read_integer(13).unwrap(), 13825);
+    }
+
+
+    #[test]
     fn read_with_msb_to_lsb_byte_pack_direction() {
         let test_data: [u8; 1] = [
             0b00011111
