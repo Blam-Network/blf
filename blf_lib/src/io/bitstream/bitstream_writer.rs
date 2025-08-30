@@ -6,6 +6,8 @@ use binrw::BinWrite;
 use widestring::U16CString;
 use blf_lib::assert_ok;
 use blf_lib::blam::common::math::real_math::{assert_valid_real_normal3d, cross_product3d, dequantize_unit_vector3d, dot_product3d, k_real_epsilon, global_forward3d, global_left3d, global_up3d, normalize3d, valid_real_vector3d_axes3, arctangent, quantize_normalized_vector3d, k_pi};
+use blf_lib::io::bitstream::e_bitstream_byte_fill_direction;
+use blf_lib::io::bitstream::e_bitstream_byte_fill_direction::{_bitstream_byte_fill_direction_lsb_to_msb, _bitstream_byte_fill_direction_msb_to_lsb};
 use blf_lib_derivable::result::BLFLibResult;
 use crate::blam::common::math::integer_math::int32_point3d;
 use crate::blam::common::math::real_math::{quantize_real, real_vector3d};
@@ -18,7 +20,26 @@ pub struct c_bitstream_writer
     m_data_size_bytes: usize,
     m_state: e_bitstream_state,
 
-    m_byte_order: e_bitstream_byte_order,
+    /// Some old versions of halo will pack BE values in LE and visa versa.
+    /// We keep "packed" byte order which is swapped when using legacy settings.
+    /// This allows BE consumers (ie xenon builds) to pass BE and legacy config will swap if necessary.
+    m_packed_byte_order: e_bitstream_byte_order,
+    /// This is the direction in which bytes within the bitstream are filled.
+    /// For example, when writing 5 bits 11111 then 3 bits 000 to a bitstream,
+    /// this could be expressed as:
+    /// 11111000 (most significant bit to least significant bit)
+    /// 00011111 (least significant bit to most significant bit)
+    /// In most cases, MSB to LSB is used, bit LSB to MSB is notably used in Halo 3 Beta and prior.
+    m_byte_pack_direction: e_bitstream_byte_fill_direction,
+    /// This is the direction in which bytes within the bitstream are put back together.
+    /// Eg, given a buffer of 2 bytes, and an offset of bit 3
+    /// when reading 8 bits, we will read 5 11111 from byte 1, 3 000 from byte 2.
+    /// We can then return this as a byte
+    /// When using MSB to LSB, the 5 bits read first would go first
+    /// 11111000
+    /// When using LSB to MSB, the 5 bits read first go last
+    /// 00011111
+    m_byte_unpack_direction: e_bitstream_byte_fill_direction,
 
     current_stream_bit_position: usize,
     current_stream_byte_position: usize,
@@ -30,7 +51,25 @@ impl c_bitstream_writer {
             m_data: vec![0u8; size],
             m_data_size_bytes: size,
             m_state: e_bitstream_state::_bitstream_state_initial,
-            m_byte_order: byte_order,
+
+            m_packed_byte_order: byte_order,
+            m_byte_pack_direction: e_bitstream_byte_fill_direction::default(),
+            m_byte_unpack_direction: e_bitstream_byte_fill_direction::default(),
+
+            current_stream_bit_position: 0,
+            current_stream_byte_position: 0,
+        }
+    }
+
+    pub fn new_with_legacy_settings(size: usize, byte_order: e_bitstream_byte_order) -> c_bitstream_writer {
+        c_bitstream_writer {
+            m_data: vec![0u8; size],
+            m_data_size_bytes: size,
+            m_state: e_bitstream_state::_bitstream_state_initial,
+
+            m_packed_byte_order: byte_order.swap(),
+            m_byte_pack_direction: _bitstream_byte_fill_direction_lsb_to_msb,
+            m_byte_unpack_direction: _bitstream_byte_fill_direction_lsb_to_msb,
 
             current_stream_bit_position: 0,
             current_stream_byte_position: 0,
@@ -40,7 +79,7 @@ impl c_bitstream_writer {
     // WRITES
 
     pub fn write_integer(&mut self, value: u32, size_in_bits: usize) -> BLFLibResult {
-        match self.m_byte_order {
+        match self.m_packed_byte_order {
             e_bitstream_byte_order::_bitstream_byte_order_little_endian => {
                 self.write_bits_internal(&value.to_le_bytes(), size_in_bits)?;
             }
@@ -71,7 +110,7 @@ impl c_bitstream_writer {
 
     // Be careful using this.
     pub fn write_float(&mut self, value: impl Into<f32>, size_in_bits: usize) -> BLFLibResult {
-        match self.m_byte_order {
+        match self.m_packed_byte_order {
             e_bitstream_byte_order::_bitstream_byte_order_little_endian => {
                 self.write_bits_internal(&value.into().to_le_bytes(), size_in_bits)?;
             }
@@ -93,7 +132,7 @@ impl c_bitstream_writer {
     pub fn write_raw<T: BinWrite>(&mut self, value: T, size_in_bits: usize) -> BLFLibResult where for<'a> <T as BinWrite>::Args<'a>: Default {
         let mut writer = Cursor::new(Vec::new());
 
-        match self.m_byte_order {
+        match self.m_packed_byte_order {
             e_bitstream_byte_order::_bitstream_byte_order_little_endian => {
                 T::write_le(&value, &mut writer)?;
             }
@@ -111,7 +150,7 @@ impl c_bitstream_writer {
     }
 
     pub fn write_qword(&mut self, value: impl Into<u64>, size_in_bits: usize) -> BLFLibResult {
-        match self.m_byte_order {
+        match self.m_packed_byte_order {
             e_bitstream_byte_order::_bitstream_byte_order_little_endian => {
                 self.write_bits_internal(&value.into().to_le_bytes(), size_in_bits)?;
             }
@@ -133,59 +172,114 @@ impl c_bitstream_writer {
             return Err(format!("Tried to write {size_in_bits} bits but only {} were provided!", (data.len() * 8)).into())
         }
 
-        let bits_available
-            = ((self.m_data.len() - self.current_stream_byte_position) * 8)
-            - self.current_stream_bit_position;
+        // println!("io:bitstream:bitstream_writer write_bits_internal: writing {size_in_bits} bits");
 
-        // Make a mutable clone of the data to work with.
-        let mut data = Vec::from(data);
-
-        // If we were given surplus bits, shift them off.
-        let surplus_bits = (data.len() * 8) - size_in_bits;
-        left_shift_array(&mut data, surplus_bits);
+        let surplus_bytes = data.len() - (size_in_bits as f32 / 8f32).ceil() as usize;
+        // This isn't the total surplus bit count but instead, bits in addition to the surplus bytes.
+        let surplus_bits = ((data.len() * 8) - size_in_bits) % 8;
 
         let mut remaining_bits_to_write = size_in_bits;
 
-        // 1. Write remaining bits at the current byte.
-        let remaining_bits_at_output_position =
-            8 - self.current_stream_bit_position;
+        while remaining_bits_to_write > 0 {
+            let bytes_written = (size_in_bits - remaining_bits_to_write) / 8;
 
-        if remaining_bits_at_output_position < 8 {
-            // of the remaining bits at this byte, how many are we writing?
-            let bits_to_write_at_position = min(remaining_bits_to_write, remaining_bits_at_output_position);
-            let writing_byte = data[0];
-            self.m_data[self.current_stream_byte_position]
-                |= writing_byte >> (8 - remaining_bits_at_output_position);
+            // Bits of the current byte written.
+            let mut bits_written = 0;
 
-            remaining_bits_to_write -= min(remaining_bits_at_output_position, remaining_bits_to_write);
-            // after writing, how many bits are now left at this byte?
-            let remaining_bits_at_output_position = remaining_bits_at_output_position - bits_to_write_at_position;
-            let more_space_at_current_byte = remaining_bits_at_output_position > 0;
+            // 1. Get the next bits to write. We shift bits to the MSB.
+            let mut writing_byte = match self.m_packed_byte_order {
+                e_bitstream_byte_order::_bitstream_byte_order_little_endian => {
+                    // if we were writing -1 in 13 bits, we would have 3 surplus bits.
+                    // in LE these surplus bits are at the last byte
+                    // 11111111 00011111
+                    // If we have less than a byte remaining to write, we're at the end, we can shift left.
+                    if remaining_bits_to_write < 8 {
+                        data[bytes_written] << (8 - remaining_bits_to_write)
+                    } else {
+                        data[bytes_written]
+                    }
+                }
+                e_bitstream_byte_order::_bitstream_byte_order_big_endian => {
+                    let mut bits = data[bytes_written + surplus_bytes] << surplus_bits;
 
-            if !more_space_at_current_byte {
+                    // if after shifting, we no longer have enough bits to write...
+                    // grab more bits from the next source byte.
+                    if min(remaining_bits_to_write, 8) > 8 - surplus_bits {
+                        let remaining_bits_needed = min(remaining_bits_to_write, 8) - (8 - surplus_bytes);
+                        bits |= data[bytes_written + surplus_bytes + 1] >> surplus_bytes;
+                    }
+                    bits
+                }
+            };
+
+            // 2. If we're writing less than a byte, mask off any excess at the LSB.
+            writing_byte &= 0xff << (8 - min(8, remaining_bits_to_write));
+
+            // 3. Write remaining bits at the current byte.
+            let writing_bits_at_position = min(8 - self.current_stream_bit_position, remaining_bits_to_write);
+            let remaining_bits_at_position = 8 - self.current_stream_bit_position;
+
+            // The bits we're writing at the current byte are first shifted to MSB / masked if necessary.
+            let mut bits = match &self.m_byte_unpack_direction {
+                _bitstream_byte_fill_direction_lsb_to_msb => {
+                    writing_byte << min(8, remaining_bits_to_write) - writing_bits_at_position
+                }
+                _bitstream_byte_fill_direction_msb_to_lsb => {
+                    writing_byte & (0xff << 8 - writing_bits_at_position)
+                }
+            };
+
+            // Shift from MSB to current stream position
+            match self.m_byte_pack_direction {
+                _bitstream_byte_fill_direction_lsb_to_msb => {
+                    println!("io:bitstream:bitstream_writer: >> {}", 8 - (self.current_stream_bit_position + writing_bits_at_position));
+                    bits >>= 8 - (self.current_stream_bit_position + writing_bits_at_position);
+                }
+                _bitstream_byte_fill_direction_msb_to_lsb => {
+                    println!("io:bitstream:bitstream_writer: >> {}", self.current_stream_bit_position);
+                    bits >>= self.current_stream_bit_position;
+                }
+            }
+
+            println!("io:bitstream:bitstream_writer writing bits {bits:08b} at {}", self.current_stream_byte_position);
+
+            self.m_data[self.current_stream_byte_position] |= bits;
+            bits_written += writing_bits_at_position;
+
+            if writing_bits_at_position == remaining_bits_at_position {
                 self.current_stream_bit_position = 0;
                 self.current_stream_byte_position += 1;
             } else {
-                self.current_stream_bit_position = 8 - remaining_bits_at_output_position;
+                self.current_stream_bit_position += writing_bits_at_position;
             }
 
-            left_shift_array(&mut data, bits_to_write_at_position);
-        }
+            remaining_bits_to_write -= writing_bits_at_position;
 
-        // 2. Write full bytes.
-        let bytes_remaining = remaining_bits_to_write / 8;
-        for i in 0..bytes_remaining {
-            self.m_data[self.current_stream_byte_position] = data[i];
+            // 4. Write any more bits to the next byte.
+            if remaining_bits_to_write > 0 {
+                let writing_bits_at_position = min(remaining_bits_to_write, 8 - bits_written);
 
-            self.current_stream_byte_position += 1;
-            remaining_bits_to_write -= 8;
-        }
+                // The bits we're writing at the current byte are first shifted to MSB / masked if necessary.
+                let mut bits = match &self.m_byte_unpack_direction {
+                    _bitstream_byte_fill_direction_lsb_to_msb => {
+                        writing_byte & (0xff << 8 - writing_bits_at_position)
+                    }
+                    _bitstream_byte_fill_direction_msb_to_lsb => {
+                        writing_byte << bits_written
+                    }
+                };
 
-        // 3. Write remaining bits.
-        if remaining_bits_to_write > 0 {
-            self.m_data[self.current_stream_byte_position] = data[bytes_remaining];
-            self.current_stream_bit_position
-                += remaining_bits_to_write;
+                if self.m_byte_pack_direction == _bitstream_byte_fill_direction_lsb_to_msb {
+                    bits >>= 8 - writing_bits_at_position
+                }
+
+                self.m_data[self.current_stream_byte_position] |= bits;
+                bits_written += writing_bits_at_position;
+
+                self.current_stream_bit_position = writing_bits_at_position;
+
+                remaining_bits_to_write -= writing_bits_at_position;
+            }
         }
 
         Ok(())
@@ -264,7 +358,7 @@ impl c_bitstream_writer {
         let characters = wchar_string.as_slice();
 
         for char in characters {
-            match self.m_byte_order {
+            match self.m_packed_byte_order {
                 e_bitstream_byte_order::_bitstream_byte_order_little_endian => {
                     self.write_value_internal(&char.to_le_bytes(), 16)?;
                 }
@@ -320,55 +414,22 @@ impl c_bitstream_writer {
         unimplemented!()
     }
 
-    pub fn reading(&self) -> bool {
-        self.m_state == e_bitstream_state::_bitstream_state_reading ||
-            self.m_state == e_bitstream_state::_bitstream_state_read_only_for_consistency
-    }
-
     pub fn writing(&self) -> bool {
         self.m_state == e_bitstream_state::_bitstream_state_writing
     }
 
-    pub fn finish_consistency_check() {
-        unimplemented!()
-    }
 
-    pub fn finish_reading() {
-        unreachable!()
-    }
 
-    pub fn finish_writing(&mut self, out_bits_remaining: &mut usize) {
+    pub fn finish_writing(&mut self) {
         self.m_state = e_bitstream_state::_bitstream_state_write_finished;
         self.m_data_size_bytes = (((self.current_stream_byte_position * 8) + self.current_stream_bit_position) as f32 / 8f32).ceil() as usize;
-        *out_bits_remaining = (8 * self.m_data.len()) - self.m_data_size_bytes;
     }
 
-    pub fn get_current_stream_bit_position() -> u32 {
-        unimplemented!()
-    }
-
-    pub fn get_space_used_in_bits() -> u32 {
-        unimplemented!()
-    }
-
-    pub fn get_data(&self, data_length: &mut usize) -> BLFLibResult<&[u8]> {
+    pub fn get_data(&self) -> BLFLibResult<Vec<u8>> {
         assert_ok!(!self.writing());
 
-        *data_length = self.m_data_size_bytes;
-        Ok(self.m_data.as_slice())
+        Ok(self.m_data[0..self.m_data_size_bytes].to_vec())
     }
-
-    pub fn push_position() {
-        unimplemented!()
-    }
-
-    pub fn pop_position(pop: bool) {
-        unimplemented!()
-    }
-
-    // fn read_accumulator_from_memory(a1: u32) -> u64 {
-    //     unimplemented!()
-    // }
 
     fn reset(&mut self, state: e_bitstream_state) {
         self.m_state = state;
@@ -461,43 +522,171 @@ impl c_bitstream_writer {
 
         Ok(())
     }
-
-    // not from blam
-    pub fn get_current_offset(&self) -> usize {
-        self.current_stream_byte_position
-    }
 }
 
-// Not from blam
-fn left_shift_array(data: &mut Vec<u8>, shift: usize) {
-    if shift == 0 || data.is_empty() {
-        return;
+#[cfg(test)]
+mod bitstream_writer_tests {
+    use super::*;
+
+    #[test]
+    fn write_legacy_be() {
+        let expected: [u8; 2] = [
+            0b10110_001, 0b00001001
+        ];
+
+        let mut sut = c_bitstream_writer::new_with_legacy_settings(2, e_bitstream_byte_order::_bitstream_byte_order_big_endian);
+        sut.begin_writing();
+
+        sut.write_integer(0b001, 3).unwrap();
+        sut.write_integer(310, 13).unwrap();
+
+        sut.finish_writing();
+        let actual = sut.get_data().unwrap();
+        assert_eq!(actual, expected);
     }
 
-    let len = data.len();
-    let byte_shift = shift / 8;
-    let bit_shift = shift % 8;
+    #[test]
+    fn write_legacy_le() {
+        let expected: [u8; 2] = [
+            0b011111_001, 0b11111111
+        ];
 
-    // Shift bytes
-    if byte_shift != 0 {
-        for i in 0..len {
-            if i + byte_shift < len {
-                data[i] = data[i + byte_shift]
-            } else {
-                data[i] = 0;
-            }
-        }
+        let mut sut = c_bitstream_writer::new_with_legacy_settings(2, e_bitstream_byte_order::_bitstream_byte_order_little_endian);
+        sut.begin_writing();
+
+        sut.write_integer(0b001, 3).unwrap();
+        sut.write_integer(8191, 13).unwrap();
+
+        sut.finish_writing();
+        let actual = sut.get_data().unwrap();
+        assert_eq!(actual, expected);
     }
 
-    // Shift bits
-    data[0] <<= bit_shift;
-    for i in 1..(len - byte_shift) {
-        // use a short for shifting
-        let current_byte = data[i];
-        let shift_window = current_byte as u16;
-        let shift_window = shift_window << bit_shift;
-        let [carry_bits, shifted_byte] = shift_window.to_be_bytes();
-        data[i - 1] |= carry_bits;
-        data[i] = shifted_byte;
+    #[test]
+    fn write_be() {
+        let expected: [u8; 2] = [
+            0b001_11111, 0b11111111
+        ];
+
+        let mut sut = c_bitstream_writer::new(expected.len(), e_bitstream_byte_order::_bitstream_byte_order_big_endian);
+        sut.begin_writing();
+
+        sut.write_integer(0b001, 3).unwrap();
+        sut.write_integer(8191, 13).unwrap();
+
+        sut.finish_writing();
+        let actual = sut.get_data().unwrap();
+        assert_eq!(actual, expected);
+    }
+
+    #[test]
+    fn write_le() {
+        let expected: [u8; 2] = [
+            0b001_10000, 0b10000001
+        ];
+
+        let mut sut = c_bitstream_writer::new(expected.len(), e_bitstream_byte_order::_bitstream_byte_order_little_endian);
+        sut.begin_writing();
+
+        sut.write_integer(0b001, 3).unwrap();
+        sut.write_integer(388, 13).unwrap();
+
+        sut.finish_writing();
+        let actual = sut.get_data().unwrap();
+        assert_eq!(actual, expected);
+    }
+
+    #[test]
+    fn write_with_msb_to_lsb_byte_pack_direction() {
+        let expected: [u8; 1] = [
+            0b00011111
+        ];
+
+        let mut sut = c_bitstream_writer::new(1, e_bitstream_byte_order::_bitstream_byte_order_big_endian);
+        sut.begin_writing();
+
+        sut.write_integer(0b000, 3).unwrap();
+        sut.write_integer(0b11111, 5).unwrap();
+
+        sut.finish_writing();
+        let actual = sut.get_data().unwrap();
+        assert_eq!(actual, expected);
+    }
+
+    #[test]
+    fn write_with_lsb_to_msb_byte_pack_direction() {
+        let expected: [u8; 1] = [
+            0b11111000
+        ];
+
+        let mut sut = c_bitstream_writer::new_with_legacy_settings(1, e_bitstream_byte_order::_bitstream_byte_order_big_endian);
+        sut.begin_writing();
+
+        sut.write_integer(0b000, 3).unwrap();
+        sut.write_integer(0b11111, 5).unwrap();
+
+        sut.finish_writing();
+        let actual = sut.get_data().unwrap();
+        assert_eq!(actual, expected);
+    }
+
+    #[test]
+    fn write_h3_06481_game_set_data() {
+        let expected: [u8; 13] = [
+            0b10010100, 0b00000001, 0b00000000, 0b00000000,
+            0b00000000, 0b10110001, 0b00001001, 0b00000000,
+            0b00000000, 0b10010000, 0b10101011, 0b00000_011, 0
+        ];
+
+        let mut sut = c_bitstream_writer::new_with_legacy_settings(13, e_bitstream_byte_order::_bitstream_byte_order_big_endian);
+        sut.begin_writing();
+
+        // game entries count
+        sut.write_integer(20, 6).unwrap();
+        // game entry 1 weight
+        sut.write_integer(6, 32).unwrap();
+        // game entry 1 minimum players
+        sut.write_integer(4, 4).unwrap();
+        // game entry 1 skip after veto
+        sut.write_bool(false).unwrap();
+        // game entry 1 map id
+        sut.write_integer(310, 32).unwrap();
+        // game entry 1 game variant (truncated)
+        sut.write_string_utf8(&String::from("ru"), 3).unwrap();
+
+        sut.finish_writing();
+        let actual = sut.get_data().unwrap();
+        assert_eq!(actual, expected);
+    }
+
+    #[test]
+    fn write_h3_12070_game_set_data() {
+        let expected: Vec<u8> = [
+            0b11011100, 0b00000000, 0b00000000, 0b00000000,
+            0b00000100, 0b01000000, 0b00000000, 0b00000000,
+            0b00100000, 0b10000011, 0b01010101, 0b1111_0000, 0
+        ].to_vec();
+
+        let mut sut = c_bitstream_writer::new(13, e_bitstream_byte_order::_bitstream_byte_order_big_endian);
+        sut.begin_writing();
+
+        // game entries count
+        sut.write_integer(55, 6).unwrap();
+        // game entry 1 weight
+        sut.write_integer(1, 32).unwrap();
+        // game entry 1 minimum players
+        sut.write_integer(1, 4).unwrap();
+        // game entry 1 skip after veto
+        sut.write_bool(false).unwrap();
+        // game entry 1 optional
+        sut.write_bool(false).unwrap();
+        // game entry 1 map id
+        sut.write_integer(520, 32).unwrap();
+        // game entry 1 game variant (truncated)
+        sut.write_string_utf8(&String::from("5_"), 3).unwrap();
+
+        sut.finish_writing();
+        let actual = sut.get_data().unwrap();
+        assert_eq!(actual, expected);
     }
 }
