@@ -14,7 +14,7 @@ use crate::blf::versions::haloreach::v11860_10_07_24_0147_omaha_release::{e_map_
 
 #[binrw]
 #[derive(BlfChunk,Default,PartialEq,Debug,Clone,Serialize,Deserialize)]
-#[Size(0x2254)]
+#[Size(0x25B0)]
 #[Header("netc", 245.1)]
 #[brw(big)]
 pub struct s_blf_chunk_network_configuration
