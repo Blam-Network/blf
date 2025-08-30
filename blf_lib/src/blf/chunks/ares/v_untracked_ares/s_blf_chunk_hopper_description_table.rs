@@ -3,11 +3,10 @@ use std::io::{Read, Seek, Write};
 use binrw::{BinRead, BinResult, BinWrite, BinWriterExt, Endian};
 use serde::{Deserialize, Serialize};
 use blf_lib::BINRW_RESULT;
-use blf_lib::io::bitstream::{c_bitstream_reader, create_bitstream_writer, e_bitstream_byte_order};
+use blf_lib::io::bitstream::{c_bitstream_reader, c_bitstream_writer, e_bitstream_byte_order};
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
 use blf_lib_derive::BlfChunk;
 use crate::types::c_string::StaticString;
-use crate::io::bitstream::close_bitstream_writer;
 
 #[derive(BlfChunk,Default,PartialEq,Debug,Clone,Serialize,Deserialize)]
 #[Header("mhdf", 3.1)]
@@ -78,7 +77,8 @@ impl BinWrite for s_blf_chunk_hopper_description_table {
     type Args<'a> = ();
 
     fn write_options<W: Write + Seek>(&self, writer: &mut W, endian: Endian, args: Self::Args<'_>) -> BinResult<()> {
-        let mut bitstream = create_bitstream_writer(0x4000, e_bitstream_byte_order::_bitstream_byte_order_big_endian);
+        let mut bitstream = c_bitstream_writer::new(0x4000, e_bitstream_byte_order::_bitstream_byte_order_big_endian);
+        bitstream.begin_writing();
 
         bitstream.write_integer(self.description_count as u32, 6)?;
 
@@ -89,6 +89,7 @@ impl BinWrite for s_blf_chunk_hopper_description_table {
             bitstream.write_string_utf8(&description.description.get_string()?, 256)?;
         }
 
-        writer.write_ne(&close_bitstream_writer(&mut bitstream)?)
+        bitstream.finish_writing();
+        writer.write_ne(&bitstream.get_data()?)
     }
 }

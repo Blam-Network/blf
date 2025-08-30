@@ -5,13 +5,14 @@ use flate2::read::ZlibDecoder;
 use flate2::write::ZlibEncoder;
 use serde::{Deserialize, Serialize};
 use blf_lib::blam::common::memory::secure_signature::s_network_http_request_hash;
-use blf_lib::io::bitstream::{c_bitstream_reader, close_bitstream_writer, create_bitstream_writer, e_bitstream_byte_order};
+use blf_lib::io::bitstream::{c_bitstream_reader, e_bitstream_byte_order};
 use blf_lib::types::array::StaticArray;
 use crate::types::c_string::StaticString;
 use blf_lib::types::time::{filetime};
 use blf_lib::types::bool::Bool;
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
 use blf_lib_derive::BlfChunk;
+use crate::io::bitstream::c_bitstream_writer;
 use crate::types::numbers::Float32;
 
 pub const k_hopper_maximum_category_count: usize = 16;
@@ -103,11 +104,15 @@ impl BinWrite for s_blf_chunk_hopper_configuration_table {
         let compressed_length: u16 = compressed_data.len() as u16;
         let uncompressed_length: u32 = encoded_chunk.len() as u32;
         // TODO: allow the writer to grow if it runs out of space.
-        let mut packed_writer = create_bitstream_writer(0x8A48, e_bitstream_byte_order::from_binrw_endian(endian));
+        let mut packed_writer = c_bitstream_writer::new(0x8A48, e_bitstream_byte_order::from_binrw_endian(endian));
+        packed_writer.begin_writing();
+
         packed_writer.write_integer((compressed_length + 4) as u32, 14)?;
         packed_writer.write_integer(uncompressed_length, 32)?;
         packed_writer.write_raw_data(&compressed_data, (compressed_length * 8) as usize)?;
-        writer.write_ne(&close_bitstream_writer(&mut packed_writer)?)?;
+
+        packed_writer.finish_writing();
+        writer.write_ne(&packed_writer.get_data()?)?;
 
         Ok(())
     }

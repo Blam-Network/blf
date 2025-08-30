@@ -2,11 +2,10 @@ use std::io::{Read, Seek, Write};
 use binrw::{BinRead, BinResult, BinWrite, BinWriterExt, Endian};
 use serde::{Deserialize, Serialize};
 use blf_lib::blam::common::memory::secure_signature::s_network_http_request_hash;
-use blf_lib::io::bitstream::{c_bitstream_reader, create_bitstream_writer, e_bitstream_byte_order};
+use blf_lib::io::bitstream::{c_bitstream_reader, c_bitstream_writer, e_bitstream_byte_order};
 use blf_lib::types::array::StaticArray;
 use crate::types::c_string::StaticString;
 use blf_lib::types::time::{filetime};
-use crate::io::bitstream::close_bitstream_writer;
 use serde_hex::{SerHex,StrictCap};
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
 use blf_lib_derive::BlfChunk;
@@ -310,7 +309,8 @@ impl BinWrite for s_blf_chunk_hopper_configuration_table {
     type Args<'a> = ();
 
     fn write_options<W: Write + Seek>(&self, writer: &mut W, endian: Endian, args: Self::Args<'_>) -> BinResult<()> {
-        let mut bitstream = create_bitstream_writer(0x4C98, e_bitstream_byte_order::_bitstream_byte_order_big_endian);
+        let mut bitstream = c_bitstream_writer::new(0x4C98, e_bitstream_byte_order::_bitstream_byte_order_big_endian);
+        bitstream.begin_writing();
 
         // Encode hopper_category_count
         bitstream.write_integer(self.hopper_category_count as u32, 3)?;
@@ -436,6 +436,8 @@ impl BinWrite for s_blf_chunk_hopper_configuration_table {
                 }
             }
         }
-        writer.write_ne(&close_bitstream_writer(&mut bitstream)?)
+
+        bitstream.finish_writing();
+        writer.write_ne(&bitstream.get_data()?)
     }
 }

@@ -1,9 +1,9 @@
 use std::io::{Read, Seek, Write};
 use binrw::{BinRead, BinResult, BinWrite, BinWriterExt, Endian};
 use serde::{Deserialize, Serialize};
-use crate::io::bitstream::{create_bitstream_writer, e_bitstream_byte_order};
+use crate::io::bitstream::{e_bitstream_byte_order};
 use crate::blam::halo3::release::saved_games::scenario_map_variant::c_map_variant;
-use blf_lib::io::bitstream::{c_bitstream_reader, close_bitstream_writer};
+use blf_lib::io::bitstream::{c_bitstream_reader, c_bitstream_writer};
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
 use blf_lib_derive::BlfChunk;
 
@@ -38,8 +38,12 @@ impl BinWrite for s_blf_chunk_packed_map_variant {
     type Args<'a> = ();
 
     fn write_options<W: Write + Seek>(&self, writer: &mut W, endian: Endian, args: Self::Args<'_>) -> BinResult<()> {
-        let mut bitstream = create_bitstream_writer(0xE0A0, e_bitstream_byte_order::_bitstream_byte_order_big_endian);
+        let mut bitstream = c_bitstream_writer::new(0xE0A0, e_bitstream_byte_order::_bitstream_byte_order_big_endian);
+        bitstream.begin_writing();
+
         self.map_variant.encode(&mut bitstream)?;
-        writer.write_ne(&close_bitstream_writer(&mut bitstream)?)
+
+        bitstream.finish_writing();
+        writer.write_ne(&bitstream.get_data()?)
     }
 }
