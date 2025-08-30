@@ -129,9 +129,9 @@ impl<'a> c_bitstream_reader<'a> {
 
         let mut remaining_bits_to_read = size_in_bits;
 
-        let mut byte_index = 0;
+        let mut output_byte_index = 0;
         while remaining_bits_to_read > 0 {
-            // println!("io:bitstream:bitstream_reader reading byte {byte_index}");
+            // println!("io:bitstream:bitstream_reader reading byte {output_byte_index}");
 
             let mut output_byte = 0u8;
             let mut bits_read = 0;
@@ -201,11 +201,9 @@ impl<'a> c_bitstream_reader<'a> {
                 // 2.4 Shift what we've read according to unpacking order.
                 match self.m_byte_unpack_direction {
                     _bitstream_byte_fill_direction_msb_to_lsb => {
-                        // BBB----- >> AABBB---
                         bits >>= bits_read
                     }
                     _bitstream_byte_fill_direction_lsb_to_msb => {
-                        // BBB---AA >> ---AABBB
                         bits >>= 8 - (bits_read + reading_bits_at_position)
                     }
                 }
@@ -225,15 +223,42 @@ impl<'a> c_bitstream_reader<'a> {
                 }
             }
 
-            // If we read less than a byte and we've unpacked MSB to LSB, we shift the bits to the LSB.
-            if bits_read < 8 && self.m_byte_unpack_direction == _bitstream_byte_fill_direction_msb_to_lsb {
-                output_byte >>= 8 - bits_read;
+            // If we read less than a byte and we've unpacked LSB to MSB, we shift the bits to the MSB.
+            if bits_read < 8 && self.m_byte_unpack_direction == _bitstream_byte_fill_direction_lsb_to_msb {
+                output_byte <<= 8 - bits_read;
             }
 
-            // println!("io:bitstream:bitstream_reader byte {byte_index} is {output_byte:08b}");
-            output[byte_index] = output_byte;
+            // println!("io:bitstream:bitstream_reader read {bits_read} bits {:0width$b}", output_byte >> 8 - bits_read, width = bits_read);
+            // 3. We now have n bits loaded into the byte, with any unused bits at the LSB.
+            // Depending on byte order, we shift this to relocate surplus bits.
+            match self.m_packed_byte_order {
+                e_bitstream_byte_order::_bitstream_byte_order_big_endian => {
+                    // 1111111 11111000 >> 00011111 11111111
+                    let surplus_bits = (8 - (size_in_bits % 8)) % 8;
+                    println!("io:bitstream:bitstream_reader surplus_bits = {surplus_bits}");
+                    let [left_output, right_output] = ((output_byte as u16) << (8 - surplus_bits)).to_be_bytes();
+                    output[output_byte_index] |= left_output;
+                    println!("io:bitstream:bitstream_reader left = {left_output:08b}");
+                    println!("io:bitstream:bitstream_reader right = {right_output:08b}");
 
-            byte_index += 1;
+                    if right_output != 0 {
+                        output[output_byte_index + 1] |= right_output;
+                    }
+                    output_byte_index += 1;
+
+                }
+                e_bitstream_byte_order::_bitstream_byte_order_little_endian => {
+                    // 1111111 11111000 >> 11111111 00011111
+                    if bits_read < 8 {
+                        output_byte >>= 8 - bits_read;
+                    }
+
+                    output[output_byte_index] = output_byte;
+                    output_byte_index += 1;
+                }
+            }
+
+            // println!("io:bitstream:bitstream_reader byte {output_byte_index} is {output_byte:08b}");
         }
 
         Ok(())
@@ -407,7 +432,6 @@ impl<'a> c_bitstream_reader<'a> {
         assert_ok!(self.reading());
         assert_ok!(max_string_size > 0);
 
-
         let mut bytes = vec![0u8; max_string_size];
 
         for i in 0..max_string_size {
@@ -450,38 +474,8 @@ impl<'a> c_bitstream_reader<'a> {
         unimplemented!()
     }
 
-    // GUTS
-
-    pub fn append(stream: &c_bitstream_reader) {
-        unimplemented!()
-    }
-
-    pub fn begin_consistency_check() -> bool {
-        unimplemented!()
-    }
-
     pub fn begin_reading(&mut self) {
         self.reset(e_bitstream_state::_bitstream_state_reading);
-    }
-
-    pub fn data_is_untrusted(is_untrusted: bool) {
-        unimplemented!()
-    }
-
-    pub fn discard_remaining_data() {
-        unimplemented!()
-    }
-
-    fn encode_qword_to_memory(value: u64, size_in_bits: u8) {
-        unimplemented!()
-    }
-
-    pub fn overflowed() -> bool {
-        unimplemented!()
-    }
-
-    pub fn error_occurred() -> bool {
-        unimplemented!()
     }
 
     pub fn reading(&self) -> bool {
@@ -489,38 +483,14 @@ impl<'a> c_bitstream_reader<'a> {
         self.m_state == e_bitstream_state::_bitstream_state_read_only_for_consistency
     }
 
-    pub fn finish_consistency_check() {
-        unimplemented!()
-    }
-
-    pub fn finish_reading() {
-        unimplemented!()
-    }
-
-    pub fn get_current_stream_bit_position() -> u32 {
-        unimplemented!()
-    }
-
-    pub fn get_space_used_in_bits() -> u32 {
-        unimplemented!()
+    pub fn finish_reading(&mut self) {
+        self.m_state = e_bitstream_state::_bitstream_state_read_finished;
     }
 
     pub fn get_data(&self, data_length: &mut usize) -> BLFLibResult<&[u8]> {
         *data_length = self.m_data_size_bytes;
         Ok(self.m_data)
     }
-
-    pub fn push_position() {
-        unimplemented!()
-    }
-
-    pub fn pop_position(pop: bool) {
-        unimplemented!()
-    }
-
-    // fn read_accumulator_from_memory(a1: u32) -> u64 {
-    //     unimplemented!()
-    // }
 
     fn reset(&mut self, state: e_bitstream_state) {
         self.m_state = state;
@@ -542,10 +512,6 @@ impl<'a> c_bitstream_reader<'a> {
     fn would_overflow(size_in_bits: u32) -> bool {
         unimplemented!()
     }
-
-    // fn write_accumulator_to_memory(a1: u64, a2: u32) {
-    //     unimplemented!()
-    // }
 
     pub fn axes_compute_reference_internal(
         up: &real_vector3d,
@@ -591,27 +557,27 @@ mod bitstream_reader_tests {
     #[test]
     fn read_be() {
         let test_data: [u8; 2] = [
-            0b001_10000, 0b10000001
+            0b001_11111, 0b11111111
         ];
 
         let mut sut = c_bitstream_reader::new(&test_data, e_bitstream_byte_order::_bitstream_byte_order_big_endian);
         sut.begin_reading();
 
         assert_eq!(sut.read_integer(3).unwrap(), 0b001);
-        assert_eq!(sut.read_integer(13).unwrap(), 33793);
+        assert_eq!(sut.read_integer(13).unwrap(), 8191);
     }
 
     #[test]
     fn read_le() {
         let test_data: [u8; 2] = [
-            0b001_10000, 0b10000001
+            0b001_11111, 0b11111111
         ];
 
         let mut sut = c_bitstream_reader::new(&test_data, e_bitstream_byte_order::_bitstream_byte_order_little_endian);
         sut.begin_reading();
 
         assert_eq!(sut.read_integer(3).unwrap(), 0b001);
-        assert_eq!(sut.read_integer(13).unwrap(), 388);
+        assert_eq!(sut.read_integer(13).unwrap(), 8191);
     }
 
     #[test]
@@ -630,14 +596,14 @@ mod bitstream_reader_tests {
     #[test]
     fn read_legacy_le() {
         let test_data: [u8; 2] = [
-            0b10110_001, 0b00001001
+            0b01001_001, 0b10110000
         ];
 
         let mut sut = c_bitstream_reader::new_with_legacy_settings(&test_data, e_bitstream_byte_order::_bitstream_byte_order_little_endian);
         sut.begin_reading();
 
         assert_eq!(sut.read_integer(3).unwrap(), 0b001);
-        assert_eq!(sut.read_integer(13).unwrap(), 13825);
+        assert_eq!(sut.read_integer(13).unwrap(), 310);
     }
 
 
