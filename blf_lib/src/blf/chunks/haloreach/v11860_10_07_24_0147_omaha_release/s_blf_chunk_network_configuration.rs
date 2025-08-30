@@ -96,14 +96,14 @@ pub struct s_simulation_world_configuration {
     pub unknown30: i32,
     pub unknown34: i32,
     pub unknown38: StaticArray<i32, 6>,
-    pub unknown50: i32,
-    pub unknown54: i32,
-    pub unknown58: i32,
-    pub unknown5C: i32,
-    pub unknown60: i32,
+    pub unknown50: f32,
+    pub unknown54: f32,
+    pub unknown58: f32,
+    pub unknown5C: f32,
+    pub unknown60: f32,
     pub simulation_event_projectile_supercombine_request_fraction: i32, // deffo supercombine but name may be wrong
-    pub unknown68: i32,
-    pub unknown6C: i32,
+    pub unknown68: f32,
+    pub unknown6C: f32,
     pub maximum_catchup_views: i32,
     pub join_timeout: i32,
     pub host_join_minimum_wait_time: i32,
@@ -353,12 +353,38 @@ pub struct s_session_qos_reply_block_configuration {
 #[brw(big)]
 pub struct s_logic_configuration {
     pub session_tracker: s_logic_session_tracker_configuration,
-    pub unknown_data: StaticArray<i32, 18>,
+    pub unknown14: i32,
+    pub unknown18: f32,
+    pub unknown1c: i32,
+    pub unknown20_time: i32,
+    pub unknown24_time: i32,
+    pub unknown28_time: i32,
+    pub unknown2c_clamp: i32,
+    pub unknown30: f32,
+    pub unknown34: f32,
+    pub unknown38: f32,
+    pub unknown3c: f32,
+    pub unknown40_locality_x: f32,
+    pub unknown44_locality_y: f32,
+    pub unknown48_locality_z: f32,
+    #[serde(with = "SerHex::<StrictCapPfx>")]
+    pub unknown4c: u32,
+    #[serde(with = "SerHex::<StrictCapPfx>")]
+    pub unknown50: u32,
+    #[serde(with = "SerHex::<StrictCapPfx>")]
+    pub unknown54: u32,
+    #[serde(with = "SerHex::<StrictCapPfx>")]
+    pub unknown58: u32,
     // pub desirability: s_logic_matchmaking_desirability,
     // pub seeker: s_logic_matchmaking_seeker_configuration,
     pub leaderboard: s_logic_leaderboard_configuration,
     pub session_interface: s_session_interface_configuration,
-    pub unknown_data2: StaticArray<i32, 6>,
+    pub unknown84: i32,
+    pub unknown88: i32,
+    pub unknown8c: i32,
+    pub unknown90: i32,
+    pub unknown94: i32,
+    pub unknown98: i32,
     pub base_qos_reply_block: s_qos_reply_block_configuration,
     pub unknown1: i32,
     pub squad_qos_reply_block: s_session_qos_reply_block_configuration,
@@ -391,7 +417,13 @@ pub struct s_life_cycle_handler_matchmaking_configuration {
     pub perform_nat_check: Bool,
     #[brw(align_before = 4)]
     pub matchmaking_strict_nat_host_percentage: Float32,
-    pub unknown_data: StaticArray<i32, 7>,
+    pub posse_leave_timeout: i32,
+    pub unknown0c_posse_start_matchmaking: i32,
+    pub posse_session_creation_timeout: i32,
+    pub squad_peers_join_session_timeout: i32,
+    pub group_leave_timeout: i32,
+    pub matchmaking_search_give_up_time_seconds: i32,
+    pub unknown20: i32,
     // pub matchmaking_start_failure_wait_time_ms: i32,
     // pub matchmaking_find_match_joinable_session_threshold: i32,
     // pub matchmaking_find_match_join_wait_time_ms: i32,
@@ -411,11 +443,22 @@ pub struct s_life_cycle_handler_matchmaking_configuration {
     pub end_match_write_stats_boot_threshold_seconds: i32,
     pub arbitration_wait_for_establishment_and_connectivity_threshold_seconds: i32,
     pub arbitration_wait_for_completion_threshold_seconds: i32,
-    pub unknown2: i32,
+    #[brw(pad_after = 3)]
+    pub unknown2C_voting_system: u8,
     pub post_match_return_to_pre_game_lobby: Bool,
     #[brw(align_before = 4)]
     pub post_match_stats_refresh_time: i32,
     pub warning_toast_minimum_time_seconds: i32,
+    pub unknown70: i32,
+    pub unknown74: i32,
+    pub unknown78: i32,
+    pub unknown7c_matchmaking_search_stale_timeout: i32,
+    pub unknown80: i32,
+    pub unknown84_gather_timeout: i32,
+    pub find_and_assemble_gather_wait_time_before_searching_ms: i32,
+    pub assemble_gather_wait_time_before_searching_ms: i32,
+    #[brw(pad_after = 3)]
+    pub unknown90_player_count_increase_stop_search: Bool,
 }
 
 #[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
@@ -430,7 +473,6 @@ pub struct s_life_cycle_handler_in_game_configuration {
 pub struct s_life_cycle_configuration {
     pub joining: s_life_cycle_handler_joining_configuration,
     pub matchmaking: s_life_cycle_handler_matchmaking_configuration,
-    pub unknown_data: StaticArray<i32, 9>,
     pub in_game: s_life_cycle_handler_in_game_configuration,
 }
 
@@ -476,16 +518,16 @@ pub struct s_bandwidth_unknown_struct_1 {
 
 #[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
 #[brw(big)]
-pub struct s_bandwidth_configuration {
-    pub unknown00: i32,
-    pub unknown04: i32,
-    pub unknown08: i32,
-    pub unknown0c: i32,
+pub struct s_bandwidth_unknown_struct_2 {
+    pub unknown0: i32,
+    pub unknown4: i32,
+    pub unknown8: i32,
+    pub unknownc: i32,
     pub unknown10: i32,
     pub unknown14: i32,
     pub unknown18: i32,
     pub unknown1c: i32,
-    pub unknown20: i32,
+    pub unknown20: f32,
     pub unknown24: i32,
     pub unknown28: i32,
     pub unknown2c: i32,
@@ -494,13 +536,93 @@ pub struct s_bandwidth_configuration {
     pub unknown38: i32,
     pub unknown3c: i32,
     pub unknown40: i32,
+    pub unknown44: i32,
+    pub unknown48: f32,
+    pub unknown4c: i32,
+    pub unknown50: i32,
+    pub unknown54: i32,
+    pub unknown58: i32,
+    pub unknown5c: i32,
+    pub unknown60: i32,
+    pub unknown64: i32,
+    pub unknown68: i32,
+    pub unknown6c: i32,
+    pub unknown70: i32,
+    pub unknown74: i32,
+    pub unknown78: i32,
+    pub unknown7c: i32,
+    pub unknown80: i32,
+    pub unknown84: i32,
+    pub unknown88: i32,
+    pub unknown8c: i32,
+    pub unknown90: i32,
+    pub unknown94: i32,
+    pub unknown98: i32,
+    pub unknown9c: i32,
+    pub unknowna0: i32,
+    pub unknowna4: i32,
+    pub unknowna8: i32,
+    pub unknownac: i32,
+    pub unknownb0: i32,
+    pub unknownb4: i32,
+    pub unknownb8: i32,
+    pub unknownbc: i32,
+    pub unknownc0: i32,
+    pub unknownc4: i32,
+    pub unknownc8: i32,
+    pub unknowncc: i32,
+    pub unknownd0: f32,
+    pub unknownd4: f32,
+    pub unknownd8: f32,
+    pub unknowndc: f32,
+    pub unknowne0: f32,
+    pub unknowne4: f32,
+    pub unknowne8: f32,
+    pub unknownec: f32,
+    pub unknownf0: f32,
+    pub unknownf4: f32,
+    pub unknownf8: f32,
+    pub unknownfc: f32,
+    pub unknown100: f32,
+    pub unknown104: f32,
+    pub unknown108: f32,
+    pub unknown10c: f32,
+    pub unknown110: f32,
+    pub unknown114: f32,
+    pub unknown118: f32,
+    pub unknown11c: f32,
+    pub unknown120: f32,
+    pub unknown124: f32,
+    pub unknown128: f32,
+}
+
+#[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
+#[brw(big)]
+pub struct s_bandwidth_configuration {
+    pub unknown00: i32,
+    pub unknown04: i32,
+    pub unknown08: i32,
+    pub unknown0c: i32,
+    pub unknown10: f32,
+    pub unknown14: f32,
+    pub unknown18: f32,
+    pub unknown1c: i32,
+    pub unknown20: i32,
+    pub unknown24: i32,
+    pub unknown28: i32,
+    pub unknown2c: i32,
+    pub unknown30: i32,
+    pub unknown34: i32,
+    pub unknown38: i32,
+    pub unknown3c: f32,
+    pub unknown40: f32,
     pub reduced_hosting_ban_quality_decrease: f32,
-    pub unknown48: i32,
+    pub unknown48: f32,
     pub unknown4c_flag: Bool,
     pub unknown4d: Bool,
     pub unknown4e: Bool,
     pub unknown4f: Bool,
-    pub unknown50: StaticArray<StaticArray<i32, 75>, 3>,
+    pub unknown50: StaticArray<s_bandwidth_unknown_struct_2, 3>,
     pub unknown3d4: Float32,
     pub unknown3d8: Float32,
     pub unloaded_voice_stream_cost_bps: i32,
@@ -698,7 +820,15 @@ pub struct s_observer_configuration {
     // pub stream_growth_incremental_rtt_increase_msec: i32,
     // pub stream_cautious_expansion_limited_periods_count: i32,
     // pub stream_cautious_expansion_instability_timeout_msec: i32,
-    pub unknown_data1: StaticArray<i32, 9>,
+    pub unknown19c: i32,
+    pub unknown1a0: f32,
+    pub unknown1a4: i32,
+    pub unknown1a8: i32,
+    pub unknown1ac: i32,
+    pub unknown1b0: i32,
+    pub unknown1b4: i32,
+    pub unknown1b8: i32,
+    pub unknown1bc: i32,
     pub bandwidth_monitor_period_count: i32,
     #[serde(with = "SerHex::<StrictCapPfx>")]
     pub bandwidth_monitor_limitation_bps: u32,
@@ -725,7 +855,13 @@ pub struct s_observer_configuration {
     // pub packet_loss_rate_deviation_gain_bits: i32,
     // pub maximum_rtt_increase_msec: i32,
     // pub maximum_lost_packet_rate_increase: i32,
-    pub unknown_data2: StaticArray<i32, 7>,
+    pub unknown1f4: i32,
+    pub unknown1f8: i32,
+    pub unknown1fc: i32,
+    pub unknown200: f32,
+    pub unknown204: f32,
+    pub unknown208: i32,
+    pub unknown20c: i32,
     pub minimum_packet_loss_deviation: i32,
     pub minimum_probe_packet_loss_deviation: i32,
     pub stream_maximum_bandwidth_maximum_delta: i32,
@@ -775,7 +911,16 @@ pub struct s_observer_configuration {
     // pub check_single_stream_overprobe: Bool,
     // pub use_deviation_only_for_related_rtt_timeout: Bool,
     // pub fast_probe_failed_streams: Bool,
-    pub unknown_data3: StaticArray<i32, 5>,
+    #[serde(with = "SerHex::<StrictCapPfx>")]
+    pub unknown28c: u32,
+    #[serde(with = "SerHex::<StrictCapPfx>")]
+    pub unknown290: u32,
+    #[serde(with = "SerHex::<StrictCapPfx>")]
+    pub unknown294: u32,
+    #[serde(with = "SerHex::<StrictCapPfx>")]
+    pub unknown298: u32,
+    #[serde(with = "SerHex::<StrictCapPfx>")]
+    pub unknown29c: u32,
     pub packet_loss_spike_threshold: i32,
     pub packet_loss_spike_minimum_packet_count: i32,
     pub packet_loss_spike_skip_averaging_any_spike: i32,
@@ -835,7 +980,26 @@ pub struct s_observer_configuration {
     #[serde(with = "SerHex::<StrictCapPfx>")]
     pub slow_probe_overprobe_maximum_bps: u32,
     pub slow_probe_overprobe_transmit_ratio: i32,
-    pub unknown_data4: StaticArray<i32, 20>,
+    pub unknown36c: i32,
+    pub unknown370: i32,
+    pub unknown374: i32,
+    pub unknown378: i32,
+    pub unknown37c: i32,
+    pub unknown380: f32,
+    pub unknown384: i32,
+    pub unknown388: i32,
+    pub unknown38c: i32,
+    pub unknown390: i32,
+    pub unknown394: i32,
+    pub unknown398: i32,
+    pub unknown39c: f32,
+    pub unknown3a0: f32,
+    pub unknown3a4: f32,
+    pub unknown3a8: f32,
+    pub unknown3ac: f32,
+    pub unknown3b0: f32,
+    pub unknown3b4: f32,
+    pub unknown3b8: f32,
 }
 
 #[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
@@ -920,8 +1084,10 @@ pub struct s_data_mine_configuration {
 #[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
 #[brw(big)]
 pub struct s_network_memory_configuration {
-    pub network_heap_large_size: i32,
-    pub network_heap_small_size: i32,
+    #[serde(with = "SerHex::<StrictCapPfx>")]
+    pub network_heap_large_size: u32,
+    #[serde(with = "SerHex::<StrictCapPfx>")]
+    pub network_heap_small_size: u32,
 }
 
 #[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
@@ -943,16 +1109,6 @@ pub enum e_map_status {
     map_status_dlc = 1,
     map_status_replaced = 2,
     map_status_revoked = 3,
-}
-
-#[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default)]
-#[brw(big, repr = u32)]
-pub enum e_dlc_pack {
-    #[default]
-    dlc_pack_none = 0,
-    dlc_pack_1 = 1,
-    dlc_pack_2 = 2,
-    dlc_pack_3 = 3,
 }
 
 #[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]

@@ -232,16 +232,12 @@ impl c_bitstream_writer {
             // Shift from MSB to current stream position
             match self.m_byte_pack_direction {
                 _bitstream_byte_fill_direction_lsb_to_msb => {
-                    println!("io:bitstream:bitstream_writer: >> {}", 8 - (self.current_stream_bit_position + writing_bits_at_position));
                     bits >>= 8 - (self.current_stream_bit_position + writing_bits_at_position);
                 }
                 _bitstream_byte_fill_direction_msb_to_lsb => {
-                    println!("io:bitstream:bitstream_writer: >> {}", self.current_stream_bit_position);
                     bits >>= self.current_stream_bit_position;
                 }
             }
-
-            println!("io:bitstream:bitstream_writer writing bits {bits:08b} at {}", self.current_stream_byte_position);
 
             self.m_data[self.current_stream_byte_position] |= bits;
             bits_written += writing_bits_at_position;
@@ -256,7 +252,7 @@ impl c_bitstream_writer {
             remaining_bits_to_write -= writing_bits_at_position;
 
             // 4. Write any more bits to the next byte.
-            if remaining_bits_to_write > 0 {
+            if remaining_bits_to_write > 0 && bits_written < 8 {
                 let writing_bits_at_position = min(remaining_bits_to_write, 8 - bits_written);
 
                 // The bits we're writing at the current byte are first shifted to MSB / masked if necessary.

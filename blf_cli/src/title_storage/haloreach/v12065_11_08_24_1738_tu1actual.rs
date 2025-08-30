@@ -2245,7 +2245,7 @@ impl v12065_11_08_24_1738_tu1actual {
     ) -> Result<(), Box<dyn Error>> {
         let mut task = console_task::start("Building Network Configuration");
 
-        let netc = blf_lib::blf::versions::halo3::v11902_08_01_16_1426_halo3_ship::s_blf_chunk_network_configuration {
+        let netc = s_blf_chunk_network_configuration {
             config: read_json_file(
                 title_storage_config::network_configuration_file_path(hoppers_config_path)
             )?,
