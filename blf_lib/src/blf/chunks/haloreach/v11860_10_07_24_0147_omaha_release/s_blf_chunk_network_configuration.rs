@@ -14,7 +14,7 @@ use blf_lib::types::bool::Bool;
 #[binrw]
 #[derive(BlfChunk,Default,PartialEq,Debug,Clone,Serialize,Deserialize)]
 #[Size(0x2254)]
-#[Header("netc", 245.1)]
+#[Header("netc", 241.1)]
 #[brw(big)]
 pub struct s_blf_chunk_network_configuration
 {
@@ -959,9 +959,7 @@ pub enum e_dlc_pack {
 #[brw(big)]
 pub struct s_map_information {
     pub map_id: i32,
-    pub map_status: blf_lib::blf::versions::haloreach::v09730_10_04_09_1309_omaha_delta::e_map_status,
-    pub dlc_path_index: i32,
-    pub dlc_pack: blf_lib::blf::versions::haloreach::v09730_10_04_09_1309_omaha_delta::e_dlc_pack,
+    pub map_status: e_map_status,
 }
 
 #[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
@@ -1231,56 +1229,6 @@ pub struct s_active_roster_configuration {
     pub unknown1b7c: i32,
 }
 
-#[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize)]
-pub struct s_dlc_path {
-    pub path: StaticString<43>,
-}
-
-
-impl BinRead for blf_lib::blf::versions::haloreach::v09730_10_04_09_1309_omaha_delta::s_dlc_path {
-    type Args<'a> = ();
-
-    fn read_options<R: Read + Seek>(reader: &mut R, endian: binrw::Endian, _args: Self::Args<'_>) -> BinResult<Self> {
-        // Read the `StaticString` field, ignoring the first bit
-        let mut buffer = vec![0u8; 43];
-        reader.read_exact(&mut buffer)?;
-
-        // Ignore the first bit of the first byte
-        buffer[0] &= 0b0111_1111;
-        let mut cursor = Cursor::new(buffer);
-
-        // Convert the buffer to a StaticString
-        let path: StaticString<43> = cursor.read_type(endian)?;
-
-        Ok(blf_lib::blf::versions::haloreach::v09730_10_04_09_1309_omaha_delta::s_dlc_path { path })
-    }
-}
-
-impl BinWrite for blf_lib::blf::versions::haloreach::v09730_10_04_09_1309_omaha_delta::s_dlc_path {
-    type Args<'a> = ();
-
-    fn write_options<W: Write + Seek>(&self, writer: &mut W, endian: binrw::Endian, _args: Self::Args<'_>) -> BinResult<()> {
-        // Convert the StaticString to bytes
-        let string: String = BINRW_RESULT!(self.path.get_string())?;
-        let mut buffer = string.into_bytes();
-        buffer.resize(43, 0);
-
-        // Ensure the first bit is set in the first byte
-        buffer[0] |= 0b1000_0000;
-
-        // Write the buffer to the output
-        writer.write_all(buffer.as_slice())?;
-        Ok(())
-    }
-}
-
-
-#[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
-#[brw(big)]
-pub struct s_dlc_paths {
-    pub paths: StaticArray<blf_lib::blf::versions::haloreach::v09730_10_04_09_1309_omaha_delta::s_dlc_path, 8>,
-}
-
 #[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
 #[brw(big)]
 pub struct s_experience_and_credits_configuration {
@@ -1328,7 +1276,6 @@ pub struct s_network_configuration {
     pub unknown1b80_lsp_leaderboard_time: i32,
     pub unknown1b84_lsp_leaderboard_time: i32,
     pub unknown1b88_lsp_leaderboard_time: i32,
-    pub unknown1b8c: i32, // Added in TU 1
     pub determinism_configuration: s_determinism_configuration,
     pub network_files_configuration: s_network_files_configuration,
     pub network_status_configuration: s_network_status_configuration,
@@ -1340,7 +1287,6 @@ pub struct s_network_configuration {
     pub invasion_url: StaticWcharString<64>,
     #[brw(pad_after = 2)]
     pub network_details_url: StaticWcharString<64>,
-    pub dlc_paths: s_dlc_paths,
 }
 
 

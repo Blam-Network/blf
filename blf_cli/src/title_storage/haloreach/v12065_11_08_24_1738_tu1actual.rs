@@ -474,13 +474,12 @@ mod title_storage_config {
         )
     }
 
-    pub fn network_configuration_file_name() -> String {
-        format!("network_configuration_{:0>3}.bin", s_blf_chunk_network_configuration::get_version().major)
-    }
+    pub const network_configuration_file_name: &str = "network_configuration.json";
+
     pub fn network_configuration_file_path(config_folder: &String) -> String {
         build_path!(
             config_folder,
-            network_configuration_file_name()
+            network_configuration_file_name
         )
     }
 
@@ -1305,12 +1304,7 @@ impl v12065_11_08_24_1738_tu1actual {
 
         let netc = find_chunk_in_file::<s_blf_chunk_network_configuration>(network_configuration_source_path)?;
 
-        BlfFileBuilder::new()
-            .add_chunk(s_blf_chunk_start_of_file::new("omaha net config"))
-            .add_chunk(s_blf_chunk_author::for_build::<v12065_11_08_24_1738_tu1actual>())
-            .add_chunk(netc)
-            .add_chunk(s_blf_chunk_end_of_file::default())
-            .write_file(network_configuration_dest_path)?;
+        write_json_file(&netc.config, title_storage_config::network_configuration_file_path(hoppers_config_path))?;
 
         やった!(task)
     }
@@ -2250,10 +2244,12 @@ impl v12065_11_08_24_1738_tu1actual {
         hoppers_blfs_path: &String,
     ) -> Result<(), Box<dyn Error>> {
         let mut task = console_task::start("Building Network Configuration");
-        let netc =
-            find_chunk_in_file::<s_blf_chunk_network_configuration>(
+
+        let netc = blf_lib::blf::versions::halo3::v11902_08_01_16_1426_halo3_ship::s_blf_chunk_network_configuration {
+            config: read_json_file(
                 title_storage_config::network_configuration_file_path(hoppers_config_path)
-            )?;
+            )?,
+        };
 
         BlfFileBuilder::new()
             .add_chunk(s_blf_chunk_start_of_file::new("reach net config"))

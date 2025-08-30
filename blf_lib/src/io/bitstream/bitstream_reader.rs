@@ -235,11 +235,8 @@ impl<'a> c_bitstream_reader<'a> {
                 e_bitstream_byte_order::_bitstream_byte_order_big_endian => {
                     // 1111111 11111000 >> 00011111 11111111
                     let surplus_bits = (8 - (size_in_bits % 8)) % 8;
-                    println!("io:bitstream:bitstream_reader surplus_bits = {surplus_bits}");
                     let [left_output, right_output] = ((output_byte as u16) << (8 - surplus_bits)).to_be_bytes();
                     output[output_byte_index] |= left_output;
-                    println!("io:bitstream:bitstream_reader left = {left_output:08b}");
-                    println!("io:bitstream:bitstream_reader right = {right_output:08b}");
 
                     if right_output != 0 {
                         output[output_byte_index + 1] |= right_output;
