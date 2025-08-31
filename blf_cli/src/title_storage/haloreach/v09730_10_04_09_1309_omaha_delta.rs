@@ -26,7 +26,6 @@ use blf_lib::blf::versions::haloreach::v09730_10_04_09_1309_omaha_delta::s_blf_c
 use blf_lib::io::{read_json_file, write_json_file};
 use blf_lib::OPTION_TO_RESULT;
 use blf_lib::result::{BLFLibError, BLFLibResult};
-use blf_lib::types::byte_order_mark::byte_order_mark;
 use crate::title_storage::haloreach::v09730_10_04_09_1309_omaha_delta::title_storage_config::get_hopper_id_from_hopper_folder_name;
 use crate::title_storage::haloreach::v09730_10_04_09_1309_omaha_delta::title_storage_output::{hopper_image_height, hopper_image_width, user_nag_message_image_width, user_nag_message_image_height};
 

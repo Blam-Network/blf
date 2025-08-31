@@ -11,7 +11,7 @@ use crate::types::c_string::StaticString;
 use blf_lib::types::bool::Bool;
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
 use blf_lib_derivable::result::BLFLibResult;
-use blf_lib_derive::BlfChunk;
+use blf_lib_derive::{BlfChunk, TestSize};
 use crate::types::numbers::Float32;
 
 pub const k_maximum_game_entries: usize = 128;
@@ -38,8 +38,6 @@ impl BinRead for s_blf_chunk_game_set {
     type Args<'a> = ();
 
     fn read_options<R: Read + Seek>(reader: &mut R, endian: Endian, args: Self::Args<'_>) -> BinResult<Self> {
-        unimplemented!();
-
         // this chunk in this version is BE
         let endian = Endian::Big;
 
@@ -115,36 +113,37 @@ impl BinWrite for s_blf_chunk_game_set {
 #[derive(Clone, Default, PartialEq, Debug, Copy, Serialize, Deserialize)]
 #[binrw]
 pub struct s_game_set_entry_campaign_and_survival_data {
-    pub dword1c: u32,
-    pub dword20: u32,
-    pub dword24: u32,
-    pub dword28: u32,
+    pub dword00: Float32,
+    pub dword04: u32,
+    pub dword08: u32,
+    pub dword0C: u32,
 }
 
 #[derive(Clone, Default, PartialEq, Debug, Copy, Serialize, Deserialize)]
 #[binrw]
 pub struct s_game_set_entry_replicated_data {
-    pub gap2c: u16,
-    pub word2e: u16,
-    pub dword30: u32,
-    pub dword34: u32,
-    pub float38: Float32,
-    pub float3c: Float32,
+    #[brw(pad_after = 1)]
+    pub unknown00: Bool,
+    pub unknown02: u16,
+    pub unknown04: u32,
+    pub unknown08: Float32,
+    pub unknown0C: Float32,
+    pub unknown10: Float32,
     #[brw(pad_after = 3)]
-    pub byte40: u8,
+    pub unknown14: Bool,
 }
 
-#[derive(Clone, Default, PartialEq, Debug, Copy, Serialize, Deserialize)]
+#[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, TestSize)]
+#[Size(0x230)]
 #[binrw]
 pub struct s_game_set_entry {
-    pub dword0: u32,
-    pub dword4: u32,
-    pub dword8: u32,
+    pub weight: u32,
+    pub minimum_player_count: u32,
+    pub maximum_player_count: u32,
     pub dwordc: u32,
     pub dword10: u32,
     pub dword14: u32,
     pub dword18: u32,
-    // campaign and survival data
     pub campaign_and_survival_data: s_game_set_entry_campaign_and_survival_data,
     pub replicated_data: s_game_set_entry_replicated_data,
     // #[serde(skip_serializing,skip_deserializing)]
@@ -157,6 +156,8 @@ pub struct s_game_set_entry {
     pub game_variant_file_name: StaticString<32>,
     #[serde(skip_serializing,skip_deserializing)]
     pub game_variant_hash: s_network_http_request_hash,
+    #[serde(skip_serializing, skip_deserializing, default)]
+    pub game_variant_unknown_data: StaticArray<u8, 174>,
     #[serde(skip_serializing,skip_deserializing)]
     has_map_variant: Bool, // set before write via hook
     #[serde(skip_serializing_if = "StaticString::is_empty", default)]
@@ -164,6 +165,8 @@ pub struct s_game_set_entry {
     #[serde(skip_serializing_if = "StaticString::is_empty", default)]
     pub map_variant_file_name: StaticString<32>,
     #[serde(skip_serializing,skip_deserializing)]
-    #[brw(pad_after = 2)]
     pub map_variant_hash: s_network_http_request_hash,
+    #[brw(pad_after = 2)]
+    #[serde(skip_serializing, skip_deserializing, default)]
+    pub map_variant_unknown_data: StaticArray<u8, 174>,
 }

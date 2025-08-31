@@ -15,7 +15,7 @@ use crate::types::numbers::Float32;
 #[binrw]
 #[derive(BlfChunk,Default,PartialEq,Debug,Clone,Serialize,Deserialize)]
 #[Header("netc", 142.1)]
-#[Size(5828)]
+#[Size(0x16C4)]
 #[brw(little)]
 pub struct s_blf_chunk_network_configuration
 {

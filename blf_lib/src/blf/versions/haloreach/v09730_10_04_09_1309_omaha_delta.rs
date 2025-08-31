@@ -18,7 +18,7 @@ pub use haloreach::v12065_11_08_24_1738_tu1actual::s_blf_chunk_player_heartbeat_
 pub use haloreach::v12065_11_08_24_1738_tu1actual::s_blf_chunk_daily_challenges::*;
 pub use haloreach::v12065_11_08_24_1738_tu1actual::s_blf_chunk_rewards_persistance::*;
 pub use haloreach::v12065_11_08_24_1738_tu1actual::s_blf_chunk_service_record::*;
-pub use haloreach::v12065_11_08_24_1738_tu1actual::s_blf_chunk_game_set::*;
+pub use haloreach::v09730_10_04_09_1309_omaha_delta::s_blf_chunk_game_set::*;
 pub use haloreach::v12065_11_08_24_1738_tu1actual::s_blf_chunk_nag_message::*;
 pub use haloreach::v12065_11_08_24_1738_tu1actual::s_blf_chunk_network_configuration::*;
 pub use haloreach::v12065_11_08_24_1738_tu1actual::s_blf_chunk_map_variant::*;
