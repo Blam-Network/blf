@@ -133,10 +133,9 @@ mod title_storage_output {
     // Languages
     // storage/title/4d53085bf0/12065/default_hoppers/en/
     pub const rsa_manifest_file_name: &str = "rsa_manifest.bin";
-    pub fn rsa_manifest_file_path(hoppers_path: &String, language_code: &str) -> String {
+    pub fn rsa_manifest_file_path(hoppers_path: &String) -> String {
         build_path!(
             hoppers_path,
-            language_code,
             rsa_manifest_file_name
         )
     }
@@ -285,11 +284,10 @@ mod title_storage_config {
     }
 
     pub const rsa_signatures_folder_name: &str = "rsa_signatures";
-    pub fn rsa_signatures_folder_path(config_folder: &String, language_code: &str) -> String {
+    pub fn rsa_signatures_folder_path(config_folder: &String) -> String {
         build_path!(
             config_folder,
-            rsa_signatures_folder_name,
-            format!("{language_code}")
+            rsa_signatures_folder_name
         )
     }
 
@@ -1602,43 +1600,39 @@ impl v09730_10_04_09_1309_omaha_delta {
     {
         let mut task = console_task::start("Building Map Manifests");
 
-        for language_code in k_language_suffixes {
-            let rsa_folder = title_storage_config::rsa_signatures_folder_path(
-                hoppers_config_path,
-                language_code,
-            );
+        let rsa_folder = title_storage_config::rsa_signatures_folder_path(
+            hoppers_config_path
+        );
 
-            let mut rsa_files = Vec::<String>::new();
+        let mut rsa_files = Vec::<String>::new();
 
-            if exists(&rsa_folder)? {
-                rsa_files = get_files_in_folder(&rsa_folder)?;
-            }
-
-            if rsa_files.is_empty() {
-                task.add_error(format!("No {} RSA signatures were found", get_language_string(language_code)))
-            }
-
-            let mut map_manifest = s_blf_chunk_map_manifest::default();
-
-            for rsa_file_name in rsa_files {
-                let rsa_file_path = build_path!(&rsa_folder, &rsa_file_name);
-                let mut rsa_file = File::open(&rsa_file_path)?;
-                let mut rsa_signature = Vec::<u8>::with_capacity(0x100);
-                rsa_file.read_to_end(&mut rsa_signature).unwrap();
-
-                map_manifest.add_rsa_signature(rsa_signature.as_slice())?;
-            }
-
-            BlfFileBuilder::new()
-                .add_chunk(s_blf_chunk_start_of_file::new("rsa manifest"))
-                .add_chunk(s_blf_chunk_author::for_build::<v09730_10_04_09_1309_omaha_delta>())
-                .add_chunk(map_manifest)
-                .add_chunk(s_blf_chunk_end_of_file::default())
-                .write_file(title_storage_output::rsa_manifest_file_path(
-                    hoppers_blf_path,
-                    language_code
-                ))?;
+        if exists(&rsa_folder)? {
+            rsa_files = get_files_in_folder(&rsa_folder)?;
         }
+
+        if rsa_files.is_empty() {
+            task.add_error("No RSA signatures were found")
+        }
+
+        let mut map_manifest = s_blf_chunk_map_manifest::default();
+
+        for rsa_file_name in rsa_files {
+            let rsa_file_path = build_path!(&rsa_folder, &rsa_file_name);
+            let mut rsa_file = File::open(&rsa_file_path)?;
+            let mut rsa_signature = Vec::<u8>::with_capacity(0x100);
+            rsa_file.read_to_end(&mut rsa_signature).unwrap();
+
+            map_manifest.add_rsa_signature(rsa_signature.as_slice())?;
+        }
+
+        BlfFileBuilder::new()
+            .add_chunk(s_blf_chunk_start_of_file::new("rsa manifest"))
+            .add_chunk(s_blf_chunk_author::for_build::<v09730_10_04_09_1309_omaha_delta>())
+            .add_chunk(map_manifest)
+            .add_chunk(s_blf_chunk_end_of_file::default())
+            .write_file(title_storage_output::rsa_manifest_file_path(
+                hoppers_blf_path,
+            ))?;
 
         やった!(task)
     }
@@ -2232,15 +2226,15 @@ impl v09730_10_04_09_1309_omaha_delta {
             title_storage_output::dlc_map_manifest_file_path(hoppers_blfs_path)
         )?;
 
-        for language_code in k_language_suffixes {
-            add_hash_if_file_exists(
-                format!(
-                    "/{language_code}/{}",
-                    title_storage_output::rsa_manifest_file_name
-                ),
-                title_storage_output::rsa_manifest_file_path(hoppers_blfs_path, language_code)
-            )?;
+        add_hash_if_file_exists(
+            format!(
+                "/{}",
+                title_storage_output::rsa_manifest_file_name
+            ),
+            title_storage_output::rsa_manifest_file_path(hoppers_blfs_path)
+        )?;
 
+        for language_code in k_language_suffixes {
             add_hash_if_file_exists(
                 format!(
                     "/{language_code}/{}",

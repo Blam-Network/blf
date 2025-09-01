@@ -94,7 +94,7 @@ impl BinWrite for s_dlc_path {
 #[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
 #[brw(big)]
 pub struct s_dlc_paths {
-    pub paths: StaticArray<blf_lib::blf::versions::haloreach::v09730_10_04_09_1309_omaha_delta::s_dlc_path, 8>,
+    pub paths: StaticArray<s_dlc_path, 8>,
 }
 
 #[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
