@@ -7,6 +7,7 @@ use crate::title_storage::ares::v_untracked_ares::v_untracked_ares;
 use crate::title_storage::halo3::v12070_08_09_05_2031_halo3_ship::v12070_08_09_05_2031_halo3_ship;
 use crate::title_storage::halo3odst::v13895_09_04_27_2201_atlas_release::v13895_09_04_27_2201_atlas_release;
 use crate::title_storage::haloonline::v1_106708_cert_ms23___release::v1_106708_cert_ms23___release;
+use crate::title_storage::haloreach::v09449_10_03_25_1545_omaha_beta::v09449_10_03_25_1545_omaha_beta;
 use crate::title_storage::haloreach::v09730_10_04_09_1309_omaha_delta::v09730_10_04_09_1309_omaha_delta;
 use crate::title_storage::haloreach::v12065_11_08_24_1738_tu1actual::v12065_11_08_24_1738_tu1actual;
 
@@ -39,6 +40,7 @@ fn get_title_converters() -> Vec<Box<dyn TitleConverter>> {
 
         // Pre-Releases
         Box::new(v09730_10_04_09_1309_omaha_delta::default()),      // Halo: Reach (Public Beta)
+        Box::new(v09449_10_03_25_1545_omaha_beta::default()),       // Halo: Reach (Private Beta)
 
         // Mods & Others
         Box::new(v_untracked_ares::default()),                      //

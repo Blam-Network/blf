@@ -1,3 +1,4 @@
 pub mod s_blf_chunk_hopper_configuration_table;
 pub mod s_blf_chunk_game_set;
 pub mod s_blf_chunk_network_configuration;
+pub mod s_blf_chunk_rewards_persistance;

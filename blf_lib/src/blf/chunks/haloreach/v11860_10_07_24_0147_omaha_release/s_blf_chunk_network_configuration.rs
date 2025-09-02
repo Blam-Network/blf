@@ -100,10 +100,12 @@ pub struct s_simulation_world_configuration {
     pub unknown54: f32,
     pub unknown58: f32,
     pub unknown5C: f32,
+    // shared configuration
     pub unknown60: f32,
     pub simulation_event_projectile_supercombine_request_fraction: i32, // deffo supercombine but name may be wrong
     pub unknown68: f32,
     pub unknown6C: f32,
+    // world configuration
     pub maximum_catchup_views: i32,
     pub join_timeout: i32,
     pub host_join_minimum_wait_time: i32,

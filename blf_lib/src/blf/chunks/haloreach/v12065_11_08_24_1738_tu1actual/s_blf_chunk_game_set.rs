@@ -114,10 +114,11 @@ impl BinWrite for s_blf_chunk_game_set {
 #[derive(Clone, Default, PartialEq, Debug, Copy, Serialize, Deserialize)]
 #[binrw]
 pub struct s_game_set_entry_campaign_and_survival_data {
-    pub dword00: Float32,
-    pub dword04: u32,
-    pub dword08: u32,
-    pub dword0C: u32,
+    #[brw(pad_after = 3)]
+    pub unknown00: Bool,
+    pub unknown04: u32,
+    pub unknown08: u32,
+    pub unknown0C: u32,
 }
 
 #[derive(Clone, Default, PartialEq, Debug, Copy, Serialize, Deserialize)]
@@ -140,10 +141,10 @@ pub struct s_game_set_entry {
     pub weight: u32,
     pub minimum_player_count: u32,
     pub maximum_player_count: u32,
-    pub dwordc: u32,
-    pub dword10: u32,
-    pub dword14: u32,
-    pub dword18: u32,
+    pub voting_max_fails: u32,
+    pub voting_round: u32,
+    pub min_skill: u32,
+    pub max_skill: u32,
     pub campaign_and_survival_data: s_game_set_entry_campaign_and_survival_data,
     pub replicated_data:s_game_set_entry_replicated_data,
     // #[serde(skip_serializing,skip_deserializing)]

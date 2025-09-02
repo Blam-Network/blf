@@ -18,8 +18,7 @@ use blf_lib::types::bool::Bool;
 #[brw(big)]
 pub struct s_blf_chunk_network_configuration
 {
-    pub data: StaticArray<u8, 6756>
-    //pub config: s_network_configuration,
+    pub config: s_network_configuration,
 }
 
 #[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
@@ -95,16 +94,14 @@ pub struct s_simulation_world_configuration {
     pub unknown28: i32,
     pub unknown2C: i32,
     pub unknown30: i32,
-    pub unknown34: i32,
+    pub unknown34: Float32,
     pub unknown38: StaticArray<i32, 6>,
     pub unknown50: f32,
     pub unknown54: f32,
-    pub unknown58: f32,
+    pub simulation_event_projectile_supercombine_request_fraction: f32,
     pub unknown5C: f32,
-    pub unknown60: f32,
-    pub simulation_event_projectile_supercombine_request_fraction: i32, // deffo supercombine but name may be wrong
-    pub unknown68: f32,
-    pub unknown6C: f32,
+    // pub unknown60: f32,
+    pub unknown60: f32, // deffo supercombine but name may be wrong
     pub maximum_catchup_views: i32,
     pub join_timeout: i32,
     pub host_join_minimum_wait_time: i32,
@@ -118,8 +115,8 @@ pub struct s_simulation_world_configuration {
     pub client_activation_failure_timeout: i32,
     pub game_simulation_queue_danger_allocation_size_percentage: Float32,
     pub game_simulation_queue_danger_allocation_count_percentage: Float32,
-    // This is based on c_simulation_world::is_authority true and false for different gamemodes.
-    pub halt_configuration: StaticArray<s_halt_configuration, 8>,
+    // This is based on different gamemodes.
+    pub halt_configuration: StaticArray<s_halt_configuration, 4>,
     pub unknown1: i32,
     pub unknown2: Float32,
     pub unknown3: Float32,
@@ -220,11 +217,6 @@ pub struct s_simulation_configuration {
     pub unknown67C: Float32,
     pub unknown680: Float32,
     pub unknown684: Float32,
-    pub unknown688: Float32,
-    pub unknown68C: Float32,
-    pub unknown690: Float32,
-    pub unknown694: Float32,
-    pub unknown698: Float32,
     // pub zoom_relevance: s_simulation_zoom_relevance,
     pub control_relevance: s_simulation_control_relevance,
     pub position_relevance: s_simulation_position_relevance,
@@ -242,10 +234,10 @@ pub struct s_simulation_configuration {
     pub warping: s_simulation_warping_configuration,
     pub weapon: s_simulation_weapon_configuration,
     pub unknown11: Float32,
-    pub unknown12: Float32,
-    pub unknown13: i32,
+    pub unknown12: Bool,
+    #[brw(pad_after = 2)]
+    pub unknown13: Bool,
     pub unknown14: Float32,
-    pub unknown115: Float32,
 }
 
 #[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
@@ -380,12 +372,12 @@ pub struct s_logic_configuration {
     // pub seeker: s_logic_matchmaking_seeker_configuration,
     pub leaderboard: s_logic_leaderboard_configuration,
     pub session_interface: s_session_interface_configuration,
-    pub unknown84: i32,
-    pub unknown88: i32,
-    pub unknown8c: i32,
-    pub unknown90: i32,
-    pub unknown94: i32,
-    pub unknown98: i32,
+    // pub unknown84: i32,
+    // pub unknown88: i32,
+    // pub unknown8c: i32,
+    // pub unknown90: i32,
+    // pub unknown94: i32,
+    // pub unknown98: i32,
     pub base_qos_reply_block: s_qos_reply_block_configuration,
     pub unknown1: i32,
     pub squad_qos_reply_block: s_session_qos_reply_block_configuration,
@@ -418,12 +410,12 @@ pub struct s_life_cycle_handler_matchmaking_configuration {
     pub perform_nat_check: Bool,
     #[brw(align_before = 4)]
     pub matchmaking_strict_nat_host_percentage: Float32,
-    pub posse_leave_timeout: i32,
+    // pub posse_leave_timeout: i32,
     pub unknown0c_posse_start_matchmaking: i32,
     pub posse_session_creation_timeout: i32,
     pub squad_peers_join_session_timeout: i32,
     pub group_leave_timeout: i32,
-    pub matchmaking_search_give_up_time_seconds: i32,
+    // pub matchmaking_search_give_up_time_seconds: i32,
     pub unknown20: i32,
     // pub matchmaking_start_failure_wait_time_ms: i32,
     // pub matchmaking_find_match_joinable_session_threshold: i32,
@@ -437,8 +429,6 @@ pub struct s_life_cycle_handler_matchmaking_configuration {
     // pub prepare_map_veto_timer_seconds: i32,
     pub prepare_map_minimum_load_time_seconds: i32,
     pub prepare_map_countdown_timer_seconds: i32,
-    #[serde(with = "SerHex::<StrictCapPfx>")]
-    pub unknown1: u32,
     // pub prepare_map_vetoed_countdown_timer_seconds: i32,
     // pub prepare_map_veto_failed_countdown_timer_seconds: i32,
     pub end_match_write_stats_boot_threshold_seconds: i32,
@@ -450,8 +440,8 @@ pub struct s_life_cycle_handler_matchmaking_configuration {
     #[brw(align_before = 4)]
     pub post_match_stats_refresh_time: i32,
     pub warning_toast_minimum_time_seconds: i32,
-    pub unknown70: i32,
-    pub unknown74: i32,
+    // pub unknown70: i32,
+    // pub unknown74: i32,
     pub unknown78: i32,
     pub unknown7c_matchmaking_search_stale_timeout: i32,
     pub unknown80: i32,
@@ -618,11 +608,6 @@ pub struct s_bandwidth_configuration {
     pub unknown3c: f32,
     pub unknown40: f32,
     pub reduced_hosting_ban_quality_decrease: f32,
-    pub unknown48: f32,
-    pub unknown4c_flag: Bool,
-    pub unknown4d: Bool,
-    pub unknown4e: Bool,
-    pub unknown4f: Bool,
     pub unknown50: StaticArray<s_bandwidth_unknown_struct_2, 3>,
     pub unknown3d4: Float32,
     pub unknown3d8: Float32,
@@ -658,7 +643,6 @@ pub struct s_session_configuration {
     pub join_abort_timeout_msec: i32,
     pub host_rejoin_accept_timeout_msec: i32,
     pub leave_timeout_msec: i32,
-    pub unknown3: i32,
     pub leave_request_interval_msec: i32,
     pub host_handoff_initiate_timeout_msec: i32,
     pub host_handoff_selection_delay_msec: i32,
@@ -705,7 +689,6 @@ pub struct s_observer_configuration {
     pub safety_packet_interval: Float32,
     pub safety_packet_maximum_interval: Float32,
     pub unknown2: Float32,
-    pub unknown3: Float32,
     pub packet_rate_multiplier_count: i32,
     pub packet_rate_multipliers: StaticArray<Float32, 16>,
     pub packet_window_minimum_bytes: i32,
@@ -1000,7 +983,6 @@ pub struct s_observer_configuration {
     pub unknown3ac: f32,
     pub unknown3b0: f32,
     pub unknown3b4: f32,
-    pub unknown3b8: f32,
 }
 
 #[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
@@ -1098,8 +1080,8 @@ pub struct s_user_interface {
     pub networked_playback_maximum_player_count: i32,
     pub basic_training_completion_minimum_games_completed: i32,
     pub basic_training_completion_minimum_experience: i32,
-    pub unknown1: i32,
-    pub unknown2: i32,
+    // pub unknown1: i32,
+    // pub unknown2: i32,
 }
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default)]
@@ -1143,8 +1125,9 @@ pub struct s_alpha_configuration {
     #[brw(align_before = 4)]
     pub ui_level: e_alpha_configuration_ui_level,
     pub maximum_multiplayer_split_screen: i32,
-    pub unknown1: i32,
-    pub unknown2: i32,
+    pub unknown1: f32,
+    #[brw(pad_after = 3)]
+    pub unknown2: Bool,
 }
 
 #[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
@@ -1221,17 +1204,15 @@ pub struct s_griefer_configuration {
     pub unknown_griefer_multiplier_1: Float32,
     pub unknown_griefer_multiplier_2: Float32,
     pub unknown_griefer_multiplier_3: Float32,
-    pub ai_griefer_multiplier: Float32,
+    pub unknown_griefer_multiplier_4: Float32,
     pub unknown_griefer_multiplier_5: Float32,
     pub unknown_griefer_multiplier_6: Float32,
-    pub same_squad_griefer_multiplier: Float32,
-    pub ai_nearby_griefer_multiplier: Float32,
-    pub enemy_player_nearby_griefer_multiplier: Float32,
+    pub unknown_griefer_multiplier_7: Float32,
+    pub unknown_griefer_multiplier_8: Float32,
+    pub unknown_griefer_multiplier_9: Float32,
     pub unknown_griefer_multiplier_10: Float32,
-    pub objects_in_sphere_radius_griefer_multiplier: Float32,
-    pub shield_damage_griefer_multiplier: Float32,
-    pub body_damage_griefer_multiplier: Float32,
-    pub betrayal_griefer_multiplier: Float32,
+    pub unknown_griefer_multiplier_11: Float32,
+    pub unknown_griefer_multiplier_12: Float32,
     pub betrayal_decrement_time: Float32,
     pub eject_decrement_time: Float32,
     pub betrayal_cutoff: Float32,
@@ -1258,20 +1239,12 @@ pub struct s_banhammer_upload_failure_configuration {
 pub struct s_banhammer_configuration {
     pub host_chance_reduction_percentage: i32,
     pub idle_controller_timeout_seconds: i32,
-    #[serde(with = "SerHex::<StrictCapPfx>")]
-    pub unknown1: u32,
     pub unknown2: i32,
-    // one per e_network_banhammer_upload_failure_type
-    pub failure_configuration: StaticArray<s_banhammer_upload_failure_configuration, 4>,
-    pub security_challenge_configuration: s_security_challenge_configuration,
 }
 
 #[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
 #[brw(big)]
 pub struct s_network_files_configuration {
-    pub unknown1B98_file_share_string_validation: Bool,
-    #[brw(pad_after = 2)]
-    pub unknown1B99_file_share_string_validation: Bool,
     pub map_manifest_refresh_seconds: i32,
     pub map_manifest_refresh_threshold_seconds: i32,
     pub file_manifest_refresh_seconds: i32,
@@ -1280,53 +1253,6 @@ pub struct s_network_files_configuration {
     pub machine_file_refresh_threshold_seconds: i32,
     pub user_file_refresh_seconds: i32,
     pub user_file_refresh_threshold_seconds: i32,
-    pub title_files_refresh_seconds: i32,
-    pub title_files_refresh_threshold_seconds: i32,
-}
-
-#[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
-#[brw(big)]
-pub struct s_security_challenge_failure_response_configuration {
-    pub unknown0: u8,
-    pub unknown1: u8,
-    pub unknown2: u8,
-    pub unknown3: u8,
-    pub unknown4: u32,
-}
-
-#[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
-#[brw(big)]
-pub struct s_security_challenge_configuration {
-    pub security_challenge_timeout: i32,
-    #[brw(pad_after = 3)]
-    pub security_challenge_fail_on_timeout: Bool,
-    pub unknown60C: i32,
-    pub unknown610: i32,
-    pub unknown614: i32,
-    pub unknown618: i32,
-    pub unknown61C: i32,
-    pub unknown620: i32,
-    pub failure_response_config: StaticArray<s_security_challenge_failure_response_configuration, 5>,
-}
-
-#[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
-#[brw(big)]
-pub struct s_network_status_configuration {
-    pub unknown1BC4: Float32,
-    pub unknown1BC8: Float32,
-    pub unknown1BCC: Float32,
-    pub unknown1BD0: Float32,
-    pub unknown1BD4: Float32,
-    pub unknown1BD8: Float32,
-    pub unknown1BDC: Float32,
-    pub unknown1BE0: Float32,
-    pub unknown1BE4: Float32,
-    pub unknown1BE8: Float32,
-    pub unknown1BEC: Float32,
-    pub unknown1BF0: Float32,
-    pub unknown1BF4: Float32,
-    pub unknown1BF8: Float32,
-    pub url: StaticWcharString<128>,
 }
 
 #[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
@@ -1340,16 +1266,15 @@ pub struct s_chicken_switches {
     pub unknown1AFC_bandwidth_quality_statistics_from_lsp_flag: Bool,
     pub unknown1AFD_simulation_flag: Bool,
     pub enable_user_image_upload: Bool,
-    pub unknown1AFF_session_flag: Bool,
-    pub disable_slot_count_hack: Bool,
-    pub unknown1B01_qos_reply_block_flag: Bool,
-    pub lsp_leaderboard_disabled: Bool,
-    // disables some voice thing if enabled.
-    pub unknown1B03_social_preferences_flag : Bool,
-    pub unknown1B04_team_related: Bool,
-    pub unknown1b05: Bool,
-    pub unknown1b06: Bool,
-    pub unknown1b07: Bool,
+    pub unknown1AFF: Bool,
+    // pub unknown1B00: Bool,
+    // pub unknown1B01: Bool,
+    // pub unknown1B02: Bool,
+    // pub unknown1B03 : Bool,
+    // pub unknown1B04_team_related: Bool,
+    // pub unknown1b05: Bool,
+    // pub unknown1b06: Bool,
+    // pub unknown1b07: Bool,
 }
 
 #[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
@@ -1382,20 +1307,11 @@ pub struct s_active_roster_configuration {
     pub unknown1b6c: i32,
     pub unknown1b70_heartbeat: i32,
     pub unknown1b74: i32,
-    pub unknown1b78: i32,
+    // pub unknown1b78: i32,
     pub unknown1b7c: i32,
 }
 
-#[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
-#[brw(big)]
-pub struct s_experience_and_credits_configuration {
-    pub player_rank_cap: i32, // rank cap
-    pub player_grade_cap: i32, // grade cap
-    pub daily_cookie_limit_offline: i32,
-    pub daily_cookie_limit_online: i32, // daily cookie cap.
-    pub cookie_multipliers_per_rank_and_grade: StaticArray<StaticArray<Float32, 5>, 21>,
-    pub unknown_per_rank_and_grade: StaticArray<StaticArray<i32, 5>, 21>,
-}
+
 
 #[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
 #[brw(big)]
@@ -1434,16 +1350,7 @@ pub struct s_network_configuration {
     pub unknown1b84_lsp_leaderboard_time: i32,
     pub unknown1b88_lsp_leaderboard_time: i32,
     pub determinism_configuration: s_determinism_configuration,
-    pub network_files_configuration: s_network_files_configuration,
-    pub network_status_configuration: s_network_status_configuration,
-    pub experience_and_credits_configuration: s_experience_and_credits_configuration,
-    #[brw(pad_after = 1)]
-    pub allow_bungie_pro_file_share_without_gold: Bool,
-    pub router_url: StaticWcharString<64>,
-    pub arena_url: StaticWcharString<64>,
-    pub invasion_url: StaticWcharString<64>,
-    #[brw(pad_after = 2)]
-    pub network_details_url: StaticWcharString<64>,
+    pub network_files_configuration: s_network_files_configuration
 }
 
 

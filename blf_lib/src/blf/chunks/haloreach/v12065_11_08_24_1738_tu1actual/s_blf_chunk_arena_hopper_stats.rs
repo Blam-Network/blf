@@ -13,7 +13,11 @@ use napi_derive::napi;
 #[cfg_attr(feature = "napi", napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]
 pub struct s_blf_chunk_arena_hopper_stats {
     // TODO: Map
-    pub data: StaticArray<u8, 0x16>,
+    pub season: u32,
+    pub unknown04: u32,
+    pub unknown08: u32,
+    pub unknown0C: u32,
+    pub unknown10: u32,
 }
 
 impl BlfChunkHooks for s_blf_chunk_arena_hopper_stats {}

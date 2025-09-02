@@ -98,6 +98,7 @@ impl BinWrite for s_blf_chunk_hopper_configuration_table {
         let mut e = ZlibEncoder::new_with_compress(Vec::new(), Compress::new_with_window_bits(Compression::new(9), true, 15));
         e.write_all(encoded_chunk.as_slice())?;
         let compressed_data = e.finish()?;
+
         // 3. Pack
         let compressed_length: u16 = compressed_data.len() as u16;
         let uncompressed_length: u32 = encoded_chunk.len() as u32;
@@ -127,29 +128,35 @@ pub struct s_game_hopper_custom_category {
 
 #[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
 pub struct s_hopper_query_latency_desirability_configuration {
-    pub unknown1: u32,
-    pub unknown2: u32,
-    pub unknown3: u32,
+    pub unknown00: f32,
+    pub unknown04: u32,
+    pub unknown08: u32,
 }
 
 #[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
 pub struct s_hopper_query_configuration {
-    pub dword0: u32,
-    pub gap4: u32,
-    pub dword8: u32,
-    pub gapc: u32,
-    pub dword10: u32,
-    pub gap14: u32,
-    pub dword18: u32,
-    pub dword1c: u32,
-    pub dword20: u32,
-    pub gap24: u32,
-    pub dword28: u32,
-    pub dword2c: u32,
-    pub dword30: u32,
-    pub unknown1: u32,
+    pub unknown00: u32,
+    #[brw(pad_after = 3)]
+    pub unknown04: Bool,
+    pub unknown08: u32,
+    #[brw(pad_after = 3)]
+    pub unknown0c: Bool,
+    pub unknown10: f32,
+    #[brw(pad_after = 3)]
+    pub unknown14: Bool,
+    pub unknown18: f32,
+    pub unknown1c: f32,
+    pub unknown20: f32,
+    pub unknown24: Bool,
+    #[brw(pad_after = 2)]
+    pub unknown25: Bool,
+    pub unknown28: u32,
+    pub unknown2c: u32,
+    pub unknown30: u32,
+    #[brw(pad_after = 3)]
+    pub unknown34: Bool,
     pub latency_desirability_configurations: StaticArray<s_hopper_query_latency_desirability_configuration, 2>,
-    pub unknown2: StaticArray<Float32, 17>,
+    pub unknown50: StaticArray<Float32, 17>,
 }
 
 #[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
@@ -167,6 +174,18 @@ pub struct s_hopper_jackpot_configuration {
     pub unknown3: u32,
 }
 
+#[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
+pub struct s_hopper_voting_configuration {
+    pub voting_categories: u32,
+    pub number_of_votes_per_peer: u32,
+    pub voting_rounds: u32,
+    pub veto_rounds: u32,
+    pub maximum_load_failures: u32,
+    pub voting_time_seconds: u32,
+    #[brw(pad_after = 3)]
+    pub flags: u8,
+}
+
 #[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, TestSize)]
 #[Size(0x458)]
 pub struct c_hopper_configuration {
@@ -181,7 +200,7 @@ pub struct c_hopper_configuration {
     pub image_index: u32,
     pub xlast_index: u32,
     #[brw(pad_after = 3)]
-    pub equivalency_id: u8, // this might be the wrong type.
+    pub equivalency_id: u8,
     pub start_time: filetime,
     pub end_time: filetime,
     pub minimum_games_won: u32,
@@ -194,15 +213,15 @@ pub struct c_hopper_configuration {
     pub max_party_size: u32,
     pub min_local_players: u32,
     pub max_local_players: u32,
-    pub hopper_access_bit: u32,
+    pub hopper_access_bit: i32,
     pub account_type_access: u32,
     pub require_all_party_members_meet_games_played_requirements: Bool,
-    pub byte89: u8,
+    pub unknown89: u8,
     pub require_all_party_members_meet_grade_requirements: Bool,
     pub require_all_party_members_meet_access_requirements: Bool,
     pub require_all_party_members_meet_live_account_access_requirements: Bool,
     pub hide_hopper_from_games_played_restricted_players: Bool,
-    pub byte8e: u8,
+    pub unknown8e: u8,
     pub hide_hopper_from_grade_restricted_players: Bool,
     pub hide_hopper_from_access_restricted_players: Bool,
     pub hide_hopper_from_live_account_access_restricted_players: Bool,
@@ -210,64 +229,63 @@ pub struct c_hopper_configuration {
     pub requires_hard_drive: Bool,
     #[brw(pad_after = 3)]
     pub requires_local_party: Bool,
-    pub dword98: u32,
-    pub dword9c: u32,
-    pub dworda0: u32,
-    pub dworda4: u32,
-    pub dworda8: u32,
-    pub dwordac: u32,
-    #[brw(pad_after = 3)] // Not 100% confident on this, should check game code.
-    pub byteb0: u8,
+    pub voting_configuration: s_hopper_voting_configuration,
     pub is_ranked: u8,
     pub is_arbitrated: u8,
     pub are_guests_allowed: u8,
     pub are_opponents_visible: u8,
     pub uses_arena_lsp_stats: u8,
     #[brw(pad_after = 2)]
-    pub byteb9:u8,
-    pub dwordbc: u32,
-    pub dwordc0: u32,
-    pub gapc4: u8, // unsure
+    pub unknownb9:u8,
+    pub unknownbc: u32,
+    pub unknownc0: u32,
+    pub unknownc4: u8, // unsure
     #[brw(pad_after = 2)]
     pub uses_high_score_leaderboard: u8,
     pub posse_formation: u32,
     pub post_match_countdown_time_seconds: u32,
-    pub require_hosts_on_multiple_teams: u32, // definately a u32?
+    #[brw(pad_after = 3)]
+    pub require_hosts_on_multiple_teams: Bool,
     pub repeated_opponents_to_consider_for_penalty: u32,
     pub repeated_opponents_skill_throttle_start: u32,
     pub repeated_opponents_skill_throttle_stop: u32,
-    pub is_team_matching_enabled: u32,
+    pub matchmaking_composition_build_flags: u8,
+    #[brw(pad_after = 2)]
+    // Not confident this exists, maybe it's synonymous with matchmaking_composition_build_flags
+    pub is_team_matching_enabled: Bool,
     pub gather_start_threshold_seconds: u32,
     pub get_gather_start_game_early_seconds: u32,
     pub get_gather_give_up_seconds: u32,
     pub chance_of_gathering: StaticArray<u8, 16>,
-    pub gapf0_5: u32, // sometimes there is data here, maybe not a gap.
-    pub dword104: u32,
-    pub dword108: u32,
-    pub uses_ffa_scoring_for_leaderboard_writes: u8,
+    pub unknown100: u32,
+    pub unknown104: u32,
+    pub unknown108: u32,
+    pub uses_ffa_scoring_for_leaderboard_writes: Bool,
     #[brw(pad_after = 2)]
-    pub should_modify_skill_update_weight_with_game_quality: u8,
-    pub trueskill_sigma_multiplier: Float32,
-    pub dword114: u32,
-    pub trueskill_tau_dynamics_factor: u32,
+    pub should_modify_skill_update_weight_with_game_quality: Bool,
+    pub trueskill_sigma_multiplier: f32,
+    pub unknown114: f32,
+    pub trueskill_tau_dynamics_factor: f32,
     pub trueskill_draw_probability: u32,
     pub pre_match_voice_configuration: u32,
     pub in_match_voice_configuration: u32,
     pub post_match_voice_configuration: u32,
     pub restrict_open_channel: u32,
-    pub dword130: u32,
+    pub unknown130: u32,
     pub query_configurations: StaticArray<s_hopper_query_configuration, 4>,
-    pub games_game_type: u32,
+    pub game_type: u8,
+    #[brw(pad_after = 2)]
+    pub is_ffa: Bool,
     pub minimum_player_count: u32,
     pub maximum_player_count: u32,
     pub ffa_model_override: u32,
     pub minimum_team_count: u32,
     pub maximum_team_count: u32,
-    pub per_team_data: [s_hopper_configuration_per_team_data; 8],
+    pub per_team_data: StaticArray<s_hopper_configuration_per_team_data, 8>,
     pub maximum_team_imbalance: u32,
     pub big_squad_size_threshold: u32,
-    pub dword424: u32,
-    pub gap428: u32, // unsure
+    pub unknown424: u32,
+    pub unknown428: u32,
     pub undersized_party_split_permissions: u32,
     pub jackpot_minimum_time_seconds: u32,
     pub jackpot_configurations: StaticArray<s_hopper_jackpot_configuration, 3>,

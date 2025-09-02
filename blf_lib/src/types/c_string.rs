@@ -87,6 +87,10 @@ impl<const N: usize> FromNapiValue for StaticWcharString<N> {
 }
 
 impl<const N: usize> StaticWcharString<N> {
+    pub fn is_empty(&self) -> bool {
+        self.buf[0] == 0x0000
+    }
+
     pub fn from_string(value: &String) -> BLFLibResult<Self> {
         let mut new = Self {
             buf: StaticArray::default()

@@ -6,7 +6,7 @@ use std::path::Path;
 use serde::de::DeserializeOwned;
 use serde::Serialize;
 use blf_lib::OPTION_TO_RESULT;
-use blf_lib_derivable::result::BLFLibResult;
+use blf_lib_derivable::result::{BLFLibError, BLFLibResult};
 
 pub mod bitstream;
 
@@ -22,8 +22,9 @@ pub fn read_file_to_string(path: impl Into<String>) -> Result<String, Box<dyn Er
 }
 
 pub fn read_json_file<T: DeserializeOwned>(path: impl Into<String>) -> BLFLibResult<T> {
-    let json = read_file_to_string(path)?;
-    serde_json::from_str(&json).map_err(|e| e.into())
+    let path = path.into();
+    let json = read_file_to_string(&path)?;
+    serde_json::from_str(&json).map_err(|e| BLFLibError::from(format!("Failed to read JSON file {}\r\n{}", path, e.to_string())))
 }
 
 pub fn write_json_file<T: Serialize>(value: &T, path: impl Into<String> + AsRef<OsStr>) -> BLFLibResult {

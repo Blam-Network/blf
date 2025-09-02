@@ -7,7 +7,7 @@ use serde::{Deserialize, Serialize};
 use blf_lib::blam::common::memory::secure_signature::s_network_http_request_hash;
 use blf_lib::io::bitstream::{c_bitstream_reader, c_bitstream_writer, e_bitstream_byte_order};
 use blf_lib::types::array::StaticArray;
-use crate::types::c_string::StaticString;
+use crate::types::c_string::{StaticString, StaticWcharString};
 use blf_lib::types::bool::Bool;
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
 use blf_lib_derivable::result::BLFLibResult;
@@ -102,6 +102,7 @@ impl BinWrite for s_blf_chunk_game_set {
         packed_writer.write_integer((compressed_length + 4) as u32, 14)?;
         packed_writer.write_integer(uncompressed_length, 32)?;
         packed_writer.write_raw_data(&compressed_data, (compressed_length * 8) as usize)?;
+        packed_writer.write_integer(0, 32)?; // not sure
 
         packed_writer.finish_writing();
         writer.write_ne(&packed_writer.get_data()?)?;
@@ -113,10 +114,10 @@ impl BinWrite for s_blf_chunk_game_set {
 #[derive(Clone, Default, PartialEq, Debug, Copy, Serialize, Deserialize)]
 #[binrw]
 pub struct s_game_set_entry_campaign_and_survival_data {
-    pub dword00: Float32,
-    pub dword04: u32,
-    pub dword08: u32,
-    pub dword0C: u32,
+    #[brw(pad_after = 3)]
+    pub unknown00: Bool,
+    pub unknown04: u32,
+    pub unknown08: u32,
 }
 
 #[derive(Clone, Default, PartialEq, Debug, Copy, Serialize, Deserialize)]
@@ -140,33 +141,43 @@ pub struct s_game_set_entry {
     pub weight: u32,
     pub minimum_player_count: u32,
     pub maximum_player_count: u32,
-    pub dwordc: u32,
-    pub dword10: u32,
-    pub dword14: u32,
-    pub dword18: u32,
+    pub voting_max_fails: u32, // voting max fails?
+    pub voting_round: u32, // voting round
+    pub min_skill: u32, // min skill
+    pub max_skill: u32, // max skill
     pub campaign_and_survival_data: s_game_set_entry_campaign_and_survival_data,
+    // #[serde(skip_deserializing, default)]
     pub replicated_data: s_game_set_entry_replicated_data,
     // #[serde(skip_serializing,skip_deserializing)]
     pub map_id: u32,
     #[serde(skip_serializing,skip_deserializing)]
+    #[brw(pad_after = 1)]
     has_game_variant: Bool,  // set before write via hook
-    #[serde(skip_serializing_if = "StaticString::is_empty", default)]
-    pub game_name: StaticString<16>,
+    #[serde(skip_serializing_if = "StaticWcharString::is_empty", default)]
+    pub game_name: StaticWcharString<16>,
+    #[serde(skip_serializing_if = "StaticWcharString::is_empty", default)]
+    pub game_variant_unknown_string1: StaticWcharString<64>,
+    #[serde(skip_serializing_if = "StaticWcharString::is_empty", default)]
+    // used in multiplayer_game_hoppers_build_voting_descriptions_from_voting_round
+    // not present in 11860
+    pub game_variant_unknown_string2: StaticWcharString<16>,
     #[serde(skip_serializing_if = "StaticString::is_empty", default)]
     pub game_variant_file_name: StaticString<32>,
     #[serde(skip_serializing,skip_deserializing)]
     pub game_variant_hash: s_network_http_request_hash,
-    #[serde(skip_serializing, skip_deserializing, default)]
-    pub game_variant_unknown_data: StaticArray<u8, 174>,
     #[serde(skip_serializing,skip_deserializing)]
+    #[brw(pad_after = 1)]
     has_map_variant: Bool, // set before write via hook
-    #[serde(skip_serializing_if = "StaticString::is_empty", default)]
-    pub map_name: StaticString<16>,
+    #[serde(skip_serializing_if = "StaticWcharString::is_empty", default)]
+    pub map_name: StaticWcharString<16>,
+    #[serde(skip_serializing_if = "StaticWcharString::is_empty", default)]
+    pub map_variant_unknown_string1: StaticWcharString<64>,
+    #[serde(skip_serializing_if = "StaticWcharString::is_empty", default)]
+    // used in multiplayer_game_hoppers_build_voting_descriptions_from_voting_round
+    // not present in 11860
+    pub map_variant_unknown_string2: StaticWcharString<16>,
     #[serde(skip_serializing_if = "StaticString::is_empty", default)]
     pub map_variant_file_name: StaticString<32>,
     #[serde(skip_serializing,skip_deserializing)]
     pub map_variant_hash: s_network_http_request_hash,
-    #[brw(pad_after = 2)]
-    #[serde(skip_serializing, skip_deserializing, default)]
-    pub map_variant_unknown_data: StaticArray<u8, 174>,
 }

@@ -5,18 +5,22 @@ use flate2::read::ZlibDecoder;
 use flate2::write::ZlibEncoder;
 use serde::{Deserialize, Serialize};
 use blf_lib::blam::common::memory::secure_signature::s_network_http_request_hash;
+use blf_lib::blf::versions::haloreach::v12065_11_08_24_1738_tu1actual::s_hopper_query_configuration;
 use blf_lib::io::bitstream::{c_bitstream_reader, e_bitstream_byte_order};
 use blf_lib::types::array::StaticArray;
 use crate::types::c_string::StaticString;
 use blf_lib::types::time::{filetime};
 use blf_lib::types::bool::Bool;
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
-use blf_lib_derive::BlfChunk;
+use blf_lib_derivable::result::BLFLibResult;
+use blf_lib_derive::{BlfChunk, TestSize};
+use crate::blf::versions::haloreach::v12065_11_08_24_1738_tu1actual::s_hopper_voting_configuration;
 use crate::io::bitstream::c_bitstream_writer;
 use crate::types::numbers::Float32;
 
 pub const k_hopper_maximum_category_count: usize = 16;
-pub const k_hopper_maximum_hopper_count: usize = 32; // TODO: Check, this seems low.
+// Not sure why this is 31, but 32 seems to kill decompression. Might be a beta bug.
+pub const k_hopper_maximum_hopper_count: usize = 32;
 
 #[derive(BlfChunk,Default,PartialEq,Debug,Clone,Serialize,Deserialize)]
 #[Header("mhcf", 25.1)]
@@ -104,7 +108,7 @@ impl BinWrite for s_blf_chunk_hopper_configuration_table {
         let compressed_length: u16 = compressed_data.len() as u16;
         let uncompressed_length: u32 = encoded_chunk.len() as u32;
         // TODO: allow the writer to grow if it runs out of space.
-        let mut packed_writer = c_bitstream_writer::new(0x8A48, e_bitstream_byte_order::from_binrw_endian(endian));
+        let mut packed_writer = c_bitstream_writer::new(0x8948, e_bitstream_byte_order::from_binrw_endian(endian));
         packed_writer.begin_writing();
 
         packed_writer.write_integer((compressed_length + 4) as u32, 14)?;
@@ -135,34 +139,15 @@ pub struct s_hopper_query_latency_desirability_configuration {
 }
 
 #[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
-pub struct s_hopper_query_configuration {
-    pub dword0: u32,
-    pub gap4: u32,
-    pub dword8: u32,
-    pub gapc: u32,
-    pub dword10: u32,
-    pub gap14: u32,
-    pub dword18: u32,
-    pub dword1c: u32,
-    pub dword20: u32,
-    pub gap24: u32,
-    pub dword28: u32,
-    pub dword2c: u32,
-    pub dword30: u32,
-    pub unknown1: u32,
-    pub latency_desirability_configurations: StaticArray<s_hopper_query_latency_desirability_configuration, 2>,
-    pub unknown2: StaticArray<Float32, 17>,
-}
-
-#[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
 pub struct s_hopper_configuration_per_team_data {
     pub minimum_team_size: u32,
     pub maximum_team_size: u32,
-    pub team_model_override: u32,
-    pub team_allegiance: u32,
+    pub team_model_override: u32, // in pre alpha
+    pub team_allegiance: u32, // in pre alpha
 }
 
-#[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
+#[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, TestSize)]
+#[Size(0x428)] // see multiplayer_game_hoppers_get_hopper_configuration
 pub struct c_hopper_configuration {
     pub hopper_name: StaticString<32>,
     #[serde(skip_serializing,skip_deserializing)]
@@ -175,90 +160,89 @@ pub struct c_hopper_configuration {
     pub image_index: u32,
     pub xlast_index: u32,
     #[brw(pad_after = 3)]
-    pub equivalency_id: u8, // this might be the wrong type.
+    pub equivalency_id: u8,
     pub start_time: filetime,
     pub end_time: filetime,
     pub minimum_games_won: u32,
     pub maximum_games_won: u32,
     pub minimum_games_played: u32,
     pub maximum_games_played: u32,
-    pub minimum_grade: u32,
-    pub maximum_grade: u32,
+    pub minimum_grade: u32, // appears non-functional
+    pub maximum_grade: u32, // appears non-functional
     pub min_party_size: u32,
     pub max_party_size: u32,
     pub min_local_players: u32,
     pub max_local_players: u32,
-    pub hopper_access_bit: u32,
+    pub hopper_access_bit: i32,
     pub account_type_access: u32,
     pub require_all_party_members_meet_games_played_requirements: Bool,
-    pub byte89: u8,
+    pub unknown89: u8,
     pub require_all_party_members_meet_grade_requirements: Bool,
     pub require_all_party_members_meet_access_requirements: Bool,
     pub require_all_party_members_meet_live_account_access_requirements: Bool,
     pub hide_hopper_from_games_played_restricted_players: Bool,
-    pub byte8e: u8,
+    pub unknown8e: u8,
     pub hide_hopper_from_grade_restricted_players: Bool,
     pub hide_hopper_from_access_restricted_players: Bool,
     pub hide_hopper_from_live_account_access_restricted_players: Bool,
+    #[brw(pad_after = 1)]
     pub hide_hopper_due_to_time_restriction: Bool,
-    pub requires_hard_drive: Bool,
-    #[brw(pad_after = 3)]
-    pub requires_local_party: Bool,
-    pub dword98: u32,
-    pub dword9c: u32,
-    pub dworda0: u32,
-    pub dworda4: u32,
-    pub dworda8: u32,
-    pub dwordac: u32,
-    pub dwordb0: u32, // originally had this as a gap, but it does hold data. Might be noise.
+    pub voting_configuration: s_hopper_voting_configuration,
     pub is_ranked: u8,
     pub is_arbitrated: u8,
     pub are_guests_allowed: u8,
     pub are_opponents_visible: u8,
-    #[brw(pad_after = 3)]
     pub uses_arena_lsp_stats: u8,
-    pub dwordbc: u32,
-    pub dwordc0: u32,
-    pub gapc4: u8, // unsure
+    #[brw(pad_after = 2)]
+    // I've never seen code referencing this but it has data in release
+    pub unknownb9:u8,
+    pub unknownbc: u32,
+    pub unknownc0: u32,
+    pub unknownc4: u8, // unsure
     #[brw(pad_after = 2)]
     pub uses_high_score_leaderboard: u8,
     pub posse_formation: u32,
     pub post_match_countdown_time_seconds: u32,
-    pub require_hosts_on_multiple_teams: u32, // definately a u32?
+    #[brw(pad_after = 3)]
+    pub require_hosts_on_multiple_teams: Bool,
     pub repeated_opponents_to_consider_for_penalty: u32,
     pub repeated_opponents_skill_throttle_start: u32,
     pub repeated_opponents_skill_throttle_stop: u32,
-    pub is_team_matching_enabled: u32,
+    pub matchmaking_composition_build_flags: u8,
+    #[brw(pad_after = 2)]
+    // Not confident this exists, maybe it's synonymous with matchmaking_composition_build_flags
+    pub is_team_matching_enabled: Bool,
     pub gather_start_threshold_seconds: u32,
     pub get_gather_start_game_early_seconds: u32,
     pub get_gather_give_up_seconds: u32,
     pub chance_of_gathering: StaticArray<u8, 16>,
-    pub gapf0_5: u32, // sometimes there is data here, maybe not a gap.
-    pub dword104: u32,
-    pub dword108: u32,
-    pub uses_ffa_scoring_for_leaderboard_writes: u8,
+    pub uses_ffa_scoring_for_leaderboard_writes: Bool,
     #[brw(pad_after = 2)]
-    pub should_modify_skill_update_weight_with_game_quality: u8,
-    pub trueskill_sigma_multiplier: Float32,
-    pub dword114: u32,
-    pub trueskill_tau_dynamics_factor: u32,
+    pub should_modify_skill_update_weight_with_game_quality: Bool,
+    pub trueskill_sigma_multiplier: f32,
+    pub unknown104: u32,
+    pub trueskill_tau_dynamics_factor: f32,
     pub trueskill_draw_probability: u32,
     pub pre_match_voice_configuration: u32,
     pub in_match_voice_configuration: u32,
     pub post_match_voice_configuration: u32,
     pub restrict_open_channel: u32,
-    pub dword130: u32,
+    pub unknown120: u32,
+    pub unknown124: u32,
     pub query_configurations: StaticArray<s_hopper_query_configuration, 4>,
-    pub games_game_type: u32,
+    pub game_type: u8,
+    #[brw(pad_after = 2)]
+    pub is_ffa: Bool,
     pub minimum_player_count: u32,
     pub maximum_player_count: u32,
     pub ffa_model_override: u32,
     pub minimum_team_count: u32,
     pub maximum_team_count: u32,
-    pub per_team_data: [s_hopper_configuration_per_team_data; 8],
+    pub per_team_data: StaticArray<s_hopper_configuration_per_team_data, 8>,
     pub maximum_team_imbalance: u32,
     pub big_squad_size_threshold: u32,
-    pub dword424: u32,
-    pub gap428: u32, // unsure
+    pub unknown418: u32,
+    pub unknown41c: u32,
     pub undersized_party_split_permissions: u32,
+    pub jackpot_minimum_time_seconds: u32,
 }
