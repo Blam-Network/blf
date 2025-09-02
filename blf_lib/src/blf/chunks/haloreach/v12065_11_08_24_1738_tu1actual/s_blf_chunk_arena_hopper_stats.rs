@@ -18,6 +18,7 @@ pub struct s_blf_chunk_arena_hopper_stats {
     pub unknown08: u32,
     pub unknown0C: u32,
     pub unknown10: u32,
+    pub unknown14: u16,
 }
 
 impl BlfChunkHooks for s_blf_chunk_arena_hopper_stats {}
