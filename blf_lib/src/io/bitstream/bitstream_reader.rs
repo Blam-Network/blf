@@ -80,6 +80,24 @@ impl<'a> c_bitstream_reader<'a> {
         }
     }
 
+    pub fn seek(&mut self, byte: usize) -> BLFLibResult {
+        assert_ok!(byte < self.m_data_size_bytes);
+
+        self.current_stream_byte_position = byte;
+        self.current_stream_bit_position = 0;
+
+        Ok(())
+    }
+
+    pub fn seek_bit(&mut self, byte: usize, bit: usize) -> BLFLibResult {
+        assert_ok!(bit < 8);
+
+        self.seek(byte)?;
+        self.current_stream_bit_position = bit;
+
+        Ok(())
+    }
+
     // READS
 
     pub fn read_raw_data(&mut self, size_in_bits: usize) -> BLFLibResult<Vec<u8>> {
@@ -288,6 +306,16 @@ impl<'a> c_bitstream_reader<'a> {
         }
     }
 
+    pub fn read_index<const max: usize>(&mut self, size_in_bits: usize) -> BLFLibResult<i32> {
+        if self.read_bool()? {
+            Ok(-1)
+        } else {
+            let value = self.read_integer(size_in_bits)?;
+            assert_ok!(value < max as u32);
+            Ok(value as i32)
+        }
+    }
+
     pub fn read_float(&mut self, size_in_bits: usize) -> BLFLibResult<Float32> {
         assert_ok!(size_in_bits > 0);
         assert_ok!(size_in_bits <= 32);
@@ -359,7 +387,7 @@ impl<'a> c_bitstream_reader<'a> {
     pub fn read_quantized_real(&mut self, min_value: f32, max_value: f32, size_in_bits: usize, exact_midpoint: bool, exact_endpoints: bool) -> BLFLibResult<Float32> {
         assert_ok!(self.reading());
         let value = self.read_integer(size_in_bits)?;
-        Ok(Float32(dequantize_real(value as i32, min_value, max_value, size_in_bits, exact_midpoint)))
+        Ok(Float32(dequantize_real(value as i32, min_value, max_value, size_in_bits, exact_midpoint, exact_endpoints)))
     }
 
     pub fn read_qword_internal(size_in_bits: u8) -> u64 {
@@ -370,20 +398,16 @@ impl<'a> c_bitstream_reader<'a> {
         unimplemented!()
     }
 
-    pub fn read_axis(&mut self, forward: &mut real_vector3d, up: &mut real_vector3d) -> BLFLibResult {
-        let up_is_global_up = self.read_bool()?;
-
-        if up_is_global_up {
-            up.i = global_up3d.i;
-            up.j = global_up3d.j;
-            up.k = global_up3d.k;
+    pub fn  read_axis<const forward_bits: usize, const up_bits: usize>(&mut self, forward: &mut real_vector3d, up: &mut real_vector3d) -> BLFLibResult {
+        if self.read_bool()? {
+            up.clone_from(&global_up3d);
         }
         else {
-            let quantized = self.read_signed_integer(19)?;
+            let quantized = self.read_signed_integer(up_bits)?;
             dequantize_unit_vector3d(quantized, up)?;
         }
 
-        let forward_angle = self.read_quantized_real(-k_pi, k_pi, 8, true, false)?;
+        let forward_angle = self.read_quantized_real(-k_pi, k_pi, forward_bits, false, false)?;
         c_bitstream_reader::angle_to_axes_internal(up, forward_angle, forward)?;
         Ok(())
     }

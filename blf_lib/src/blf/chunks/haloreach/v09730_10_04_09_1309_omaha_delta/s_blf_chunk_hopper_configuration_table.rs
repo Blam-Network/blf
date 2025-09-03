@@ -19,7 +19,6 @@ use crate::io::bitstream::c_bitstream_writer;
 use crate::types::numbers::Float32;
 
 pub const k_hopper_maximum_category_count: usize = 16;
-// Not sure why this is 31, but 32 seems to kill decompression. Might be a beta bug.
 pub const k_hopper_maximum_hopper_count: usize = 32;
 
 #[derive(BlfChunk,Default,PartialEq,Debug,Clone,Serialize,Deserialize)]
