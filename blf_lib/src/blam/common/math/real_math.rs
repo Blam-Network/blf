@@ -346,8 +346,8 @@ pub fn normalize3d(vector: &mut real_vector3d) -> f32 {
 
 pub fn dequantize_unit_vector3d(value: i32, vector: &mut real_vector3d) -> Result<(), Box<dyn Error>> {
     let face = value & 7;
-    let x = dequantize_real((value >> 3) as u8 as i32, -1.0, 1.0, 8, true);
-    let y = dequantize_real((value >> 11) as u8 as i32, -1.0, 1.0, 8, true);
+    let x = dequantize_real((value >> 3) as u8 as i32, -1.0, 1.0, 8, true, false);
+    let y = dequantize_real((value >> 11) as u8 as i32, -1.0, 1.0, 8, true, false);
 
     match face {
         0 => {

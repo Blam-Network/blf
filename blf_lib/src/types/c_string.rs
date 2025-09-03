@@ -91,11 +91,11 @@ impl<const N: usize> StaticWcharString<N> {
         self.buf[0] == 0x0000
     }
 
-    pub fn from_string(value: &String) -> BLFLibResult<Self> {
+    pub fn from_string(value: impl Into<String>) -> BLFLibResult<Self> {
         let mut new = Self {
             buf: StaticArray::default()
         };
-        new.set_string(value)?;
+        new.set_string(&value.into())?;
 
         Ok(new)
     }
