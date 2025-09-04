@@ -4,7 +4,7 @@ use std::io::Cursor;
 use binrw::BinRead;
 use num_traits::FromPrimitive;
 use widestring::U16CString;
-use blf_lib::blam::common::math::real_math::{assert_valid_real_normal3d, cross_product3d, dequantize_unit_vector3d, dot_product3d, k_real_epsilon, global_forward3d, global_left3d, global_up3d, normalize3d, valid_real_vector3d_axes3, arctangent, k_pi, dequantize_real, rotate_vector_about_axis, valid_real_vector3d_axes2};
+use blf_lib::blam::common::math::real_math::{assert_valid_real_normal3d, cross_product3d, dot_product3d, k_real_epsilon, global_forward3d, global_left3d, global_up3d, normalize3d, valid_real_vector3d_axes3, arctangent, k_pi, dequantize_real, rotate_vector_about_axis, valid_real_vector3d_axes2};
 use blf_lib::{assert_ok, OPTION_TO_RESULT};
 use blf_lib::io::bitstream::{e_bitstream_byte_fill_direction};
 use blf_lib_derivable::result::BLFLibResult;
@@ -384,6 +384,7 @@ impl<'a> c_bitstream_reader<'a> {
         Ok(())
     }
 
+    /// - exact_endpoints: This didn't exist prior to Reach, set it to true by default.
     pub fn read_quantized_real(&mut self, min_value: f32, max_value: f32, size_in_bits: usize, exact_midpoint: bool, exact_endpoints: bool) -> BLFLibResult<Float32> {
         assert_ok!(self.reading());
         let value = self.read_integer(size_in_bits)?;
@@ -396,20 +397,6 @@ impl<'a> c_bitstream_reader<'a> {
 
     pub fn read_secure_address(address: &mut s_transport_secure_address) {
         unimplemented!()
-    }
-
-    pub fn  read_axis<const forward_bits: usize, const up_bits: usize>(&mut self, forward: &mut real_vector3d, up: &mut real_vector3d) -> BLFLibResult {
-        if self.read_bool()? {
-            up.clone_from(&global_up3d);
-        }
-        else {
-            let quantized = self.read_signed_integer(up_bits)?;
-            dequantize_unit_vector3d(quantized, up)?;
-        }
-
-        let forward_angle = self.read_quantized_real(-k_pi, k_pi, forward_bits, false, false)?;
-        c_bitstream_reader::angle_to_axes_internal(up, forward_angle, forward)?;
-        Ok(())
     }
 
     pub fn angle_to_axes_internal(up: &real_vector3d, angle: impl Into<f32>, forward: &mut real_vector3d) -> BLFLibResult {

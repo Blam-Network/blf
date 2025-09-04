@@ -5,7 +5,7 @@ use std::io::Cursor;
 use binrw::BinWrite;
 use widestring::U16CString;
 use blf_lib::assert_ok;
-use blf_lib::blam::common::math::real_math::{assert_valid_real_normal3d, cross_product3d, dequantize_unit_vector3d, dot_product3d, k_real_epsilon, global_forward3d, global_left3d, global_up3d, normalize3d, valid_real_vector3d_axes3, arctangent, quantize_normalized_vector3d, k_pi};
+use blf_lib::blam::common::math::real_math::{assert_valid_real_normal3d, cross_product3d, dot_product3d, k_real_epsilon, global_forward3d, global_left3d, global_up3d, normalize3d, valid_real_vector3d_axes3, arctangent, quantize_normalized_vector3d, k_pi};
 use blf_lib::io::bitstream::e_bitstream_byte_fill_direction;
 use blf_lib::io::bitstream::e_bitstream_byte_fill_direction::{_bitstream_byte_fill_direction_lsb_to_msb, _bitstream_byte_fill_direction_msb_to_lsb};
 use blf_lib_derivable::result::BLFLibResult;
@@ -479,44 +479,11 @@ impl c_bitstream_writer {
         Ok(())
     }
 
-    fn axes_to_angle_internal(forward: &real_vector3d, up: &real_vector3d) -> BLFLibResult<f32> {
+    pub(crate) fn axes_to_angle_internal(forward: &real_vector3d, up: &real_vector3d) -> BLFLibResult<f32> {
         let mut forward_reference: real_vector3d = real_vector3d::default();
         let mut left_reference: real_vector3d = real_vector3d::default();
         c_bitstream_writer::axes_compute_reference_internal(up, &mut forward_reference, &mut left_reference)?;
         Ok(arctangent(dot_product3d(&left_reference, forward), dot_product3d(&forward_reference, forward)))
-    }
-
-    pub fn write_axes(
-        &mut self,
-        forward: &real_vector3d,
-        up: &real_vector3d,
-    ) -> BLFLibResult {
-        assert_ok!(assert_valid_real_normal3d(up));
-        assert_ok!(assert_valid_real_normal3d(forward));
-
-        let mut dequantized_up: real_vector3d = real_vector3d::default();
-
-        let i_abs = (up.i - global_up3d.i).abs();
-        let j_abs = (up.j - global_up3d.j).abs();
-        let k_abs = (up.k - global_up3d.k).abs();
-
-        if i_abs > k_real_epsilon
-            || j_abs > k_real_epsilon
-            || k_abs > k_real_epsilon
-        {
-            let quantized_up = quantize_normalized_vector3d(up);
-            self.write_bool(false)?; // up-is-global-up3d
-            self.write_integer(quantized_up as u32, 19)?;
-            dequantize_unit_vector3d(quantized_up, &mut dequantized_up)?;
-        } else {
-            self.write_bool(true)?; // up-is-global-up3d
-            dequantized_up = global_up3d;
-        }
-
-        let forward_angle = c_bitstream_writer::axes_to_angle_internal(forward, &dequantized_up)?;
-        self.write_quantized_real(forward_angle, -k_pi, k_pi, 8, true, false)?;
-
-        Ok(())
     }
 }
 
