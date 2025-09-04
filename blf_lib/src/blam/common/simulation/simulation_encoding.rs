@@ -30,21 +30,6 @@ pub fn simulation_write_quantized_position(
 const k_world_units_to_inches: f32 = 10.0f32 * 12.0f32;
 const k_inches_to_world_units: f32 = 1.0f32 / k_world_units_to_inches;
 
-pub fn required_encoding_bits_for_count(a1: u32) -> usize {
-    if a1 == 0 {
-        return 0;
-    }
-
-    let v2 = 31 - a1.leading_zeros();
-
-    if a1 & ((1 << v2) - 1) != 0 {
-        (v2 + 1) as usize
-    } else {
-        v2 as usize
-    }
-}
-
-// DONE
 pub fn adjust_axis_encoding_bit_count_to_match_error_goals(
     bit_count: usize,
     bounds: &real_rectangle3d,
@@ -84,7 +69,6 @@ pub fn adjust_axis_encoding_bit_count_to_match_error_goals(
 }
 
 
-// DONE
 pub fn simulation_read_position(
     bitstream: &mut c_bitstream_reader,
     position: &mut real_point3d,
