@@ -5,7 +5,11 @@
 #![allow(dead_code)]
 #![allow(unused_variables)]
 
+use std::io::{Cursor, Read, Seek};
 use clap::{command, Parser};
+use blf_lib::blf::chunks::{find_chunk_in_file, search_for_chunk_in_file};
+use blf_lib::blf::versions::haloreach::v12065_11_08_24_1738_tu1actual::{s_blf_chunk_hopper_configuration_table, s_blf_chunk_map_variant, s_blf_chunk_matchmaking_game_variant};
+use blf_lib::io::write_json_file;
 use crate::commands::Commands;
 use crate::commands::Commands::{ConvertH3MCCMapVariants, TitleStorage};
 use crate::commands::convert_halo3mcc_map_variants::convert_halo3mcc_map_variants;
@@ -21,6 +25,9 @@ mod io;
 mod console;
 mod commands;
 mod result;
+use flate2::Compression;
+use flate2::read::{ZlibDecoder};
+use tokio::io::AsyncSeekExt;
 
 #[derive(Debug, Parser)]
 #[command(name = "blf_cli")]
@@ -32,6 +39,20 @@ struct Cli {
 
 fn main() {
     let args = Cli::parse();
+
+    let mpvr = search_for_chunk_in_file::<s_blf_chunk_map_variant>("/Users/codiestella/Desktop/powerhouse_r_360.mvar").unwrap().unwrap();
+    write_json_file(&mpvr, "/Users/codiestella/Desktop/powerhouse_r_360.json").unwrap();
+
+    // let gset = find_chunk_in_file::<s_blf_chunk_game_set>("/Users/codiestella/Downloads/RawGames-Halo/Halo Reach/11860.10.07.24.0147.omaha_relea/title storage/tu1_hoppers/00108/game_set_015.bin").unwrap();
+    // BlfFileBuilder::new()
+    //     .add_chunk(s_blf_chunk_start_of_file::default())
+    //     .add_chunk(s_blf_chunk_author::for_build::<v12065_11_08_24_1738_tu1actual>())
+    //     .add_chunk(gset)
+    //     .add_chunk(s_blf_chunk_end_of_file::default())
+    //     .write_file("/Users/codiestella/Desktop/bnet/title_storage/old/matchmaking_hopper_027.bin_rebuilt")
+    //     .unwrap();
+    //
+    // return;
 
     match args.command {
         TitleStorage(title_storage_command) => match title_storage_command.command {

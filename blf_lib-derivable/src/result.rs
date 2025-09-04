@@ -1,5 +1,5 @@
 use std::fmt::{Debug, Display};
-use std::num::ParseIntError;
+use std::num::{ParseIntError, TryFromIntError};
 
 pub struct BLFLibError(Box<dyn std::error::Error>);
 
@@ -18,6 +18,17 @@ impl From<&str> for BLFLibError {
 impl From<std::io::Error> for BLFLibError {
     fn from(e: std::io::Error) -> BLFLibError {
         BLFLibError(e.into())
+    }
+}
+impl From<TryFromIntError> for BLFLibError {
+    fn from(e: TryFromIntError) -> Self {
+        BLFLibError(e.into())
+    }
+}
+
+impl From<std::convert::Infallible> for BLFLibError {
+    fn from(_: std::convert::Infallible) -> Self {
+        unreachable!("Infallible conversion should never fail")
     }
 }
 

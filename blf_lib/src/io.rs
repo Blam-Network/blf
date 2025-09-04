@@ -10,8 +10,7 @@ use blf_lib_derivable::result::{BLFLibError, BLFLibResult};
 
 pub mod bitstream;
 
-// Consider returning io error instead of generic.
-pub fn read_file_to_string(path: impl Into<String>) -> Result<String, Box<dyn Error>> {
+pub fn read_file_to_string(path: impl Into<String>) -> BLFLibResult<String> {
     let path = path.into();
     let mut file = File::open(&path).map_err(|err|{
         Box::<dyn Error>::from(format!("read_file_to_string({path}) {}", err))

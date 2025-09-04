@@ -54,18 +54,18 @@ impl c_game_engine_juggernaut_variant {
         SET_BIT!(self.m_variant_flags, 0, bitstream.read_bool()?);
         SET_BIT!(self.m_variant_flags, 1, bitstream.read_bool()?);
         SET_BIT!(self.m_variant_flags, 2, bitstream.read_bool()?);
-        self.m_score_to_win_round = bitstream.read_u16(9)?;
-        self.m_initial_juggernaut = bitstream.read_u8(2)?;
-        self.m_next_juggernaut = bitstream.read_u8(2)?;
-        self.m_zone_movement = bitstream.read_u8(4)?;
-        self.m_zone_order = bitstream.read_u8(1)?;
-        self.m_kill_points = bitstream.read_signed_integer(5)? as i8;
-        self.m_juggernaut_kill_points = bitstream.read_signed_integer(5)? as i8;
-        self.m_kill_as_juggernaut_points = bitstream.read_signed_integer(5)? as i8;
-        self.m_destination_arrival_points = bitstream.read_signed_integer(5)? as i8;
-        self.m_suicide_points = bitstream.read_signed_integer(5)? as i8;
-        self.m_betrayal_points = bitstream.read_signed_integer(5)? as i8;
-        self.m_juggernaut_delay = bitstream.read_u8(4)?;
+        self.m_score_to_win_round = bitstream.read_integer(9)?;
+        self.m_initial_juggernaut = bitstream.read_integer(2)?;
+        self.m_next_juggernaut = bitstream.read_integer(2)?;
+        self.m_zone_movement = bitstream.read_integer(4)?;
+        self.m_zone_order = bitstream.read_integer(1)?;
+        self.m_kill_points = bitstream.read_signed_integer(5)?;
+        self.m_juggernaut_kill_points = bitstream.read_signed_integer(5)?;
+        self.m_kill_as_juggernaut_points = bitstream.read_signed_integer(5)?;
+        self.m_destination_arrival_points = bitstream.read_signed_integer(5)?;
+        self.m_suicide_points = bitstream.read_signed_integer(5)?;
+        self.m_betrayal_points = bitstream.read_signed_integer(5)?;
+        self.m_juggernaut_delay = bitstream.read_integer(4)?;
         self.m_juggernaut_traits.decode(bitstream)?;
 
         Ok(())

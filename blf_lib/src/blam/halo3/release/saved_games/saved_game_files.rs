@@ -83,16 +83,16 @@ impl s_content_item_metadata {
         self.name.set_string(&bitstream.read_string_whar(32)?)?;
         self.description.set_string(&bitstream.read_string_utf8(128)?)?;
         self.author.set_string(&bitstream.read_string_utf8(16)?)?;
-        self.file_type = bitstream.read_signed_integer(5)? - 1;
-        self.author_is_xuid_online = Bool::from(bitstream.read_bool()?);
+        self.file_type = bitstream.read_signed_integer::<i32>(5)? - 1;
+        self.author_is_xuid_online = bitstream.read_bool()?;
         self.author_id = bitstream.read_qword(64)?;
         self.size_in_bytes = bitstream.read_qword(64)?;
-        self.date = time64_t::from(bitstream.read_qword(64)?);
+        self.date = bitstream.read_qword(64)?;
         self.length_seconds = bitstream.read_integer(32)?;
         self.campaign_id = bitstream.read_signed_integer(32)?;
         self.map_id = bitstream.read_signed_integer(32)?;
         self.game_engine_type = bitstream.read_integer(4)?;
-        self.campaign_difficulty = bitstream.read_signed_integer(3)? - 1;
+        self.campaign_difficulty = bitstream.read_signed_integer::<i32>(3)? - 1;
         self.hopper_id = bitstream.read_i16(16)?;
         self.game_id = bitstream.read_qword(64)?;
 

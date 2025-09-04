@@ -61,13 +61,13 @@ impl BinRead for s_blf_chunk_game_set {
 
         let mut game_set = Self::default();
 
-        game_set.game_entry_count = BINRW_RESULT!(bitstream.read_integer(6))? as usize;
+        game_set.game_entry_count = BINRW_RESULT!(bitstream.read_integer(6))?;
         game_set.game_entries.resize(game_set.game_entry_count, s_blf_chunk_game_set_entry::default());
 
         for i in 0..game_set.game_entry_count {
             let game_entry = &mut game_set.game_entries.as_mut_slice()[i];
             game_entry.weight = BINRW_RESULT!(bitstream.read_integer(32))?;
-            game_entry.minimum_player_count = BINRW_RESULT!(bitstream.read_integer(4))? as u8;
+            game_entry.minimum_player_count = BINRW_RESULT!(bitstream.read_integer(4))?;
             game_entry.skip_after_veto = BINRW_RESULT!(bitstream.read_bool())?;
             game_entry.optional = BINRW_RESULT!(bitstream.read_bool())?;
             game_entry.map_id = BINRW_RESULT!(bitstream.read_integer(32))?;

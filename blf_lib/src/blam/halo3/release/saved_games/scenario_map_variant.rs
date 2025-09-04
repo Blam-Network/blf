@@ -8,10 +8,10 @@ use blf_lib::types::array::StaticArray;
 use crate::blam::common::math::real_math::real_vector3d;
 use crate::blam::common::simulation::simulation_encoding::{simulation_read_quantized_position, simulation_write_quantized_position};
 use serde_hex::{SerHex,StrictCap};
-use blf_lib::blam::halo3::release::io::bitstream_reader::c_bitstream_reader_extensions;
+use blf_lib::blam::halo3::release::memory::bitstream_reader::c_bitstream_reader_extensions;
 use blf_lib_derive::TestSize;
 use blf_lib_derivable::result::BLFLibResult;
-use crate::blam::halo3::release::io::bitstream_writer::c_bitstream_writer_extensions;
+use crate::blam::halo3::release::memory::bitstream_writer::c_bitstream_writer_extensions;
 use crate::types::bool::Bool;
 use crate::types::numbers::Float32;
 
@@ -140,13 +140,13 @@ impl c_map_variant {
 
     pub fn decode(&mut self, mut bitstream: &mut c_bitstream_reader) -> BLFLibResult {
         self.m_metadata.decode(bitstream)?;
-        self.m_map_variant_version = bitstream.read_integer(8)? as u16;
+        self.m_map_variant_version = bitstream.read_integer(8)?;
         self.m_original_map_rsa_signature_hash = bitstream.read_integer(32)?;
-        self.m_number_of_scenario_objects = bitstream.read_u16(10)?;
-        self.m_number_of_variant_objects = bitstream.read_u16(10)?;
-        self.m_number_of_placeable_object_quotas = bitstream.read_u16(9)?;
+        self.m_number_of_scenario_objects = bitstream.read_integer(10)?;
+        self.m_number_of_variant_objects = bitstream.read_integer(10)?;
+        self.m_number_of_placeable_object_quotas = bitstream.read_integer(9)?;
         self.m_map_id = bitstream.read_integer(32)?;
-        self.m_built_in = Bool::from(bitstream.read_bool()?);
+        self.m_built_in = bitstream.read_bool()?;
         self.m_world_bounds = bitstream.read_raw(0xC0)?;
         self.m_game_engine_subtype = bitstream.read_integer(4)?;
         self.m_maximum_budget = bitstream.read_float(32)?;
@@ -155,35 +155,30 @@ impl c_map_variant {
         for i in 0..self.m_number_of_variant_objects as usize {
             let variant_object = &mut self.m_variant_objects.get_mut()[i];
 
-            let variant_object_exists = bitstream.read_bool()?;
-
-            if !variant_object_exists {
+            if !bitstream.read_bool()? {
                 continue;
             }
 
-            variant_object.flags = bitstream.read_u16(16)?;
+            variant_object.flags = bitstream.read_integer(16)?;
             variant_object.variant_quota_index = bitstream.read_signed_integer(32)?;
 
-            let parent_object_exists = bitstream.read_bool()?;
-            if parent_object_exists {
+            if bitstream.read_bool()? {
                 variant_object.parent_object_identifier = bitstream.read_raw(64)?;
             }
 
-            let position_exists = bitstream.read_bool()?;
-
-            if !position_exists {
+            if !bitstream.read_bool()? {
                 continue;
             }
 
             simulation_read_quantized_position(bitstream, &mut variant_object.position, 16, &self.m_world_bounds)?;
             bitstream.read_axis(&mut variant_object.forward, &mut variant_object.up)?;
-            variant_object.multiplayer_game_object_properties.object_type = bitstream.read_signed_integer(8)? as i8;
-            variant_object.multiplayer_game_object_properties.symmetry_placement_flags = bitstream.read_u8(8)?;
-            variant_object.multiplayer_game_object_properties.game_engine_flags = bitstream.read_u16(16)?;
-            variant_object.multiplayer_game_object_properties.shared_storage = bitstream.read_u8(8)?;
-            variant_object.multiplayer_game_object_properties.spawn_time = bitstream.read_u8(8)?;
-            variant_object.multiplayer_game_object_properties.owner_team = bitstream.read_u8(8)? as i8;
-            variant_object.multiplayer_game_object_properties.boundary_shape = bitstream.read_u8(8)?;
+            variant_object.multiplayer_game_object_properties.object_type = bitstream.read_signed_integer(8)?;
+            variant_object.multiplayer_game_object_properties.symmetry_placement_flags = bitstream.read_integer(8)?;
+            variant_object.multiplayer_game_object_properties.game_engine_flags = bitstream.read_integer(16)?;
+            variant_object.multiplayer_game_object_properties.shared_storage = bitstream.read_integer(8)?;
+            variant_object.multiplayer_game_object_properties.spawn_time = bitstream.read_integer(8)?;
+            variant_object.multiplayer_game_object_properties.owner_team = bitstream.read_integer(8)?;
+            variant_object.multiplayer_game_object_properties.boundary_shape = bitstream.read_integer(8)?;
 
             match variant_object.multiplayer_game_object_properties.boundary_shape {
                 1 => { // sphere
@@ -206,16 +201,16 @@ impl c_map_variant {
         }
 
         for i in 0..k_object_type_count {
-            self.m_object_type_start_index.get_mut()[i] = bitstream.read_integer(9)? as i16 - 1;
+            self.m_object_type_start_index.get_mut()[i] = bitstream.read_integer::<i16>(9)? - 1;
         }
 
         for i in 0..self.m_number_of_placeable_object_quotas as usize {
             let object_quota = &mut self.m_quotas.get_mut()[i];
             object_quota.object_definition_index = bitstream.read_integer(32)?;
-            object_quota.minimum_count = bitstream.read_integer(8)? as u8;
-            object_quota.maximum_count = bitstream.read_integer(8)? as u8;
-            object_quota.placed_on_map = bitstream.read_integer(8)? as u8;
-            object_quota.maximum_allowed = bitstream.read_integer(8)? as i8;
+            object_quota.minimum_count = bitstream.read_integer(8)?;
+            object_quota.maximum_count = bitstream.read_integer(8)?;
+            object_quota.placed_on_map = bitstream.read_integer(8)?;
+            object_quota.maximum_allowed = bitstream.read_signed_integer(8)?;
             object_quota.price_per_item = bitstream.read_float(32)?;
         }
 

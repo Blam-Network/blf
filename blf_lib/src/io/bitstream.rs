@@ -41,6 +41,15 @@ impl e_bitstream_byte_order
     }
 }
 
+impl Into<binrw::endian::Endian> for e_bitstream_byte_order {
+    fn into(self) -> binrw::endian::Endian {
+        match self {
+            e_bitstream_byte_order::_bitstream_byte_order_big_endian => binrw::endian::Endian::Big,
+            e_bitstream_byte_order::_bitstream_byte_order_little_endian => binrw::endian::Endian::Little
+        }
+    }
+}
+
 #[derive(Default, PartialEq, Eq, Debug)]
 pub enum e_bitstream_state
 {

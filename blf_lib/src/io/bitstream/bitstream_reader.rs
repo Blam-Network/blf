@@ -1,5 +1,6 @@
 
 use std::cmp::min;
+use std::fmt::{Debug, Display};
 use std::io::Cursor;
 use binrw::BinRead;
 use num_traits::FromPrimitive;
@@ -7,7 +8,7 @@ use widestring::U16CString;
 use blf_lib::blam::common::math::real_math::{assert_valid_real_normal3d, cross_product3d, dot_product3d, k_real_epsilon, global_forward3d, global_left3d, global_up3d, normalize3d, valid_real_vector3d_axes3, arctangent, k_pi, dequantize_real, rotate_vector_about_axis, valid_real_vector3d_axes2};
 use blf_lib::{assert_ok, OPTION_TO_RESULT};
 use blf_lib::io::bitstream::{e_bitstream_byte_fill_direction};
-use blf_lib_derivable::result::BLFLibResult;
+use blf_lib_derivable::result::{BLFLibError, BLFLibResult};
 use crate::blam::common::math::integer_math::int32_point3d;
 use crate::blam::common::math::real_math::real_vector3d;
 use crate::blam::halo3::release::networking::transport::transport_security::s_transport_secure_address;
@@ -21,6 +22,7 @@ pub struct c_bitstream_reader<'a>
     m_data: &'a [u8],
     m_data_size_bytes: usize,
     m_state: e_bitstream_state,
+    m_byte_order: e_bitstream_byte_order,
     /// Some old versions of halo will pack BE values in LE and visa versa.
     /// We keep "packed" byte order which is swapped when using legacy settings.
     /// This allows BE consumers (ie xenon builds) to pass BE and legacy config will swap if necessary.
@@ -53,6 +55,7 @@ impl<'a> c_bitstream_reader<'a> {
             m_data: data,
             m_data_size_bytes: length,
             m_state: e_bitstream_state::_bitstream_state_initial,
+            m_byte_order: byte_order,
             m_packed_byte_order: byte_order,
             m_byte_pack_direction: e_bitstream_byte_fill_direction::default(),
             m_byte_unpack_direction: e_bitstream_byte_fill_direction::default(),
@@ -70,7 +73,7 @@ impl<'a> c_bitstream_reader<'a> {
             m_data_size_bytes: length,
             m_state: e_bitstream_state::_bitstream_state_initial,
 
-            // Legacy shiz
+            m_byte_order: byte_order,
             m_packed_byte_order: byte_order.swap(),
             m_byte_pack_direction: _bitstream_byte_fill_direction_lsb_to_msb,
             m_byte_unpack_direction: _bitstream_byte_fill_direction_lsb_to_msb,
@@ -78,6 +81,21 @@ impl<'a> c_bitstream_reader<'a> {
             current_stream_byte_position: 0,
             current_stream_bit_position: 0,
         }
+    }
+
+    pub fn get_byte_order(&self) -> e_bitstream_byte_order {
+        self.m_packed_byte_order
+    }
+
+    pub fn seek_relative(&mut self, bits: usize) -> BLFLibResult {
+        let current_bit_position = (self.current_stream_byte_position * 8) + self.current_stream_bit_position;
+        let new_bit_position = current_bit_position + bits;
+        assert_ok!(new_bit_position / 8 < self.m_data_size_bytes);
+
+        self.current_stream_bit_position = new_bit_position % 8;
+        self.current_stream_byte_position = new_bit_position / 8;
+
+        Ok(())
     }
 
     pub fn seek(&mut self, byte: usize) -> BLFLibResult {
@@ -120,8 +138,11 @@ impl<'a> c_bitstream_reader<'a> {
         })
     }
 
-    pub fn read_bool(&mut self) -> BLFLibResult<bool> {
-        Ok(self.read_u8(1)? == 1)
+    pub fn read_bool<T>(&mut self) -> BLFLibResult<T>
+        where
+            T: From<bool>,
+    {
+        Ok(T::from(self.read_integer::<u8>(1)? == 1))
     }
 
     pub fn read_bits_internal(&mut self, output: &mut [u8], size_in_bits: usize) -> BLFLibResult {
@@ -130,7 +151,7 @@ impl<'a> c_bitstream_reader<'a> {
         let remaining_stream_bytes = end_stream_position - (self.current_stream_byte_position + 1);
         let remaining_stream_bits = (8 - self.current_stream_bit_position) + (remaining_stream_bytes * 8);
 
-        // println!("io:bitstream:bitstream_reader read_bits_internal: reading {size_in_bits} bits");
+        // println!("memory:bitstream:bitstream_reader read_bits_internal: reading {size_in_bits} bits");
 
         let size_in_bytes = size_in_bits.div_ceil(8);
         if end_memory_position < size_in_bytes {
@@ -149,7 +170,7 @@ impl<'a> c_bitstream_reader<'a> {
 
         let mut output_byte_index = 0;
         while remaining_bits_to_read > 0 {
-            // println!("io:bitstream:bitstream_reader reading byte {output_byte_index}");
+            // println!("memory:bitstream:bitstream_reader reading byte {output_byte_index}");
 
             let mut output_byte = 0u8;
             let mut bits_read = 0;
@@ -175,7 +196,7 @@ impl<'a> c_bitstream_reader<'a> {
                 // 1.3. Mask off any excess
                 bits &= 0xff << (8 - reading_bits_at_position);
 
-                // println!("io:bitstream:bitstream_reader 1. Read {:0width$b}", bits >> 8 - reading_bits_at_position, width=reading_bits_at_position);
+                // println!("memory:bitstream:bitstream_reader 1. Read {:0width$b}", bits >> 8 - reading_bits_at_position, width=reading_bits_at_position);
 
                 // 1.4 If we're unpacking LSB to MSB, we need to shift what we've read.
                 if self.m_byte_unpack_direction == _bitstream_byte_fill_direction_lsb_to_msb {
@@ -214,7 +235,7 @@ impl<'a> c_bitstream_reader<'a> {
                 // 2.3. Mask off any excess
                 bits &= 0xff << (8 - reading_bits_at_position);
 
-                // println!("io:bitstream:bitstream_reader 2. Read {:0width$b}", bits >> 8 - reading_bits_at_position, width=reading_bits_at_position);
+                // println!("memory:bitstream:bitstream_reader 2. Read {:0width$b}", bits >> 8 - reading_bits_at_position, width=reading_bits_at_position);
 
                 // 2.4 Shift what we've read according to unpacking order.
                 match self.m_byte_unpack_direction {
@@ -246,7 +267,7 @@ impl<'a> c_bitstream_reader<'a> {
                 output_byte <<= 8 - bits_read;
             }
 
-            // println!("io:bitstream:bitstream_reader read {bits_read} bits {:0width$b}", output_byte >> 8 - bits_read, width = bits_read);
+            // println!("memory:bitstream:bitstream_reader read {bits_read} bits {:0width$b}", output_byte >> 8 - bits_read, width = bits_read);
             // 3. We now have n bits loaded into the byte, with any unused bits at the LSB.
             // Depending on byte order, we shift this to relocate surplus bits.
             match self.m_packed_byte_order {
@@ -273,18 +294,21 @@ impl<'a> c_bitstream_reader<'a> {
                 }
             }
 
-            // println!("io:bitstream:bitstream_reader byte {output_byte_index} is {output_byte:08b}");
+            // println!("memory:bitstream:bitstream_reader byte {output_byte_index} is {output_byte:08b}");
         }
 
         Ok(())
     }
 
     pub fn read_enum<T: FromPrimitive>(&mut self, size_in_bits: usize) -> BLFLibResult<T> {
-        let integer = self.read_integer(size_in_bits)?;
+        let integer: u32 = self.read_integer(size_in_bits)?;
         OPTION_TO_RESULT!(FromPrimitive::from_u32(integer), format!("Unexpected enum value: {}", integer).into())
     }
 
-    pub fn read_integer(&mut self, size_in_bits: usize) -> BLFLibResult<u32> {
+    pub fn read_integer<T>(&mut self, size_in_bits: usize) -> BLFLibResult<T>
+        where
+            T: TryFrom<u32> + std::fmt::Display + std::fmt::Debug, <T as TryFrom<u32>>::Error: Display + Debug
+    {
         assert_ok!(size_in_bits > 0);
         assert_ok!(size_in_bits <= 32);
         let size_in_bytes = (size_in_bits as f32 / 8f32 ).ceil() as usize;
@@ -294,16 +318,31 @@ impl<'a> c_bitstream_reader<'a> {
 
         let mut byte_array = [0u8; 4];
 
-        match self.m_packed_byte_order {
+        let foo = T::try_from(match self.m_packed_byte_order {
             e_bitstream_byte_order::_bitstream_byte_order_little_endian => {
                 byte_array[0..bytes_slice.len()].copy_from_slice(bytes_slice);
-                Ok(u32::from_le_bytes(byte_array))
+                u32::from_le_bytes(byte_array)
             }
             e_bitstream_byte_order::_bitstream_byte_order_big_endian => {
                 byte_array[4 - bytes_slice.len()..4].copy_from_slice(bytes_slice);
-                Ok(u32::from_be_bytes(byte_array))
+                u32::from_be_bytes(byte_array)
             }
-        }
+        });
+
+        Ok(T::try_from(match self.m_packed_byte_order {
+            e_bitstream_byte_order::_bitstream_byte_order_little_endian => {
+                byte_array[0..bytes_slice.len()].copy_from_slice(bytes_slice);
+                u32::from_le_bytes(byte_array)
+            }
+            e_bitstream_byte_order::_bitstream_byte_order_big_endian => {
+                byte_array[4 - bytes_slice.len()..4].copy_from_slice(bytes_slice);
+                u32::from_be_bytes(byte_array)
+            }
+        }).map_err(|e|BLFLibError::from(format!("\
+            read_integer failed to convert u32 to type. size = {} data = {:?}",
+            size_in_bits,
+            byte_array,
+        )))?)
     }
 
     pub fn read_index<const max: usize>(&mut self, size_in_bits: usize) -> BLFLibResult<i32> {
@@ -311,8 +350,8 @@ impl<'a> c_bitstream_reader<'a> {
             Ok(-1)
         } else {
             let value = self.read_integer(size_in_bits)?;
-            assert_ok!(value < max as u32);
-            Ok(value as i32)
+            assert_ok!(value < max as i32);
+            Ok(value)
         }
     }
 
@@ -340,34 +379,41 @@ impl<'a> c_bitstream_reader<'a> {
         })
     }
 
-    pub fn read_u16(&mut self, size_in_bits: usize) -> BLFLibResult<u16> {
-        Ok(self.read_integer(size_in_bits)? as u16)
-    }
-
-    pub fn read_u8(&mut self, size_in_bits: usize) -> BLFLibResult<u8> {
-        Ok(self.read_integer(size_in_bits)? as u8)
-    }
-
-    pub fn read_signed_integer(&mut self, size_in_bits: usize) -> BLFLibResult<i32> {
-        let mut result = self.read_integer(size_in_bits)?;
+    pub fn read_signed_integer<T>(&mut self, size_in_bits: usize) -> BLFLibResult<T>
+        where
+            T: TryFrom<i32>,
+    {
+        let mut result: u32 = self.read_integer(size_in_bits)?;
 
         if size_in_bits < 32 && (result & (1 << (size_in_bits - 1))) != 0 {
             result |= !((1 << size_in_bits) - 1);
         }
 
-        Ok(result as i32)
+        Ok(
+            T::try_from(result as i32)
+                .map_err(|e|BLFLibError::from("read_signed_integer failed to convert i32 to type."))?
+        )
     }
 
-    pub fn read_qword(&mut self, size_in_bits: usize) -> BLFLibResult<Unsigned64> {
+    pub fn read_qword<T>(&mut self, size_in_bits: usize) -> BLFLibResult<T>
+        where
+            T: TryFrom<u64>,
+    {
         assert_ok!(size_in_bits > 0);
         assert_ok!(size_in_bits <= 64);
         let mut bytes = [0u8; 8];
         self.read_bits_internal(&mut bytes, size_in_bits)?;
 
-        match self.m_packed_byte_order {
-            e_bitstream_byte_order::_bitstream_byte_order_little_endian => { Ok(Unsigned64::from(u64::from_le_bytes(bytes))) }
-            e_bitstream_byte_order::_bitstream_byte_order_big_endian => { Ok(Unsigned64::from(u64::from_be_bytes(bytes))) }
-        }
+        Ok(T::try_from(
+            match self.m_packed_byte_order {
+                e_bitstream_byte_order::_bitstream_byte_order_little_endian => {
+                    u64::from_le_bytes(bytes)
+                }
+                e_bitstream_byte_order::_bitstream_byte_order_big_endian => {
+                    u64::from_be_bytes(bytes)
+                }
+            }
+        ).map_err(|e|BLFLibError::from("read_qword failed to convert u64 to type."))?)
     }
 
     pub fn read_identifier(identifier: String) { // param may be wrong.
@@ -377,9 +423,9 @@ impl<'a> c_bitstream_reader<'a> {
     pub fn read_point3d(&mut self, point: &mut int32_point3d, axis_encoding_size_in_bits: usize) -> BLFLibResult {
         assert_ok!(0 < axis_encoding_size_in_bits && axis_encoding_size_in_bits <= 32);
 
-        point.x = self.read_integer(axis_encoding_size_in_bits)? as i32;
-        point.y = self.read_integer(axis_encoding_size_in_bits)? as i32;
-        point.z = self.read_integer(axis_encoding_size_in_bits)? as i32;
+        point.x = self.read_integer(axis_encoding_size_in_bits)?;
+        point.y = self.read_integer(axis_encoding_size_in_bits)?;
+        point.z = self.read_integer(axis_encoding_size_in_bits)?;
 
         Ok(())
     }
@@ -387,8 +433,8 @@ impl<'a> c_bitstream_reader<'a> {
     /// - exact_endpoints: This didn't exist prior to Reach, set it to true by default.
     pub fn read_quantized_real(&mut self, min_value: f32, max_value: f32, size_in_bits: usize, exact_midpoint: bool, exact_endpoints: bool) -> BLFLibResult<Float32> {
         assert_ok!(self.reading());
-        let value = self.read_integer(size_in_bits)?;
-        Ok(Float32(dequantize_real(value as i32, min_value, max_value, size_in_bits, exact_midpoint, exact_endpoints)))
+        let value: i32 = self.read_integer(size_in_bits)?;
+        Ok(Float32(dequantize_real(value, min_value, max_value, size_in_bits, exact_midpoint, exact_endpoints)))
     }
 
     pub fn read_qword_internal(size_in_bits: u8) -> u64 {
@@ -443,7 +489,7 @@ impl<'a> c_bitstream_reader<'a> {
         let mut bytes = vec![0u8; max_string_size];
 
         for i in 0..max_string_size {
-            let byte = self.read_u8(8)?;
+            let byte = self.read_integer(8)?;
             bytes[i] = byte;
 
             if byte == 0 {
@@ -462,7 +508,7 @@ impl<'a> c_bitstream_reader<'a> {
         let mut characters = vec![0u16; max_string_size];
 
         for i in 0..max_string_size {
-            let character = self.read_u16(16)?;
+            let character = self.read_integer(16)?;
 
             if character == 0 {
                 return Ok(U16CString::from_vec(&mut characters[0..i]).map_err(|e|e.to_string())?.to_string().map_err(|e|e.to_string())?);

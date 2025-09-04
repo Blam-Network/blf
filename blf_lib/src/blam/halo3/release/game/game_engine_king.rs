@@ -39,13 +39,13 @@ impl c_game_engine_king_variant {
 
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
         SET_BIT!(self.m_variant_flags, 0, bitstream.read_bool()?);
-        self.m_score_to_win = bitstream.read_u16(10)?;
-        self.m_moving_hill = bitstream.read_u8(4)?;
-        self.m_moving_hill_order = bitstream.read_u8(2)?;
-        self.m_inside_hill_points = bitstream.read_signed_integer(5)? as i8;
-        self.m_outside_hill_points = bitstream.read_signed_integer(5)? as i8;
-        self.m_uncontested_hill_bonus = bitstream.read_signed_integer(5)? as i8;
-        self.m_kill_points = bitstream.read_signed_integer(5)? as i8;
+        self.m_score_to_win = bitstream.read_integer(10)?;
+        self.m_moving_hill = bitstream.read_integer(4)?;
+        self.m_moving_hill_order = bitstream.read_integer(2)?;
+        self.m_inside_hill_points = bitstream.read_signed_integer(5)?;
+        self.m_outside_hill_points = bitstream.read_signed_integer(5)?;
+        self.m_uncontested_hill_bonus = bitstream.read_signed_integer(5)?;
+        self.m_kill_points = bitstream.read_signed_integer(5)?;
         self.m_inside_hill_traits.decode(bitstream)?;
 
         Ok(())

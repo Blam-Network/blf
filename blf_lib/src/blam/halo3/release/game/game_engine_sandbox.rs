@@ -29,8 +29,8 @@ impl c_game_engine_sandbox_variant {
 
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
         SET_BIT!(self.m_variant_flags, 0, bitstream.read_bool()?);
-        self.m_edit_mode = bitstream.read_u8(2)?;
-        self.m_respawn_time = bitstream.read_u16(6)?;
+        self.m_edit_mode = bitstream.read_integer(2)?;
+        self.m_respawn_time = bitstream.read_integer(6)?;
         self.m_player_traits.decode(bitstream)?;
 
         Ok(())

@@ -155,9 +155,6 @@ impl filetime {
         self.0
     }
 
-    pub fn from_u64(t: impl Into<u64>) -> Self {
-        Self(t.into())
-    }
 }
 
 impl Serialize for filetime {
@@ -185,10 +182,15 @@ impl<'de> Deserialize<'de> for filetime {
 
         let datetime = NaiveDateTime::parse_from_str(&s, "%Y-%m-%d %H:%M:%S")
             .map_err(serde::de::Error::custom)?;
-        Ok(Self::from_time_t(datetime.and_utc().timestamp() as u64))
+        Ok(Self::from(datetime.and_utc().timestamp() as u64))
     }
 }
 
+impl From<u64> for filetime {
+    fn from(t: u64) -> Self {
+        Self(t.into())
+    }
+}
 
 #[cfg(feature = "napi")]
 impl ToNapiValue for time32_t {

@@ -20,6 +20,7 @@ pub struct c_bitstream_writer
     m_data_size_bytes: usize,
     m_state: e_bitstream_state,
 
+    m_byte_order: e_bitstream_byte_order,
     /// Some old versions of halo will pack BE values in LE and visa versa.
     /// We keep "packed" byte order which is swapped when using legacy settings.
     /// This allows BE consumers (ie xenon builds) to pass BE and legacy config will swap if necessary.
@@ -52,6 +53,7 @@ impl c_bitstream_writer {
             m_data_size_bytes: size,
             m_state: e_bitstream_state::_bitstream_state_initial,
 
+            m_byte_order: byte_order,
             m_packed_byte_order: byte_order,
             m_byte_pack_direction: e_bitstream_byte_fill_direction::default(),
             m_byte_unpack_direction: e_bitstream_byte_fill_direction::default(),
@@ -67,6 +69,7 @@ impl c_bitstream_writer {
             m_data_size_bytes: size,
             m_state: e_bitstream_state::_bitstream_state_initial,
 
+            m_byte_order: byte_order,
             m_packed_byte_order: byte_order.swap(),
             m_byte_pack_direction: _bitstream_byte_fill_direction_lsb_to_msb,
             m_byte_unpack_direction: _bitstream_byte_fill_direction_lsb_to_msb,
@@ -76,9 +79,15 @@ impl c_bitstream_writer {
         }
     }
 
+    pub fn get_byte_order(&self) -> e_bitstream_byte_order {
+        self.m_byte_order
+    }
+
     // WRITES
 
-    pub fn write_integer(&mut self, value: u32, size_in_bits: usize) -> BLFLibResult {
+    pub fn write_integer(&mut self, value: impl Into<u32>, size_in_bits: usize) -> BLFLibResult {
+        let value = value.into();
+
         match self.m_packed_byte_order {
             e_bitstream_byte_order::_bitstream_byte_order_little_endian => {
                 self.write_bits_internal(&value.to_le_bytes(), size_in_bits)?;
@@ -91,7 +100,8 @@ impl c_bitstream_writer {
         Ok(())
     }
 
-    pub fn write_signed_integer(&mut self, value: i32, size_in_bits: usize) -> BLFLibResult {
+    pub fn write_signed_integer(&mut self, value: impl Into<i32>, size_in_bits: usize) -> BLFLibResult {
+        let value = value.into();
         let max_value = ((1u32 << (size_in_bits - 1)) - 1) as i32; // Maximum positive value
 
         assert_ok!(self.writing(), "writing()");
@@ -104,8 +114,12 @@ impl c_bitstream_writer {
     }
 
     pub fn write_bool<B: Sized + Into<bool>>(&mut self, value: B) -> BLFLibResult {
-        self.write_integer(if value.into() { 1 } else { 0 }, 1)?;
+        self.write_integer(if value.into() { 1u8 } else { 0u8 }, 1)?;
         Ok(())
+    }
+
+    pub fn seek_relative(&mut self, bits: usize) -> BLFLibResult {
+        self.write_raw_data(&*vec![0u8; (bits as f32 / 8f32).ceil() as usize], bits)
     }
 
     // Be careful using this.
@@ -172,7 +186,7 @@ impl c_bitstream_writer {
             return Err(format!("Tried to write {size_in_bits} bits but only {} were provided!", (data.len() * 8)).into())
         }
 
-        // println!("io:bitstream:bitstream_writer write_bits_internal: writing {size_in_bits} bits");
+        // println!("memory:bitstream:bitstream_writer write_bits_internal: writing {size_in_bits} bits");
 
         let surplus_bytes = data.len() - (size_in_bits as f32 / 8f32).ceil() as usize;
         // This isn't the total surplus bit count but instead, bits in addition to the surplus bytes.
@@ -295,6 +309,21 @@ impl c_bitstream_writer {
         self.write_integer(point.x as u32, axis_encoding_size_in_bits)?;
         self.write_integer(point.y as u32, axis_encoding_size_in_bits)?;
         self.write_integer(point.z as u32, axis_encoding_size_in_bits)?;
+
+        Ok(())
+    }
+
+    pub fn write_index<const max_value: usize>(&mut self, value: impl Into<i32>, bit_size: usize) -> BLFLibResult {
+        let value = value.into();
+
+        assert_ok!(value <= max_value as i32);
+
+        if value == -1 {
+            self.write_bool(false)?;
+        } else {
+            self.write_bool(true)?;
+            self.write_integer(value as u32, bit_size)?;
+        }
 
         Ok(())
     }
@@ -500,8 +529,8 @@ mod bitstream_writer_tests {
         let mut sut = c_bitstream_writer::new_with_legacy_settings(2, e_bitstream_byte_order::_bitstream_byte_order_big_endian);
         sut.begin_writing();
 
-        sut.write_integer(0b001, 3).unwrap();
-        sut.write_integer(310, 13).unwrap();
+        sut.write_integer(0b001u32, 3).unwrap();
+        sut.write_integer(310u32, 13).unwrap();
 
         sut.finish_writing();
         let actual = sut.get_data().unwrap();
@@ -517,8 +546,8 @@ mod bitstream_writer_tests {
         let mut sut = c_bitstream_writer::new_with_legacy_settings(2, e_bitstream_byte_order::_bitstream_byte_order_little_endian);
         sut.begin_writing();
 
-        sut.write_integer(0b001, 3).unwrap();
-        sut.write_integer(8191, 13).unwrap();
+        sut.write_integer(0b001u32, 3).unwrap();
+        sut.write_integer(8191u32, 13).unwrap();
 
         sut.finish_writing();
         let actual = sut.get_data().unwrap();
@@ -534,8 +563,8 @@ mod bitstream_writer_tests {
         let mut sut = c_bitstream_writer::new(expected.len(), e_bitstream_byte_order::_bitstream_byte_order_big_endian);
         sut.begin_writing();
 
-        sut.write_integer(0b001, 3).unwrap();
-        sut.write_integer(8191, 13).unwrap();
+        sut.write_integer(0b001u32, 3).unwrap();
+        sut.write_integer(8191u32, 13).unwrap();
 
         sut.finish_writing();
         let actual = sut.get_data().unwrap();
@@ -551,8 +580,8 @@ mod bitstream_writer_tests {
         let mut sut = c_bitstream_writer::new(expected.len(), e_bitstream_byte_order::_bitstream_byte_order_little_endian);
         sut.begin_writing();
 
-        sut.write_integer(0b001, 3).unwrap();
-        sut.write_integer(388, 13).unwrap();
+        sut.write_integer(0b001u32, 3).unwrap();
+        sut.write_integer(388u32, 13).unwrap();
 
         sut.finish_writing();
         let actual = sut.get_data().unwrap();
@@ -568,8 +597,8 @@ mod bitstream_writer_tests {
         let mut sut = c_bitstream_writer::new(1, e_bitstream_byte_order::_bitstream_byte_order_big_endian);
         sut.begin_writing();
 
-        sut.write_integer(0b000, 3).unwrap();
-        sut.write_integer(0b11111, 5).unwrap();
+        sut.write_integer(0b000u32, 3).unwrap();
+        sut.write_integer(0b11111u32, 5).unwrap();
 
         sut.finish_writing();
         let actual = sut.get_data().unwrap();
@@ -585,8 +614,8 @@ mod bitstream_writer_tests {
         let mut sut = c_bitstream_writer::new_with_legacy_settings(1, e_bitstream_byte_order::_bitstream_byte_order_big_endian);
         sut.begin_writing();
 
-        sut.write_integer(0b000, 3).unwrap();
-        sut.write_integer(0b11111, 5).unwrap();
+        sut.write_integer(0b000u32, 3).unwrap();
+        sut.write_integer(0b11111u32, 5).unwrap();
 
         sut.finish_writing();
         let actual = sut.get_data().unwrap();
@@ -605,15 +634,15 @@ mod bitstream_writer_tests {
         sut.begin_writing();
 
         // game entries count
-        sut.write_integer(20, 6).unwrap();
+        sut.write_integer(20u32, 6).unwrap();
         // game entry 1 weight
-        sut.write_integer(6, 32).unwrap();
+        sut.write_integer(6u32, 32).unwrap();
         // game entry 1 minimum players
-        sut.write_integer(4, 4).unwrap();
+        sut.write_integer(4u32, 4).unwrap();
         // game entry 1 skip after veto
         sut.write_bool(false).unwrap();
         // game entry 1 map id
-        sut.write_integer(310, 32).unwrap();
+        sut.write_integer(310u32, 32).unwrap();
         // game entry 1 game variant (truncated)
         sut.write_string_utf8(&String::from("ru"), 3).unwrap();
 
@@ -634,17 +663,17 @@ mod bitstream_writer_tests {
         sut.begin_writing();
 
         // game entries count
-        sut.write_integer(55, 6).unwrap();
+        sut.write_integer(55u32, 6).unwrap();
         // game entry 1 weight
-        sut.write_integer(1, 32).unwrap();
+        sut.write_integer(1u32, 32).unwrap();
         // game entry 1 minimum players
-        sut.write_integer(1, 4).unwrap();
+        sut.write_integer(1u32, 4).unwrap();
         // game entry 1 skip after veto
         sut.write_bool(false).unwrap();
         // game entry 1 optional
         sut.write_bool(false).unwrap();
         // game entry 1 map id
-        sut.write_integer(520, 32).unwrap();
+        sut.write_integer(520u32, 32).unwrap();
         // game entry 1 game variant (truncated)
         sut.write_string_utf8(&String::from("5_"), 3).unwrap();
 

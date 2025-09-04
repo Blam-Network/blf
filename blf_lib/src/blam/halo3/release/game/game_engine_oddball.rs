@@ -43,14 +43,14 @@ impl c_game_engine_oddball_variant {
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
         SET_BIT!(self.m_variant_flags, 0, bitstream.read_bool()?);
         SET_BIT!(self.m_variant_flags, 1, bitstream.read_bool()?);
-        self.m_score_to_win = bitstream.read_signed_integer(11)? as i16;
-        self.m_carrying_points = bitstream.read_signed_integer(5)? as i16;
-        self.m_kill_points = bitstream.read_signed_integer(5)? as i8;
-        self.m_ball_kill_points = bitstream.read_signed_integer(5)? as i8;
-        self.m_carrier_kill_points = bitstream.read_signed_integer(5)? as i8;
-        self.m_ball_count = bitstream.read_u8(2)?;
-        self.m_ball_spawn_delay = bitstream.read_u16(7)?;
-        self.m_ball_inactive_respawn_delay = bitstream.read_u16(7)?;
+        self.m_score_to_win = bitstream.read_signed_integer(11)?;
+        self.m_carrying_points = bitstream.read_signed_integer(5)?;
+        self.m_kill_points = bitstream.read_signed_integer(5)?;
+        self.m_ball_kill_points = bitstream.read_signed_integer(5)?;
+        self.m_carrier_kill_points = bitstream.read_signed_integer(5)?;
+        self.m_ball_count = bitstream.read_integer(2)?;
+        self.m_ball_spawn_delay = bitstream.read_integer(7)?;
+        self.m_ball_inactive_respawn_delay = bitstream.read_integer(7)?;
         self.m_carrier_traits.decode(bitstream)?;
 
         Ok(())

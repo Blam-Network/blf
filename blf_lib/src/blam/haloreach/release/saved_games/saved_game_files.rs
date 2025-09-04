@@ -9,6 +9,9 @@ use crate::types::u64::Unsigned64;
 use blf_lib::types::array::StaticArray;
 use blf_lib_derivable::result::BLFLibResult;
 use crate::types::time::filetime;
+use serde_hex::{SerHex, StrictCap};
+use crate::io::bitstream::c_bitstream_writer;
+use crate::OPTION_TO_RESULT;
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite)]
 pub struct s_content_item_metadata_film_data {
@@ -64,11 +67,13 @@ pub struct s_content_item_metadata {
     #[brw(pad_after = 7)]
     pub megalo_category_index: i8,
     pub creation_time: time64_t,
+    #[serde(with = "SerHex::<StrictCap>")]
     pub creator_xuid: Unsigned64,
     pub creator_name: StaticString<16>,
     #[brw(pad_after = 3)]
     pub creator_xuid_is_online: Bool,
     pub modification_time: time64_t,
+    #[serde(with = "SerHex::<StrictCap>")]
     pub modifier_xuid: Unsigned64,
     pub modifier_name: StaticString<16>,
     #[brw(pad_after = 3)]
@@ -114,25 +119,25 @@ pub struct s_content_item_metadata {
 
 impl s_content_item_metadata {
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
-        self.file_type = (bitstream.read_integer(4)? as i8) - 1;
+        self.file_type = bitstream.read_integer::<i8>(4)? - 1;
         self.size_in_bytes = bitstream.read_integer(32)?;
         self.unique_id = bitstream.read_qword(64)?;
         self.parent_unique_id = bitstream.read_qword(64)?;
         self.root_unique_id = bitstream.read_qword(64)?;
         self.game_id = bitstream.read_qword(64)?;
-        self.activity = (bitstream.read_integer(3)? as i8) - 1;
-        self.game_mode = bitstream.read_integer(3)? as u8;
-        self.game_engine_type = bitstream.read_integer(3)? as u8;
-        self.map_id = bitstream.read_integer(32)? as i32;
-        self.megalo_category_index = bitstream.read_integer(8)? as i8;
-        self.creation_time = time64_t::from(bitstream.read_qword(64)?);
+        self.activity = bitstream.read_integer::<i8>(3)? - 1;
+        self.game_mode = bitstream.read_integer(3)?;
+        self.game_engine_type = bitstream.read_integer(3)?;
+        self.map_id = bitstream.read_integer(32)?;
+        self.megalo_category_index = bitstream.read_signed_integer(8)?;
+        self.creation_time = bitstream.read_qword(64)?;
         self.creator_xuid = bitstream.read_qword(64)?;
         self.creator_name = StaticString::from_string(bitstream.read_string_utf8(16)?)?;
-        self.creator_xuid_is_online = Bool::from(bitstream.read_bool()?);
-        self.modification_time = time64_t::from(bitstream.read_qword(64)?);
+        self.creator_xuid_is_online = bitstream.read_bool()?;
+        self.modification_time = bitstream.read_qword(64)?;
         self.modifier_xuid = bitstream.read_qword(64)?;
         self.modifier_name = StaticString::from_string(bitstream.read_string_utf8(16)?)?;
-        self.modifier_xuid_is_online = Bool::from(bitstream.read_bool()?);
+        self.modifier_xuid_is_online = bitstream.read_bool()?;
         self.name = StaticWcharString::from_string(bitstream.read_string_whar(128)?)?;
         self.description = StaticWcharString::from_string(bitstream.read_string_whar(128)?)?;
 
@@ -144,7 +149,7 @@ impl s_content_item_metadata {
             }
             6 => {
                 self.game_variant_data = Some(s_content_item_metadata_game_variant_data {
-                    icon_index: bitstream.read_signed_integer(8)? as i8,
+                    icon_index: bitstream.read_signed_integer(8)?,
                 })
             }
             _ => {}
@@ -153,7 +158,7 @@ impl s_content_item_metadata {
         match self.activity {
             2 => {
                 self.matchmaking_data = Some(s_content_item_metadata_matchmaking_data {
-                    hopper_identifier: bitstream.read_integer(16)? as u16,
+                    hopper_identifier: bitstream.read_integer(16)?,
                 })
             }
             _ => {}
@@ -162,24 +167,113 @@ impl s_content_item_metadata {
         match self.game_mode {
             1 => {
                 self.campaign_data = Some(s_content_item_metadata_campaign_data {
-                    campaign_id: bitstream.read_integer(8)? as i32,
-                    campaign_difficulty: bitstream.read_integer(2)? as i16,
-                    campaign_metagame_scoring: bitstream.read_integer(2)? as i16,
-                    campaign_insertion_point: bitstream.read_integer(2)? as i32,
-                    campaign_primary_skulls: bitstream.read_integer(16)? as i16,
-                    campaign_secondary_skulls: bitstream.read_integer(16)? as i16,
+                    campaign_id: bitstream.read_integer(8)?,
+                    campaign_difficulty: bitstream.read_integer(2)?,
+                    campaign_metagame_scoring: bitstream.read_integer(2)?,
+                    campaign_insertion_point: bitstream.read_integer(2)?,
+                    campaign_primary_skulls: bitstream.read_integer(16)?,
+                    campaign_secondary_skulls: bitstream.read_integer(16)?,
                 })
             }
             2 => {
                 self.firefight_data = Some(s_content_item_metadata_firefight_data {
-                    firefight_difficulty: bitstream.read_integer(2)? as i16,
-                    firefight_primary_skulls: bitstream.read_integer(16)? as i16,
-                    firefight_secondary_skulls: bitstream.read_integer(16)? as i16,
+                    firefight_difficulty: bitstream.read_integer(2)?,
+                    firefight_primary_skulls: bitstream.read_integer(16)?,
+                    firefight_secondary_skulls: bitstream.read_integer(16)?,
                 })
             }
             _ => {}
         }
 
         Ok(())
+    }
+
+    pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
+        bitstream.write_integer((self.file_type + 1) as u32, 4)?;
+        bitstream.write_integer(self.size_in_bytes, 32)?;
+        bitstream.write_qword( self.unique_id, 64)?;
+        bitstream.write_qword(self.parent_unique_id, 64)?;
+        bitstream.write_qword(self.root_unique_id, 64)?;
+        bitstream.write_qword(self.game_id, 64)?;
+        bitstream.write_integer((self.activity + 1) as u32, 3)?;
+        bitstream.write_integer(self.game_mode, 3)?;
+        bitstream.write_integer(self.game_engine_type, 3)?;
+        bitstream.write_signed_integer(self.map_id, 32)?;
+        bitstream.write_signed_integer(self.megalo_category_index, 8)?;
+        bitstream.write_qword(self.creation_time, 64)?;
+        bitstream.write_qword(self.creator_xuid, 64)?;
+        bitstream.write_string_utf8(&self.creator_name.get_string()?, 16)?;
+        bitstream.write_bool(self.creator_xuid_is_online)?;
+        bitstream.write_qword(self.modification_time, 64)?;
+        bitstream.write_qword(self.modifier_xuid, 64)?;
+        bitstream.write_string_utf8(&self.modifier_name.get_string()?, 16)?;
+        bitstream.write_bool(self.modifier_xuid_is_online)?;
+        bitstream.write_string_wchar(&self.name.get_string(), 128)?;
+        bitstream.write_string_wchar(&self.description.get_string(), 128)?;
+
+        match self.file_type {
+            3 | 4 => {
+                bitstream.write_signed_integer(
+                    OPTION_TO_RESULT!(
+                        &self.film_data,
+                        "Tried to serialize film with no film data."
+                    )?.seconds,
+                    32
+                )?;
+            }
+            6 => {
+                bitstream.write_signed_integer(
+                    OPTION_TO_RESULT!(
+                        &self.game_variant_data,
+                        "Tried to serialize gametype with no game data."
+                    )?.icon_index,
+                    8
+                )?;
+            }
+            _ => {}
+        }
+
+        match self.activity {
+            2 => {
+                bitstream.write_signed_integer(
+                    OPTION_TO_RESULT!(
+                        &self.matchmaking_data,
+                        "Tried to serialize a file from matchmaking with no matchmaking data."
+                    )?.hopper_identifier,
+                    16
+                )?;
+            }
+            _ => {}
+        }
+
+        match self.activity {
+            1 => {
+                let campaign_data = OPTION_TO_RESULT!(
+                    &self.campaign_data,
+                    "Tried to serialize campaign file with no campaign data."
+                )?;
+
+                bitstream.write_integer(campaign_data.campaign_id as u32, 8)?;
+                bitstream.write_integer(campaign_data.campaign_difficulty as u32, 2)?;
+                bitstream.write_integer(campaign_data.campaign_metagame_scoring as u32, 2)?;
+                bitstream.write_integer(campaign_data.campaign_insertion_point as u32, 2)?;
+                bitstream.write_integer(campaign_data.campaign_primary_skulls as u32, 16)?;
+                bitstream.write_integer(campaign_data.campaign_secondary_skulls as u32, 16)?;
+            }
+            2 => {
+                let firefight_data = OPTION_TO_RESULT!(
+                    &self.firefight_data,
+                    "Tried to serialize firefight file with no firefight data."
+                )?;
+
+                bitstream.write_integer(firefight_data.firefight_difficulty as u32, 2)?;
+                bitstream.write_integer(firefight_data.firefight_primary_skulls as u32, 16)?;
+                bitstream.write_integer(firefight_data.firefight_secondary_skulls as u32, 16)?;
+            }
+            _ => {}
+        }
+
+        Ok(())
+
     }
 }

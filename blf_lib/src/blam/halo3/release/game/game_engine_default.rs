@@ -32,8 +32,8 @@ impl c_game_engine_social_options {
     }
 
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
-        bitstream.read_bool()?;
-        self.m_team_changing = bitstream.read_integer(2)? as u16;
+        bitstream.seek_relative(1)?;
+        self.m_team_changing = bitstream.read_integer(2)?;
         SET_BIT!(self.m_flags, 0, bitstream.read_bool()?);
         SET_BIT!(self.m_flags, 1, bitstream.read_bool()?);
         SET_BIT!(self.m_flags, 2, bitstream.read_bool()?);
@@ -81,14 +81,14 @@ impl c_game_engine_map_override_options {
         SET_BIT!(self.m_flags, 0, bitstream.read_bool()?);
         SET_BIT!(self.m_flags, 1, bitstream.read_bool()?);
         self.m_base_player_traits.decode(bitstream)?;
-        self.m_weapon_set_absolute_index = bitstream.read_signed_integer(8)? as i16;
-        self.m_vehicle_set_absolute_index = bitstream.read_signed_integer(8)? as i16;
+        self.m_weapon_set_absolute_index = bitstream.read_signed_integer(8)?;
+        self.m_vehicle_set_absolute_index = bitstream.read_signed_integer(8)?;
         self.m_red_powerup_traits.decode(bitstream)?;
         self.m_blue_powerup_traits.decode(bitstream)?;
         self.m_yellow_powerup_traits.decode(bitstream)?;
-        self.m_red_powerup_duration_seconds = bitstream.read_integer(7)? as u8;
-        self.m_blue_powerup_duration_seconds = bitstream.read_integer(7)? as u8;
-        self.m_yellow_powerup_duration_seconds = bitstream.read_integer(7)? as u8;
+        self.m_red_powerup_duration_seconds = bitstream.read_integer(7)?;
+        self.m_blue_powerup_duration_seconds = bitstream.read_integer(7)?;
+        self.m_yellow_powerup_duration_seconds = bitstream.read_integer(7)?;
 
         Ok(())
     }
@@ -125,12 +125,12 @@ impl c_game_engine_base_variant {
 
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult<()> {
         self.m_metadata.decode(bitstream)?;
-        self.m_flags = bitstream.read_u16(1)?;
+        self.m_flags = bitstream.read_integer(1)?;
         self.m_miscellaneous_options.decode(bitstream)?;
         self.m_respawn_options.decode(bitstream)?;
         self.m_social_options.decode(bitstream)?;
         self.m_map_override_options.decode(bitstream)?;
-        self.m_team_scoring_method = bitstream.read_u16(3)?;
+        self.m_team_scoring_method = bitstream.read_integer(3)?;
 
         Ok(())
     }
