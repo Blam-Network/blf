@@ -10,6 +10,7 @@ use napi::sys;
 #[cfg(feature = "napi")]
 use napi::sys::{napi_env};
 use blf_lib::result::BLFLibResult;
+use crate::SERDE_DESERIALIZE_RESULT;
 
 #[derive(PartialEq, Debug)]
 pub struct StaticArray<E: 'static, const N: usize> {
@@ -99,20 +100,26 @@ impl<E: Clone, const N: usize> Index<usize> for StaticArray<E, N> {
     }
 }
 
-impl<E: Serialize + Clone, const N: usize> Serialize for StaticArray<E, N> {
+impl<E: Serialize + Clone + Default + PartialEq, const N: usize> Serialize for StaticArray<E, N> {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
     where
-        S: Serializer
+        S: Serializer,
     {
-        self._data.serialize(serializer)
+        let mut populated_size = 0;
+        let default = E::default();
+        self._data.iter().enumerate().for_each(|(index, item)| if *item != default { populated_size = index + 1; });
+
+        let filtered = &self._data
+            .as_slice()[0..populated_size];
+
+        filtered.serialize(serializer)
     }
 }
 
-impl<'de, E: Deserialize<'de> + Clone, const N: usize> serde::Deserialize<'de> for StaticArray<E, N> {
+impl<'de, E: Deserialize<'de>+ Clone + Default, const N: usize> serde::Deserialize<'de> for StaticArray<E, N> {
     fn deserialize<D: Deserializer<'de>>(d: D) -> Result<Self, D::Error> {
-        Ok(Self {
-            _data: Vec::<E>::deserialize(d)?
-        })
+        let vec: Vec<E> = Deserialize::deserialize(d)?;
+        SERDE_DESERIALIZE_RESULT!(Self::from_vec(&vec))
     }
 }
 
