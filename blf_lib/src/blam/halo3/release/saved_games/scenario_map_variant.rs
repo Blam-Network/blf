@@ -8,8 +8,10 @@ use blf_lib::types::array::StaticArray;
 use crate::blam::common::math::real_math::real_vector3d;
 use crate::blam::common::simulation::simulation_encoding::{simulation_read_quantized_position, simulation_write_quantized_position};
 use serde_hex::{SerHex,StrictCap};
+use blf_lib::blam::halo3::release::io::bitstream_reader::c_bitstream_reader_extensions;
 use blf_lib_derive::TestSize;
 use blf_lib_derivable::result::BLFLibResult;
+use crate::blam::halo3::release::io::bitstream_writer::c_bitstream_writer_extensions;
 use crate::types::bool::Bool;
 use crate::types::numbers::Float32;
 
@@ -43,7 +45,7 @@ pub struct c_map_variant {
 }
 
 impl c_map_variant {
-    pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
+    pub fn encode(&self, mut bitstream: &mut c_bitstream_writer) -> BLFLibResult {
         self.m_metadata.encode(bitstream)?;
         bitstream.write_integer(self.m_map_variant_version as u32, 8)?;
         bitstream.write_integer(self.m_original_map_rsa_signature_hash, 32)?;
@@ -136,7 +138,7 @@ impl c_map_variant {
         Ok(())
     }
 
-    pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
+    pub fn decode(&mut self, mut bitstream: &mut c_bitstream_reader) -> BLFLibResult {
         self.m_metadata.decode(bitstream)?;
         self.m_map_variant_version = bitstream.read_integer(8)? as u16;
         self.m_original_map_rsa_signature_hash = bitstream.read_integer(32)?;
@@ -174,7 +176,7 @@ impl c_map_variant {
             }
 
             simulation_read_quantized_position(bitstream, &mut variant_object.position, 16, &self.m_world_bounds)?;
-            bitstream.read_axis::<8, 19>(&mut variant_object.forward, &mut variant_object.up)?;
+            bitstream.read_axis(&mut variant_object.forward, &mut variant_object.up)?;
             variant_object.multiplayer_game_object_properties.object_type = bitstream.read_signed_integer(8)? as i8;
             variant_object.multiplayer_game_object_properties.symmetry_placement_flags = bitstream.read_u8(8)?;
             variant_object.multiplayer_game_object_properties.game_engine_flags = bitstream.read_u16(16)?;
@@ -185,19 +187,19 @@ impl c_map_variant {
 
             match variant_object.multiplayer_game_object_properties.boundary_shape {
                 1 => { // sphere
-                    variant_object.multiplayer_game_object_properties.boundary_size = bitstream.read_quantized_real(0.0, 60.0, 16, false, false)?;
-                    variant_object.multiplayer_game_object_properties.boundary_negative_height = bitstream.read_quantized_real(0.0, 60.0, 16, false, false)?;
+                    variant_object.multiplayer_game_object_properties.boundary_size = bitstream.read_quantized_real(0.0, 60.0, 16, false, true)?;
+                    variant_object.multiplayer_game_object_properties.boundary_negative_height = bitstream.read_quantized_real(0.0, 60.0, 16, false, true)?;
                 }
                 2 => { // cylinder
-                    variant_object.multiplayer_game_object_properties.boundary_size = bitstream.read_quantized_real(0.0, 60.0, 16, false, false)?;
-                    variant_object.multiplayer_game_object_properties.boundary_box_length = bitstream.read_quantized_real(0.0, 60.0, 16, false, false)?;
-                    variant_object.multiplayer_game_object_properties.boundary_positive_height = bitstream.read_quantized_real(0.0, 60.0, 16, false, false)?;
+                    variant_object.multiplayer_game_object_properties.boundary_size = bitstream.read_quantized_real(0.0, 60.0, 16, false, true)?;
+                    variant_object.multiplayer_game_object_properties.boundary_box_length = bitstream.read_quantized_real(0.0, 60.0, 16, false, true)?;
+                    variant_object.multiplayer_game_object_properties.boundary_positive_height = bitstream.read_quantized_real(0.0, 60.0, 16, false, true)?;
                 }
                 3 => { // box
-                    variant_object.multiplayer_game_object_properties.boundary_size = bitstream.read_quantized_real(0.0, 60.0, 16, false, false)?;
-                    variant_object.multiplayer_game_object_properties.boundary_box_length = bitstream.read_quantized_real(0.0, 60.0, 16, false, false)?;
-                    variant_object.multiplayer_game_object_properties.boundary_positive_height = bitstream.read_quantized_real(0.0, 60.0, 16, false, false)?;
-                    variant_object.multiplayer_game_object_properties.boundary_negative_height = bitstream.read_quantized_real(0.0, 60.0, 16, false, false)?;
+                    variant_object.multiplayer_game_object_properties.boundary_size = bitstream.read_quantized_real(0.0, 60.0, 16, false, true)?;
+                    variant_object.multiplayer_game_object_properties.boundary_box_length = bitstream.read_quantized_real(0.0, 60.0, 16, false, true)?;
+                    variant_object.multiplayer_game_object_properties.boundary_positive_height = bitstream.read_quantized_real(0.0, 60.0, 16, false, true)?;
+                    variant_object.multiplayer_game_object_properties.boundary_negative_height = bitstream.read_quantized_real(0.0, 60.0, 16, false, true)?;
                 }
                 _ => { }
             }
