@@ -218,10 +218,10 @@ impl c_bitstream_writer {
 
                     // if after shifting, we no longer have enough bits to write...
                     // grab more bits from the next source byte.
-                    if min(remaining_bits_to_write, 8) > 8 - surplus_bits {
-                        let remaining_bits_needed = min(remaining_bits_to_write, 8) - (8 - surplus_bytes);
-                        bits |= data[bytes_written + surplus_bytes + 1] >> surplus_bytes;
+                    if surplus_bits != 0 && remaining_bits_to_write > 8 - surplus_bits {
+                        bits |= data[bytes_written + surplus_bytes + 1] >> 8 - surplus_bits;
                     }
+
                     bits
                 }
             };
@@ -616,6 +616,23 @@ mod bitstream_writer_tests {
 
         sut.write_integer(0b000u32, 3).unwrap();
         sut.write_integer(0b11111u32, 5).unwrap();
+
+        sut.finish_writing();
+        let actual = sut.get_data().unwrap();
+        assert_eq!(actual, expected);
+    }
+
+    #[test]
+    fn write_9_at_2() {
+        let expected: [u8; 2] = [
+            0b00000010, 0b01100000
+        ];
+
+        let mut sut = c_bitstream_writer::new(2, e_bitstream_byte_order::_bitstream_byte_order_big_endian);
+        sut.begin_writing();
+
+        sut.write_integer(0b00u32, 2).unwrap();
+        sut.write_integer(19u32, 9).unwrap();
 
         sut.finish_writing();
         let actual = sut.get_data().unwrap();
