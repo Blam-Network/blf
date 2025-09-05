@@ -956,8 +956,7 @@ impl v08516_10_02_19_1607_omaha_alpha {
                 }
 
                 if let Ok(mvar) = find_chunk_in_file::<s_blf_chunk_map_variant>(map_variant_blf_file_path) {
-                    debug_log!("{}", map_variant_file_name);
-                    write_json_file(&mvar.map_variant, map_variant_config_file_path)?;
+                        write_json_file(&mvar.map_variant, map_variant_config_file_path)?;
                     converted_maps.push(map_variant_blf_file_name.clone());
                 } else {
                     task.add_warning(format!("Failed to read {map_variant_file_name}"));
