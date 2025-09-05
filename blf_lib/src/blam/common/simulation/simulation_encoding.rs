@@ -84,7 +84,7 @@ pub fn simulation_read_position(
         let mut quantized_point = int32_point3d::default();
         bitstream.read_point3d_efficient(&mut quantized_point, per_axis_bit_counts)?;
 
-        Ok(dequantize_real_point3d_per_axis(&quantized_point, world_bounds, &per_axis_bit_counts, position, exact_endpoints, exact_endpoints))
+        Ok(dequantize_real_point3d_per_axis(&quantized_point, world_bounds, &per_axis_bit_counts, position, exact_midpoints, exact_endpoints))
     }
     else {
         // This branch requires runtime game BSP data, we can't perform it.

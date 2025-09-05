@@ -11,7 +11,7 @@ pub use halo3::v12070_08_09_05_2031_halo3_ship::s_blf_chunk_online_file_manifest
 pub use halo3::v12070_08_09_05_2031_halo3_ship::s_blf_chunk_banhammer_messages::*;
 pub use halo3::v12070_08_09_05_2031_halo3_ship::s_blf_chunk_matchmaking_tips::*;
 pub use halo3odst::v13895_09_04_27_2201_atlas_release::s_blf_chunk_author::*;
-pub use haloreach::v09730_10_04_09_1309_omaha_delta::s_blf_chunk_hopper_configuration_table::*;
+pub use haloreach::v08516_10_02_19_1607_omaha_alpha::s_blf_chunk_hopper_configuration_table::*;
 pub use haloreach::v12065_11_08_24_1738_tu1actual::s_blf_chunk_player_data::*;
 pub use haloreach::v12065_11_08_24_1738_tu1actual::s_blf_chunk_arena_hopper_stats::*;
 pub use haloreach::v12065_11_08_24_1738_tu1actual::s_blf_chunk_player_heartbeat_response::*;
@@ -20,10 +20,10 @@ pub use haloreach::v09730_10_04_09_1309_omaha_delta::s_blf_chunk_rewards_persist
 pub use haloreach::v12065_11_08_24_1738_tu1actual::s_blf_chunk_service_record::*;
 pub use haloreach::v09730_10_04_09_1309_omaha_delta::s_blf_chunk_game_set::*;
 pub use haloreach::v12065_11_08_24_1738_tu1actual::s_blf_chunk_nag_message::*;
-pub use haloreach::v09449_10_03_25_1545_omaha_beta::s_blf_chunk_network_configuration::*;
+pub use haloreach::v08516_10_02_19_1607_omaha_alpha::s_blf_chunk_network_configuration::*;
 pub use haloreach::v09730_10_04_09_1309_omaha_delta::s_blf_chunk_map_variant::*;
 pub use haloreach::v12065_11_08_24_1738_tu1actual::s_blf_chunk_content_header::*;
-pub use haloreach::v09449_10_03_25_1545_omaha_beta::s_blf_chunk_matchmaking_game_variant::*;
+pub use haloreach::v08516_10_02_19_1607_omaha_alpha::s_blf_chunk_matchmaking_game_variant::*;
 pub use haloreach::v12065_11_08_24_1738_tu1actual::s_blf_chunk_dlc_map_manifest::*;
 pub use haloreach::v12065_11_08_24_1738_tu1actual::s_blf_chunk_megalo_categories::*;
 pub use haloreach::v12065_11_08_24_1738_tu1actual::s_blf_chunk_predefined_queries::*;
@@ -31,5 +31,5 @@ pub use haloreach::v12065_11_08_24_1738_tu1actual::s_blf_chunk_matchmaking_hoppe
 
 #[derive(TitleAndBuild)]
 #[Title("Halo: Reach")]
-#[Build("09449.10.03.25.1545.omaha_beta")]
-pub struct v09449_10_03_25_1545_omaha_beta {}
+#[Build("08516.10.02.19.1607.omaha_alpha")]
+pub struct v08516_10_02_19_1607_omaha_alpha {}
