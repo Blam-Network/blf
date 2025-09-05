@@ -21,6 +21,7 @@ use tokio::runtime;
 use tokio::sync::Mutex;
 use tokio::task::JoinHandle;
 use blf_lib::blam::common::memory::secure_signature::s_network_http_request_hash;
+use blf_lib::blam::haloreach::v09730_10_04_09_1309_omaha_delta::saved_games::scenario_map_variant::c_map_variant;
 use blf_lib::blf::versions::haloreach::v09730_10_04_09_1309_omaha_delta::{s_blf_chunk_author, s_blf_chunk_banhammer_messages, s_blf_chunk_end_of_file, s_blf_chunk_game_set, s_blf_chunk_hopper_configuration_table, s_blf_chunk_hopper_description_table, s_blf_chunk_map_manifest, s_blf_chunk_map_variant, s_blf_chunk_matchmaking_game_variant, s_blf_chunk_matchmaking_tips, s_blf_chunk_megalo_categories, s_blf_chunk_nag_message, s_blf_chunk_network_configuration, s_blf_chunk_online_file_manifest, s_blf_chunk_predefined_queries, s_blf_chunk_start_of_file};
 use blf_lib::blf::versions::haloreach::v09730_10_04_09_1309_omaha_delta::s_blf_chunk_dlc_map_manifest;
 use blf_lib::io::{read_json_file, write_json_file};
@@ -418,10 +419,9 @@ mod title_storage_config {
         build_path!(
             config_folder,
             map_variants_folder_name,
-            format!("{variant_file_name}.bin")
+            format!("{variant_file_name}.json")
         )
     }
-
 
     pub const matchmaking_hoppers_folder_name: &str = "hoppers";
     pub const matchmaking_hopper_configuration_file_name: &str = "configuration.json";
@@ -452,13 +452,11 @@ mod title_storage_config {
         )
     }
 
-    pub fn network_configuration_file_name() -> String {
-        format!("network_configuration_{:0>3}.bin", s_blf_chunk_network_configuration::get_version().major)
-    }
+    pub const network_configuration_file_name: &str = "network_configuration.json";
     pub fn network_configuration_file_path(config_folder: &String) -> String {
         build_path!(
             config_folder,
-            network_configuration_file_name()
+            network_configuration_file_name
         )
     }
 
@@ -957,16 +955,13 @@ impl v09730_10_04_09_1309_omaha_delta {
                     remove_file(&map_variant_config_file_path)?
                 }
 
-                let mvar = find_chunk_in_file::<s_blf_chunk_map_variant>(map_variant_blf_file_path)?;
-
-                BlfFileBuilder::new()
-                    .add_chunk(s_blf_chunk_start_of_file::default())
-                    .add_chunk(mvar)
-                    .add_chunk(s_blf_chunk_end_of_file::default())
-                    .write_file(map_variant_config_file_path)?;
-
-                // map_variant::read_file(&map_variant_blf_file_path)?
-                //     .write_to_config(hoppers_config_path, &map_variant_file_name)?;
+                if let Ok(mvar) = find_chunk_in_file::<s_blf_chunk_map_variant>(map_variant_blf_file_path) {
+                    debug_log!("{}", map_variant_file_name);
+                    write_json_file(&mvar.map_variant, map_variant_config_file_path)?;
+                    converted_maps.push(map_variant_blf_file_name.clone());
+                } else {
+                    task.add_warning(format!("Failed to read {map_variant_file_name}"));
+                }
             }
         }
 
@@ -1813,7 +1808,7 @@ impl v09730_10_04_09_1309_omaha_delta {
         ).collect();
         let map_variants_to_convert: HashSet<String> = HashSet::from_iter(map_variants_to_convert.iter().cloned());
 
-        let mut json_queue: Vec<(String, s_blf_chunk_map_variant)> = Vec::new();
+        let mut json_queue: Vec<(String, String)> = Vec::new();
         for map_variant in map_variants_to_convert {
             let map_variant_json_path = title_storage_config::map_variant_file_path(
                 hoppers_config_path,
@@ -1825,12 +1820,11 @@ impl v09730_10_04_09_1309_omaha_delta {
                 panic!();
             }
 
-            // let mut file = File::open(&map_variant_json_path).unwrap();
-            // let mut map_variant_json = String::new();
-            // file.read_to_string(&mut map_variant_json).unwrap();
-            let chunk = find_chunk_in_file::<s_blf_chunk_map_variant>(map_variant_json_path).unwrap();
+            let mut file = File::open(&map_variant_json_path).unwrap();
+            let mut map_variant_json = String::new();
+            file.read_to_string(&mut map_variant_json).unwrap();
 
-            json_queue.push((map_variant, chunk));
+            json_queue.push((map_variant, map_variant_json));
         }
 
         let rt = runtime::Builder::new_multi_thread()
@@ -1869,13 +1863,29 @@ impl v09730_10_04_09_1309_omaha_delta {
                                 )
                             );
 
-                            // let mut map_variant_json: c_map_variant = serde_json::from_str(&json).unwrap();
-                            //
-                            // let mut map_variant_blf_file = map_variant::create(map_variant_json);
-                            // map_variant_blf_file.write_file(&map_variant_blf_path).unwrap();
+                            let mut map_variant_json: c_map_variant = serde_json::from_str(&json).unwrap();
+
+                            // Check the scenario crc
+                            // TODO: Map and pallette crcs.
+                            // let expected_scenario_crc = scenario_crc32s.get(&map_variant_json.m_map_id);
+                            // if expected_scenario_crc.is_none() {
+                            //     let mut task = task.lock().await;
+                            //     task.add_error(format!("Map Variant {map_variant_file_name} could not be validated due to missing RSA signature!"))
+                            // }
+                            // else {
+                            //     let expected_scenario_crc = expected_scenario_crc.unwrap();
+                            //     if expected_scenario_crc != &map_variant_json.m_original_map_rsa_signature_hash {
+                            //         let mut task = task.lock().await;
+                            //         task.add_error(format!("Map Variant \"{map_variant_file_name}\" has a bad checksum and may not load properly! (got {:08X}, expected {:08X})", &map_variant_json.m_original_map_rsa_signature_hash, expected_scenario_crc));
+                            //         map_variant_json.m_original_map_rsa_signature_hash = *expected_scenario_crc;
+                            //     }
+                            // }
+
                             BlfFileBuilder::new()
                                 .add_chunk(s_blf_chunk_start_of_file::default())
-                                .add_chunk(json)
+                                .add_chunk(s_blf_chunk_map_variant {
+                                    map_variant: map_variant_json
+                                })
                                 .add_chunk(s_blf_chunk_end_of_file::default())
                                 .write_file(&map_variant_blf_path).unwrap();
 
@@ -2167,10 +2177,12 @@ impl v09730_10_04_09_1309_omaha_delta {
         hoppers_blfs_path: &String,
     ) -> Result<(), Box<dyn Error>> {
         let mut task = console_task::start("Building Network Configuration");
-        let netc =
-            find_chunk_in_file::<s_blf_chunk_network_configuration>(
+
+        let netc = s_blf_chunk_network_configuration {
+            config: read_json_file(
                 title_storage_config::network_configuration_file_path(hoppers_config_path)
-            )?;
+            )?,
+        };
 
         BlfFileBuilder::new()
             .add_chunk(s_blf_chunk_start_of_file::new("reach net config"))

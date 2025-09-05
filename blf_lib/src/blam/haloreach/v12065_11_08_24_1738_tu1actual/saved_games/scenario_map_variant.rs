@@ -1,3 +1,4 @@
+use std::cmp::min;
 use binrw::{BinRead, BinWrite};
 use num_derive::{FromPrimitive, ToPrimitive};
 use serde::{Deserialize, Serialize};
@@ -9,13 +10,13 @@ use crate::blam::common::math::real_math::real_vector3d;
 use crate::blam::common::simulation::simulation_encoding::{simulation_read_quantized_position, simulation_write_position, simulation_write_quantized_position};
 use serde_hex::{SerHex,StrictCap};
 use blf_lib::blam::common::simulation::simulation_encoding::simulation_read_position;
-use blf_lib::blam::haloreach::release::game::string_table;
-use blf_lib::blam::haloreach::release::memory::bitstream_writer::c_bitstream_writer_extensions;
-use blf_lib::blam::haloreach::release::saved_games::saved_game_files::s_content_item_metadata;
+use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::string_table;
+use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::memory::bitstream_writer::c_bitstream_writer_extensions;
+use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::saved_games::saved_game_files::s_content_item_metadata;
 use blf_lib_derive::TestSize;
 use blf_lib_derivable::result::BLFLibResult;
-use crate::blam::haloreach::release::game::string_table::c_single_language_string_table;
-use crate::blam::haloreach::release::memory::bitstream_reader::c_bitstream_reader_extensions;
+use crate::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::string_table::c_single_language_string_table;
+use crate::blam::haloreach::v12065_11_08_24_1738_tu1actual::memory::bitstream_reader::c_bitstream_reader_extensions;
 use crate::types::bool::Bool;
 use crate::types::numbers::Float32;
 
@@ -62,7 +63,6 @@ impl c_map_variant {
         self.m_string_table.encode(bitstream)?;
 
         for i in 0..k_maximum_variant_objects {
-            println!("writing variant object {} @ {}:{}", i, bitstream.get_current_offset().0, bitstream.get_current_offset().1);
             self.m_variant_objects[i].encode(bitstream, &self.m_world_bounds)?;
         }
 
@@ -88,11 +88,10 @@ impl c_map_variant {
         self.m_string_table.decode(bitstream)?;
 
         for i in 0..k_maximum_variant_objects {
-            println!("reading variant object {} @ {}:{}", i, bitstream.get_current_offset().0, bitstream.get_current_offset().1);
             &mut self.m_variant_objects.get_mut()[i].decode(bitstream, &self.m_world_bounds)?;
         }
 
-        for i in 0..k_maximum_variant_quotas {
+        for i in 0..min(k_maximum_variant_quotas, self.m_number_of_placeable_object_quotas as usize) {
             &mut self.m_quotas.get_mut()[i].decode(bitstream)?;
         }
 
@@ -334,7 +333,6 @@ impl s_variant_object_datum {
             self.flags = bitstream.read_integer(2)?;
             self.variant_quota_index = bitstream.read_index::<k_maximum_variant_quotas>(8)?;
             self.variant_index = bitstream.read_index::<32>(5)?;
-            println!("simulation_read_position @ {}:{}", bitstream.get_current_offset().0, bitstream.get_current_offset().1);
             simulation_read_position(bitstream, &mut self.position, 21, false, true, &world_bounds)?;
             bitstream.read_axes::<14, 20>(&mut self.forward, &mut self.up)?;
             self.spawn_relative_to = bitstream.read_integer::<i32>(10)? - 1;
@@ -354,7 +352,6 @@ impl s_variant_object_datum {
         bitstream.write_integer(self.flags, 2)?;
         bitstream.write_index::<k_maximum_variant_quotas>(self.variant_quota_index, 8)?;
         bitstream.write_index::<32>(self.variant_index, 5)?;
-        println!("simulation_write_position @ {}:{}", bitstream.get_current_offset().0, bitstream.get_current_offset().1);
         simulation_write_position(bitstream, &self.position, 21, world_bounds)?;
         bitstream.write_axes::<14, 20>(&self.forward, &self.up)?;
         bitstream.write_integer((self.spawn_relative_to + 1) as u32, 10)?;

@@ -21,7 +21,7 @@ pub use haloreach::v12065_11_08_24_1738_tu1actual::s_blf_chunk_service_record::*
 pub use haloreach::v09730_10_04_09_1309_omaha_delta::s_blf_chunk_game_set::*;
 pub use haloreach::v12065_11_08_24_1738_tu1actual::s_blf_chunk_nag_message::*;
 pub use haloreach::v09449_10_03_25_1545_omaha_beta::s_blf_chunk_network_configuration::*;
-pub use haloreach::v09449_10_03_25_1545_omaha_beta::s_blf_chunk_map_variant::*;
+pub use crate::blf::chunks::haloreach::v09730_10_04_09_1309_omaha_delta::s_blf_chunk_map_variant::*;
 pub use haloreach::v12065_11_08_24_1738_tu1actual::s_blf_chunk_content_header::*;
 pub use haloreach::v09449_10_03_25_1545_omaha_beta::s_blf_chunk_matchmaking_game_variant::*;
 pub use haloreach::v12065_11_08_24_1738_tu1actual::s_blf_chunk_dlc_map_manifest::*;

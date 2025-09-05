@@ -2,14 +2,14 @@ use std::io::{Read, Seek, Write};
 use binrw::{binrw, BinRead, BinResult, BinWrite, BinWriterExt, Endian};
 use serde::{Deserialize, Serialize};
 use blf_lib::blam::common::memory::secure_signature::s_network_http_request_hash;
-use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::saved_games::scenario_map_variant::c_map_variant;
+use blf_lib::blam::haloreach::v09730_10_04_09_1309_omaha_delta::saved_games::scenario_map_variant::c_map_variant;
+use blf_lib::blf::get_buffer_hash;
 use blf_lib::io::bitstream::{c_bitstream_reader, c_bitstream_writer, e_bitstream_byte_order};
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
 use blf_lib_derive::BlfChunk;
-use crate::blf::get_buffer_hash;
 
 #[derive(BlfChunk,PartialEq,Debug,Clone,Serialize,Deserialize)]
-#[Header("mvar", 31.1)]
+#[Header("mvar", 19.1)]
 #[derive(Default)]
 pub struct s_blf_chunk_map_variant
 {
@@ -17,17 +17,17 @@ pub struct s_blf_chunk_map_variant
     pub map_variant: c_map_variant,
 }
 
+
 impl BlfChunkHooks for s_blf_chunk_map_variant {}
+
 
 impl BinRead for s_blf_chunk_map_variant {
     type Args<'a> = ();
 
     fn read_options<R: Read + Seek>(reader: &mut R, endian: Endian, args: Self::Args<'_>) -> BinResult<Self> {
         let mut packed_map_variant = Self::default();
-        s_network_http_request_hash::read_options(reader, endian, ())?;
-        let packed_variant_length = u32::read_options(reader, Endian::Big, ())? as usize;
 
-        let mut buffer = Vec::<u8>::with_capacity(packed_variant_length);
+        let mut buffer = Vec::<u8>::new();
         reader.read_to_end(&mut buffer)?;
 
         let mut bitstream = c_bitstream_reader::new(buffer.as_slice(), e_bitstream_byte_order::_bitstream_byte_order_big_endian);
@@ -50,10 +50,7 @@ impl BinWrite for s_blf_chunk_map_variant {
 
         bitstream.finish_writing();
         let packed_data = bitstream.get_data()?;
-        let packed_data_length = packed_data.len() as u32;
 
-        writer.write_ne(&get_buffer_hash(&packed_data)?)?;
-        packed_data_length.write_options(writer, Endian::Big, ())?;
         writer.write_ne(&bitstream.get_data()?)
     }
 }

@@ -132,11 +132,11 @@ impl s_content_item_metadata {
         self.megalo_category_index = bitstream.read_signed_integer(8)?;
         self.creation_time = bitstream.read_qword(64)?;
         self.creator_xuid = bitstream.read_qword(64)?;
-        self.creator_name = StaticString::from_string(bitstream.read_string_utf8(16)?)?;
+        self.creator_name = StaticString::from_string(bitstream.read_string_utf8(16).unwrap_or_default())?;
         self.creator_xuid_is_online = bitstream.read_bool()?;
         self.modification_time = bitstream.read_qword(64)?;
         self.modifier_xuid = bitstream.read_qword(64)?;
-        self.modifier_name = StaticString::from_string(bitstream.read_string_utf8(16)?)?;
+        self.modifier_name = StaticString::from_string(bitstream.read_string_utf8(16).unwrap_or_default())?;
         self.modifier_xuid_is_online = bitstream.read_bool()?;
         self.name = StaticWcharString::from_string(bitstream.read_string_whar(128)?)?;
         self.description = StaticWcharString::from_string(bitstream.read_string_whar(128)?)?;
