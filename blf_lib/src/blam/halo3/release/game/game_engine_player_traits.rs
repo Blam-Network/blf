@@ -19,6 +19,7 @@ pub struct c_player_trait_weapons {
 }
 
 #[derive(BinRead, BinWrite, Serialize, Deserialize, Default, PartialEq, Debug, Copy, Clone, FromPrimitive, ToPrimitive)]
+#[cfg_attr(feature = "napi", napi(namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 #[brw(big, repr = u32)]
 pub enum e_damage_resistance_percentage_setting {
     #[default]
@@ -39,6 +40,7 @@ pub enum e_damage_resistance_percentage_setting {
 }
 
 #[derive(BinRead, BinWrite, Serialize, Deserialize, Default, PartialEq, Debug, Copy, Clone, FromPrimitive, ToPrimitive)]
+#[cfg_attr(feature = "napi", napi(namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 #[brw(big, repr = u32)]
 pub enum e_shield_recharge_rate_percentage_setting {
     #[default]
@@ -56,6 +58,7 @@ pub enum e_shield_recharge_rate_percentage_setting {
 }
 
 #[derive(BinRead, BinWrite, Serialize, Deserialize, Default, PartialEq, Debug, Copy, Clone, FromPrimitive, ToPrimitive)]
+#[cfg_attr(feature = "napi", napi(namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 #[brw(big, repr = u32)]
 pub enum e_vampirism_percentage_setting {
     #[default]
@@ -69,6 +72,7 @@ pub enum e_vampirism_percentage_setting {
 }
 
 #[derive(BinRead, BinWrite, Serialize, Deserialize, Default, PartialEq, Debug, Copy, Clone, FromPrimitive, ToPrimitive)]
+#[cfg_attr(feature = "napi", napi(namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 #[brw(big, repr = u32)]
 pub enum e_shield_multiplier_setting {
     #[default]
@@ -82,6 +86,7 @@ pub enum e_shield_multiplier_setting {
 }
 
 #[derive(BinRead, BinWrite, Serialize, Deserialize, Default, PartialEq, Debug, Copy, Clone, FromPrimitive, ToPrimitive)]
+#[cfg_attr(feature = "napi", napi(namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 #[brw(big, repr = u32)]
 pub enum e_damage_modifier_percentage_setting {
     #[default]
@@ -102,6 +107,7 @@ pub enum e_damage_modifier_percentage_setting {
 }
 
 #[derive(BinRead, BinWrite, Serialize, Deserialize, Default, PartialEq, Debug, Copy, Clone, FromPrimitive, ToPrimitive)]
+#[cfg_attr(feature = "napi", napi(namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 #[brw(big, repr = u32)]
 pub enum e_headshot_immunity_setting {
     #[default]

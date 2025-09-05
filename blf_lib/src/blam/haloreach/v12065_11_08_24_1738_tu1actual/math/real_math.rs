@@ -9,8 +9,8 @@ pub fn dequantize_unit_vector3d(value: i32, vector: &mut real_vector3d, bit_coun
     let x = (value % encoding_constants.actual_per_axis_max_count as i32) as f32 / encoding_constants.quantized_value_count as f32;
     let y = (value % encoding_constants.actual_per_axis_max_count as i32) as f32 % encoding_constants.quantized_value_count as f32;
 
-    let x = dequantize_real((value >> 3) as u8 as i32, -1.0, 1.0, bit_count, true, false);
-    let y = dequantize_real((value >> 11) as u8 as i32, -1.0, 1.0, bit_count, true, false);
+    let x = dequantize_real(x as i32, -1.0, 1.0, bit_count, true, false);
+    let y = dequantize_real(y as i32, -1.0, 1.0, bit_count, true, false);
 
     match face {
         0 => {
