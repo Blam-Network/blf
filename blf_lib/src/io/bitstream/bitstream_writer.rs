@@ -3,8 +3,9 @@ use std::cmp::min;
 use std::error::Error;
 use std::io::Cursor;
 use binrw::BinWrite;
+use num_traits::{FromPrimitive, ToPrimitive};
 use widestring::U16CString;
-use blf_lib::assert_ok;
+use blf_lib::{assert_ok, OPTION_TO_RESULT};
 use blf_lib::blam::common::math::real_math::{assert_valid_real_normal3d, cross_product3d, dot_product3d, k_real_epsilon, global_forward3d, global_left3d, global_up3d, normalize3d, valid_real_vector3d_axes3, arctangent, quantize_normalized_vector3d, k_pi};
 use blf_lib::io::bitstream::e_bitstream_byte_fill_direction;
 use blf_lib::io::bitstream::e_bitstream_byte_fill_direction::{_bitstream_byte_fill_direction_lsb_to_msb, _bitstream_byte_fill_direction_msb_to_lsb};
@@ -83,7 +84,17 @@ impl c_bitstream_writer {
         self.m_byte_order
     }
 
+    pub fn get_current_offset(&self) -> (usize, usize) {
+        (self.current_stream_byte_position, self.current_stream_bit_position)
+    }
+
+
     // WRITES
+
+    pub fn write_enum<T: ToPrimitive + std::fmt::Debug>(&mut self, value: T, size_in_bits: usize) -> BLFLibResult {
+        let value = OPTION_TO_RESULT!(value.to_u32(), format!("Failed to convert value {value:?} to an integer."))?;
+        self.write_integer(value, size_in_bits)
+    }
 
     pub fn write_integer(&mut self, value: impl Into<u32>, size_in_bits: usize) -> BLFLibResult {
         let value = value.into();
@@ -186,7 +197,7 @@ impl c_bitstream_writer {
             return Err(format!("Tried to write {size_in_bits} bits but only {} were provided!", (data.len() * 8)).into())
         }
 
-        // println!("memory:bitstream:bitstream_writer write_bits_internal: writing {size_in_bits} bits");
+        // println!("memory:bitstream:bitstream_writer write_bits_internal: writing {size_in_bits}");
 
         let surplus_bytes = data.len() - (size_in_bits as f32 / 8f32).ceil() as usize;
         // This isn't the total surplus bit count but instead, bits in addition to the surplus bytes.
@@ -313,15 +324,35 @@ impl c_bitstream_writer {
         Ok(())
     }
 
+    pub fn write_point3d_efficient(
+        &mut self,
+        point: &int32_point3d,
+        axis_encoding_size_in_bits: &int32_point3d,
+    ) -> BLFLibResult {
+        assert_ok!(axis_encoding_size_in_bits.x > 0 && axis_encoding_size_in_bits.x <= 32);
+        assert_ok!(axis_encoding_size_in_bits.y > 0 && axis_encoding_size_in_bits.y <= 32);
+        assert_ok!(axis_encoding_size_in_bits.z > 0 && axis_encoding_size_in_bits.z <= 32);
+
+        assert_ok!((point.x as u32) < (1u32 << axis_encoding_size_in_bits.x));
+        assert_ok!((point.y as u32) < (1u32 << axis_encoding_size_in_bits.y));
+        assert_ok!((point.z as u32) < (1u32 << axis_encoding_size_in_bits.z));
+
+        self.write_integer(point.x as u32, axis_encoding_size_in_bits.x as usize)?;
+        self.write_integer(point.y as u32, axis_encoding_size_in_bits.y as usize)?;
+        self.write_integer(point.z as u32, axis_encoding_size_in_bits.z as usize)?;
+
+        Ok(())
+    }
+
     pub fn write_index<const max_value: usize>(&mut self, value: impl Into<i32>, bit_size: usize) -> BLFLibResult {
         let value = value.into();
 
         assert_ok!(value <= max_value as i32);
 
         if value == -1 {
-            self.write_bool(false)?;
-        } else {
             self.write_bool(true)?;
+        } else {
+            self.write_bool(false)?;
             self.write_integer(value as u32, bit_size)?;
         }
 

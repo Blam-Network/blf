@@ -2,14 +2,15 @@ use binrw::{BinRead, BinWrite};
 use num_derive::{FromPrimitive, ToPrimitive};
 use serde::{Deserialize, Serialize};
 use blf_lib::io::bitstream::{c_bitstream_reader, c_bitstream_writer};
-use blf_lib::{assert_ok, TEST_BIT};
+use blf_lib::{assert_ok, OPTION_TO_RESULT, TEST_BIT};
 use crate::blam::common::math::real_math::{real_point3d, real_rectangle3d};
 use blf_lib::types::array::StaticArray;
 use crate::blam::common::math::real_math::real_vector3d;
-use crate::blam::common::simulation::simulation_encoding::{simulation_read_quantized_position, simulation_write_quantized_position};
+use crate::blam::common::simulation::simulation_encoding::{simulation_read_quantized_position, simulation_write_position, simulation_write_quantized_position};
 use serde_hex::{SerHex,StrictCap};
 use blf_lib::blam::common::simulation::simulation_encoding::simulation_read_position;
 use blf_lib::blam::haloreach::release::game::string_table;
+use blf_lib::blam::haloreach::release::memory::bitstream_writer::c_bitstream_writer_extensions;
 use blf_lib::blam::haloreach::release::saved_games::saved_game_files::s_content_item_metadata;
 use blf_lib_derive::TestSize;
 use blf_lib_derivable::result::BLFLibResult;
@@ -19,7 +20,7 @@ use crate::types::bool::Bool;
 use crate::types::numbers::Float32;
 
 pub const k_maximum_variant_objects: usize = 651;
-pub const k_maximum_variant_quotas: usize = 651;
+pub const k_maximum_variant_quotas: usize = 256;
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 // This structure is not a direct representation of Halo: Reach's memory
@@ -27,8 +28,6 @@ pub const k_maximum_variant_quotas: usize = 651;
 pub struct c_map_variant {
     pub m_metadata: s_content_item_metadata,
     pub m_map_variant_version: u16,
-    pub m_number_of_scenario_objects: u16,
-    pub m_number_of_variant_objects: u16,
     pub m_number_of_placeable_object_quotas: u16,
     pub m_map_id: u32,
     pub m_world_bounds: real_rectangle3d,
@@ -63,99 +62,15 @@ impl c_map_variant {
         self.m_string_table.encode(bitstream)?;
 
         for i in 0..k_maximum_variant_objects {
-            self.m_variant_objects[i].encode(bitstream)?;
+            println!("writing variant object {} @ {}:{}", i, bitstream.get_current_offset().0, bitstream.get_current_offset().1);
+            self.m_variant_objects[i].encode(bitstream, &self.m_world_bounds)?;
+        }
+
+        for i in 0..k_maximum_variant_quotas {
+            self.m_quotas[i].encode(bitstream)?;
         }
 
         Ok(())
-        // bitstream.write_integer(self.m_map_variant_version as u32, 8)?;
-        // bitstream.write_integer(self.m_original_map_rsa_signature_hash, 32)?;
-        // bitstream.write_integer(self.m_number_of_scenario_objects as u32, 10)?;
-        // bitstream.write_integer(self.m_number_of_variant_objects as u32, 10)?;
-        // bitstream.write_integer(self.m_number_of_placeable_object_quotas as u32, 9)?;
-        // bitstream.write_integer(self.m_map_id, 32)?;
-        // bitstream.write_bool(self.m_built_in)?;
-        // bitstream.write_raw(self.m_world_bounds, 0xC0)?;
-        // bitstream.write_integer(self.m_game_engine_subtype, 4)?;
-        // bitstream.write_float(self.m_maximum_budget, 32)?;
-        // bitstream.write_float(self.m_spent_budget, 32)?;
-        //
-        // for i in 0..self.m_number_of_variant_objects as usize {
-        //     let variant_object = self.m_variant_objects[i];
-        //
-        //     if variant_object.flags & 0x3FF == 0 // 0x3FF is 10 bits, there's 10 flags. If none are set...
-        //     {
-        //         bitstream.write_bool(false)?; // variant_object_exists
-        //     }
-        //     else
-        //     {
-        //         bitstream.write_bool(true)?; // variant_object_exists
-        //         bitstream.write_integer(variant_object.flags as u32, 16)?;
-        //         bitstream.write_integer(variant_object.variant_quota_index as u32, 32)?;
-        //
-        //         if TEST_BIT!(variant_object.flags, 8) // spawns relative
-        //         {
-        //             bitstream.write_bool(true)?; // parent-object-exists
-        //             bitstream.write_raw(variant_object.parent_object_identifier, 64)?;
-        //         }
-        //         else
-        //         {
-        //             bitstream.write_bool(false)?; // parent-object-exists
-        //         }
-        //
-        //         if !TEST_BIT!(variant_object.flags, 1) && i < self.m_number_of_scenario_objects as usize  //edited
-        //         {
-        //             bitstream.write_bool(false)?;
-        //         }
-        //         else
-        //         {
-        //             bitstream.write_bool(true)?;
-        //             simulation_write_quantized_position(bitstream, &variant_object.position, 16, false, &self.m_world_bounds)?;
-        //             bitstream.write_axes(&variant_object.forward, &variant_object.up)?;
-        //             bitstream.write_integer(variant_object.multiplayer_game_object_properties.object_type as u32, 8)?;
-        //             bitstream.write_integer(variant_object.multiplayer_game_object_properties.symmetry_placement_flags as u32, 8)?;
-        //             bitstream.write_integer(variant_object.multiplayer_game_object_properties.game_engine_flags as u32, 16)?;
-        //             bitstream.write_integer(variant_object.multiplayer_game_object_properties.shared_storage as u32, 8)?;
-        //             bitstream.write_integer(variant_object.multiplayer_game_object_properties.spawn_time as u32, 8)?;
-        //             bitstream.write_integer(variant_object.multiplayer_game_object_properties.owner_team as u32, 8)?;
-        //             bitstream.write_integer(variant_object.multiplayer_game_object_properties.boundary_shape as u32, 8)?;
-        //
-        //             match variant_object.multiplayer_game_object_properties.boundary_shape {
-        //                 1 => { // sphere
-        //                     bitstream.write_quantized_real(variant_object.multiplayer_game_object_properties.boundary_size, 0.0, 60.0, 16, false, false)?;
-        //                     bitstream.write_quantized_real(variant_object.multiplayer_game_object_properties.boundary_negative_height, 0.0, 60.0, 16, false, false)?;
-        //                 }
-        //                 2 => { // cylinder
-        //                     bitstream.write_quantized_real(variant_object.multiplayer_game_object_properties.boundary_size, 0.0, 60.0, 16, false, false)?;
-        //                     bitstream.write_quantized_real(variant_object.multiplayer_game_object_properties.boundary_box_length, 0.0, 60.0, 16, false, false)?;
-        //                     bitstream.write_quantized_real(variant_object.multiplayer_game_object_properties.boundary_positive_height, 0.0, 60.0, 16, false, false)?;
-        //                 }
-        //                 3 => { // box
-        //                     bitstream.write_quantized_real(variant_object.multiplayer_game_object_properties.boundary_size, 0.0, 60.0, 16, false, false)?;
-        //                     bitstream.write_quantized_real(variant_object.multiplayer_game_object_properties.boundary_box_length, 0.0, 60.0, 16, false, false)?;
-        //                     bitstream.write_quantized_real(variant_object.multiplayer_game_object_properties.boundary_positive_height, 0.0, 60.0, 16, false, false)?;
-        //                     bitstream.write_quantized_real(variant_object.multiplayer_game_object_properties.boundary_negative_height, 0.0, 60.0, 16, false, false)?;
-        //                 }
-        //                 _ => { }
-        //             }
-        //         }
-        //     }
-        // }
-        //
-        // for i in 0..k_object_type_count {
-        //     bitstream.write_integer((self.m_object_type_start_index[i] + 1) as u32, 9)?;
-        // }
-        //
-        // for i in 0..self.m_number_of_placeable_object_quotas as usize {
-        //     let object_quota = self.m_quotas[i];
-        //     bitstream.write_integer(object_quota.object_definition_index, 32)?;
-        //     bitstream.write_integer(object_quota.minimum_count as u32, 8)?;
-        //     bitstream.write_integer(object_quota.maximum_count as u32, 8)?;
-        //     bitstream.write_integer(object_quota.placed_on_map as u32, 8)?;
-        //     bitstream.write_integer(object_quota.maximum_allowed as u32, 8)?;
-        //     bitstream.write_float(object_quota.price_per_item, 32)?;
-        // }
-        //
-        // Ok(())
     }
 
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
@@ -173,6 +88,7 @@ impl c_map_variant {
         self.m_string_table.decode(bitstream)?;
 
         for i in 0..k_maximum_variant_objects {
+            println!("reading variant object {} @ {}:{}", i, bitstream.get_current_offset().0, bitstream.get_current_offset().1);
             &mut self.m_variant_objects.get_mut()[i].decode(bitstream, &self.m_world_bounds)?;
         }
 
@@ -200,6 +116,13 @@ impl s_variant_quota {
         self.minimum_count = bitstream.read_integer(8)?;
         self.maximum_count = bitstream.read_integer(8)?;
         self.placed_on_map = bitstream.read_integer(8)?;
+        Ok(())
+    }
+
+    pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
+        bitstream.write_integer(self.minimum_count, 8)?;
+        bitstream.write_integer(self.maximum_count, 8)?;
+        bitstream.write_integer(self.placed_on_map, 8)?;
         Ok(())
     }
 }
@@ -248,6 +171,30 @@ impl s_multiplayer_object_boundary {
         };
 
         Ok(Some(boundary))
+    }
+
+    pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
+        bitstream.write_enum(self.shape, 2)?;
+
+        match self.shape {
+            e_boundary_shape::unused => {}
+            e_boundary_shape::sphere => {
+                bitstream.write_quantized_real(self.size, 0f32, 200f32, 11, false, true)?;
+            }
+            e_boundary_shape::cylinder => {
+                bitstream.write_quantized_real(self.size, 0f32, 200f32, 11, false, true)?;
+                bitstream.write_quantized_real(self.positive_height, 0f32, 200f32, 11, false, true)?;
+                bitstream.write_quantized_real(self.negative_height, 0f32, 200f32, 11, false, true)?;
+            }
+            e_boundary_shape::r#box => {
+                bitstream.write_quantized_real(self.size, 0f32, 200f32, 11, false, true)?;
+                bitstream.write_quantized_real(self.box_length, 0f32, 200f32, 11, false, true)?;
+                bitstream.write_quantized_real(self.positive_height, 0f32, 200f32, 11, false, true)?;
+                bitstream.write_quantized_real(self.negative_height, 0f32, 200f32, 11, false, true)?;
+            }
+        }
+
+        Ok(())
     }
 }
 
@@ -322,6 +269,48 @@ impl s_variant_multiplayer_object_properties_definition {
 
         Ok(())
     }
+
+    pub fn encode(&self, mut bitstream: &mut c_bitstream_writer) -> BLFLibResult {
+        self.boundary.unwrap_or_default().encode(&mut bitstream)?;
+        bitstream.write_integer(self.user_data, 8)?;
+        bitstream.write_integer(self.spawn_time, 8)?;
+        bitstream.write_integer(self.cached_type, 5)?;
+        bitstream.write_index::<256>(self.label_index, 8)?;
+        bitstream.write_integer(self.placement_flags, 8)?;
+        bitstream.write_integer((self.team + 1) as u32, 4)?;
+        bitstream.write_index::<8>(self.primary_change_color_index, 3)?;
+
+        match self.cached_type {
+            1 => {
+                let weapon_data = OPTION_TO_RESULT!(
+                    self.weapon_data,
+                    "Tried to encode a weapon with no weapon data provided."
+                )?;
+
+                bitstream.write_integer(weapon_data.spare_clips, 8)?;
+            }
+            12 | 13 | 14 => {
+                let teleporter_data = OPTION_TO_RESULT!(
+                    self.teleporter_data,
+                    "Tried to encode a teleporter with no teleporter data provided."
+                )?;
+
+                bitstream.write_integer(teleporter_data.channel, 5)?;
+                bitstream.write_integer(teleporter_data.passability, 5)?;
+            }
+            19 => {
+                let location_data = OPTION_TO_RESULT!(
+                    self.location_data,
+                    "Tried to encode a location name with no name provided."
+                )?;
+
+                bitstream.write_index::<255>(location_data.location_name_index, 8)?;
+            }
+            _ => {}
+        }
+
+        Ok(())
+    }
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Copy, Serialize, Deserialize)]
@@ -343,10 +332,11 @@ impl s_variant_object_datum {
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader, world_bounds: &real_rectangle3d) -> BLFLibResult {
         if bitstream.read_bool()? { // exists
             self.flags = bitstream.read_integer(2)?;
-            self.variant_quota_index = bitstream.read_index::<256>(8)?;
+            self.variant_quota_index = bitstream.read_index::<k_maximum_variant_quotas>(8)?;
             self.variant_index = bitstream.read_index::<32>(5)?;
-            simulation_read_position(bitstream, &mut self.position, 21, &world_bounds)?;
-            bitstream.read_axis::<14, 20>(&mut self.forward, &mut self.up)?;
+            println!("simulation_read_position @ {}:{}", bitstream.get_current_offset().0, bitstream.get_current_offset().1);
+            simulation_read_position(bitstream, &mut self.position, 21, false, true, &world_bounds)?;
+            bitstream.read_axes::<14, 20>(&mut self.forward, &mut self.up)?;
             self.spawn_relative_to = bitstream.read_integer::<i32>(10)? - 1;
             self.multiplayer_game_object_properties.decode(bitstream)?;
         }
@@ -354,19 +344,21 @@ impl s_variant_object_datum {
         Ok(())
     }
 
-    pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
+    pub fn encode(&self, mut bitstream: &mut c_bitstream_writer, world_bounds: &real_rectangle3d) -> BLFLibResult {
         if self.flags & 0x3FF == 0 {
             bitstream.write_bool(false)?;
             return Ok(());
         }
 
+        bitstream.write_bool(true)?;
         bitstream.write_integer(self.flags, 2)?;
-        bitstream.write_index::<651>(self.variant_quota_index, 8)?;
+        bitstream.write_index::<k_maximum_variant_quotas>(self.variant_quota_index, 8)?;
         bitstream.write_index::<32>(self.variant_index, 5)?;
-        // simulation_write_position
-        // bitstream.write_axis
+        println!("simulation_write_position @ {}:{}", bitstream.get_current_offset().0, bitstream.get_current_offset().1);
+        simulation_write_position(bitstream, &self.position, 21, world_bounds)?;
+        bitstream.write_axes::<14, 20>(&self.forward, &self.up)?;
         bitstream.write_integer((self.spawn_relative_to + 1) as u32, 10)?;
-        // self.multiplayer_game_object_properties.encode(bitstream)?;
+        self.multiplayer_game_object_properties.encode(bitstream)?;
 
         Ok(())
     }

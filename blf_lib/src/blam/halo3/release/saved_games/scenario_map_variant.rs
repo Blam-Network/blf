@@ -171,7 +171,7 @@ impl c_map_variant {
             }
 
             simulation_read_quantized_position(bitstream, &mut variant_object.position, 16, &self.m_world_bounds)?;
-            bitstream.read_axis(&mut variant_object.forward, &mut variant_object.up)?;
+            bitstream.read_axes(&mut variant_object.forward, &mut variant_object.up)?;
             variant_object.multiplayer_game_object_properties.object_type = bitstream.read_signed_integer(8)?;
             variant_object.multiplayer_game_object_properties.symmetry_placement_flags = bitstream.read_integer(8)?;
             variant_object.multiplayer_game_object_properties.game_engine_flags = bitstream.read_integer(16)?;

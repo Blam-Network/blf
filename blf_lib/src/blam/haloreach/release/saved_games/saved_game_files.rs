@@ -128,7 +128,7 @@ impl s_content_item_metadata {
         self.activity = bitstream.read_integer::<i8>(3)? - 1;
         self.game_mode = bitstream.read_integer(3)?;
         self.game_engine_type = bitstream.read_integer(3)?;
-        self.map_id = bitstream.read_integer(32)?;
+        self.map_id = bitstream.read_signed_integer(32)?;
         self.megalo_category_index = bitstream.read_signed_integer(8)?;
         self.creation_time = bitstream.read_qword(64)?;
         self.creator_xuid = bitstream.read_qword(64)?;

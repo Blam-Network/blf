@@ -60,6 +60,12 @@ pub struct real_rectangle3d {
     pub z: real_bounds,
 }
 
+pub fn point_in_rectangle3d(point: &real_point3d, rect: &real_rectangle3d) -> bool {
+    (rect.x.lower <= point.x && point.x <= rect.x.upper) &&
+        (rect.y.lower <= point.y && point.y <= rect.y.upper) &&
+        (rect.z.lower <= point.z && point.z <= rect.z.upper)
+}
+
 #[cfg_attr(feature = "napi", napi(object))]
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite, Copy)]
 #[wasm_bindgen(getter_with_clone)]
@@ -117,7 +123,9 @@ pub fn dequantize_real_point3d_per_axis(
     quantized: &int32_point3d,
     bounds: &real_rectangle3d,
     bits: &int32_point3d,
-    position: &mut real_point3d
+    position: &mut real_point3d,
+    exact_midpoints: bool,
+    exact_endpoints: bool,
 ) {
     assert!(bits.x <= 32 && bits.y <= 32 && bits.z <= 32);
 
@@ -126,8 +134,8 @@ pub fn dequantize_real_point3d_per_axis(
         bounds.x.lower,
         bounds.x.upper,
         bits.x as usize,
-        false,
-        false,
+        exact_midpoints,
+        exact_endpoints,
     ));
 
     position.y = Float32::from(dequantize_real(
@@ -135,8 +143,8 @@ pub fn dequantize_real_point3d_per_axis(
         bounds.y.lower,
         bounds.y.upper,
         bits.y as usize,
-        false,
-        false,
+        exact_midpoints,
+        exact_endpoints,
     ));
 
     position.z = Float32::from(dequantize_real(
@@ -144,9 +152,20 @@ pub fn dequantize_real_point3d_per_axis(
         bounds.z.lower,
         bounds.z.upper,
         bits.z as usize,
-        false,
-        false,
+        exact_midpoints,
+        exact_endpoints,
     ));
+}
+
+pub fn quantize_real_point3d_per_axis(
+    position: &real_point3d,
+    bounds: &real_rectangle3d,
+    bits: &int32_point3d,
+    quantized: &mut int32_point3d,
+) {
+    quantized.x = quantize_real(position.x, bounds.x.lower, bounds.x.upper, bits.x as usize, false, false);
+    quantized.y = quantize_real(position.y, bounds.y.lower, bounds.y.upper, bits.y as usize, false, false);
+    quantized.z = quantize_real(position.z, bounds.z.lower, bounds.z.upper, bits.z as usize, false, false);
 }
 
 

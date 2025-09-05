@@ -26,7 +26,7 @@ impl BinRead for s_blf_chunk_map_variant {
     fn read_options<R: Read + Seek>(reader: &mut R, endian: Endian, args: Self::Args<'_>) -> BinResult<Self> {
         let mut packed_map_variant = Self::default();
         packed_map_variant.hash = s_network_http_request_hash::read_options(reader, endian, ())?;
-        let packed_variant_length = u32::read_options(reader, endian, ())? as usize;
+        let packed_variant_length = u32::read_options(reader, Endian::Big, ())? as usize;
 
         let mut buffer = Vec::<u8>::with_capacity(packed_variant_length);
         reader.read_to_end(&mut buffer)?;
@@ -54,7 +54,7 @@ impl BinWrite for s_blf_chunk_map_variant {
         let packed_data_length = packed_data.len() as u32;
 
         writer.write_ne(&self.hash)?;
-        packed_data_length.write_options(writer, endian, ())?;
+        packed_data_length.write_options(writer, Endian::Big, ())?;
         writer.write_ne(&bitstream.get_data()?)
     }
 }

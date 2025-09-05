@@ -7,7 +7,7 @@ use blf_lib_derivable::result::BLFLibResult;
 pub trait c_bitstream_reader_extensions<'a>  {
     fn bitstream_reader(&mut self) -> &mut c_bitstream_reader<'a>;
 
-    fn read_axis(&mut self, forward: &mut real_vector3d, up: &mut real_vector3d) -> BLFLibResult {
+    fn read_axes(&mut self, forward: &mut real_vector3d, up: &mut real_vector3d) -> BLFLibResult {
         let reader = self.bitstream_reader();
 
         if reader.read_bool()? {

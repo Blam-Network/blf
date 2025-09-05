@@ -1,9 +1,9 @@
 use std::io::{Cursor, Read, Write};
-use binrw::BinRead;
+use binrw::{BinRead, BinWrite};
 use flate2::{Compress, Compression, Decompress};
 use flate2::read::ZlibDecoder;
 use flate2::write::ZlibEncoder;
-use blf_lib_derivable::result::BLFLibResult;
+use blf_lib_derivable::result::{BLFLibError, BLFLibResult};
 use crate::io::bitstream::e_bitstream_byte_order;
 
 // Signature differes from original.
@@ -18,7 +18,12 @@ pub fn runtime_data_decompress(
         cursor,
         Decompress::new(true)
     );
-    decoder.read_to_end(decompressed_buffer)?;
+    decoder.read_to_end(decompressed_buffer)
+        .map_err(|e| BLFLibError::from(
+            format!("runtime_data_decompress: failed to decompress {} - {}",
+                    compressed_buffer_size, e.to_string()
+        ))
+    )?;
 
     Ok(())
 }
@@ -32,16 +37,11 @@ pub fn runtime_data_compress(
     e.write_all(source_buffer)?;
     let mut compressed_data = e.finish()?;
 
-    compressed_buffer.append(&mut match endian {
-        e_bitstream_byte_order::_bitstream_byte_order_big_endian => {
-            u32::to_be_bytes(compressed_data.len() as u32)
-        }
-        e_bitstream_byte_order::_bitstream_byte_order_little_endian => {
-            u32::to_le_bytes(compressed_data.len() as u32)
-        }
-    }.to_vec());
+    let mut writer = Cursor::new(compressed_buffer);
+    let compressed_size = compressed_data.len() as u32 + 4;
 
-    compressed_buffer.append(&mut compressed_data);
+    compressed_size.write_options(&mut writer, endian.into(), ())?;
+    writer.write_all(compressed_data.as_slice())?;
 
     Ok(())
 }

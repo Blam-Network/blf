@@ -116,6 +116,10 @@ impl<'a> c_bitstream_reader<'a> {
         Ok(())
     }
 
+    pub fn get_current_offset(&self) -> (usize, usize) {
+        (self.current_stream_byte_position, self.current_stream_bit_position)
+    }
+
     // READS
 
     pub fn read_raw_data(&mut self, size_in_bits: usize) -> BLFLibResult<Vec<u8>> {
@@ -307,7 +311,7 @@ impl<'a> c_bitstream_reader<'a> {
 
     pub fn read_integer<T>(&mut self, size_in_bits: usize) -> BLFLibResult<T>
         where
-            T: TryFrom<u32> + std::fmt::Display + std::fmt::Debug, <T as TryFrom<u32>>::Error: Display + Debug
+            T: TryFrom<u32> + Display + Debug, <T as TryFrom<u32>>::Error: Display + Debug
     {
         assert_ok!(size_in_bits > 0);
         assert_ok!(size_in_bits <= 32);
@@ -317,17 +321,6 @@ impl<'a> c_bitstream_reader<'a> {
         let bytes_slice = bytes_vec.as_slice();
 
         let mut byte_array = [0u8; 4];
-
-        let foo = T::try_from(match self.m_packed_byte_order {
-            e_bitstream_byte_order::_bitstream_byte_order_little_endian => {
-                byte_array[0..bytes_slice.len()].copy_from_slice(bytes_slice);
-                u32::from_le_bytes(byte_array)
-            }
-            e_bitstream_byte_order::_bitstream_byte_order_big_endian => {
-                byte_array[4 - bytes_slice.len()..4].copy_from_slice(bytes_slice);
-                u32::from_be_bytes(byte_array)
-            }
-        });
 
         Ok(T::try_from(match self.m_packed_byte_order {
             e_bitstream_byte_order::_bitstream_byte_order_little_endian => {
@@ -426,6 +419,18 @@ impl<'a> c_bitstream_reader<'a> {
         point.x = self.read_integer(axis_encoding_size_in_bits)?;
         point.y = self.read_integer(axis_encoding_size_in_bits)?;
         point.z = self.read_integer(axis_encoding_size_in_bits)?;
+
+        Ok(())
+    }
+
+    pub fn read_point3d_efficient(&mut self, point: &mut int32_point3d, axis_encoding_size_in_bits: int32_point3d) -> BLFLibResult {
+        assert_ok!(0 < axis_encoding_size_in_bits.x && axis_encoding_size_in_bits.x <= 32);
+        assert_ok!(0 < axis_encoding_size_in_bits.y && axis_encoding_size_in_bits.y <= 32);
+        assert_ok!(0 < axis_encoding_size_in_bits.z && axis_encoding_size_in_bits.z <= 32);
+
+        point.x = self.read_integer(axis_encoding_size_in_bits.x as usize)?;
+        point.y = self.read_integer(axis_encoding_size_in_bits.y as usize)?;
+        point.z = self.read_integer(axis_encoding_size_in_bits.z as usize)?;
 
         Ok(())
     }
@@ -617,8 +622,8 @@ mod bitstream_reader_tests {
         let mut sut = c_bitstream_reader::new(&test_data, e_bitstream_byte_order::_bitstream_byte_order_big_endian);
         sut.begin_reading();
 
-        assert_eq!(sut.read_integer(3).unwrap(), 0b001);
-        assert_eq!(sut.read_integer(13).unwrap(), 8191);
+        assert_eq!(sut.read_integer::<u32>(3).unwrap(), 0b001);
+        assert_eq!(sut.read_integer::<u32>(13).unwrap(), 8191);
     }
 
     #[test]
@@ -630,8 +635,8 @@ mod bitstream_reader_tests {
         let mut sut = c_bitstream_reader::new(&test_data, e_bitstream_byte_order::_bitstream_byte_order_little_endian);
         sut.begin_reading();
 
-        assert_eq!(sut.read_integer(3).unwrap(), 0b001);
-        assert_eq!(sut.read_integer(13).unwrap(), 8191);
+        assert_eq!(sut.read_integer::<u32>(3).unwrap(), 0b001);
+        assert_eq!(sut.read_integer::<u32>(13).unwrap(), 8191);
     }
 
     #[test]
@@ -643,8 +648,8 @@ mod bitstream_reader_tests {
         let mut sut = c_bitstream_reader::new_with_legacy_settings(&test_data, e_bitstream_byte_order::_bitstream_byte_order_big_endian);
         sut.begin_reading();
 
-        assert_eq!(sut.read_integer(3).unwrap(), 0b001);
-        assert_eq!(sut.read_integer(13).unwrap(), 310);
+        assert_eq!(sut.read_integer::<u32>(3).unwrap(), 0b001);
+        assert_eq!(sut.read_integer::<u32>(13).unwrap(), 310);
     }
 
     #[test]
@@ -656,8 +661,8 @@ mod bitstream_reader_tests {
         let mut sut = c_bitstream_reader::new_with_legacy_settings(&test_data, e_bitstream_byte_order::_bitstream_byte_order_little_endian);
         sut.begin_reading();
 
-        assert_eq!(sut.read_integer(3).unwrap(), 0b001);
-        assert_eq!(sut.read_integer(13).unwrap(), 310);
+        assert_eq!(sut.read_integer::<u32>(3).unwrap(), 0b001);
+        assert_eq!(sut.read_integer::<u32>(13).unwrap(), 310);
     }
 
 
@@ -670,8 +675,8 @@ mod bitstream_reader_tests {
         let mut sut = c_bitstream_reader::new(&test_data, e_bitstream_byte_order::_bitstream_byte_order_big_endian);
         sut.begin_reading();
 
-        assert_eq!(sut.read_integer(3).unwrap(), 0b000);
-        assert_eq!(sut.read_integer(5).unwrap(), 0b11111);
+        assert_eq!(sut.read_integer::<u32>(3).unwrap(), 0b000);
+        assert_eq!(sut.read_integer::<u32>(5).unwrap(), 0b11111);
     }
 
     #[test]
@@ -683,8 +688,8 @@ mod bitstream_reader_tests {
         let mut sut = c_bitstream_reader::new_with_legacy_settings(&test_data, e_bitstream_byte_order::_bitstream_byte_order_big_endian);
         sut.begin_reading();
 
-        assert_eq!(sut.read_integer(6).unwrap(), 20);
-        assert_eq!(sut.read_integer(2).unwrap(), 0b10);
+        assert_eq!(sut.read_integer::<u32>(6).unwrap(), 20);
+        assert_eq!(sut.read_integer::<u32>(2).unwrap(), 0b10);
     }
 
     #[test]
@@ -698,15 +703,15 @@ mod bitstream_reader_tests {
         let mut sut = c_bitstream_reader::new_with_legacy_settings(&test_data, e_bitstream_byte_order::_bitstream_byte_order_big_endian);
         sut.begin_reading();
         // game entries count
-        assert_eq!(sut.read_integer(6).unwrap(), 20);
+        assert_eq!(sut.read_integer::<u32>(6).unwrap(), 20);
         // game entry 1 weight
-        assert_eq!(sut.read_integer(32).unwrap(), 6);
+        assert_eq!(sut.read_integer::<u32>(32).unwrap(), 6);
         // game entry 1 minimum players
-        assert_eq!(sut.read_integer(4).unwrap(), 4);
+        assert_eq!(sut.read_integer::<u32>(4).unwrap(), 4);
         // game entry 1 skip after veto
-        assert_eq!(sut.read_bool().unwrap(), false);
+        assert_eq!(sut.read_bool::<bool>().unwrap(), false);
         // game entry 1 map id
-        assert_eq!(sut.read_integer(32).unwrap(), 310);
+        assert_eq!(sut.read_integer::<u32>(32).unwrap(), 310);
         // game entry 1 game variant (truncated)
         assert_eq!(sut.read_string_utf8(3).unwrap(), "ru\0");
     }
@@ -722,17 +727,17 @@ mod bitstream_reader_tests {
         let mut sut = c_bitstream_reader::new(&test_data, e_bitstream_byte_order::_bitstream_byte_order_big_endian);
         sut.begin_reading();
         // game entries count
-        assert_eq!(sut.read_integer(6).unwrap(), 55);
+        assert_eq!(sut.read_integer::<u32>(6).unwrap(), 55);
         // game entry 1 weight
-        assert_eq!(sut.read_integer(32).unwrap(), 1);
+        assert_eq!(sut.read_integer::<u32>(32).unwrap(), 1);
         // game entry 1 minimum players
-        assert_eq!(sut.read_integer(4).unwrap(), 1);
+        assert_eq!(sut.read_integer::<u32>(4).unwrap(), 1);
         // game entry 1 skip after veto
-        assert_eq!(sut.read_bool().unwrap(), false);
+        assert_eq!(sut.read_bool::<bool>().unwrap(), false);
         // game entry 1 optional
-        assert_eq!(sut.read_bool().unwrap(), false);
+        assert_eq!(sut.read_bool::<bool>().unwrap(), false);
         // game entry 1 map id
-        assert_eq!(sut.read_integer(32).unwrap(), 520);
+        assert_eq!(sut.read_integer::<u32>(32).unwrap(), 520);
         // game entry 1 game variant (truncated)
         assert_eq!(sut.read_string_utf8(3).unwrap(), "5_\0");
     }
