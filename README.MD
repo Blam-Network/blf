@@ -1,3 +1,4 @@
+![hero](hero.jpeg)
 # @blamnetwork/blf
 
 This repository contains a [Cargo Workspace](https://doc.rust-lang.org/book/ch14-03-cargo-workspaces.html) of various [Rust](https://doc.rust-lang.org/stable/) [Crates](https://doc.rust-lang.org/book/ch07-01-packages-and-crates.html) which handle BLF files used by various Blam engine games such as Halo 3, Halo 3: ODST and Halo: Reach.
