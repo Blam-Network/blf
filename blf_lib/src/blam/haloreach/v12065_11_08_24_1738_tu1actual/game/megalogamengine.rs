@@ -1,0 +1,13 @@
+pub mod megalogamengine_user_defined_options;
+pub mod megalogamengine_map_permissions;
+pub mod megalogamengine_conditions;
+pub mod megalogamengine_explicit_player;
+pub mod megalogamengine_explicit_object;
+pub mod megalogamengine_player_reference;
+pub mod megalogamengine_explicit_team;
+pub mod megalogamengine_object_reference;
+pub mod megalogamengine_team_reference;
+pub mod megalogamengine_custom_timer_reference;
+pub mod megalogamengine_custom_variable_reference;
+pub mod megalogamengine_variant_variable;
+pub mod megalogamengine_object_type_reference;
