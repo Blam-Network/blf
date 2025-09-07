@@ -1,5 +1,5 @@
 use std::io::{Read, Seek, Write};
-use std::ops::Index;
+use std::ops::{Index, IndexMut};
 use binrw::{BinRead, BinResult, BinWrite, Endian};
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 
@@ -92,7 +92,7 @@ impl<E: Default + Clone, const N: usize> Default for StaticArray<E, N> {
     }
 }
 
-impl<E: Clone, const N: usize> Index<usize> for StaticArray<E, N> {
+impl<E, const N: usize> Index<usize> for StaticArray<E, N> {
     type Output = E;
 
     fn index(&self, index: usize) -> &Self::Output {
@@ -105,14 +105,15 @@ impl<E: Serialize + Clone + Default + PartialEq, const N: usize> Serialize for S
     where
         S: Serializer,
     {
-        let mut populated_size = 0;
-        let default = E::default();
-        self._data.iter().enumerate().for_each(|(index, item)| if *item != default { populated_size = index + 1; });
+        // let mut populated_size = 0;
+        // let default = E::default();
+        // self._data.iter().enumerate().for_each(|(index, item)| if *item != default { populated_size = index + 1; });
+        //
+        // let filtered = &self._data
+        //     .as_slice()[0..populated_size];
 
-        let filtered = &self._data
-            .as_slice()[0..populated_size];
-
-        filtered.serialize(serializer)
+        // filtered.serialize(serializer)
+        self._data.serialize(serializer)
     }
 }
 
@@ -120,6 +121,12 @@ impl<'de, E: Deserialize<'de>+ Clone + Default, const N: usize> serde::Deseriali
     fn deserialize<D: Deserializer<'de>>(d: D) -> Result<Self, D::Error> {
         let vec: Vec<E> = Deserialize::deserialize(d)?;
         SERDE_DESERIALIZE_RESULT!(Self::from_vec(&vec))
+    }
+}
+
+impl<E, const N: usize> IndexMut<usize> for StaticArray<E, N> {
+    fn index_mut(&mut self, index: usize) -> &mut Self::Output {
+        &mut self._data[index]
     }
 }
 
