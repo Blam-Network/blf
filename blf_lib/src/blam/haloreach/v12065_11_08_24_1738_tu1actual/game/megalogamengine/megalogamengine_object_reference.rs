@@ -7,7 +7,7 @@ use crate::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::megalogamengin
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct c_object_reference {
-    pub m_type: u8,
+    pub m_type: u8, // 3 bits
     #[serde(skip_serializing_if = "Option::is_none")]
     pub m_player: Option<c_explicit_player>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -15,7 +15,7 @@ pub struct c_object_reference {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub m_team: Option<c_explicit_team>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub m_variable_index: Option<u8>,
+    pub m_variable_index: Option<u8>, // 2 or 3 bits
 }
 
 impl c_object_reference {
@@ -97,7 +97,7 @@ impl c_object_reference {
                 let mut player = c_explicit_player::default();
                 player.decode(bitstream)?;
                 self.m_player = Some(player);
-                self.m_variable_index = Some(bitstream.read_integer("variable-index", 3)?);
+                self.m_variable_index = Some(bitstream.read_integer("variable-index", 2)?);
             }
             6 => {
                 let mut object = c_explicit_object::default();

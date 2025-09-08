@@ -20,33 +20,32 @@ pub struct c_team_reference {
 impl c_team_reference {
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
         match (&self.m_player, &self.m_object, &self.m_team, self.m_variable_index) {
-
-            (Some(player), None, None, Some(variable_index)) => {
+            (None, None, Some(team), None) => {
                 bitstream.write_integer(0u8, 3)?;
+                team.encode(bitstream)?;
+            }
+            (Some(player), None, None, Some(variable_index)) => {
+                bitstream.write_integer(1u8, 3)?;
                 player.encode(bitstream)?;
                 bitstream.write_integer(variable_index, 2)?;
             }
             (None, Some(object), None, Some(variable_index)) => {
-                bitstream.write_integer(1u8, 3)?;
+                bitstream.write_integer(2u8, 3)?;
                 object.encode(bitstream)?;
                 bitstream.write_integer(variable_index, 1)?;
             }
             (None, None, Some(team), Some(variable_index)) => {
-                bitstream.write_integer(2u8, 3)?;
+                bitstream.write_integer(3u8, 3)?;
                 team.encode(bitstream)?;
                 bitstream.write_integer(variable_index, 2)?;
             }
             (Some(player), None, None, None) => {
-                bitstream.write_integer(3u8, 3)?;
+                bitstream.write_integer(4u8, 3)?;
                 player.encode(bitstream)?;
             }
             (None, Some(object), None, None) => {
-                bitstream.write_integer(4u8, 3)?;
-                object.encode(bitstream)?;
-            }
-            (None, None, Some(team), None) => {
                 bitstream.write_integer(5u8, 3)?;
-                team.encode(bitstream)?;
+                object.encode(bitstream)?;
             }
             _ => {
                 // return Err(format!("Invalid c_team_reference: {self:?}").into())
@@ -61,37 +60,37 @@ impl c_team_reference {
 
         match ref_type {
             0 => {
+                let mut team = c_explicit_team::default();
+                team.decode(bitstream)?;
+                self.m_team = Some(team);
+            }
+            1 => {
                 let mut player = c_explicit_player::default();
                 player.decode(bitstream)?;
                 self.m_player = Some(player);
                 self.m_variable_index = Some(bitstream.read_integer("variable-index", 2)?);
             }
-            1 => {
+            2 => {
                 let mut object = c_explicit_object::default();
                 object.decode(bitstream)?;
                 self.m_object = Some(object);
                 self.m_variable_index = Some(bitstream.read_integer("variable-index", 1)?);
             }
-            2 => {
+            3 => {
                 let mut team = c_explicit_team::default();
                 team.decode(bitstream)?;
                 self.m_team = Some(team);
                 self.m_variable_index = Some(bitstream.read_integer("variable-index", 2)?);
             }
-            3 => {
+            4 => {
                 let mut player = c_explicit_player::default();
                 player.decode(bitstream)?;
                 self.m_player = Some(player);
             }
-            4 => {
+            5 => {
                 let mut object = c_explicit_object::default();
                 object.decode(bitstream)?;
                 self.m_object = Some(object);
-            }
-            5 => {
-                let mut team = c_explicit_team::default();
-                team.decode(bitstream)?;
-                self.m_team = Some(team);
             }
             _ => {
                 // return Err(format!("Invalid c_team_reference: {self:?}").into())

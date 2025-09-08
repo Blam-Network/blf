@@ -4,7 +4,7 @@ use blf_lib_derivable::result::BLFLibResult;
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct c_explicit_team {
-    pub m_explicit_team_type: u8,
+    pub m_explicit_team_type: u8, // 5 bits
 }
 
 impl c_explicit_team {

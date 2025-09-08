@@ -7,6 +7,7 @@ use crate::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::megalogamengin
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct c_custom_timer_reference {
+    // type, 3 bits
     #[serde(skip_serializing_if = "Option::is_none")]
     pub m_player: Option<c_explicit_player>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -14,7 +15,7 @@ pub struct c_custom_timer_reference {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub m_team: Option<c_explicit_team>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub m_variable_index: Option<u8>,
+    pub m_variable_index: Option<u8>, // 2 or 3 bits
 }
 
 impl c_custom_timer_reference {

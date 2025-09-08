@@ -13,7 +13,7 @@ use crate::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::megalogamengin
 pub struct s_condition_if_parameters {
     pub m_left: s_variant_variable,
     pub m_right: s_variant_variable,
-    pub m_comparison: u8,
+    pub m_comparison: u8, // 3 bit
 }
 
 impl s_condition_if_parameters {
@@ -38,7 +38,7 @@ impl s_condition_if_parameters {
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct s_condition_player_died_parameters {
     pub m_player: c_player_reference,
-    pub m_killer_type: u8,
+    pub m_killer_type: u8, // 5 bits
 }
 
 impl s_condition_player_died_parameters {
@@ -60,8 +60,8 @@ impl s_condition_player_died_parameters {
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct s_condition_team_disposition_parameters {
-    pub m_team_1: c_player_reference,
-    pub m_team_2: c_player_reference,
+    pub m_team_1: c_team_reference,
+    pub m_team_2: c_team_reference,
     pub m_disposition: u8, // 2 bits
 }
 
@@ -107,10 +107,10 @@ impl s_condition_object_matches_filter_parameters {
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct c_condition {
-    pub m_type: u8,
+    pub m_type: u8, // 5 bits
     pub m_negated: bool,
-    pub m_union_group: u16,
-    pub m_execute_before_action: u16,
+    pub m_union_group: u16, // 9 bits
+    pub m_execute_before_action: u16, // 10 bits
 
     #[serde(skip_serializing_if = "Option::is_none")]
     pub m_if_parameters: Option<s_condition_if_parameters>,
@@ -154,7 +154,7 @@ impl c_condition {
                     &self.m_if_parameters,
                     format!("Can't encode condition type {} without if_parameters", self.m_type)
                 )?;
-                if_parameters.encode(bitstream)?;
+                if_parameters.encode(bitstream)?; // OK
             }
             2 => {
                 let object_reference_1 = OPTION_TO_RESULT!(
@@ -209,11 +209,11 @@ impl c_condition {
                 team.encode(bitstream)?;
             }
             8 | 13 => {
-                let team = OPTION_TO_RESULT!(
+                let object = OPTION_TO_RESULT!(
                     &self.m_object_reference_1,
                     format!("Can't encode condition type {} without object reference", self.m_type)
                 )?;
-                team.encode(bitstream)?;
+                object.encode(bitstream)?;
             }
             9 | 12 | 14 | 15 | 16 => {
                 let player = OPTION_TO_RESULT!(

@@ -7,9 +7,9 @@ use crate::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::megalogamengin
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct c_custom_variable_reference {
-    pub m_type: u8,
+    pub m_type: u8, // 6 bits
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub m_immediate_value: Option<i16>,
+    pub m_immediate_value: Option<i16>, // 16 bits
     #[serde(skip_serializing_if = "Option::is_none")]
     pub m_player: Option<c_explicit_player>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -17,11 +17,11 @@ pub struct c_custom_variable_reference {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub m_team: Option<c_explicit_team>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub m_variable_index: Option<u8>,
+    pub m_variable_index: Option<u8>, // 3 or 4 bits
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub m_option_index: Option<u8>,
+    pub m_option_index: Option<u8>, // 4 bits
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub m_statistic_index: Option<u8>,
+    pub m_statistic_index: Option<u8>, // 2 bits
 }
 
 impl c_custom_variable_reference {
