@@ -11,3 +11,5 @@ pub mod megalogamengine_custom_timer_reference;
 pub mod megalogamengine_custom_variable_reference;
 pub mod megalogamengine_variant_variable;
 pub mod megalogamengine_object_type_reference;
+pub mod megalogamengine_actions;
+pub mod megalogamengine_text;
