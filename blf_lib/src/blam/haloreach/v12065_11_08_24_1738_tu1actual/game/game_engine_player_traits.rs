@@ -68,46 +68,46 @@ pub struct c_player_traits {
 
 impl c_player_traits {
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
-        bitstream.write_integer(self.m_shield_vitality_traits.m_damage_resistance_percentage_setting as u32, 4)?;
-        bitstream.write_integer(self.m_shield_vitality_traits.m_body_multiplier as u32, 3)?;
-        bitstream.write_integer(self.m_shield_vitality_traits.m_body_recharge_rate as u32, 4)?;
-        bitstream.write_integer(self.m_shield_vitality_traits.m_shield_multiplier as u32, 3)?;
-        bitstream.write_integer(self.m_shield_vitality_traits.m_shield_recharge_rate as u32, 4)?;
-        bitstream.write_integer(self.m_shield_vitality_traits.m_overshield_recharge_rate as u32, 4)?;
-        bitstream.write_integer(self.m_shield_vitality_traits.m_headshot_immunity_setting as u32, 2)?;
-        bitstream.write_integer(self.m_shield_vitality_traits.m_vampirism_percentage_setting as u32, 3)?;
-        bitstream.write_integer(self.m_shield_vitality_traits.m_assasination_immunity as u32, 2)?;
-        bitstream.write_integer(self.m_shield_vitality_traits.m_cannot_die_from_damage as u32, 2)?;
-        bitstream.write_integer(self.m_weapon_traits.m_damage_modifier_percentage_setting as u32, 4)?;
-        bitstream.write_integer(self.m_weapon_traits.m_melee_damage_modifier_percentage_setting as u32, 4)?;
-        bitstream.write_signed_integer(self.m_weapon_traits.m_initial_primary_weapon_absolute_index as i32, 8)?;
-        bitstream.write_signed_integer(self.m_weapon_traits.m_initial_secondary_weapon_absolute_index as i32, 8)?;
-        bitstream.write_integer(self.m_weapon_traits.m_initial_grenade_count_setting as u32, 4)?;
-        bitstream.write_integer(self.m_weapon_traits.m_infinite_ammo_setting as u32, 2)?;
-        bitstream.write_integer(self.m_weapon_traits.m_recharging_grenades_setting as u32, 2)?;
-        bitstream.write_integer(self.m_weapon_traits.m_weapon_pickup_setting as u32, 2)?;
-        bitstream.write_integer(self.m_weapon_traits.m_equipment_usage_setting as u32, 2)?;
-        bitstream.write_integer(self.m_weapon_traits.m_equipment_drop_on_death_setting as u32, 2)?;
-        bitstream.write_integer(self.m_weapon_traits.m_infinite_equipment_setting as u32, 2)?;
-        bitstream.write_integer(self.m_weapon_traits.m_initial_equipment_absolute_index as u32, 8)?;
-        bitstream.write_integer(self.m_movement_traits.m_speed_setting as u32, 5)?;
-        bitstream.write_integer(self.m_movement_traits.m_gravity_setting as u32, 4)?;
-        bitstream.write_integer(self.m_movement_traits.m_vehicle_usage_setting as u32, 4)?;
-        bitstream.write_integer(self.m_movement_traits.m_double_jump_setting as u32, 2)?;
+        bitstream.write_integer(self.m_shield_vitality_traits.m_damage_resistance_percentage_setting, 4)?;
+        bitstream.write_integer(self.m_shield_vitality_traits.m_body_multiplier, 3)?;
+        bitstream.write_integer(self.m_shield_vitality_traits.m_body_recharge_rate, 4)?;
+        bitstream.write_integer(self.m_shield_vitality_traits.m_shield_multiplier, 3)?;
+        bitstream.write_integer(self.m_shield_vitality_traits.m_shield_recharge_rate, 4)?;
+        bitstream.write_integer(self.m_shield_vitality_traits.m_overshield_recharge_rate, 4)?;
+        bitstream.write_integer(self.m_shield_vitality_traits.m_headshot_immunity_setting, 2)?;
+        bitstream.write_integer(self.m_shield_vitality_traits.m_vampirism_percentage_setting, 3)?;
+        bitstream.write_integer(self.m_shield_vitality_traits.m_assasination_immunity, 2)?;
+        bitstream.write_integer(self.m_shield_vitality_traits.m_cannot_die_from_damage, 2)?;
+        bitstream.write_integer(self.m_weapon_traits.m_damage_modifier_percentage_setting, 4)?;
+        bitstream.write_integer(self.m_weapon_traits.m_melee_damage_modifier_percentage_setting, 4)?;
+        bitstream.write_signed_integer(self.m_weapon_traits.m_initial_primary_weapon_absolute_index, 8)?;
+        bitstream.write_signed_integer(self.m_weapon_traits.m_initial_secondary_weapon_absolute_index, 8)?;
+        bitstream.write_integer(self.m_weapon_traits.m_initial_grenade_count_setting, 4)?;
+        bitstream.write_integer(self.m_weapon_traits.m_infinite_ammo_setting, 2)?;
+        bitstream.write_integer(self.m_weapon_traits.m_recharging_grenades_setting, 2)?;
+        bitstream.write_integer(self.m_weapon_traits.m_weapon_pickup_setting, 2)?;
+        bitstream.write_integer(self.m_weapon_traits.m_equipment_usage_setting, 2)?;
+        bitstream.write_integer(self.m_weapon_traits.m_equipment_drop_on_death_setting, 2)?;
+        bitstream.write_integer(self.m_weapon_traits.m_infinite_equipment_setting, 2)?;
+        bitstream.write_signed_integer(self.m_weapon_traits.m_initial_equipment_absolute_index, 8)?;
+        bitstream.write_integer(self.m_movement_traits.m_speed_setting, 5)?;
+        bitstream.write_integer(self.m_movement_traits.m_gravity_setting, 4)?;
+        bitstream.write_integer(self.m_movement_traits.m_vehicle_usage_setting, 4)?;
+        bitstream.write_integer(self.m_movement_traits.m_double_jump_setting, 2)?;
         if self.m_movement_traits.m_jump_modifier != -1 {
             bitstream.write_bool(true)?;
-            bitstream.write_integer(self.m_movement_traits.m_jump_modifier as u32, 9)?;
+            bitstream.write_signed_integer(self.m_movement_traits.m_jump_modifier, 9)?;
         } else {
             bitstream.write_bool(false)?;
         }
-        bitstream.write_integer(self.m_appearance_traits.m_active_camo_setting as u32, 3)?;
-        bitstream.write_integer(self.m_appearance_traits.m_waypoint_setting as u32, 2)?;
-        bitstream.write_integer(self.m_appearance_traits.m_gamertag_setting as u32, 2)?;
-        bitstream.write_integer(self.m_appearance_traits.m_aura_setting as u32, 3)?;
-        bitstream.write_integer(self.m_appearance_traits.m_forced_change_color_setting as u32, 4)?;
-        bitstream.write_integer(self.m_sensor_traits.m_motion_tracker_setting as u32, 3)?;
-        bitstream.write_integer(self.m_sensor_traits.m_motion_tracker_range_setting as u32, 3)?;
-        bitstream.write_integer(self.m_sensor_traits.m_directional_damage_setting as u32, 2)?;
+        bitstream.write_integer(self.m_appearance_traits.m_active_camo_setting, 3)?;
+        bitstream.write_integer(self.m_appearance_traits.m_waypoint_setting, 2)?;
+        bitstream.write_integer(self.m_appearance_traits.m_gamertag_setting, 2)?;
+        bitstream.write_integer(self.m_appearance_traits.m_aura_setting, 3)?;
+        bitstream.write_integer(self.m_appearance_traits.m_forced_change_color_setting, 4)?;
+        bitstream.write_integer(self.m_sensor_traits.m_motion_tracker_setting, 3)?;
+        bitstream.write_integer(self.m_sensor_traits.m_motion_tracker_range_setting, 3)?;
+        bitstream.write_integer(self.m_sensor_traits.m_directional_damage_setting, 2)?;
 
         Ok(())
     }

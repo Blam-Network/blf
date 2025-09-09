@@ -59,12 +59,7 @@ pub struct c_game_engine_map_override_options {
 
 impl c_game_engine_map_override_options {
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
-        bitstream.write_bool(TEST_BIT!(self.m_flags, 0))?;
-        bitstream.write_bool(TEST_BIT!(self.m_flags, 1))?;
-        bitstream.write_bool(TEST_BIT!(self.m_flags, 2))?;
-        bitstream.write_bool(TEST_BIT!(self.m_flags, 3))?;
-        bitstream.write_bool(TEST_BIT!(self.m_flags, 4))?;
-        bitstream.write_bool(TEST_BIT!(self.m_flags, 5))?;
+        bitstream.write_integer(self.m_flags, 6)?;
         self.m_base_player_traits.encode(bitstream)?;
         bitstream.write_signed_integer(self.m_weapon_set_absolute_index as i32, 8)?;
         bitstream.write_signed_integer(self.m_vehicle_set_absolute_index as i32, 8)?;

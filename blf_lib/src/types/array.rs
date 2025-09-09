@@ -130,6 +130,33 @@ impl<E, const N: usize> IndexMut<usize> for StaticArray<E, N> {
     }
 }
 
+impl<E: 'static, const N: usize> IntoIterator for StaticArray<E, N> {
+    type Item = E;
+    type IntoIter = std::vec::IntoIter<E>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self._data.into_iter()
+    }
+}
+
+impl<'a, E: 'static, const N: usize> IntoIterator for &'a StaticArray<E, N> {
+    type Item = &'a E;
+    type IntoIter = std::slice::Iter<'a, E>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self._data.iter()
+    }
+}
+
+impl<'a, E: 'static, const N: usize> IntoIterator for &'a mut StaticArray<E, N> {
+    type Item = &'a mut E;
+    type IntoIter = std::slice::IterMut<'a, E>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self._data.iter_mut()
+    }
+}
+
 #[cfg(feature = "napi")]
 impl<E: ToNapiValue, const N: usize> ToNapiValue for StaticArray<E, N> {
     unsafe fn to_napi_value(env: napi_env, val: Self) -> napi::Result<napi::sys::napi_value> {

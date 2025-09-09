@@ -22,7 +22,7 @@ impl s_user_defined_option_value {
                 "Tried to write a ranged s_user_defined_option with no name!"
             )?;
             let description_index = OPTION_TO_RESULT!(
-                self.m_name_string_index,
+                self.m_description_string_index,
                 "Tried to write a ranged s_user_defined_option with no description!"
             )?;
             bitstream.write_integer(name_index as u8, 7)?;
@@ -89,6 +89,7 @@ impl s_user_defined_option {
             &self.m_range_max_value,
             &self.m_range_current_value
         ) {
+            bitstream.write_bool(true)?;
             range_default_value.encode(bitstream, true)?;
             range_min_value.encode(bitstream, true)?;
             range_max_value.encode(bitstream, true)?;
@@ -103,12 +104,13 @@ impl s_user_defined_option {
             &self.m_values,
             &self.m_current_value_index,
         ) {
+            bitstream.write_bool(false)?;
             bitstream.write_integer(*default_value_index, 3)?;
             bitstream.write_integer(values.len() as u32, 4)?;
             for i in 0..values.len() {
                 values[i].encode(bitstream, false)?;
             }
-            bitstream.write_signed_integer(*current_value_index, 3)?;
+            bitstream.write_integer(*current_value_index, 3)?;
         }
         else {
             return Err(format!("Can't encode invalid s_user_defined_option: {self:?}").into())

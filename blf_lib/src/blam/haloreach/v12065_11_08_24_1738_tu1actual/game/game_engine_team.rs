@@ -76,8 +76,8 @@ impl c_game_engine_team_options {
     }
 
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
-        self.m_designator_switch_type = bitstream.read_integer("designator-switch-type", 2)?;
         self.m_model_override = bitstream.read_integer("model-override", 3)?;
+        self.m_designator_switch_type = bitstream.read_integer("designator-switch-type", 2)?;
         for team in self.m_teams.get_mut().iter_mut() {
             team.decode(bitstream)?
         }

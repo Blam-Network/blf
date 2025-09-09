@@ -1,11 +1,12 @@
 use std::io::{Read, Seek, Write};
-use binrw::{BinRead, BinResult, BinWrite, Endian};
+use binrw::{BinRead, BinResult, BinWrite, BinWriterExt, Endian};
 use serde::{Deserialize, Serialize};
-use blf_lib::io::bitstream::{c_bitstream_reader, e_bitstream_byte_order};
+use blf_lib::io::bitstream::{c_bitstream_reader, c_bitstream_writer, e_bitstream_byte_order};
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
 use blf_lib_derive::BlfChunk;
 use crate::blam::common::memory::secure_signature::s_network_http_request_hash;
 use crate::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::game_variant::c_game_variant;
+use crate::blf::get_buffer_hash;
 
 #[derive(BlfChunk,PartialEq,Debug,Clone,Serialize,Deserialize,Default)]
 #[Header("mpvr", 54.1)]
@@ -13,8 +14,9 @@ use crate::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::game_variant::
 pub struct s_blf_chunk_game_variant
 {
     pub hash: s_network_http_request_hash,
-    pub unknown04: u32,
-    pub unknown_length: u32,
+    pub unknown04: u16,
+    pub unknown06: u16,
+    pub variant_length: u32,
     pub game_variant: c_game_variant,
 }
 
@@ -29,8 +31,9 @@ impl BinRead for s_blf_chunk_game_variant {
         bitstream.begin_reading();
 
         let hash = bitstream.read_raw(0x14 * 8)?;
-        let unknown04 = bitstream.read_integer("unknown04", 32)?;
-        let unknown_length = bitstream.read_integer("unknown_length", 32)?;
+        let unknown04 = bitstream.read_integer("unknown04", 16)?;
+        let unknown06 = bitstream.read_integer("unknown06", 16)?;
+        let variant_length = bitstream.read_integer("variant-length", 32)?;
 
 
         let mut game_variant = c_game_variant::default();
@@ -39,7 +42,8 @@ impl BinRead for s_blf_chunk_game_variant {
         Ok(Self {
             hash,
             unknown04,
-            unknown_length,
+            unknown06,
+            variant_length,
             game_variant,
         })
     }
@@ -49,7 +53,20 @@ impl BinWrite for s_blf_chunk_game_variant {
     type Args<'a> = ();
 
     fn write_options<W: Write + Seek>(&self, writer: &mut W, endian: Endian, args: Self::Args<'_>) -> BinResult<()> {
-        unimplemented!();
+        let mut bitstream_writer = c_bitstream_writer::new(0x5028, e_bitstream_byte_order::_bitstream_byte_order_big_endian);
+        bitstream_writer.begin_writing();
+        self.game_variant.encode(&mut bitstream_writer)?;
+        bitstream_writer.finish_writing();
+        let gametype_data = bitstream_writer.get_data()?;
+
+        let hash = get_buffer_hash(&gametype_data)?;
+        hash.write_options(writer, Endian::Big, args)?;
+        self.unknown04.write_options(writer, Endian::Big, args)?;
+        self.unknown06.write_options(writer, Endian::Big, args)?;
+        self.variant_length.write_options(writer, Endian::Big, args)?;
+        gametype_data.write_options(writer, Endian::Big, args)?;
+
+        Ok(())
     }
 }
 

@@ -19,12 +19,6 @@ pub struct c_object_reference {
 }
 
 impl c_object_reference {
-    pub fn is_player_reference(&self) -> bool {
-        match self.m_type {
-            (4 | 6 | 6 | 7) => true,
-            _ => false
-        }
-    }
 
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
         bitstream.write_integer(self.m_type, 3)?;
@@ -90,9 +84,9 @@ impl c_object_reference {
                 self.m_variable_index = Some(bitstream.read_integer("variable-index", 2)?);
             }
             3 => {
-                let mut team = c_explicit_object::default();
+                let mut team = c_explicit_team::default();
                 team.decode(bitstream)?;
-                self.m_object = Some(team);
+                self.m_team = Some(team);
                 self.m_variable_index = Some(bitstream.read_integer("variable-index", 3)?);
             }
             4 => {

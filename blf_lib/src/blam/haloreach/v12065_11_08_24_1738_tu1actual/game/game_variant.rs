@@ -47,8 +47,42 @@ pub struct c_game_engine_custom_variant {
 
 impl c_game_engine_custom_variant {
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
-        unimplemented!();
-
+        bitstream.write_signed_integer(self.m_encoding_version, 32)?;
+        bitstream.write_signed_integer(self.m_build_number, 32)?;
+        self.m_base_variant.encode(bitstream)?;
+        bitstream.write_integer(self.m_player_traits.len() as u16, 5)?;
+        for player_trait in self.m_player_traits.iter() {
+            player_trait.encode(bitstream)?;
+        }
+        bitstream.write_integer(self.m_user_defined_options.len() as u16, 5)?;
+        for option in self.m_user_defined_options.iter() {
+            option.encode(bitstream)?;
+        }
+        self.m_script_strings.encode(bitstream)?; // this is broken
+        bitstream.write_integer(self.m_base_name_string_index, 7)?;
+        self.m_localized_name.encode(bitstream)?;
+        self.m_localized_description.encode(bitstream)?;
+        self.m_localized_category.encode(bitstream)?;
+        bitstream.write_integer(self.m_engine_icon, 5)?;
+        bitstream.write_integer(self.m_engine_category, 5)?;
+        self.m_map_permissions.encode(bitstream)?;
+        self.m_player_ratings.encode(bitstream)?;
+        bitstream.write_signed_integer(self.m_score_to_win_round, 16)?;
+        bitstream.write_bool(self.m_fire_teams_enabled)?;
+        bitstream.write_bool(self.m_symmetric_gametype)?;
+        for parameter in &self.m_base_variant_parameters_locked {
+            bitstream.write_bool(*parameter)?
+        }
+        for parameter in &self.m_base_variant_parameters_hidden {
+            bitstream.write_bool(*parameter)?
+        }
+        for parameter in &self.m_user_defined_options_locked {
+            bitstream.write_bool(*parameter)?
+        }
+        for parameter in &self.m_user_defined_options_hidden {
+            bitstream.write_bool(*parameter)?
+        }
+        self.m_game_engine.encode(bitstream)?;
 
         Ok(())
     }

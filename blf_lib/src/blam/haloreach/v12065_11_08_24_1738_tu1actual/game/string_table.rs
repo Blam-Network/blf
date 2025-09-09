@@ -170,7 +170,6 @@ c_string_table<
             for &offset in language_offsets {
                 string_reader.seek(SeekFrom::Start(offset))?;
 
-                println!("language_index = {}", language_index);
                 self.strings.get_mut()[language_index].push(NullString::read(&mut string_reader)?.to_string());
 
                 string_reader.seek(SeekFrom::Start(offset))?;
@@ -188,12 +187,12 @@ c_string_table<
             return Ok(());
         }
 
-        let mut offset: u16 = 0;
-        for language_strings in self.strings.get().iter() {
-            for string in language_strings.iter() {
+        let mut language_offsets = vec![0u16; k_language_count];
+        for i in 0..self.strings[0].len() {
+            for language_index in 0..k_language_count {
                 bitstream.write_bool(true)?;
-                bitstream.write_integer(offset, offset_bit_length)?;
-                offset += string.len() as u16 + 1;
+                bitstream.write_integer(language_offsets[language_index], offset_bit_length)?;
+                language_offsets[language_index] += self.strings[language_index][i].len() as u16;
             }
         }
 
