@@ -395,6 +395,21 @@ impl c_bitstream_writer {
         assert_ok!(max_string_size > 0);
         assert_ok!(char_string.len() <= max_string_size as usize);
 
+        for byte in char_string.as_bytes() {
+            self.write_value_internal(&[*byte], 8)?;
+        }
+
+        // null terminate
+        self.write_value_internal(&0u8.to_ne_bytes(), 8)?;
+
+        Ok(())
+    }
+
+    pub fn write_string_extended_ascii(&mut self, char_string: &String, max_string_size: u32) -> BLFLibResult {
+        assert_ok!(self.writing());
+        assert_ok!(max_string_size > 0);
+        assert_ok!(char_string.len() <= max_string_size as usize);
+
         for ch in char_string.chars() {
             let code = ch as u32;
             if code > 0xFF {

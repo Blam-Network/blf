@@ -544,6 +544,24 @@ impl<'a> c_bitstream_reader<'a> {
             bytes[i] = byte;
 
             if byte == 0 {
+                return Ok(String::from_utf8(bytes)?)
+            }
+        }
+
+        Err("Exceeded max string size reading utf8 string.".into())
+    }
+
+    pub fn read_string_extended_ascii(&mut self, max_string_size: usize) -> BLFLibResult<String> {
+        assert_ok!(self.reading());
+        assert_ok!(max_string_size > 0);
+
+        let mut bytes = vec![0u8; max_string_size];
+
+        for i in 0..max_string_size {
+            let byte = self.read_unnamed_integer(8)?;
+            bytes[i] = byte;
+
+            if byte == 0 {
                 // manually parse the string because halo sometimes uses extended char sets.
                 let s: String = bytes.iter().map(|&b| b as char).collect();
                 return Ok(s);

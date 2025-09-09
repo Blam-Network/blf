@@ -132,11 +132,11 @@ impl s_content_item_metadata {
         self.megalo_category_index = bitstream.read_unnamed_signed_integer(8)?;
         self.creation_time = bitstream.read_qword(64)?;
         self.creator_xuid = bitstream.read_qword(64)?;
-        self.creator_name = StaticString::from_string(bitstream.read_string_utf8(16)?)?;
+        self.creator_name = StaticString::from_string(bitstream.read_string_extended_ascii(16)?)?;
         self.creator_xuid_is_online = bitstream.read_unnamed_bool()?;
         self.modification_time = bitstream.read_qword(64)?;
         self.modifier_xuid = bitstream.read_qword(64)?;
-        self.modifier_name = StaticString::from_string(bitstream.read_string_utf8(16).unwrap_or_default())?;
+        self.modifier_name = StaticString::from_string(bitstream.read_string_extended_ascii(16)?)?;
         self.modifier_xuid_is_online = bitstream.read_unnamed_bool()?;
         self.name = StaticWcharString::from_string(bitstream.read_string_whar(128)?)?;
         self.description = StaticWcharString::from_string(bitstream.read_string_whar(128)?)?;
@@ -202,11 +202,11 @@ impl s_content_item_metadata {
         bitstream.write_signed_integer(self.megalo_category_index, 8)?;
         bitstream.write_qword(self.creation_time, 64)?;
         bitstream.write_qword(self.creator_xuid, 64)?;
-        bitstream.write_string_utf8(&self.creator_name.get_string()?, 16)?;
+        bitstream.write_string_extended_ascii(&self.creator_name.get_string()?, 16)?;
         bitstream.write_bool(self.creator_xuid_is_online)?;
         bitstream.write_qword(self.modification_time, 64)?;
         bitstream.write_qword(self.modifier_xuid, 64)?;
-        bitstream.write_string_utf8(&self.modifier_name.get_string()?, 16)?;
+        bitstream.write_string_extended_ascii(&self.modifier_name.get_string()?, 16)?;
         bitstream.write_bool(self.modifier_xuid_is_online)?;
         bitstream.write_string_wchar(&self.name.get_string(), 128)?;
         bitstream.write_string_wchar(&self.description.get_string(), 128)?;
