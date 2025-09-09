@@ -749,7 +749,7 @@ impl s_action_hud_widget_set_icon_parameters {
 
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
         self.m_widget_index = bitstream.read_index::<4>("widget-index", 2)? as i8;
-        self.m_widget_index = bitstream.read_index::<64>("icon-index", 6)? as i8;
+        self.m_icon_index = bitstream.read_index::<64>("icon-index", 6)? as i8;
 
         Ok(())
     }

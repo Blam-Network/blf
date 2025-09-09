@@ -58,8 +58,10 @@ impl BinWrite for s_blf_chunk_game_variant {
         self.game_variant.encode(&mut bitstream_writer)?;
         bitstream_writer.finish_writing();
         let gametype_data = bitstream_writer.get_data()?;
+        let mut hashable_data: Vec<u8> = (gametype_data.len() as u32).to_be_bytes().to_vec();
+        hashable_data.extend_from_slice(gametype_data.as_slice());
 
-        let hash = get_buffer_hash(&gametype_data)?;
+        let hash = get_buffer_hash(&hashable_data)?;
         hash.write_options(writer, Endian::Big, args)?;
         self.unknown04.write_options(writer, Endian::Big, args)?;
         self.unknown06.write_options(writer, Endian::Big, args)?;
