@@ -39,7 +39,7 @@ pub fn runtime_data_compress(
     let mut compressed_data = e.finish()?;
 
     let mut writer = Cursor::new(compressed_buffer);
-    let decompressed_size = source_buffer.len() as u32 + 4;
+    let decompressed_size = source_buffer.len() as u32;
 
     decompressed_size.write_options(&mut writer, endian.into(), ())?;
     writer.write_all(compressed_data.as_slice())?;
