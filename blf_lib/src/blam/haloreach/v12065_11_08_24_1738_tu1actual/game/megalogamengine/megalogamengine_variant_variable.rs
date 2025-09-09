@@ -13,7 +13,7 @@ use crate::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::megalogamengin
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct s_variant_variable {
-    // type, 3 bits
+    pub m_type: u8,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub m_player: Option<c_player_reference>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -28,29 +28,26 @@ pub struct s_variant_variable {
 
 impl s_variant_variable {
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
-        match (&self.m_player, &self.m_object, &self.m_team, &self.m_custom_timer, &self.m_custom_variable) {
-            (None, None, None, None, Some(custom_variable)) => {
-                bitstream.write_integer(0u8, 3)?;
+        bitstream.write_integer(self.m_type, 3)?;
+
+        match (self.m_type, self.m_player.as_ref(), self.m_object.as_ref(), self.m_team.as_ref(), self.m_custom_timer.as_ref(), self.m_custom_variable.as_ref()) {
+            (0, None, None, None, None, Some(custom_variable)) => {
                 custom_variable.encode(bitstream)?; // seems ok
             }
-            (Some(player), None, None, None, None) => {
-                bitstream.write_integer(1u8, 3)?;
+            (1, Some(player), None, None, None, None) => {
                 player.encode(bitstream)?;
             }
-            (None, Some(object), None, None, None) => {
-                bitstream.write_integer(2u8, 3)?;
+            (2, None, Some(object), None, None, None) => {
                 object.encode(bitstream)?;
             }
-            (None, None, Some(team), None, None) => {
-                bitstream.write_integer(3u8, 3)?;
+            (3, None, None, Some(team), None, None) => {
                 team.encode(bitstream)?;
             }
-            (None, None, None, Some(timer), None) => {
-                bitstream.write_integer(4u8, 3)?;
+            (4, None, None, None, Some(timer), None) => {
                 timer.encode(bitstream)?;
             }
             _ => {
-                // return Err(format!("Invalid c_team_reference: {self:?}").into())
+                return Err(format!("Invalid s_variant_variable: {self:?}").into())
             }
         };
 
@@ -58,9 +55,9 @@ impl s_variant_variable {
     }
 
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
-        let ref_type = bitstream.read_integer("type", 3)?;
+        self.m_type = bitstream.read_integer("type", 3)?;
 
-        match ref_type {
+        match self.m_type {
             0 => {
                 let mut custom_variable = c_custom_variable_reference::default();
                 custom_variable.decode(bitstream)?;
@@ -87,7 +84,7 @@ impl s_variant_variable {
                 self.m_custom_timer = Some(custom_timer);
             }
             _ => {
-                // return Err(format!("Invalid c_team_reference: {self:?}").into())
+                return Err(format!("Invalid s_variant_variable: {self:?}").into())
             }
         }
 

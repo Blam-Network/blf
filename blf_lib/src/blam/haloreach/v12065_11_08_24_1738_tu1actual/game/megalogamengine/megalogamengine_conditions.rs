@@ -241,7 +241,9 @@ impl c_condition {
                 )?;
                 object_matches_filter_parameters.encode(bitstream)?;
             }
-            _ => {}
+            _ => {
+                return Err(format!("Invalid c_condition: {self:?}").into())
+            }
         }
 
         Ok(())
@@ -249,6 +251,11 @@ impl c_condition {
 
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
         self.m_type = bitstream.read_integer("type", 5)?;
+
+        if self.m_type == 0 {
+            return Ok(());
+        }
+
         self.m_negated = bitstream.read_bool("negated")?;
         self.m_union_group = bitstream.read_integer("union-group", 9)?;
         self.m_execute_before_action = bitstream.read_integer("execute-before-action", 10)?;

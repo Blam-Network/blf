@@ -1,6 +1,7 @@
 use serde::{Deserialize, Serialize};
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::game_engine_default::c_game_engine_base_variant;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::game_engine_player_rating_parameters::s_game_engine_player_rating_parameters;
+use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::game_engine_team::{c_game_engine_team_options_team, k_game_variant_team_count};
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::game_engine_traits::s_player_trait_option;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::megalogamengine::megalogamengine_actions::c_action;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::megalogamengine::megalogamengine_conditions::c_condition;
@@ -11,6 +12,7 @@ use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::megalogameng
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::megalogamengine::megalogamengine_variable_metadata::s_variable_metadata;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::string_table::c_string_table;
 use blf_lib::io::bitstream::{c_bitstream_reader, c_bitstream_writer};
+use blf_lib::types::numbers::Float32;
 use blf_lib_derivable::result::BLFLibResult;
 use crate::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::megalogamengine::megalogamengine_map_permissions::c_megalogamengine_map_permissions;
 use crate::types::array::StaticArray;
@@ -42,6 +44,8 @@ pub struct c_game_engine_custom_variant {
     pub m_user_defined_options_locked: StaticArray<bool, 32>,
     pub m_user_defined_options_hidden: StaticArray<bool, 32>,
     pub m_game_engine: s_custom_game_engine_definition,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub m_au1_settings: Option<c_game_engine_custom_variant_au1_settings>,
 
 }
 
@@ -83,6 +87,13 @@ impl c_game_engine_custom_variant {
             bitstream.write_bool(*parameter)?
         }
         self.m_game_engine.encode(bitstream)?;
+        if self.m_encoding_version > 106 {
+            if let Some(au1_settings) = &self.m_au1_settings {
+                au1_settings.encode(bitstream)?;
+            } else {
+                return Err("Writing v107 gametypes (and higher) requires AU1 Options to be set.".into());
+            }
+        }
 
         Ok(())
     }
@@ -128,6 +139,11 @@ impl c_game_engine_custom_variant {
             self.m_user_defined_options_hidden[i] = bitstream.read_bool("user-defined-options-hidden")?;
         }
         self.m_game_engine.decode(bitstream)?;
+        if self.m_encoding_version > 106 {
+            let mut au1_settings = c_game_engine_custom_variant_au1_settings::default();
+            au1_settings.decode(bitstream)?;
+            self.m_au1_settings = Some(au1_settings);
+        }
 
         Ok(())
     }
@@ -222,8 +238,7 @@ pub struct s_custom_game_engine_definition {
     pub m_local_trigger_index: u16,
     pub m_pregame_trigger_index: u16,
     pub m_objects_used: StaticArray<bool, 2048>,
-    pub m_object_filters: Vec<c_object_filter>
-
+    pub m_object_filters: Vec<c_object_filter>,
 }
 
 impl s_custom_game_engine_definition {
@@ -335,6 +350,47 @@ impl s_custom_game_engine_definition {
             object_filter.decode(bitstream)?;
             self.m_object_filters.push(object_filter);
         }
+
+        Ok(())
+    }
+}
+
+#[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
+// no idea what this is called
+pub struct c_game_engine_custom_variant_au1_settings {
+    pub m_flags: u32,
+    pub m_precision_bloom: Float32,
+    pub m_active_camo_energy_curve_min: Float32,
+    pub m_active_camo_energy_curve_max: Float32,
+    pub m_armor_lock_damage_drain: Float32,
+    pub m_armor_lock_damage_drain_limit: Float32,
+    pub m_magnum_damage: Float32,
+    pub m_magnum_fire_delay: Float32,
+}
+
+impl c_game_engine_custom_variant_au1_settings {
+    pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
+        bitstream.write_integer(self.m_flags, 32)?;
+        bitstream.write_quantized_real(self.m_precision_bloom, 0f32, 2f32, 8, false, true)?;
+        bitstream.write_quantized_real(self.m_active_camo_energy_curve_min, 0f32, 2f32, 8, false, true)?;
+        bitstream.write_quantized_real(self.m_active_camo_energy_curve_max, 0f32, 2f32, 8, false, true)?;
+        bitstream.write_quantized_real(self.m_armor_lock_damage_drain, 0f32, 2f32, 8, false, true)?;
+        bitstream.write_quantized_real(self.m_armor_lock_damage_drain_limit, 0f32, 2f32, 8, false, true)?;
+        bitstream.write_quantized_real(self.m_magnum_damage, 0f32, 10f32, 8, false, true)?;
+        bitstream.write_quantized_real(self.m_magnum_fire_delay, 0f32, 10f32, 8, false, true)?;
+
+        Ok(())
+    }
+
+    pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
+        self.m_flags = bitstream.read_integer("flags", 32)?;
+        self.m_precision_bloom = bitstream.read_quantized_real(0f32, 2f32, 8, false, true)?;
+        self.m_active_camo_energy_curve_min = bitstream.read_quantized_real(0f32, 2f32, 8, false, true)?;
+        self.m_active_camo_energy_curve_max = bitstream.read_quantized_real(0f32, 2f32, 8, false, true)?;
+        self.m_armor_lock_damage_drain = bitstream.read_quantized_real(0f32, 2f32, 8, false, true)?;
+        self.m_armor_lock_damage_drain_limit = bitstream.read_quantized_real(0f32, 2f32, 8, false, true)?;
+        self.m_magnum_damage = bitstream.read_quantized_real(0f32, 10f32, 8, false, true)?;
+        self.m_magnum_fire_delay = bitstream.read_quantized_real(0f32, 10f32, 8, false, true)?;
 
         Ok(())
     }

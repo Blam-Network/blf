@@ -107,9 +107,9 @@ impl c_object_reference {
                 self.m_variable_index = Some(bitstream.read_integer("variable-index", 2)?);
             }
             7 => {
-                let mut team = c_explicit_object::default();
+                let mut team = c_explicit_team::default();
                 team.decode(bitstream)?;
-                self.m_object = Some(team);
+                self.m_team = Some(team);
                 self.m_variable_index = Some(bitstream.read_integer("variable-index", 2)?);
             }
             _ => {

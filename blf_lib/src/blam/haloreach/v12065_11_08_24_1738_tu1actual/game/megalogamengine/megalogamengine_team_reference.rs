@@ -48,7 +48,7 @@ impl c_team_reference {
                 object.encode(bitstream)?;
             }
             _ => {
-                // return Err(format!("Invalid c_team_reference: {self:?}").into())
+                return Err(format!("Invalid c_team_reference: {self:?}").into())
             }
         };
 
@@ -93,7 +93,7 @@ impl c_team_reference {
                 self.m_object = Some(object);
             }
             _ => {
-                // return Err(format!("Invalid c_team_reference: {self:?}").into())
+                return Err(format!("Invalid c_team_reference: {self:?}").into())
             }
         }
 

@@ -9,7 +9,7 @@ use blf_lib_derivable::result::BLFLibResult;
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct c_replaceable_token {
-    // type, 3 bits
+    pub m_type: u8, // 3 bits
     #[serde(skip_serializing_if = "Option::is_none")]
     pub m_player: Option<c_player_reference>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -24,58 +24,57 @@ pub struct c_replaceable_token {
 
 impl c_replaceable_token {
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
-        match (&self.m_player, &self.m_object, &self.m_team, &self.m_custom_timer, &self.m_custom_variable) {
-            (Some(player), None, None, None, None) => {
-                bitstream.write_integer(0u8, 3)?;
+        bitstream.write_integer(self.m_type, 3)?;
+
+        match (self.m_type, &self.m_player, &self.m_object, &self.m_team, &self.m_custom_timer, &self.m_custom_variable) {
+            (1, Some(player), None, None, None, None) => {
                 player.encode(bitstream)?;
             }
-            (None, None, Some(team), None, None) => {
-                bitstream.write_integer(1u8, 3)?;
+            (2, None, None, Some(team), None, None) => {
                 team.encode(bitstream)?;
             }
-            (None, Some(object), None, None, None) => {
-                bitstream.write_integer(2u8, 3)?;
+            (3, None, Some(object), None, None, None) => {
                 object.encode(bitstream)?;
             }
-            (None, None, None, None, Some(custom_variable)) => {
-                bitstream.write_integer(0u8, 3)?;
+            (4, None, None, None, None, Some(custom_variable)) => {
                 custom_variable.encode(bitstream)?; // seems ok
             }
-            (None, None, None, Some(timer), None) => {
-                bitstream.write_integer(4u8, 3)?;
+            (5, None, None, None, Some(timer), None) => {
                 timer.encode(bitstream)?;
             }
-            _ => { }
+            _ => {
+                return Err(format!("Invalid c_replaceable_token: {self:?}").into())
+            }
         };
 
         Ok(())
     }
 
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
-        let ref_type = (bitstream.read_integer::<u8>("token-type", 3)? as i8) - 1;
+        self.m_type = bitstream.read_integer("token-type", 3)?;
 
-        match ref_type {
-            0 => {
+        match self.m_type {
+            1 => {
                 let mut player = c_player_reference::default();
                 player.decode(bitstream)?;
                 self.m_player = Some(player);
             }
-            1 => {
+            2 => {
                 let mut team = c_team_reference::default();
                 team.decode(bitstream)?;
                 self.m_team = Some(team);
             }
-            2 => {
+            3 => {
                 let mut object = c_object_reference::default();
                 object.decode(bitstream)?;
                 self.m_object = Some(object);
             }
-            3 => {
+            4 => {
                 let mut custom_variable = c_custom_variable_reference::default();
                 custom_variable.decode(bitstream)?;
                 self.m_custom_variable = Some(custom_variable);
             }
-            4 => {
+            5 => {
                 let mut custom_timer = c_custom_timer_reference::default();
                 custom_timer.decode(bitstream)?;
                 self.m_custom_timer = Some(custom_timer);

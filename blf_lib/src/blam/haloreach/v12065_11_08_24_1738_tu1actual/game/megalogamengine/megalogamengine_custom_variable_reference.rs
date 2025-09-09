@@ -28,7 +28,7 @@ impl c_custom_variable_reference {
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
         bitstream.write_integer(self.m_type, 6)?;
 
-        match (&self.m_type, self.m_immediate_value, &self.m_player, &self.m_object, &self.m_team, self.m_variable_index, self.m_option_index, self.m_statistic_index) {
+        match (self.m_type, self.m_immediate_value, &self.m_player, &self.m_object, &self.m_team, self.m_variable_index, self.m_option_index, self.m_statistic_index) {
             (0, Some(immediate_value), None, None, None, None, None, None) => {
                 bitstream.write_signed_integer(immediate_value, 16)?;
             }
@@ -80,7 +80,7 @@ impl c_custom_variable_reference {
 
         match self.m_type {
             0 => {
-                self.m_immediate_value = Some(bitstream.read_integer("immediate-value", 16)?);
+                self.m_immediate_value = Some(bitstream.read_signed_integer("immediate-value", 16)?);
             }
             1 => {
                 let mut player = c_explicit_player::default();

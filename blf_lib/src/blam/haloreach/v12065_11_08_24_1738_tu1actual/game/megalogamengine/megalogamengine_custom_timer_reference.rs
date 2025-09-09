@@ -35,23 +35,19 @@ impl c_custom_timer_reference {
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
         bitstream.write_enum(self.m_type.clone(), 3)?;
 
-        match (self.m_type.clone(), &self.m_player, &self.m_object, &self.m_team, &self.m_variable_index) {
+        match (self.m_type.clone(), self.m_player.as_ref(), self.m_object.as_ref(), self.m_team.as_ref(), self.m_variable_index.as_ref()) {
             (e_custom_timer_type::global, None, None, None, Some(variable_index)) => {
-                bitstream.write_integer(0u8, 3)?;
                 bitstream.write_integer(*variable_index, 3)?;
             }
             (e_custom_timer_type::player, Some(player), None, None, Some(variable_index)) => {
-                bitstream.write_integer(1u8, 3)?;
                 player.encode(bitstream)?;
                 bitstream.write_integer(*variable_index, 2)?;
             }
             (e_custom_timer_type::object, None, Some(object), None, Some(variable_index)) => {
-                bitstream.write_integer(2u8, 3)?;
                 object.encode(bitstream)?;
-                bitstream.write_integer(*variable_index, 1)?;
+                bitstream.write_integer(*variable_index, 2)?;
             }
             (e_custom_timer_type::team, None, None, Some(team), Some(variable_index)) => {
-                bitstream.write_integer(3u8, 3)?;
                 team.encode(bitstream)?;
                 bitstream.write_integer(*variable_index, 2)?;
             }
@@ -95,7 +91,7 @@ impl c_custom_timer_reference {
             e_custom_timer_type::sudden_death => {}
             e_custom_timer_type::grace_period => {}
             _ => {
-                return Err(format!("Invalid c_custom_timer_reference: {self:?}").into())
+                // return Err(format!("Invalid c_custom_timer_reference: {self:?}").into())
             }
         }
 
