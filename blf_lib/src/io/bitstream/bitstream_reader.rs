@@ -544,7 +544,9 @@ impl<'a> c_bitstream_reader<'a> {
             bytes[i] = byte;
 
             if byte == 0 {
-                return Ok(String::from_utf8(bytes)?)
+                // manually parse the string because halo sometimes uses extended char sets.
+                let s: String = bytes.iter().map(|&b| b as char).collect();
+                return Ok(s);
             }
         }
 

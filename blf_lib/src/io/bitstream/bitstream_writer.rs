@@ -395,8 +395,13 @@ impl c_bitstream_writer {
         assert_ok!(max_string_size > 0);
         assert_ok!(char_string.len() <= max_string_size as usize);
 
-        for byte in char_string.as_bytes() {
-            self.write_value_internal(&[*byte], 8)?;
+        for ch in char_string.chars() {
+            let code = ch as u32;
+            if code > 0xFF {
+                return Err(format!("Cannot encode non-Latin-1 char: {ch:?}").into());
+            }
+            let byte = code as u8;
+            self.write_value_internal(&[byte], 8)?;
         }
 
         // null terminate
