@@ -52,7 +52,7 @@ impl c_replaceable_token {
     }
 
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
-        let ref_type = bitstream.read_integer("token-type", 3)?;
+        let ref_type = (bitstream.read_integer::<u8>("token-type", 3)? as i8) - 1;
 
         match ref_type {
             0 => {

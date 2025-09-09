@@ -7,7 +7,7 @@ use crate::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::megalogamengin
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct c_player_reference {
-    // type, 2 bits
+    pub m_type: u8, // 2 bits
     #[serde(skip_serializing_if = "Option::is_none")]
     pub m_player: Option<c_explicit_player>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -20,23 +20,21 @@ pub struct c_player_reference {
 
 impl c_player_reference {
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
-        match (&self.m_player, &self.m_object, &self.m_team, self.m_variable_index) {
-            (Some(player), None, None, None) => {
-                bitstream.write_integer(0u8, 2)?;
+        bitstream.write_integer(self.m_type, 2)?;
+
+        match (&self.m_type, &self.m_player, &self.m_object, &self.m_team, self.m_variable_index) {
+            (0, Some(player), None, None, None) => {
                 player.encode(bitstream)?;
             }
-            (Some(player), None, None, Some(variable_index)) => {
-                bitstream.write_integer(1u8, 2)?;
+            (1, Some(player), None, None, Some(variable_index)) => {
                 player.encode(bitstream)?;
                 bitstream.write_integer(variable_index, 2)?;
             }
-            (None, Some(object), None, Some(variable_index)) => {
-                bitstream.write_integer(2u8, 2)?;
+            (2, None, Some(object), None, Some(variable_index)) => {
                 object.encode(bitstream)?;
                 bitstream.write_integer(variable_index, 2)?;
             }
-            (None, None, Some(team), Some(variable_index)) => {
-                bitstream.write_integer(3u8, 2)?;
+            (3, None, None, Some(team), Some(variable_index)) => {
                 team.encode(bitstream)?;
                 bitstream.write_integer(variable_index, 2)?;
             }
@@ -49,9 +47,9 @@ impl c_player_reference {
     }
 
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
-        let ref_type = bitstream.read_integer("type", 2)?;
+        self.m_type = bitstream.read_integer("type", 2)?;
 
-        match ref_type {
+        match self.m_type {
             0 => {
                 let mut player = c_explicit_player::default();
                 player.decode(bitstream)?;
@@ -76,7 +74,7 @@ impl c_player_reference {
                 self.m_variable_index = Some(bitstream.read_integer("m_variable_index", 2)?);
             }
             _ => {
-                return Err(format!("Invalid c_explicit_player: type = {ref_type}").into())
+                return Err(format!("Invalid c_explicit_player: type = {}", self.m_type).into())
             }
         }
 

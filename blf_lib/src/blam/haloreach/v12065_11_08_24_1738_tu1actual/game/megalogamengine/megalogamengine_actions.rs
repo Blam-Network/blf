@@ -1,3 +1,6 @@
+use binrw::{BinRead, BinWrite};
+use num_derive::{FromPrimitive, ToPrimitive};
+use num_traits::FromPrimitive;
 use serde::{Deserialize, Serialize};
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::megalogamengine::megalogamengine_custom_timer_reference::c_custom_timer_reference;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::megalogamengine::megalogamengine_object_type_reference::c_object_type_reference;
@@ -7,6 +10,7 @@ use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::megalogameng
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::megalogamengine::megalogamengine_variant_variable::s_variant_variable;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::saved_games::scenario_map_variant::e_boundary_shape;
 use blf_lib::io::bitstream::{c_bitstream_reader, c_bitstream_writer};
+use blf_lib::OPTION_TO_RESULT;
 use blf_lib_derivable::result::{BLFLibError, BLFLibResult};
 use crate::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::megalogamengine::megalogamengine_custom_variable_reference::c_custom_variable_reference;
 use crate::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::megalogamengine::megalogamengine_object_reference::c_object_reference;
@@ -115,7 +119,7 @@ impl s_action_create_object_parameters {
         self.m_object_reference_1.decode(bitstream)?;
         self.m_object_reference_2.decode(bitstream)?;
         self.m_filter_index = bitstream.read_index::<16>("filter_index", 4)? as i8;
-        self.m_flags = bitstream.read_integer("flags", 4)?;
+        self.m_flags = bitstream.read_integer("flags", 3)?;
         self.m_offset = bitstream.read_integer("offset", 24)?;
         self.m_variant_name_index = bitstream.read_integer("variant-name-index", 8)?;
 
@@ -810,14 +814,14 @@ pub struct s_action_player_set_objective_allegiance_icon_parameters {
 impl s_action_player_set_objective_allegiance_icon_parameters {
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
         self.m_player.encode(bitstream)?;
-        bitstream.write_index::<128>(self.m_icon_index, 2)?;
+        bitstream.write_index::<128>(self.m_icon_index, 7)?;
 
         Ok(())
     }
 
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
         self.m_player.decode(bitstream)?;
-        self.m_icon_index = bitstream.read_index::<128>("icon-index", 2)? as i8;
+        self.m_icon_index = bitstream.read_index::<128>("icon-index", 7)? as i8;
 
         Ok(())
     }
@@ -1309,9 +1313,113 @@ impl s_action_boundary_set_player_color_parameters {
     }
 }
 
+#[derive(Clone, PartialEq, Debug, Serialize, Deserialize, Default, ToPrimitive, FromPrimitive)]
+pub enum e_action_type {
+    #[default]
+    none = 0,
+    set_score = 1,
+    place_at_me = 2,
+    delete_object = 3,
+    set_waypoint_visibility = 4,
+    set_waypoint_icon = 5,
+    set_waypoint_priority = 6,
+    set_waypoint_timer = 7,
+    set_waypoint_distance = 8,
+    modify_variable = 9,
+    set_object_shape = 10,
+    apply_player_traits = 11,
+    set_weapon_pickup_permissions = 12,
+    set_spawn_location_permissions = 13,
+    set_spawn_location_fireteams = 14,
+    set_object_progress_bar = 15,
+    kill_feed_message = 16,
+    set_timer_rate = 17,
+    debug_print = 18,
+    get_carrier = 19,
+    run_nested_trigger = 20,
+    end_round = 21,
+    set_object_shape_visibility = 22,
+    kill_object_instantly = 23,
+    set_object_invincibility = 24,
+    random_number = 25,
+    break_into_debugger = 26,
+    get_object_orientation = 27,
+    get_speed = 28,
+    get_killer = 29,
+    get_death_damage_type = 30,
+    get_death_damage_modifier = 31,
+    debugging_enable_tracing = 32,
+    attach_objects = 33,
+    detach_objects = 34,
+    get_player_scoreboard_position = 35,
+    get_team_scoreboard_position = 36,
+    get_player_killstreak = 37,
+    modify_player_requisition_money = 38,
+    set_player_requisition_purchase_modes = 39,
+    get_player_vehicle = 40,
+    force_player_into_vehicle = 41,
+    set_player_biped = 42,
+    reset_timer = 43,
+    set_weapon_pickup_priority = 44,
+    push_object_up = 45,
+    set_text = 46,
+    set_value_text = 47,
+    set_meter_parameters = 48,
+    set_icon = 49,
+    set_visibility = 50,
+    play_sound = 51,
+    modify_object_scale = 52,
+    set_waypoint_text = 53,
+    get_object_shields = 54,
+    get_object_health = 55,
+    set_objective_text = 56,
+    set_objective_allegiance_name = 57,
+    set_objective_allegiance_icon = 58,
+    set_co_op_spawning = 59,
+    set_primary_respawn_object_for_team = 60,
+    set_primary_respawn_object_for_player = 61,
+    get_player_fireteam = 62,
+    set_player_fireteam = 63,
+    modify_object_shields = 64,
+    modify_object_health = 65,
+    get_distance = 66,
+    modify_object_max_shields = 67,
+    modify_object_max_health = 68,
+    set_player_requisition_palette = 69,
+    set_device_power = 70,
+    get_device_power = 71,
+    set_device_position = 72,
+    get_device_position = 73,
+    modify_player_grenades = 74,
+    send_incident = 75,
+    send_incident_with_value = 76,
+    set_player_loadout_palette = 77,
+    set_device_position_track = 78,
+    animate_device_position = 79,
+    set_device_actual_position = 80,
+    insert_theater_film_marker = 81,
+    enable_disable_spawn_zone = 82,
+    get_player_weapon = 83,
+    get_player_armor_ability = 84,
+    enable_disable_object_garbage_collection = 85,
+    get_player_target_object = 86,
+    create_object_equidistant = 87,
+    debug_force_splitscreen_count = 88,
+    add_weapon_to_player = 89,
+    set_co_op_spawning_for_player = 90,
+    copy_object_rotation = 91,
+    point_object_toward_object = 92,
+    add_weapon_to_biped = 93,
+    remove_weapon_from = 94,
+    set_scenario_interpolator_state = 95,
+    get_random_object = 96,
+    record_griefer_penalty = 97,
+    set_shape_owner = 98,
+}
+
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct c_action {
-    pub m_type: u8, // 7 bits
+    pub m_type: e_action_type, // 7 bits
     #[serde(skip_serializing_if = "Option::is_none")]
     pub m_set_score_parameters: Option<s_action_set_score_parameters>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1424,9 +1532,9 @@ pub struct c_action {
 
 impl c_action {
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
-        bitstream.write_integer(self.m_type, 7)?;
+        bitstream.write_enum(self.m_type.clone(), 7)?;
 
-        match self.m_type {
+        match self.m_type.clone() as u32 {
             1 => self.m_set_score_parameters.as_ref()
                 .ok_or_else(|| BLFLibError::from("m_set_score_parameters does not exist."))?
                 .encode(bitstream)?,
@@ -1679,9 +1787,9 @@ impl c_action {
     }
 
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
-        self.m_type = bitstream.read_integer("action-type", 7)?;
+        self.m_type = bitstream.read_enum(7)?;
 
-        match self.m_type {
+        match self.m_type.clone() as u32 {
             1 => {
                 let mut set_score_parameters = s_action_set_score_parameters::default();
                 set_score_parameters.decode(bitstream)?;
