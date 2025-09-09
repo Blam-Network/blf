@@ -13,15 +13,16 @@ pub fn runtime_data_decompress(
     endian: e_bitstream_byte_order,
 ) -> BLFLibResult {
     let mut cursor = Cursor::new(source_buffer);
-    let compressed_buffer_size = u32::read_options(&mut cursor, endian.into(), ())?;
+    let decompressed_buffer_size = u32::read_options(&mut cursor, endian.into(), ())?;
     let mut decoder = ZlibDecoder::new_with_decompress(
         cursor,
         Decompress::new(true)
     );
+
     decoder.read_to_end(decompressed_buffer)
         .map_err(|e| BLFLibError::from(
             format!("runtime_data_decompress: failed to decompress {} - {}",
-                    compressed_buffer_size, e.to_string()
+                    decompressed_buffer_size, e.to_string()
         ))
     )?;
 
@@ -38,9 +39,9 @@ pub fn runtime_data_compress(
     let mut compressed_data = e.finish()?;
 
     let mut writer = Cursor::new(compressed_buffer);
-    let compressed_size = compressed_data.len() as u32 + 4;
+    let decompressed_size = source_buffer.len() as u32 + 4;
 
-    compressed_size.write_options(&mut writer, endian.into(), ())?;
+    decompressed_size.write_options(&mut writer, endian.into(), ())?;
     writer.write_all(compressed_data.as_slice())?;
 
     Ok(())
