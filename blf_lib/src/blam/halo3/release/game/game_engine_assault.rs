@@ -44,16 +44,16 @@ impl c_game_engine_assault_variant {
     }
 
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
-        SET_BIT!(self.m_variant_flags, 0, bitstream.read_bool()?);
-        self.m_game_type = bitstream.read_integer(2)?;
-        self.m_respawn = bitstream.read_integer(3)?;
-        self.m_enemy_bomb_waypoint = bitstream.read_integer(3)?;
-        self.m_score_to_win = bitstream.read_integer(6)?;
-        self.m_sudden_death_time = bitstream.read_signed_integer(9)?;
-        self.m_bomb_arming_time = bitstream.read_integer(5)?;
-        self.m_bomb_disarming_time = bitstream.read_integer(5)?;
-        self.m_bomb_fuse_time = bitstream.read_integer(5)?;
-        self.m_bomb_reset_time = bitstream.read_integer(6)?;
+        SET_BIT!(self.m_variant_flags, 0, bitstream.read_unnamed_bool()?);
+        self.m_game_type = bitstream.read_unnamed_integer(2)?;
+        self.m_respawn = bitstream.read_unnamed_integer(3)?;
+        self.m_enemy_bomb_waypoint = bitstream.read_unnamed_integer(3)?;
+        self.m_score_to_win = bitstream.read_unnamed_integer(6)?;
+        self.m_sudden_death_time = bitstream.read_unnamed_signed_integer(9)?;
+        self.m_bomb_arming_time = bitstream.read_unnamed_integer(5)?;
+        self.m_bomb_disarming_time = bitstream.read_unnamed_integer(5)?;
+        self.m_bomb_fuse_time = bitstream.read_unnamed_integer(5)?;
+        self.m_bomb_reset_time = bitstream.read_unnamed_integer(6)?;
         self.m_carrier_traits.decode(bitstream)?;
         self.m_arming_traits.decode(bitstream)?;
 

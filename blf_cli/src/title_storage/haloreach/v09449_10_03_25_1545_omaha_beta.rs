@@ -1706,16 +1706,16 @@ impl v09449_10_03_25_1545_omaha_beta {
             // let mut file = File::open(&map_variant_json_path).unwrap();
             // let mut game_variant_json = String::new();
             // file.read_to_string(&mut game_variant_json).unwrap();
-            let old_chunk = find_chunk_in_file::<haloreach::v11860_10_07_24_0147_omaha_release::s_blf_chunk_matchmaking_game_variant>(&game_variant_json_path);
-            match old_chunk {
-                Ok(old_chunk) => {
-                    json_queue.push((game_variant, s_blf_chunk_matchmaking_game_variant { data: old_chunk.data}));
-                }
-                Err(..) => {
-                    let chunk = find_chunk_in_file::<s_blf_chunk_matchmaking_game_variant>(game_variant_json_path).unwrap();
-                    json_queue.push((game_variant, chunk));
-                }
-            }
+            // let old_chunk = find_chunk_in_file::<haloreach::v11860_10_07_24_0147_omaha_release::s_blf_chunk_matchmaking_game_variant>(&game_variant_json_path);
+            // match old_chunk {
+            //     Ok(old_chunk) => {
+            //         json_queue.push((game_variant, s_blf_chunk_matchmaking_game_variant { data: old_chunk.data}));
+            //     }
+            //     Err(..) => {
+            //         let chunk = find_chunk_in_file::<s_blf_chunk_matchmaking_game_variant>(game_variant_json_path).unwrap();
+            //         json_queue.push((game_variant, chunk));
+            //     }
+            // }
 
             // json_queue.push((game_variant, chunk));
         }

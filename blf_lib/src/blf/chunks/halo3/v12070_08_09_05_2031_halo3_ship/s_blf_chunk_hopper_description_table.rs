@@ -59,13 +59,13 @@ impl BinRead for s_blf_chunk_hopper_description_table {
 
         let mut mhdf = Self::default();
 
-        mhdf.description_count = bitstream.read_integer(6)?;
+        mhdf.description_count = bitstream.read_unnamed_integer(6)?;
         mhdf.descriptions.resize(mhdf.description_count, s_game_hopper_description::default());
 
         for i in 0..mhdf.description_count {
             let description = &mut mhdf.descriptions[i];
-            description.identifier = bitstream.read_integer(16)?;
-            description.hopper_type = bitstream.read_bool()?;
+            description.identifier = bitstream.read_unnamed_integer(16)?;
+            description.hopper_type = bitstream.read_unnamed_bool()?;
             BINRW_RESULT!(description.description.set_string(&BINRW_RESULT!(bitstream.read_string_utf8(256))?))?;
         }
 

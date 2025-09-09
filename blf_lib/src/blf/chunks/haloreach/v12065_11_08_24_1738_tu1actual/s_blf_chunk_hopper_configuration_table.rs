@@ -40,8 +40,8 @@ impl BinRead for s_blf_chunk_hopper_configuration_table {
         let mut bitstream = c_bitstream_reader::new(packed_buffer.as_slice(), e_bitstream_byte_order::from_binrw_endian(endian));
 
         // Now decompress.
-        let compressed_length = bitstream.read_integer::<usize>(14)? - 4; // this -4 is necessary, but idk why
-        let decompressed_length = bitstream.read_integer(32)?;
+        let compressed_length = bitstream.read_unnamed_integer::<usize>(14)? - 4; // this -4 is necessary, but idk why
+        let decompressed_length = bitstream.read_unnamed_integer(32)?;
         let compressed_hopper_table_data: Vec<u8> = bitstream.read_raw_data(compressed_length * 8)?;
         let mut decompressed_hopper_table_data: Vec<u8> = Vec::with_capacity(decompressed_length);
         let mut decoder = ZlibDecoder::new(Cursor::new(compressed_hopper_table_data));

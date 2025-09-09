@@ -15,3 +15,4 @@ pub mod s_blf_chunk_dlc_map_manifest;
 pub mod s_blf_chunk_megalo_categories;
 pub mod s_blf_chunk_predefined_queries;
 pub mod s_blf_chunk_matchmaking_hopper_statistics;
+pub mod s_blf_chunk_game_variant;

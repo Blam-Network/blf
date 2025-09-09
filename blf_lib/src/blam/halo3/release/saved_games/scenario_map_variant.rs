@@ -140,45 +140,45 @@ impl c_map_variant {
 
     pub fn decode(&mut self, mut bitstream: &mut c_bitstream_reader) -> BLFLibResult {
         self.m_metadata.decode(bitstream)?;
-        self.m_map_variant_version = bitstream.read_integer(8)?;
-        self.m_original_map_rsa_signature_hash = bitstream.read_integer(32)?;
-        self.m_number_of_scenario_objects = bitstream.read_integer(10)?;
-        self.m_number_of_variant_objects = bitstream.read_integer(10)?;
-        self.m_number_of_placeable_object_quotas = bitstream.read_integer(9)?;
-        self.m_map_id = bitstream.read_integer(32)?;
-        self.m_built_in = bitstream.read_bool()?;
+        self.m_map_variant_version = bitstream.read_unnamed_integer(8)?;
+        self.m_original_map_rsa_signature_hash = bitstream.read_unnamed_integer(32)?;
+        self.m_number_of_scenario_objects = bitstream.read_unnamed_integer(10)?;
+        self.m_number_of_variant_objects = bitstream.read_unnamed_integer(10)?;
+        self.m_number_of_placeable_object_quotas = bitstream.read_unnamed_integer(9)?;
+        self.m_map_id = bitstream.read_unnamed_integer(32)?;
+        self.m_built_in = bitstream.read_unnamed_bool()?;
         self.m_world_bounds = bitstream.read_raw(0xC0)?;
-        self.m_game_engine_subtype = bitstream.read_integer(4)?;
-        self.m_maximum_budget = bitstream.read_float(32)?;
-        self.m_spent_budget = bitstream.read_float(32)?;
+        self.m_game_engine_subtype = bitstream.read_unnamed_integer(4)?;
+        self.m_maximum_budget = bitstream.read_unnamed_float(32)?;
+        self.m_spent_budget = bitstream.read_unnamed_float(32)?;
 
         for i in 0..self.m_number_of_variant_objects as usize {
             let variant_object = &mut self.m_variant_objects.get_mut()[i];
 
-            if !bitstream.read_bool()? {
+            if !bitstream.read_unnamed_bool()? {
                 continue;
             }
 
-            variant_object.flags = bitstream.read_integer(16)?;
-            variant_object.variant_quota_index = bitstream.read_signed_integer(32)?;
+            variant_object.flags = bitstream.read_unnamed_integer(16)?;
+            variant_object.variant_quota_index = bitstream.read_unnamed_signed_integer(32)?;
 
-            if bitstream.read_bool()? {
+            if bitstream.read_unnamed_bool()? {
                 variant_object.parent_object_identifier = bitstream.read_raw(64)?;
             }
 
-            if !bitstream.read_bool()? {
+            if !bitstream.read_unnamed_bool()? {
                 continue;
             }
 
             simulation_read_quantized_position(bitstream, &mut variant_object.position, 16, &self.m_world_bounds)?;
             bitstream.read_axes(&mut variant_object.forward, &mut variant_object.up)?;
-            variant_object.multiplayer_game_object_properties.object_type = bitstream.read_signed_integer(8)?;
-            variant_object.multiplayer_game_object_properties.symmetry_placement_flags = bitstream.read_integer(8)?;
-            variant_object.multiplayer_game_object_properties.game_engine_flags = bitstream.read_integer(16)?;
-            variant_object.multiplayer_game_object_properties.shared_storage = bitstream.read_integer(8)?;
-            variant_object.multiplayer_game_object_properties.spawn_time = bitstream.read_integer(8)?;
-            variant_object.multiplayer_game_object_properties.owner_team = bitstream.read_integer(8)?;
-            variant_object.multiplayer_game_object_properties.boundary_shape = bitstream.read_integer(8)?;
+            variant_object.multiplayer_game_object_properties.object_type = bitstream.read_unnamed_signed_integer(8)?;
+            variant_object.multiplayer_game_object_properties.symmetry_placement_flags = bitstream.read_unnamed_integer(8)?;
+            variant_object.multiplayer_game_object_properties.game_engine_flags = bitstream.read_unnamed_integer(16)?;
+            variant_object.multiplayer_game_object_properties.shared_storage = bitstream.read_unnamed_integer(8)?;
+            variant_object.multiplayer_game_object_properties.spawn_time = bitstream.read_unnamed_integer(8)?;
+            variant_object.multiplayer_game_object_properties.owner_team = bitstream.read_unnamed_integer(8)?;
+            variant_object.multiplayer_game_object_properties.boundary_shape = bitstream.read_unnamed_integer(8)?;
 
             match variant_object.multiplayer_game_object_properties.boundary_shape {
                 1 => { // sphere
@@ -201,17 +201,17 @@ impl c_map_variant {
         }
 
         for i in 0..k_object_type_count {
-            self.m_object_type_start_index.get_mut()[i] = bitstream.read_integer::<i16>(9)? - 1;
+            self.m_object_type_start_index.get_mut()[i] = bitstream.read_unnamed_integer::<i16>(9)? - 1;
         }
 
         for i in 0..self.m_number_of_placeable_object_quotas as usize {
             let object_quota = &mut self.m_quotas.get_mut()[i];
-            object_quota.object_definition_index = bitstream.read_integer(32)?;
-            object_quota.minimum_count = bitstream.read_integer(8)?;
-            object_quota.maximum_count = bitstream.read_integer(8)?;
-            object_quota.placed_on_map = bitstream.read_integer(8)?;
-            object_quota.maximum_allowed = bitstream.read_signed_integer(8)?;
-            object_quota.price_per_item = bitstream.read_float(32)?;
+            object_quota.object_definition_index = bitstream.read_unnamed_integer(32)?;
+            object_quota.minimum_count = bitstream.read_unnamed_integer(8)?;
+            object_quota.maximum_count = bitstream.read_unnamed_integer(8)?;
+            object_quota.placed_on_map = bitstream.read_unnamed_integer(8)?;
+            object_quota.maximum_allowed = bitstream.read_unnamed_signed_integer(8)?;
+            object_quota.price_per_item = bitstream.read_unnamed_float(32)?;
         }
 
         Ok(())

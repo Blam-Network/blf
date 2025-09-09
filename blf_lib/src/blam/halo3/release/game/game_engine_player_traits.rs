@@ -196,22 +196,22 @@ impl c_player_traits {
         self.m_shield_vitality_traits.m_vampirism_percentage_setting = bitstream.read_enum(3)?;
         self.m_shield_vitality_traits.m_headshot_immunity_setting = bitstream.read_enum(2)?;
         self.m_shield_vitality_traits.m_shield_multiplier_setting = bitstream.read_enum(3)?;
-        self.m_weapon_traits.m_damage_modifier_percentage_setting = bitstream.read_integer(4)?;
-        self.m_weapon_traits.m_initial_primary_weapon_absolute_index = bitstream.read_signed_integer(8)?;
-        self.m_weapon_traits.m_initial_secondary_weapon_absolute_index = bitstream.read_signed_integer(8)?;
-        self.m_weapon_traits.m_initial_grenade_count_setting = bitstream.read_integer(2)?;
-        self.m_weapon_traits.m_infinite_ammo_setting = bitstream.read_integer(2)?;
-        self.m_weapon_traits.m_recharging_grenades_setting = bitstream.read_integer(2)?;
-        self.m_weapon_traits.m_weapon_pickup_setting = bitstream.read_integer(2)?;
-        self.m_movement_traits.m_speed_setting = bitstream.read_integer(4)?;
-        self.m_movement_traits.m_gravity_setting = bitstream.read_integer(3)?;
-        self.m_movement_traits.m_vehicle_usage_setting = bitstream.read_integer(2)?;
-        self.m_appearance_traits.m_active_camo_setting = bitstream.read_integer(3)?;
-        self.m_appearance_traits.m_waypoint_setting = bitstream.read_integer(2)?;
-        self.m_appearance_traits.m_aura_setting = bitstream.read_integer(3)?;
-        self.m_appearance_traits.m_forced_change_color_setting = bitstream.read_integer(4)?;
-        self.m_sensor_traits.m_motion_tracker_setting = bitstream.read_integer(3)?;
-        self.m_sensor_traits.m_motion_tracker_range_setting = bitstream.read_integer(3)?;
+        self.m_weapon_traits.m_damage_modifier_percentage_setting = bitstream.read_unnamed_integer(4)?;
+        self.m_weapon_traits.m_initial_primary_weapon_absolute_index = bitstream.read_unnamed_signed_integer(8)?;
+        self.m_weapon_traits.m_initial_secondary_weapon_absolute_index = bitstream.read_unnamed_signed_integer(8)?;
+        self.m_weapon_traits.m_initial_grenade_count_setting = bitstream.read_unnamed_integer(2)?;
+        self.m_weapon_traits.m_infinite_ammo_setting = bitstream.read_unnamed_integer(2)?;
+        self.m_weapon_traits.m_recharging_grenades_setting = bitstream.read_unnamed_integer(2)?;
+        self.m_weapon_traits.m_weapon_pickup_setting = bitstream.read_unnamed_integer(2)?;
+        self.m_movement_traits.m_speed_setting = bitstream.read_unnamed_integer(4)?;
+        self.m_movement_traits.m_gravity_setting = bitstream.read_unnamed_integer(3)?;
+        self.m_movement_traits.m_vehicle_usage_setting = bitstream.read_unnamed_integer(2)?;
+        self.m_appearance_traits.m_active_camo_setting = bitstream.read_unnamed_integer(3)?;
+        self.m_appearance_traits.m_waypoint_setting = bitstream.read_unnamed_integer(2)?;
+        self.m_appearance_traits.m_aura_setting = bitstream.read_unnamed_integer(3)?;
+        self.m_appearance_traits.m_forced_change_color_setting = bitstream.read_unnamed_integer(4)?;
+        self.m_sensor_traits.m_motion_tracker_setting = bitstream.read_unnamed_integer(3)?;
+        self.m_sensor_traits.m_motion_tracker_range_setting = bitstream.read_unnamed_integer(3)?;
 
         Ok(())
     }

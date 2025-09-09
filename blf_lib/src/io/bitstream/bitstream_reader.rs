@@ -142,11 +142,19 @@ impl<'a> c_bitstream_reader<'a> {
         })
     }
 
-    pub fn read_bool<T>(&mut self) -> BLFLibResult<T>
+    #[deprecated]
+    pub fn read_unnamed_bool<T>(&mut self) -> BLFLibResult<T>
         where
             T: From<bool>,
     {
-        Ok(T::from(self.read_integer::<u8>(1)? == 1))
+        self.read_bool("???")
+    }
+
+    pub fn read_bool<T>(&mut self, name: &str) -> BLFLibResult<T>
+    where
+        T: From<bool>,
+    {
+        Ok(T::from(self.read_integer::<u8>(name, 1)? == 1))
     }
 
     pub fn read_bits_internal(&mut self, output: &mut [u8], size_in_bits: usize) -> BLFLibResult {
@@ -305,13 +313,13 @@ impl<'a> c_bitstream_reader<'a> {
     }
 
     pub fn read_enum<T: FromPrimitive>(&mut self, size_in_bits: usize) -> BLFLibResult<T> {
-        let integer: u32 = self.read_integer(size_in_bits)?;
+        let integer: u32 = self.read_unnamed_integer(size_in_bits)?;
         OPTION_TO_RESULT!(FromPrimitive::from_u32(integer), format!("Unexpected enum value: {}", integer).into())
     }
 
-    pub fn read_integer<T>(&mut self, size_in_bits: usize) -> BLFLibResult<T>
-        where
-            T: TryFrom<u32> + Display + Debug, <T as TryFrom<u32>>::Error: Display + Debug
+    pub fn read_integer<T>(&mut self, name: &str, size_in_bits: usize) -> BLFLibResult<T>
+    where
+        T: TryFrom<u32> + Display + Debug, <T as TryFrom<u32>>::Error: Display + Debug
     {
         assert_ok!(size_in_bits > 0);
         assert_ok!(size_in_bits <= 32);
@@ -338,26 +346,56 @@ impl<'a> c_bitstream_reader<'a> {
         )))?)
     }
 
-    pub fn read_index<const max: usize>(&mut self, size_in_bits: usize) -> BLFLibResult<i32> {
-        if self.read_bool()? {
+    #[deprecated]
+    pub fn read_unnamed_integer<T>(&mut self, size_in_bits: usize) -> BLFLibResult<T>
+        where
+            T: TryFrom<u32> + Display + Debug, <T as TryFrom<u32>>::Error: Display + Debug
+    {
+        self.read_integer("???", size_in_bits)
+    }
+
+    #[deprecated]
+    pub fn read_unnamed_index<const max: usize>(&mut self, size_in_bits: usize) -> BLFLibResult<i32> {
+        if self.read_unnamed_bool()? {
             Ok(-1)
         } else {
-            let value = self.read_integer(size_in_bits)?;
+            let value = self.read_unnamed_integer(size_in_bits)?;
             assert_ok!(value < max as i32);
             Ok(value)
         }
     }
 
-    pub fn read_float(&mut self, size_in_bits: usize) -> BLFLibResult<Float32> {
+    pub fn read_index<const max: usize>(&mut self, name: &str, size_in_bits: usize) -> BLFLibResult<i32> {
+        if self.read_bool("index-exists")? {
+            Ok(-1)
+        } else {
+            let value = self.read_integer(name, size_in_bits)?;
+            assert_ok!(value < max as i32);
+            Ok(value)
+        }
+    }
+
+    pub fn read_unnamed_float(&mut self, size_in_bits: usize) -> BLFLibResult<Float32> {
+        self.read_float("???", size_in_bits)
+    }
+
+    pub fn read_float<T>(&mut self, name: &str, size_in_bits: usize) -> BLFLibResult<T>
+        where
+            T: TryFrom<f32> + Display + Debug, <T as TryFrom<f32>>::Error: Display + Debug
+    {
         assert_ok!(size_in_bits > 0);
         assert_ok!(size_in_bits <= 32);
         let mut bytes = [0u8; 4];
         self.read_bits_internal(&mut bytes, size_in_bits)?;
 
-        Ok(match self.m_packed_byte_order {
-            e_bitstream_byte_order::_bitstream_byte_order_little_endian => { Float32::from(f32::from_le_bytes(bytes)) }
-            e_bitstream_byte_order::_bitstream_byte_order_big_endian => { Float32::from(f32::from_be_bytes(bytes)) }
-        })
+        Ok(T::try_from(match self.m_packed_byte_order {
+            e_bitstream_byte_order::_bitstream_byte_order_little_endian => { f32::from_le_bytes(bytes) }
+            e_bitstream_byte_order::_bitstream_byte_order_big_endian => { f32::from_be_bytes(bytes) }
+        }).map_err(|e|BLFLibError::from(format!("\
+            read_integer failed to convert u32 to type. size = {} data = {:?}",
+            size_in_bits,
+            bytes,
+        )))?)
     }
 
     pub fn read_i16(&mut self, size_in_bits: usize) -> BLFLibResult<i16> {
@@ -372,11 +410,19 @@ impl<'a> c_bitstream_reader<'a> {
         })
     }
 
-    pub fn read_signed_integer<T>(&mut self, size_in_bits: usize) -> BLFLibResult<T>
+    #[deprecated]
+    pub fn read_unnamed_signed_integer<T>(&mut self, size_in_bits: usize) -> BLFLibResult<T>
         where
             T: TryFrom<i32>,
     {
-        let mut result: u32 = self.read_integer(size_in_bits)?;
+        self.read_signed_integer("???", size_in_bits)
+    }
+
+    pub fn read_signed_integer<T>(&mut self, name: &str, size_in_bits: usize) -> BLFLibResult<T>
+    where
+        T: TryFrom<i32>,
+    {
+        let mut result: u32 = self.read_integer(name, size_in_bits)?;
 
         if size_in_bits < 32 && (result & (1 << (size_in_bits - 1))) != 0 {
             result |= !((1 << size_in_bits) - 1);
@@ -416,9 +462,9 @@ impl<'a> c_bitstream_reader<'a> {
     pub fn read_point3d(&mut self, point: &mut int32_point3d, axis_encoding_size_in_bits: usize) -> BLFLibResult {
         assert_ok!(0 < axis_encoding_size_in_bits && axis_encoding_size_in_bits <= 32);
 
-        point.x = self.read_integer(axis_encoding_size_in_bits)?;
-        point.y = self.read_integer(axis_encoding_size_in_bits)?;
-        point.z = self.read_integer(axis_encoding_size_in_bits)?;
+        point.x = self.read_unnamed_integer(axis_encoding_size_in_bits)?;
+        point.y = self.read_unnamed_integer(axis_encoding_size_in_bits)?;
+        point.z = self.read_unnamed_integer(axis_encoding_size_in_bits)?;
 
         Ok(())
     }
@@ -428,9 +474,9 @@ impl<'a> c_bitstream_reader<'a> {
         assert_ok!(0 < axis_encoding_size_in_bits.y && axis_encoding_size_in_bits.y <= 32);
         assert_ok!(0 < axis_encoding_size_in_bits.z && axis_encoding_size_in_bits.z <= 32);
 
-        point.x = self.read_integer(axis_encoding_size_in_bits.x as usize)?;
-        point.y = self.read_integer(axis_encoding_size_in_bits.y as usize)?;
-        point.z = self.read_integer(axis_encoding_size_in_bits.z as usize)?;
+        point.x = self.read_unnamed_integer(axis_encoding_size_in_bits.x as usize)?;
+        point.y = self.read_unnamed_integer(axis_encoding_size_in_bits.y as usize)?;
+        point.z = self.read_unnamed_integer(axis_encoding_size_in_bits.z as usize)?;
 
         Ok(())
     }
@@ -438,7 +484,7 @@ impl<'a> c_bitstream_reader<'a> {
     /// - exact_endpoints: This didn't exist prior to Reach, set it to true by default.
     pub fn read_quantized_real(&mut self, min_value: f32, max_value: f32, size_in_bits: usize, exact_midpoint: bool, exact_endpoints: bool) -> BLFLibResult<Float32> {
         assert_ok!(self.reading());
-        let value: i32 = self.read_integer(size_in_bits)?;
+        let value: i32 = self.read_unnamed_integer(size_in_bits)?;
         Ok(Float32(dequantize_real(value, min_value, max_value, size_in_bits, exact_midpoint, exact_endpoints)))
     }
 
@@ -494,7 +540,7 @@ impl<'a> c_bitstream_reader<'a> {
         let mut bytes = vec![0u8; max_string_size];
 
         for i in 0..max_string_size {
-            let byte = self.read_integer(8)?;
+            let byte = self.read_unnamed_integer(8)?;
             bytes[i] = byte;
 
             if byte == 0 {
@@ -513,7 +559,7 @@ impl<'a> c_bitstream_reader<'a> {
         let mut characters = vec![0u16; max_string_size];
 
         for i in 0..max_string_size {
-            let character = self.read_integer(16)?;
+            let character = self.read_unnamed_integer(16)?;
 
             if character == 0 {
                 return Ok(U16CString::from_vec(&mut characters[0..i]).map_err(|e|e.to_string())?.to_string().map_err(|e|e.to_string())?);
@@ -622,8 +668,8 @@ mod bitstream_reader_tests {
         let mut sut = c_bitstream_reader::new(&test_data, e_bitstream_byte_order::_bitstream_byte_order_big_endian);
         sut.begin_reading();
 
-        assert_eq!(sut.read_integer::<u32>(3).unwrap(), 0b001);
-        assert_eq!(sut.read_integer::<u32>(13).unwrap(), 8191);
+        assert_eq!(sut.read_unnamed_integer::<u32>(3).unwrap(), 0b001);
+        assert_eq!(sut.read_unnamed_integer::<u32>(13).unwrap(), 8191);
     }
 
     #[test]
@@ -635,8 +681,8 @@ mod bitstream_reader_tests {
         let mut sut = c_bitstream_reader::new(&test_data, e_bitstream_byte_order::_bitstream_byte_order_little_endian);
         sut.begin_reading();
 
-        assert_eq!(sut.read_integer::<u32>(3).unwrap(), 0b001);
-        assert_eq!(sut.read_integer::<u32>(13).unwrap(), 8191);
+        assert_eq!(sut.read_unnamed_integer::<u32>(3).unwrap(), 0b001);
+        assert_eq!(sut.read_unnamed_integer::<u32>(13).unwrap(), 8191);
     }
 
     #[test]
@@ -648,8 +694,8 @@ mod bitstream_reader_tests {
         let mut sut = c_bitstream_reader::new_with_legacy_settings(&test_data, e_bitstream_byte_order::_bitstream_byte_order_big_endian);
         sut.begin_reading();
 
-        assert_eq!(sut.read_integer::<u32>(3).unwrap(), 0b001);
-        assert_eq!(sut.read_integer::<u32>(13).unwrap(), 310);
+        assert_eq!(sut.read_unnamed_integer::<u32>(3).unwrap(), 0b001);
+        assert_eq!(sut.read_unnamed_integer::<u32>(13).unwrap(), 310);
     }
 
     #[test]
@@ -661,8 +707,8 @@ mod bitstream_reader_tests {
         let mut sut = c_bitstream_reader::new_with_legacy_settings(&test_data, e_bitstream_byte_order::_bitstream_byte_order_little_endian);
         sut.begin_reading();
 
-        assert_eq!(sut.read_integer::<u32>(3).unwrap(), 0b001);
-        assert_eq!(sut.read_integer::<u32>(13).unwrap(), 310);
+        assert_eq!(sut.read_unnamed_integer::<u32>(3).unwrap(), 0b001);
+        assert_eq!(sut.read_unnamed_integer::<u32>(13).unwrap(), 310);
     }
 
 
@@ -675,8 +721,8 @@ mod bitstream_reader_tests {
         let mut sut = c_bitstream_reader::new(&test_data, e_bitstream_byte_order::_bitstream_byte_order_big_endian);
         sut.begin_reading();
 
-        assert_eq!(sut.read_integer::<u32>(3).unwrap(), 0b000);
-        assert_eq!(sut.read_integer::<u32>(5).unwrap(), 0b11111);
+        assert_eq!(sut.read_unnamed_integer::<u32>(3).unwrap(), 0b000);
+        assert_eq!(sut.read_unnamed_integer::<u32>(5).unwrap(), 0b11111);
     }
 
     #[test]
@@ -688,8 +734,8 @@ mod bitstream_reader_tests {
         let mut sut = c_bitstream_reader::new_with_legacy_settings(&test_data, e_bitstream_byte_order::_bitstream_byte_order_big_endian);
         sut.begin_reading();
 
-        assert_eq!(sut.read_integer::<u32>(6).unwrap(), 20);
-        assert_eq!(sut.read_integer::<u32>(2).unwrap(), 0b10);
+        assert_eq!(sut.read_unnamed_integer::<u32>(6).unwrap(), 20);
+        assert_eq!(sut.read_unnamed_integer::<u32>(2).unwrap(), 0b10);
     }
 
     #[test]
@@ -703,15 +749,15 @@ mod bitstream_reader_tests {
         let mut sut = c_bitstream_reader::new_with_legacy_settings(&test_data, e_bitstream_byte_order::_bitstream_byte_order_big_endian);
         sut.begin_reading();
         // game entries count
-        assert_eq!(sut.read_integer::<u32>(6).unwrap(), 20);
+        assert_eq!(sut.read_unnamed_integer::<u32>(6).unwrap(), 20);
         // game entry 1 weight
-        assert_eq!(sut.read_integer::<u32>(32).unwrap(), 6);
+        assert_eq!(sut.read_unnamed_integer::<u32>(32).unwrap(), 6);
         // game entry 1 minimum players
-        assert_eq!(sut.read_integer::<u32>(4).unwrap(), 4);
+        assert_eq!(sut.read_unnamed_integer::<u32>(4).unwrap(), 4);
         // game entry 1 skip after veto
-        assert_eq!(sut.read_bool::<bool>().unwrap(), false);
+        assert_eq!(sut.read_unnamed_bool::<bool>().unwrap(), false);
         // game entry 1 map id
-        assert_eq!(sut.read_integer::<u32>(32).unwrap(), 310);
+        assert_eq!(sut.read_unnamed_integer::<u32>(32).unwrap(), 310);
         // game entry 1 game variant (truncated)
         assert_eq!(sut.read_string_utf8(3).unwrap(), "ru\0");
     }
@@ -727,17 +773,17 @@ mod bitstream_reader_tests {
         let mut sut = c_bitstream_reader::new(&test_data, e_bitstream_byte_order::_bitstream_byte_order_big_endian);
         sut.begin_reading();
         // game entries count
-        assert_eq!(sut.read_integer::<u32>(6).unwrap(), 55);
+        assert_eq!(sut.read_unnamed_integer::<u32>(6).unwrap(), 55);
         // game entry 1 weight
-        assert_eq!(sut.read_integer::<u32>(32).unwrap(), 1);
+        assert_eq!(sut.read_unnamed_integer::<u32>(32).unwrap(), 1);
         // game entry 1 minimum players
-        assert_eq!(sut.read_integer::<u32>(4).unwrap(), 1);
+        assert_eq!(sut.read_unnamed_integer::<u32>(4).unwrap(), 1);
         // game entry 1 skip after veto
-        assert_eq!(sut.read_bool::<bool>().unwrap(), false);
+        assert_eq!(sut.read_unnamed_bool::<bool>().unwrap(), false);
         // game entry 1 optional
-        assert_eq!(sut.read_bool::<bool>().unwrap(), false);
+        assert_eq!(sut.read_unnamed_bool::<bool>().unwrap(), false);
         // game entry 1 map id
-        assert_eq!(sut.read_integer::<u32>(32).unwrap(), 520);
+        assert_eq!(sut.read_unnamed_integer::<u32>(32).unwrap(), 520);
         // game entry 1 game variant (truncated)
         assert_eq!(sut.read_string_utf8(3).unwrap(), "5_\0");
     }

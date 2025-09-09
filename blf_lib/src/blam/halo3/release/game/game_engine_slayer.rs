@@ -48,20 +48,20 @@ impl c_game_engine_slayer_variant {
     }
 
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
-        self.m_score_to_win = bitstream.read_signed_integer(10)?;
-        self.m_kill_points = bitstream.read_signed_integer(5)?;
-        self.m_assist_points = bitstream.read_signed_integer(5)?;
-        self.m_death_points = bitstream.read_signed_integer(5)?;
-        self.m_suicide_points = bitstream.read_signed_integer(5)?;
-        self.m_betrayal_points = bitstream.read_signed_integer(5)?;
-        self.m_leader_killed_points = bitstream.read_signed_integer(5)?;
-        self.m_elimination_points = bitstream.read_signed_integer(5)?;
-        self.m_assassination_points = bitstream.read_signed_integer(5)?;
-        self.m_headshot_points = bitstream.read_signed_integer(5)?;
-        self.m_melee_points = bitstream.read_signed_integer(5)?;
-        self.m_sticky_points = bitstream.read_signed_integer(5)?;
-        self.m_splatter_points = bitstream.read_signed_integer(5)?;
-        self.m_killing_spree_points = bitstream.read_signed_integer(5)?;
+        self.m_score_to_win = bitstream.read_unnamed_signed_integer(10)?;
+        self.m_kill_points = bitstream.read_unnamed_signed_integer(5)?;
+        self.m_assist_points = bitstream.read_unnamed_signed_integer(5)?;
+        self.m_death_points = bitstream.read_unnamed_signed_integer(5)?;
+        self.m_suicide_points = bitstream.read_unnamed_signed_integer(5)?;
+        self.m_betrayal_points = bitstream.read_unnamed_signed_integer(5)?;
+        self.m_leader_killed_points = bitstream.read_unnamed_signed_integer(5)?;
+        self.m_elimination_points = bitstream.read_unnamed_signed_integer(5)?;
+        self.m_assassination_points = bitstream.read_unnamed_signed_integer(5)?;
+        self.m_headshot_points = bitstream.read_unnamed_signed_integer(5)?;
+        self.m_melee_points = bitstream.read_unnamed_signed_integer(5)?;
+        self.m_sticky_points = bitstream.read_unnamed_signed_integer(5)?;
+        self.m_splatter_points = bitstream.read_unnamed_signed_integer(5)?;
+        self.m_killing_spree_points = bitstream.read_unnamed_signed_integer(5)?;
         self.m_leader_traits.decode(bitstream)?;
 
         Ok(())

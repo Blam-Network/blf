@@ -77,7 +77,7 @@ pub fn simulation_read_position(
     exact_endpoints: bool,
     world_bounds: &real_rectangle3d
 ) -> BLFLibResult {
-    if bitstream.read_bool()? { // point-in-initial-bounds
+    if bitstream.read_unnamed_bool()? { // point-in-initial-bounds
         let mut per_axis_bit_counts = int32_point3d::default();
         adjust_axis_encoding_bit_count_to_match_error_goals(axis_encoding_size_in_bits, world_bounds, 26, &mut per_axis_bit_counts);
 

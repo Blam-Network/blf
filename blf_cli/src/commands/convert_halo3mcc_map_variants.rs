@@ -79,7 +79,7 @@ fn convert_mcc_map(task: &mut console_task, map: &mut c_map_variant) -> bool {
         let h3_object_index = crate::title_storage::halo3::v12070_08_09_05_2031_halo3_ship::variant_importer::mcc::object_indexes::get_h3_index_for_mcc_object(map.m_map_id, quota.object_definition_index);
 
         if h3_object_index.is_some() {
-            map.m_quotas.get_mut()[i].object_definition_index = h3_object_index.unwrap();
+            map.m_quotas[i].object_definition_index = h3_object_index.unwrap();
         }
         else {
             map.m_quotas.get_mut().remove(i);

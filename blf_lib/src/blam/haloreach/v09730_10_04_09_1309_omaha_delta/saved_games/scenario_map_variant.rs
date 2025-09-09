@@ -40,7 +40,7 @@ pub struct c_map_variant {
     pub m_original_map_rsa_signature_hash: u32,
     #[serde(with = "SerHex::<StrictCap>")]
     pub m_scenario_palette_crc: u32,
-    pub m_string_table: c_single_language_string_table<256, 4096>,
+    pub m_string_table: c_single_language_string_table<256, 4096, 12, 13, 9>,
     pub m_variant_objects: StaticArray<s_variant_object_datum, k_maximum_variant_objects>,
     pub m_quotas: StaticArray<s_variant_quota, k_maximum_variant_quotas>,
 }
@@ -72,15 +72,15 @@ impl c_map_variant {
 
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
         self.m_metadata.decode(bitstream)?;
-        self.m_map_variant_version = bitstream.read_integer(8)?;
-        self.m_original_map_rsa_signature_hash = bitstream.read_integer(32)?;
-        self.m_number_of_variant_objects = bitstream.read_integer(10)?;
-        self.m_number_of_placeable_object_quotas = bitstream.read_integer(9)?;
-        self.m_map_id = bitstream.read_integer(32)?;
-        self.m_built_in = bitstream.read_bool()?;
+        self.m_map_variant_version = bitstream.read_unnamed_integer(8)?;
+        self.m_original_map_rsa_signature_hash = bitstream.read_unnamed_integer(32)?;
+        self.m_number_of_variant_objects = bitstream.read_unnamed_integer(10)?;
+        self.m_number_of_placeable_object_quotas = bitstream.read_unnamed_integer(9)?;
+        self.m_map_id = bitstream.read_unnamed_integer(32)?;
+        self.m_built_in = bitstream.read_unnamed_bool()?;
         self.m_world_bounds = bitstream.read_raw(0xC0)?;
-        self.m_maximum_budget = bitstream.read_integer(32)?;
-        self.m_spent_budget = bitstream.read_integer(32)?;
+        self.m_maximum_budget = bitstream.read_unnamed_integer(32)?;
+        self.m_spent_budget = bitstream.read_unnamed_integer(32)?;
         self.m_string_table.decode(bitstream)?;
 
         for i in 0..min(k_maximum_variant_objects, self.m_number_of_variant_objects as usize) {
@@ -108,9 +108,9 @@ pub struct s_variant_quota {
 
 impl s_variant_quota {
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
-        self.minimum_count = bitstream.read_integer(8)?;
-        self.maximum_count = bitstream.read_integer(8)?;
-        self.placed_on_map = bitstream.read_integer(8)?;
+        self.minimum_count = bitstream.read_unnamed_integer(8)?;
+        self.maximum_count = bitstream.read_unnamed_integer(8)?;
+        self.placed_on_map = bitstream.read_unnamed_integer(8)?;
         Ok(())
     }
 
@@ -234,29 +234,29 @@ pub struct s_variant_multiplayer_object_properties_definition {
 impl s_variant_multiplayer_object_properties_definition {
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
         self.boundary = s_multiplayer_object_boundary::decode(bitstream)?;
-        self.user_data = bitstream.read_integer(8)?;
-        self.spawn_time = bitstream.read_integer(8)?;
-        self.cached_type = bitstream.read_integer(5)?;
-        self.label_index = bitstream.read_index::<256>(8)? as i8;
-        self.placement_flags = bitstream.read_integer(8)?;
-        self.team = bitstream.read_integer::<i8>(4)? - 1;
-        self.primary_change_color_index = bitstream.read_index::<8>(3)? as i8;
+        self.user_data = bitstream.read_unnamed_integer(8)?;
+        self.spawn_time = bitstream.read_unnamed_integer(8)?;
+        self.cached_type = bitstream.read_unnamed_integer(5)?;
+        self.label_index = bitstream.read_unnamed_index::<256>(8)? as i8;
+        self.placement_flags = bitstream.read_unnamed_integer(8)?;
+        self.team = bitstream.read_unnamed_integer::<i8>(4)? - 1;
+        self.primary_change_color_index = bitstream.read_unnamed_index::<8>(3)? as i8;
 
         match self.cached_type {
             1 => {
                 self.weapon_data = Some(s_variant_multiplayer_object_properties_definition_weapon_data {
-                    spare_clips: bitstream.read_integer(8)?,
+                    spare_clips: bitstream.read_unnamed_integer(8)?,
                 })
             }
             12 | 13 | 14 => {
                 self.teleporter_data = Some(s_variant_multiplayer_object_properties_definition_teleporter_data {
-                    channel: bitstream.read_integer(5)?,
-                    passability: bitstream.read_integer(5)?,
+                    channel: bitstream.read_unnamed_integer(5)?,
+                    passability: bitstream.read_unnamed_integer(5)?,
                 })
             }
             19 => {
                 self.location_data = Some(s_variant_multiplayer_object_properties_definition_location_data {
-                    location_name_index: bitstream.read_index::<255>(8)? as i8,
+                    location_name_index: bitstream.read_unnamed_index::<255>(8)? as i8,
                 })
             }
             _ => {}
@@ -327,19 +327,19 @@ pub struct s_variant_object_datum {
 
 impl s_variant_object_datum {
     pub fn decode(&mut self, mut bitstream: &mut c_bitstream_reader, world_bounds: &real_rectangle3d) -> BLFLibResult {
-        if bitstream.read_bool()? { // exists
-            self.flags = bitstream.read_integer(2)?;
-            self.variant_quota_index = bitstream.read_index::<k_maximum_variant_quotas>(8)?;
-            self.variant_index = bitstream.read_index::<32>(5)?;
-            self.scenario_object_type = bitstream.read_integer::<i8>(4)? - 1;
+        if bitstream.read_unnamed_bool()? { // exists
+            self.flags = bitstream.read_unnamed_integer(2)?;
+            self.variant_quota_index = bitstream.read_unnamed_index::<k_maximum_variant_quotas>(8)?;
+            self.variant_index = bitstream.read_unnamed_index::<32>(5)?;
+            self.scenario_object_type = bitstream.read_unnamed_integer::<i8>(4)? - 1;
 
             if self.scenario_object_type != -1 {
-                self.scenario_object_datum_index = bitstream.read_integer(13)?;
+                self.scenario_object_datum_index = bitstream.read_unnamed_integer(13)?;
             }
 
             simulation_read_quantized_position(bitstream, &mut self.position, 16, world_bounds)?;
             bitstream.read_axes(&mut self.forward, &mut self.up)?;
-            self.spawn_relative_to = bitstream.read_integer::<i32>(10)? - 1;
+            self.spawn_relative_to = bitstream.read_unnamed_integer::<i32>(10)? - 1;
             self.multiplayer_game_object_properties.decode(bitstream)?;
         }
 

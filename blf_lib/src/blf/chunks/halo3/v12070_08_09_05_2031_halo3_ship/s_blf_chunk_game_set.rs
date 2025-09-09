@@ -61,16 +61,16 @@ impl BinRead for s_blf_chunk_game_set {
 
         let mut game_set = Self::default();
 
-        game_set.game_entry_count = BINRW_RESULT!(bitstream.read_integer(6))?;
+        game_set.game_entry_count = BINRW_RESULT!(bitstream.read_unnamed_integer(6))?;
         game_set.game_entries.resize(game_set.game_entry_count, s_blf_chunk_game_set_entry::default());
 
         for i in 0..game_set.game_entry_count {
             let game_entry = &mut game_set.game_entries.as_mut_slice()[i];
-            game_entry.weight = BINRW_RESULT!(bitstream.read_integer(32))?;
-            game_entry.minimum_player_count = BINRW_RESULT!(bitstream.read_integer(4))?;
-            game_entry.skip_after_veto = BINRW_RESULT!(bitstream.read_bool())?;
-            game_entry.optional = BINRW_RESULT!(bitstream.read_bool())?;
-            game_entry.map_id = BINRW_RESULT!(bitstream.read_integer(32))?;
+            game_entry.weight = BINRW_RESULT!(bitstream.read_unnamed_integer(32))?;
+            game_entry.minimum_player_count = BINRW_RESULT!(bitstream.read_unnamed_integer(4))?;
+            game_entry.skip_after_veto = BINRW_RESULT!(bitstream.read_unnamed_bool())?;
+            game_entry.optional = BINRW_RESULT!(bitstream.read_unnamed_bool())?;
+            game_entry.map_id = BINRW_RESULT!(bitstream.read_unnamed_integer(32))?;
             BINRW_RESULT!(game_entry.game_variant_file_name.set_string(&BINRW_RESULT!(bitstream.read_string_utf8(32))?))?;
             game_entry.game_variant_file_hash = BINRW_RESULT!(s_network_http_request_hash::try_from(BINRW_RESULT!(bitstream.read_raw_data(0xA0))?))?;
             BINRW_RESULT!(game_entry.map_variant_file_name.set_string(&BINRW_RESULT!(bitstream.read_string_utf8(32))?))?;

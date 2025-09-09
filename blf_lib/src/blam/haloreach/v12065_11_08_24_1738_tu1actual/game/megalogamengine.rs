@@ -13,3 +13,7 @@ pub mod megalogamengine_variant_variable;
 pub mod megalogamengine_object_type_reference;
 pub mod megalogamengine_actions;
 pub mod megalogamengine_text;
+pub mod megalogamengine_trigger;
+pub mod megalogamengine_statistics;
+pub mod megalogamengine_variable_metadata;
+pub mod megalogamengine_map_objects;

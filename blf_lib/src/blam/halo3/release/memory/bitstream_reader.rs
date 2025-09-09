@@ -10,11 +10,11 @@ pub trait c_bitstream_reader_extensions<'a>  {
     fn read_axes(&mut self, forward: &mut real_vector3d, up: &mut real_vector3d) -> BLFLibResult {
         let reader = self.bitstream_reader();
 
-        if reader.read_bool()? {
+        if reader.read_unnamed_bool()? {
             up.clone_from(&global_up3d);
         }
         else {
-            let quantized = reader.read_signed_integer(19)?;
+            let quantized = reader.read_unnamed_signed_integer(19)?;
             dequantize_unit_vector3d(quantized, up)?;
         }
 

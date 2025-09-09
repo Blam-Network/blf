@@ -51,17 +51,17 @@ impl c_game_engine_infection_variant {
     }
 
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
-        SET_BIT!(self.m_variant_flags, 0, bitstream.read_bool()?);
-        self.m_safe_havens = bitstream.read_integer(2)?;
-        self.m_next_zombie = bitstream.read_integer(2)?;
-        self.m_initial_zombie_count = bitstream.read_integer(5)?;
-        self.m_safe_haven_movement_time = bitstream.read_integer(7)?;
-        self.m_zombie_kill_points = bitstream.read_signed_integer(5)?;
-        self.m_infection_points = bitstream.read_signed_integer(5)?;
-        self.m_safe_haven_arrival_points = bitstream.read_signed_integer(5)?;
-        self.m_suicide_points = bitstream.read_signed_integer(5)?;
-        self.m_betrayal_points = bitstream.read_signed_integer(5)?;
-        self.m_last_man_bonus_points = bitstream.read_signed_integer(5)?;
+        SET_BIT!(self.m_variant_flags, 0, bitstream.read_unnamed_bool()?);
+        self.m_safe_havens = bitstream.read_unnamed_integer(2)?;
+        self.m_next_zombie = bitstream.read_unnamed_integer(2)?;
+        self.m_initial_zombie_count = bitstream.read_unnamed_integer(5)?;
+        self.m_safe_haven_movement_time = bitstream.read_unnamed_integer(7)?;
+        self.m_zombie_kill_points = bitstream.read_unnamed_signed_integer(5)?;
+        self.m_infection_points = bitstream.read_unnamed_signed_integer(5)?;
+        self.m_safe_haven_arrival_points = bitstream.read_unnamed_signed_integer(5)?;
+        self.m_suicide_points = bitstream.read_unnamed_signed_integer(5)?;
+        self.m_betrayal_points = bitstream.read_unnamed_signed_integer(5)?;
+        self.m_last_man_bonus_points = bitstream.read_unnamed_signed_integer(5)?;
         self.m_zombie_traits.decode(bitstream)?;
         self.m_first_zombie_traits.decode(bitstream)?;
         self.m_last_human_traits.decode(bitstream)?;

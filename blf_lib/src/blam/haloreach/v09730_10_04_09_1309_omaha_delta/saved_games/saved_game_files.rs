@@ -82,32 +82,32 @@ pub struct s_content_item_metadata {
 
 impl s_content_item_metadata {
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
-        self.file_type = bitstream.read_integer::<i8>(4)? - 1;
-        self.size_in_bytes = bitstream.read_integer(32)?;
+        self.file_type = bitstream.read_unnamed_integer::<i8>(4)? - 1;
+        self.size_in_bytes = bitstream.read_unnamed_integer(32)?;
         self.unique_id = bitstream.read_qword(64)?;
         self.parent_unique_id = bitstream.read_qword(64)?;
         self.root_unique_id = bitstream.read_qword(64)?;
         self.game_id = bitstream.read_qword(64)?;
-        self.activity = bitstream.read_integer::<i8>(3)? - 1;
-        self.game_mode = bitstream.read_integer(3)?;
-        self.game_engine_type = bitstream.read_integer(3)?;
-        self.map_id = bitstream.read_signed_integer(32)?;
+        self.activity = bitstream.read_unnamed_integer::<i8>(3)? - 1;
+        self.game_mode = bitstream.read_unnamed_integer(3)?;
+        self.game_engine_type = bitstream.read_unnamed_integer(3)?;
+        self.map_id = bitstream.read_unnamed_signed_integer(32)?;
         self.unknown1 = bitstream.read_qword(64)?;
         self.creation_time = bitstream.read_qword(64)?;
         self.creator_xuid = bitstream.read_qword(64)?;
         self.creator_name = StaticString::from_string(bitstream.read_string_utf8(16).unwrap_or_default())?;
-        self.creator_xuid_is_online = bitstream.read_bool()?;
+        self.creator_xuid_is_online = bitstream.read_unnamed_bool()?;
         self.modification_time = bitstream.read_qword(64)?;
         self.modifier_xuid = bitstream.read_qword(64)?;
         self.modifier_name = StaticString::from_string(bitstream.read_string_utf8(16).unwrap_or_default())?;
-        self.modifier_xuid_is_online = bitstream.read_bool()?;
+        self.modifier_xuid_is_online = bitstream.read_unnamed_bool()?;
         self.name = StaticWcharString::from_string(bitstream.read_string_whar(128)?)?;
         self.description = StaticWcharString::from_string(bitstream.read_string_whar(128)?)?;
 
         match self.file_type {
             3 | 4 => {
                 self.film_data = Some(s_content_item_metadata_film_data {
-                    seconds: bitstream.read_signed_integer(32)?
+                    seconds: bitstream.read_unnamed_signed_integer(32)?
                 })
             }
             _ => {}
@@ -116,7 +116,7 @@ impl s_content_item_metadata {
         match self.activity {
             2 => {
                 self.matchmaking_data = Some(s_content_item_metadata_matchmaking_data {
-                    hopper_identifier: bitstream.read_integer(16)?,
+                    hopper_identifier: bitstream.read_unnamed_integer(16)?,
                 })
             }
             _ => {}
@@ -125,15 +125,15 @@ impl s_content_item_metadata {
         match self.game_mode {
             1 => {
                 self.campaign_data = Some(s_content_item_metadata_campaign_data {
-                    campaign_id: bitstream.read_integer(8)?,
-                    campaign_difficulty: bitstream.read_integer(2)?,
-                    campaign_metagame_scoring: bitstream.read_integer(2)?,
-                    campaign_insertion_point: bitstream.read_integer(2)?,
+                    campaign_id: bitstream.read_unnamed_integer(8)?,
+                    campaign_difficulty: bitstream.read_unnamed_integer(2)?,
+                    campaign_metagame_scoring: bitstream.read_unnamed_integer(2)?,
+                    campaign_insertion_point: bitstream.read_unnamed_integer(2)?,
                 })
             }
             2 => {
                 self.firefight_data = Some(s_content_item_metadata_firefight_data {
-                    firefight_difficulty: bitstream.read_integer(2)?,
+                    firefight_difficulty: bitstream.read_unnamed_integer(2)?,
                 })
             }
             _ => {}

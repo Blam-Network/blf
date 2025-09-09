@@ -32,11 +32,11 @@ impl c_game_engine_territories_variant {
     }
 
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
-        SET_BIT!(self.m_variant_flags, 0, bitstream.read_bool()?);
-        SET_BIT!(self.m_variant_flags, 1, bitstream.read_bool()?);
-        self.m_respawn_on_capture = bitstream.read_integer(2)?;
-        self.m_capture_time = bitstream.read_integer(7)?;
-        self.m_sudden_death_time = bitstream.read_signed_integer(10)?;
+        SET_BIT!(self.m_variant_flags, 0, bitstream.read_unnamed_bool()?);
+        SET_BIT!(self.m_variant_flags, 1, bitstream.read_unnamed_bool()?);
+        self.m_respawn_on_capture = bitstream.read_unnamed_integer(2)?;
+        self.m_capture_time = bitstream.read_unnamed_integer(7)?;
+        self.m_sudden_death_time = bitstream.read_unnamed_signed_integer(10)?;
         self.m_defender_traits.decode(bitstream)?;
         self.m_attacker_traits.decode(bitstream)?;
 
