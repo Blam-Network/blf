@@ -1995,8 +1995,8 @@ impl c_action {
             53 => {
                 let mut object = c_object_reference::default();
                 let mut string = c_dynamic_string::default();
-                string.decode(bitstream)?;
                 object.decode(bitstream)?;
+                string.decode(bitstream)?;
                 self.m_object = Some(object);
                 self.m_string = Some(string);
             }
