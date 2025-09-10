@@ -1008,7 +1008,6 @@ impl v12065_11_08_24_1738_tu1actual {
                 }
 
                 if let Ok(mvar) = find_chunk_in_file::<s_blf_chunk_map_variant>(map_variant_blf_file_path) {
-                    debug_log!("{}", map_variant_file_name);
                     write_json_file(&mvar.map_variant, map_variant_config_file_path)?;
                     converted_maps.push(map_variant_blf_file_name.clone());
                 } else {
@@ -1085,7 +1084,6 @@ impl v12065_11_08_24_1738_tu1actual {
                     remove_file(&game_variant_config_file_path)?;
                 }
 
-                debug_log!("{}", game_variant_file_name);
                 let gvar = find_chunk_in_file::<s_blf_chunk_matchmaking_game_variant>(game_variant_blf_file_path)?;
 
                 write_json_file(&gvar.game_variant, game_variant_config_file_path)?;
