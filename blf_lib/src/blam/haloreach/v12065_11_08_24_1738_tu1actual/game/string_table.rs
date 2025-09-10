@@ -46,7 +46,7 @@ c_single_language_string_table<
         let mut offsets = vec![0; string_count];
         for i in 0..string_count {
             if bitstream.read_bool("exists")? {
-                offsets[i] = bitstream.read_integer("index", offset_bit_length)?;
+                offsets[i] = bitstream.read_integer("offset", offset_bit_length)?;
             }
         }
 

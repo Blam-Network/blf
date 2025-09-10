@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 use blf_lib::io::bitstream::{c_bitstream_reader, c_bitstream_writer};
-use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::string_table::c_single_language_string_table;
+use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::string_table::{c_single_language_string_table, c_string_table};
 use blf_lib_derivable::result::BLFLibResult;
 use crate::types::array::StaticArray;
 use serde_hex::SerHex;
@@ -13,7 +13,7 @@ pub struct c_game_engine_team_options_team {
     pub m_override_color_armour: bool,
     pub m_override_color_ui_text: bool,
     pub m_override_color_ui_bitmap: bool,
-    pub m_name: c_single_language_string_table<1, 32, 5, 6, 1>,
+    pub m_name: c_string_table<1, 32, 5, 6, 1>,
     pub m_team_initial_designator: u8,
     pub m_model_override: u8,
     pub m_team_color_override: i32,
@@ -40,10 +40,10 @@ impl c_game_engine_team_options_team {
     }
 
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
-        self.m_team_enabled = bitstream.read_bool("team-enabled")?;
-        self.m_override_color_armour = bitstream.read_bool("team-override-armour-color")?;
-        self.m_override_color_ui_text = bitstream.read_bool("team-override-ui-text-color")?;
         self.m_override_color_ui_bitmap = bitstream.read_bool("team-override-ui-bitmap-color")?;
+        self.m_override_color_ui_text = bitstream.read_bool("team-override-ui-text-color")?;
+        self.m_override_color_armour = bitstream.read_bool("team-override-armour-color")?;
+        self.m_team_enabled = bitstream.read_bool("team-enabled")?;
         self.m_name.decode(bitstream)?;
         self.m_team_initial_designator = bitstream.read_integer("team-initial-designator", 4)?;
         self.m_model_override = bitstream.read_integer("team-model-override", 1)?;

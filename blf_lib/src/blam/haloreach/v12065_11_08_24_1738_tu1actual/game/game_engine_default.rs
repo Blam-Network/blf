@@ -130,7 +130,6 @@ impl c_game_engine_base_variant {
         self.m_team_options.decode(bitstream)?;
         self.m_loadouts.decode(bitstream)?;
 
-
         Ok(())
     }
 }

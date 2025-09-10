@@ -1495,12 +1495,12 @@ impl v12070_08_09_05_2031_halo3_ship {
                                 )
                             );
 
-                            let game_variant_json: c_game_variant = serde_json::from_str(&json).unwrap();
+                            let game_variant: c_game_variant = serde_json::from_str(&json).unwrap();
 
                             BlfFileBuilder::new()
                                 .add_chunk(s_blf_chunk_start_of_file::new("game var"))
                                 .add_chunk(s_blf_chunk_author::for_build::<v12070_08_09_05_2031_halo3_ship>())
-                                .add_chunk(s_blf_chunk_packed_game_variant::create(game_variant_json))
+                                .add_chunk(s_blf_chunk_packed_game_variant::create(game_variant))
                                 .add_chunk(s_blf_chunk_end_of_file::default())
                                 .write_file(&game_variant_blf_path)
                                 .unwrap();

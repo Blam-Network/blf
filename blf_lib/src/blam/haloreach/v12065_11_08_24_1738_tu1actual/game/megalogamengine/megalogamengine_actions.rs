@@ -179,7 +179,7 @@ impl s_action_navpoint_set_icon_parameters {
         bitstream.write_integer(self.m_navpoint_icon, 5)?;
 
         match (self.m_navpoint_icon, &self.m_variable) {
-            (11, Some(variable)) => {
+            (12, Some(variable)) => {
                 variable.encode(bitstream)?;
             }
             _ => {}
@@ -192,7 +192,7 @@ impl s_action_navpoint_set_icon_parameters {
         self.m_object.decode(bitstream)?;
         self.m_navpoint_icon = bitstream.read_integer("navpoint-icon", 5)?;
 
-        if self.m_navpoint_icon == 11 {
+        if self.m_navpoint_icon == 12 {
             let mut variable = c_custom_variable_reference::default();
             variable.decode(bitstream)?;
             self.m_variable = Some(variable);
@@ -464,7 +464,7 @@ impl s_action_hud_post_message_parameters {
 
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
         self.m_target.decode(bitstream)?;
-        self.m_sound_index = bitstream.read_integer("sound-index", 2)?;
+        self.m_sound_index = bitstream.read_integer("sound-index", 7)?;
         self.m_string.decode(bitstream)?;
 
         Ok(())
@@ -1332,7 +1332,7 @@ pub enum e_action_type {
     set_spawn_location_permissions = 13,
     set_spawn_location_fireteams = 14,
     set_object_progress_bar = 15,
-    kill_feed_message = 16,
+    show_message_to = 16,
     set_timer_rate = 17,
     debug_print = 18,
     get_carrier = 19,
@@ -1343,20 +1343,20 @@ pub enum e_action_type {
     set_object_invincibility = 24,
     random_number = 25,
     break_into_debugger = 26,
-    get_object_orientation = 27,
+    get_orientation = 27,
     get_speed = 28,
     get_killer = 29,
     get_death_damage_type = 30,
     get_death_damage_modifier = 31,
     debugging_enable_tracing = 32,
     attach_objects = 33,
-    detach_objects = 34,
+    detach = 34,
     get_player_scoreboard_position = 35,
-    get_team_scoreboard_position = 36,
+    get_team_scoreboard_pos = 36,
     get_player_killstreak = 37,
     modify_player_requisition_money = 38,
     set_player_requisition_purchase_modes = 39,
-    get_player_vehicle = 40,
+    get_vehicle = 40,
     force_player_into_vehicle = 41,
     set_player_biped = 42,
     reset_timer = 43,
@@ -1378,8 +1378,8 @@ pub enum e_action_type {
     set_co_op_spawning = 59,
     set_primary_respawn_object_for_team = 60,
     set_primary_respawn_object_for_player = 61,
-    get_player_fireteam = 62,
-    set_player_fireteam = 63,
+    get_fireteam = 62,
+    set_fireteam = 63,
     modify_object_shields = 64,
     modify_object_health = 65,
     get_distance = 66,
@@ -1400,7 +1400,7 @@ pub enum e_action_type {
     insert_theater_film_marker = 81,
     enable_disable_spawn_zone = 82,
     get_player_weapon = 83,
-    get_player_armor_ability = 84,
+    get_armor_ability = 84,
     enable_disable_object_garbage_collection = 85,
     get_player_target_object = 86,
     create_object_equidistant = 87,
@@ -1414,7 +1414,7 @@ pub enum e_action_type {
     set_scenario_interpolator_state = 95,
     get_random_object = 96,
     record_griefer_penalty = 97,
-    set_shape_owner = 98,
+    apply_shape_color_from_player_member = 98,
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
@@ -1935,7 +1935,7 @@ impl c_action {
                 let mut team = c_team_reference::default();
                 let mut variable = c_custom_variable_reference::default();
                 team.decode(bitstream)?;
-                team.decode(bitstream)?;
+                variable.decode(bitstream)?;
                 self.m_team = Some(team);
                 self.m_variable_1 = Some(variable);
             }
@@ -1952,7 +1952,7 @@ impl c_action {
             40 | 41 | 42 | 61 | 84 | 86 | 89 => {
                 let mut player = c_player_reference::default();
                 let mut object = c_object_reference::default();
-                object.decode(bitstream)?;
+                player.decode(bitstream)?;
                 object.decode(bitstream)?;
                 self.m_player_1 = Some(player);
                 self.m_object = Some(object);

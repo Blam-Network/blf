@@ -7,6 +7,7 @@ use crate::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::megalogamengin
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct c_team_reference {
+    pub m_type: u8, // 3 bits
     #[serde(skip_serializing_if = "Option::is_none")]
     pub m_player: Option<c_explicit_player>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -19,32 +20,27 @@ pub struct c_team_reference {
 
 impl c_team_reference {
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
-        match (&self.m_player, &self.m_object, &self.m_team, self.m_variable_index) {
-            (None, None, Some(team), None) => {
-                bitstream.write_integer(0u8, 3)?;
+        bitstream.write_integer(self.m_type, 3)?;
+        match (self.m_type, &self.m_player, &self.m_object, &self.m_team, self.m_variable_index) {
+            (0, None, None, Some(team), None) => {
                 team.encode(bitstream)?;
             }
-            (Some(player), None, None, Some(variable_index)) => {
-                bitstream.write_integer(1u8, 3)?;
+            (1, Some(player), None, None, Some(variable_index)) => {
                 player.encode(bitstream)?;
                 bitstream.write_integer(variable_index, 2)?;
             }
-            (None, Some(object), None, Some(variable_index)) => {
-                bitstream.write_integer(2u8, 3)?;
+            (2, None, Some(object), None, Some(variable_index)) => {
                 object.encode(bitstream)?;
                 bitstream.write_integer(variable_index, 1)?;
             }
-            (None, None, Some(team), Some(variable_index)) => {
-                bitstream.write_integer(3u8, 3)?;
+            (3, None, None, Some(team), Some(variable_index)) => {
                 team.encode(bitstream)?;
                 bitstream.write_integer(variable_index, 2)?;
             }
-            (Some(player), None, None, None) => {
-                bitstream.write_integer(4u8, 3)?;
+            (4, Some(player), None, None, None) => {
                 player.encode(bitstream)?;
             }
-            (None, Some(object), None, None) => {
-                bitstream.write_integer(5u8, 3)?;
+            (5, None, Some(object), None, None) => {
                 object.encode(bitstream)?;
             }
             _ => {
@@ -56,9 +52,9 @@ impl c_team_reference {
     }
 
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
-        let ref_type = bitstream.read_integer("type", 3)?;
+        self.m_type = bitstream.read_integer("type", 3)?;
 
-        match ref_type {
+        match self.m_type {
             0 => {
                 let mut team = c_explicit_team::default();
                 team.decode(bitstream)?;
