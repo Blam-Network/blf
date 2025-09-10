@@ -84,7 +84,7 @@ impl s_variant_variable {
                 self.m_custom_timer = Some(custom_timer);
             }
             _ => {
-                return Err(format!("Invalid s_variant_variable: {self:?}").into())
+                // return Err(format!("Invalid s_variant_variable: {self:?}").into())
             }
         }
 

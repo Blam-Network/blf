@@ -1787,7 +1787,14 @@ impl c_action {
     }
 
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
-        self.m_type = bitstream.read_enum(7)?;
+        let action_type = bitstream.read_integer("action-type", 7)?;
+        if let Some(action_type) = FromPrimitive::from_u32(action_type) {
+            self.m_type = action_type;
+        }
+        else {
+            return Err(format!("unsupported action type: {}", action_type).into())
+        }
+
 
         match self.m_type.clone() as u32 {
             1 => {
