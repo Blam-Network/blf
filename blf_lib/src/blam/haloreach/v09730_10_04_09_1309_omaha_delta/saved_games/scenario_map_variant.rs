@@ -7,11 +7,11 @@ use blf_lib::{assert_ok, OPTION_TO_RESULT, TEST_BIT};
 use crate::blam::common::math::real_math::{real_point3d, real_rectangle3d};
 use blf_lib::types::array::StaticArray;
 use crate::blam::common::math::real_math::real_vector3d;
-use crate::blam::common::simulation::simulation_encoding::{simulation_read_quantized_position, simulation_write_position, simulation_write_quantized_position};
+use crate::blam::common::simulation::simulation_encoding::{simulation_write_position, simulation_write_quantized_position};
 use serde_hex::{SerHex,StrictCap};
-use blf_lib::blam::common::simulation::simulation_encoding::simulation_read_position;
 use blf_lib::blam::halo3::release::memory::bitstream_reader::c_bitstream_reader_extensions;
 use blf_lib::blam::halo3::release::memory::bitstream_writer::c_bitstream_writer_extensions;
+use blf_lib::blam::halo3::release::simulation::simulation_encoding::simulation_read_quantized_position;
 use blf_lib::blam::haloreach::v09730_10_04_09_1309_omaha_delta::saved_games::saved_game_files::s_content_item_metadata;
 use blf_lib_derive::TestSize;
 use blf_lib_derivable::result::BLFLibResult;
@@ -143,25 +143,25 @@ pub struct s_multiplayer_object_boundary {
 }
 
 impl s_multiplayer_object_boundary {
-    pub fn decode(bitstream: &mut c_bitstream_reader) -> BLFLibResult<Option<s_multiplayer_object_boundary>> {
+    pub fn decode(mut bitstream: &mut c_bitstream_reader) -> BLFLibResult<Option<s_multiplayer_object_boundary>> {
         let mut boundary = Self::default();
         boundary.shape = bitstream.read_enum(2)?;
 
         match boundary.shape {
             e_boundary_shape::unused => return Ok(None),
             e_boundary_shape::sphere => {
-                boundary.size = bitstream.read_quantized_real(0f32, 200.0f32, 11, false, true)?;
+                boundary.size = bitstream.read_quantized_real(0f32, 200.0f32, 11, false)?;
             }
             e_boundary_shape::cylinder => {
-                boundary.size = bitstream.read_quantized_real(0f32, 200.0f32, 11, false, true)?;
-                boundary.positive_height = bitstream.read_quantized_real(0f32, 200.0f32, 11, false, true)?;
-                boundary.negative_height = bitstream.read_quantized_real(0f32, 200.0f32, 11, false, true)?;
+                boundary.size = bitstream.read_quantized_real(0f32, 200.0f32, 11, false)?;
+                boundary.positive_height = bitstream.read_quantized_real(0f32, 200.0f32, 11, false)?;
+                boundary.negative_height = bitstream.read_quantized_real(0f32, 200.0f32, 11, false)?;
             }
             e_boundary_shape::r#box => {
-                boundary.size = bitstream.read_quantized_real(0f32, 200.0f32, 11, false, true)?;
-                boundary.box_length = bitstream.read_quantized_real(0f32, 200.0f32, 11, false, true)?;
-                boundary.positive_height = bitstream.read_quantized_real(0f32, 200.0f32, 11, false, true)?;
-                boundary.negative_height = bitstream.read_quantized_real(0f32, 200.0f32, 11, false, true)?;
+                boundary.size = bitstream.read_quantized_real(0f32, 200.0f32, 11, false)?;
+                boundary.box_length = bitstream.read_quantized_real(0f32, 200.0f32, 11, false)?;
+                boundary.positive_height = bitstream.read_quantized_real(0f32, 200.0f32, 11, false)?;
+                boundary.negative_height = bitstream.read_quantized_real(0f32, 200.0f32, 11, false)?;
             }
         };
 

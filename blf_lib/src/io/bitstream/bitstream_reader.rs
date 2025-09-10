@@ -5,7 +5,7 @@ use std::io::Cursor;
 use binrw::BinRead;
 use num_traits::FromPrimitive;
 use widestring::U16CString;
-use blf_lib::blam::common::math::real_math::{assert_valid_real_normal3d, cross_product3d, dot_product3d, k_real_epsilon, global_forward3d, global_left3d, global_up3d, normalize3d, valid_real_vector3d_axes3, arctangent, k_pi, dequantize_real, rotate_vector_about_axis, valid_real_vector3d_axes2};
+use blf_lib::blam::common::math::real_math::{assert_valid_real_normal3d, cross_product3d, dot_product3d, k_real_epsilon, global_forward3d, global_left3d, global_up3d, normalize3d, valid_real_vector3d_axes3, arctangent, k_pi, rotate_vector_about_axis, valid_real_vector3d_axes2};
 use blf_lib::{assert_ok, OPTION_TO_RESULT};
 use blf_lib::io::bitstream::{e_bitstream_byte_fill_direction};
 use blf_lib_derivable::result::{BLFLibError, BLFLibResult};
@@ -15,7 +15,6 @@ use crate::blam::halo3::release::networking::transport::transport_security::s_tr
 use crate::io::bitstream::{e_bitstream_byte_order, e_bitstream_state};
 use crate::io::bitstream::e_bitstream_byte_fill_direction::{_bitstream_byte_fill_direction_msb_to_lsb, _bitstream_byte_fill_direction_lsb_to_msb};
 use crate::types::numbers::Float32;
-use crate::types::u64::Unsigned64;
 
 pub struct c_bitstream_reader<'a>
 {
@@ -480,13 +479,6 @@ impl<'a> c_bitstream_reader<'a> {
         point.z = self.read_unnamed_integer(axis_encoding_size_in_bits.z as usize)?;
 
         Ok(())
-    }
-
-    /// - exact_endpoints: This didn't exist prior to Reach, set it to true by default.
-    pub fn read_quantized_real(&mut self, min_value: f32, max_value: f32, size_in_bits: usize, exact_midpoint: bool, exact_endpoints: bool) -> BLFLibResult<Float32> {
-        assert_ok!(self.reading());
-        let value: i32 = self.read_unnamed_integer(size_in_bits)?;
-        Ok(Float32(dequantize_real(value, min_value, max_value, size_in_bits, exact_midpoint, exact_endpoints)))
     }
 
     pub fn read_qword_internal(size_in_bits: u8) -> u64 {

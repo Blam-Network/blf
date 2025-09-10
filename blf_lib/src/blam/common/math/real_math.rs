@@ -119,44 +119,6 @@ pub struct real_plane3d {
     pub d: Float32,
 }
 
-pub fn dequantize_real_point3d_per_axis(
-    quantized: &int32_point3d,
-    bounds: &real_rectangle3d,
-    bits: &int32_point3d,
-    position: &mut real_point3d,
-    exact_midpoints: bool,
-    exact_endpoints: bool,
-) {
-    assert!(bits.x <= 32 && bits.y <= 32 && bits.z <= 32);
-
-    position.x = Float32::from(dequantize_real(
-        quantized.x,
-        bounds.x.lower,
-        bounds.x.upper,
-        bits.x as usize,
-        exact_midpoints,
-        exact_endpoints,
-    ));
-
-    position.y = Float32::from(dequantize_real(
-        quantized.y,
-        bounds.y.lower,
-        bounds.y.upper,
-        bits.y as usize,
-        exact_midpoints,
-        exact_endpoints,
-    ));
-
-    position.z = Float32::from(dequantize_real(
-        quantized.z,
-        bounds.z.lower,
-        bounds.z.upper,
-        bits.z as usize,
-        exact_midpoints,
-        exact_endpoints,
-    ));
-}
-
 pub fn quantize_real_point3d_per_axis(
     position: &real_point3d,
     bounds: &real_rectangle3d,
@@ -166,19 +128,6 @@ pub fn quantize_real_point3d_per_axis(
     quantized.x = quantize_real(position.x, bounds.x.lower, bounds.x.upper, bits.x as usize, false, false);
     quantized.y = quantize_real(position.y, bounds.y.lower, bounds.y.upper, bits.y as usize, false, false);
     quantized.z = quantize_real(position.z, bounds.z.lower, bounds.z.upper, bits.z as usize, false, false);
-}
-
-
-pub fn dequantize_real_point3d(
-    point: &int32_point3d,
-    bounds: &real_rectangle3d,
-    axis_encoding_bit_count: usize,
-    dequantized_point: &mut real_point3d
-) {
-    // I think there's a missing assert here.
-    dequantized_point.x.0 = dequantize_real(point.x, bounds.x.lower, bounds.x.upper, axis_encoding_bit_count, false, true);
-    dequantized_point.y.0 = dequantize_real(point.y, bounds.y.lower, bounds.y.upper, axis_encoding_bit_count, false, true);
-    dequantized_point.z.0 = dequantize_real(point.z, bounds.z.lower, bounds.z.upper, axis_encoding_bit_count, false, true);
 }
 
 pub fn rotate_vector_about_axis(
@@ -252,52 +201,6 @@ pub fn quantize_real(value: impl Into<f32>, min_value: impl Into<f32>, max_value
     assert!(quantized_value >= 0 && quantized_value <= step_count, "quantized_value>=0 && quantized_value<=step_count");
 
     quantized_value
-}
-
-pub fn dequantize_real(
-    quantized: i32,
-    min_value: impl Into<f32>,
-    max_value: impl Into<f32>,
-    size_in_bits: usize,
-    exact_midpoint: bool,
-    exact_endpoints: bool
-) -> f32 {
-    let min_value = min_value.into();
-    let max_value = max_value.into();
-
-    assert!(size_in_bits > 0, "size_in_bits>0");
-    assert!(max_value > min_value, "max_value>min_value");
-    assert!(!exact_midpoint || size_in_bits > 1, "!exact_midpoint || size_in_bits>1");
-
-    let mut step_count = (1 << size_in_bits) - 1;
-    if exact_midpoint {
-        step_count -= step_count % 2;
-    }
-    assert!(step_count > 0, "step_count>0");
-
-    let dequantized: f32;
-
-    if exact_endpoints {
-        if quantized != 0 {
-            if quantized < step_count {
-                dequantized = (((step_count - quantized) as f32 * min_value) + (quantized as f32 * max_value)) / step_count as f32;
-            } else {
-                dequantized = max_value;
-            }
-        } else {
-            dequantized = min_value;
-        }
-    } else {
-        let step = (max_value - min_value) / step_count as f32;
-        assert!(step > 0.0, "step>0.0f");
-        dequantized = ((quantized as f32 * step) + min_value) + (step / 2.0f32);
-    }
-
-    if exact_midpoint && 2 * quantized == step_count {
-        assert!(dequantized == (min_value + max_value) / 2.0, "value==(max_value+min_value)/2");
-    }
-
-    dequantized
 }
 
 pub fn assert_valid_real_normal3d(vector: &real_vector3d) -> bool {
