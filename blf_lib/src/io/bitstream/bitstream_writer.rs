@@ -427,11 +427,12 @@ impl c_bitstream_writer {
 
     pub fn write_string_wchar(&mut self, value: &String, max_string_size: usize) -> BLFLibResult {
         assert_ok!(self.writing());
-        assert_ok!(value.len() <= max_string_size);
         assert_ok!(max_string_size > 0);
 
         let wchar_string = U16CString::from_str(value).map_err(|e|e.to_string())?;
         let characters = wchar_string.as_slice();
+
+        assert_ok!(characters.len() <= max_string_size);
 
         for char in characters {
             match self.m_packed_byte_order {
