@@ -1,6 +1,8 @@
 use serde::{Deserialize, Serialize};
+use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::game_engine_campaign::c_game_engine_campaign_variant;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::game_engine_default::c_game_engine_base_variant;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::game_engine_player_rating_parameters::s_game_engine_player_rating_parameters;
+use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::game_engine_survival::c_game_engine_survival_variant;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::game_engine_team::{c_game_engine_team_options_team, k_game_variant_team_count};
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::game_engine_traits::s_player_trait_option;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::megalogamengine::megalogamengine_actions::c_action;
@@ -16,8 +18,6 @@ use blf_lib::types::numbers::Float32;
 use blf_lib_derivable::result::BLFLibResult;
 use crate::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::megalogamengine::megalogamengine_map_permissions::c_megalogamengine_map_permissions;
 use crate::types::array::StaticArray;
-
-pub type c_game_engine_campaign_variant = c_game_engine_base_variant;
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct c_game_engine_custom_variant {
@@ -159,6 +159,8 @@ pub struct c_game_variant {
     pub m_campaign_variant: Option<c_game_engine_campaign_variant>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub m_custom_variant: Option<c_game_engine_custom_variant>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub m_survival_variant: Option<c_game_engine_survival_variant>,
 
 }
 
@@ -166,18 +168,18 @@ impl c_game_variant {
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
         bitstream.write_enum(self.m_game_engine, 4)?;
 
-        match (self.m_game_engine, &self.m_custom_variant, &self.m_campaign_variant) {
-            (1, None, None) => {
-                unimplemented!()
+        match (self.m_game_engine, &self.m_custom_variant, &self.m_campaign_variant, &self.m_survival_variant) {
+            (1, None, None, None) => {
+                return Err("Encoding forge variants is currently unsupported. If you have an example file, please send it to us!".into())
             }
-            (2, Some(custom_variant), None) => {
+            (2, Some(custom_variant), None, None) => {
                 custom_variant.encode(bitstream)?;
             }
-            (3, None, Some(campaign_variant)) => {
+            (3, None, Some(campaign_variant), None) => {
                 campaign_variant.encode(bitstream)?;
             }
-            (4, None, None) => {
-                unimplemented!()
+            (4, None, None, Some(survival_variant)) => {
+                survival_variant.encode(bitstream)?;
             }
             _ => {
                 Err(format!("Unrecognized game engine {}", self.m_game_engine))?;
@@ -193,7 +195,7 @@ impl c_game_variant {
 
         match self.m_game_engine {
             1 => {
-                unimplemented!()
+                return Err("Decoding forge variants is currently unsupported. If you have an example file, please send it to us!".into())
             }
             2 => {
                 // customs
@@ -207,8 +209,9 @@ impl c_game_variant {
                 self.m_campaign_variant = Some(campaign_variant);
             }
             4 => {
-                // firefight
-                unimplemented!();
+                let mut survival_variant = c_game_engine_survival_variant::default();
+                survival_variant.decode(bitstream)?;
+                self.m_survival_variant = Some(survival_variant);
             }
             _ => {
                 Err(format!("Unrecognized game engine {}", self.m_game_engine))?;

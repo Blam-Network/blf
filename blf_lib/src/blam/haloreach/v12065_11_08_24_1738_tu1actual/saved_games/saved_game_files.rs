@@ -246,7 +246,7 @@ impl s_content_item_metadata {
             _ => {}
         }
 
-        match self.activity {
+        match self.game_mode {
             1 => {
                 let campaign_data = OPTION_TO_RESULT!(
                     &self.campaign_data,
