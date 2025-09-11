@@ -101,7 +101,6 @@ pub struct c_game_engine_base_variant {
     pub m_team_scoring_method: u16,
     pub m_team_options: c_game_engine_team_options,
     pub m_loadouts: c_game_engine_loadout_traits,
-
 }
 
 impl c_game_engine_base_variant {

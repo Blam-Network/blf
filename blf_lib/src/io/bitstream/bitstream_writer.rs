@@ -6,12 +6,12 @@ use binrw::BinWrite;
 use num_traits::{FromPrimitive, ToPrimitive};
 use widestring::U16CString;
 use blf_lib::{assert_ok, OPTION_TO_RESULT};
-use blf_lib::blam::common::math::real_math::{assert_valid_real_normal3d, cross_product3d, dot_product3d, k_real_epsilon, global_forward3d, global_left3d, global_up3d, normalize3d, valid_real_vector3d_axes3, arctangent, quantize_normalized_vector3d, k_pi};
+use blf_lib::blam::common::math::real_math::{assert_valid_real_normal3d, cross_product3d, dot_product3d, k_real_epsilon, global_forward3d, global_left3d, global_up3d, normalize3d, valid_real_vector3d_axes3, arctangent, k_pi};
 use blf_lib::io::bitstream::e_bitstream_byte_fill_direction;
 use blf_lib::io::bitstream::e_bitstream_byte_fill_direction::{_bitstream_byte_fill_direction_lsb_to_msb, _bitstream_byte_fill_direction_msb_to_lsb};
 use blf_lib_derivable::result::BLFLibResult;
 use crate::blam::common::math::integer_math::int32_point3d;
-use crate::blam::common::math::real_math::{quantize_real, real_vector3d};
+use crate::blam::common::math::real_math::real_vector3d;
 use crate::blam::halo3::release::networking::transport::transport_security::s_transport_secure_address;
 use crate::io::bitstream::{e_bitstream_byte_order, e_bitstream_state};
 
@@ -357,29 +357,6 @@ impl c_bitstream_writer {
         }
 
         Ok(())
-    }
-
-    pub fn write_quantized_real(
-        &mut self,
-        value: impl Into<f32>,
-        min_value: f32,
-        max_value: f32,
-        size_in_bits: usize,
-        exact_midpoint: bool,
-        exact_endpoints: bool
-    ) -> BLFLibResult {
-        assert_ok!(self.writing());
-        self.write_integer(
-            quantize_real(
-                value.into(),
-                min_value,
-                max_value,
-                size_in_bits,
-                exact_midpoint,
-                exact_endpoints
-            ) as u32,
-            size_in_bits
-        )
     }
 
     pub fn write_secure_address(address: &s_transport_secure_address) -> BLFLibResult {

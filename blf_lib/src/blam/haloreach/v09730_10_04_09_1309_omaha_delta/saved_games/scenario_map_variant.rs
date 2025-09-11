@@ -7,7 +7,7 @@ use blf_lib::{assert_ok, OPTION_TO_RESULT, TEST_BIT};
 use crate::blam::common::math::real_math::{real_point3d, real_rectangle3d};
 use blf_lib::types::array::StaticArray;
 use crate::blam::common::math::real_math::real_vector3d;
-use crate::blam::common::simulation::simulation_encoding::{simulation_write_position, simulation_write_quantized_position};
+use crate::blam::halo3::release::simulation::simulation_encoding::simulation_write_quantized_position;
 use serde_hex::{SerHex,StrictCap};
 use blf_lib::blam::halo3::release::memory::bitstream_reader::c_bitstream_reader_extensions;
 use blf_lib::blam::halo3::release::memory::bitstream_writer::c_bitstream_writer_extensions;
@@ -168,24 +168,24 @@ impl s_multiplayer_object_boundary {
         Ok(Some(boundary))
     }
 
-    pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
+    pub fn encode(&self, mut bitstream: &mut c_bitstream_writer) -> BLFLibResult {
         bitstream.write_enum(self.shape, 2)?;
 
         match self.shape {
             e_boundary_shape::unused => {}
             e_boundary_shape::sphere => {
-                bitstream.write_quantized_real(self.size, 0f32, 200f32, 11, false, true)?;
+                bitstream.write_quantized_real(self.size, 0f32, 200f32, 11, false)?;
             }
             e_boundary_shape::cylinder => {
-                bitstream.write_quantized_real(self.size, 0f32, 200f32, 11, false, true)?;
-                bitstream.write_quantized_real(self.positive_height, 0f32, 200f32, 11, false, true)?;
-                bitstream.write_quantized_real(self.negative_height, 0f32, 200f32, 11, false, true)?;
+                bitstream.write_quantized_real(self.size, 0f32, 200f32, 11, false)?;
+                bitstream.write_quantized_real(self.positive_height, 0f32, 200f32, 11, false)?;
+                bitstream.write_quantized_real(self.negative_height, 0f32, 200f32, 11, false)?;
             }
             e_boundary_shape::r#box => {
-                bitstream.write_quantized_real(self.size, 0f32, 200f32, 11, false, true)?;
-                bitstream.write_quantized_real(self.box_length, 0f32, 200f32, 11, false, true)?;
-                bitstream.write_quantized_real(self.positive_height, 0f32, 200f32, 11, false, true)?;
-                bitstream.write_quantized_real(self.negative_height, 0f32, 200f32, 11, false, true)?;
+                bitstream.write_quantized_real(self.size, 0f32, 200f32, 11, false)?;
+                bitstream.write_quantized_real(self.box_length, 0f32, 200f32, 11, false)?;
+                bitstream.write_quantized_real(self.positive_height, 0f32, 200f32, 11, false)?;
+                bitstream.write_quantized_real(self.negative_height, 0f32, 200f32, 11, false)?;
             }
         }
 

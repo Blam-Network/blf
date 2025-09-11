@@ -4,27 +4,7 @@ use blf_lib::blam::common::math::integer_math::int32_point3d;
 use blf_lib::blam::common::math::real_math::{real_point3d, real_rectangle3d};
 use blf_lib_derivable::result::{BLFLibError, BLFLibResult};
 use crate::io::bitstream::c_bitstream_writer;
-use crate::blam::common::math::real_math::{point_in_rectangle3d, quantize_real_point3d, quantize_real_point3d_per_axis};
-
-pub fn simulation_write_quantized_position(
-    bitstream: &mut c_bitstream_writer,
-    position: &real_point3d,
-    bits: usize,
-    a4: bool,
-    world_bounds: &real_rectangle3d
-) -> BLFLibResult {
-
-    let mut quantized_point = int32_point3d::default();
-    quantize_real_point3d(position, world_bounds, bits, &mut quantized_point);
-
-    if a4 {
-        unimplemented!()
-    }
-
-    bitstream.write_point3d(&quantized_point, bits)?;
-
-    Ok(())
-}
+use crate::blam::common::math::real_math::point_in_rectangle3d;
 
 const k_world_units_to_inches: f32 = 10.0f32 * 12.0f32;
 const k_inches_to_world_units: f32 = 1.0f32 / k_world_units_to_inches;
@@ -66,40 +46,3 @@ pub fn adjust_axis_encoding_bit_count_to_match_error_goals(
     let required_bits = (f32::ln(max_value as f32) / f32::ln(2f32)).ceil() as usize;
     per_axis_bit_counts.z = min(required_bits, max_bit_count) as i32;
 }
-
-pub fn simulation_write_position(
-    bitstream: &mut c_bitstream_writer,
-    position: &real_point3d,
-    bits: usize,
-    world_bounds: &real_rectangle3d,
-) -> BLFLibResult<()> {
-    let mut per_axis_bit_counts = int32_point3d { x: bits as i32, y: bits as i32, z: bits as i32 };
-    let mut quantized_point = int32_point3d::default();
-
-    let in_bounds = point_in_rectangle3d(position, world_bounds);
-    bitstream.write_bool(in_bounds)?;
-
-    if !in_bounds {
-        // This branch requires runtime game BSP data, we can't perform it.
-        return Err(BLFLibError::from(
-            format!("Tried to write a position {position:?} outside of world bounds {world_bounds:?}! Fallback behaviour is only supported in-engine.")
-        ))
-    }
-
-    adjust_axis_encoding_bit_count_to_match_error_goals(bits, world_bounds, 26, &mut per_axis_bit_counts);
-
-    quantize_real_point3d_per_axis(
-        position,
-        world_bounds,
-        &per_axis_bit_counts,
-        &mut quantized_point,
-    );
-
-    bitstream.write_point3d_efficient(
-        &quantized_point,
-        &per_axis_bit_counts,
-    )?;
-
-    Ok(())
-}
-

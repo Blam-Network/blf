@@ -336,7 +336,7 @@ impl<'a> c_bitstream_reader<'a> {
             }
             e_bitstream_byte_order::_bitstream_byte_order_big_endian => {
                 byte_array[4 - bytes_slice.len()..4].copy_from_slice(bytes_slice);
-                // println!("read {} ({} bits) = {}", name, size_in_bits, u32::from_be_bytes(byte_array));
+                println!("read {} ({} bits) = {}", name, size_in_bits, u32::from_be_bytes(byte_array));
                 u32::from_be_bytes(byte_array)
             }
         }).map_err(|e|BLFLibError::from(format!("\

@@ -14,6 +14,7 @@ use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::megalogameng
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::megalogamengine::megalogamengine_variable_metadata::s_variable_metadata;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::string_table::c_string_table;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::memory::bitstream_reader::c_bitstream_reader_extensions;
+use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::memory::bitstream_writer::c_bitstream_writer_extensions;
 use blf_lib::io::bitstream::{c_bitstream_reader, c_bitstream_writer};
 use blf_lib::types::numbers::Float32;
 use blf_lib_derivable::result::BLFLibResult;
@@ -373,7 +374,7 @@ pub struct c_game_engine_custom_variant_au1_settings {
 }
 
 impl c_game_engine_custom_variant_au1_settings {
-    pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
+    pub fn encode(&self, mut bitstream: &mut c_bitstream_writer) -> BLFLibResult {
         bitstream.write_integer(self.m_flags, 32)?;
         bitstream.write_quantized_real(self.m_precision_bloom, 0f32, 2f32, 8, false, true)?;
         bitstream.write_quantized_real(self.m_active_camo_energy_curve_min, 0f32, 2f32, 8, false, true)?;

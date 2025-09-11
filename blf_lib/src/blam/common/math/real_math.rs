@@ -119,17 +119,6 @@ pub struct real_plane3d {
     pub d: Float32,
 }
 
-pub fn quantize_real_point3d_per_axis(
-    position: &real_point3d,
-    bounds: &real_rectangle3d,
-    bits: &int32_point3d,
-    quantized: &mut int32_point3d,
-) {
-    quantized.x = quantize_real(position.x, bounds.x.lower, bounds.x.upper, bits.x as usize, false, false);
-    quantized.y = quantize_real(position.y, bounds.y.lower, bounds.y.upper, bits.y as usize, false, false);
-    quantized.z = quantize_real(position.z, bounds.z.lower, bounds.z.upper, bits.z as usize, false, false);
-}
-
 pub fn rotate_vector_about_axis(
     forward: &mut real_vector3d,
     up: &real_vector3d,
@@ -145,62 +134,6 @@ pub fn rotate_vector_about_axis(
     forward.i = ((v * forward.i) + (v1 * up.i)) - (u * ((forward.j * up.k) - (forward.k * up.j)));
     forward.j = ((v * forward.j) + (v1 * up.j)) - (u * v2);
     forward.k = ((v * forward.k) + (v1 * up.k)) - (u * v3);
-}
-
-pub fn quantize_real_point3d(
-    point: &real_point3d,
-    bounds: &real_rectangle3d,
-    axis_encoding_bit_count: usize,
-    quantized_point: &mut int32_point3d
-) {
-    assert!(axis_encoding_bit_count <= 32, "axis_encoding_bit_count<=SIZEOF_BITS(point->n[0])");
-
-    let bounded_x =
-        if point.x > bounds.x.upper { bounds.x.upper }
-        else if point.x < bounds.x.lower { bounds.x.lower }
-        else { point.x };
-    let bounded_y =
-        if point.y > bounds.y.upper { bounds.y.upper }
-        else if point.y < bounds.y.lower { bounds.y.lower }
-        else { point.y };
-    let bounded_z =
-        if point.z > bounds.z.upper { bounds.z.upper }
-        else if point.z < bounds.z.lower { bounds.z.lower }
-        else { point.z };
-
-    quantized_point.x = quantize_real(bounded_x, bounds.x.lower, bounds.x.upper, axis_encoding_bit_count, false, false);
-    quantized_point.y = quantize_real(bounded_y, bounds.y.lower, bounds.y.upper, axis_encoding_bit_count, false, false);
-    quantized_point.z = quantize_real(bounded_z, bounds.z.lower, bounds.z.upper, axis_encoding_bit_count, false, false);
-}
-
-pub fn quantize_real(value: impl Into<f32>, min_value: impl Into<f32>, max_value: impl Into<f32>, size_in_bits: usize, exact_midpoint: bool, a6: bool) -> i32 {
-    let value = value.into();
-    let min_value = min_value.into();
-    let max_value = max_value.into();
-
-    assert!(size_in_bits > 0, "size_in_bits>0");
-    assert!(max_value > min_value, "max_value>min_value");
-    assert!(!exact_midpoint || size_in_bits > 1, "!exact_midpoint || size_in_bits>1");
-    assert!(value >= min_value, "value>=min_value");
-    assert!(value <= max_value, "value<=max_value");
-
-    let mut step_count = (1 << size_in_bits) - 1; // Maximum index based on size in bits
-    if exact_midpoint {
-        step_count -= step_count % 2; // Adjust for even distribution if exact midpoint is required
-    }
-    assert!(step_count > 0, "step_count>0");
-
-    let step = (max_value - min_value) / step_count as f32;
-    assert!(step > 0.0, "step>0.0f");
-
-    let normalized_value = (value - min_value) / step;
-
-    let sign = if normalized_value < 0.0 { -1.0 } else { 1.0 };
-    let quantized_value = (sign * 0.5 + normalized_value) as i32;
-
-    assert!(quantized_value >= 0 && quantized_value <= step_count, "quantized_value>=0 && quantized_value<=step_count");
-
-    quantized_value
 }
 
 pub fn assert_valid_real_normal3d(vector: &real_vector3d) -> bool {
@@ -233,57 +166,6 @@ pub const global_up3d: real_vector3d = real_vector3d::new(0f32, 0f32, 1f32);
 pub const global_forward3d: real_vector3d = real_vector3d::new(1f32, 0f32, 0f32);
 
 pub const global_left3d: real_vector3d = real_vector3d::new(0f32, 1f32, 0f32);
-
-pub fn quantize_normalized_vector3d(vector: &real_vector3d) -> i32 {
-    assert!(assert_valid_real_normal3d(vector));
-
-    let mut axis_code: u8;
-    let u: f32;
-    let v: f32;
-    let negative: bool;
-    let positive_code: u8;
-
-    let i_abs = vector.i.abs();
-    let j_abs = vector.j.abs();
-    let k_abs = vector.k.abs();
-    let i = vector.i;
-    let j = vector.j;
-    let k = vector.k;
-
-    if i_abs <= j_abs && j_abs > k_abs {
-        axis_code = 4;
-        negative = j <= 0.0;
-        positive_code = 1;
-        u = i / j_abs;
-        v = k / j_abs;
-    } else if i_abs > j_abs && i_abs > k_abs {
-        positive_code = 0;
-        axis_code = 3;
-        negative = i <= 0.0;
-        u = j / i_abs;
-        v = k / i_abs;
-    } else {
-        negative = k <= 0.0;
-        positive_code = 2;
-        axis_code = 5;
-        v = j / k_abs;
-        u = i / k_abs;
-    }
-
-    if !negative {
-        axis_code = positive_code;
-    }
-
-    assert!((-1.0..=1.0).contains(&u));
-    assert!((-1.0..=1.0).contains(&v));
-
-    let quantized_u = quantize_real(u, -1.0, 1.0, 8, true, false);
-    let quantized_v = quantize_real(v, -1.0, 1.0, 8, true, false);
-
-
-
-    axis_code as i32 | (quantized_u << 3) | (quantized_v << 11)
-}
 
 pub fn square_root(value: f32) -> f32 {
     value.sqrt()
