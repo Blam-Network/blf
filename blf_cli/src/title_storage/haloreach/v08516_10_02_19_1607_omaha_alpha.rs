@@ -168,7 +168,7 @@ mod title_storage_output {
         )
     }
 
-    pub const global_nag_message_image_file_name: &str = "dynamic_global_nag_image.jpg";
+    pub const global_nag_message_image_file_name: &str = "global_nag_image.jpg";
     pub fn global_nag_message_image_file_path(hoppers_path: &String, language_code: &str) -> String {
         build_path!(
             hoppers_path,

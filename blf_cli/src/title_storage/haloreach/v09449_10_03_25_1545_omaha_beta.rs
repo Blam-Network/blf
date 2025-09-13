@@ -171,7 +171,7 @@ mod title_storage_output {
         )
     }
 
-    pub const global_nag_message_image_file_name: &str = "dynamic_global_nag_image.jpg";
+    pub const global_nag_message_image_file_name: &str = "global_nag_image.jpg";
     pub fn global_nag_message_image_file_path(hoppers_path: &String, language_code: &str) -> String {
         build_path!(
             hoppers_path,
@@ -1707,7 +1707,7 @@ impl v09449_10_03_25_1545_omaha_beta {
 
 
         let rt = runtime::Builder::new_multi_thread()
-            .worker_threads(4)
+            .worker_threads(1)
             .build()
             .unwrap();
 
@@ -1719,7 +1719,7 @@ impl v09449_10_03_25_1545_omaha_beta {
         rt.block_on(async {
             let mut thread_handles = Vec::<JoinHandle<()>>::with_capacity(cpu_cores);
 
-            for n in 0..cpu_cores {
+            for n in 0..1 {
                 let shared_variant_hashes = Arc::clone(&shared_variant_hashes);
                 let game_variants_temp_build_path = game_variants_temp_build_path.clone();
                 let task = Arc::clone(&task);
@@ -1733,7 +1733,7 @@ impl v09449_10_03_25_1545_omaha_beta {
                             let remaining = json_queue.len();
                             drop(json_queue);
 
-                            // debug_log!("[GAMES] Thread {n} got {game_variant_file_name} ({remaining} remaining)");
+                            debug_log!("[GAMES] Thread {n} got {game_variant_file_name} ({remaining} remaining)");
 
                             let game_variant_blf_path = build_path!(
                                 &game_variants_temp_build_path,
