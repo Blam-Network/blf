@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::game_engine_campaign::c_game_engine_campaign_variant;
 use blf_lib::blam::haloreach::v09730_10_04_09_1309_omaha_delta::game::game_engine_default::c_game_engine_base_variant;
-use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::game_engine_survival::c_game_engine_survival_variant;
+use blf_lib::blam::haloreach::v09730_10_04_09_1309_omaha_delta::game::game_engine_survival::c_game_engine_survival_variant;
 use blf_lib::blam::haloreach::v09730_10_04_09_1309_omaha_delta::game::game_engine_traits::s_player_trait_option;
 use blf_lib::blam::haloreach::v09730_10_04_09_1309_omaha_delta::game::megalogamengine::megalogamengine_actions::c_action;
 use blf_lib::blam::haloreach::v09730_10_04_09_1309_omaha_delta::game::megalogamengine::megalogamengine_conditions::c_condition;
@@ -13,7 +13,6 @@ use blf_lib::blam::haloreach::v09730_10_04_09_1309_omaha_delta::game::megalogame
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::string_table::c_string_table;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::memory::bitstream_reader::c_bitstream_reader_extensions;
 use blf_lib::io::bitstream::{c_bitstream_reader, c_bitstream_writer};
-use blf_lib::types::numbers::Float32;
 use blf_lib_derivable::result::BLFLibResult;
 use crate::blam::haloreach::v09730_10_04_09_1309_omaha_delta::game::game_engine_loadout_traits::{s_loadout_palette_unknown_struct, s_loadout_unknown_struct};
 use crate::blam::haloreach::v09730_10_04_09_1309_omaha_delta::game::megalogamengine::megalogamengine_requisitions::s_requisition_palette;

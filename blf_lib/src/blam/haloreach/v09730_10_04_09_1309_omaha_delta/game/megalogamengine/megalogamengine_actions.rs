@@ -1018,14 +1018,14 @@ impl s_action_set_loadout_palette_parameters {
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct s_action_device_set_position_track_parameters {
     pub m_object: c_object_reference,
-    pub m_animation_name_index: u8, // 8 bits
+    pub m_animation_name_index: i16, // 8 bits
     pub m_variable: c_custom_variable_reference,
 }
 
 impl s_action_device_set_position_track_parameters {
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
         self.m_object.encode(bitstream)?;
-        bitstream.write_integer(self.m_animation_name_index, 8)?;
+        bitstream.write_index::<255>(self.m_animation_name_index, 8)?;
         self.m_variable.encode(bitstream)?;
 
         Ok(())
@@ -1033,7 +1033,7 @@ impl s_action_device_set_position_track_parameters {
 
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
         self.m_object.decode(bitstream)?;
-        self.m_animation_name_index = bitstream.read_integer("animation-name-index", 8)?;
+        self.m_animation_name_index = bitstream.read_index::<255>("animation-name-index", 8)? as i16;
         self.m_variable.decode(bitstream)?;
 
         Ok(())
@@ -2184,9 +2184,10 @@ impl c_action {
                 self.m_player_set_coop_spawning_parameters = Some(player_set_coop_spawning_parameters);
             }
             e_action_type::unknown_92 => {
-                let mut object_set_orientation_parameters = s_action_object_set_orientation_parameters::default();
-                object_set_orientation_parameters.decode(bitstream)?;
-                self.m_object_set_orientation_parameters = Some(object_set_orientation_parameters);
+                let mut player_1 = c_player_reference::default();
+                player_1.decode(bitstream)?;
+                self.m_player_1 = Some(player_1);
+                self.m_unknown_data = Some(bitstream.read_integer("unknown-data", 1)?);
             }
             e_action_type::set_weapon_pickup_priority => {
                 let mut pickup_priority = s_action_weapon_set_pickup_priority_parameters::default();
