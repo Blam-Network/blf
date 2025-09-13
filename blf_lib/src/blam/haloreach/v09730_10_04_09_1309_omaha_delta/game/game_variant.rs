@@ -50,7 +50,7 @@ impl c_game_engine_custom_variant {
         for option in self.m_user_defined_options.iter() {
             option.encode(bitstream)?;
         }
-        self.m_script_strings.encode(bitstream)?; // this is broken
+        self.m_script_strings.encode(bitstream)?;
         bitstream.write_integer(self.m_base_name_string_index, 7)?;
         self.m_localized_name.encode(bitstream)?;
         self.m_localized_description.encode(bitstream)?;
@@ -204,6 +204,21 @@ impl s_custom_game_engine_definition {
             trigger.encode(bitstream)?;
         }
 
+        bitstream.write_integer(self.m_requisitions.len() as u32, 4)?;
+        for requisition in &self.m_requisitions {
+            requisition.encode(bitstream)?;
+        }
+
+        bitstream.write_integer(self.m_loadouts.len() as u32, 6)?;
+        for loadout in &self.m_loadouts {
+            loadout.encode(bitstream)?;
+        }
+
+        bitstream.write_integer(self.m_loadout_palette.len() as u32, 5)?;
+        for loadout in &self.m_loadout_palette {
+            loadout.encode(bitstream)?;
+        }
+
         bitstream.write_integer(self.m_statistics.len() as u32, 3)?;
         for statistic in &self.m_statistics {
             statistic.encode(bitstream)?;
@@ -219,11 +234,11 @@ impl s_custom_game_engine_definition {
             bitstream.write_integer(*widget, 4)?;
         }
 
-        bitstream.write_index::<320>(self.m_initialization_trigger_index, 9)?;
-        bitstream.write_index::<320>(self.m_local_initialization_trigger_index, 9)?;
-        bitstream.write_index::<320>(self.m_host_migration_trigger_index, 9)?;
-        bitstream.write_index::<320>(self.m_object_death_event_trigger_index, 9)?;
-        bitstream.write_index::<320>(self.m_local_trigger_index, 9)?;
+        bitstream.write_index::<320>(self.m_initialization_trigger_index, 8)?;
+        bitstream.write_index::<320>(self.m_local_initialization_trigger_index, 8)?;
+        bitstream.write_index::<320>(self.m_host_migration_trigger_index, 8)?;
+        bitstream.write_index::<320>(self.m_object_death_event_trigger_index, 8)?;
+        bitstream.write_index::<320>(self.m_local_trigger_index, 8)?;
 
         for object_type in self.m_objects_used.get() {
             bitstream.write_bool(*object_type)?

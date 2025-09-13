@@ -96,7 +96,7 @@ pub struct c_condition {
 
 impl c_condition {
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
-        bitstream.write_enum(self.m_type.clone(), 5)?;
+        bitstream.write_enum(self.m_type.clone(), 4)?;
         if self.m_type == e_condition_type::none {
             return Ok(());
         }

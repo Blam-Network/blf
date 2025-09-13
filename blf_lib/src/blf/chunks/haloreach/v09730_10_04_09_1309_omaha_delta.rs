@@ -3,3 +3,4 @@ pub mod s_blf_chunk_game_set;
 pub mod s_blf_chunk_network_configuration;
 pub mod s_blf_chunk_rewards_persistance;
 pub mod s_blf_chunk_map_variant;
+pub mod s_blf_chunk_matchmaking_game_variant;

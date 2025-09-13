@@ -35,29 +35,29 @@ s_variable_metadata<
 >
 {
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
-        bitstream.write_integer(self.m_numeric_variables.len() as u8, numeric_variable_count_bits)?;
+        bitstream.write_integer(self.m_numeric_variables.len() as u16, numeric_variable_count_bits)?;
         for (numeric_variable, network_state) in self.m_numeric_variables.iter() {
             numeric_variable.encode(bitstream)?;
             bitstream.write_integer(*network_state, 2)?
         }
 
-        bitstream.write_integer(self.m_timer_variables.len() as u8, timer_variable_count_bits)?;
+        bitstream.write_integer(self.m_timer_variables.len() as u16, timer_variable_count_bits)?;
         for timer_variable in self.m_timer_variables.iter() {
             timer_variable.encode(bitstream)?;
         }
 
-        bitstream.write_integer(self.m_team_variables.len() as u8, team_variable_count_bits)?;
+        bitstream.write_integer(self.m_team_variables.len() as u16, team_variable_count_bits)?;
         for (team_variable, network_state) in self.m_team_variables.iter() {
             bitstream.write_integer(*team_variable, 4)?;
             bitstream.write_integer(*network_state, 2)?
         }
 
-        bitstream.write_integer(self.m_player_variables.len() as u8, player_variable_count_bits)?;
+        bitstream.write_integer(self.m_player_variables.len() as u16, player_variable_count_bits)?;
         for network_state in self.m_player_variables.iter() {
             bitstream.write_integer(*network_state, 2)?
         }
 
-        bitstream.write_integer(self.m_object_variables.len() as u8, object_variable_count_bits)?;
+        bitstream.write_integer(self.m_object_variables.len() as u16, object_variable_count_bits)?;
         for network_state in self.m_object_variables.iter() {
             bitstream.write_integer(*network_state, 2)?
         }
