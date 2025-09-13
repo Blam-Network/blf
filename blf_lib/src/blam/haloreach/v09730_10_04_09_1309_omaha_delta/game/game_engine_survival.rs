@@ -37,7 +37,7 @@ impl c_game_engine_survival_variant {
         self.m_base_variant.encode(bitstream)?;
         bitstream.write_integer(self.m_variant_flags, 3)?;
         bitstream.write_integer(self.m_campaign_difficulty_level, 3)?;
-        bitstream.write_integer(self.m_time_limit_seconds, 12)?;
+        bitstream.write_integer(self.m_time_limit_seconds, 11)?;
         bitstream.write_integer(self.m_set_count, 4)?;
         bitstream.write_integer(self.m_bonus_lives_awarded, 4)?;
         bitstream.write_integer(self.m_bonus_target, 15)?;
@@ -130,7 +130,7 @@ pub struct s_survival_wave_properties {
     pub m_wave_squad_advance_type: u8, // 1 bits
     pub m_skull_flags: u32, // 14 bits
     pub m_wave_squad_count: u8, // 4 bits
-    pub m_squads: StaticArray<u8, 8>,
+    pub m_squads: StaticArray<u8, 12>,
 }
 
 impl s_survival_wave_properties {

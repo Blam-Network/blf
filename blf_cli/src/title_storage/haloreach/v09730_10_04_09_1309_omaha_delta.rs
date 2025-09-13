@@ -22,6 +22,7 @@ use tokio::sync::Mutex;
 use tokio::task::JoinHandle;
 use blf_lib::blam::common::memory::secure_signature::s_network_http_request_hash;
 use blf_lib::blam::haloreach::v09730_10_04_09_1309_omaha_delta::saved_games::scenario_map_variant::c_map_variant;
+use blf_lib::blam::haloreach::v09730_10_04_09_1309_omaha_delta::game::game_variant::c_game_variant;
 use blf_lib::blf::versions::haloreach::v09730_10_04_09_1309_omaha_delta::{s_blf_chunk_author, s_blf_chunk_banhammer_messages, s_blf_chunk_end_of_file, s_blf_chunk_game_set, s_blf_chunk_hopper_configuration_table, s_blf_chunk_hopper_description_table, s_blf_chunk_map_manifest, s_blf_chunk_map_variant, s_blf_chunk_matchmaking_game_variant, s_blf_chunk_matchmaking_tips, s_blf_chunk_megalo_categories, s_blf_chunk_nag_message, s_blf_chunk_network_configuration, s_blf_chunk_online_file_manifest, s_blf_chunk_predefined_queries, s_blf_chunk_start_of_file};
 use blf_lib::blf::versions::haloreach::v09730_10_04_09_1309_omaha_delta::s_blf_chunk_dlc_map_manifest;
 use blf_lib::io::{read_json_file, write_json_file};
@@ -159,7 +160,7 @@ mod title_storage_output {
         )
     }
 
-    pub const global_nag_message_file_name: &str = "dynamic_global_nag.bin";
+    pub const global_nag_message_file_name: &str = "global_nag.bin";
     pub fn global_nag_message_file_path(hoppers_path: &String, language_code: &str) -> String {
         build_path!(
             hoppers_path,
@@ -410,7 +411,7 @@ mod title_storage_config {
         build_path!(
             config_folder,
             game_variants_folder_name,
-            format!("{variant_file_name}.bin")
+            format!("{variant_file_name}.json")
         )
     }
 
@@ -1003,7 +1004,7 @@ impl v09730_10_04_09_1309_omaha_delta {
                 }
 
                 let game_variant_file_name = game_variant_blf_file_name.replace(
-                    &format!("_{:0>3}.bin", s_blf_chunk_matchmaking_game_variant::get_version().major),
+                    &format!("_{:0>3}.bin", blf_lib::blf::versions::haloreach::v09664_10_04_06_2121_omaha_beta::s_blf_chunk_matchmaking_game_variant::get_version().major),
                     ""
                 );
 
@@ -1033,16 +1034,9 @@ impl v09730_10_04_09_1309_omaha_delta {
                     remove_file(&game_variant_config_file_path)?;
                 }
 
-                let gvar = find_chunk_in_file::<s_blf_chunk_matchmaking_game_variant>(game_variant_blf_file_path)?;
+                let gvar = find_chunk_in_file::<blf_lib::blf::versions::haloreach::v09664_10_04_06_2121_omaha_beta::s_blf_chunk_matchmaking_game_variant>(game_variant_blf_file_path)?;
 
-                BlfFileBuilder::new()
-                    .add_chunk(s_blf_chunk_start_of_file::default())
-                    .add_chunk(gvar)
-                    .add_chunk(s_blf_chunk_end_of_file::default())
-                    .write_file(game_variant_config_file_path)?;
-
-                // game_variant::read_file(&game_variant_blf_file_path)?
-                //     .write_to_config(hoppers_config_path, &game_variant_file_name)?;
+                write_json_file(&gvar.game_variant, game_variant_config_file_path)?;
             }
         }
 
@@ -1692,7 +1686,7 @@ impl v09730_10_04_09_1309_omaha_delta {
 
         let game_variants_to_convert: HashSet<String> = HashSet::from_iter(game_variants_to_convert.iter().cloned());
 
-        let mut json_queue: Vec<(String, s_blf_chunk_matchmaking_game_variant)> = Vec::new();
+        let mut json_queue: Vec<(String, String)> = Vec::new();
         for game_variant in game_variants_to_convert {
             let game_variant_json_path = title_storage_config::game_variant_file_path(hoppers_config_path, &game_variant);
 
@@ -1701,12 +1695,11 @@ impl v09730_10_04_09_1309_omaha_delta {
                 panic!();
             }
 
-            // let mut file = File::open(&map_variant_json_path).unwrap();
-            // let mut game_variant_json = String::new();
-            // file.read_to_string(&mut game_variant_json).unwrap();
-            let chunk = find_chunk_in_file::<s_blf_chunk_matchmaking_game_variant>(game_variant_json_path).unwrap();
+            let mut file = File::open(&game_variant_json_path).unwrap();
+            let mut game_variant_json = String::new();
+            file.read_to_string(&mut game_variant_json).unwrap();
 
-            json_queue.push((game_variant, chunk));
+            json_queue.push((game_variant, game_variant_json));
         }
 
 
@@ -1746,15 +1739,12 @@ impl v09730_10_04_09_1309_omaha_delta {
                                 )
                             );
 
-                            // let game_variant_json: c_game_variant = serde_json::from_str(&json).unwrap();
-                            //
-                            // let mut game_variant_blf_file = game_variant::create(game_variant_json);
-                            // game_variant_blf_file.write_file(&game_variant_blf_path).expect(&format!("Failed to write game variant {}", game_variant_file_name));
+                            let game_variant: c_game_variant = serde_json::from_str(&json).unwrap();
 
                             BlfFileBuilder::new()
                                 .add_chunk(s_blf_chunk_start_of_file::new("game var"))
                                 .add_chunk(s_blf_chunk_author::for_build::<v09730_10_04_09_1309_omaha_delta>())
-                                .add_chunk(json)
+                                .add_chunk(s_blf_chunk_matchmaking_game_variant { game_variant })
                                 .add_chunk(s_blf_chunk_end_of_file::default())
                                 .write_file(&game_variant_blf_path)
                                 .unwrap();

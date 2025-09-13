@@ -34,11 +34,13 @@ pub struct s_content_item_metadata_campaign_data {
     pub campaign_difficulty: i16,
     pub campaign_metagame_scoring: i16,
     pub campaign_insertion_point: i32,
+    pub campaign_skull_flags: u32,
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize,)]
 pub struct s_content_item_metadata_firefight_data {
     pub firefight_difficulty: i16,
+    pub firefight_skull_flags: u32,
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
@@ -129,11 +131,13 @@ impl s_content_item_metadata {
                     campaign_difficulty: bitstream.read_unnamed_integer(2)?,
                     campaign_metagame_scoring: bitstream.read_unnamed_integer(2)?,
                     campaign_insertion_point: bitstream.read_unnamed_integer(2)?,
+                    campaign_skull_flags: bitstream.read_unnamed_integer(32)?,
                 })
             }
             2 => {
                 self.firefight_data = Some(s_content_item_metadata_firefight_data {
                     firefight_difficulty: bitstream.read_unnamed_integer(2)?,
+                    firefight_skull_flags: bitstream.read_unnamed_integer(32)?,
                 })
             }
             _ => {}
@@ -202,6 +206,7 @@ impl s_content_item_metadata {
                 bitstream.write_integer(campaign_data.campaign_difficulty as u32, 2)?;
                 bitstream.write_integer(campaign_data.campaign_metagame_scoring as u32, 2)?;
                 bitstream.write_integer(campaign_data.campaign_insertion_point as u32, 2)?;
+                bitstream.write_integer(campaign_data.campaign_skull_flags, 32)?;
             }
             2 => {
                 let firefight_data = OPTION_TO_RESULT!(
@@ -210,6 +215,7 @@ impl s_content_item_metadata {
                 )?;
 
                 bitstream.write_integer(firefight_data.firefight_difficulty as u32, 2)?;
+                bitstream.write_integer(firefight_data.firefight_skull_flags, 32)?;
             }
             _ => {}
         }

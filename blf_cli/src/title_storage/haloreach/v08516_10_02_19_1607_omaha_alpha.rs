@@ -159,7 +159,7 @@ mod title_storage_output {
         )
     }
 
-    pub const global_nag_message_file_name: &str = "dynamic_global_nag.bin";
+    pub const global_nag_message_file_name: &str = "global_nag.bin";
     pub fn global_nag_message_file_path(hoppers_path: &String, language_code: &str) -> String {
         build_path!(
             hoppers_path,
