@@ -3,7 +3,7 @@ use blf_lib::io::bitstream::{c_bitstream_reader, c_bitstream_writer};
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::string_table::{c_single_language_string_table, c_string_table};
 use blf_lib_derivable::result::BLFLibResult;
 use crate::types::array::StaticArray;
-use serde_hex::SerHex;
+use serde_hex::{SerHex,StrictCap};
 
 pub const k_game_variant_team_count: usize = 8;
 
@@ -16,9 +16,12 @@ pub struct c_game_engine_team_options_team {
     pub m_name: c_string_table<1, 32, 5, 6, 1>,
     pub m_team_initial_designator: u8,
     pub m_model_override: u8,
-    pub m_team_color_override: i32,
-    pub m_team_ui_text_tint_color_override: i32,
-    pub m_team_ui_bitmap_tint_color_override: i32,
+    #[serde(with = "SerHex::<StrictCap>")]
+    pub m_team_color_override: u32,
+    #[serde(with = "SerHex::<StrictCap>")]
+    pub m_team_ui_text_tint_color_override: u32,
+    #[serde(with = "SerHex::<StrictCap>")]
+    pub m_team_ui_bitmap_tint_color_override: u32,
     pub m_fireteam_count: u8,
 }
 
@@ -31,9 +34,9 @@ impl c_game_engine_team_options_team {
         self.m_name.encode(bitstream)?;
         bitstream.write_integer(self.m_team_initial_designator, 4)?;
         bitstream.write_integer(self.m_model_override, 1)?;
-        bitstream.write_signed_integer(self.m_team_color_override, 32)?;
-        bitstream.write_signed_integer(self.m_team_ui_text_tint_color_override, 32)?;
-        bitstream.write_signed_integer(self.m_team_ui_bitmap_tint_color_override, 32)?;
+        bitstream.write_integer(self.m_team_color_override, 32)?;
+        bitstream.write_integer(self.m_team_ui_text_tint_color_override, 32)?;
+        bitstream.write_integer(self.m_team_ui_bitmap_tint_color_override, 32)?;
         bitstream.write_integer(self.m_fireteam_count, 5)?;
 
         Ok(())
@@ -47,9 +50,9 @@ impl c_game_engine_team_options_team {
         self.m_name.decode(bitstream)?;
         self.m_team_initial_designator = bitstream.read_integer("team-initial-designator", 4)?;
         self.m_model_override = bitstream.read_integer("team-model-override", 1)?;
-        self.m_team_color_override = bitstream.read_signed_integer("team-color-override", 32)?;
-        self.m_team_ui_text_tint_color_override = bitstream.read_signed_integer("team-ui-text-tint-color-override", 32)?;
-        self.m_team_ui_bitmap_tint_color_override = bitstream.read_signed_integer("team-ui-bitmap-tint-color-override", 32)?;
+        self.m_team_color_override = bitstream.read_integer("team-color-override", 32)?;
+        self.m_team_ui_text_tint_color_override = bitstream.read_integer("team-ui-text-tint-color-override", 32)?;
+        self.m_team_ui_bitmap_tint_color_override = bitstream.read_integer("team-ui-bitmap-tint-color-override", 32)?;
         self.m_fireteam_count = bitstream.read_integer("fireteam-count", 5)?;
 
         Ok(())

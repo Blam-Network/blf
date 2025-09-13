@@ -6,3 +6,4 @@ pub mod game_engine_team;
 pub mod megalogamengine;
 pub mod game_engine_loadout_traits;
 pub mod game_engine_survival;
+pub mod game_engine_campaign;
