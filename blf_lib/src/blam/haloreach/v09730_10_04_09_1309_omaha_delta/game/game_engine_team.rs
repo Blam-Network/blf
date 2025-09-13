@@ -19,7 +19,6 @@ pub struct c_game_engine_team_options_team {
     pub m_team_color_override: i32,
     pub m_team_ui_text_tint_color_override: i32,
     pub m_team_ui_bitmap_tint_color_override: i32,
-    pub m_fireteam_count: u8,
 }
 
 impl c_game_engine_team_options_team {
@@ -34,7 +33,6 @@ impl c_game_engine_team_options_team {
         bitstream.write_signed_integer(self.m_team_color_override, 32)?;
         bitstream.write_signed_integer(self.m_team_ui_text_tint_color_override, 32)?;
         bitstream.write_signed_integer(self.m_team_ui_bitmap_tint_color_override, 32)?;
-        bitstream.write_integer(self.m_fireteam_count, 5)?;
 
         Ok(())
     }
@@ -50,7 +48,6 @@ impl c_game_engine_team_options_team {
         self.m_team_color_override = bitstream.read_signed_integer("team-color-override", 32)?;
         self.m_team_ui_text_tint_color_override = bitstream.read_signed_integer("team-ui-text-tint-color-override", 32)?;
         self.m_team_ui_bitmap_tint_color_override = bitstream.read_signed_integer("team-ui-bitmap-tint-color-override", 32)?;
-        self.m_fireteam_count = bitstream.read_integer("fireteam-count", 5)?;
 
         Ok(())
     }

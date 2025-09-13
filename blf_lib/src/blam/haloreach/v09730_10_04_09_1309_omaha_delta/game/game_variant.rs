@@ -1,24 +1,23 @@
 use serde::{Deserialize, Serialize};
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::game_engine_campaign::c_game_engine_campaign_variant;
-use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::game_engine_default::c_game_engine_base_variant;
-use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::game_engine_player_rating_parameters::s_game_engine_player_rating_parameters;
+use blf_lib::blam::haloreach::v09730_10_04_09_1309_omaha_delta::game::game_engine_default::c_game_engine_base_variant;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::game_engine_survival::c_game_engine_survival_variant;
-use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::game_engine_team::{c_game_engine_team_options_team, k_game_variant_team_count};
-use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::game_engine_traits::s_player_trait_option;
-use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::megalogamengine::megalogamengine_actions::c_action;
-use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::megalogamengine::megalogamengine_conditions::c_condition;
+use blf_lib::blam::haloreach::v09730_10_04_09_1309_omaha_delta::game::game_engine_traits::s_player_trait_option;
+use blf_lib::blam::haloreach::v09730_10_04_09_1309_omaha_delta::game::megalogamengine::megalogamengine_actions::c_action;
+use blf_lib::blam::haloreach::v09730_10_04_09_1309_omaha_delta::game::megalogamengine::megalogamengine_conditions::c_condition;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::megalogamengine::megalogamengine_map_objects::c_object_filter;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::megalogamengine::megalogamengine_statistics::c_megalo_game_statistic;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::megalogamengine::megalogamengine_trigger::c_trigger;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::megalogamengine::megalogamengine_user_defined_options::s_user_defined_option;
-use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::megalogamengine::megalogamengine_variable_metadata::s_variable_metadata;
+use blf_lib::blam::haloreach::v09730_10_04_09_1309_omaha_delta::game::megalogamengine::megalogamengine_variable_metadata::s_variable_metadata;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::string_table::c_string_table;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::memory::bitstream_reader::c_bitstream_reader_extensions;
-use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::memory::bitstream_writer::c_bitstream_writer_extensions;
 use blf_lib::io::bitstream::{c_bitstream_reader, c_bitstream_writer};
 use blf_lib::types::numbers::Float32;
 use blf_lib_derivable::result::BLFLibResult;
-use crate::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::megalogamengine::megalogamengine_map_permissions::c_megalogamengine_map_permissions;
+use crate::blam::haloreach::v09730_10_04_09_1309_omaha_delta::game::game_engine_loadout_traits::{s_loadout_palette_unknown_struct, s_loadout_unknown_struct};
+use crate::blam::haloreach::v09730_10_04_09_1309_omaha_delta::game::megalogamengine::megalogamengine_requisitions::s_requisition_palette;
+use crate::blam::haloreach::v12065_11_08_24_1738_tu1actual::memory::bitstream_writer::c_bitstream_writer_extensions;
 use crate::types::array::StaticArray;
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
@@ -28,27 +27,14 @@ pub struct c_game_engine_custom_variant {
     pub m_base_variant: c_game_engine_base_variant,
     pub m_player_traits: Vec<s_player_trait_option>,
     pub m_user_defined_options: Vec<s_user_defined_option>,
-    pub m_script_strings: c_string_table<112, 0x4C00, 15, 15, 7>,
+    pub m_script_strings: c_string_table<112, 0x4C00, 14, 14, 7>,
     pub m_base_name_string_index: u8,
     pub m_localized_name: c_string_table<1, 0x180, 9, 9, 1>,
     pub m_localized_description: c_string_table<1, 0xC00, 12, 12, 1>,
-    pub m_localized_category: c_string_table<1, 0x180, 9, 9, 1>,
-    pub m_engine_icon: u8,
-    pub m_engine_category: u8,
-    pub m_map_permissions: c_megalogamengine_map_permissions,
-    pub m_player_ratings: s_game_engine_player_rating_parameters,
+    pub m_engine_icon: i8,
     pub m_score_to_win_round: u16,
-    pub m_fire_teams_enabled: bool,
     pub m_symmetric_gametype: bool,
-    // These should each be named at some point, but as I'm still researching I'm going to leave them like this.
-    pub m_base_variant_parameters_locked: StaticArray<bool, 1280>,
-    pub m_base_variant_parameters_hidden: StaticArray<bool, 1280>,
-    pub m_user_defined_options_locked: StaticArray<bool, 32>,
-    pub m_user_defined_options_hidden: StaticArray<bool, 32>,
     pub m_game_engine: s_custom_game_engine_definition,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub m_au1_settings: Option<c_game_engine_custom_variant_au1_settings>,
-
 }
 
 impl c_game_engine_custom_variant {
@@ -68,34 +54,10 @@ impl c_game_engine_custom_variant {
         bitstream.write_integer(self.m_base_name_string_index, 7)?;
         self.m_localized_name.encode(bitstream)?;
         self.m_localized_description.encode(bitstream)?;
-        self.m_localized_category.encode(bitstream)?;
-        bitstream.write_integer(self.m_engine_icon, 5)?;
-        bitstream.write_integer(self.m_engine_category, 5)?;
-        self.m_map_permissions.encode(bitstream)?;
-        self.m_player_ratings.encode(bitstream)?;
-        bitstream.write_signed_integer(self.m_score_to_win_round, 16)?;
-        bitstream.write_bool(self.m_fire_teams_enabled)?;
+        bitstream.write_index::<64>(self.m_engine_icon, 6)?;
+        bitstream.write_integer(self.m_score_to_win_round, 16)?;
         bitstream.write_bool(self.m_symmetric_gametype)?;
-        for parameter in &self.m_base_variant_parameters_locked {
-            bitstream.write_bool(*parameter)?
-        }
-        for parameter in &self.m_base_variant_parameters_hidden {
-            bitstream.write_bool(*parameter)?
-        }
-        for parameter in &self.m_user_defined_options_locked {
-            bitstream.write_bool(*parameter)?
-        }
-        for parameter in &self.m_user_defined_options_hidden {
-            bitstream.write_bool(*parameter)?
-        }
         self.m_game_engine.encode(bitstream)?;
-        if self.m_encoding_version > 106 {
-            if let Some(au1_settings) = &self.m_au1_settings {
-                au1_settings.encode(bitstream)?;
-            } else {
-                return Err("Writing v107 gametypes (and higher) requires AU1 Options to be set.".into());
-            }
-        }
 
         Ok(())
     }
@@ -120,32 +82,10 @@ impl c_game_engine_custom_variant {
         self.m_base_name_string_index = bitstream.read_integer("base-name-string-index", 7)?;
         self.m_localized_name.decode(bitstream)?;
         self.m_localized_description.decode(bitstream)?;
-        self.m_localized_category.decode(bitstream)?;
-        self.m_engine_icon = bitstream.read_integer("engine-icon-index", 5)?;
-        self.m_engine_category = bitstream.read_integer("engine-category", 5)?;
-        self.m_map_permissions.decode(bitstream)?;
-        self.m_player_ratings.decode(bitstream)?;
-        self.m_score_to_win_round = bitstream.read_signed_integer("score-to-win-round", 16)?;
-        self.m_fire_teams_enabled = bitstream.read_bool("fire-teams-enabled")?;
+        self.m_engine_icon = bitstream.read_index::<64>("engine-icon-index", 6)? as i8;
+        self.m_score_to_win_round = bitstream.read_integer("score-to-win-round", 16)?;
         self.m_symmetric_gametype = bitstream.read_bool("symmetric-gametype")?;
-        for i in 0..1280 {
-            self.m_base_variant_parameters_locked[i] = bitstream.read_bool("base-variant-parameters-locked")?;
-        }
-        for i in 0..1280 {
-            self.m_base_variant_parameters_hidden[i] = bitstream.read_bool("base-variant-parameters-hidden")?;
-        }
-        for i in 0..32 {
-            self.m_user_defined_options_locked[i] = bitstream.read_bool("user-defined-options-locked")?;
-        }
-        for i in 0..32 {
-            self.m_user_defined_options_hidden[i] = bitstream.read_bool("user-defined-options-hidden")?;
-        }
         self.m_game_engine.decode(bitstream)?;
-        if self.m_encoding_version > 106 {
-            let mut au1_settings = c_game_engine_custom_variant_au1_settings::default();
-            au1_settings.decode(bitstream)?;
-            self.m_au1_settings = Some(au1_settings);
-        }
 
         Ok(())
     }
@@ -229,19 +169,20 @@ pub struct s_custom_game_engine_definition {
     pub m_conditions: Vec<c_condition>,
     pub m_actions: Vec<c_action>,
     pub m_triggers: Vec<c_trigger>,
+    pub m_requisitions: Vec<s_requisition_palette>,
+    pub m_loadouts: Vec<s_loadout_unknown_struct>,
+    pub m_loadout_palette: Vec<s_loadout_palette_unknown_struct>,
     pub m_statistics: Vec<c_megalo_game_statistic>,
     pub m_global_variable_metadata: s_variable_metadata<4, 4, 4, 4, 5>,
     pub m_player_variable_metadata: s_variable_metadata<4, 3, 3, 3, 3>,
     pub m_object_variable_metadata: s_variable_metadata<4, 3, 2, 3, 3>,
     pub m_team_variable_metadata: s_variable_metadata<4, 3, 3, 3, 3>,
     pub m_hud_widgets: Vec<u8>,
-    pub m_initialization_trigger_index: u16,
-    pub m_local_initialization_trigger_index: u16,
-    pub m_host_migration_trigger_index: u16,
-    pub m_double_migration_trigger_index: u16,
-    pub m_object_death_event_trigger_index: u16,
-    pub m_local_trigger_index: u16,
-    pub m_pregame_trigger_index: u16,
+    pub m_initialization_trigger_index: i16,
+    pub m_local_initialization_trigger_index: i16,
+    pub m_host_migration_trigger_index: i16,
+    pub m_object_death_event_trigger_index: i16,
+    pub m_local_trigger_index: i16,
     pub m_objects_used: StaticArray<bool, 2048>,
     pub m_object_filters: Vec<c_object_filter>,
 }
@@ -278,13 +219,11 @@ impl s_custom_game_engine_definition {
             bitstream.write_integer(*widget, 4)?;
         }
 
-        bitstream.write_integer(self.m_initialization_trigger_index as u32, 9)?;
-        bitstream.write_integer(self.m_local_initialization_trigger_index as u32, 9)?;
-        bitstream.write_integer(self.m_host_migration_trigger_index as u32, 9)?;
-        bitstream.write_integer(self.m_double_migration_trigger_index as u32, 9)?;
-        bitstream.write_integer(self.m_object_death_event_trigger_index as u32, 9)?;
-        bitstream.write_integer(self.m_local_trigger_index as u32, 9)?;
-        bitstream.write_integer(self.m_pregame_trigger_index as u32, 9)?;
+        bitstream.write_index::<320>(self.m_initialization_trigger_index, 9)?;
+        bitstream.write_index::<320>(self.m_local_initialization_trigger_index, 9)?;
+        bitstream.write_index::<320>(self.m_host_migration_trigger_index, 9)?;
+        bitstream.write_index::<320>(self.m_object_death_event_trigger_index, 9)?;
+        bitstream.write_index::<320>(self.m_local_trigger_index, 9)?;
 
         for object_type in self.m_objects_used.get() {
             bitstream.write_bool(*object_type)?
@@ -320,6 +259,27 @@ impl s_custom_game_engine_definition {
             self.m_triggers.push(trigger);
         }
 
+        let requisition_palette_count = bitstream.read_integer("requisition-palette-count", 4)?;
+        for i in 0..requisition_palette_count {
+            let mut requisition = s_requisition_palette::default();
+            requisition.decode(bitstream)?;
+            self.m_requisitions.push(requisition);
+        }
+
+        let loadout_count: u8 = bitstream.read_integer("loadout-count", 6)?;
+        for i in 0..loadout_count {
+            let mut loadout = s_loadout_unknown_struct::default();
+            loadout.decode(bitstream)?;
+            self.m_loadouts.push(loadout);
+        }
+
+        let loadout_palette_count: u8 = bitstream.read_integer("loadout-palette-count", 5)?;
+        for i in 0..loadout_palette_count {
+            let mut loadout_palette = s_loadout_palette_unknown_struct::default();
+            loadout_palette.decode(bitstream)?;
+            self.m_loadout_palette.push(loadout_palette);
+        }
+
         let statistic_count: u8 = bitstream.read_integer("game-statistic-count", 3)?;
         for i in 0..statistic_count {
             let mut statistic = c_megalo_game_statistic::default();
@@ -337,13 +297,11 @@ impl s_custom_game_engine_definition {
             self.m_hud_widgets.push(bitstream.read_integer("position", 4)?);
         }
 
-        self.m_initialization_trigger_index = bitstream.read_integer("initial-trigger-index", 9)?;
-        self.m_local_initialization_trigger_index = bitstream.read_integer("local-initialization-trigger-index", 9)?;
-        self.m_host_migration_trigger_index = bitstream.read_integer("host-migration-trigger-index", 9)?;
-        self.m_double_migration_trigger_index = bitstream.read_integer("double-migration-trigger-index", 9)?;
-        self.m_object_death_event_trigger_index = bitstream.read_integer("death-event-trigger-index", 9)?;
-        self.m_local_trigger_index = bitstream.read_integer("local-trigger-index", 9)?;
-        self.m_pregame_trigger_index = bitstream.read_integer("pregame-trigger-index", 9)?;
+        self.m_initialization_trigger_index = bitstream.read_index::<320>("initial-trigger-index", 8)? as i16;
+        self.m_local_initialization_trigger_index = bitstream.read_index::<320>("local-initialization-trigger-index", 8)? as i16;
+        self.m_host_migration_trigger_index = bitstream.read_index::<320>("host-migration-trigger-index", 8)? as i16;
+        self.m_object_death_event_trigger_index = bitstream.read_index::<320>("death-event-trigger-index", 8)? as i16;
+        self.m_local_trigger_index = bitstream.read_index::<320>("local-trigger-index", 8)? as i16;
 
         for i in 0..2048 {
             self.m_objects_used[i] = bitstream.read_bool("object-types-used")?;
@@ -355,47 +313,6 @@ impl s_custom_game_engine_definition {
             object_filter.decode(bitstream)?;
             self.m_object_filters.push(object_filter);
         }
-
-        Ok(())
-    }
-}
-
-#[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
-// no idea what this is called
-pub struct c_game_engine_custom_variant_au1_settings {
-    pub m_flags: u32,
-    pub m_precision_bloom: Float32,
-    pub m_active_camo_energy_curve_min: Float32,
-    pub m_active_camo_energy_curve_max: Float32,
-    pub m_armor_lock_damage_drain: Float32,
-    pub m_armor_lock_damage_drain_limit: Float32,
-    pub m_magnum_damage: Float32,
-    pub m_magnum_fire_delay: Float32,
-}
-
-impl c_game_engine_custom_variant_au1_settings {
-    pub fn encode(&self, mut bitstream: &mut c_bitstream_writer) -> BLFLibResult {
-        bitstream.write_integer(self.m_flags, 32)?;
-        bitstream.write_quantized_real(self.m_precision_bloom, 0f32, 2f32, 8, false, true)?;
-        bitstream.write_quantized_real(self.m_active_camo_energy_curve_min, 0f32, 2f32, 8, false, true)?;
-        bitstream.write_quantized_real(self.m_active_camo_energy_curve_max, 0f32, 2f32, 8, false, true)?;
-        bitstream.write_quantized_real(self.m_armor_lock_damage_drain, 0f32, 2f32, 8, false, true)?;
-        bitstream.write_quantized_real(self.m_armor_lock_damage_drain_limit, 0f32, 2f32, 8, false, true)?;
-        bitstream.write_quantized_real(self.m_magnum_damage, 0f32, 10f32, 8, false, true)?;
-        bitstream.write_quantized_real(self.m_magnum_fire_delay, 0f32, 10f32, 8, false, true)?;
-
-        Ok(())
-    }
-
-    pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
-        self.m_flags = bitstream.read_integer("flags", 32)?;
-        self.m_precision_bloom = bitstream.read_quantized_real(0f32, 2f32, 8, false, true)?;
-        self.m_active_camo_energy_curve_min = bitstream.read_quantized_real(0f32, 2f32, 8, false, true)?;
-        self.m_active_camo_energy_curve_max = bitstream.read_quantized_real(0f32, 2f32, 8, false, true)?;
-        self.m_armor_lock_damage_drain = bitstream.read_quantized_real(0f32, 2f32, 8, false, true)?;
-        self.m_armor_lock_damage_drain_limit = bitstream.read_quantized_real(0f32, 2f32, 8, false, true)?;
-        self.m_magnum_damage = bitstream.read_quantized_real(0f32, 10f32, 8, false, true)?;
-        self.m_magnum_fire_delay = bitstream.read_quantized_real(0f32, 10f32, 8, false, true)?;
 
         Ok(())
     }

@@ -145,7 +145,7 @@ pub struct s_multiplayer_object_boundary {
 impl s_multiplayer_object_boundary {
     pub fn decode(mut bitstream: &mut c_bitstream_reader) -> BLFLibResult<Option<s_multiplayer_object_boundary>> {
         let mut boundary = Self::default();
-        boundary.shape = bitstream.read_enum(2)?;
+        boundary.shape = bitstream.read_unnamed_enum(2)?;
 
         match boundary.shape {
             e_boundary_shape::unused => return Ok(None),

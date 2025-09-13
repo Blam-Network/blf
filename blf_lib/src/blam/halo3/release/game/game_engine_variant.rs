@@ -238,7 +238,7 @@ impl c_game_variant {
     }
 
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
-        self.m_game_engine = bitstream.read_enum(4)?;
+        self.m_game_engine = bitstream.read_unnamed_enum(4)?;
         self.m_base_variant.decode(bitstream)?;
 
         match self.m_game_engine {

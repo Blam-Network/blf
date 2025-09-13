@@ -7,8 +7,11 @@ use crate::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::megalogamengin
 pub struct c_object_filter {
     pub m_label_string_index: u8, // 7 bits
     pub m_valid_parameters: u8, // 3 bits, flags
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub m_object_type: Option<c_object_type_reference>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub m_team: Option<u8>, // 4 bits
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub m_user_data: Option<i16>, // 16 bits
     pub m_min: u8,
 }

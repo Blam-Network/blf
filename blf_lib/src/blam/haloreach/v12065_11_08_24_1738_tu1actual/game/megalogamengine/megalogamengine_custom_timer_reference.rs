@@ -63,7 +63,7 @@ impl c_custom_timer_reference {
     }
 
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
-        self.m_type = bitstream.read_enum(3)?;
+        self.m_type = bitstream.read_unnamed_enum(3)?;
 
         match self.m_type {
             e_custom_timer_type::global => {

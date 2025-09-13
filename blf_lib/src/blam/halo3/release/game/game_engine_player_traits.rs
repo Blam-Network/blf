@@ -191,11 +191,11 @@ impl c_player_traits {
     }
 
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
-        self.m_shield_vitality_traits.m_damage_resistance_percentage_setting = bitstream.read_enum(4)?;
-        self.m_shield_vitality_traits.m_shield_recharge_rate_percentage_setting = bitstream.read_enum(4)?;
-        self.m_shield_vitality_traits.m_vampirism_percentage_setting = bitstream.read_enum(3)?;
-        self.m_shield_vitality_traits.m_headshot_immunity_setting = bitstream.read_enum(2)?;
-        self.m_shield_vitality_traits.m_shield_multiplier_setting = bitstream.read_enum(3)?;
+        self.m_shield_vitality_traits.m_damage_resistance_percentage_setting = bitstream.read_unnamed_enum(4)?;
+        self.m_shield_vitality_traits.m_shield_recharge_rate_percentage_setting = bitstream.read_unnamed_enum(4)?;
+        self.m_shield_vitality_traits.m_vampirism_percentage_setting = bitstream.read_unnamed_enum(3)?;
+        self.m_shield_vitality_traits.m_headshot_immunity_setting = bitstream.read_unnamed_enum(2)?;
+        self.m_shield_vitality_traits.m_shield_multiplier_setting = bitstream.read_unnamed_enum(3)?;
         self.m_weapon_traits.m_damage_modifier_percentage_setting = bitstream.read_unnamed_integer(4)?;
         self.m_weapon_traits.m_initial_primary_weapon_absolute_index = bitstream.read_unnamed_signed_integer(8)?;
         self.m_weapon_traits.m_initial_secondary_weapon_absolute_index = bitstream.read_unnamed_signed_integer(8)?;

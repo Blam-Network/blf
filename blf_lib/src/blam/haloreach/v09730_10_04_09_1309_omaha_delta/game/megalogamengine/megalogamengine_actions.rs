@@ -6,15 +6,13 @@ use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::megalogameng
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::megalogamengine::megalogamengine_object_type_reference::c_object_type_reference;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::megalogamengine::megalogamengine_player_reference::c_player_reference;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::megalogamengine::megalogamengine_team_reference::c_team_reference;
-use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::megalogamengine::megalogamengine_text::c_dynamic_string;
-use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::megalogamengine::megalogamengine_variant_variable::s_variant_variable;
+use blf_lib::blam::haloreach::v09730_10_04_09_1309_omaha_delta::game::megalogamengine::megalogamengine_text::c_dynamic_string;
+use blf_lib::blam::haloreach::v09730_10_04_09_1309_omaha_delta::game::megalogamengine::megalogamengine_variant_variable::s_variant_variable;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::saved_games::scenario_map_variant::e_boundary_shape;
 use blf_lib::io::bitstream::{c_bitstream_reader, c_bitstream_writer};
-use blf_lib::OPTION_TO_RESULT;
 use blf_lib_derivable::result::{BLFLibError, BLFLibResult};
-use crate::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::megalogamengine::megalogamengine_custom_variable_reference::c_custom_variable_reference;
+use crate::blam::haloreach::v09730_10_04_09_1309_omaha_delta::game::megalogamengine::megalogamengine_custom_variable_reference::c_custom_variable_reference;
 use crate::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::megalogamengine::megalogamengine_object_reference::c_object_reference;
-
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct s_team_or_player_target {
@@ -96,7 +94,6 @@ pub struct s_action_create_object_parameters {
     pub m_filter_index: i8, // 4 bits
     pub m_flags: u8, // 3 bits
     pub m_offset: u32, // 24 bits
-    pub m_variant_name_index: u8, // 8 bits
 }
 
 impl s_action_create_object_parameters {
@@ -107,7 +104,6 @@ impl s_action_create_object_parameters {
         bitstream.write_index::<16>(self.m_filter_index, 4)?;
         bitstream.write_integer(self.m_flags, 3)?;
         bitstream.write_integer(self.m_offset, 24)?;
-        bitstream.write_integer(self.m_variant_name_index, 8)?;
 
         Ok(())
     }
@@ -119,7 +115,6 @@ impl s_action_create_object_parameters {
         self.m_filter_index = bitstream.read_index::<16>("filter_index", 4)? as i8;
         self.m_flags = bitstream.read_integer("flags", 3)?;
         self.m_offset = bitstream.read_integer("offset", 24)?;
-        self.m_variant_name_index = bitstream.read_integer("variant-name-index", 8)?;
 
         Ok(())
     }
@@ -493,18 +488,18 @@ impl s_action_timer_set_rate_parameters {
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct s_action_for_each_parameters {
-    pub m_trigger_index: u16, // 9 bits
+    pub m_trigger_index: u16, // 8 bits
 }
 
 impl s_action_for_each_parameters {
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
-        bitstream.write_integer(self.m_trigger_index, 9)?;
+        bitstream.write_integer(self.m_trigger_index, 8)?;
 
         Ok(())
     }
 
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
-        self.m_trigger_index = bitstream.read_integer("trigger-index", 9)?;
+        self.m_trigger_index = bitstream.read_integer("trigger-index", 8)?;
 
         Ok(())
     }
@@ -537,7 +532,6 @@ pub struct s_action_object_attach_parameters {
     pub m_object_1: c_object_reference,
     pub m_object_2: c_object_reference,
     pub m_offset: u32,
-    pub m_absolute_orientation: bool,
 }
 
 impl s_action_object_attach_parameters {
@@ -545,7 +539,6 @@ impl s_action_object_attach_parameters {
         self.m_object_1.encode(bitstream)?;
         self.m_object_2.encode(bitstream)?;
         bitstream.write_integer(self.m_offset, 24)?;
-        bitstream.write_bool(self.m_absolute_orientation)?;
 
         Ok(())
     }
@@ -554,7 +547,6 @@ impl s_action_object_attach_parameters {
         self.m_object_1.decode(bitstream)?;
         self.m_object_2.decode(bitstream)?;
         self.m_offset = bitstream.read_integer("offset", 24)?;
-        self.m_absolute_orientation = bitstream.read_bool("absolute_orientation")?;
 
         Ok(())
     }
@@ -1371,48 +1363,53 @@ pub enum e_action_type {
     get_object_shields = 54,
     get_object_health = 55,
     set_objective_text = 56,
-    set_objective_allegiance_name = 57,
-    set_objective_allegiance_icon = 58,
-    set_co_op_spawning = 59,
-    set_primary_respawn_object_for_team = 60,
-    set_primary_respawn_object_for_player = 61,
-    get_fireteam = 62,
-    set_fireteam = 63,
-    modify_object_shields = 64,
-    modify_object_health = 65,
-    get_distance = 66,
-    modify_object_max_shields = 67,
-    modify_object_max_health = 68,
-    set_player_requisition_palette = 69,
-    set_device_power = 70,
-    get_device_power = 71,
-    set_device_position = 72,
-    get_device_position = 73,
+    // -- not in beta --
+    // set_objective_allegiance_name = 57,
+    // set_objective_allegiance_icon = 58,
+    set_co_op_spawning = 57,
+    set_primary_respawn_object_for_team = 58,
+    set_primary_respawn_object_for_player = 59,
+    get_fireteam = 60,
+    set_fireteam = 61,
+    modify_object_shields = 62,
+    modify_object_health = 63,
+    get_distance = 64,
+    modify_object_max_shields = 65,
+    modify_object_max_health = 66,
+    set_player_requisition_palette = 67,
+    unknown_68 = 68,
+    set_device_power = 69,
+    get_device_power = 70,
+    set_device_position = 71,
+    get_device_position = 72,
+    unknown_73 = 73,
     modify_player_grenades = 74,
     send_incident = 75,
     send_incident_with_value = 76,
-    set_player_loadout_palette = 77,
-    set_device_position_track = 78,
-    animate_device_position = 79,
-    set_device_actual_position = 80,
-    insert_theater_film_marker = 81,
-    enable_disable_spawn_zone = 82,
-    get_player_weapon = 83,
-    get_armor_ability = 84,
-    enable_disable_object_garbage_collection = 85,
-    get_player_target_object = 86,
-    create_object_equidistant = 87,
-    debug_force_splitscreen_count = 88,
-    add_weapon_to_player = 89,
-    set_co_op_spawning_for_player = 90,
-    copy_object_rotation = 91,
-    point_object_toward_object = 92,
-    add_weapon_to_biped = 93,
-    remove_weapon_from = 94,
-    set_scenario_interpolator_state = 95,
-    get_random_object = 96,
-    record_griefer_penalty = 97,
-    apply_shape_color_from_player_member = 98,
+    unknown_77 = 77,
+    unknown_78 = 78,
+    set_device_position_track = 79,
+    animate_device_position = 80,
+    set_device_actual_position = 81,
+    insert_theater_film_marker = 82,
+    enable_disable_spawn_zone = 83,
+    get_player_weapon = 84,
+    get_armor_ability = 85,
+    enable_disable_object_garbage_collection = 86,
+    get_player_target_object = 87,
+    create_object_equidistant = 88,
+    debug_force_splitscreen_count = 89,
+    add_weapon_to_player = 90,
+    unknown_91 = 91, // could be set_co_op_spawning_for_player
+    unknown_92 = 92,
+    // -- not in beta --
+    // point_object_toward_object = 93,
+    // add_weapon_to_biped = 94,
+    // remove_weapon_from = 95,
+    // set_scenario_interpolator_state = 96,
+    // get_random_object = 97,
+    // record_griefer_penalty = 98,
+    // apply_shape_color_from_player_member = 99,
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
@@ -1423,7 +1420,11 @@ pub struct c_action {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub m_create_object_parameters: Option<s_action_create_object_parameters>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub m_object: Option<c_object_reference>,
+    pub m_object_1: Option<c_object_reference>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub m_object_2: Option<c_object_reference>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub m_object_type: Option<c_object_type_reference>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub m_player_filter_modifier: Option<c_player_filter_modifier>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1526,89 +1527,111 @@ pub struct c_action {
     pub m_get_random_object_parameters: Option<s_action_get_random_object_parameters>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub m_boundary_set_player_color_parameters: Option<s_action_boundary_set_player_color_parameters>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub m_target: Option<s_team_or_player_target>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub m_unknown_data: Option<u32>,
 }
 
 impl c_action {
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
         bitstream.write_enum(self.m_type.clone(), 7)?;
 
-        match self.m_type.clone() as u32 {
-            1 => self.m_set_score_parameters.as_ref()
+        match self.m_type {
+            e_action_type::set_score => self.m_set_score_parameters.as_ref()
                 .ok_or_else(|| BLFLibError::from("m_set_score_parameters does not exist."))?
                 .encode(bitstream)?,
-            2 => self.m_create_object_parameters.as_ref()
+            e_action_type::place_at_me => self.m_create_object_parameters.as_ref()
                 .ok_or_else(|| BLFLibError::from("m_create_object_parameters does not exist."))?
                 .encode(bitstream)?,
-            3 | 34 | 45 => self.m_object.as_ref()
+            e_action_type::delete_object
+                | e_action_type::kill_object_instantly
+                | e_action_type::detach
+                | e_action_type::push_object_up
+            => self.m_object_1.as_ref()
                 .ok_or_else(|| BLFLibError::from("m_object does not exist."))?
                 .encode(bitstream)?,
-            4 | 12 | 13 | 22 => {
-                self.m_object.as_ref()
+            e_action_type::set_waypoint_visibility
+                | e_action_type::set_weapon_pickup_permissions
+                | e_action_type::set_spawn_location_permissions
+                | e_action_type::set_object_shape_visibility
+            => {
+                self.m_object_1.as_ref()
                     .ok_or_else(|| BLFLibError::from("m_object does not exist."))?
                     .encode(bitstream)?;
                 self.m_player_filter_modifier.as_ref()
                     .ok_or_else(|| BLFLibError::from("m_player_filter_modifier does not exist."))?
                     .encode(bitstream)?;
             }
-            5 => self.m_navpoint_set_icon_parameters.as_ref()
+            e_action_type::set_waypoint_icon => self.m_navpoint_set_icon_parameters.as_ref()
                 .ok_or_else(|| BLFLibError::from("m_navpoint_set_icon_parameters does not exist."))?
                 .encode(bitstream)?,
-            6 => self.m_navpoint_set_priority_parameters.as_ref()
+            e_action_type::set_waypoint_priority => self.m_navpoint_set_priority_parameters.as_ref()
                 .ok_or_else(|| BLFLibError::from("m_navpoint_set_priority_parameters does not exist."))?
                 .encode(bitstream)?,
-            7 => self.m_navpoint_set_timer_parameters.as_ref()
+            e_action_type::set_waypoint_timer => self.m_navpoint_set_timer_parameters.as_ref()
                 .ok_or_else(|| BLFLibError::from("m_navpoint_set_timer_parameters does not exist."))?
                 .encode(bitstream)?,
-            8 => self.m_navpoint_set_visible_range_parameters.as_ref()
+            e_action_type::set_waypoint_distance => self.m_navpoint_set_visible_range_parameters.as_ref()
                 .ok_or_else(|| BLFLibError::from("m_navpoint_set_visible_range_parameters does not exist."))?
                 .encode(bitstream)?,
-            9 => self.m_set_parameters.as_ref()
+            e_action_type::modify_variable => self.m_set_parameters.as_ref()
                 .ok_or_else(|| BLFLibError::from("m_set_parameters does not exist."))?
                 .encode(bitstream)?,
-            10 => self.m_set_boundary_parameters.as_ref()
+            e_action_type::set_object_shape => self.m_set_boundary_parameters.as_ref()
                 .ok_or_else(|| BLFLibError::from("m_set_boundary_parameters does not exist."))?
                 .encode(bitstream)?,
-            11 => self.m_apply_player_traits_parameters.as_ref()
+            e_action_type::apply_player_traits => self.m_apply_player_traits_parameters.as_ref()
                 .ok_or_else(|| BLFLibError::from("m_apply_player_traits_parameters does not exist."))?
                 .encode(bitstream)?,
-            14 => self.m_set_fireteam_respawn_filter_parameters.as_ref()
+            e_action_type::set_spawn_location_fireteams => self.m_set_fireteam_respawn_filter_parameters.as_ref()
                 .ok_or_else(|| BLFLibError::from("m_set_fireteam_respawn_filter_parameters does not exist."))?
                 .encode(bitstream)?,
-            15 => self.m_set_progress_bar_parameters.as_ref()
+            e_action_type::set_object_progress_bar => self.m_set_progress_bar_parameters.as_ref()
                 .ok_or_else(|| BLFLibError::from("m_set_progress_bar_parameters does not exist."))?
                 .encode(bitstream)?,
-            16 => self.m_hud_post_message_parameters.as_ref()
+            e_action_type::show_message_to => self.m_hud_post_message_parameters.as_ref()
                 .ok_or_else(|| BLFLibError::from("m_hud_post_message_parameters does not exist."))?
                 .encode(bitstream)?,
-            17 => self.m_timer_set_rate_parameters.as_ref()
+            e_action_type::set_timer_rate => self.m_timer_set_rate_parameters.as_ref()
                 .ok_or_else(|| BLFLibError::from("m_timer_set_rate_parameters does not exist."))?
                 .encode(bitstream)?,
-            18 => self.m_string.as_ref()
+            e_action_type::debug_print => self.m_string.as_ref()
                 .ok_or_else(|| BLFLibError::from("m_string does not exist."))?
                 .encode(bitstream)?,
-            19 => {
-                self.m_object.as_ref()
+            e_action_type::get_carrier => {
+                self.m_object_1.as_ref()
                     .ok_or_else(|| BLFLibError::from("m_object does not exist."))?
                     .encode(bitstream)?;
                 self.m_player_1.as_ref()
                     .ok_or_else(|| BLFLibError::from("m_player_1 does not exist."))?
                     .encode(bitstream)?;
             }
-            20 => self.m_for_each_parameters.as_ref()
+            e_action_type::run_nested_trigger => self.m_for_each_parameters.as_ref()
                 .ok_or_else(|| BLFLibError::from("m_for_each_parameters does not exist."))?
                 .encode(bitstream)?,
-            23 => self.m_object_destroy_parameters.as_ref()
-                .ok_or_else(|| BLFLibError::from("m_object_destroy_parameters does not exist."))?
-                .encode(bitstream)?,
-            24 | 27 | 28 | 52 | 54 | 55 | 70 | 71 | 72 | 73 | 80 | 82 | 85 => {
-                self.m_object.as_ref()
+            e_action_type::set_object_invincibility
+                | e_action_type::get_orientation
+                | e_action_type::get_speed
+                | e_action_type::modify_object_scale
+                | e_action_type::get_object_shields
+                | e_action_type::get_object_health
+                | e_action_type::set_device_power
+                | e_action_type::get_device_power
+                | e_action_type::set_device_position
+                | e_action_type::get_device_position
+                | e_action_type::set_device_actual_position
+                | e_action_type::enable_disable_spawn_zone
+                | e_action_type::enable_disable_object_garbage_collection
+            => {
+                self.m_object_1.as_ref()
                     .ok_or_else(|| BLFLibError::from("m_object does not exist."))?
                     .encode(bitstream)?;
                 self.m_variable_1.as_ref()
                     .ok_or_else(|| BLFLibError::from("m_variable_1 does not exist."))?
                     .encode(bitstream)?;
             }
-            25 | 95 => {
+            e_action_type::random_number => {
                 self.m_variable_1.as_ref()
                     .ok_or_else(|| BLFLibError::from("m_variable_1 does not exist."))?
                     .encode(bitstream)?;
@@ -1616,7 +1639,7 @@ impl c_action {
                     .ok_or_else(|| BLFLibError::from("m_variable_2 does not exist."))?
                     .encode(bitstream)?;
             }
-            29 => {
+            e_action_type::get_killer => {
                 self.m_player_1.as_ref()
                     .ok_or_else(|| BLFLibError::from("m_player_1 does not exist."))?
                     .encode(bitstream)?;
@@ -1624,7 +1647,13 @@ impl c_action {
                     .ok_or_else(|| BLFLibError::from("m_player_2 does not exist."))?
                     .encode(bitstream)?;
             }
-            30 | 31 | 35 | 37 | 62 | 63 | 97 => {
+            e_action_type::get_death_damage_type
+                | e_action_type::get_death_damage_modifier
+                | e_action_type::get_player_scoreboard_position
+                | e_action_type::get_player_killstreak
+                | e_action_type::get_fireteam
+                | e_action_type::set_fireteam
+                | e_action_type::unknown_68 => {
                 self.m_player_1.as_ref()
                     .ok_or_else(|| BLFLibError::from("m_player_1 does not exist."))?
                     .encode(bitstream)?;
@@ -1632,15 +1661,15 @@ impl c_action {
                     .ok_or_else(|| BLFLibError::from("m_variable_1 does not exist."))?
                     .encode(bitstream)?;
             }
-            32 => {
+            e_action_type::debugging_enable_tracing => {
                 let flag = self.m_tracing_enabled
                     .ok_or_else(|| BLFLibError::from("m_tracing_enabled does not exist."))?;
                 bitstream.write_bool(flag)?;
             }
-            33 => self.m_object_attach_parameters.as_ref()
+            e_action_type::attach_objects => self.m_object_attach_parameters.as_ref()
                 .ok_or_else(|| BLFLibError::from("m_object_attach_parameters does not exist."))?
                 .encode(bitstream)?,
-            36 => {
+            e_action_type::get_team_scoreboard_pos => {
                 self.m_team.as_ref()
                     .ok_or_else(|| BLFLibError::from("m_team does not exist."))?
                     .encode(bitstream)?;
@@ -1648,50 +1677,56 @@ impl c_action {
                     .ok_or_else(|| BLFLibError::from("m_variable_1 does not exist."))?
                     .encode(bitstream)?;
             }
-            38 => self.m_player_adjust_money_parameters.as_ref()
+            e_action_type::modify_player_requisition_money => self.m_player_adjust_money_parameters.as_ref()
                 .ok_or_else(|| BLFLibError::from("m_player_adjust_money_parameters does not exist."))?
                 .encode(bitstream)?,
-            39 => self.m_player_enable_purchases_parameters.as_ref()
+            e_action_type::set_player_requisition_purchase_modes => self.m_player_enable_purchases_parameters.as_ref()
                 .ok_or_else(|| BLFLibError::from("m_player_enable_purchases_parameters does not exist."))?
                 .encode(bitstream)?,
-            40 | 41 | 42 | 61 | 84 | 86 | 89 => {
+            e_action_type::get_vehicle
+                | e_action_type::force_player_into_vehicle
+                | e_action_type::set_player_biped
+                | e_action_type::set_primary_respawn_object_for_player
+                | e_action_type::get_armor_ability
+                | e_action_type::get_player_target_object
+                | e_action_type::add_weapon_to_player
+            => {
                 self.m_player_1.as_ref()
                     .ok_or_else(|| BLFLibError::from("m_player_1 does not exist."))?
                     .encode(bitstream)?;
-                self.m_object.as_ref()
+                self.m_object_1.as_ref()
                     .ok_or_else(|| BLFLibError::from("m_object does not exist."))?
                     .encode(bitstream)?;
             }
-            43 => self.m_timer.as_ref()
+            e_action_type::reset_timer => self.m_timer.as_ref()
                 .ok_or_else(|| BLFLibError::from("m_timer does not exist."))?
                 .encode(bitstream)?,
-            44 => self.m_weapon_set_pickup_priority_parameters.as_ref()
-                .ok_or_else(|| BLFLibError::from("m_weapon_set_pickup_priority_parameters does not exist."))?
-                .encode(bitstream)?,
-            46 | 47 => self.m_hud_widget_text_base.as_ref()
+            e_action_type::set_text
+                | e_action_type::set_value_text
+            => self.m_hud_widget_text_base.as_ref()
                 .ok_or_else(|| BLFLibError::from("m_hud_widget_text_base does not exist."))?
                 .encode(bitstream)?,
-            48 => self.m_hud_widget_set_meter_parameters.as_ref()
+            e_action_type::set_meter_parameters => self.m_hud_widget_set_meter_parameters.as_ref()
                 .ok_or_else(|| BLFLibError::from("m_hud_widget_set_meter_parameters does not exist."))?
                 .encode(bitstream)?,
-            49 => self.m_hud_widget_set_icon_parameters.as_ref()
+            e_action_type::set_icon => self.m_hud_widget_set_icon_parameters.as_ref()
                 .ok_or_else(|| BLFLibError::from("m_hud_widget_set_icon_parameters does not exist."))?
                 .encode(bitstream)?,
-            50 => self.m_hud_widget_set_visibility_parameters.as_ref()
+            e_action_type::set_visibility => self.m_hud_widget_set_visibility_parameters.as_ref()
                 .ok_or_else(|| BLFLibError::from("m_hud_widget_set_visibility_parameters does not exist."))?
                 .encode(bitstream)?,
-            51 => self.m_play_sound_parameters.as_ref()
+            e_action_type::play_sound => self.m_play_sound_parameters.as_ref()
                 .ok_or_else(|| BLFLibError::from("m_play_sound_parameters does not exist."))?
                 .encode(bitstream)?,
-            53 => {
-                self.m_object.as_ref()
+            e_action_type::set_waypoint_text => {
+                self.m_object_1.as_ref()
                     .ok_or_else(|| BLFLibError::from("m_object does not exist."))?
                     .encode(bitstream)?;
                 self.m_string.as_ref()
                     .ok_or_else(|| BLFLibError::from("m_string does not exist."))?
                     .encode(bitstream)?;
             }
-            56 | 57 => {
+            e_action_type::set_objective_text => {
                 self.m_player_1.as_ref()
                     .ok_or_else(|| BLFLibError::from("m_player_1 does not exist."))?
                     .encode(bitstream)?;
@@ -1699,48 +1734,66 @@ impl c_action {
                     .ok_or_else(|| BLFLibError::from("m_string does not exist."))?
                     .encode(bitstream)?;
             }
-            58 => self.m_player_set_objective_allegiance_icon_parameters.as_ref()
-                .ok_or_else(|| BLFLibError::from("m_player_set_objective_allegiance_icon_parameters does not exist."))?
-                .encode(bitstream)?,
-            59 => self.m_team_set_coop_spawning_parameters.as_ref()
+            e_action_type::set_co_op_spawning => self.m_team_set_coop_spawning_parameters.as_ref()
                 .ok_or_else(|| BLFLibError::from("m_team_set_coop_spawning_parameters does not exist."))?
                 .encode(bitstream)?,
-            60 => {
+            e_action_type::set_primary_respawn_object_for_team => {
                 self.m_team.as_ref()
                     .ok_or_else(|| BLFLibError::from("m_team does not exist."))?
                     .encode(bitstream)?;
-                self.m_object.as_ref()
+                self.m_object_1.as_ref()
                     .ok_or_else(|| BLFLibError::from("m_object does not exist."))?
                     .encode(bitstream)?;
             }
-            64 | 65 | 67 | 68 => self.m_vitality_adjustment_parameters.as_ref()
+            e_action_type::modify_object_shields
+                | e_action_type::modify_object_health
+                | e_action_type::modify_object_max_shields
+                | e_action_type::modify_object_max_health
+            => self.m_vitality_adjustment_parameters.as_ref()
                 .ok_or_else(|| BLFLibError::from("m_vitality_adjustment_parameters does not exist."))?
                 .encode(bitstream)?,
-            66 => self.m_object_get_distance_parameters.as_ref()
+            e_action_type::get_distance => self.m_object_get_distance_parameters.as_ref()
                 .ok_or_else(|| BLFLibError::from("m_object_get_distance_parameters does not exist."))?
                 .encode(bitstream)?,
-            69 => self.m_player_set_requisition_palette_parameters.as_ref()
+            e_action_type::set_player_requisition_palette => self.m_player_set_requisition_palette_parameters.as_ref()
                 .ok_or_else(|| BLFLibError::from("m_player_set_requisition_palette_parameters does not exist."))?
                 .encode(bitstream)?,
-            74 => self.m_adjust_grenades_parameters.as_ref()
+            e_action_type::unknown_73 => {
+                self.m_object_type.as_ref()
+                    .ok_or_else(|| BLFLibError::from("m_object_type does not exist."))?
+                    .encode(bitstream)?;
+                self.m_player_1.as_ref()
+                    .ok_or_else(|| BLFLibError::from("m_object_type does not exist."))?
+                    .encode(bitstream)?;
+            }
+            e_action_type::modify_player_grenades => self.m_adjust_grenades_parameters.as_ref()
                 .ok_or_else(|| BLFLibError::from("m_adjust_grenades_parameters does not exist."))?
                 .encode(bitstream)?,
-            75 => self.m_submit_incident_parameters.as_ref()
+            e_action_type::send_incident => self.m_submit_incident_parameters.as_ref()
                 .ok_or_else(|| BLFLibError::from("m_submit_incident_parameters does not exist."))?
                 .encode(bitstream)?,
-            76 => self.m_submit_incident_with_custom_value_parameters.as_ref()
+            e_action_type::send_incident_with_value => self.m_submit_incident_with_custom_value_parameters.as_ref()
                 .ok_or_else(|| BLFLibError::from("m_submit_incident_with_custom_value_parameters does not exist."))?
                 .encode(bitstream)?,
-            77 => self.m_set_loadout_palette_parameters.as_ref()
-                .ok_or_else(|| BLFLibError::from("m_set_loadout_palette_parameters does not exist."))?
-                .encode(bitstream)?,
-            78 => self.m_device_set_position_track_parameters.as_ref()
-                .ok_or_else(|| BLFLibError::from("m_device_set_position_track_parameters does not exist."))?
-                .encode(bitstream)?,
-            79 => self.m_device_animate_position_parameters.as_ref()
+            e_action_type::unknown_77
+                | e_action_type::unknown_78
+            => {
+                self.m_target.as_ref()
+                    .ok_or_else(|| BLFLibError::from("m_target does not exist."))?
+                    .encode(bitstream)?;
+                bitstream.write_integer(
+                    self.m_unknown_data
+                        .ok_or_else(|| BLFLibError::from("m_unknown_data does not exist."))?,
+                    8
+                )?;
+            },
+            e_action_type::set_device_position_track => self.m_device_set_position_track_parameters.as_ref()
                 .ok_or_else(|| BLFLibError::from("m_device_animate_position_parameters does not exist."))?
                 .encode(bitstream)?,
-            81 => {
+            e_action_type::animate_device_position => self.m_device_animate_position_parameters.as_ref()
+                .ok_or_else(|| BLFLibError::from("m_device_animate_position_parameters does not exist."))?
+                .encode(bitstream)?,
+            e_action_type::insert_theater_film_marker => {
                 self.m_variable_1.as_ref()
                     .ok_or_else(|| BLFLibError::from("m_variable_1 does not exist."))?
                     .encode(bitstream)?;
@@ -1748,37 +1801,33 @@ impl c_action {
                     .ok_or_else(|| BLFLibError::from("m_string does not exist."))?
                     .encode(bitstream)?;
             }
-            83 => self.m_player_get_weapon_parameters.as_ref()
+            e_action_type::get_player_weapon => self.m_player_get_weapon_parameters.as_ref()
                 .ok_or_else(|| BLFLibError::from("m_player_get_weapon_parameters does not exist."))?
                 .encode(bitstream)?,
-            87 => self.m_create_tunnel_parameters.as_ref()
+            e_action_type::create_object_equidistant => self.m_create_tunnel_parameters.as_ref()
                 .ok_or_else(|| BLFLibError::from("m_create_tunnel_parameters does not exist."))?
                 .encode(bitstream)?,
-            88 => self.m_variable_1.as_ref()
+            e_action_type::debug_force_splitscreen_count => self.m_variable_1.as_ref()
                 .ok_or_else(|| BLFLibError::from("m_variable_1 does not exist."))?
                 .encode(bitstream)?,
-            90 => self.m_player_set_coop_spawning_parameters.as_ref()
-                .ok_or_else(|| BLFLibError::from("m_player_set_coop_spawning_parameters does not exist."))?
+            e_action_type::unknown_91
+                | e_action_type::unknown_92
+            => {
+                self.m_player_1.as_ref()
+                    .ok_or_else(|| BLFLibError::from("m_player_1 does not exist."))?
+                    .encode(bitstream)?;
+                bitstream.write_integer(
+                    *self.m_unknown_data.as_ref()
+                        .ok_or_else(|| BLFLibError::from("m_unknown_data does not exist."))?,
+                    1
+                )?;
+            }
+            e_action_type::set_weapon_pickup_priority => self.m_weapon_set_pickup_priority_parameters.as_ref()
+                .ok_or_else(|| BLFLibError::from("m_weapon_set_pickup_priority_parameters does not exist."))?
                 .encode(bitstream)?,
-            91 => self.m_object_set_orientation_parameters.as_ref()
-                .ok_or_else(|| BLFLibError::from("m_object_set_orientation_parameters does not exist."))?
-                .encode(bitstream)?,
-            92 => self.m_object_face_object_parameters.as_ref()
-                .ok_or_else(|| BLFLibError::from("m_object_face_object_parameters does not exist."))?
-                .encode(bitstream)?,
-            93 => self.m_biped_give_weapon_parameters.as_ref()
-                .ok_or_else(|| BLFLibError::from("m_biped_give_weapon_parameters does not exist."))?
-                .encode(bitstream)?,
-            94 => self.m_biped_drop_weapon_parameters.as_ref()
-                .ok_or_else(|| BLFLibError::from("m_biped_drop_weapon_parameters does not exist."))?
-                .encode(bitstream)?,
-            96 => self.m_get_random_object_parameters.as_ref()
-                .ok_or_else(|| BLFLibError::from("m_get_random_object_parameters does not exist."))?
-                .encode(bitstream)?,
-            98 => self.m_boundary_set_player_color_parameters.as_ref()
-                .ok_or_else(|| BLFLibError::from("m_boundary_set_player_color_parameters does not exist."))?
-                .encode(bitstream)?,
-            _ => {}
+            e_action_type::none => {}
+            e_action_type::end_round => {}
+            e_action_type::break_into_debugger => {}
         }
 
         Ok(())
@@ -1790,121 +1839,138 @@ impl c_action {
             self.m_type = action_type;
         }
         else {
-            return Err(format!("unsupported action type: {}", action_type).into())
+            return Ok(())
+            // return Err(format!("unsupported action type: {}", action_type).into())
         }
 
 
-        match self.m_type.clone() as u32 {
-            1 => {
+        match self.m_type {
+            e_action_type::set_score => {
                 let mut set_score_parameters = s_action_set_score_parameters::default();
                 set_score_parameters.decode(bitstream)?;
                 self.m_set_score_parameters = Some(set_score_parameters);
             }
-            2 => {
+            e_action_type::place_at_me => {
                 let mut create_object_parameters = s_action_create_object_parameters::default();
                 create_object_parameters.decode(bitstream)?;
                 self.m_create_object_parameters = Some(create_object_parameters);
             }
-            3 | 34 | 45 => {
+            e_action_type::delete_object
+                | e_action_type::kill_object_instantly
+                | e_action_type::detach
+                | e_action_type::push_object_up
+            => {
                 let mut object = c_object_reference::default();
                 object.decode(bitstream)?;
-                self.m_object = Some(object);
+                self.m_object_1 = Some(object);
             }
-            4 | 12 | 13 | 22 => {
+            e_action_type::set_waypoint_visibility
+                | e_action_type::set_weapon_pickup_permissions
+                | e_action_type::set_spawn_location_permissions
+                | e_action_type::set_object_shape_visibility
+            => {
                 let mut object = c_object_reference::default();
                 let mut player_filter_modifier = c_player_filter_modifier::default();
                 object.decode(bitstream)?;
                 player_filter_modifier.decode(bitstream)?;
-                self.m_object = Some(object);
+                self.m_object_1 = Some(object);
                 self.m_player_filter_modifier = Some(player_filter_modifier);
             }
-            5 => {
+            e_action_type::set_waypoint_icon => {
                 let mut navpoint_set_icon_parameters = s_action_navpoint_set_icon_parameters::default();
                 navpoint_set_icon_parameters.decode(bitstream)?;
                 self.m_navpoint_set_icon_parameters = Some(navpoint_set_icon_parameters);
             }
-            6 => {
+            e_action_type::set_waypoint_priority => {
                 let mut navpoint_set_priority_parameters = s_action_navpoint_set_priority_parameters::default();
                 navpoint_set_priority_parameters.decode(bitstream)?;
                 self.m_navpoint_set_priority_parameters = Some(navpoint_set_priority_parameters);
             }
-            7 => {
+            e_action_type::set_waypoint_timer => {
                 let mut navpoint_set_timer_parameters = s_action_navpoint_set_timer_parameters::default();
                 navpoint_set_timer_parameters.decode(bitstream)?;
                 self.m_navpoint_set_timer_parameters = Some(navpoint_set_timer_parameters);
             }
-            8 => {
+            e_action_type::set_waypoint_distance => {
                 let mut navpoint_set_visible_range_parameters = s_action_navpoint_set_visible_range_parameters::default();
                 navpoint_set_visible_range_parameters.decode(bitstream)?;
                 self.m_navpoint_set_visible_range_parameters = Some(navpoint_set_visible_range_parameters);
             }
-            9 => {
+            e_action_type::modify_variable => {
                 let mut set_parameters = s_action_set_parameters::default();
                 set_parameters.decode(bitstream)?;
                 self.m_set_parameters = Some(set_parameters);
             }
-            10 => {
+            e_action_type::set_object_shape => {
                 let mut set_boundary_parameters = s_action_set_boundary_parameters::default();
                 set_boundary_parameters.decode(bitstream)?;
                 self.m_set_boundary_parameters = Some(set_boundary_parameters);
             }
-            11 => {
+            e_action_type::apply_player_traits => {
                 let mut apply_player_traits_parameters = s_action_apply_player_traits_parameters::default();
                 apply_player_traits_parameters.decode(bitstream)?;
                 self.m_apply_player_traits_parameters = Some(apply_player_traits_parameters);
             }
-            14 => {
+            e_action_type::set_spawn_location_fireteams => {
                 let mut set_fireteam_respawn_filter_parameters = s_action_set_fireteam_respawn_filter_parameters::default();
                 set_fireteam_respawn_filter_parameters.decode(bitstream)?;
                 self.m_set_fireteam_respawn_filter_parameters = Some(set_fireteam_respawn_filter_parameters);
             }
-            15 => {
+            e_action_type::set_object_progress_bar => {
                 let mut set_progress_bar_parameters = s_action_set_progress_bar_parameters::default();
                 set_progress_bar_parameters.decode(bitstream)?;
                 self.m_set_progress_bar_parameters = Some(set_progress_bar_parameters);
             }
-            16 => {
+            e_action_type::show_message_to => {
                 let mut hud_post_message_parameters = s_action_hud_post_message_parameters::default();
                 hud_post_message_parameters.decode(bitstream)?;
                 self.m_hud_post_message_parameters = Some(hud_post_message_parameters);
             }
-            17 => {
+            e_action_type::set_timer_rate => {
                 let mut timer_set_rate_parameters = s_action_timer_set_rate_parameters::default();
                 timer_set_rate_parameters.decode(bitstream)?;
                 self.m_timer_set_rate_parameters = Some(timer_set_rate_parameters);
             }
-            18 => {
+            e_action_type::debug_print => {
                 let mut string = c_dynamic_string::default();
                 string.decode(bitstream)?;
                 self.m_string = Some(string);
             }
-            19 => {
+            e_action_type::get_carrier => {
                 let mut object = c_object_reference::default();
                 let mut player = c_player_reference::default();
                 object.decode(bitstream)?;
                 player.decode(bitstream)?;
-                self.m_object = Some(object);
+                self.m_object_1 = Some(object);
                 self.m_player_1 = Some(player);
             }
-            20 => {
+            e_action_type::run_nested_trigger => {
                 let mut for_each_parameters = s_action_for_each_parameters::default();
                 for_each_parameters.decode(bitstream)?;
                 self.m_for_each_parameters = Some(for_each_parameters);
             }
-            23 => {
-                let mut object_destroy_parameters = s_action_object_destroy_parameters::default();
-                object_destroy_parameters.decode(bitstream)?;
-                self.m_object_destroy_parameters = Some(object_destroy_parameters);
-            }
-            24 | 27 | 28 | 52 | 54 | 55 | 70 | 71 | 72 | 73 | 80 | 82 | 85 => {
+            e_action_type::set_object_invincibility
+                | e_action_type::get_orientation
+                | e_action_type::get_speed
+                | e_action_type::modify_object_scale
+                | e_action_type::get_object_shields
+                | e_action_type::get_object_health
+                | e_action_type::set_device_power
+                | e_action_type::get_device_power
+                | e_action_type::set_device_position
+                | e_action_type::get_device_position
+                | e_action_type::set_device_actual_position
+                | e_action_type::enable_disable_spawn_zone
+                | e_action_type::enable_disable_object_garbage_collection
+            => {
                 let mut object = c_object_reference::default();
                 let mut variable = c_custom_variable_reference::default();
                 object.decode(bitstream)?;
                 variable.decode(bitstream)?;
-                self.m_object = Some(object);
+                self.m_object_1 = Some(object);
                 self.m_variable_1 = Some(variable);
             }
-            25 | 95 => {
+            e_action_type::random_number => {
                 let mut variable1 = c_custom_variable_reference::default();
                 let mut variable2 = c_custom_variable_reference::default();
                 variable1.decode(bitstream)?;
@@ -1912,7 +1978,7 @@ impl c_action {
                 self.m_variable_1 = Some(variable1);
                 self.m_variable_2 = Some(variable2);
             }
-            29 => {
+            e_action_type::get_killer => {
                 let mut player1 = c_player_reference::default();
                 let mut player2 = c_player_reference::default();
                 player1.decode(bitstream)?;
@@ -1920,7 +1986,14 @@ impl c_action {
                 self.m_player_1 = Some(player1);
                 self.m_player_2 = Some(player2);
             }
-            30 | 31 | 35 | 37 | 62 | 63 | 97 => {
+            e_action_type::get_death_damage_type
+                | e_action_type::get_death_damage_modifier
+                | e_action_type::get_player_scoreboard_position
+                | e_action_type::get_player_killstreak
+                | e_action_type::get_fireteam
+                | e_action_type::set_fireteam
+                | e_action_type::unknown_68
+            => {
                 let mut player1 = c_player_reference::default();
                 let mut variable1 = c_custom_variable_reference::default();
                 player1.decode(bitstream)?;
@@ -1928,15 +2001,15 @@ impl c_action {
                 self.m_player_1 = Some(player1);
                 self.m_variable_1 = Some(variable1);
             }
-            32 => {
+            e_action_type::debugging_enable_tracing => {
                 self.m_tracing_enabled = Some(bitstream.read_bool("tracing-enabled")?);
             }
-            33 => {
+            e_action_type::attach_objects => {
                 let mut object_attach_parameters = s_action_object_attach_parameters::default();
                 object_attach_parameters.decode(bitstream)?;
                 self.m_object_attach_parameters = Some(object_attach_parameters);
             }
-            36 => {
+            e_action_type::get_team_scoreboard_pos => {
                 let mut team = c_team_reference::default();
                 let mut variable = c_custom_variable_reference::default();
                 team.decode(bitstream)?;
@@ -1944,68 +2017,72 @@ impl c_action {
                 self.m_team = Some(team);
                 self.m_variable_1 = Some(variable);
             }
-            38 => {
+            e_action_type::modify_player_requisition_money => {
                 let mut player_adjust_money_parameters = s_action_player_adjust_money_parameters::default();
                 player_adjust_money_parameters.decode(bitstream)?;
                 self.m_player_adjust_money_parameters = Some(player_adjust_money_parameters);
             }
-            39 => {
+            e_action_type::set_player_requisition_purchase_modes => {
                 let mut player_enable_purchases_parameters = s_action_player_enable_purchases_parameters::default();
                 player_enable_purchases_parameters.decode(bitstream)?;
                 self.m_player_enable_purchases_parameters = Some(player_enable_purchases_parameters);
             }
-            40 | 41 | 42 | 61 | 84 | 86 | 89 => {
+            e_action_type::get_vehicle
+                | e_action_type::force_player_into_vehicle
+                | e_action_type::set_player_biped
+                | e_action_type::set_primary_respawn_object_for_player
+                | e_action_type::get_armor_ability
+                | e_action_type::get_player_target_object
+                | e_action_type::add_weapon_to_player
+            => {
                 let mut player = c_player_reference::default();
                 let mut object = c_object_reference::default();
                 player.decode(bitstream)?;
                 object.decode(bitstream)?;
                 self.m_player_1 = Some(player);
-                self.m_object = Some(object);
+                self.m_object_1 = Some(object);
             }
-            43 => {
+            e_action_type::reset_timer => {
                 let mut timer = c_custom_timer_reference::default();
                 timer.decode(bitstream)?;
                 self.m_timer = Some(timer);
             }
-            44 => {
-                let mut weapon_set_pickup_priority_parameters = s_action_weapon_set_pickup_priority_parameters::default();
-                weapon_set_pickup_priority_parameters.decode(bitstream)?;
-                self.m_weapon_set_pickup_priority_parameters = Some(weapon_set_pickup_priority_parameters);
-            }
-            46 | 47 => {
+            e_action_type::set_text
+                | e_action_type::set_value_text
+            => {
                 let mut hud_widget_text_base = s_action_hud_widget_text_base::default();
                 hud_widget_text_base.decode(bitstream)?;
                 self.m_hud_widget_text_base = Some(hud_widget_text_base);
             }
-            48 => {
+            e_action_type::set_meter_parameters => {
                 let mut hud_widget_set_meter_parameters = s_action_hud_widget_set_meter_parameters::default();
                 hud_widget_set_meter_parameters.decode(bitstream)?;
                 self.m_hud_widget_set_meter_parameters = Some(hud_widget_set_meter_parameters);
             }
-            49 => {
+            e_action_type::set_icon => {
                 let mut hud_widget_set_icon_parameters = s_action_hud_widget_set_icon_parameters::default();
                 hud_widget_set_icon_parameters.decode(bitstream)?;
                 self.m_hud_widget_set_icon_parameters = Some(hud_widget_set_icon_parameters);
             }
-            50 => {
+            e_action_type::set_visibility => {
                 let mut hud_widget_set_visibility_parameters = s_action_hud_widget_set_visibility_parameters::default();
                 hud_widget_set_visibility_parameters.decode(bitstream)?;
                 self.m_hud_widget_set_visibility_parameters = Some(hud_widget_set_visibility_parameters);
             }
-            51 => {
+            e_action_type::play_sound => {
                 let mut play_sound_parameters = s_action_play_sound_parameters::default();
                 play_sound_parameters.decode(bitstream)?;
                 self.m_play_sound_parameters = Some(play_sound_parameters);
             }
-            53 => {
+            e_action_type::set_waypoint_text => {
                 let mut object = c_object_reference::default();
                 let mut string = c_dynamic_string::default();
                 object.decode(bitstream)?;
                 string.decode(bitstream)?;
-                self.m_object = Some(object);
+                self.m_object_1 = Some(object);
                 self.m_string = Some(string);
             }
-            56 | 57 => {
+            e_action_type::set_objective_text => {
                 let mut player = c_player_reference::default();
                 let mut string = c_dynamic_string::default();
                 player.decode(bitstream)?;
@@ -2013,70 +2090,72 @@ impl c_action {
                 self.m_player_1 = Some(player);
                 self.m_string = Some(string);
             }
-            58 => {
-                let mut player_set_objective_allegiance_icon_parameters = s_action_player_set_objective_allegiance_icon_parameters::default();
-                player_set_objective_allegiance_icon_parameters.decode(bitstream)?;
-                self.m_player_set_objective_allegiance_icon_parameters = Some(player_set_objective_allegiance_icon_parameters);
-            }
-            59 => {
+            e_action_type::set_co_op_spawning => {
                 let mut team_set_coop_spawning_parameters = s_action_team_set_coop_spawning_parameters::default();
                 team_set_coop_spawning_parameters.decode(bitstream)?;
                 self.m_team_set_coop_spawning_parameters = Some(team_set_coop_spawning_parameters);
             }
-            60 => {
+            e_action_type::set_primary_respawn_object_for_team => {
                 let mut team = c_team_reference::default();
                 let mut object = c_object_reference::default();
                 team.decode(bitstream)?;
                 object.decode(bitstream)?;
                 self.m_team = Some(team);
-                self.m_object = Some(object);
+                self.m_object_1 = Some(object);
             }
-            64 | 65 | 67 | 68 => {
+            e_action_type::modify_object_shields
+                | e_action_type::modify_object_health
+                | e_action_type::modify_object_max_health
+                | e_action_type::modify_object_max_shields
+            => {
                 let mut vitality_adjustment_parameters = s_action_vitality_adjustment_parameters::default();
                 vitality_adjustment_parameters.decode(bitstream)?;
                 self.m_vitality_adjustment_parameters = Some(vitality_adjustment_parameters);
             }
-            66 => {
+            e_action_type::get_distance => {
                 let mut object_get_distance_parameters = s_action_object_get_distance_parameters::default();
                 object_get_distance_parameters.decode(bitstream)?;
                 self.m_object_get_distance_parameters = Some(object_get_distance_parameters);
             }
-            69 => {
+            e_action_type::set_player_requisition_palette => {
                 let mut player_set_requisition_palette_parameters = s_action_player_set_requisition_palette_parameters::default();
                 player_set_requisition_palette_parameters.decode(bitstream)?;
                 self.m_player_set_requisition_palette_parameters = Some(player_set_requisition_palette_parameters);
             }
-            74 => {
+            e_action_type::modify_player_grenades => {
                 let mut adjust_grenades_parameters = s_action_adjust_grenades_parameters::default();
                 adjust_grenades_parameters.decode(bitstream)?;
                 self.m_adjust_grenades_parameters = Some(adjust_grenades_parameters);
             }
-            75 => {
+            e_action_type::send_incident => {
                 let mut submit_incident_parameters = s_action_submit_incident_parameters::default();
                 submit_incident_parameters.decode(bitstream)?;
                 self.m_submit_incident_parameters = Some(submit_incident_parameters);
             }
-            76 => {
+            e_action_type::send_incident_with_value => {
                 let mut submit_incident_with_custom_value_parameters = s_action_submit_incident_with_custom_value_parameters::default();
                 submit_incident_with_custom_value_parameters.decode(bitstream)?;
                 self.m_submit_incident_with_custom_value_parameters = Some(submit_incident_with_custom_value_parameters);
             }
-            77 => {
-                let mut set_loadout_palette_parameters = s_action_set_loadout_palette_parameters::default();
-                set_loadout_palette_parameters.decode(bitstream)?;
-                self.m_set_loadout_palette_parameters = Some(set_loadout_palette_parameters);
+            e_action_type::unknown_77
+                | e_action_type::unknown_78
+            => {
+                let mut target = s_team_or_player_target::default();
+                target.decode(bitstream)?;
+                self.m_target = Some(target);
+                self.m_unknown_data = Some(bitstream.read_integer("unknown-data", 8)?);
             }
-            78 => {
-                let mut device_set_position_track_parameters = s_action_device_set_position_track_parameters::default();
-                device_set_position_track_parameters.decode(bitstream)?;
-                self.m_device_set_position_track_parameters = Some(device_set_position_track_parameters);
+            e_action_type::set_device_position_track => {
+                let mut params = s_action_device_set_position_track_parameters::default();
+                params.decode(bitstream)?;
+                self.m_device_set_position_track_parameters = Some(params);
             }
-            79 => {
+            e_action_type::animate_device_position => {
                 let mut device_animate_position_parameters = s_action_device_animate_position_parameters::default();
                 device_animate_position_parameters.decode(bitstream)?;
                 self.m_device_animate_position_parameters = Some(device_animate_position_parameters);
             }
-            81 => {
+            e_action_type::insert_theater_film_marker => {
                 let mut variable = c_custom_variable_reference::default();
                 let mut string = c_dynamic_string::default();
                 variable.decode(bitstream)?;
@@ -2084,57 +2163,47 @@ impl c_action {
                 self.m_variable_1 = Some(variable);
                 self.m_string = Some(string);
             }
-            83 => {
+            e_action_type::get_player_weapon => {
                 let mut player_get_weapon_parameters = s_action_player_get_weapon_parameters::default();
                 player_get_weapon_parameters.decode(bitstream)?;
                 self.m_player_get_weapon_parameters = Some(player_get_weapon_parameters);
             }
-            87 => {
+            e_action_type::create_object_equidistant => {
                 let mut create_tunnel_parameters = s_action_create_tunnel_parameters::default();
                 create_tunnel_parameters.decode(bitstream)?;
                 self.m_create_tunnel_parameters = Some(create_tunnel_parameters);
             }
-            88 => {
+            e_action_type::debug_force_splitscreen_count => {
                 let mut variable = c_custom_variable_reference::default();
                 variable.decode(bitstream)?;
                 self.m_variable_1 = Some(variable);
             }
-            90 => {
+            e_action_type::unknown_91 => {
                 let mut player_set_coop_spawning_parameters = s_action_player_set_coop_spawning_parameters::default();
                 player_set_coop_spawning_parameters.decode(bitstream)?;
                 self.m_player_set_coop_spawning_parameters = Some(player_set_coop_spawning_parameters);
             }
-            91 => {
+            e_action_type::unknown_92 => {
                 let mut object_set_orientation_parameters = s_action_object_set_orientation_parameters::default();
                 object_set_orientation_parameters.decode(bitstream)?;
                 self.m_object_set_orientation_parameters = Some(object_set_orientation_parameters);
             }
-            92 => {
-                let mut object_face_object_parameters = s_action_object_face_object_parameters::default();
-                object_face_object_parameters.decode(bitstream)?;
-                self.m_object_face_object_parameters = Some(object_face_object_parameters);
+            e_action_type::set_weapon_pickup_priority => {
+                let mut pickup_priority = s_action_weapon_set_pickup_priority_parameters::default();
+                pickup_priority.decode(bitstream)?;
+                self.m_weapon_set_pickup_priority_parameters = Some(pickup_priority);
             }
-            93 => {
-                let mut biped_give_weapon_parameters = s_action_biped_give_weapon_parameters::default();
-                biped_give_weapon_parameters.decode(bitstream)?;
-                self.m_biped_give_weapon_parameters = Some(biped_give_weapon_parameters);
+            e_action_type::unknown_73 => {
+                let mut object_type_reference = c_object_type_reference::default();
+                let mut player_reference = c_player_reference::default();
+                object_type_reference.decode(bitstream)?;
+                player_reference.decode(bitstream)?;
+                self.m_object_type = Some(object_type_reference);
+                self.m_unknown_data = Some(bitstream.read_integer("unknown-data", 1)?)
             }
-            94 => {
-                let mut biped_drop_weapon_parameters = s_action_biped_drop_weapon_parameters::default();
-                biped_drop_weapon_parameters.decode(bitstream)?;
-                self.m_biped_drop_weapon_parameters = Some(biped_drop_weapon_parameters);
-            }
-            96 => {
-                let mut get_random_object_parameters = s_action_get_random_object_parameters::default();
-                get_random_object_parameters.decode(bitstream)?;
-                self.m_get_random_object_parameters = Some(get_random_object_parameters);
-            }
-            98 => {
-                let mut boundary_set_player_color_parameters = s_action_boundary_set_player_color_parameters::default();
-                boundary_set_player_color_parameters.decode(bitstream)?;
-                self.m_boundary_set_player_color_parameters = Some(boundary_set_player_color_parameters);
-            }
-            _ => {}
+            e_action_type::none => {}
+            e_action_type::end_round => {}
+            e_action_type::break_into_debugger => {}
         }
 
         Ok(())
