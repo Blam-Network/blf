@@ -1,6 +1,6 @@
 use blf_lib::blam::common::math::integer_math::int32_point3d;
 use blf_lib::blam::common::math::real_math::{real_point3d, real_rectangle3d};
-use blf_lib::blam::halo3::release::math::real_math::{dequantize_real_point3d, quantize_real_point3d};
+use blf_lib::blam::halo3::v12070_08_09_05_2031_halo3_ship::math::real_math::{dequantize_real_point3d, quantize_real_point3d};
 use blf_lib::io::bitstream::{c_bitstream_reader, c_bitstream_writer};
 use blf_lib_derivable::result::BLFLibResult;
 

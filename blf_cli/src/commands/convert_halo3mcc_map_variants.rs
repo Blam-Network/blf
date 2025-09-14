@@ -1,6 +1,6 @@
 use std::error::Error;
 use std::fs::create_dir_all;
-use blf_lib::blam::halo3::release::saved_games::scenario_map_variant::{c_map_variant, s_variant_object_datum, s_variant_quota};
+use blf_lib::blam::halo3::v12070_08_09_05_2031_halo3_ship::saved_games::scenario_map_variant::{c_map_variant, s_variant_object_datum, s_variant_quota};
 use blf_lib::blf::BlfFileBuilder;
 use blf_lib::blf::chunks::search_for_chunk_in_file;
 use blf_lib::blf::versions::halo3::v12070_08_09_05_2031_halo3_ship::{s_blf_chunk_content_header, s_blf_chunk_end_of_file, s_blf_chunk_map_variant, s_blf_chunk_packed_map_variant, s_blf_chunk_start_of_file};

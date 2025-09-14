@@ -1,9 +1,9 @@
 use serde::{Deserialize, Serialize};
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::game_engine_player_traits::c_player_trait_shield_vitality;
-use blf_lib::blam::halo3::release::memory::bitstream_reader::c_bitstream_reader_extensions;
+use blf_lib::blam::halo3::v12070_08_09_05_2031_halo3_ship::memory::bitstream_reader::c_bitstream_reader_extensions;
 use blf_lib::io::bitstream::{c_bitstream_reader, c_bitstream_writer};
 use blf_lib_derivable::result::BLFLibResult;
-use crate::blam::halo3::release::memory::bitstream_writer::c_bitstream_writer_extensions;
+use crate::blam::halo3::v12070_08_09_05_2031_halo3_ship::memory::bitstream_writer::c_bitstream_writer_extensions;
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct c_player_trait_weapons {

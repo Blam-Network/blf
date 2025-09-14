@@ -1,6 +1,6 @@
 use blf_lib::assert_ok;
 use blf_lib::blam::common::math::real_math::{assert_valid_real_normal3d, global_up3d, k_pi, k_real_epsilon, real_vector3d};
-use blf_lib::blam::halo3::release::math::real_math::{dequantize_unit_vector3d, quantize_normalized_vector3d, quantize_real};
+use blf_lib::blam::halo3::v12070_08_09_05_2031_halo3_ship::math::real_math::{dequantize_unit_vector3d, quantize_normalized_vector3d, quantize_real};
 use blf_lib::io::bitstream::{c_bitstream_reader, c_bitstream_writer};
 use blf_lib_derivable::result::BLFLibResult;
 

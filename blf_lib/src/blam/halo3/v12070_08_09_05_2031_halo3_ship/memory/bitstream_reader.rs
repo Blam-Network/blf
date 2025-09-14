@@ -1,6 +1,6 @@
 use blf_lib::assert_ok;
 use blf_lib::blam::common::math::real_math::{global_up3d, k_pi, real_vector3d};
-use blf_lib::blam::halo3::release::math::real_math::{dequantize_real, dequantize_unit_vector3d};
+use blf_lib::blam::halo3::v12070_08_09_05_2031_halo3_ship::math::real_math::{dequantize_real, dequantize_unit_vector3d};
 use blf_lib::io::bitstream::c_bitstream_reader;
 use blf_lib::types::numbers::Float32;
 use blf_lib_derivable::result::BLFLibResult;

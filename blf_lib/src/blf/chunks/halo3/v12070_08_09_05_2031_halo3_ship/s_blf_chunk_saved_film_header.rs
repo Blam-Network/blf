@@ -2,7 +2,7 @@ use binrw::binrw;
 use serde::{Deserialize, Serialize};
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
 use blf_lib_derive::BlfChunk;
-use crate::blam::halo3::release::game::game_options::game_options;
+use crate::blam::halo3::v12070_08_09_05_2031_halo3_ship::game::game_options::game_options;
 use crate::types::array::StaticArray;
 use crate::types::bool::Bool;
 use crate::types::c_string::StaticString;

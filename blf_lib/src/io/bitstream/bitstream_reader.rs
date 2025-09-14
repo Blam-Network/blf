@@ -11,7 +11,7 @@ use blf_lib::io::bitstream::{e_bitstream_byte_fill_direction};
 use blf_lib_derivable::result::{BLFLibError, BLFLibResult};
 use crate::blam::common::math::integer_math::int32_point3d;
 use crate::blam::common::math::real_math::real_vector3d;
-use crate::blam::halo3::release::networking::transport::transport_security::s_transport_secure_address;
+use crate::blam::halo3::v12070_08_09_05_2031_halo3_ship::networking::transport::transport_security::s_transport_secure_address;
 use crate::io::bitstream::{e_bitstream_byte_order, e_bitstream_state};
 use crate::io::bitstream::e_bitstream_byte_fill_direction::{_bitstream_byte_fill_direction_msb_to_lsb, _bitstream_byte_fill_direction_lsb_to_msb};
 use crate::types::numbers::Float32;

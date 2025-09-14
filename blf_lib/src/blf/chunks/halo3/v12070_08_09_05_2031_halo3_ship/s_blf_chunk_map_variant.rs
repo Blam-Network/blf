@@ -1,7 +1,7 @@
 use binrw::binrw;
 use serde::{Deserialize, Serialize};
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
-use crate::blam::halo3::release::saved_games::scenario_map_variant::c_map_variant;
+use crate::blam::halo3::v12070_08_09_05_2031_halo3_ship::saved_games::scenario_map_variant::c_map_variant;
 use blf_lib_derive::BlfChunk;
 
 #[binrw]

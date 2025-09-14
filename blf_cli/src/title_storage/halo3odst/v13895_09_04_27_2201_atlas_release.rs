@@ -9,7 +9,7 @@ use crate::io::{get_directories_in_folder, get_files_in_folder, read_text_file_l
 use crate::{build_path, debug_log, title_converter, やった};
 use crate::title_storage::{check_file_exists, validate_jpeg, TitleConverter};
 use lazy_static::lazy_static;
-use blf_lib::blam::halo3::release::cseries::language::{get_language_string, k_language_suffix_chinese_traditional, k_language_suffix_english, k_language_suffix_french, k_language_suffix_german, k_language_suffix_italian, k_language_suffix_japanese, k_language_suffix_korean, k_language_suffix_mexican, k_language_suffix_portuguese, k_language_suffix_spanish};
+use blf_lib::blam::halo3::v12070_08_09_05_2031_halo3_ship::cseries::language::{get_language_string, k_language_suffix_chinese_traditional, k_language_suffix_english, k_language_suffix_french, k_language_suffix_german, k_language_suffix_italian, k_language_suffix_japanese, k_language_suffix_korean, k_language_suffix_mexican, k_language_suffix_portuguese, k_language_suffix_spanish};
 use blf_lib::blf::{get_blf_file_hash, BlfFile, BlfFileBuilder};
 use blf_lib::blf::chunks::find_chunk_in_file;
 use crate::console::console_task;

@@ -3,7 +3,7 @@ use binrw::{BinRead, BinWrite};
 use napi_derive::napi;
 use serde::{Deserialize, Serialize};
 use blf_lib::io::bitstream::{c_bitstream_reader, c_bitstream_writer};
-use blf_lib::blam::halo3::release::game::game_engine_player_traits::c_player_traits;
+use blf_lib::blam::halo3::v12070_08_09_05_2031_halo3_ship::game::game_engine_player_traits::c_player_traits;
 use blf_lib_derivable::result::BLFLibResult;
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite)]

@@ -1,5 +1,5 @@
-use blf_lib::blam::halo3::release::game::game_engine_variant::c_game_variant;
-use blf_lib::blam::halo3::release::saved_games::scenario_map_variant::c_map_variant;
+use blf_lib::blam::halo3::v12070_08_09_05_2031_halo3_ship::game::game_engine_variant::c_game_variant;
+use blf_lib::blam::halo3::v12070_08_09_05_2031_halo3_ship::saved_games::scenario_map_variant::c_map_variant;
 use blf_lib::blf::BlfFileBuilder;
 use blf_lib::blf::versions::halo3::v12070_08_09_05_2031_halo3_ship::{s_blf_chunk_content_header, s_blf_chunk_end_of_file, s_blf_chunk_game_variant, s_blf_chunk_map_variant, s_blf_chunk_start_of_file};
 use blf_lib::io::read_json_file;
