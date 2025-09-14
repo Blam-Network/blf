@@ -23,7 +23,7 @@ use tokio::task::JoinHandle;
 use blf_lib::blam::common::memory::secure_signature::s_network_http_request_hash;
 use blf_lib::blam::haloreach::v09730_10_04_09_1309_omaha_delta::saved_games::scenario_map_variant::c_map_variant;
 use blf_lib::blf::versions::haloreach;
-use blf_lib::blf::versions::haloreach::v08516_10_02_19_1607_omaha_alpha::{s_blf_chunk_dlc_map_manifest, s_blf_chunk_author, s_blf_chunk_banhammer_messages, s_blf_chunk_end_of_file, s_blf_chunk_game_set, s_blf_chunk_hopper_configuration_table, s_blf_chunk_hopper_description_table, s_blf_chunk_map_manifest, s_blf_chunk_map_variant, s_blf_chunk_matchmaking_game_variant, s_blf_chunk_matchmaking_tips, s_blf_chunk_megalo_categories, s_blf_chunk_nag_message, s_blf_chunk_network_configuration, s_blf_chunk_online_file_manifest, s_blf_chunk_predefined_queries, s_blf_chunk_start_of_file};
+use blf_lib::blf::versions::haloreach::v08516_10_02_19_1607_omaha_alpha::{s_blf_chunk_dlc_map_manifest, s_blf_chunk_author, s_blf_chunk_banhammer_messages, s_blf_chunk_end_of_file, s_blf_chunk_game_set, s_blf_chunk_hopper_configuration_table, s_blf_chunk_hopper_description_table, s_blf_chunk_map_manifest, s_blf_chunk_map_variant, s_blf_chunk_matchmaking_game_variant, s_blf_chunk_matchmaking_tips, s_blf_chunk_nag_message, s_blf_chunk_network_configuration, s_blf_chunk_online_file_manifest, s_blf_chunk_predefined_queries, s_blf_chunk_start_of_file};
 use blf_lib::io::{read_json_file, write_json_file};
 use blf_lib::OPTION_TO_RESULT;
 use blf_lib::result::{BLFLibError, BLFLibResult};
@@ -91,14 +91,6 @@ mod title_storage_output {
             hoppers_path,
             dlc_map_manifest_images_folder_name,
             format!("{image_name}")
-        )
-    }
-    pub const megalo_categories_file_name: &str = "file_megalo_categories.bin";
-    pub fn megalo_categories_file_path(hoppers_path: &String, language_code: &str) -> String {
-        build_path!(
-            hoppers_path,
-            language_code,
-            megalo_categories_file_name
         )
     }
     pub fn network_configuration_file_name() -> String {
@@ -338,16 +330,6 @@ mod title_storage_config {
         )
     }
 
-    pub const megalo_categories_folder_name: &str = "megalo_categories";
-
-    pub fn megalo_categories_file_path(config_folder: &String, language_code: &str) -> String {
-        build_path!(
-            config_folder,
-            megalo_categories_folder_name,
-            format!("{language_code}.json")
-        )
-    }
-
     pub const predefined_queries_folder_name: &str = "predefined_queries";
 
     pub fn predefined_queries_file_path(config_folder: &String, language_code: &str) -> String {
@@ -530,7 +512,6 @@ impl TitleConverter for v08516_10_02_19_1607_omaha_alpha {
                 Self::build_blf_global_nag_messages(&hopper_config_path, &hopper_blfs_path)?;
                 Self::build_blf_user_nag_messages(&hopper_config_path, &hopper_blfs_path)?;
                 Self::build_blf_map_manifests(&hopper_config_path, &hopper_blfs_path)?;
-                Self::build_blf_megalo_categories(&hopper_config_path, &hopper_blfs_path)?;
                 Self::build_blf_predefined_queries(&hopper_config_path, &hopper_blfs_path)?;
                 Self::build_blf_dlc_manifest(&hopper_config_path, &hopper_blfs_path)?;
                 Self::build_blf_game_variants(&hopper_config_path, &hopper_blfs_path, &build_temp_dir_path, &game_sets, &mut game_variant_hashes)?;
@@ -575,7 +556,6 @@ impl TitleConverter for v08516_10_02_19_1607_omaha_alpha {
 
                 println!("{} {}...", "Converting".bold(), hopper_directory.bold().bright_white());
                 Self::build_config_banhammer_messages(&hoppers_blf_path, &hoppers_config_path)?;
-                Self::build_config_megalo_categories(&hoppers_blf_path, &hoppers_config_path)?;
                 Self::build_config_predefined_queries(&hoppers_blf_path, &hoppers_config_path)?;
                 Self::build_config_matchmaking_tips(&hoppers_blf_path, &hoppers_config_path)?;
                 Self::build_config_dlc_manifest(&hoppers_blf_path, &hoppers_config_path)?;
@@ -624,34 +604,6 @@ impl v08516_10_02_19_1607_omaha_alpha {
                 ),
                 &bhms.get_messages()?
             )?;
-        }
-
-        やった!(task)
-    }
-
-    fn build_config_megalo_categories(hoppers_blf_path: &String, hoppers_config_path: &String) -> Result<(), Box<dyn Error>> {
-        let mut task = console_task::start("Converting Megalo Categories");
-
-        for language_code in k_language_suffixes {
-            let blf_file_path = title_storage_output::megalo_categories_file_path(
-                hoppers_blf_path,
-                language_code,
-            );
-
-            if !exists(&blf_file_path)? {
-                task.add_warning(format!(
-                    "No {} megalo categories are present.",
-                    get_language_string(language_code),
-                ));
-
-                continue;
-            }
-
-            let megalo_categories = find_chunk_in_file::<s_blf_chunk_megalo_categories>(blf_file_path)?;
-            write_json_file(&megalo_categories, title_storage_config::megalo_categories_file_path(
-                hoppers_config_path,
-                language_code,
-            ))?;
         }
 
         やった!(task)
@@ -1380,32 +1332,6 @@ impl v08516_10_02_19_1607_omaha_alpha {
             .write_file(title_storage_output::dlc_map_manifest_file_path(
                 hoppers_blf_folder
             ))?;
-
-        やった!(task)
-    }
-
-    fn build_blf_megalo_categories(hoppers_config_folder: &String, hoppers_blf_folder: &String) -> Result<(), Box<dyn Error>> {
-        let mut task = console_task::start("Building Megalo Categories");
-
-        for language_code in k_language_suffixes {
-            let config_path = title_storage_config::megalo_categories_file_path(hoppers_config_folder, language_code);
-
-            if !exists(&config_path)? {
-                task.add_warning(format!("No {} Megalo Categories were found", get_language_string(language_code)));
-                continue;
-            }
-
-            let megalo_categories = read_json_file::<s_blf_chunk_megalo_categories>(&config_path)?;
-
-            BlfFileBuilder::new()
-                .add_chunk(s_blf_chunk_start_of_file::default())
-                .add_chunk(megalo_categories)
-                .add_chunk(s_blf_chunk_end_of_file::default())
-                .write_file(title_storage_output::megalo_categories_file_path(
-                    hoppers_blf_folder,
-                    language_code,
-                ))?;
-        }
 
         やった!(task)
     }
@@ -2255,14 +2181,6 @@ impl v08516_10_02_19_1607_omaha_alpha {
         )?;
 
         for language_code in k_language_suffixes {
-            add_hash_if_file_exists(
-                format!(
-                    "/{language_code}/{}",
-                    title_storage_output::megalo_categories_file_name
-                ),
-                title_storage_output::megalo_categories_file_path(hoppers_blfs_path, language_code)
-            )?;
-
             add_hash_if_file_exists(
                 format!(
                     "/{language_code}/{}",
