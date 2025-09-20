@@ -1,5 +1,6 @@
 
 use std::fs::File;
+use std::path::Path;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::game_variant::c_game_variant;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::saved_games::scenario_map_variant::{c_map_variant, s_variant_object_datum, s_variant_quota};
 use blf_lib::blf::chunks::search_for_chunk_in_file;
@@ -22,9 +23,10 @@ pub fn import_variant(hoppers_config_path: &String, variant_path: &String) {
     if game_variant.is_some() {
         let game_variant = game_variant.unwrap();
         let metadata = game_variant.get_metadata().unwrap();
-        let output_file_name = format!("{}.json", metadata.name.get_string()
-            .replace(" ", "_")
-            .to_lowercase());
+        // let output_file_name = format!("{}.json", metadata.name.get_string()
+        //     .replace(" ", "_")
+        //     .to_lowercase());
+        let output_file_name = Path::new(variant_path).file_name().unwrap().to_str().unwrap().to_string().replace(".bin", ".json");
         let output_file = File::create(build_path!(
             hoppers_config_path,
             "game_variants",
@@ -62,5 +64,5 @@ pub fn import_variant(hoppers_config_path: &String, variant_path: &String) {
         return;
     }
 
-    task.fail_with_error("Unable to parse variant file.");
+    task.fail_with_error(format!("Unable to parse variant file. {}", variant_path));
 }
