@@ -153,13 +153,11 @@ pub struct s_game_set_entry {
     #[brw(pad_after = 1)]
     has_game_variant: Bool,  // set before write via hook
     #[serde(skip_serializing_if = "StaticWcharString::is_empty", default)]
-    pub game_name: StaticWcharString<16>,
+    pub game_variant_name: StaticWcharString<16>,
     #[serde(skip_serializing_if = "StaticWcharString::is_empty", default)]
-    pub game_variant_unknown_string1: StaticWcharString<64>,
+    pub game_variant_description: StaticString<128>,
     #[serde(skip_serializing_if = "StaticWcharString::is_empty", default)]
-    // used in multiplayer_game_hoppers_build_voting_descriptions_from_voting_round
-    // not present in 11860
-    pub game_variant_unknown_string2: StaticWcharString<16>,
+    pub game_variant_author: StaticWcharString<16>,
     #[serde(skip_serializing_if = "StaticString::is_empty", default)]
     pub game_variant_file_name: StaticString<32>,
     #[serde(skip_serializing,skip_deserializing)]
@@ -168,13 +166,11 @@ pub struct s_game_set_entry {
     #[brw(pad_after = 1)]
     has_map_variant: Bool, // set before write via hook
     #[serde(skip_serializing_if = "StaticWcharString::is_empty", default)]
-    pub map_name: StaticWcharString<16>,
+    pub map_variant_name: StaticWcharString<16>,
     #[serde(skip_serializing_if = "StaticWcharString::is_empty", default)]
-    pub map_variant_unknown_string1: StaticWcharString<64>,
+    pub map_variant_description: StaticString<128>,
     #[serde(skip_serializing_if = "StaticWcharString::is_empty", default)]
-    // used in multiplayer_game_hoppers_build_voting_descriptions_from_voting_round
-    // not present in 11860
-    pub map_variant_unknown_string2: StaticWcharString<16>,
+    pub map_variant_author: StaticWcharString<16>,
     #[serde(skip_serializing_if = "StaticString::is_empty", default)]
     pub map_variant_file_name: StaticString<32>,
     #[serde(skip_serializing,skip_deserializing)]
