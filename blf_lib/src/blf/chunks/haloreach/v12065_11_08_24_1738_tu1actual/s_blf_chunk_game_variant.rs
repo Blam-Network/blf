@@ -1,6 +1,7 @@
 use std::io::{Read, Seek, Write};
 use binrw::{BinRead, BinResult, BinWrite, Endian};
 use serde::{Deserialize, Serialize};
+use blf_lib::blam::common::memory::secure_signature::s_network_http_request_hash;
 use blf_lib::io::bitstream::{c_bitstream_reader, c_bitstream_writer, e_bitstream_byte_order};
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
 use blf_lib_derive::BlfChunk;
@@ -24,10 +25,10 @@ impl BinRead for s_blf_chunk_game_variant {
         let mut bitstream = c_bitstream_reader::new(data.as_slice(), e_bitstream_byte_order::_bitstream_byte_order_big_endian);
         bitstream.begin_reading();
 
-        let hash = bitstream.read_raw(0x14 * 8)?;
-        let unknown04 = bitstream.read_integer("unknown04", 16)?;
-        let unknown06 = bitstream.read_integer("unknown06", 16)?;
-        let variant_length = bitstream.read_integer("variant-length", 32)?;
+        let hash: s_network_http_request_hash = bitstream.read_raw(0x14 * 8)?;
+        let unknown04: i16 = bitstream.read_integer("unknown04", 16)?;
+        let unknown06: u16 = bitstream.read_integer("unknown06", 16)?;
+        let variant_length: u32 = bitstream.read_integer("variant-length", 32)?;
 
 
         let mut game_variant = c_game_variant::default();

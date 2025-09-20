@@ -12,7 +12,7 @@ pub fn import_variant(
     title: String,
     version: String,
 ) {
-    match (title, version) {
+    match (title.as_str(), version.as_str()) {
         (k_title_halo3, k_build_string_halo3_ship_12070) => {
             v12070_08_09_05_2031_halo3_ship::variant_importer::import_variant(&hoppers_config_path, &variant_path);
         }

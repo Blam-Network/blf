@@ -1,3 +1,4 @@
+use num_derive::{FromPrimitive, ToPrimitive};
 use serde::{Deserialize, Serialize};
 use blf_lib::blam::haloreach::v08516_10_02_19_1607_omaha_alpha::game::game_engine_campaign::c_game_engine_campaign_variant;
 use blf_lib::blam::haloreach::v08516_10_02_19_1607_omaha_alpha::game::game_engine_default::c_game_engine_base_variant;
@@ -90,10 +91,19 @@ impl c_game_engine_custom_variant {
     }
 }
 
+#[derive(Clone, PartialEq, Debug, Serialize, Deserialize, Default, ToPrimitive, FromPrimitive)]
+pub enum e_game_mode {
+    sandbox = 1,
+    #[default]
+    custom = 2,
+    campaign = 3,
+    survival = 4,
+}
+
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct c_game_variant {
-    pub m_game_engine: u8,
+    pub m_game_engine: e_game_mode,
 
     // campaign only uses a base variant.
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -107,23 +117,23 @@ pub struct c_game_variant {
 
 impl c_game_variant {
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
-        bitstream.write_enum(self.m_game_engine, 4)?;
+        bitstream.write_enum(self.m_game_engine.clone(), 4)?;
 
-        match (self.m_game_engine, &self.m_custom_variant, &self.m_campaign_variant, &self.m_survival_variant) {
-            (1, None, None, None) => {
+        match (&self.m_game_engine, &self.m_custom_variant, &self.m_campaign_variant, &self.m_survival_variant) {
+            (e_game_mode::sandbox, None, None, None) => {
                 return Err("Encoding forge variants is currently unsupported. If you have an example file, please send it to us!".into())
             }
-            (2, Some(custom_variant), None, None) => {
+            (e_game_mode::custom, Some(custom_variant), None, None) => {
                 custom_variant.encode(bitstream)?;
             }
-            (3, None, Some(campaign_variant), None) => {
+            (e_game_mode::campaign, None, Some(campaign_variant), None) => {
                 campaign_variant.encode(bitstream)?;
             }
-            (4, None, None, Some(survival_variant)) => {
+            (e_game_mode::survival, None, None, Some(survival_variant)) => {
                 survival_variant.encode(bitstream)?;
             }
             _ => {
-                Err(format!("Unrecognized game engine {}", self.m_game_engine))?;
+                Err(format!("Unrecognized game engine {:?}", self.m_game_engine))?;
             }
         }
 
@@ -135,27 +145,27 @@ impl c_game_variant {
         self.m_game_engine = bitstream.read_unnamed_enum(4)?;
 
         match self.m_game_engine {
-            1 => {
+            e_game_mode::sandbox => {
                 return Err("Decoding forge variants is currently unsupported. If you have an example file, please send it to us!".into())
             }
-            2 => {
+            e_game_mode::custom => {
                 // customs
                 let mut custom_variant = c_game_engine_custom_variant::default();
                 custom_variant.decode(bitstream)?;
                 self.m_custom_variant = Some(custom_variant);
             }
-            3 => {
+            e_game_mode::campaign => {
                 let mut campaign_variant = c_game_engine_campaign_variant::default();
                 campaign_variant.decode(bitstream)?;
                 self.m_campaign_variant = Some(campaign_variant);
             }
-            4 => {
+            e_game_mode::survival => {
                 let mut survival_variant = c_game_engine_survival_variant::default();
                 survival_variant.decode(bitstream)?;
                 self.m_survival_variant = Some(survival_variant);
             }
             _ => {
-                Err(format!("Unrecognized game engine {}", self.m_game_engine))?;
+                Err(format!("Unrecognized game engine {:?}", self.m_game_engine))?;
             }
         }
 
