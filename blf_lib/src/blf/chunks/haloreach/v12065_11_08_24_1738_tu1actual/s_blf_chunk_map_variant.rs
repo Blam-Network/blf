@@ -57,3 +57,11 @@ impl BinWrite for s_blf_chunk_map_variant {
         writer.write_ne(&bitstream.get_data()?)
     }
 }
+
+impl s_blf_chunk_map_variant {
+    pub fn create(map_variant: c_map_variant) -> Self {
+        Self {
+            map_variant,
+        }
+    }
+}

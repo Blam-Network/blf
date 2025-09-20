@@ -1,3 +1,6 @@
+pub mod variant_exporter;
+pub mod variant_importer;
+
 use std::collections::{HashMap, HashSet, VecDeque};
 use std::error::Error;
 use std::fs;
@@ -30,6 +33,8 @@ use blf_lib::OPTION_TO_RESULT;
 use blf_lib::result::{BLFLibError, BLFLibResult};
 use crate::title_storage::haloreach::v12065_11_08_24_1738_tu1actual::title_storage_config::get_hopper_id_from_hopper_folder_name;
 use crate::title_storage::haloreach::v12065_11_08_24_1738_tu1actual::title_storage_output::{hopper_image_height, hopper_image_width, user_nag_message_image_width, user_nag_message_image_height};
+
+pub const k_build_string_tu1actual_12065: &str = "12070.08.09.05.2031.halo3_ship";
 
 title_converter! (
     #[Title("Halo: Reach")]

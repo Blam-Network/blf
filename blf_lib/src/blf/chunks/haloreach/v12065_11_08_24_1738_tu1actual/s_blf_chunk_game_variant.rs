@@ -1,22 +1,16 @@
 use std::io::{Read, Seek, Write};
-use binrw::{BinRead, BinResult, BinWrite, BinWriterExt, Endian};
+use binrw::{BinRead, BinResult, BinWrite, Endian};
 use serde::{Deserialize, Serialize};
 use blf_lib::io::bitstream::{c_bitstream_reader, c_bitstream_writer, e_bitstream_byte_order};
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
 use blf_lib_derive::BlfChunk;
-use crate::blam::common::memory::secure_signature::s_network_http_request_hash;
 use crate::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::game_variant::c_game_variant;
 use crate::blf::get_buffer_hash;
 
 #[derive(BlfChunk,PartialEq,Debug,Clone,Serialize,Deserialize,Default)]
 #[Header("mpvr", 54.1)]
-// Not sure what this chunk is called
 pub struct s_blf_chunk_game_variant
 {
-    pub hash: s_network_http_request_hash,
-    pub unknown04: u16,
-    pub unknown06: u16,
-    pub variant_length: u32,
     pub game_variant: c_game_variant,
 }
 
@@ -40,10 +34,6 @@ impl BinRead for s_blf_chunk_game_variant {
         game_variant.decode(&mut bitstream)?;
 
         Ok(Self {
-            hash,
-            unknown04,
-            unknown06,
-            variant_length,
             game_variant,
         })
     }
@@ -62,10 +52,14 @@ impl BinWrite for s_blf_chunk_game_variant {
         hashable_data.extend_from_slice(gametype_data.as_slice());
 
         let hash = get_buffer_hash(&hashable_data)?;
+        let unknown04: i16 = -1;
+        let unknown06: u16 = 0;
+        let gametype_length = gametype_data.len() as u32;
+
         hash.write_options(writer, Endian::Big, args)?;
-        self.unknown04.write_options(writer, Endian::Big, args)?;
-        self.unknown06.write_options(writer, Endian::Big, args)?;
-        self.variant_length.write_options(writer, Endian::Big, args)?;
+        unknown04.write_options(writer, Endian::Big, args)?;
+        unknown06.write_options(writer, Endian::Big, args)?;
+        gametype_length.write_options(writer, Endian::Big, args)?;
         gametype_data.write_options(writer, Endian::Big, args)?;
 
         Ok(())
@@ -74,3 +68,11 @@ impl BinWrite for s_blf_chunk_game_variant {
 
 
 impl BlfChunkHooks for s_blf_chunk_game_variant {}
+
+impl s_blf_chunk_game_variant {
+    pub fn create(game_variant: c_game_variant) -> s_blf_chunk_game_variant {
+        s_blf_chunk_game_variant {
+            game_variant
+        }
+    }
+}
