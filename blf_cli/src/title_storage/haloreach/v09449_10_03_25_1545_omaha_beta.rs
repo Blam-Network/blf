@@ -23,7 +23,6 @@ use tokio::task::JoinHandle;
 use blf_lib::blam::common::memory::secure_signature::s_network_http_request_hash;
 use blf_lib::blam::haloreach::v09730_10_04_09_1309_omaha_delta::game::game_variant::c_game_variant;
 use blf_lib::blam::haloreach::v09730_10_04_09_1309_omaha_delta::saved_games::scenario_map_variant::c_map_variant;
-use blf_lib::blf::versions::haloreach;
 use blf_lib::blf::versions::haloreach::v09449_10_03_25_1545_omaha_beta::{s_blf_chunk_author, s_blf_chunk_banhammer_messages, s_blf_chunk_end_of_file, s_blf_chunk_game_set, s_blf_chunk_hopper_configuration_table, s_blf_chunk_hopper_description_table, s_blf_chunk_map_manifest, s_blf_chunk_map_variant, s_blf_chunk_matchmaking_game_variant, s_blf_chunk_matchmaking_tips, s_blf_chunk_nag_message, s_blf_chunk_network_configuration, s_blf_chunk_online_file_manifest, s_blf_chunk_predefined_queries, s_blf_chunk_start_of_file};
 use blf_lib::blf::versions::haloreach::v09449_10_03_25_1545_omaha_beta::s_blf_chunk_dlc_map_manifest;
 use blf_lib::io::{read_json_file, write_json_file};
@@ -967,7 +966,7 @@ impl v09449_10_03_25_1545_omaha_beta {
                 }
 
                 let game_variant_file_name = game_variant_blf_file_name.replace(
-                    &format!("_{:0>3}.bin", blf_lib::blf::versions::haloreach::v09664_10_04_06_2121_omaha_beta::s_blf_chunk_matchmaking_game_variant::get_version().major),
+                    &format!("_{:0>3}.bin", s_blf_chunk_matchmaking_game_variant::get_version().major),
                     ""
                 );
 
@@ -997,7 +996,7 @@ impl v09449_10_03_25_1545_omaha_beta {
                     remove_file(&game_variant_config_file_path)?;
                 }
 
-                let gvar = find_chunk_in_file::<blf_lib::blf::versions::haloreach::v09664_10_04_06_2121_omaha_beta::s_blf_chunk_matchmaking_game_variant>(game_variant_blf_file_path)?;
+                let gvar = find_chunk_in_file::<s_blf_chunk_matchmaking_game_variant>(game_variant_blf_file_path)?;
 
                 write_json_file(&gvar.game_variant, game_variant_config_file_path)?;
             }
