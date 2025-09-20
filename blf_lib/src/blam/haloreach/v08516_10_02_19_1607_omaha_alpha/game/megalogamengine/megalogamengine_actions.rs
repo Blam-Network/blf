@@ -415,20 +415,27 @@ impl s_action_set_fireteam_respawn_filter_parameters {
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct s_action_set_progress_bar_parameters {
     pub m_object: c_object_reference,
+    pub m_team_filter: u8, // 2 bits
     pub m_timer_index: i8, // 2 bits
 }
 
 impl s_action_set_progress_bar_parameters {
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
         self.m_object.encode(bitstream)?;
-        bitstream.write_index::<4>(self.m_timer_index, 2)?;
+        bitstream.write_integer(self.m_team_filter, 2)?;
+        if self.m_team_filter != 0 {
+            bitstream.write_index::<4>(self.m_timer_index, 2)?;
+        }
 
         Ok(())
     }
 
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
         self.m_object.decode(bitstream)?;
-        self.m_timer_index = bitstream.read_index::<4>("timer-index", 2)? as i8;
+        self.m_team_filter = bitstream.read_integer("team-filter", 2)?;
+        if self.m_team_filter != 0 {
+            self.m_timer_index = bitstream.read_index::<4>("timer-index", 2)? as i8;
+        }
 
         Ok(())
     }
