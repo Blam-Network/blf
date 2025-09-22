@@ -1,5 +1,6 @@
 use std::fmt;
 use std::io::{Read, Seek, Write};
+use std::ops::Not;
 use binrw::{BinRead, BinReaderExt, BinResult, BinWrite, Endian};
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use shrinkwraprs::Shrinkwrap;
@@ -107,6 +108,14 @@ impl BinWrite for Bool {
         }
 
         Ok(())
+    }
+}
+
+impl Not for Bool {
+    type Output = Self;
+
+    fn not(self) -> Self::Output {
+        (!self.0).into()
     }
 }
 

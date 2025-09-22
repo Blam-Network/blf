@@ -12,6 +12,7 @@ use blf_lib::types::bool::Bool;
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
 use blf_lib_derivable::result::BLFLibResult;
 use blf_lib_derive::{BlfChunk, TestSize};
+use crate::blam::common::memory::data_compress::runtime_data_compress;
 use crate::types::numbers::Float32;
 
 pub const k_maximum_game_entries: usize = 128;
@@ -26,8 +27,8 @@ pub struct s_blf_chunk_game_set
 impl BlfChunkHooks for s_blf_chunk_game_set {
     fn before_write(&mut self, _previously_written: &Vec<u8>) -> BLFLibResult {
         for entry in self.entries.iter_mut() {
-            entry.has_game_variant = Bool::from(!entry.game_variant_file_name.get_string()?.is_empty());
-            entry.has_map_variant = Bool::from(!entry.map_variant_file_name.get_string()?.is_empty());
+            entry.game_variant_file.exists = Bool::from(!entry.game_variant_file.file_name.get_string()?.is_empty());
+            entry.map_variant_file.exists = Bool::from(!entry.map_variant_file.file_name.get_string()?.is_empty());
         }
 
         Ok(())
@@ -71,9 +72,6 @@ impl BinWrite for s_blf_chunk_game_set {
     type Args<'a> = ();
 
     fn write_options<W: Write + Seek>(&self, writer: &mut W, endian: Endian, args: Self::Args<'_>) -> BinResult<()> {
-        // 2. Deflate via zlib
-        // 3. Write packed chunk
-
         // this chunk in this version is BE
         let endian = Endian::Big;
 
@@ -89,18 +87,15 @@ impl BinWrite for s_blf_chunk_game_set {
         game_set_entries.write_options(&mut encoded_writer, endian, args)?;
 
         // 2. Deflate
-        let mut e = ZlibEncoder::new_with_compress(Vec::new(), Compress::new_with_window_bits(Compression::new(9), true, 15));
-        e.write_all(encoded_chunk.as_slice())?;
-        let compressed_data = e.finish()?;
+        let mut compressed_data = Vec::new();
+        runtime_data_compress(&encoded_chunk, &mut compressed_data, e_bitstream_byte_order::_bitstream_byte_order_big_endian)?;
 
         // 3. Pack
         let compressed_length: u16 = compressed_data.len() as u16;
-        let uncompressed_length: u32 = encoded_chunk.len() as u32;
         let mut packed_writer = c_bitstream_writer::new(0x11804, e_bitstream_byte_order::from_binrw_endian(endian));
         packed_writer.begin_writing();
 
-        packed_writer.write_integer((compressed_length + 4) as u32, 14)?;
-        packed_writer.write_integer(uncompressed_length, 32)?;
+        packed_writer.write_integer(compressed_length as u32, 14)?;
         packed_writer.write_raw_data(&compressed_data, (compressed_length * 8) as usize)?;
 
         packed_writer.finish_writing();
@@ -133,46 +128,45 @@ pub struct s_game_set_entry_replicated_data {
     pub unknown14: Bool,
 }
 
-#[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, TestSize)]
+#[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, TestSize, BinRead, BinWrite)]
 #[Size(0x230)]
-#[binrw]
 pub struct s_game_set_entry {
     pub weight: u32,
     pub minimum_player_count: u32,
     pub maximum_player_count: u32,
-    pub voting_max_fails: u32, // voting max fails?
-    pub voting_round: u32, // voting round
-    pub min_skill: u32, // min skill
-    pub max_skill: u32, // max skill
+    pub voting_max_fails: u32,
+    pub voting_round: u32,
+    pub min_skill: u32,
+    pub max_skill: u32,
     pub campaign_and_survival_data: s_game_set_entry_campaign_and_survival_data,
-    // #[serde(skip_deserializing, default)]
     pub replicated_data: s_game_set_entry_replicated_data,
-    // #[serde(skip_serializing,skip_deserializing)]
     pub map_id: u32,
+    #[serde(skip_serializing_if = "s_game_set_file::is_empty", default)]
+    pub game_variant_file: s_game_set_file,
+    #[serde(skip_serializing_if = "s_game_set_file::is_empty", default)]
+    pub map_variant_file: s_game_set_file,
+}
+
+#[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize)]
+#[binrw]
+pub struct s_game_set_file {
     #[serde(skip_serializing,skip_deserializing)]
     #[brw(pad_after = 1)]
-    has_game_variant: Bool,  // set before write via hook
+    pub exists: Bool,  // set before write via hook
     #[serde(skip_serializing_if = "StaticWcharString::is_empty", default)]
-    pub game_variant_name: StaticWcharString<16>,
-    #[serde(skip_serializing_if = "StaticWcharString::is_empty", default)]
-    pub game_variant_description: StaticString<128>,
-    #[serde(skip_serializing_if = "StaticWcharString::is_empty", default)]
-    pub game_variant_author: StaticWcharString<16>,
+    pub name: StaticWcharString<16>,
     #[serde(skip_serializing_if = "StaticString::is_empty", default)]
-    pub game_variant_file_name: StaticString<32>,
-    #[serde(skip_serializing,skip_deserializing)]
-    pub game_variant_hash: s_network_http_request_hash,
-    #[serde(skip_serializing,skip_deserializing)]
-    #[brw(pad_after = 1)]
-    has_map_variant: Bool, // set before write via hook
+    pub description: StaticString<128>,
     #[serde(skip_serializing_if = "StaticWcharString::is_empty", default)]
-    pub map_variant_name: StaticWcharString<16>,
-    #[serde(skip_serializing_if = "StaticWcharString::is_empty", default)]
-    pub map_variant_description: StaticString<128>,
-    #[serde(skip_serializing_if = "StaticWcharString::is_empty", default)]
-    pub map_variant_author: StaticWcharString<16>,
+    pub author: StaticWcharString<16>,
     #[serde(skip_serializing_if = "StaticString::is_empty", default)]
-    pub map_variant_file_name: StaticString<32>,
+    pub file_name: StaticString<32>,
     #[serde(skip_serializing,skip_deserializing)]
-    pub map_variant_hash: s_network_http_request_hash,
+    pub hash: s_network_http_request_hash,
+}
+
+impl s_game_set_file {
+    pub fn is_empty(&self) -> bool {
+        !self.exists.0
+    }
 }

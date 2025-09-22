@@ -1760,8 +1760,8 @@ impl v12065_11_08_24_1738_tu1actual {
 
         let game_variants_to_convert: Vec<String> = game_sets.iter().flat_map(|(_, game_set)|
             game_set.entries.iter()
-                .filter(|entry|!entry.game_variant_file_name.is_empty())
-                .map(|entry|entry.game_variant_file_name.get_string().unwrap().clone()).collect::<Vec<String>>()
+                .filter(|entry|!entry.game_variant_file.file_name.is_empty())
+                .map(|entry|entry.game_variant_file.file_name.get_string().unwrap().clone()).collect::<Vec<String>>()
         ).collect();
 
         let game_variants_to_convert: HashSet<String> = HashSet::from_iter(game_variants_to_convert.iter().cloned());
@@ -1873,8 +1873,8 @@ impl v12065_11_08_24_1738_tu1actual {
 
         let map_variants_to_convert: Vec<String> = game_sets.iter().flat_map(|(_, game_set)|
             game_set.entries.iter()
-                .filter(|entry| !entry.map_variant_file_name.is_empty())
-                .map(|entry| entry.map_variant_file_name.get_string().unwrap().clone()).collect::<Vec<String>>()
+                .filter(|entry| !entry.map_variant_file.file_name.is_empty())
+                .map(|entry| entry.map_variant_file.file_name.get_string().unwrap().clone()).collect::<Vec<String>>()
         ).collect();
         let map_variants_to_convert: HashSet<String> = HashSet::from_iter(map_variants_to_convert.iter().cloned());
 
@@ -2010,15 +2010,15 @@ impl v12065_11_08_24_1738_tu1actual {
 
             for game_set_row in &game_set_config.entries {
                 // Copy the game and map variants over...
-                if !game_set_row.game_variant_file_name.is_empty()
-                    && !copied_games.contains(&game_set_row.game_variant_file_name.get_string()?)
+                if !game_set_row.game_variant_file.file_name.is_empty()
+                    && !copied_games.contains(&game_set_row.game_variant_file.file_name.get_string()?)
                 {
-                    let game_variant_file_name = game_set_row.game_variant_file_name.get_string()?;
+                    let game_variant_file_name = game_set_row.game_variant_file.file_name.get_string()?;
 
                     let game_variant_dst_path = title_storage_output::game_variant_file_path(
                         hoppers_blf_path,
                         hopper_id,
-                        &game_set_row.game_variant_file_name.get_string()?,
+                        &game_set_row.game_variant_file.file_name.get_string()?,
                     );
                     create_parent_folders(&game_variant_dst_path)?;
 
@@ -2034,9 +2034,9 @@ impl v12065_11_08_24_1738_tu1actual {
                     )?;
                 }
 
-                if !game_set_row.map_variant_file_name.is_empty()
-                    && !copied_maps.contains(&game_set_row.map_variant_file_name.get_string()?) {
-                    let map_variant_file_name = game_set_row.map_variant_file_name.get_string()?;
+                if !game_set_row.map_variant_file.file_name.is_empty()
+                    && !copied_maps.contains(&game_set_row.map_variant_file.file_name.get_string()?) {
+                    let map_variant_file_name = game_set_row.map_variant_file.file_name.get_string()?;
 
                     let map_variant_dst_path = title_storage_output::map_variant_file_path(
                         hoppers_blf_path,
@@ -2059,11 +2059,11 @@ impl v12065_11_08_24_1738_tu1actual {
             }
 
             for entry in game_set_config.entries.iter_mut() {
-                if !entry.map_variant_file_name.is_empty() {
-                    entry.map_variant_hash = *map_variant_hashes.get(&entry.map_variant_file_name.get_string()?).unwrap();
+                if !entry.map_variant_file.file_name.is_empty() {
+                    entry.map_variant_file.hash = *map_variant_hashes.get(&entry.map_variant_file.file_name.get_string()?).unwrap();
                 }
-                if !entry.game_variant_file_name.is_empty() {
-                    entry.game_variant_hash = *game_variant_hashes.get(&entry.game_variant_file_name.get_string()?).unwrap();
+                if !entry.game_variant_file.file_name.is_empty() {
+                    entry.game_variant_file.hash = *game_variant_hashes.get(&entry.game_variant_file.file_name.get_string()?).unwrap();
                 }
             }
 
