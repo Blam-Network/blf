@@ -33,8 +33,6 @@ pub struct c_map_variant {
     pub m_spent_budget: Float32,
     pub m_helpers_enabled: Bool,
     pub m_built_in: Bool,
-    // #[serde(skip_serializing,skip_deserializing)]
-    // __pad12A: [u8; 2],
     #[serde(with = "SerHex::<StrictCap>")]
     #[brw(align_before = 4)]
     pub m_original_map_rsa_signature_hash: u32,

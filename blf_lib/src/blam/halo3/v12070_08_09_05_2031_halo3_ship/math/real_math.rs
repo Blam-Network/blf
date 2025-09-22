@@ -70,8 +70,8 @@ pub fn dequantize_real(quantized: i32, min_value: impl Into<f32>, max_value: imp
 
 pub fn dequantize_unit_vector3d(value: i32, vector: &mut real_vector3d) -> BLFLibResult {
     let face = value & 7;
-    let x = dequantize_real((value >> 3) as u8 as i32, -1.0, 1.0, 8, false);
-    let y = dequantize_real((value >> 11) as u8 as i32, -1.0, 1.0, 8, false);
+    let x = dequantize_real((value >> 3) as u8 as i32, -1.0, 1.0, 8, true);
+    let y = dequantize_real((value >> 11) as u8 as i32, -1.0, 1.0, 8, true);
 
     match face {
         0 => {
