@@ -38,18 +38,18 @@ title_converter! (
     pub struct v09449_10_03_25_1545_omaha_beta {}
 );
 
-pub const k_language_suffixes: [&str; 10] = [
+pub const k_language_suffixes: [&str; 1] = [
     k_language_suffix_english,
-    k_language_suffix_japanese,
-    k_language_suffix_german,
-    k_language_suffix_french,
-    k_language_suffix_spanish,
-    k_language_suffix_mexican,
-    k_language_suffix_italian,
-    k_language_suffix_korean,
-    k_language_suffix_chinese_traditional,
+    // k_language_suffix_japanese,
+    // k_language_suffix_german,
+    // k_language_suffix_french,
+    // k_language_suffix_spanish,
+    // k_language_suffix_mexican,
+    // k_language_suffix_italian,
+    // k_language_suffix_korean,
+    // k_language_suffix_chinese_traditional,
     // k_language_suffix_chinese_simplified,
-    k_language_suffix_portuguese,
+    // k_language_suffix_portuguese,
     // k_language_suffix_polish,
 ];
 
@@ -252,15 +252,13 @@ mod title_storage_output {
             )
         )
     }
-    /// eg. default_hoppers/001/images
-    pub const hopper_images_folder_name: &str = "images";
-    /// eg. default_hoppers/001/images/hopper.jpg
+    /// eg. default_hoppers/001/en/hopper.jpg
     pub const hopper_image_file_name: &str = "hopper.jpg";
-    pub fn hopper_image_file_path(hoppers_path: &String, hopper_identifier: u16) -> String {
+    pub fn hopper_image_file_path(hoppers_path: &String, language_code: &str, hopper_identifier: u16) -> String {
         build_path!(
             hoppers_path,
             format!("{:0>5}", hopper_identifier),
-            hopper_images_folder_name,
+            language_code,
             hopper_image_file_name
         )
     }
@@ -1135,6 +1133,7 @@ impl v09449_10_03_25_1545_omaha_beta {
 
             let hopper_image_src_path = title_storage_output::hopper_image_file_path(
                 hoppers_blfs_path,
+                "en",
                 hopper_configuration_json.configuration.identifier
             );
 
@@ -1972,11 +1971,6 @@ impl v09449_10_03_25_1545_omaha_beta {
                 active_hopper_folder,
             );
 
-            let hopper_image_dst_path = title_storage_output::hopper_image_file_path(
-                hoppers_blfs_path,
-                hopper_id,
-            );
-
             if !exists(&hopper_image_src_path)? {
                 task.add_warning(format!("No image was found for hopper {}", hopper_id))
             }
@@ -1984,8 +1978,16 @@ impl v09449_10_03_25_1545_omaha_beta {
                 task.add_warning(format!("Hopper {} has an invalid image.", hopper_id))
             }
             else {
-                create_parent_folders(&hopper_image_dst_path)?;
-                fs::copy(hopper_image_src_path, hopper_image_dst_path)?;
+                for language_suffix in k_language_suffixes {
+                    let hopper_image_dst_path = title_storage_output::hopper_image_file_path(
+                        hoppers_blfs_path,
+                        language_suffix,
+                        hopper_id,
+                    );
+
+                    create_parent_folders(&hopper_image_dst_path)?;
+                    fs::copy(&hopper_image_src_path, &hopper_image_dst_path)?;
+                }
             }
         }
 
