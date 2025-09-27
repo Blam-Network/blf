@@ -1,7 +1,7 @@
 pub mod s_blf_chunk_player_data;
 pub mod s_blf_chunk_player_heartbeat_response;
 pub mod s_blf_chunk_arena_hopper_stats;
-pub mod s_blf_chunk_rewards_persistance;
+pub mod s_blf_chunk_rewards_persistence;
 pub mod s_blf_chunk_daily_challenges;
 pub mod s_blf_chunk_service_record;
 pub mod s_blf_chunk_hopper_configuration_table;

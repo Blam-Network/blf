@@ -14,10 +14,16 @@ use napi_derive::napi;
 #[cfg_attr(feature = "napi", napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]
 pub struct s_blf_chunk_rewards_persistance {
     // TODO: Map
-    pub unknown1: u32, // controller?
-    pub unknown2: StaticArray<u8, 0x20F>,
-    pub unknown3: u32,
-    pub unknown4: u32,
+    pub credits: u32,
+    pub unknown1: u32,
+    pub commendations: StaticArray<u16, 128>, // commendation state structs
+    pub purchased_items: StaticArray<u8, 256>,
+    pub unknown2: u32,
+    pub unknown3: u8, // shows bonus notice
+    pub unknown4: u8, // shows bonus notice
+    pub unknown5: u8,
+
+
 }
 
 impl BlfChunkHooks for s_blf_chunk_rewards_persistance {}

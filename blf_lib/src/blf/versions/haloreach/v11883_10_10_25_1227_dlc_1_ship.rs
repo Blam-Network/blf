@@ -15,7 +15,7 @@ pub use haloreach::v12065_11_08_24_1738_tu1actual::s_blf_chunk_player_data::*;
 pub use haloreach::v12065_11_08_24_1738_tu1actual::s_blf_chunk_arena_hopper_stats::*;
 pub use haloreach::v12065_11_08_24_1738_tu1actual::s_blf_chunk_player_heartbeat_response::*;
 pub use haloreach::v12065_11_08_24_1738_tu1actual::s_blf_chunk_daily_challenges::*;
-pub use haloreach::v12065_11_08_24_1738_tu1actual::s_blf_chunk_rewards_persistance::*;
+pub use haloreach::v12065_11_08_24_1738_tu1actual::s_blf_chunk_rewards_persistence::*;
 pub use haloreach::v12065_11_08_24_1738_tu1actual::s_blf_chunk_service_record::*;
 pub use haloreach::v12065_11_08_24_1738_tu1actual::s_blf_chunk_hopper_configuration_table::*;
 pub use haloreach::v12065_11_08_24_1738_tu1actual::s_blf_chunk_game_set::*;
