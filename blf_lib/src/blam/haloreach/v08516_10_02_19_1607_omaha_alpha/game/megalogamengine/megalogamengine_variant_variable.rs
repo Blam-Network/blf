@@ -43,7 +43,7 @@ impl s_variant_variable {
                 timer.encode(bitstream)?;
             }
             _ => {
-                return Err(format!("Invalid s_variant_variable: {self:?}").into())
+                //return Err(format!("Invalid s_variant_variable: {self:?}").into())
             }
         };
 

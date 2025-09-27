@@ -14,12 +14,12 @@ use crate::types::c_string::StaticString;
 #[Size(0x45)]
 #[cfg_attr(feature = "napi", napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]
 pub struct s_blf_chunk_player_data {
+    #[brw(pad_after = 1)]
     pub hopper_access: u8,
-    pub bungie_user_role: u16,
-    pub unknown1: u8,
+    pub bungie_user_role: u16, // includes blue flames at bit 3
     pub hopper_directory: StaticString<32>,
-    pub unknown2: StaticArray<u8, 0x20>,
-    pub unknown3: u8,
+    pub unlock_achievements: StaticArray<u8, 32>, // 59 achievements, capacity of 256 bits
+    pub extras_portal_debug: u8,
 }
 
 impl BlfChunkHooks for s_blf_chunk_player_data {}
@@ -29,11 +29,10 @@ impl Default for s_blf_chunk_player_data {
         s_blf_chunk_player_data {
             hopper_access: 0,
             bungie_user_role: 0xffff,
-            unknown1: 0,
             hopper_directory: StaticString::from_string("default_hoppers")
                 .expect("Default hopper_directory must be valid."),
-            unknown2: StaticArray::default(),
-            unknown3: 1,
+            unlock_achievements: StaticArray::default(),
+            extras_portal_debug: 0,
         }
     }
 }
