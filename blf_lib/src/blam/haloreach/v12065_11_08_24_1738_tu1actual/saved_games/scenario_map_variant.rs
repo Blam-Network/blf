@@ -65,7 +65,7 @@ impl c_map_variant {
             self.m_variant_objects[i].encode(bitstream, &self.m_world_bounds)?;
         }
 
-        for i in 0..k_maximum_variant_quotas {
+        for i in 0..min(k_maximum_variant_quotas, self.m_number_of_placeable_object_quotas as usize) {
             self.m_quotas[i].encode(bitstream)?;
         }
 
