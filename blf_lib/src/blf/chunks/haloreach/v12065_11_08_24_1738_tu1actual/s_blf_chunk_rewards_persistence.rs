@@ -9,7 +9,7 @@ use napi_derive::napi;
 #[binrw]
 #[derive(BlfChunk,PartialEq,Debug,Clone,Serialize,Deserialize,Default)]
 #[Header("rpdl", 2.1)]
-#[Size(0x21B)]
+#[Size(0x20F)]
 #[brw(big)]
 #[cfg_attr(feature = "napi", napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]
 pub struct s_blf_chunk_rewards_persistance {
