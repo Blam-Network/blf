@@ -31,6 +31,10 @@ use crate::title_storage::haloreach::v08516_10_02_19_1607_omaha_alpha::title_sto
 use crate::title_storage::haloreach::v08516_10_02_19_1607_omaha_alpha::title_storage_output::{hopper_image_height, hopper_image_width, user_nag_message_image_width, user_nag_message_image_height};
 use crate::title_storage::haloreach::v09730_10_04_09_1309_omaha_delta::v09730_10_04_09_1309_omaha_delta;
 
+// Technically, the Halo: Reach pre-release builds can use Halo 3's Start Menu, which makes the Halo 3 MOTD accessible.
+// While the game fully supports this, it's only displayed when the mainmenu.map has been modded to enable it.
+// So, we don't support those MOTDs here.
+
 title_converter! (
     #[Title("Halo: Reach")]
     #[Build("08516.10.02.19.1607.omaha_alpha")]
