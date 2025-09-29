@@ -164,9 +164,6 @@ impl c_game_variant {
                 survival_variant.decode(bitstream)?;
                 self.m_survival_variant = Some(survival_variant);
             }
-            _ => {
-                Err(format!("Unrecognized game engine {:?}", self.m_game_engine))?;
-            }
         }
 
         Ok(())

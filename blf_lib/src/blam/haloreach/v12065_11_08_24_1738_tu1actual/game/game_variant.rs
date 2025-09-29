@@ -205,9 +205,6 @@ impl c_game_variant {
                         .m_base_variant.m_metadata
                 )
             }
-            _ => {
-                Err("Unsupported game variant".into())
-            }
         }
     }
 
