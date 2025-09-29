@@ -20,7 +20,7 @@ pub struct s_blf_chunk_player_data {
     pub bungie_user_role: u16, // includes blue flames at bit 3
     pub hopper_directory: StaticString<32>,
     pub unlock_achievements: StaticArray<u8, 32>, // 59 achievements, capacity of 256 bits
-    pub extras_portal_debug: u8,
+    pub extras_portal_debug: Bool,
 }
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, FromPrimitive)]
