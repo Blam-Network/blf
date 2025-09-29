@@ -56,7 +56,7 @@ impl Default for s_blf_chunk_player_data {
             hopper_directory: StaticString::from_string("default_hoppers")
                 .expect("Default hopper_directory must be valid."),
             unlock_achievements: StaticArray::default(),
-            extras_portal_debug: 0,
+            extras_portal_debug: Bool::from(false),
         }
     }
 }
