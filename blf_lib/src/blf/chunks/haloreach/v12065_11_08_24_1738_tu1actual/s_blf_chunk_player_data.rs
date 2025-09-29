@@ -25,9 +25,9 @@ pub struct s_blf_chunk_player_data {
 }
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, FromPrimitive)]
-#[brw(big, repr = u32)]
+#[brw(big, repr = u8)]
 #[cfg_attr(feature = "napi", napi(namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]
-#[repr(u32)]
+#[repr(u8)]
 pub enum e_player_nameplate {
     #[default]
     none = 0,
