@@ -1,5 +1,5 @@
 use blf_lib::blam::common::math::integer_math::int32_point3d;
-use blf_lib::blam::common::math::real_math::{real_point3d, real_rectangle3d};
+use blf_lib::blam::common::math::real_math::{global_up3d, k_real_epsilon, real_point3d, real_rectangle3d};
 use blf_lib::blam::common::math::unit_vector_quanitzation::get_unit_vector_encoding_constants;
 use blf_lib::types::numbers::Float32;
 use blf_lib_derivable::result::BLFLibResult;
@@ -36,6 +36,38 @@ pub fn quantize_real(value: impl Into<f32>, min_value: impl Into<f32>, max_value
     assert!(quantized_value >= 0 && quantized_value <= quantized_value_count as i32, "quantized_value>=0 && quantized_value<=step_count");
 
     quantized_value
+}
+
+// The exact midpoints param is a guess, though in reach it doesn't seem to actually do anything.
+pub fn quantize_real_fast<const EXACT_MIDPOINTS: bool, const EXACT_ENDPOITNS: bool>(
+    value: f32,
+    min: f32,
+    max: f32,
+    count: usize,
+) -> i32 {
+    assert!(count > 0);
+    assert!(max > min);
+
+    let step = (max - min) / count as f32;
+    let mut idx: i32;
+
+    if EXACT_ENDPOITNS {
+        if value <= min {
+            idx = 0;
+        } else if value >= max {
+            idx = count as i32 - 1;
+        } else {
+            idx = 1 + (((value - min) / step).floor() as i32);
+            if idx > count as i32 - 2 {
+                idx = count as i32 - 2;
+            }
+        }
+    } else {
+        idx = (((value - min) / step).floor() as i32)
+            .clamp(0, count as i32 - 1);
+    }
+
+    idx
 }
 
 pub fn dequantize_real(
@@ -78,6 +110,7 @@ pub fn dequantize_real(
     dequantized
 }
 
+// QFib: Fast and Efficient Brain Tractogram Compression - Scientific Figure on ResearchGate.
 pub fn quantize_unit_vector3d(vector: &real_vector3d, bit_count: usize) -> BLFLibResult<i32> {
     let encoding_constants = get_unit_vector_encoding_constants(bit_count).unwrap();
 
@@ -123,11 +156,15 @@ pub fn quantize_unit_vector3d(vector: &real_vector3d, bit_count: usize) -> BLFLi
         }
     }
 
-    assert!((-1.0..=1.0).contains(&u));
-    assert!((-1.0..=1.0).contains(&w));
+    let mut min_u = -1.0;
+    let mut max_u = 1.0;
+    if u < min_u || u > max_u {
+        min_u = -1.0;
+        max_u = 1.0;
+    }
 
-    let qu = quantize_real(u, -1.0, 1.0, encoding_constants.quantized_value_count as usize, true, false);
-    let qw = quantize_real(w, -1.0, 1.0, encoding_constants.quantized_value_count as usize, true, false);
+    let qu = quantize_real_fast::<true, false>(u, min_u, max_u, encoding_constants.quantized_value_count as usize);
+    let qw = quantize_real_fast::<true, false>(w, -1.0, 1.0, encoding_constants.quantized_value_count as usize);
 
     Ok(
         encoding_constants.quantized_value_count as i32 * qu
@@ -136,49 +173,35 @@ pub fn quantize_unit_vector3d(vector: &real_vector3d, bit_count: usize) -> BLFLi
     )
 }
 
-pub fn dequantize_unit_vector3d(value: i32, vector: &mut real_vector3d, bit_count: usize) -> BLFLibResult {
+pub fn dequantize_unit_vector3d(value: i32, vector: &mut real_vector3d, bit_count: usize) -> BLFLibResult<()> {
     let encoding_constants = get_unit_vector_encoding_constants(bit_count)?;
+    let actual_per_axis_max_count = encoding_constants.actual_per_axis_max_count as i32;
+    let quantized_value_count = encoding_constants.quantized_value_count as i32;
 
-    let face = (value as f32 / encoding_constants.actual_per_axis_max_count as f32) as usize;
-    let x = (value % encoding_constants.actual_per_axis_max_count as i32) as f32 / encoding_constants.quantized_value_count as f32;
-    let y = (value % encoding_constants.actual_per_axis_max_count as i32) as f32 % encoding_constants.quantized_value_count as f32;
 
-    let x = dequantize_real(x as i32, -1.0, 1.0, encoding_constants.quantized_value_count as usize, true, false);
-    let y = dequantize_real(y as i32, -1.0, 1.0, encoding_constants.quantized_value_count as usize, true, false);
+    let face = (value / actual_per_axis_max_count) as usize;
+    let rem  = value - (face as i32) * actual_per_axis_max_count;
+    let qu   = rem / quantized_value_count;
+    let qw   = rem % quantized_value_count;
+
+    if qu < 0 || qu >= actual_per_axis_max_count / quantized_value_count || qw < 0 || qw >= quantized_value_count {
+        *vector = global_up3d.clone();
+        return Err(format!("dequantize_unit_vector3d: bad quant indices qu={} qw={} face={}", qu, qw, face).into());
+    }
+
+    let u = dequantize_real(qu, -1.0f32, 1.0f32, quantized_value_count as usize, true, false);
+    let w = dequantize_real(qw, -1.0f32, 1.0f32, quantized_value_count as usize, true, false);
 
     match face {
-        0 => {
-            vector.i.0 = 1.0;
-            vector.j.0 = x;
-            vector.k.0 = y;
-        }
-        1 => {
-            vector.i.0 = x;
-            vector.j.0 = 1.0;
-            vector.k.0 = y;
-        }
-        2 => {
-            vector.i.0 = x;
-            vector.j.0 = y;
-            vector.k.0 = 1.0;
-        }
-        3 => {
-            vector.i.0 = -1.0;
-            vector.j.0 = x;
-            vector.k.0 = y;
-        }
-        4 => {
-            vector.i.0 = x;
-            vector.j.0 = -1.0;
-            vector.k.0 = y;
-        }
-        5 => {
-            vector.i.0 = x;
-            vector.j.0 = y;
-            vector.k.0 = -1.0;
-        }
+        0 => { vector.i =  Float32(1.0); vector.j = Float32(u); vector.k = Float32(w); }
+        1 => { vector.i =  Float32(u);  vector.j = Float32(1.0); vector.k = Float32(w); }
+        2 => { vector.i =  Float32(u);  vector.j = Float32(w);  vector.k = Float32(1.0); }
+        3 => { vector.i = Float32(-1.0); vector.j = Float32(u); vector.k = Float32(w); }
+        4 => { vector.i =  Float32(u);  vector.j = Float32(-1.0);vector.k = Float32(w); }
+        5 => { vector.i =  Float32(u);  vector.j = Float32(w);  vector.k = Float32(-1.0); }
         _ => {
-            return Err(format!("dequantize_unit_vector3d: bad face value {face} when reading unit vector").into());
+            *vector = global_up3d.clone();
+            return Err(format!("dequantize_unit_vector3d: bad face value {}", face).into());
         }
     }
 

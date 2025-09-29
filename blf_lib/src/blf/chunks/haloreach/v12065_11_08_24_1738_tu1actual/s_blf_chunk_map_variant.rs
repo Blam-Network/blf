@@ -53,7 +53,7 @@ impl BinWrite for s_blf_chunk_map_variant {
         let packed_data_length = packed_data.len() as u32;
 
         let mut hash_buffer = packed_data_length.to_be_bytes().to_vec();
-        hash_buffer.append(&mut packed_data.clone());
+        hash_buffer.extend_from_slice(&packed_data);
 
         writer.write_ne(&get_buffer_hash(&hash_buffer)?)?;
         packed_data_length.write_options(writer, Endian::Big, ())?;

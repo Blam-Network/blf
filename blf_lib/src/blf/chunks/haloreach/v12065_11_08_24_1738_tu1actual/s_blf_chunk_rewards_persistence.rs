@@ -18,12 +18,9 @@ pub struct s_blf_chunk_rewards_persistance {
     pub unknown1: u32,
     pub commendations: StaticArray<u16, 128>, // commendation state structs
     pub purchased_items: StaticArray<u8, 256>,
-    pub unknown2: u32,
-    pub unknown3: u8, // shows bonus notice
-    pub unknown4: u8, // shows bonus notice
-    pub unknown5: u8,
-
-
+    pub unknown2: u16,
+    pub unknown3: u32, // shows bonus notice
+    pub unknown4: u8 // shows bonus notice
 }
 
 impl BlfChunkHooks for s_blf_chunk_rewards_persistance {}

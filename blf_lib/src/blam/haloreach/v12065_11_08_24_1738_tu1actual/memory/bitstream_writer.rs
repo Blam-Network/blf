@@ -47,10 +47,10 @@ pub trait c_bitstream_writer_extensions {
         let k_abs = (up.k - global_up3d.k).abs();
 
         if i_abs > k_real_epsilon || j_abs > k_real_epsilon || k_abs > k_real_epsilon {
-            let quantized_up = quantize_unit_vector3d(up, 20)?;
+            let quantized_up = quantize_unit_vector3d(up, up_bits)?;
             writer.write_bool(false)?; // up-is-global-up3d
             writer.write_integer(quantized_up as u32, up_bits)?;
-            dequantize_unit_vector3d(quantized_up, &mut dequantized_up, 20)?;
+            dequantize_unit_vector3d(quantized_up, &mut dequantized_up, up_bits)?;
         } else {
             writer.write_bool(true)?; // up-is-global-up3d
             dequantized_up = global_up3d;
