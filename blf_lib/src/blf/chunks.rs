@@ -13,7 +13,7 @@ use blf_lib::blf::s_blf_header;
 pub use blf_lib_derivable::blf::chunks::*;
 use blf_lib_derivable::result::BLFLibResult;
 
-pub fn find_chunk<'a, T: BlfChunk + SerializableBlfChunk + ReadableBlfChunk>(buffer: Vec<u8>) -> Result<T, Box<dyn Error>> {
+pub fn find_chunk<'a, T: BlfChunk + SerializableBlfChunk + ReadableBlfChunk>(buffer: &Vec<u8>) -> Result<T, Box<dyn Error>> {
     let mut cursor = Cursor::new(buffer);
     let mut headerBytes = [0u8; s_blf_header::size()];
     let mut header: s_blf_header;
