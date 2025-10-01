@@ -10,7 +10,7 @@ use blf_lib_derivable::result::BLFLibResult;
 use blf_lib_derive::BlfChunk;
 
 #[binrw]
-#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
+#[cfg_attr(feature = "napi", napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]
 #[derive(BlfChunk,Default,PartialEq,Debug,Clone,Serialize,Deserialize)]
 #[Header("chdr", 10.2)]
 #[brw(big)]

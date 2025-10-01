@@ -17,14 +17,14 @@ use crate::OPTION_TO_RESULT;
 use napi_derive::napi;
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
+#[cfg_attr(feature = "napi", napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]
 pub struct s_content_item_metadata_film_data {
     #[brw(pad_after = 12)]
     pub seconds: i32,
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
+#[cfg_attr(feature = "napi", napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]
 pub struct s_content_item_metadata_game_variant_data {
     #[brw(pad_after = 15)]
     pub icon_index: i8,
@@ -38,7 +38,7 @@ pub struct s_content_item_metadata_matchmaking_data {
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
+#[cfg_attr(feature = "napi", napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]
 pub struct s_content_item_metadata_campaign_data {
     pub campaign_id: i32,
     pub campaign_difficulty: i16,
@@ -50,7 +50,7 @@ pub struct s_content_item_metadata_campaign_data {
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
+#[cfg_attr(feature = "napi", napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]
 pub struct s_content_item_metadata_firefight_data {
     pub firefight_difficulty: i16,
     pub firefight_primary_skulls: i16,
@@ -59,7 +59,7 @@ pub struct s_content_item_metadata_firefight_data {
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
+#[cfg_attr(feature = "napi", napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]
 pub struct s_content_item_metadata {
     #[brw(pad_after = 3)]
     pub file_type: i8,
