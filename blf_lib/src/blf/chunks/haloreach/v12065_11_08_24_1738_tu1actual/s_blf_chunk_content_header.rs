@@ -1,4 +1,6 @@
 use binrw::binrw;
+#[cfg(feature = "napi")]
+use napi_derive::napi;
 use serde::{Deserialize, Serialize};
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::game_variant::c_game_variant;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::saved_games::saved_game_files::s_content_item_metadata;
@@ -8,6 +10,7 @@ use blf_lib_derivable::result::BLFLibResult;
 use blf_lib_derive::BlfChunk;
 
 #[binrw]
+#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 #[derive(BlfChunk,Default,PartialEq,Debug,Clone,Serialize,Deserialize)]
 #[Header("chdr", 10.2)]
 #[brw(big)]
