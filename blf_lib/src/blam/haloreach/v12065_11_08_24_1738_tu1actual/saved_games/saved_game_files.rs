@@ -31,7 +31,7 @@ pub struct s_content_item_metadata_game_variant_data {
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
+#[cfg_attr(feature = "napi", napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]
 pub struct s_content_item_metadata_matchmaking_data {
     #[brw(pad_after = 14)]
     pub hopper_identifier: u16,
