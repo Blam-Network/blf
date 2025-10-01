@@ -121,7 +121,7 @@ impl<T> BinRead for s_blf_chunk_compressed_data<T> where T: BlfChunk + Serializa
 impl<T> BlfChunkHooks for s_blf_chunk_compressed_data<T> where T: BlfChunk + SerializableBlfChunk + Clone + ReadableBlfChunk {}
 
 #[cfg(feature = "napi")]
-impl<T: ToNapiValue> ToNapiValue for s_blf_chunk_compressed_data<T> {
+impl<T: ToNapiValue + BlfChunk + SerializableBlfChunk + Clone + ReadableBlfChunk> ToNapiValue for s_blf_chunk_compressed_data<T> {
     unsafe fn to_napi_value(env: napi_env, val: Self) -> napi::Result<napi::sys::napi_value> {
         T::to_napi_value(env, val.chunk)
     }
