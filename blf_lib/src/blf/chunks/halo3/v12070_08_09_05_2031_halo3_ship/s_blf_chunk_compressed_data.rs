@@ -12,6 +12,13 @@ use blf_lib_derivable::blf::s_blf_header::s_blf_header;
 use blf_lib_derivable::types::chunk_signature::chunk_signature;
 use blf_lib_derivable::types::chunk_version::chunk_version;
 
+#[cfg(feature = "napi")]
+use napi::bindgen_prelude::{FromNapiValue, ToNapiValue};
+#[cfg(feature = "napi")]
+use napi::sys;
+#[cfg(feature = "napi")]
+use napi::sys::napi_env;
+
 lazy_static! {
     static ref signature: chunk_signature = chunk_signature::from_string("_cmp");
     static ref version: chunk_version = chunk_version::new(1.1);
@@ -112,3 +119,17 @@ impl<T> BinRead for s_blf_chunk_compressed_data<T> where T: BlfChunk + Serializa
 }
 
 impl<T> BlfChunkHooks for s_blf_chunk_compressed_data<T> where T: BlfChunk + SerializableBlfChunk + Clone + ReadableBlfChunk {}
+
+#[cfg(feature = "napi")]
+impl<T: ToNapiValue> ToNapiValue for s_blf_chunk_compressed_data<T> {
+    unsafe fn to_napi_value(env: napi_env, val: Self) -> napi::Result<napi::sys::napi_value> {
+        T::to_napi_value(env, val.chunk)
+    }
+}
+
+#[cfg(feature = "napi")]
+impl<T: FromNapiValue + BlfChunk + SerializableBlfChunk + Clone + ReadableBlfChunk> FromNapiValue for s_blf_chunk_compressed_data<T> {
+    unsafe fn from_napi_value(env: sys::napi_env, napi_val: sys::napi_value) -> napi::Result<Self> {
+        Ok(Self::create(T::from_napi_value(env, napi_val)?))
+    }
+}
