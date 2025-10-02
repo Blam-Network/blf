@@ -19,13 +19,16 @@ pub fn blf_file_macro(input: TokenStream) -> TokenStream {
                 let field_name = format_ident!("{}", field.clone().ident.unwrap().to_string());
 
                 quote! {
-                    reader.read_exact(&mut headerBytes)?;
-                    header = blf_lib::blf::s_blf_header::decode(&headerBytes)?;
+                    reader.read_exact(&mut header_bytes)?;
+                    header = blf_lib::blf::s_blf_header::decode(&header_bytes)?;
 
                     if header.signature == blf_lib::blf::chunks::DynamicBlfChunk::signature(&blf_file.#field_name) && header.version == blf_lib::blf::chunks::DynamicBlfChunk::version(&blf_file.#field_name) {
                         let mut body_bytes = vec![0u8; (header.chunk_size as usize) - blf_lib::blf::s_blf_header::size()];
                         reader.read_exact(body_bytes.as_mut_slice())?;
-                        blf_lib::blf::chunks::SerializableBlfChunk::decode_body(&mut blf_file.#field_name, body_bytes.as_slice())?;
+                        blf_lib::blf::chunks::SerializableBlfChunk::decode_body(&mut blf_file.#field_name, body_bytes.as_slice(), &previously_read)?;
+
+                        previously_read.extend_from_slice(&header_bytes);
+                        previously_read.extend_from_slice(&body_bytes);
                     }
                     else {
                         return Err(format!("{} Chunk not found!", blf_lib::blf::chunks::DynamicBlfChunk::signature(&blf_file.#field_name).to_string()).into());
@@ -61,8 +64,9 @@ pub fn blf_file_macro(input: TokenStream) -> TokenStream {
                     }
 
                     fn read(reader: &mut dyn std::io::Read) -> Result<Self, Box<dyn std::error::Error>> {
-                        let mut headerBytes = [0u8; blf_lib::blf::s_blf_header::size()];
+                        let mut header_bytes = [0u8; blf_lib::blf::s_blf_header::size()];
                         let mut header: blf_lib::blf::s_blf_header;
+                        let mut previously_read = Vec::<u8>::new();
 
                         let mut blf_file = Self::default();
 
