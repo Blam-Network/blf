@@ -5,7 +5,7 @@ use crate::result::BLFLibResult;
 use crate::types::chunk_signature::chunk_signature;
 use crate::types::chunk_version::chunk_version;
 
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct s_blf_header
 {
     pub signature: chunk_signature,

@@ -109,7 +109,7 @@ impl<T> BinRead for s_blf_chunk_compressed_data<T> where T: BlfChunk + Serializa
             })
         }
 
-        let chunk = BINRW_RESULT!(T::read(chunk_buffer.into(), Some(header)))?;
+        let chunk = BINRW_RESULT!(T::read(chunk_buffer.into(), Some(header), &Vec::new()))?;
 
         Ok(Self {
             compression_type,

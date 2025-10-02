@@ -73,12 +73,13 @@ impl BlfFileBuilder {
 
     pub fn read(&mut self, buffer: &Vec<u8>) -> BLFLibResult<&mut BlfFileBuilder> {
         let mut reader = Cursor::new(buffer);
-        let mut headerBytes = [0u8; s_blf_header::size()];
+        let mut header_bytes = [0u8; s_blf_header::size()];
         let mut header: s_blf_header;
+        let mut previously_read: Vec<u8> = Vec::new();
 
         for chunk in &mut self.chunks.iter_mut()  {
-            reader.read_exact(&mut headerBytes)?;
-            header = s_blf_header::decode(&headerBytes)?;
+            reader.read_exact(&mut header_bytes)?;
+            header = s_blf_header::decode(&header_bytes)?;
 
             if header.signature != chunk.signature() || header.version != chunk.version() {
                 return Err(format!("Failed to read chunk {} {}, found {} {} instead!",
@@ -91,7 +92,10 @@ impl BlfFileBuilder {
 
             let mut body_bytes = vec![0u8; (header.chunk_size as usize) - s_blf_header::size()];
             reader.read_exact(&mut body_bytes)?;
-            chunk.decode_body(&body_bytes)?;
+            chunk.decode_body(&body_bytes, &previously_read)?;
+
+            previously_read.extend_from_slice(&header_bytes);
+            previously_read.extend_from_slice(&body_bytes);
         }
 
         Ok(self)
