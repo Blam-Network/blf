@@ -46,7 +46,8 @@ pub fn find_and_validate_eof(buffer: &Vec<u8>) -> BLFLibResult {
         previously_read.extend_from_slice(&header_bytes);
         previously_read.extend_from_slice(&body_bytes);
     }
-    Err(format!("_eof Chunk not found!").into())
+
+    Ok(())
 }
 
 pub fn find_chunk<'a, T: BlfChunk + SerializableBlfChunk + ReadableBlfChunk>(buffer: &Vec<u8>) -> Result<T, Box<dyn Error>> {
@@ -54,7 +55,7 @@ pub fn find_chunk<'a, T: BlfChunk + SerializableBlfChunk + ReadableBlfChunk>(buf
     let mut headerBytes = [0u8; s_blf_header::size()];
     let mut header: s_blf_header;
 
-    // find_and_validate_eof(buffer)?;
+    find_and_validate_eof(buffer)?;
 
     while cursor.read_exact(&mut headerBytes).is_ok() {
         header = s_blf_header::decode(&headerBytes)?;
@@ -77,7 +78,7 @@ pub fn find_chunk_in_file<T: BlfChunk + SerializableBlfChunk + ReadableBlfChunk>
     let mut headerBytes = [0u8; s_blf_header::size()];
     let mut header: s_blf_header;
 
-    // find_and_validate_eof(&fs::read(&path)?)?;
+    find_and_validate_eof(&fs::read(&path)?)?;
 
     while file.read_exact(&mut headerBytes).is_ok() {
         header = s_blf_header::decode(&headerBytes)?;
