@@ -5,13 +5,14 @@ use blf_lib_derivable::result::BLFLibError;
 
 #[cfg(feature = "napi")]
 use napi_derive::napi;
+use blf_lib::types::array::StaticArray;
 
 const HTTP_REQUEST_HASH_LENGTH: usize = 20;
 
-#[derive(Default, PartialEq, Debug, Clone, Copy, BinRead, BinWrite)]
+#[derive(Default, PartialEq, Debug, Clone, BinRead, BinWrite)]
 #[cfg_attr(feature = "napi", napi(object))]
 pub struct s_network_http_request_hash {
-    pub data: [u8; HTTP_REQUEST_HASH_LENGTH]
+    pub data: StaticArray<u8, HTTP_REQUEST_HASH_LENGTH>
 }
 
 impl Serialize for s_network_http_request_hash {
@@ -19,7 +20,7 @@ impl Serialize for s_network_http_request_hash {
     where
         S: Serializer
     {
-        serializer.serialize_str(&hex::encode_upper(self.data).to_string())
+        serializer.serialize_str(&hex::encode_upper(self.data.get()).to_string())
     }
 }
 
@@ -39,7 +40,7 @@ impl TryFrom<Vec<u8>> for s_network_http_request_hash {
             .map_err(|v: Vec<u8>| -> Self::Error { format!("Expected {HTTP_REQUEST_HASH_LENGTH} bytes, got {} bytes", v.len()).into() })?;
 
         Ok(s_network_http_request_hash {
-            data
+            data: StaticArray::from_slice(&data)?,
         })
     }
 }

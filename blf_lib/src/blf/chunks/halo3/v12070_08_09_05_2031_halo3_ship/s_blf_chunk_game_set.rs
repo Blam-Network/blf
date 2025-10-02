@@ -18,7 +18,7 @@ pub struct s_blf_chunk_game_set
 
 impl BlfChunkHooks for s_blf_chunk_game_set {}
 
-#[derive(Clone, Default, PartialEq, Debug, Copy, Serialize, Deserialize)]
+#[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize)]
 pub struct s_blf_chunk_game_set_entry {
     pub weight: u32,
     pub minimum_player_count: u8,
@@ -91,16 +91,16 @@ impl BinWrite for s_blf_chunk_game_set {
         BINRW_RESULT!(bitstream.write_integer(self.game_entry_count as u32, 6))?;
 
         for i in 0..self.game_entry_count {
-            let game_entry = self.game_entries[i];
+            let game_entry = &self.game_entries[i];
             BINRW_RESULT!(bitstream.write_integer(game_entry.weight, 32))?;
             BINRW_RESULT!(bitstream.write_integer(game_entry.minimum_player_count as u32, 4))?;
             BINRW_RESULT!(bitstream.write_bool(game_entry.skip_after_veto))?;
             BINRW_RESULT!(bitstream.write_bool(game_entry.optional))?;
             BINRW_RESULT!(bitstream.write_integer(game_entry.map_id, 32))?;
             BINRW_RESULT!(bitstream.write_string_utf8(&BINRW_RESULT!(game_entry.game_variant_file_name.get_string())?, 32))?;
-            BINRW_RESULT!(bitstream.write_raw_data(&game_entry.game_variant_file_hash.data, 0xA0))?;
+            BINRW_RESULT!(bitstream.write_raw(&game_entry.game_variant_file_hash, 20))?;
             BINRW_RESULT!(bitstream.write_string_utf8(&BINRW_RESULT!(game_entry.map_variant_file_name.get_string())?, 32))?;
-            BINRW_RESULT!(bitstream.write_raw_data(&game_entry.map_variant_file_hash.data, 0xA0))?;
+            BINRW_RESULT!(bitstream.write_raw(&game_entry.map_variant_file_hash, 20))?;
         }
 
         bitstream.finish_writing();

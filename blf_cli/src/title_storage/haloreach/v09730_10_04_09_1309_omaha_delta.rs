@@ -1907,10 +1907,10 @@ impl v09730_10_04_09_1309_omaha_delta {
 
             for entry in game_set_config.entries.iter_mut() {
                 if !entry.map_variant_file.file_name.is_empty() {
-                    entry.map_variant_file.hash = *map_variant_hashes.get(&entry.map_variant_file.file_name.get_string()?).unwrap();
+                    entry.map_variant_file.hash = map_variant_hashes.get(&entry.map_variant_file.file_name.get_string()?).unwrap().clone();
                 }
                 if !entry.game_variant_file.file_name.is_empty() {
-                    entry.game_variant_file.hash = *game_variant_hashes.get(&entry.game_variant_file.file_name.get_string()?).unwrap();
+                    entry.game_variant_file.hash = game_variant_hashes.get(&entry.game_variant_file.file_name.get_string()?).unwrap().clone();
                 }
             }
 

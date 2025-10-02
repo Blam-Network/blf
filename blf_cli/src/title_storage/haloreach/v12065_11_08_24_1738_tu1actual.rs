@@ -26,7 +26,7 @@ use tokio::task::JoinHandle;
 use blf_lib::blam::common::memory::secure_signature::s_network_http_request_hash;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::game_variant::c_game_variant;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::saved_games::scenario_map_variant::c_map_variant;
-use blf_lib::blf::versions::haloreach::v12065_11_08_24_1738_tu1actual::{s_blf_chunk_author, s_blf_chunk_banhammer_messages, s_blf_chunk_end_of_file, s_blf_chunk_game_set, s_blf_chunk_hopper_configuration_table, s_blf_chunk_hopper_description_table, s_blf_chunk_map_manifest, s_blf_chunk_map_variant, s_blf_chunk_matchmaking_game_variant, s_blf_chunk_matchmaking_tips, s_blf_chunk_megalo_categories, s_blf_chunk_nag_message, s_blf_chunk_network_configuration, s_blf_chunk_online_file_manifest, s_blf_chunk_predefined_queries, s_blf_chunk_start_of_file};
+use blf_lib::blf::versions::haloreach::v11883_10_10_25_1227_dlc_1_ship::{s_blf_chunk_author, s_blf_chunk_banhammer_messages, s_blf_chunk_end_of_file, s_blf_chunk_game_set, s_blf_chunk_hopper_configuration_table, s_blf_chunk_hopper_description_table, s_blf_chunk_map_manifest, s_blf_chunk_map_variant, s_blf_chunk_matchmaking_game_variant, s_blf_chunk_matchmaking_tips, s_blf_chunk_megalo_categories, s_blf_chunk_nag_message, s_blf_chunk_network_configuration, s_blf_chunk_online_file_manifest, s_blf_chunk_predefined_queries, s_blf_chunk_start_of_file};
 use blf_lib::blf::versions::haloreach::v12065_11_08_24_1738_tu1actual::s_blf_chunk_dlc_map_manifest;
 use blf_lib::io::{read_json_file, write_json_file};
 use blf_lib::OPTION_TO_RESULT;
@@ -66,7 +66,7 @@ lazy_static! {
 
 mod title_storage_output {
     use blf_lib::blf::chunks::BlfChunk;
-    use blf_lib::blf::versions::haloreach::v12065_11_08_24_1738_tu1actual::{s_blf_chunk_game_set, s_blf_chunk_hopper_configuration_table, s_blf_chunk_hopper_description_table, s_blf_chunk_map_variant, s_blf_chunk_matchmaking_game_variant, s_blf_chunk_network_configuration, s_blf_chunk_online_file_manifest};
+    use blf_lib::blf::versions::haloreach::v11883_10_10_25_1227_dlc_1_ship::{s_blf_chunk_game_set, s_blf_chunk_hopper_configuration_table, s_blf_chunk_hopper_description_table, s_blf_chunk_map_variant, s_blf_chunk_matchmaking_game_variant, s_blf_chunk_network_configuration, s_blf_chunk_online_file_manifest};
     use crate::build_path;
 
     // applies to the root folder, eg "default_hoppers"
@@ -2060,10 +2060,10 @@ impl v12065_11_08_24_1738_tu1actual {
 
             for entry in game_set_config.entries.iter_mut() {
                 if !entry.map_variant_file.file_name.is_empty() {
-                    entry.map_variant_file.hash = *map_variant_hashes.get(&entry.map_variant_file.file_name.get_string()?).unwrap();
+                    entry.map_variant_file.hash = map_variant_hashes.get(&entry.map_variant_file.file_name.get_string()?).unwrap().clone();
                 }
                 if !entry.game_variant_file.file_name.is_empty() {
-                    entry.game_variant_file.hash = *game_variant_hashes.get(&entry.game_variant_file.file_name.get_string()?).unwrap();
+                    entry.game_variant_file.hash = game_variant_hashes.get(&entry.game_variant_file.file_name.get_string()?).unwrap().clone();
                 }
             }
 

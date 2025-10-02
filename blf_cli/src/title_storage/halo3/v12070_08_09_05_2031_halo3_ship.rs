@@ -1785,10 +1785,10 @@ impl v12070_08_09_05_2031_halo3_ship {
                     skip_after_veto: row.skip_after_veto,
                     optional: row.optional,
 
-                    map_variant_file_hash: *map_variant_hashes.get(&row.map_variant_file_name)
-                        .unwrap_or_else(|| panic!("No map variant hash found for {}", row.map_variant_file_name)),
-                    game_variant_file_hash: *game_variant_hashes.get(&row.game_variant_file_name)
-                        .unwrap_or_else(|| panic!("No map variant hash found for {}", row.game_variant_file_name)),
+                    map_variant_file_hash: map_variant_hashes.get(&row.map_variant_file_name)
+                        .unwrap_or_else(|| panic!("No map variant hash found for {}", row.map_variant_file_name)).clone(),
+                    game_variant_file_hash: game_variant_hashes.get(&row.game_variant_file_name)
+                        .unwrap_or_else(|| panic!("No map variant hash found for {}", row.game_variant_file_name)).clone(),
                     map_id: *map_variant_map_ids.get(&row.map_variant_file_name)
                         .unwrap_or_else(|| panic!("No map ID found for {}", row.map_variant_file_name)),
                 })?;
