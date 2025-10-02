@@ -3,9 +3,13 @@ use serde::{Deserializer, Serialize, Serializer};
 use blf_lib::SERDE_DESERIALIZE_RESULT;
 use blf_lib_derivable::result::BLFLibError;
 
+#[cfg(feature = "napi")]
+use napi_derive::napi;
+
 const HTTP_REQUEST_HASH_LENGTH: usize = 20;
 
 #[derive(Default, PartialEq, Debug, Clone, Copy, BinRead, BinWrite)]
+#[cfg_attr(feature = "napi", napi(object))]
 pub struct s_network_http_request_hash {
     pub data: [u8; HTTP_REQUEST_HASH_LENGTH]
 }
