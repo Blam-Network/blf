@@ -37,7 +37,7 @@ pub enum e_bungienet_user_flags {
     bungie =                    0b0000000000001000, // unlocks blue flames
     unknown4 =                  0b0000000000010000,
     unknown5 =                  0b0000000000100000,
-    activities_unlocked =       0b0000000001000000,
+    debug_enabled =             0b0000000001000000, // unlocks CLAW, may unlock some activities in pre-releases
     unknown7 =                  0b0000000010000000,
     unknown8 =                  0b0000000100000000,
     unknown9 =                  0b0000001000000000,
