@@ -31,10 +31,10 @@ pub struct s_blf_chunk_player_data {
 pub enum e_bungienet_user_flags {
     #[default]
     none =                      0b0000000000000000,
-    community =                 0b0000000000000001,
-    community1 =                0b0000000000000010,
-    community2 =                0b0000000000000100,
-    bungie =                    0b0000000000001000, // unlocks blue flames
+    is_bnet_user =              0b0000000000000001,
+    is_pro =                    0b0000000000000010,
+    is_bungie =                 0b0000000000000100, // unlocks blue flames
+    unknown3 =                  0b0000000000001000,
     unknown4 =                  0b0000000000010000,
     unknown5 =                  0b0000000000100000,
     debug_enabled =             0b0000000001000000, // unlocks CLAW, may unlock some activities in pre-releases
