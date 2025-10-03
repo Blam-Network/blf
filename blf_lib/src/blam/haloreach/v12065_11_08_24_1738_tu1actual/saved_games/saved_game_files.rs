@@ -43,7 +43,6 @@ pub struct s_content_item_metadata_campaign_data {
     pub campaign_id: i32,
     pub campaign_difficulty: i16,
     pub campaign_metagame_scoring: i16,
-    #[brw(pad_after = 4)]
     pub campaign_insertion_point: i32,
     pub campaign_primary_skulls: i16,
     pub campaign_secondary_skulls: i16,
