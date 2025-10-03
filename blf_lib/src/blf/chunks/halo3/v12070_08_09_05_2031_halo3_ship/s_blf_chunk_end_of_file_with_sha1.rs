@@ -11,6 +11,7 @@ use blf_lib_derive::BlfChunk;
 use crate::assert_ok;
 
 #[binrw]
+#[brw(big)]
 #[derive(BlfChunk,Default,PartialEq,Debug,Clone,Serialize,Deserialize)]
 #[Header("_eof", 1.1)]
 #[Size(0x19)]
@@ -34,6 +35,7 @@ impl BlfChunkHooks for s_blf_chunk_end_of_file_with_sha1 {
         let expected_hash = &self.sha1;
         let actual_hash = &get_buffer_hash(&previously_read)?;
         assert_ok!(actual_hash == expected_hash, "s_blf_chunk_end_of_file_with_sha1 has an invalid sha1");
+        assert_ok!(self.file_size == previously_read.len() as u32, "_eof has an invalid size");
 
         Ok(())
     }

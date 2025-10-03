@@ -7,9 +7,11 @@ use blf_lib::blam::common::memory::secure_signature::s_network_http_request_hash
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
 use blf_lib_derivable::result::BLFLibResult;
 use blf_lib_derive::BlfChunk;
+use crate::assert_ok;
 use crate::types::array::StaticArray;
 
 #[binrw]
+#[brw(big)]
 #[derive(BlfChunk,Default,PartialEq,Debug,Clone,Serialize,Deserialize)]
 #[Header("_eof", 1.1)]
 #[Size(0x105)]
@@ -30,6 +32,7 @@ impl BlfChunkHooks for s_blf_chunk_end_of_file_with_rsa {
 
     fn after_read(&mut self, previously_read: &Vec<u8>) -> BLFLibResult {
         // TODO: Validate
+        assert_ok!(self.file_size == previously_read.len() as u32, "_eof has an invalid size");
         Ok(())
     }
 }

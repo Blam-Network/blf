@@ -18,7 +18,7 @@ use crate::types::c_string::StaticString;
 pub struct s_blf_chunk_player_data {
     pub hopper_access: u8,
     pub nameplate: e_player_nameplate,
-    pub bungie_user_role: u16, // includes blue flames at bit 3
+    pub bungie_user_role: u16,
     pub hopper_directory: StaticString<32>,
     pub unlock_achievements: StaticArray<u8, 32>, // 59 achievements, capacity of 256 bits
     pub extras_portal_debug: Bool,

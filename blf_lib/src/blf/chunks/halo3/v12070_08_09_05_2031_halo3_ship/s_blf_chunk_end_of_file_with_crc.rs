@@ -10,6 +10,7 @@ use blf_lib_derive::BlfChunk;
 use crate::assert_ok;
 
 #[binrw]
+#[brw(big)]
 #[derive(BlfChunk,Default,PartialEq,Debug,Clone,Serialize,Deserialize)]
 #[Header("_eof", 1.1)]
 #[Size(0x9)]
@@ -33,6 +34,7 @@ impl BlfChunkHooks for s_blf_chunk_end_of_file_with_crc {
         let expected_crc = self.crc;
         let actual_crc = crc_checksum_buffer(0xFFFFFFFF, previously_read);
         assert_ok!(expected_crc == actual_crc, "s_blf_chunk_end_of_file_with_crc has an invalid crc");
+        assert_ok!(self.file_size == previously_read.len() as u32, "_eof has an invalid size");
 
         Ok(())
     }
