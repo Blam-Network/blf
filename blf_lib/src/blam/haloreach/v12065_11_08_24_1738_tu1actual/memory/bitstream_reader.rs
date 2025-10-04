@@ -12,11 +12,10 @@ pub trait c_bitstream_reader_extensions<'a> {
 
     fn read_quantized_real(&mut self, min_value: f32, max_value: f32, size_in_bits: usize, exact_midpoint: bool, exact_endpoints: bool) -> BLFLibResult<Float32> {
         let reader = self.bitstream_reader();
-        let encoding_constants = get_unit_vector_encoding_constants(size_in_bits)?;
 
         assert_ok!(reader.reading());
         let value: i32 = reader.read_unnamed_integer(size_in_bits)?;
-        Ok(Float32(dequantize_real(value, min_value, max_value, encoding_constants.quantized_value_count as usize, exact_midpoint, exact_endpoints)))
+        Ok(Float32(dequantize_real(value, min_value, max_value, size_in_bits << 1, exact_midpoint, exact_endpoints)))
     }
 
     fn read_axes<const forward_bits: usize, const up_bits: usize>(&mut self, forward: &mut real_vector3d, up: &mut real_vector3d) -> BLFLibResult {
