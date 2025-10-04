@@ -328,7 +328,7 @@ pub struct s_variant_object_datum {
 
 impl s_variant_object_datum {
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader, world_bounds: &real_rectangle3d) -> BLFLibResult {
-        if bitstream.read_unnamed_bool()? { // exists
+        if bitstream.read_bool("variant_object_exists")? {
             self.flags = bitstream.read_unnamed_integer(2)?;
             self.variant_quota_index = bitstream.read_unnamed_index::<k_maximum_variant_quotas>(8)?;
             self.variant_index = bitstream.read_unnamed_index::<32>(5)?;

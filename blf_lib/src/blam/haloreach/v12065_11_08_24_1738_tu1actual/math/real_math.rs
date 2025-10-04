@@ -224,7 +224,7 @@ pub fn dequantize_real_point3d_per_axis(
         quantized.x,
         bounds.x.lower,
         bounds.x.upper,
-        bits.x as usize,
+        1 << bits.x as usize,
         exact_midpoints,
         exact_endpoints,
     ));
@@ -233,7 +233,7 @@ pub fn dequantize_real_point3d_per_axis(
         quantized.y,
         bounds.y.lower,
         bounds.y.upper,
-        bits.y as usize,
+        1 << bits.y as usize,
         exact_midpoints,
         exact_endpoints,
     ));
@@ -242,7 +242,7 @@ pub fn dequantize_real_point3d_per_axis(
         quantized.z,
         bounds.z.lower,
         bounds.z.upper,
-        bits.z as usize,
+        1 << bits.z as usize,
         exact_midpoints,
         exact_endpoints,
     ));
