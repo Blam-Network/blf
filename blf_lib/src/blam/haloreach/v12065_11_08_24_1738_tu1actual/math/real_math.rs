@@ -11,63 +11,77 @@ pub fn quantize_real_point3d_per_axis(
     bits: &int32_point3d,
     quantized: &mut int32_point3d,
 ) {
-    quantized.x = quantize_real(position.x, bounds.x.lower, bounds.x.upper, bits.x as usize, false, false);
-    quantized.y = quantize_real(position.y, bounds.y.lower, bounds.y.upper, bits.y as usize, false, false);
-    quantized.z = quantize_real(position.z, bounds.z.lower, bounds.z.upper, bits.z as usize, false, false);
+    quantized.x = quantize_real_fast_guts::<false, false>(position.x, bounds.x.lower, bounds.x.upper, bits.x as usize);
+    quantized.y = quantize_real_fast_guts::<false, false>(position.y, bounds.y.lower, bounds.y.upper, bits.y as usize);
+    quantized.z = quantize_real_fast_guts::<false, false>(position.z, bounds.z.lower, bounds.z.upper, bits.z as usize);
 }
 
-pub fn quantize_real(value: impl Into<f32>, min_value: impl Into<f32>, max_value: impl Into<f32>, quantized_value_count: usize, exact_midpoint: bool, a6: bool) -> i32 {
+pub fn quantize_real(
+    value: impl Into<f32>,
+    min_value: impl Into<f32>,
+    max_value: impl Into<f32>,
+    quantized_value_count: usize,
+    exact_midpoint: bool,
+    exact_endpoints: bool,
+) -> i32 {
     let value = value.into();
     let min_value = min_value.into();
     let max_value = max_value.into();
 
-    assert!(quantized_value_count > 3, "quantized_value_count>3");
-    assert!(max_value > min_value, "max_value>min_value");
+    assert!(quantized_value_count > 3, "quantized_value_count must be > 3");
+    assert!(max_value > min_value, "max_value must be > min_value");
 
+    let mut step_count = quantized_value_count as i32;
+    if exact_midpoint {
+        step_count -= 1;
+    }
 
-    let step = (max_value - min_value) / quantized_value_count as f32;
-    assert!(step > 0.0, "step>0.0f");
+    let step = (max_value - min_value) / step_count as f32;
+    assert!(step > 0.0, "step must be > 0.0");
 
-    let normalized_value = (value - min_value) / step;
+    let mut quantized_value: i32;
 
-    let sign = if normalized_value < 0.0 { -1.0 } else { 1.0 };
-    let quantized_value = (sign * 0.5 + normalized_value) as i32;
+    if exact_endpoints {
+        if value <= min_value {
+            return 0;
+        }
+        if value >= max_value {
+            return step_count;
+        }
+    } else {
+        if value <= min_value {
+            return 0;
+        }
+        if value >= max_value {
+            return step_count - 1;
+        }
+    }
 
-    assert!(quantized_value >= 0 && quantized_value <= quantized_value_count as i32, "quantized_value>=0 && quantized_value<=step_count");
+    let mut normalized = (value - min_value) / step;
+
+    if exact_midpoint {
+        normalized += 0.5;
+    }
+
+    quantized_value = normalized.floor() as i32;
+
+    if exact_endpoints {
+        quantized_value = quantized_value.clamp(0, step_count);
+    } else {
+        quantized_value = quantized_value.clamp(0, step_count - 1);
+    }
 
     quantized_value
 }
 
 // The exact midpoints param is a guess, though in reach it doesn't seem to actually do anything.
-pub fn quantize_real_fast<const EXACT_MIDPOINTS: bool, const EXACT_ENDPOITNS: bool>(
-    value: f32,
-    min: f32,
-    max: f32,
+pub fn quantize_real_fast<const EXACT_MIDPOINTS: bool, const EXACT_ENDPOINTS: bool>(
+    value: impl Into<f32>,
+    min: impl Into<f32>,
+    max: impl Into<f32>,
     count: usize,
 ) -> i32 {
-    assert!(count > 0);
-    assert!(max > min);
-
-    let step = (max - min) / count as f32;
-    let mut idx: i32;
-
-    if EXACT_ENDPOITNS {
-        if value <= min {
-            idx = 0;
-        } else if value >= max {
-            idx = count as i32 - 1;
-        } else {
-            idx = 1 + (((value - min) / step).floor() as i32);
-            if idx > count as i32 - 2 {
-                idx = count as i32 - 2;
-            }
-        }
-    } else {
-        idx = (((value - min) / step).floor() as i32)
-            .clamp(0, count as i32 - 1);
-    }
-
-    idx
+    quantize_real(value, min, max, count, EXACT_MIDPOINTS, EXACT_ENDPOINTS)
 }
 
 pub fn dequantize_real(
@@ -173,32 +187,68 @@ pub fn quantize_unit_vector3d(vector: &real_vector3d, bit_count: usize) -> BLFLi
     )
 }
 
-pub fn dequantize_unit_vector3d(value: i32, vector: &mut real_vector3d, bit_count: usize) -> BLFLibResult<()> {
+pub fn dequantize_unit_vector3d(
+    value: i32,
+    vector: &mut real_vector3d,
+    bit_count: usize,
+) -> BLFLibResult {
     let encoding_constants = get_unit_vector_encoding_constants(bit_count)?;
     let actual_per_axis_max_count = encoding_constants.actual_per_axis_max_count as i32;
     let quantized_value_count = encoding_constants.quantized_value_count as i32;
 
+    let face = ((value as f32) / (actual_per_axis_max_count as f32)).floor() as usize;
 
-    let face = (value / actual_per_axis_max_count) as usize;
-    let rem  = value - (face as i32) * actual_per_axis_max_count;
-    let qu   = rem / quantized_value_count;
-    let qw   = rem % quantized_value_count;
+    let rem = value % actual_per_axis_max_count;
+    let qu = rem / quantized_value_count;
+    let qw = rem % quantized_value_count;
 
-    if qu < 0 || qu >= actual_per_axis_max_count / quantized_value_count || qw < 0 || qw >= quantized_value_count {
+    if qu < 0
+        || qu >= actual_per_axis_max_count / quantized_value_count
+        || qw < 0
+        || qw >= quantized_value_count
+    {
         *vector = global_up3d.clone();
-        return Err(format!("dequantize_unit_vector3d: bad quant indices qu={} qw={} face={}", qu, qw, face).into());
+        return Err(format!(
+            "dequantize_unit_vector3d: bad quant indices qu={} qw={} face={}",
+            qu, qw, face
+        )
+            .into());
     }
 
-    let u = dequantize_real(qu, -1.0f32, 1.0f32, quantized_value_count as usize, true, false);
-    let w = dequantize_real(qw, -1.0f32, 1.0f32, quantized_value_count as usize, true, false);
+    let u = dequantize_real(qu, -1.0f32, 1.0f32, (quantized_value_count - 1) as usize, false, false);
+    let w = dequantize_real(qw, -1.0f32, 1.0f32, (quantized_value_count - 1) as usize, false, false);
 
     match face {
-        0 => { vector.i =  Float32(1.0); vector.j = Float32(u); vector.k = Float32(w); }
-        1 => { vector.i =  Float32(u);  vector.j = Float32(1.0); vector.k = Float32(w); }
-        2 => { vector.i =  Float32(u);  vector.j = Float32(w);  vector.k = Float32(1.0); }
-        3 => { vector.i = Float32(-1.0); vector.j = Float32(u); vector.k = Float32(w); }
-        4 => { vector.i =  Float32(u);  vector.j = Float32(-1.0);vector.k = Float32(w); }
-        5 => { vector.i =  Float32(u);  vector.j = Float32(w);  vector.k = Float32(-1.0); }
+        0 => {
+            vector.i = Float32(1.0);
+            vector.j = Float32(u);
+            vector.k = Float32(w);
+        }
+        1 => {
+            vector.i = Float32(u);
+            vector.j = Float32(1.0);
+            vector.k = Float32(w);
+        }
+        2 => {
+            vector.i = Float32(u);
+            vector.j = Float32(w);
+            vector.k = Float32(1.0);
+        }
+        3 => {
+            vector.i = Float32(-1.0);
+            vector.j = Float32(u);
+            vector.k = Float32(w);
+        }
+        4 => {
+            vector.i = Float32(u);
+            vector.j = Float32(-1.0);
+            vector.k = Float32(w);
+        }
+        5 => {
+            vector.i = Float32(u);
+            vector.j = Float32(w);
+            vector.k = Float32(-1.0);
+        }
         _ => {
             *vector = global_up3d.clone();
             return Err(format!("dequantize_unit_vector3d: bad face value {}", face).into());
@@ -209,6 +259,34 @@ pub fn dequantize_unit_vector3d(value: i32, vector: &mut real_vector3d, bit_coun
 
     Ok(())
 }
+
+pub fn quantize_real_fast_guts<const EXACT_MIDPOINTS: bool, const EXACT_ENDPOINTS: bool>(
+    value: impl Into<f32>,
+    min_value: impl Into<f32>,
+    max_value: impl Into<f32>,
+    bits: usize,
+) -> i32 {
+    let value = value.into();
+    let min_value = min_value.into();
+    let max_value = max_value.into();
+
+    if EXACT_MIDPOINTS || EXACT_ENDPOINTS {
+        unimplemented!();
+    }
+
+    let max_int = (1 << bits) - 1;
+    let step = (max_value - min_value) / max_int as f32;
+
+    // Compute quantized value
+    let mut q = ((value - min_value) / step).floor() as i32;
+
+    // Clamp to valid range
+    if q < 0 { q = 0; }
+    if q > max_int as i32 { q = max_int as i32; }
+
+    q
+}
+
 
 pub fn dequantize_real_point3d_per_axis(
     quantized: &int32_point3d,
@@ -246,4 +324,6 @@ pub fn dequantize_real_point3d_per_axis(
         exact_midpoints,
         exact_endpoints,
     ));
+
+    println!("AFTER DEQUANTIZE {} {} {} ({} {} {})", position.x, position.y, position.z, bits.x, bits.y, bits.z);
 }
