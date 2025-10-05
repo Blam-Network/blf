@@ -32,8 +32,6 @@ pub trait c_bitstream_reader_extensions<'a> {
         let forward_angle = reader.read_quantized_real(-k_pi, k_pi, forward_bits, false, false)?;
         c_bitstream_reader::angle_to_axes_internal(up, forward_angle, forward)?;
 
-        println!("READ AXES ({}, {}, {}) ({}, {}, {})", forward.i, forward.j, forward.k, up.i, up.j, up.k);
-
         Ok(())
     }
 }
