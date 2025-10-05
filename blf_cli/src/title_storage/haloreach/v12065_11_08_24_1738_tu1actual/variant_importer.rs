@@ -23,9 +23,15 @@ pub fn import_variant(hoppers_config_path: &String, variant_path: &String) {
     if game_variant.is_some() {
         let game_variant = game_variant.unwrap();
         let metadata = game_variant.get_metadata().unwrap();
-        let output_file_name = format!("{}.json", metadata.name.get_string()
-            .replace(" ", "_")
-            .to_lowercase());
+
+        let output_file_name = if variant_path.ends_with(".bin") {
+            Path::new(variant_path).file_name().unwrap().to_str().unwrap().to_string().replace(".bin", ".json")
+        } else {
+            format!("{}.json", game_variant.get_metadata().unwrap().name.get_string()
+                .replace(" ", "_")
+                .to_lowercase())
+        };
+
         let output_file = File::create(build_path!(
             hoppers_config_path,
             "game_variants",
@@ -46,9 +52,13 @@ pub fn import_variant(hoppers_config_path: &String, variant_path: &String) {
     if map_variant.is_some() {
         let mut map_variant = map_variant.unwrap().clone();
 
-        let output_file_name = format!("{}.json", map_variant.m_metadata.name.get_string()
-            .replace(" ", "_")
-            .to_lowercase());
+        let output_file_name = if variant_path.ends_with(".bin") {
+            Path::new(variant_path).file_name().unwrap().to_str().unwrap().to_string().replace(".bin", ".json")
+        } else {
+            format!("{}.json", map_variant.m_metadata.name.get_string()
+                .replace(" ", "_")
+                .to_lowercase())
+        };
 
         let output_file = File::create(build_path!(
             hoppers_config_path,

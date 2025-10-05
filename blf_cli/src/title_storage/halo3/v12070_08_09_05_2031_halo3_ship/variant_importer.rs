@@ -2,6 +2,7 @@ pub(crate) mod mcc;
 
 use std::fs::{exists, File};
 use std::io::Read;
+use std::path::Path;
 use std::str::FromStr;
 use blf_lib::blam::common::memory::crc::crc32;
 use blf_lib::blam::halo3::v12070_08_09_05_2031_halo3_ship::game::game_engine_variant::c_game_variant;
@@ -28,9 +29,13 @@ pub fn import_variant(hoppers_config_path: &String, variant_path: &String) {
     }
     if game_variant.is_some() {
         let game_variant = game_variant.unwrap();
-        let output_file_name = format!("{}.json", game_variant.m_base_variant.m_metadata.name.get_string()
-            .replace(" ", "_")
-            .to_lowercase());
+        let output_file_name = if variant_path.ends_with(".bin") {
+            Path::new(variant_path).file_name().unwrap().to_str().unwrap().to_string().replace(".bin", ".json")
+        } else {
+            format!("{}.json", game_variant.m_base_variant.m_metadata.name.get_string()
+                .replace(" ", "_")
+                .to_lowercase())
+        };
         let output_file = File::create(build_path!(
             hoppers_config_path,
             "game_variants",
@@ -59,9 +64,13 @@ pub fn import_variant(hoppers_config_path: &String, variant_path: &String) {
             convert_mcc_map(&mut task, hoppers_config_path, &mut map_variant);
         }
 
-        let output_file_name = format!("{}.json", map_variant.m_metadata.name.get_string()
-            .replace(" ", "_")
-            .to_lowercase());
+        let output_file_name = if variant_path.ends_with(".bin") {
+            Path::new(variant_path).file_name().unwrap().to_str().unwrap().to_string().replace(".bin", ".json")
+        } else {
+            format!("{}.json", map_variant.m_metadata.name.get_string()
+                .replace(" ", "_")
+                .to_lowercase())
+        };
 
         let output_file = File::create(build_path!(
             hoppers_config_path,
