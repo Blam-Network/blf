@@ -30,8 +30,6 @@ pub trait c_bitstream_writer_extensions {
             exact_endpoints,
         ) as u32;
 
-        println!("write_quantized_real: {}", quantized_value);
-
         assert_ok!(writer.writing());
         writer.write_integer(
             quantized_value,
@@ -48,15 +46,13 @@ pub trait c_bitstream_writer_extensions {
     ) -> BLFLibResult {
         let mut writer = self.bitstream_writer();
 
-        let quantized_value_count = size_in_bits << 1;
+        let quantized_value_count = 1 << size_in_bits;
         let quantized_value = quantize_real_fast::<exact_midpoint, exact_endpoints>(
             value.into(),
             min_value,
             max_value,
             quantized_value_count,
         ) as u32;
-
-        println!("write_quantized_real_fast: {} with {} bits and {} values", quantized_value, size_in_bits, quantized_value_count);
 
         assert_ok!(writer.writing());
         writer.write_integer(
@@ -73,8 +69,6 @@ pub trait c_bitstream_writer_extensions {
         let mut writer = self.bitstream_writer();
         assert_ok!(assert_valid_real_normal3d(up));
         assert_ok!(assert_valid_real_normal3d(forward));
-
-        println!("WRITING AXES ({}, {}, {}) ({}, {}, {})", forward.i, forward.j, forward.k, up.i, up.j, up.k);
 
         let mut dequantized_up: real_vector3d = real_vector3d::default();
 
