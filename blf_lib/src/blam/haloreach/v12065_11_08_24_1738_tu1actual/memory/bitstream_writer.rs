@@ -1,9 +1,11 @@
 use blf_lib::assert_ok;
 use blf_lib::blam::common::math::real_math::{assert_valid_real_normal3d, global_up3d, k_pi, k_real_epsilon, real_vector3d};
-use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::math::real_math::{dequantize_unit_vector3d, quantize_real, quantize_unit_vector3d};
+use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::math::real_math::{dequantize_unit_vector3d, quantize_real, quantize_real_fast};
 use blf_lib::io::bitstream::c_bitstream_writer;
 use blf_lib_derivable::result::BLFLibResult;
+use crate::blam::common::math::real_math::{cross_product3d, normalize3d};
 use crate::blam::common::math::unit_vector_quanitzation::get_unit_vector_encoding_constants;
+use crate::blam::haloreach::v12065_11_08_24_1738_tu1actual::math::real_math::quantize_unit_vector3d_fast;
 
 pub trait c_bitstream_writer_extensions {
     fn bitstream_writer(&mut self) -> &mut c_bitstream_writer;
@@ -19,26 +21,60 @@ pub trait c_bitstream_writer_extensions {
     ) -> BLFLibResult {
         let mut writer = self.bitstream_writer();
 
-        let quantized_value_count = get_unit_vector_encoding_constants(size_in_bits)?.quantized_value_count;
+        let quantized_value = quantize_real(
+            value.into(),
+            min_value,
+            max_value,
+            1 << size_in_bits,
+            exact_midpoint,
+            exact_endpoints,
+        ) as u32;
+
+        println!("write_quantized_real: {}", quantized_value);
 
         assert_ok!(writer.writing());
         writer.write_integer(
-            quantize_real(
-                value.into(),
-                min_value,
-                max_value,
-                quantized_value_count as usize,
-                exact_midpoint,
-                exact_endpoints,
-            ) as u32,
+            quantized_value,
             size_in_bits
         )
     }
 
-    fn write_axes<const forward_bits: usize, const up_bits: usize>(&mut self, forward: &real_vector3d, up: &real_vector3d) -> BLFLibResult {
+    fn write_quantized_real_fast<const exact_midpoint: bool, const exact_endpoints: bool>(
+        &mut self,
+        value: impl Into<f32>,
+        min_value: f32,
+        max_value: f32,
+        size_in_bits: usize,
+    ) -> BLFLibResult {
+        let mut writer = self.bitstream_writer();
+
+        let quantized_value_count = size_in_bits << 1;
+        let quantized_value = quantize_real_fast::<exact_midpoint, exact_endpoints>(
+            value.into(),
+            min_value,
+            max_value,
+            quantized_value_count,
+        ) as u32;
+
+        println!("write_quantized_real_fast: {} with {} bits and {} values", quantized_value, size_in_bits, quantized_value_count);
+
+        assert_ok!(writer.writing());
+        writer.write_integer(
+            quantized_value,
+            size_in_bits
+        )
+    }
+
+    fn write_axes<const forward_bits: usize, const up_bits: usize>(
+        &mut self,
+        forward: &real_vector3d,
+        up: &real_vector3d,
+    ) -> BLFLibResult {
         let mut writer = self.bitstream_writer();
         assert_ok!(assert_valid_real_normal3d(up));
         assert_ok!(assert_valid_real_normal3d(forward));
+
+        println!("WRITING AXES ({}, {}, {}) ({}, {}, {})", forward.i, forward.j, forward.k, up.i, up.j, up.k);
 
         let mut dequantized_up: real_vector3d = real_vector3d::default();
 
@@ -46,18 +82,19 @@ pub trait c_bitstream_writer_extensions {
         let j_abs = (up.j - global_up3d.j).abs();
         let k_abs = (up.k - global_up3d.k).abs();
 
-        if i_abs > k_real_epsilon || j_abs > k_real_epsilon || k_abs > k_real_epsilon {
-            let quantized_up = quantize_unit_vector3d(up, up_bits)?;
+        if i_abs >= k_real_epsilon || j_abs >= k_real_epsilon || k_abs >= k_real_epsilon {
+            let quantized_up = quantize_unit_vector3d_fast::<up_bits>(up)?;
             writer.write_bool(false)?; // up-is-global-up3d
             writer.write_integer(quantized_up as u32, up_bits)?;
             dequantize_unit_vector3d(quantized_up, &mut dequantized_up, up_bits)?;
         } else {
             writer.write_bool(true)?; // up-is-global-up3d
-            dequantized_up = global_up3d;
+            dequantized_up.clone_from(&global_up3d);
         }
 
         let forward_angle = c_bitstream_writer::axes_to_angle_internal(forward, &dequantized_up)?;
-        writer.write_quantized_real(forward_angle, -k_pi, k_pi, forward_bits, false, false)?;
+        writer.write_quantized_real_fast::<false, false>(forward_angle, -k_pi, k_pi, forward_bits)?;
+
         Ok(())
     }
 }

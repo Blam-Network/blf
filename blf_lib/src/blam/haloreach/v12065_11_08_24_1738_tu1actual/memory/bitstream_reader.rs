@@ -15,7 +15,7 @@ pub trait c_bitstream_reader_extensions<'a> {
 
         assert_ok!(reader.reading());
         let value: i32 = reader.read_unnamed_integer(size_in_bits)?;
-        Ok(Float32(dequantize_real(value, min_value, max_value, size_in_bits << 1, exact_midpoint, exact_endpoints)))
+        Ok(Float32(dequantize_real(value, min_value, max_value, 1 << size_in_bits, exact_midpoint, exact_endpoints)))
     }
 
     fn read_axes<const forward_bits: usize, const up_bits: usize>(&mut self, forward: &mut real_vector3d, up: &mut real_vector3d) -> BLFLibResult {
@@ -31,6 +31,9 @@ pub trait c_bitstream_reader_extensions<'a> {
 
         let forward_angle = reader.read_quantized_real(-k_pi, k_pi, forward_bits, false, false)?;
         c_bitstream_reader::angle_to_axes_internal(up, forward_angle, forward)?;
+
+        println!("READ AXES ({}, {}, {}) ({}, {}, {})", forward.i, forward.j, forward.k, up.i, up.j, up.k);
+
         Ok(())
     }
 }
