@@ -98,9 +98,9 @@ impl BinWrite for s_blf_chunk_game_set {
             BINRW_RESULT!(bitstream.write_bool(game_entry.optional))?;
             BINRW_RESULT!(bitstream.write_integer(game_entry.map_id, 32))?;
             BINRW_RESULT!(bitstream.write_string_utf8(&BINRW_RESULT!(game_entry.game_variant_file_name.get_string())?, 32))?;
-            BINRW_RESULT!(bitstream.write_raw(&game_entry.game_variant_file_hash, 20))?;
+            bitstream.write_raw_data(&game_entry.game_variant_file_hash.data.get(), 0xA0)?;
             BINRW_RESULT!(bitstream.write_string_utf8(&BINRW_RESULT!(game_entry.map_variant_file_name.get_string())?, 32))?;
-            BINRW_RESULT!(bitstream.write_raw(&game_entry.map_variant_file_hash, 20))?;
+            bitstream.write_raw_data(&game_entry.map_variant_file_hash.data.get(), 0xA0)?;
         }
 
         bitstream.finish_writing();
