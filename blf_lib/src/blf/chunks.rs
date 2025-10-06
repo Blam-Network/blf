@@ -17,7 +17,7 @@ use blf_lib_derivable::result::{BLFLibError, BLFLibResult};
 use blf_lib_derivable::types::chunk_signature::chunk_signature;
 use crate::blf::versions::halo3::v12070_08_09_05_2031_halo3_ship::{s_blf_chunk_end_of_file, s_blf_chunk_end_of_file_with_sha1, s_blf_chunk_end_of_file_with_rsa, s_blf_chunk_end_of_file_with_crc};
 
-pub fn find_and_validate_eof(buffer: &Vec<u8>) -> BLFLibResult {
+pub fn find_and_validate_eof(buffer: &[u8]) -> BLFLibResult {
     let mut cursor = Cursor::new(buffer);
     let mut header_bytes = [0u8; s_blf_header::size()];
     let mut header: s_blf_header;
@@ -50,7 +50,7 @@ pub fn find_and_validate_eof(buffer: &Vec<u8>) -> BLFLibResult {
     Ok(())
 }
 
-pub fn find_chunk<'a, T: BlfChunk + SerializableBlfChunk + ReadableBlfChunk>(buffer: &Vec<u8>) -> Result<T, Box<dyn Error>> {
+pub fn find_chunk<'a, T: BlfChunk + SerializableBlfChunk + ReadableBlfChunk>(buffer: &[u8]) -> Result<T, Box<dyn Error>> {
     let mut cursor = Cursor::new(buffer);
     let mut headerBytes = [0u8; s_blf_header::size()];
     let mut header: s_blf_header;
