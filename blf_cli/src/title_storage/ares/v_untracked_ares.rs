@@ -1457,7 +1457,9 @@ impl v_untracked_ares {
                                 )
                             );
 
-                            let game_variant_json: c_game_variant = serde_json::from_str(&json).unwrap();
+                            let game_variant_json: c_game_variant = serde_json::from_str(&json)
+                                .map_err(|e| format!("failed to build {game_variant_file_name}, {}", e.to_string()))
+                                .unwrap();
 
                             BlfFileBuilder::new()
                                 .add_chunk(s_blf_chunk_start_of_file::new("game var"))

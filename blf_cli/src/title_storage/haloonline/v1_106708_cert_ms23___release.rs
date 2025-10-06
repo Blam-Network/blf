@@ -1,3 +1,27 @@
+use crate::console::console_task;
+use crate::io::{create_parent_folders, get_directories_in_folder, get_files_in_folder, read_text_file_lines, write_text_file, write_text_file_lines};
+use crate::title_storage::haloonline::v1_106708_cert_ms23___release::title_storage_config::{get_hopper_id_from_hopper_folder_name, matchmaking_hopper_category_configuration_and_descriptions};
+use crate::title_storage::haloonline::v1_106708_cert_ms23___release::title_storage_output::hopper_directory_name_max_length;
+use crate::title_storage::{check_file_exists, validate_jpeg, TitleConverter};
+use crate::{build_path, debug_log, title_converter, やった};
+use blf_lib::blam::common::memory::crc::crc32;
+use blf_lib::blam::common::memory::secure_signature::s_network_http_request_hash;
+use blf_lib::blam::halo3::v12070_08_09_05_2031_halo3_ship::game::game_engine_variant::c_game_variant;
+use blf_lib::blam::halo3::v12070_08_09_05_2031_halo3_ship::saved_games::scenario_map_variant::c_map_variant;
+use blf_lib::blam::haloonline::release::cseries::language::{get_language_string, k_language_suffix_chinese_traditional, k_language_suffix_english, k_language_suffix_french, k_language_suffix_german, k_language_suffix_italian, k_language_suffix_japanese, k_language_suffix_korean, k_language_suffix_mexican, k_language_suffix_russian, k_language_suffix_spanish};
+use blf_lib::blf::chunks::{find_chunk_in_file, BlfChunk};
+use blf_lib::blf::versions::haloonline::v1_106708_cert_ms23___release::s_blf_chunk_hopper_configuration_table;
+use blf_lib::blf::versions::haloonline::v1_106708_cert_ms23___release::{s_blf_chunk_author, s_blf_chunk_game_set, s_blf_chunk_hopper_description_table, s_blf_chunk_matchmaking_tips, s_blf_chunk_message_of_the_day, s_blf_chunk_message_of_the_day_popup, s_blf_chunk_network_configuration, s_blf_chunk_packed_game_variant, s_blf_chunk_packed_map_variant};
+use blf_lib::blf::versions::haloonline::v1_106708_cert_ms23___release::{s_blf_chunk_banhammer_messages, s_blf_chunk_online_file_manifest};
+use blf_lib::blf::versions::haloonline::v1_106708_cert_ms23___release::{s_blf_chunk_end_of_file, s_blf_chunk_game_set_entry, s_blf_chunk_map_manifest, s_blf_chunk_start_of_file};
+use blf_lib::blf::{get_blf_file_hash, BlfFile, BlfFileBuilder};
+use blf_lib::io::{read_file_to_string, read_json_file, write_json_file};
+use blf_lib::result::{BLFLibError, BLFLibResult};
+use blf_lib::types::c_string::StaticString;
+use colored::Colorize;
+use csv::{ReaderBuilder, WriterBuilder};
+use lazy_static::lazy_static;
+use regex::Regex;
 use std::collections::{HashMap, HashSet, VecDeque};
 use std::error::Error;
 use std::fs;
@@ -7,34 +31,10 @@ use std::path::Path;
 use std::str::FromStr;
 use std::sync::Arc;
 use std::time::SystemTime;
-use colored::Colorize;
-use csv::{ReaderBuilder, WriterBuilder};
-use crate::io::{create_parent_folders, get_directories_in_folder, get_files_in_folder, read_text_file_lines, write_text_file, write_text_file_lines};
-use crate::{build_path, debug_log, title_converter, やった};
-use crate::title_storage::{check_file_exists, validate_jpeg, TitleConverter};
-use lazy_static::lazy_static;
-use blf_lib::blam::haloonline::release::cseries::language::{get_language_string, k_language_suffix_chinese_traditional, k_language_suffix_english, k_language_suffix_french, k_language_suffix_german, k_language_suffix_italian, k_language_suffix_japanese, k_language_suffix_korean, k_language_suffix_mexican, k_language_suffix_russian, k_language_suffix_spanish};
-use blf_lib::blf::{get_blf_file_hash, BlfFile, BlfFileBuilder};
-use blf_lib::blf::chunks::{find_chunk_in_file, BlfChunk};
-use blf_lib::blf::versions::haloonline::v1_106708_cert_ms23___release::{s_blf_chunk_hopper_description_table, s_blf_chunk_matchmaking_tips, s_blf_chunk_message_of_the_day, s_blf_chunk_message_of_the_day_popup, s_blf_chunk_network_configuration, s_blf_chunk_packed_game_variant, s_blf_chunk_packed_map_variant, s_blf_chunk_game_set, s_blf_chunk_author};
-use crate::console::console_task;
-use regex::Regex;
 use tempdir::TempDir;
 use tokio::runtime;
 use tokio::sync::Mutex;
 use tokio::task::JoinHandle;
-use blf_lib::blam::common::memory::crc::crc32;
-use blf_lib::blam::common::memory::secure_signature::s_network_http_request_hash;
-use blf_lib::blam::halo3::v12070_08_09_05_2031_halo3_ship::game::game_engine_variant::c_game_variant;
-use blf_lib::blam::halo3::v12070_08_09_05_2031_halo3_ship::saved_games::scenario_map_variant::c_map_variant;
-use blf_lib::blf::versions::haloonline::v1_106708_cert_ms23___release::s_blf_chunk_hopper_configuration_table;
-use blf_lib::blf::versions::haloonline::v1_106708_cert_ms23___release::{s_blf_chunk_banhammer_messages, s_blf_chunk_online_file_manifest};
-use blf_lib::blf::versions::haloonline::v1_106708_cert_ms23___release::{s_blf_chunk_end_of_file, s_blf_chunk_game_set_entry, s_blf_chunk_map_manifest, s_blf_chunk_start_of_file};
-use blf_lib::io::{read_file_to_string, read_json_file, write_json_file};
-use blf_lib::result::{BLFLibError, BLFLibResult};
-use blf_lib::types::c_string::StaticString;
-use crate::title_storage::haloonline::v1_106708_cert_ms23___release::title_storage_config::{get_hopper_id_from_hopper_folder_name, matchmaking_hopper_category_configuration_and_descriptions};
-use crate::title_storage::haloonline::v1_106708_cert_ms23___release::title_storage_output::hopper_directory_name_max_length;
 
 title_converter! (
     #[Title("Halo: Online")]
@@ -65,9 +65,9 @@ lazy_static! {
 }
 
 mod title_storage_output {
+    use crate::build_path;
     use blf_lib::blf::chunks::BlfChunk;
     use blf_lib::blf::versions::haloonline::v1_106708_cert_ms23___release::{s_blf_chunk_game_set, s_blf_chunk_hopper_configuration_table, s_blf_chunk_hopper_description_table, s_blf_chunk_network_configuration, s_blf_chunk_online_file_manifest, s_blf_chunk_packed_game_variant, s_blf_chunk_packed_map_variant};
-    use crate::build_path;
 
     // applies to the root folder, eg "default_hoppers"
     pub const hopper_directory_name_max_length: usize = 64;
@@ -237,14 +237,14 @@ mod title_storage_output {
 }
 
 mod title_storage_config {
-    use std::collections::HashMap;
-    use regex::Regex;
-    use serde::{Deserialize, Serialize};
-    use blf_lib::OPTION_TO_RESULT;
-    use blf_lib::result::BLFLibResult;
     use crate::build_path;
     use crate::io::ordered_map;
     use blf_lib::blf::versions::haloonline::v1_106708_cert_ms23___release::{c_hopper_configuration, s_game_hopper_custom_category};
+    use blf_lib::result::BLFLibResult;
+    use blf_lib::OPTION_TO_RESULT;
+    use regex::Regex;
+    use serde::{Deserialize, Serialize};
+    use std::collections::HashMap;
 
     pub const banhammer_messages_folder_name: &str = "banhammer_messages";
     pub fn banhammer_messages_file_path(config_folder: &String, language_code: &str) -> String {
@@ -1456,7 +1456,9 @@ impl v1_106708_cert_ms23___release {
                                 )
                             );
 
-                            let game_variant_json: c_game_variant = serde_json::from_str(&json).unwrap();
+                            let game_variant_json: c_game_variant = serde_json::from_str(&json)
+                                .map_err(|e| format!("failed to build {game_variant_file_name}, {}", e.to_string()))
+                                .unwrap();
 
                             BlfFileBuilder::new()
                                 .add_chunk(s_blf_chunk_start_of_file::new("game var"))
