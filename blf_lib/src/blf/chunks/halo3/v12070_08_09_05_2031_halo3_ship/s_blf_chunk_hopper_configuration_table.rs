@@ -330,7 +330,7 @@ impl BinWrite for s_blf_chunk_hopper_configuration_table {
         for i in 0..self.hopper_configuration_count as usize {
             let configuration = &self.hopper_configurations[i];
             bitstream.write_string_utf8(&configuration.hopper_name.get_string()?, 16)?;
-            bitstream.write_raw(&configuration.game_set_hash, 20)?;
+            bitstream.write_raw(&configuration.game_set_hash, 0xA0)?;
             bitstream.write_integer(configuration.hopper_identifier as u32, 16)?;
             bitstream.write_integer(configuration.hopper_category as u32, 16)?;
             bitstream.write_integer(configuration.hopper_type as u32, 2)?;

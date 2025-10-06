@@ -1,6 +1,3 @@
-pub mod variant_importer;
-pub mod variant_exporter;
-
 use std::collections::{HashMap, HashSet, VecDeque};
 use std::error::Error;
 use std::fs;
@@ -19,7 +16,7 @@ use lazy_static::lazy_static;
 use blf_lib::blam::halo3::v12070_08_09_05_2031_halo3_ship::cseries::language::{get_language_string, k_language_suffix_chinese_traditional, k_language_suffix_english, k_language_suffix_french, k_language_suffix_german, k_language_suffix_italian, k_language_suffix_japanese, k_language_suffix_korean, k_language_suffix_mexican, k_language_suffix_portuguese, k_language_suffix_spanish};
 use blf_lib::blf::{get_blf_file_hash, BlfFile, BlfFileBuilder};
 use blf_lib::blf::chunks::{find_chunk_in_file, BlfChunk};
-use blf_lib::blf::versions::halo3::v12070_08_09_05_2031_halo3_ship::{s_blf_chunk_hopper_description_table, s_blf_chunk_matchmaking_tips, s_blf_chunk_message_of_the_day, s_blf_chunk_message_of_the_day_popup, s_blf_chunk_network_configuration, s_blf_chunk_packed_game_variant, s_blf_chunk_packed_map_variant, s_blf_chunk_game_set, s_blf_chunk_author};
+use blf_lib::blf::versions::halo3::v11856_07_08_20_2332_release::{s_blf_chunk_hopper_description_table, s_blf_chunk_matchmaking_tips, s_blf_chunk_message_of_the_day, s_blf_chunk_network_configuration, s_blf_chunk_packed_game_variant, s_blf_chunk_packed_map_variant, s_blf_chunk_game_set, s_blf_chunk_author};
 use crate::console::console_task;
 use regex::Regex;
 use tempdir::TempDir;
@@ -30,21 +27,19 @@ use blf_lib::blam::common::memory::crc::crc32;
 use blf_lib::blam::common::memory::secure_signature::s_network_http_request_hash;
 use blf_lib::blam::halo3::v12070_08_09_05_2031_halo3_ship::game::game_engine_variant::c_game_variant;
 use blf_lib::blam::halo3::v12070_08_09_05_2031_halo3_ship::saved_games::scenario_map_variant::c_map_variant;
-use blf_lib::blf::versions::halo3::v12070_08_09_05_2031_halo3_ship::s_blf_chunk_hopper_configuration_table;
+use blf_lib::blf::versions::halo3::v11856_07_08_20_2332_release::s_blf_chunk_hopper_configuration_table;
 use blf_lib::blf::versions::halo3::v11855_07_08_20_2317_halo3_ship::{s_blf_chunk_banhammer_messages, s_blf_chunk_online_file_manifest};
-use blf_lib::blf::versions::halo3::v12070_08_09_05_2031_halo3_ship::{s_blf_chunk_end_of_file, s_blf_chunk_game_set_entry, s_blf_chunk_map_manifest, s_blf_chunk_start_of_file};
+use blf_lib::blf::versions::halo3::v11856_07_08_20_2332_release::{s_blf_chunk_end_of_file, s_blf_chunk_game_set_entry, s_blf_chunk_map_manifest, s_blf_chunk_start_of_file};
 use blf_lib::io::{read_file_to_string, read_json_file, write_json_file};
 use blf_lib::result::{BLFLibError, BLFLibResult};
 use blf_lib::types::c_string::StaticString;
-use crate::title_storage::halo3::v12070_08_09_05_2031_halo3_ship::title_storage_config::{get_hopper_id_from_hopper_folder_name, matchmaking_hopper_category_configuration_and_descriptions};
-use crate::title_storage::halo3::v12070_08_09_05_2031_halo3_ship::title_storage_output::hopper_directory_name_max_length;
-
-pub const k_build_string_halo3_ship_12070: &str = "12070.08.09.05.2031.halo3_ship";
+use crate::title_storage::halo3::v11856_07_08_20_2332_release::title_storage_config::{get_hopper_id_from_hopper_folder_name, matchmaking_hopper_category_configuration_and_descriptions};
+use crate::title_storage::halo3::v11856_07_08_20_2332_release::title_storage_output::hopper_directory_name_max_length;
 
 title_converter! (
     #[Title("Halo 3")]
-    #[Build("12070.08.09.05.2031.halo3_ship")]
-    pub struct v12070_08_09_05_2031_halo3_ship {}
+    #[Build("11856.07.08.20.2332.release")]
+    pub struct v11856_07_08_20_2332_release {}
 );
 
 // Halo 3's xex supports 12 languages, but only 10 were released.
@@ -70,42 +65,9 @@ lazy_static! {
     static ref config_rsa_signature_file_map_id_regex: Regex = Regex::new(r"^[0-9]{1,}").unwrap();
 }
 
-// TODO: Move me
-pub fn get_map_budget(map_id: u32) -> f32 {
-    match map_id {
-        30 => 700.0,
-        300 => 500.0,
-        310 => 800.0,
-        320 => 500.0,
-        330 => 500.0,
-        340 => 600.0,
-        350 => 500.0,
-        360 => 500.0,
-        380 => 600.0,
-        390 => 700.0,
-        400 => 700.0,
-        410 => 800.0,
-        440 => 750.0,
-        470 => 800.0,
-        480 => 700.0,
-        490 => 550.0,
-        500 => 700.0,
-        520 => 600.0,
-        580 => 800.0,
-        590 => 550.0,
-        600 => 500.0,
-        720 => 750.0,
-        730 => 1500.0,
-        740 => 600.0,
-        _ => {
-            panic!("Unknown map ID {}", map_id);
-        }
-    }
-}
-
 mod title_storage_output {
     use blf_lib::blf::chunks::BlfChunk;
-    use blf_lib::blf::versions::halo3::v12070_08_09_05_2031_halo3_ship::{s_blf_chunk_game_set, s_blf_chunk_hopper_configuration_table, s_blf_chunk_hopper_description_table, s_blf_chunk_network_configuration, s_blf_chunk_online_file_manifest, s_blf_chunk_packed_game_variant, s_blf_chunk_packed_map_variant};
+    use blf_lib::blf::versions::halo3::v11856_07_08_20_2332_release::{s_blf_chunk_game_set, s_blf_chunk_hopper_configuration_table, s_blf_chunk_hopper_description_table, s_blf_chunk_network_configuration, s_blf_chunk_online_file_manifest, s_blf_chunk_packed_game_variant, s_blf_chunk_packed_map_variant};
     use crate::build_path;
 
     // applies to the root folder, eg "default_hoppers"
@@ -178,50 +140,21 @@ mod title_storage_output {
         )
     }
 
-    pub fn motd_file_name(blue: bool) -> String {
-        if blue { "blue_motd.bin".to_string() }
-        else { "motd.bin".to_string() }
-    }
-    pub fn motd_file_path(hoppers_path: &String, language_code: &str, blue: bool) -> String {
+    pub const motd_file_name: &str = "motd.bin";
+    pub fn motd_file_path(hoppers_path: &String, language_code: &str) -> String {
         build_path!(
             hoppers_path,
             language_code,
-            motd_file_name(blue)
+            motd_file_name
         )
     }
 
-    pub fn motd_image_file_name(blue: bool) -> String {
-        if blue { "blue_motd_image.jpg".to_string() }
-        else { "motd_image.jpg".to_string() }
-    }
-    pub fn motd_image_file_path(hoppers_path: &String, language_code: &str, blue: bool) -> String {
+    pub const motd_image_file_name: &str = "motd_image.jpg";
+    pub fn motd_image_file_path(hoppers_path: &String, language_code: &str) -> String {
         build_path!(
             hoppers_path,
             language_code,
-            motd_image_file_name(blue)
-        )
-    }
-
-    pub fn motd_popup_file_name(blue: bool) -> String {
-        if blue { "blue_motd_popup.bin".to_string() }
-        else { "motd_popup.bin".to_string() }
-    }
-    pub fn motd_popup_file_path(hoppers_path: &String, language_code: &str, blue: bool) -> String {
-        build_path!(
-            hoppers_path,
-            language_code,
-            motd_popup_file_name(blue)
-        )
-    }
-    pub fn motd_popup_image_file_name(blue: bool) -> String {
-        if blue { "blue_motd_popup_image.jpg".to_string() }
-        else { "motd_popup_image.jpg".to_string() }
-    }
-    pub fn motd_popup_image_file_path(hoppers_path: &String, language_code: &str, blue: bool) -> String {
-        build_path!(
-            hoppers_path,
-            language_code,
-            motd_popup_image_file_name(blue)
+            motd_image_file_name
         )
     }
 
@@ -283,8 +216,7 @@ mod title_storage_config {
     use blf_lib::result::BLFLibResult;
     use crate::build_path;
     use crate::io::ordered_map;
-    use blf_lib::blf::chunks::BlfChunk;
-    use blf_lib::blf::versions::halo3::v12070_08_09_05_2031_halo3_ship::{c_hopper_configuration, s_game_hopper_custom_category};
+    use blf_lib::blf::versions::halo3::v11856_07_08_20_2332_release::{c_hopper_configuration, s_game_hopper_custom_category};
 
     pub const banhammer_messages_folder_name: &str = "banhammer_messages";
     pub fn banhammer_messages_file_path(config_folder: &String, language_code: &str) -> String {
@@ -313,44 +245,19 @@ mod title_storage_config {
         )
     }
 
-    pub fn motd_folder_name(blue: bool) -> String {
-        if blue { "motd_mythic".into() }
-        else { "motd".into() }
-    }
-
-    pub fn motd_file_path(config_folder: &String, language_code: &str, blue: bool) -> String {
+    pub const motd_folder_name: &str = "motd";
+    pub fn motd_file_path(config_folder: &String, language_code: &str) -> String {
         build_path!(
             config_folder,
-            motd_folder_name(blue),
+            motd_folder_name,
             format!("{language_code}.txt")
         )
     }
 
-    pub fn motd_image_file_path(config_folder: &String, language_code: &str, blue: bool) -> String {
+    pub fn motd_image_file_path(config_folder: &String, language_code: &str) -> String {
         build_path!(
             config_folder,
-            motd_folder_name(blue),
-            format!("{language_code}.jpg")
-        )
-    }
-
-    pub fn motd_popup_folder_name(blue: bool) -> String {
-        if blue { "popup_mythic".into() }
-        else { "popup".into() }
-    }
-
-    pub fn motd_popup_file_path(config_folder: &String, language_code: &str, blue: bool) -> String {
-        build_path!(
-            config_folder,
-            motd_popup_folder_name(blue),
-            format!("{language_code}.json")
-        )
-    }
-
-    pub fn motd_popup_image_file_path(config_folder: &String, language_code: &str, blue: bool) -> String {
-        build_path!(
-            config_folder,
-            motd_popup_folder_name(blue),
+            motd_folder_name,
             format!("{language_code}.jpg")
         )
     }
@@ -466,7 +373,7 @@ mod title_storage_config {
     }
 }
 
-impl TitleConverter for v12070_08_09_05_2031_halo3_ship {
+impl TitleConverter for v11856_07_08_20_2332_release {
     fn build_blfs(&mut self, config_path: &String, blfs_path: &String) {
         let start_time = SystemTime::now();
 
@@ -513,7 +420,6 @@ impl TitleConverter for v12070_08_09_05_2031_halo3_ship {
                 Self::build_blf_banhammer_messages(&hopper_config_path, &hopper_blfs_path)?;
                 Self::build_blf_matchmaking_tips(&hopper_config_path, &hopper_blfs_path)?;
                 Self::build_blf_motds(&hopper_config_path, &hopper_blfs_path)?;
-                Self::build_blf_motd_popups(&hopper_config_path, &hopper_blfs_path)?;
                 Self::build_blf_map_manifest(&hopper_config_path, &hopper_blfs_path)?;
                 Self::build_blf_game_variants(&hopper_config_path, &hopper_blfs_path, &build_temp_dir_path, &game_sets, &mut game_variant_hashes);
                 Self::build_blf_map_variants(&hopper_config_path, &hopper_blfs_path, &build_temp_dir_path, &game_sets, &mut map_variant_hashes, &mut map_variant_map_ids);
@@ -563,7 +469,6 @@ impl TitleConverter for v12070_08_09_05_2031_halo3_ship {
                 Self::build_config_banhammer_messages(&hoppers_blf_path, &hoppers_config_path)?;
                 Self::build_config_matchmaking_tips(&hoppers_blf_path, &hoppers_config_path)?;
                 Self::build_config_motds(&hoppers_blf_path, &hoppers_config_path)?;
-                Self::build_config_motd_popups(&hoppers_blf_path, &hoppers_config_path)?;
                 Self::build_config_map_variants(&hoppers_blf_path, &hoppers_config_path)?;
                 Self::build_config_game_variants(&hoppers_blf_path, &hoppers_config_path)?;
                 Self::build_config_game_sets(&hoppers_blf_path, &hoppers_config_path)?;
@@ -580,7 +485,7 @@ impl TitleConverter for v12070_08_09_05_2031_halo3_ship {
     }
 }
 
-impl v12070_08_09_05_2031_halo3_ship {
+impl v11856_07_08_20_2332_release {
     fn build_config_banhammer_messages(hoppers_blf_path: &String, hoppers_config_path: &String) -> BLFLibResult {
         let mut task = console_task::start("Converting Banhammer Messages");
 
@@ -645,130 +550,116 @@ impl v12070_08_09_05_2031_halo3_ship {
     }
 
     fn build_config_motds(hoppers_blf_path: &String, hoppers_config_path: &String) -> BLFLibResult {
-        for blue in [false, true] {
-            let mut task = console_task::start(
-                if blue { "Converting Mythic MOTDs" } else { "Converting MOTDs" }
+        let mut task = console_task::start("Converting MOTDs");
+
+        // BLFs
+        for language_code in k_language_suffixes {
+            let blf_file_path = title_storage_output::motd_file_path(
+                hoppers_blf_path,
+                language_code,
             );
 
-            // BLFs
-            for language_code in k_language_suffixes {
-                let blf_file_path = title_storage_output::motd_file_path(
+            if !exists(&blf_file_path)? {
+                task.add_warning(format!(
+                    "No {} MOTD is present.",
+                    get_language_string(language_code),
+                ));
+
+                continue;
+            }
+
+            let motd = find_chunk_in_file::<s_blf_chunk_message_of_the_day>(
+                title_storage_output::motd_file_path(
                     hoppers_blf_path,
                     language_code,
-                    blue
-                );
+                )
+            )?;
 
-                if !exists(&blf_file_path)? {
-                    task.add_warning(format!(
-                        "No {} MOTD is present.",
-                        get_language_string(language_code),
-                    ));
-
-                    continue;
-                }
-
-                let motd = find_chunk_in_file::<s_blf_chunk_message_of_the_day>(
-                    title_storage_output::motd_file_path(
-                        hoppers_blf_path,
-                        language_code,
-                        blue,
-                    )
-                )?;
-
-                write_text_file(
-                    title_storage_config::motd_file_path(
-                        hoppers_config_path,
-                        language_code,
-                        blue,
-                    ),
-                    motd.get_message()
-                )?;
-
-                let jpg_file_path = title_storage_output::motd_image_file_path(
-                    hoppers_blf_path,
-                    language_code,
-                    blue
-                );
-
-                let output_path = title_storage_config::motd_image_file_path(
+            write_text_file(
+                title_storage_config::motd_file_path(
                     hoppers_config_path,
                     language_code,
-                    blue
-                );
+                ),
+                motd.get_message()
+            )?;
 
-                if !exists(&jpg_file_path)? {
-                    task.add_warning(format!(
-                        "No {} MOTD image is present.",
-                        get_language_string(language_code),
-                    ));
-
-                    continue;
-                }
-
-                fs::copy(jpg_file_path, output_path)?;
-            }
-
-            task.complete();
-        }
-
-        やった!()
-
-    }
-
-    fn build_config_motd_popups(hoppers_blf_path: &String, hoppers_config_path: &String) -> BLFLibResult {
-        for blue in [false, true] {
-            let mut task = console_task::start(
-                if blue { "Converting Mythic MOTD Popups" } else { "Converting MOTD Popups" }
+            let jpg_file_path = title_storage_output::motd_image_file_path(
+                hoppers_blf_path,
+                language_code,
             );
 
-            // BLFs
-            for language_code in k_language_suffixes {
-                let blf_file_path = title_storage_output::motd_popup_file_path(
-                    hoppers_blf_path,
-                    language_code,
-                    blue
-                );
+            let output_path = title_storage_config::motd_image_file_path(
+                hoppers_config_path,
+                language_code,
+            );
 
-                if !exists(&blf_file_path)? {
-                    task.add_warning(format!(
-                        "No {} MOTD Popup is present.",
-                        get_language_string(language_code),
-                    ));
+            if !exists(&jpg_file_path)? {
+                task.add_warning(format!(
+                    "No {} MOTD image is present.",
+                    get_language_string(language_code),
+                ));
 
-                    continue;
-                }
-
-                write_json_file(
-                    &find_chunk_in_file::<s_blf_chunk_message_of_the_day_popup>(blf_file_path)?,
-                    title_storage_config::motd_popup_file_path(
-                        hoppers_config_path,
-                        language_code,
-                        blue
-                    )
-                )?;
-
-                let image_path = title_storage_output::motd_popup_image_file_path(
-                    hoppers_blf_path,
-                    language_code,
-                    blue
-                );
-
-                if exists(&image_path)? {
-                    fs::copy(&image_path, title_storage_config::motd_popup_image_file_path(
-                        hoppers_config_path,
-                        language_code,
-                        blue
-                    ))?;
-                }
-                else {
-                    task.add_warning(format!("No image was found for {} Popup", language_code));
-                }
+                continue;
             }
 
-            task.complete();
+            fs::copy(jpg_file_path, output_path)?;
+        }
+        // BLFs
+        for language_code in k_language_suffixes {
+            let blf_file_path = title_storage_output::motd_file_path(
+                hoppers_blf_path,
+                language_code,
+            );
+
+            if !exists(&blf_file_path)? {
+                task.add_warning(format!(
+                    "No {} MOTD is present.",
+                    get_language_string(language_code),
+                ));
+
+                continue;
+            }
+
+            let motd = find_chunk_in_file::<s_blf_chunk_message_of_the_day>(
+                title_storage_output::motd_file_path(
+                    hoppers_blf_path,
+                    language_code,
+                )
+            )?;
+
+            write_text_file(
+                title_storage_config::motd_file_path(
+                    hoppers_config_path,
+                    language_code,
+                ),
+                motd.get_message()
+            )?;
+
+            let jpg_file_path = title_storage_output::motd_image_file_path(
+                hoppers_blf_path,
+                language_code,
+            );
+
+            let output_path = title_storage_config::motd_image_file_path(
+                hoppers_config_path,
+                language_code,
+            );
+
+            if !exists(&jpg_file_path)? {
+                task.add_warning(format!(
+                    "No {} MOTD image is present.",
+                    get_language_string(language_code),
+                ));
+
+                continue;
+            }
+
+            fs::copy(jpg_file_path, output_path)?;
         }
 
-        やった!()
+
+        やった!(task)
+
     }
 
     fn build_config_map_variants(hoppers_blf_path: &String, hoppers_config_path: &String) -> BLFLibResult {
@@ -1137,7 +1028,7 @@ impl v12070_08_09_05_2031_halo3_ship {
 
             BlfFileBuilder::new()
                 .add_chunk(s_blf_chunk_start_of_file::default())
-                .add_chunk(s_blf_chunk_author::for_build::<v12070_08_09_05_2031_halo3_ship>())
+                .add_chunk(s_blf_chunk_author::for_build::<v11856_07_08_20_2332_release>())
                 .add_chunk(bhms)
                 .add_chunk(s_blf_chunk_end_of_file::default())
                 .write_file(title_storage_output::banhammer_messages_file_path(hoppers_blf_folder, language_code))?;
@@ -1161,7 +1052,7 @@ impl v12070_08_09_05_2031_halo3_ship {
 
             BlfFileBuilder::new()
                 .add_chunk(s_blf_chunk_start_of_file::default())
-                .add_chunk(s_blf_chunk_author::for_build::<v12070_08_09_05_2031_halo3_ship>())
+                .add_chunk(s_blf_chunk_author::for_build::<v11856_07_08_20_2332_release>())
                 .add_chunk(s_blf_chunk_matchmaking_tips::create(matchmaking_tips)?)
                 .add_chunk(s_blf_chunk_end_of_file::default())
                 .write_file(title_storage_output::matchmaking_tips_file_path(
@@ -1178,141 +1069,63 @@ impl v12070_08_09_05_2031_halo3_ship {
         hoppers_blf_folder: &String,
     ) -> BLFLibResult
     {
-        for blue in [false, true] {
-            let mut task = console_task::start(
-                if blue { "Building Mythic MOTDs" } else { "Building MOTDs" }
+        let mut task = console_task::start("Building MOTDs");
+
+        for language_code in k_language_suffixes {
+            let motd_config_path = title_storage_config::motd_file_path(
+                hoppers_config_folder,
+                language_code,
             );
 
-            for language_code in k_language_suffixes {
-                let motd_config_path = title_storage_config::motd_file_path(
-                    hoppers_config_folder,
-                    language_code,
-                    blue
-                );
-
-                if !exists(&motd_config_path)? {
-                    task.add_warning(format!(
-                        "No {} MOTD is present.",
-                        get_language_string(language_code),
-                    ));
-                    continue;
-                }
-
-                let motd = s_blf_chunk_message_of_the_day::new(read_file_to_string(
-                    &motd_config_path
-                )?);
-
-                BlfFileBuilder::new()
-                    .add_chunk(s_blf_chunk_start_of_file::default())
-                    .add_chunk(s_blf_chunk_author::for_build::<v12070_08_09_05_2031_halo3_ship>())
-                    .add_chunk(motd)
-                    .add_chunk(s_blf_chunk_end_of_file::default())
-                    .write_file(title_storage_output::motd_file_path(hoppers_blf_folder, language_code, blue))?;
-
-                // copy images.
-                let image_source = title_storage_config::motd_image_file_path(
-                    hoppers_config_folder,
-                    language_code,
-                    blue
-                );
-
-                let image_valid = validate_jpeg(
-                    &image_source,
-                    title_storage_output::motd_image_width,
-                    title_storage_output::motd_image_height,
-                    Some(title_storage_output::motd_image_max_size)
-                );
-
-                if image_valid.is_err() {
-                    task.add_warning(format!(
-                        "{} MOTD has an invalid Image: {}",
-                        get_language_string(language_code),
-                        image_valid.unwrap_err()
-                    ));
-
-                    continue;
-                }
-
-                fs::copy(image_source, title_storage_output::motd_image_file_path(
-                    hoppers_blf_folder,
-                    language_code,
-                    blue
-                ))?;
+            if !exists(&motd_config_path)? {
+                task.add_warning(format!(
+                    "No {} MOTD is present.",
+                    get_language_string(language_code),
+                ));
+                continue;
             }
 
-            task.complete();
-        }
-        Ok(())
-    }
+            let motd = s_blf_chunk_message_of_the_day::new(read_file_to_string(
+                &motd_config_path
+            )?);
 
-    fn build_blf_motd_popups(
-        hoppers_config_folder: &String,
-        hoppers_blf_folder: &String,
-    ) -> BLFLibResult {
-        for blue in [false, true] {
-            let mut task = console_task::start(
-                if blue { "Building Mythic MOTD Popups" } else { "Building MOTD Popups" }
+            BlfFileBuilder::new()
+                .add_chunk(s_blf_chunk_start_of_file::default())
+                .add_chunk(s_blf_chunk_author::for_build::<v11856_07_08_20_2332_release>())
+                .add_chunk(motd)
+                .add_chunk(s_blf_chunk_end_of_file::default())
+                .write_file(title_storage_output::motd_file_path(hoppers_blf_folder, language_code))?;
+
+            // copy images.
+            let image_source = title_storage_config::motd_image_file_path(
+                hoppers_config_folder,
+                language_code,
             );
 
-            for language_code in k_language_suffixes {
-                let motd_popup_config_path = title_storage_config::motd_popup_file_path(
-                    hoppers_config_folder,
-                    language_code,
-                    blue
-                );
+            let image_valid = validate_jpeg(
+                &image_source,
+                title_storage_output::motd_image_width,
+                title_storage_output::motd_image_height,
+                Some(title_storage_output::motd_image_max_size)
+            );
 
-                if !exists(&motd_popup_config_path)? {
-                    task.add_warning(format!(
-                        "No {} MOTD Popup is present.",
-                        get_language_string(language_code),
-                    ));
-                    continue;
-                }
+            if image_valid.is_err() {
+                task.add_warning(format!(
+                    "{} MOTD has an invalid Image: {}",
+                    get_language_string(language_code),
+                    image_valid.unwrap_err()
+                ));
 
-                let mtdp = read_json_file::<s_blf_chunk_message_of_the_day_popup>(
-                    &motd_popup_config_path
-                )?;
-
-                BlfFileBuilder::new()
-                    .add_chunk(s_blf_chunk_start_of_file::default())
-                    .add_chunk(s_blf_chunk_author::for_build::<v12070_08_09_05_2031_halo3_ship>())
-                    .add_chunk(mtdp)
-                    .add_chunk(s_blf_chunk_end_of_file::default())
-                    .write_file(title_storage_output::motd_popup_file_path(hoppers_blf_folder, language_code, blue))?;
-
-                // copy images.
-                let image_source = title_storage_config::motd_popup_image_file_path(
-                    hoppers_config_folder,
-                    language_code,
-                    blue
-                );
-
-                let image_valid = validate_jpeg(
-                    &image_source,
-                    title_storage_output::motd_popup_image_width,
-                    title_storage_output::motd_popup_image_height,
-                    Some(title_storage_output::motd_popup_image_max_size)
-                );
-
-                if image_valid.is_err() {
-                    task.add_warning(format!(
-                        "{} MOTD Popup has an invalid Image: {}",
-                        get_language_string(language_code),
-                        image_valid.unwrap_err()
-                    ));
-
-                    continue;
-                }
-
-                fs::copy(image_source, title_storage_output::motd_popup_image_file_path(
-                    hoppers_blf_folder,
-                    language_code,
-                    blue
-                ))?;
+                continue;
             }
 
-            task.complete();
+            fs::copy(image_source, title_storage_output::motd_image_file_path(
+                hoppers_blf_folder,
+                language_code,
+            ))?;
         }
+
+        task.complete();
         Ok(())
     }
 
@@ -1347,7 +1160,7 @@ impl v12070_08_09_05_2031_halo3_ship {
 
         BlfFileBuilder::new()
             .add_chunk(s_blf_chunk_start_of_file::new("rsa manifest"))
-            .add_chunk(s_blf_chunk_author::for_build::<v12070_08_09_05_2031_halo3_ship>())
+            .add_chunk(s_blf_chunk_author::for_build::<v11856_07_08_20_2332_release>())
             .add_chunk(map_manifest)
             .add_chunk(s_blf_chunk_end_of_file::default())
             .write_file(title_storage_output::rsa_manifest_file_path(
@@ -1499,7 +1312,7 @@ impl v12070_08_09_05_2031_halo3_ship {
 
                             BlfFileBuilder::new()
                                 .add_chunk(s_blf_chunk_start_of_file::new("game var"))
-                                .add_chunk(s_blf_chunk_author::for_build::<v12070_08_09_05_2031_halo3_ship>())
+                                .add_chunk(s_blf_chunk_author::for_build::<v11856_07_08_20_2332_release>())
                                 .add_chunk(s_blf_chunk_packed_game_variant::create(game_variant))
                                 .add_chunk(s_blf_chunk_end_of_file::default())
                                 .write_file(&game_variant_blf_path)
@@ -1796,7 +1609,7 @@ impl v12070_08_09_05_2031_halo3_ship {
 
             BlfFileBuilder::new()
                 .add_chunk(s_blf_chunk_start_of_file::new("game set"))
-                .add_chunk(s_blf_chunk_author::for_build::<v12070_08_09_05_2031_halo3_ship>())
+                .add_chunk(s_blf_chunk_author::for_build::<v11856_07_08_20_2332_release>())
                 .add_chunk(gset)
                 .add_chunk(s_blf_chunk_end_of_file::default())
                 .write_file(title_storage_output::game_set_file_path(
@@ -1935,7 +1748,7 @@ impl v12070_08_09_05_2031_halo3_ship {
 
             BlfFileBuilder::new()
                 .add_chunk(s_blf_chunk_start_of_file::default())
-                .add_chunk(s_blf_chunk_author::for_build::<v12070_08_09_05_2031_halo3_ship>())
+                .add_chunk(s_blf_chunk_author::for_build::<v11856_07_08_20_2332_release>())
                 .add_chunk(mhdf)
                 .add_chunk(s_blf_chunk_end_of_file::default())
                 .write_file(title_storage_output::hopper_descriptions_file_path(
@@ -1946,7 +1759,7 @@ impl v12070_08_09_05_2031_halo3_ship {
 
         BlfFileBuilder::new()
             .add_chunk(s_blf_chunk_start_of_file::new("hopper config"))
-            .add_chunk(s_blf_chunk_author::for_build::<v12070_08_09_05_2031_halo3_ship>())
+            .add_chunk(s_blf_chunk_author::for_build::<v11856_07_08_20_2332_release>())
             .add_chunk(mhcf)
             .add_chunk(s_blf_chunk_end_of_file::default())
             .write_file(title_storage_output::matchmaking_hopper_file_path(
@@ -1970,7 +1783,7 @@ impl v12070_08_09_05_2031_halo3_ship {
 
         BlfFileBuilder::new()
             .add_chunk(s_blf_chunk_start_of_file::new("halo3 net config"))
-            .add_chunk(s_blf_chunk_author::for_build::<v12070_08_09_05_2031_halo3_ship>())
+            .add_chunk(s_blf_chunk_author::for_build::<v11856_07_08_20_2332_release>())
             .add_chunk(netc)
             .add_chunk(s_blf_chunk_end_of_file::default())
             .write_file(title_storage_output::network_configuration_file_path(
