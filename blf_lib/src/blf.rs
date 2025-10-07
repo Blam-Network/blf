@@ -126,7 +126,7 @@ pub fn get_blf_file_hash(path: String) -> BLFLibResult<s_network_http_request_ha
     s_network_http_request_hash::try_from(hasher.finalize().to_vec())
 }
 
-pub fn get_buffer_hash(data: &Vec<u8>) -> BLFLibResult<s_network_http_request_hash> {
+pub fn get_buffer_hash(data: &[u8]) -> BLFLibResult<s_network_http_request_hash> {
     let mut hasher = Sha1::new();
     Update::update(&mut hasher, &k_gen3_salt);
     Update::update(&mut hasher, &data);

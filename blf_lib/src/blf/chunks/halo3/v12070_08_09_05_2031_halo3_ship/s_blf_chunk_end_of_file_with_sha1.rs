@@ -31,7 +31,7 @@ impl BlfChunkHooks for s_blf_chunk_end_of_file_with_sha1 {
         Ok(())
     }
 
-    fn after_read(&mut self, previously_read: &Vec<u8>) -> BLFLibResult {
+    fn after_read(&mut self, previously_read: &[u8]) -> BLFLibResult {
         let expected_hash = &self.sha1;
         let actual_hash = &get_buffer_hash(&previously_read)?;
         assert_ok!(actual_hash == expected_hash, "s_blf_chunk_end_of_file_with_sha1 has an invalid sha1");

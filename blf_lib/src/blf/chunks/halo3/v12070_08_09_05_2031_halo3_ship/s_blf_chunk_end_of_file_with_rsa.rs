@@ -28,10 +28,10 @@ impl BlfChunkHooks for s_blf_chunk_end_of_file_with_rsa {
         self.file_size = previously_written.len() as u32;
 
         // We don't have any private keys to do this with!
-        Err("s_blf_chunk_end_of_file_with_sha1 does not support write yet.".into())
+        Err("s_blf_chunk_end_of_file_with_rsa does not support write yet.".into())
     }
 
-    fn after_read(&mut self, previously_read: &Vec<u8>) -> BLFLibResult {
+    fn after_read(&mut self, previously_read: &[u8]) -> BLFLibResult {
         // TODO: Validate
         assert_ok!(self.file_size == previously_read.len() as u32, "_eof has an invalid size");
         Ok(())

@@ -18,12 +18,12 @@ pub trait DynamicBlfChunk {
 
 pub trait BlfChunkHooks {
     fn before_write(&mut self, _previously_written: &Vec<u8>) -> BLFLibResult { Ok(()) }
-    fn after_read(&mut self, _previously_read: &Vec<u8>) -> BLFLibResult { Ok(()) }
+    fn after_read(&mut self, _previously_read: &[u8]) -> BLFLibResult { Ok(()) }
 }
 
 pub trait SerializableBlfChunk: DynamicBlfChunk + Any + Send + Sync {
     fn encode_body(&mut self, previously_written: &Vec<u8>) -> BLFLibResult<Vec<u8>>;
-    fn decode_body(&mut self, buffer: &[u8], previously_read: &Vec<u8>) -> BLFLibResult;
+    fn decode_body(&mut self, buffer: &[u8], previously_read: &[u8]) -> BLFLibResult;
 
     fn write(&mut self, previously_written: &Vec<u8>) -> BLFLibResult<Vec<u8>> {
         let mut encoded_chunk = self.encode_body(previously_written)?;
@@ -53,7 +53,7 @@ impl<T: DynamicBlfChunk + BinRead + BinWrite + Clone + Any + BlfChunkHooks + Sen
         Ok(writer.get_ref().clone())
     }
 
-    fn decode_body(&mut self, buffer: &[u8], previously_read: &Vec<u8>) -> BLFLibResult where for<'b> <T as BinRead>::Args<'b>: Default {
+    fn decode_body(&mut self, buffer: &[u8], previously_read: &[u8]) -> BLFLibResult where for<'b> <T as BinRead>::Args<'b>: Default {
         let mut reader = std::io::Cursor::new(buffer);
 
         self.clone_from(&T::read_ne(&mut reader)?);
@@ -68,7 +68,7 @@ impl<T: DynamicBlfChunk + BinRead + BinWrite + Clone + Any + BlfChunkHooks + Sen
 }
 
 pub trait ReadableBlfChunk: BlfChunk + Sized + SerializableBlfChunk + Default {
-    fn read(buffer: Vec<u8>, header: Option<s_blf_header>, _previously_read: &Vec<u8>) -> BLFLibResult<Self> {
+    fn read(buffer: Vec<u8>, header: Option<s_blf_header>, _previously_read: &[u8]) -> BLFLibResult<Self> {
         let offset = if header.is_some() { 0 } else { s_blf_header::size() };
         let header = match header {
             None => s_blf_header::decode(buffer.as_slice())?,
@@ -76,7 +76,7 @@ pub trait ReadableBlfChunk: BlfChunk + Sized + SerializableBlfChunk + Default {
         };
         let end = (header.chunk_size as usize - s_blf_header::size()) - offset;
         let mut chunk = Self::default();
-        chunk.decode_body(&buffer[offset..end], _previously_read)?;
+        chunk.decode_body(&buffer[offset..end], _previously_read.as_ref())?;
 
         Ok(chunk)
     }

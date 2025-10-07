@@ -21,7 +21,6 @@ pub fn find_and_validate_eof(buffer: &[u8]) -> BLFLibResult {
     let mut cursor = Cursor::new(buffer);
     let mut header_bytes = [0u8; s_blf_header::size()];
     let mut header: s_blf_header;
-    let mut previously_read= Vec::<u8>::new();
 
     while cursor.read_exact(&mut header_bytes).is_ok() {
         header = s_blf_header::decode(&header_bytes)?;
@@ -29,12 +28,13 @@ pub fn find_and_validate_eof(buffer: &[u8]) -> BLFLibResult {
         if header.signature == chunk_signature::from_string("_eof") && header.version.major == 1 {
             cursor.read_exact(body_bytes.as_mut_slice())?;
             let authentication_type: u8 = body_bytes[4];
+            let mut chunk_position = (cursor.position() as usize) - body_bytes.len() - s_blf_header::size();
 
             match authentication_type {
-                0 => { s_blf_chunk_end_of_file::read(body_bytes.clone(), Some(header.clone()), &previously_read)?; }
-                1 => { s_blf_chunk_end_of_file_with_crc::read(body_bytes.clone(), Some(header.clone()), &previously_read)?; }
-                2 => { s_blf_chunk_end_of_file_with_sha1::read(body_bytes.clone(), Some(header.clone()), &previously_read)?; }
-                3 => { s_blf_chunk_end_of_file_with_rsa::read(body_bytes.clone(), Some(header.clone()), &previously_read)?; }
+                0 => { s_blf_chunk_end_of_file::read(body_bytes.clone(), Some(header.clone()), &buffer[0..chunk_position])?; }
+                1 => { s_blf_chunk_end_of_file_with_crc::read(body_bytes.clone(), Some(header.clone()), &buffer[0..chunk_position])?; }
+                2 => { s_blf_chunk_end_of_file_with_sha1::read(body_bytes.clone(), Some(header.clone()), &buffer[0..chunk_position])?; }
+                3 => { s_blf_chunk_end_of_file_with_rsa::read(body_bytes.clone(), Some(header.clone()), &buffer[0..chunk_position])?; }
                 _ => { return Err(format!("Unknown _eof authentication type {}", authentication_type).into()); }
             }
         }
@@ -42,9 +42,6 @@ pub fn find_and_validate_eof(buffer: &[u8]) -> BLFLibResult {
             break;
         }
         cursor.seek_relative((header.chunk_size - s_blf_header::size() as u32) as i64)?;
-
-        previously_read.extend_from_slice(&header_bytes);
-        previously_read.extend_from_slice(&body_bytes);
     }
 
     Ok(())

@@ -29,7 +29,7 @@ impl BlfChunkHooks for s_blf_chunk_end_of_file {
         Ok(())
     }
 
-    fn after_read(&mut self, previously_read: &Vec<u8>) -> BLFLibResult {
+    fn after_read(&mut self, previously_read: &[u8]) -> BLFLibResult {
         assert_ok!(self.file_size == previously_read.len() as u32, "_eof has an invalid size");
 
         Ok(())

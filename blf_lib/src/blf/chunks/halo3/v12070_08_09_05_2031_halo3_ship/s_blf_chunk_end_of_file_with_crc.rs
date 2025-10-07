@@ -30,7 +30,7 @@ impl BlfChunkHooks for s_blf_chunk_end_of_file_with_crc {
         Ok(())
     }
 
-    fn after_read(&mut self, previously_read: &Vec<u8>) -> BLFLibResult {
+    fn after_read(&mut self, previously_read: &[u8]) -> BLFLibResult {
         let expected_crc = self.crc;
         let actual_crc = crc_checksum_buffer(0xFFFFFFFF, previously_read);
         assert_ok!(expected_crc == actual_crc, "s_blf_chunk_end_of_file_with_crc has an invalid crc");

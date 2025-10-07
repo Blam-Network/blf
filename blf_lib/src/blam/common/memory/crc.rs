@@ -1,7 +1,7 @@
 use std::sync::Mutex;
 use lazy_static::lazy_static;
 
-pub fn crc_checksum_buffer (crc: u32, buffer: &Vec<u8>) -> u32 {
+pub fn crc_checksum_buffer (crc: u32, buffer: &[u8]) -> u32 {
     crc32(crc, buffer)
 }
 
@@ -10,7 +10,7 @@ lazy_static! {
     static ref CRC_TABLE_INITIALIZED: Mutex<bool> = Mutex::new(false);
 }
 
-pub fn crc32(mut crc: u32, buffer: &Vec<u8>) -> u32 {
+pub fn crc32(mut crc: u32, buffer: &[u8]) -> u32 {
     let mut initialized = CRC_TABLE_INITIALIZED.lock().expect("Failed to lock CRC_TABLE_INITIALIZED, possible double-lock");
     if !*initialized {
         let mut table = CRC_TABLE.lock().expect("Failed to lock CRC_TABLE, possible double-lock");
