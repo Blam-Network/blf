@@ -28,7 +28,7 @@ pub fn find_and_validate_eof(buffer: &[u8]) -> BLFLibResult {
         if header.signature == chunk_signature::from_string("_eof") && header.version.major == 1 {
             cursor.read_exact(body_bytes.as_mut_slice())?;
             let authentication_type: u8 = body_bytes[4];
-            let mut chunk_position = (cursor.position() as usize) - (body_bytes.len() - s_blf_header::size());
+            let mut chunk_position = (cursor.position() as usize) - (body_bytes.len() + s_blf_header::size());
 
             match authentication_type {
                 0 => { s_blf_chunk_end_of_file::read(body_bytes.clone(), Some(header.clone()), &buffer[0..chunk_position])?; }
