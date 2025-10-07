@@ -24,6 +24,14 @@ pub fn find_and_validate_eof(buffer: &[u8]) -> BLFLibResult {
 
     while cursor.read_exact(&mut header_bytes).is_ok() {
         header = s_blf_header::decode(&header_bytes)?;
+
+        // Check that what we're reading seems like a chunk
+        // some BLF files have extra noise at the end, this is typically preceded by an _eof,
+        // but not always, so we should check!
+        if header.chunk_size == 0 || header.chunk_size > (header_bytes.len() as u32 - cursor.position() as u32) {
+            break;
+        }
+
         let mut body_bytes = vec![0u8; (header.chunk_size as usize) - s_blf_header::size()];
         if header.signature == chunk_signature::from_string("_eof") && header.version.major == 1 {
             cursor.read_exact(body_bytes.as_mut_slice())?;
@@ -37,8 +45,8 @@ pub fn find_and_validate_eof(buffer: &[u8]) -> BLFLibResult {
                 3 => { s_blf_chunk_end_of_file_with_rsa::read(body_bytes.clone(), Some(header.clone()), &buffer[0..chunk_position])?; }
                 _ => { return Err(format!("Unknown _eof authentication type {}", authentication_type).into()); }
             }
-        }
-        if header.chunk_size == 0 {
+
+            // There should only be one _eof, so we can return now.
             break;
         }
         cursor.seek_relative((header.chunk_size - s_blf_header::size() as u32) as i64)?;
