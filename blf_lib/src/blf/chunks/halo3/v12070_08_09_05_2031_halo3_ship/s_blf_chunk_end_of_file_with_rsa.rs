@@ -27,6 +27,7 @@ impl BlfChunkHooks for s_blf_chunk_end_of_file_with_rsa {
     fn before_write(&mut self, previously_written: &Vec<u8>) -> BLFLibResult {
         self.file_size = previously_written.len() as u32;
 
+        // We don't have any private keys to do this with!
         Err("s_blf_chunk_end_of_file_with_sha1 does not support write yet.".into())
     }
 

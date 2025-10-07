@@ -16,11 +16,12 @@ pub enum e_bungienet_user_flags {
     none =                      0b00000000000000000000000000000000,
     registered =                0b00000000000000000000000000000001,
     pro_member =                0b00000000000000000000000000000010,
-    // unlocks blue flames
+    // unlocks bungie chestpiece w/ flames
     staff =                     0b00000000000000000000000000000100,
-    // no idea if these are used, they're used in code to unlock items with the community stringIDs
-    // but I'm doubtful any community unlockables exist.
+    // unlocks recon
     community =                 0b00000000000000000000000000001000,
+    // these two appear unused, code to unlock armour exists
+    // but no armour use these strings for unlock.
     community2 =                0b00000000000000000000000000010000,
     community3 =                0b00000000000000000000000000100000,
     // this is set by the game at runtime based on if you're playing mythic
