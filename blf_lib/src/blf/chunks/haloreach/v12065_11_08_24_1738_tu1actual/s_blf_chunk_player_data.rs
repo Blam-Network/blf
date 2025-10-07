@@ -31,12 +31,12 @@ pub struct s_blf_chunk_player_data {
 pub enum e_bungienet_user_flags {
     #[default]
     none =                      0b0000000000000000,
-    is_bnet_user =              0b0000000000000001,
-    is_pro =                    0b0000000000000010,
-    is_bungie =                 0b0000000000000100, // unlocks blue flames
-    unknown3 =                  0b0000000000001000,
-    unknown4 =                  0b0000000000010000,
-    unknown5 =                  0b0000000000100000,
+    registered =                0b0000000000000001,
+    pro_member =                0b0000000000000010,
+    staff =                     0b0000000000000100, // unlocks blue flames
+    community =                 0b0000000000001000,
+    community2 =                0b0000000000010000,
+    community3 =                0b0000000000100000,
     debug_enabled =             0b0000000001000000, // unlocks CLAW, may unlock some activities in pre-releases
     unknown7 =                  0b0000000010000000,
     unknown8 =                  0b0000000100000000,

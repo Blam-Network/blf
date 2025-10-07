@@ -1,10 +1,32 @@
-use binrw::binrw;
+use binrw::{binrw, BinRead, BinWrite};
 use serde::{Deserialize, Serialize};
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
 use blf_lib_derive::BlfChunk;
 use crate::types::c_string::StaticString;
 #[cfg(feature = "napi")]
 use napi_derive::napi;
+use num_derive::FromPrimitive;
+
+#[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, FromPrimitive)]
+#[brw(big, repr = u32)]
+#[cfg_attr(feature = "napi", napi(namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
+#[repr(u32)]
+pub enum e_bungienet_user_flags {
+    #[default]
+    none =                      0b00000000000000000000000000000000,
+    registered =                0b00000000000000000000000000000001,
+    pro_member =                0b00000000000000000000000000000010,
+    // unlocks blue flames
+    staff =                     0b00000000000000000000000000000100,
+    // no idea if these are used, they're used in code to unlock items with the community stringIDs
+    // but I'm doubtful any community unlockables exist.
+    community =                 0b00000000000000000000000000001000,
+    community2 =                0b00000000000000000000000000010000,
+    community3 =                0b00000000000000000000000000100000,
+    // this is set by the game at runtime based on if you're playing mythic
+    // it's then used to lock campaign
+    is_blue_disk =              0b10000000000000000000000000000000
+}
 
 #[binrw]
 #[derive(BlfChunk,PartialEq,Debug,Clone,Serialize,Deserialize)]
@@ -24,7 +46,7 @@ impl Default for s_blf_chunk_player_data {
     fn default() -> Self {
         s_blf_chunk_player_data {
             hopper_access: 0,
-            bungie_user_role: 1,
+            bungie_user_role: 0,
             highest_skill: 0,
             hopper_directory: StaticString::from_string("default_hoppers")
                 .expect("Default hopper_directory must be valid."),
