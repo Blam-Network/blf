@@ -26,7 +26,7 @@ pub enum e_bungienet_user_flags {
     community3 =                0b00000000000000000000000000100000,
     // this is set by the game at runtime based on if you're playing mythic
     // it's then used to lock campaign
-    is_blue_disk =              0b10000000000000000000000000000000
+    // is_blue_disk =              0b10000000000000000000000000000000
 }
 
 #[binrw]
