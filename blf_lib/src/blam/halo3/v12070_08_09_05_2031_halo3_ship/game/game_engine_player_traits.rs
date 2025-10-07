@@ -61,9 +61,9 @@ pub enum e_shield_recharge_rate_percentage_setting {
 #[cfg_attr(feature = "napi", napi(namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 #[brw(big, repr = i32)]
 pub enum e_vampirism_percentage_setting {
+    _vampirism_percentage_setting_default = -1,
     #[default]
     _vampirism_percentage_setting_unchanged = 0,
-
     _vampirism_percentage_setting_0_percent,   // 0.0
     _vampirism_percentage_setting_10_percent,  // 0.1
     _vampirism_percentage_setting_25_percent,  // 0.25
