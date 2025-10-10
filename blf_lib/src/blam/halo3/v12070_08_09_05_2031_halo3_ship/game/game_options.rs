@@ -9,8 +9,11 @@ use crate::types::bool::Bool;
 use crate::types::c_string::{StaticString, StaticWcharString};
 use crate::types::numbers::Float32;
 use crate::types::u64::Unsigned64;
+#[cfg(feature = "napi")]
+use napi_derive::napi;
 
 #[derive(TestSize,BinRead,BinWrite,PartialEq,Debug,Default,Clone,Serialize,Deserialize)]
+#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 #[Size(0xF810)]
 #[brw(big)]
 pub struct game_options {
@@ -58,12 +61,14 @@ pub struct game_options {
 
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, TestSize)]
+#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 #[Size(0x78)]
 pub struct s_campaign_armaments {
     pub player_armaments: StaticArray<s_campaign_armaments_player, 4>,
 }
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, TestSize)]
+#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 #[Size(0x1E)]
 pub struct s_campaign_armaments_player {
     #[brw(pad_after = 1)]
@@ -78,6 +83,7 @@ pub struct s_campaign_armaments_player {
 }
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default)]
+#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 pub struct s_campaign_armaments_weapon {
     pub damage_reporting_type: u16,
     pub rounds_inventory: u16,
@@ -86,11 +92,13 @@ pub struct s_campaign_armaments_weapon {
 }
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default)]
+#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 pub struct s_machine_identifier {
     pub identifier: StaticArray<u8, 6>
 }
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, TestSize)]
+#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 #[Size(0x6C)]
 pub struct game_machine_options {
     pub machine_valid_mask: u32,
@@ -101,6 +109,7 @@ pub struct game_machine_options {
 }
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, TestSize)]
+#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 #[Size(0x128)]
 pub struct game_player_options {
     pub valid: Bool,
@@ -114,6 +123,7 @@ pub struct game_player_options {
 }
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, TestSize)]
+#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 #[Size(0x110)]
 pub struct s_player_configuration {
     pub client: s_player_configuration_from_client,
@@ -121,6 +131,7 @@ pub struct s_player_configuration {
 }
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, TestSize)]
+#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 #[Size(0x5C)]
 pub struct s_game_matchmaking_options {
     pub hopper_identifier: i16,
