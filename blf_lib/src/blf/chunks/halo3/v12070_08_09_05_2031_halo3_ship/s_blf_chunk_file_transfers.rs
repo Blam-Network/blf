@@ -5,10 +5,13 @@ use blf_lib_derivable::blf::chunks::BlfChunkHooks;
 use blf_lib_derive::BlfChunk;
 use blf_lib::types::array::StaticArray;
 use blf_lib::types::c_string::StaticWcharString;
-use crate::types::u64::Unsigned64;
+use blf_lib::types::u64::Unsigned64;
+#[cfg(feature = "napi")]
+use napi_derive::napi;
 
 #[binrw]
 #[derive(BlfChunk,Default,PartialEq,Debug,Clone,Serialize,Deserialize)]
+#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 #[Header("filq", 1.1)]
 #[brw(big)]
 #[Size(0x280)]
@@ -18,6 +21,7 @@ pub struct s_blf_chunk_file_transfers
 }
 
 #[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
+#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 #[brw(big)]
 pub struct s_files_user_auto_download_queue_item {
     pub player_xuid: Unsigned64,
@@ -30,7 +34,7 @@ pub struct s_files_user_auto_download_queue_item {
     pub campaign_id: u32,
     pub map_id: u32,
     pub game_engine_type: u32,
-    pub size_bytes: u64,
+    pub size_bytes: Unsigned64,
 }
 
 impl BlfChunkHooks for s_blf_chunk_file_transfers { }
