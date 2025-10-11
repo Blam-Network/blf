@@ -107,6 +107,7 @@ pub struct c_game_engine_base_variant {
     pub m_map_override_options: c_game_engine_map_override_options,
     #[brw(pad_before = 2)]
     pub m_flags: u16,
+    #[brw(pad_after = 2)]
     pub m_team_scoring_method: u16,
 }
 
