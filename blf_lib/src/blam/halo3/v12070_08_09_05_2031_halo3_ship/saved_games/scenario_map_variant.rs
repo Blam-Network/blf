@@ -15,10 +15,13 @@ use blf_lib_derivable::result::BLFLibResult;
 use crate::blam::halo3::v12070_08_09_05_2031_halo3_ship::memory::bitstream_writer::c_bitstream_writer_extensions;
 use crate::types::bool::Bool;
 use crate::types::numbers::Float32;
+#[cfg(feature = "napi")]
+use napi_derive::napi;
 
 const k_object_type_count: usize = 14;
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite, TestSize)]
+#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 #[Size(0xE090)]
 pub struct c_map_variant {
     pub m_metadata: s_content_item_metadata,
@@ -218,6 +221,7 @@ impl c_map_variant {
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Copy, Serialize, Deserialize, BinRead, BinWrite)]
+#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 pub struct s_variant_quota {
     #[serde(with = "SerHex::<StrictCap>")]
     pub object_definition_index: u32,
@@ -229,6 +233,7 @@ pub struct s_variant_quota {
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Copy, Serialize, Deserialize, BinRead, BinWrite, TestSize)]
+#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 #[Size(0x18)]
 pub struct s_variant_multiplayer_object_properties_definition {
     pub game_engine_flags: u16,
@@ -245,6 +250,7 @@ pub struct s_variant_multiplayer_object_properties_definition {
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Copy, Serialize, Deserialize, BinRead, BinWrite, TestSize)]
+#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 #[Size(0x54)]
 pub struct s_variant_object_datum {
     pub flags: u16,
@@ -260,10 +266,11 @@ pub struct s_variant_object_datum {
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Copy, Serialize, Deserialize, BinRead, BinWrite, TestSize)]
+#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 #[Size(0x8)]
 pub struct c_object_identifier {
-    m_unique_id: i32,
-    m_origin_bsp_index: i16,
-    m_type: i8,
-    m_source: i8,
+    pub m_unique_id: i32,
+    pub m_origin_bsp_index: i16,
+    pub m_type: i8,
+    pub m_source: i8,
 }
