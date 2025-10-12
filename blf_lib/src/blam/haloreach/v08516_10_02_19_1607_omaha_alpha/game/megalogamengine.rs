@@ -8,3 +8,4 @@ pub mod megalogamengine_player_reference;
 pub mod megalogamengine_trigger;
 pub mod megalogamengine_object_reference;
 pub mod megalogamengine_custom_timer_reference;
+pub mod megalogamengine_team_reference;

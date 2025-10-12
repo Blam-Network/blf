@@ -1765,6 +1765,11 @@ impl c_action {
                 self.m_player_1.as_ref()
                     .ok_or_else(|| BLFLibError::from("m_object_type does not exist."))?
                     .encode(bitstream)?;
+                bitstream.write_integer(
+                    self.m_unknown_data
+                        .ok_or_else(|| BLFLibError::from("m_unknown_data does not exist."))?,
+                    1
+                )?;
             }
             e_action_type::modify_player_grenades => self.m_adjust_grenades_parameters.as_ref()
                 .ok_or_else(|| BLFLibError::from("m_adjust_grenades_parameters does not exist."))?
@@ -2200,6 +2205,7 @@ impl c_action {
                 object_type_reference.decode(bitstream)?;
                 player_reference.decode(bitstream)?;
                 self.m_object_type = Some(object_type_reference);
+                self.m_player_1 = Some(player_reference);
                 self.m_unknown_data = Some(bitstream.read_integer("unknown-data", 1)?)
             }
             e_action_type::none => {}

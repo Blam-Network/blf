@@ -6,7 +6,7 @@ use blf_lib::blam::halo3::v12070_08_09_05_2031_halo3_ship::memory::bitstream_rea
 use blf_lib::blam::haloreach::v08516_10_02_19_1607_omaha_alpha::game::megalogamengine::megalogamengine_custom_timer_reference::c_custom_timer_reference;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::megalogamengine::megalogamengine_object_type_reference::c_object_type_reference;
 use blf_lib::blam::haloreach::v08516_10_02_19_1607_omaha_alpha::game::megalogamengine::megalogamengine_player_reference::c_player_reference;
-use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::megalogamengine::megalogamengine_team_reference::c_team_reference;
+use blf_lib::blam::haloreach::v08516_10_02_19_1607_omaha_alpha::game::megalogamengine::megalogamengine_team_reference::c_team_reference;
 use blf_lib::blam::haloreach::v08516_10_02_19_1607_omaha_alpha::game::megalogamengine::megalogamengine_text::c_dynamic_string;
 use blf_lib::blam::haloreach::v08516_10_02_19_1607_omaha_alpha::game::megalogamengine::megalogamengine_variant_variable::s_variant_variable;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::saved_games::scenario_map_variant::e_boundary_shape;
@@ -1383,8 +1383,8 @@ pub enum e_action_type {
     modify_player_grenades = 75,
     send_incident = 76,
     send_incident_with_value = 77,
-    unknown_76 = 78,
-    unknown_77 = 79,
+    set_loadout = 78,
+    set_loadout_palette = 79,
     set_device_position_track = 80,
     animate_device_position = 81,
     set_device_actual_position = 82,
@@ -1764,6 +1764,11 @@ impl c_action {
                 self.m_player_1.as_ref()
                     .ok_or_else(|| BLFLibError::from("m_object_type does not exist."))?
                     .encode(bitstream)?;
+                bitstream.write_integer(
+                    self.m_unknown_data
+                        .ok_or_else(|| BLFLibError::from("m_unknown_data does not exist."))?,
+                    1
+                )?;
             }
             e_action_type::modify_player_grenades => self.m_adjust_grenades_parameters.as_ref()
                 .ok_or_else(|| BLFLibError::from("m_adjust_grenades_parameters does not exist."))?
@@ -1774,8 +1779,8 @@ impl c_action {
             e_action_type::send_incident_with_value => self.m_submit_incident_with_custom_value_parameters.as_ref()
                 .ok_or_else(|| BLFLibError::from("m_submit_incident_with_custom_value_parameters does not exist."))?
                 .encode(bitstream)?,
-            e_action_type::unknown_76
-                | e_action_type::unknown_77
+            e_action_type::set_loadout
+                | e_action_type::set_loadout_palette
             => {
                 self.m_target.as_ref()
                     .ok_or_else(|| BLFLibError::from("m_target does not exist."))?
@@ -1814,8 +1819,8 @@ impl c_action {
             self.m_type = action_type;
         }
         else {
-            return Ok(())
-            // return Err(format!("unsupported action type: {}", action_type).into())
+            // return Ok(())
+            return Err(format!("unsupported action type: {}", action_type).into())
         }
 
 
@@ -2109,10 +2114,11 @@ impl c_action {
             e_action_type::unknown_72 => {
                 let mut object_type = c_object_type_reference::default();
                 let mut player = c_player_reference::default();
-                player.decode(bitstream)?;
                 object_type.decode(bitstream)?;
+                player.decode(bitstream)?;
                 self.m_object_type = Some(object_type);
                 self.m_player_1 = Some(player);
+                self.m_unknown_data = Some(bitstream.read_integer("unknown-data", 1)?)
             }
             e_action_type::modify_player_grenades => {
                 let mut adjust_grenades_parameters = s_action_adjust_grenades_parameters::default();
@@ -2129,13 +2135,13 @@ impl c_action {
                 submit_incident_with_custom_value_parameters.decode(bitstream)?;
                 self.m_submit_incident_with_custom_value_parameters = Some(submit_incident_with_custom_value_parameters);
             }
-            e_action_type::unknown_76 => {
+            e_action_type::set_loadout => {
                 let mut target = s_team_or_player_target::default();
                 target.decode(bitstream)?;
                 self.m_target = Some(target);
                 self.m_unknown_data = Some(bitstream.read_integer("loadout-reference-index", 8)?);
             }
-            e_action_type::unknown_77 => {
+            e_action_type::set_loadout_palette => {
                 let mut target = s_team_or_player_target::default();
                 target.decode(bitstream)?;
                 self.m_target = Some(target);
