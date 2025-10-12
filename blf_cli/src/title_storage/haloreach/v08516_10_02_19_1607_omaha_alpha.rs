@@ -1659,7 +1659,7 @@ impl v08516_10_02_19_1607_omaha_alpha {
                             let remaining = json_queue.len();
                             drop(json_queue);
 
-                            debug_log!("[GAMES] Thread {n} got {game_variant_file_name} ({remaining} remaining)");
+                            // debug_log!("[GAMES] Thread {n} got {game_variant_file_name} ({remaining} remaining)");
 
                             let game_variant_blf_path = build_path!(
                                 &game_variants_temp_build_path,
