@@ -2,18 +2,18 @@ use num_derive::{FromPrimitive, ToPrimitive};
 use num_traits::FromPrimitive;
 use serde::{Deserialize, Serialize};
 use blf_lib::blam::halo3::v12070_08_09_05_2031_halo3_ship::memory::bitstream_writer::c_bitstream_writer_extensions;
-use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::megalogamengine::megalogamengine_custom_timer_reference::c_custom_timer_reference;
+use blf_lib::blam::halo3::v12070_08_09_05_2031_halo3_ship::memory::bitstream_reader::c_bitstream_reader_extensions;
+use blf_lib::blam::haloreach::v08516_10_02_19_1607_omaha_alpha::game::megalogamengine::megalogamengine_custom_timer_reference::c_custom_timer_reference;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::megalogamengine::megalogamengine_object_type_reference::c_object_type_reference;
 use blf_lib::blam::haloreach::v08516_10_02_19_1607_omaha_alpha::game::megalogamengine::megalogamengine_player_reference::c_player_reference;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::megalogamengine::megalogamengine_team_reference::c_team_reference;
-use blf_lib::blam::haloreach::v09730_10_04_09_1309_omaha_delta::game::megalogamengine::megalogamengine_text::c_dynamic_string;
+use blf_lib::blam::haloreach::v08516_10_02_19_1607_omaha_alpha::game::megalogamengine::megalogamengine_text::c_dynamic_string;
 use blf_lib::blam::haloreach::v08516_10_02_19_1607_omaha_alpha::game::megalogamengine::megalogamengine_variant_variable::s_variant_variable;
-use blf_lib::blam::halo3::v12070_08_09_05_2031_halo3_ship::memory::bitstream_reader::c_bitstream_reader_extensions;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::saved_games::scenario_map_variant::e_boundary_shape;
+use blf_lib::blam::haloreach::v08516_10_02_19_1607_omaha_alpha::game::megalogamengine::megalogamengine_custom_variable_reference::c_custom_variable_reference;
+use blf_lib::blam::haloreach::v08516_10_02_19_1607_omaha_alpha::game::megalogamengine::megalogamengine_object_reference::c_object_reference;
 use blf_lib::io::bitstream::{c_bitstream_reader, c_bitstream_writer};
 use blf_lib_derivable::result::{BLFLibError, BLFLibResult};
-use crate::blam::haloreach::v08516_10_02_19_1607_omaha_alpha::game::megalogamengine::megalogamengine_custom_variable_reference::c_custom_variable_reference;
-use crate::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::megalogamengine::megalogamengine_object_reference::c_object_reference;
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct s_team_or_player_target {
@@ -940,14 +940,14 @@ impl s_action_adjust_grenades_parameters {
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct s_action_submit_incident_parameters {
-    pub m_incident_id: u16, // 10 bits
+    pub m_incident_id: i8, // 8 bits
     pub m_target_1: s_team_or_player_target,
     pub m_target_2: s_team_or_player_target,
 }
 
 impl s_action_submit_incident_parameters {
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
-        bitstream.write_integer(self.m_incident_id, 10)?;
+        bitstream.write_index::<255>(self.m_incident_id, 8)?;
         self.m_target_1.encode(bitstream)?;
         self.m_target_2.encode(bitstream)?;
 
@@ -955,7 +955,7 @@ impl s_action_submit_incident_parameters {
     }
 
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
-        self.m_incident_id = bitstream.read_integer("incident-id", 10)?;
+        self.m_incident_id = bitstream.read_index::<255>("incident-id", 8)? as i8;
         self.m_target_1.decode(bitstream)?;
         self.m_target_2.decode(bitstream)?;
 
@@ -966,7 +966,7 @@ impl s_action_submit_incident_parameters {
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct s_action_submit_incident_with_custom_value_parameters {
-    pub m_incident_id: u16, // 10 bits
+    pub m_incident_id: i8, // 8 bits
     pub m_target_1: s_team_or_player_target,
     pub m_target_2: s_team_or_player_target,
     pub m_variable: c_custom_variable_reference,
@@ -974,7 +974,7 @@ pub struct s_action_submit_incident_with_custom_value_parameters {
 
 impl s_action_submit_incident_with_custom_value_parameters {
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
-        bitstream.write_integer(self.m_incident_id, 10)?;
+        bitstream.write_index::<255>(self.m_incident_id, 8)?;
         self.m_target_1.encode(bitstream)?;
         self.m_target_2.encode(bitstream)?;
         self.m_variable.encode(bitstream)?;
@@ -983,7 +983,7 @@ impl s_action_submit_incident_with_custom_value_parameters {
     }
 
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
-        self.m_incident_id = bitstream.read_integer("incident-id", 10)?;
+        self.m_incident_id = bitstream.read_index::<255>("incident-id", 8)? as i8;
         self.m_target_1.decode(bitstream)?;
         self.m_target_2.decode(bitstream)?;
         self.m_variable.decode(bitstream)?;

@@ -317,7 +317,7 @@ impl<'a> c_bitstream_reader<'a> {
 
     pub fn read_enum<T: FromPrimitive>(&mut self, name: &str, size_in_bits: usize) -> BLFLibResult<T> {
         let integer: u32 = self.read_integer(name, size_in_bits)?;
-        OPTION_TO_RESULT!(FromPrimitive::from_u32(integer), format!("Unexpected enum value: {}", integer).into())
+        OPTION_TO_RESULT!(FromPrimitive::from_u32(integer), format!("Unexpected enum value for {name}: {}", integer).into())
     }
 
     pub fn read_integer<T>(&mut self, name: &str, size_in_bits: usize) -> BLFLibResult<T>

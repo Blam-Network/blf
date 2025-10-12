@@ -12,7 +12,7 @@ use napi_derive::napi;
 #[binrw]
 #[derive(BlfChunk,Default,PartialEq,Debug,Clone,Serialize,Deserialize)]
 #[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
-#[Header("filq", 1.1)]
+#[Header("filq", 1.0)]
 #[brw(big)]
 #[Size(0x280)]
 pub struct s_blf_chunk_file_transfers
@@ -24,7 +24,7 @@ pub struct s_blf_chunk_file_transfers
 #[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 #[brw(big)]
 pub struct s_files_user_auto_download_queue_item {
-    pub player_xuid: Unsigned64,
+    pub share_id: Unsigned64,
     pub slot: u32,
     #[brw(pad_after = 2)]
     pub title_index: u16,
