@@ -443,11 +443,13 @@ mod title_storage_config {
         )
     }
 
-    pub const network_configuration_file_name: &str = "network_configuration.json";
+    pub fn network_configuration_file_name() -> String {
+        format!("network_configuration_{:0>3}.json", s_blf_chunk_network_configuration::get_version().major)
+    }
     pub fn network_configuration_file_path(config_folder: &String) -> String {
         build_path!(
             config_folder,
-            network_configuration_file_name
+            network_configuration_file_name()
         )
     }
 

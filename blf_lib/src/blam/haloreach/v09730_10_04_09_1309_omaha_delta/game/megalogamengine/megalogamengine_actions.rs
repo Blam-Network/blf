@@ -1818,14 +1818,9 @@ impl c_action {
             e_action_type::unknown_91
                 | e_action_type::unknown_92
             => {
-                self.m_player_1.as_ref()
-                    .ok_or_else(|| BLFLibError::from("m_player_1 does not exist."))?
+                self.m_player_set_coop_spawning_parameters.as_ref()
+                    .ok_or_else(|| BLFLibError::from("m_player_set_coop_spawning_parameters does not exist."))?
                     .encode(bitstream)?;
-                bitstream.write_integer(
-                    *self.m_unknown_data.as_ref()
-                        .ok_or_else(|| BLFLibError::from("m_unknown_data does not exist."))?,
-                    1
-                )?;
             }
             e_action_type::set_weapon_pickup_priority => self.m_weapon_set_pickup_priority_parameters.as_ref()
                 .ok_or_else(|| BLFLibError::from("m_weapon_set_pickup_priority_parameters does not exist."))?

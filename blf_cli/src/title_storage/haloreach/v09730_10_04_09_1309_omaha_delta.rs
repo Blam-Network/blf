@@ -436,11 +436,13 @@ mod title_storage_config {
         )
     }
 
-    pub const network_configuration_file_name: &str = "network_configuration.json";
+    pub fn network_configuration_file_name() -> String {
+        format!("network_configuration_{:0>3}.json", s_blf_chunk_network_configuration::get_version().major)
+    }
     pub fn network_configuration_file_path(config_folder: &String) -> String {
         build_path!(
             config_folder,
-            network_configuration_file_name
+            network_configuration_file_name()
         )
     }
 
@@ -1639,7 +1641,7 @@ impl v09730_10_04_09_1309_omaha_delta {
         let json_queue = Arc::new(Mutex::new(VecDeque::from(json_queue)));
         let shared_variant_hashes = Arc::new(Mutex::new(HashMap::new()));
 
-        let cpu_cores = num_cpus::get();
+        let cpu_cores = 1;
         rt.block_on(async {
             let mut thread_handles = Vec::<JoinHandle<()>>::with_capacity(cpu_cores);
 
@@ -1657,7 +1659,7 @@ impl v09730_10_04_09_1309_omaha_delta {
                             let remaining = json_queue.len();
                             drop(json_queue);
 
-                            // debug_log!("[GAMES] Thread {n} got {game_variant_file_name} ({remaining} remaining)");
+                            debug_log!("[GAMES] Thread {n} got {game_variant_file_name} ({remaining} remaining)");
 
                             let game_variant_blf_path = build_path!(
                                 &game_variants_temp_build_path,
