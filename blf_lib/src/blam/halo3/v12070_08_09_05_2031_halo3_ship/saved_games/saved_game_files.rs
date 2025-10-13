@@ -80,7 +80,7 @@ impl s_content_item_metadata {
 
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
         self.unique_id = bitstream.read_qword(64)?;
-        self.name.set_string(&bitstream.read_string_whar(32)?)?;
+        self.name.set_string(&bitstream.read_string_wchar(32)?)?;
         self.description.set_string(&bitstream.read_string_utf8(128)?)?;
         self.author.set_string(&bitstream.read_string_utf8(16)?)?;
         self.file_type = bitstream.read_unnamed_signed_integer::<i32>(5)? - 1;

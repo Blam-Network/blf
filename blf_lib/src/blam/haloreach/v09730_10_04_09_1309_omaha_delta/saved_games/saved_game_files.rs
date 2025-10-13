@@ -103,8 +103,8 @@ impl s_content_item_metadata {
         self.modifier_xuid = bitstream.read_qword(64)?;
         self.modifier_name = StaticString::from_string(bitstream.read_string_utf8(16).unwrap_or_default())?;
         self.modifier_xuid_is_online = bitstream.read_unnamed_bool()?;
-        self.name = StaticWcharString::from_string(bitstream.read_string_whar(128)?)?;
-        self.description = StaticWcharString::from_string(bitstream.read_string_whar(128)?)?;
+        self.name = StaticWcharString::from_string(bitstream.read_string_wchar(128)?)?;
+        self.description = StaticWcharString::from_string(bitstream.read_string_wchar(128)?)?;
 
         match self.file_type {
             3 | 4 => {

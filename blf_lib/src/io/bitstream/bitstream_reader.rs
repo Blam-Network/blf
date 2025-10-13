@@ -569,7 +569,7 @@ impl<'a> c_bitstream_reader<'a> {
     }
 
     // differs from blam API
-    pub fn read_string_whar(&mut self, max_string_size: usize) -> BLFLibResult<String> {
+    pub fn read_string_wchar(&mut self, max_string_size: usize) -> BLFLibResult<String> {
         assert_ok!(self.reading());
         assert_ok!(max_string_size > 0);
 
