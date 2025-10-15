@@ -19,8 +19,7 @@ use crate::types::numbers::Float32;
 
 const k_object_type_count: usize = 14;
 
-#[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite, TestSize)]
-#[Size(0xE090)]
+#[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite)]
 pub struct c_map_variant {
     pub m_name: StaticWcharString<32>,
     pub m_description: StaticWcharString<32>,
