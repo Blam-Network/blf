@@ -1278,7 +1278,6 @@ impl v12065_11_08_24_1738_tu1actual {
     }
 
     fn build_config_network_configuration(hoppers_blfs_path: &String, hoppers_config_path: &String) -> Result<(), Box<dyn Error>> {
-        // For now we just copy it as is. But we do check that it contains a netc.
         let mut task = console_task::start("Converting Network Configuration");
 
         let network_configuration_source_path = title_storage_output::network_configuration_file_path(

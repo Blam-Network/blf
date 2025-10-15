@@ -5,3 +5,6 @@ pub mod s_blf_chunk_player_data;
 pub mod s_blf_chunk_content_header;
 pub mod s_blf_chunk_map_variant;
 pub mod s_blf_chunk_packed_map_variant;
+pub mod s_blf_chunk_packed_game_variant;
+pub mod s_blf_chunk_game_variant;
+pub mod s_blf_chunk_hopper_description_table;

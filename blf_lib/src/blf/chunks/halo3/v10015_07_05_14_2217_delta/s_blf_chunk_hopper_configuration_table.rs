@@ -12,7 +12,7 @@ use blf_lib_derive::BlfChunk;
 use crate::types::numbers::Float32;
 
 #[derive(BlfChunk,Default,PartialEq,Debug,Clone,Serialize,Deserialize)]
-#[Header("mhcf", 9.0)]
+#[Header("mhcf", 9.1)]
 pub struct s_blf_chunk_hopper_configuration_table
 {
     hopper_category_count: u8,

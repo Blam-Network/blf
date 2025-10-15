@@ -1,0 +1,70 @@
+use binrw::{BinRead, BinWrite};
+use serde::{Deserialize, Serialize};
+use blf_lib::blam::halo3::v10015_07_05_14_2217_delta::game::game_engine_player_traits::c_player_traits;
+use blf_lib::io::bitstream::{c_bitstream_reader, c_bitstream_writer};
+use blf_lib::{SET_BIT, TEST_BIT};
+use blf_lib_derivable::result::BLFLibResult;
+
+#[derive(Default, PartialEq, Debug, Clone, BinRead, BinWrite, Serialize, Deserialize)]
+pub struct c_game_engine_juggernaut_variant {
+    #[brw(pad_after = 2)]
+    pub m_score_to_win_round: u16,
+    pub m_initial_juggernaut: u8,
+    pub m_next_juggernaut: u8,
+    pub m_variant_flags: u8,
+    pub m_zone_movement: u8,
+    pub m_zone_order: u8,
+    pub m_kill_points: i8,
+    pub m_juggernaut_kill_points: i8,
+    pub m_kill_as_juggernaut_points: i8,
+    pub m_destination_arrival_points: i8,
+    pub m_suicide_points: i8,
+    pub m_betrayal_points: i8,
+    pub m_juggernaut_delay: u8,
+    #[brw(pad_after = 4)]
+    pub m_juggernaut_traits: c_player_traits,
+}
+
+impl c_game_engine_juggernaut_variant {
+    pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
+        bitstream.write_bool(TEST_BIT!(self.m_variant_flags, 0))?;
+        bitstream.write_bool(TEST_BIT!(self.m_variant_flags, 1))?;
+        bitstream.write_bool(TEST_BIT!(self.m_variant_flags, 2))?;
+        bitstream.write_integer(self.m_score_to_win_round as u32, 9)?;
+        bitstream.write_integer(self.m_initial_juggernaut as u32, 2)?;
+        bitstream.write_integer(self.m_next_juggernaut as u32, 2)?;
+        bitstream.write_integer(self.m_zone_movement as u32, 4)?;
+        bitstream.write_integer(self.m_zone_order as u32, 1)?;
+        bitstream.write_signed_integer(self.m_kill_points as i32, 5)?;
+        bitstream.write_signed_integer(self.m_juggernaut_kill_points as i32, 5)?;
+        bitstream.write_signed_integer(self.m_kill_as_juggernaut_points as i32, 5)?;
+        bitstream.write_signed_integer(self.m_destination_arrival_points as i32, 5)?;
+        bitstream.write_signed_integer(self.m_suicide_points as i32, 5)?;
+        bitstream.write_signed_integer(self.m_betrayal_points as i32, 5)?;
+        bitstream.write_integer(self.m_juggernaut_delay as u32, 4)?;
+        self.m_juggernaut_traits.encode(bitstream)?;
+
+        Ok(())
+    }
+
+    pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
+        SET_BIT!(self.m_variant_flags, 0, bitstream.read_unnamed_bool()?);
+        SET_BIT!(self.m_variant_flags, 1, bitstream.read_unnamed_bool()?);
+        SET_BIT!(self.m_variant_flags, 2, bitstream.read_unnamed_bool()?);
+        self.m_score_to_win_round = bitstream.read_unnamed_integer(9)?;
+        self.m_initial_juggernaut = bitstream.read_unnamed_integer(2)?;
+        self.m_next_juggernaut = bitstream.read_unnamed_integer(2)?;
+        self.m_zone_movement = bitstream.read_unnamed_integer(4)?;
+        self.m_zone_order = bitstream.read_unnamed_integer(1)?;
+        self.m_kill_points = bitstream.read_unnamed_signed_integer(5)?;
+        self.m_juggernaut_kill_points = bitstream.read_unnamed_signed_integer(5)?;
+        self.m_kill_as_juggernaut_points = bitstream.read_unnamed_signed_integer(5)?;
+        self.m_destination_arrival_points = bitstream.read_unnamed_signed_integer(5)?;
+        self.m_suicide_points = bitstream.read_unnamed_signed_integer(5)?;
+        self.m_betrayal_points = bitstream.read_unnamed_signed_integer(5)?;
+        self.m_juggernaut_delay = bitstream.read_unnamed_integer(4)?;
+        self.m_juggernaut_traits.decode(bitstream)?;
+
+        Ok(())
+    }
+}

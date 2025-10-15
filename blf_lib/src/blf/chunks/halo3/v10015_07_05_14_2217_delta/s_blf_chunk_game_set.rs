@@ -88,7 +88,7 @@ impl BinWrite for s_blf_chunk_game_set {
     type Args<'a> = ();
 
     fn write_options<W: Write + Seek>(&self, writer: &mut W, endian: Endian, args: Self::Args<'_>) -> BinResult<()> {
-        let mut bitstream = c_bitstream_writer::new(0x1BC0, e_bitstream_byte_order::_bitstream_byte_order_big_endian);
+        let mut bitstream = c_bitstream_writer::new_with_legacy_settings(0x1BC0, e_bitstream_byte_order::_bitstream_byte_order_big_endian);
         bitstream.begin_writing();
 
         BINRW_RESULT!(bitstream.write_integer(self.game_entry_count as u32, 6))?;

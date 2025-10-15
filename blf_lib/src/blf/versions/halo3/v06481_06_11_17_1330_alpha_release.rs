@@ -12,7 +12,7 @@ pub use halo3::v12070_08_09_05_2031_halo3_ship::s_blf_chunk_banhammer_messages::
 pub use halo3::v12070_08_09_05_2031_halo3_ship::s_blf_chunk_matchmaking_tips::*;
 pub use halo3::v06481_06_11_17_1330_alpha_release::s_blf_chunk_network_configuration::*;
 pub use halo3::v12070_08_09_05_2031_halo3_ship::s_blf_chunk_map_manifest::*;
-pub use halo3::v12070_08_09_05_2031_halo3_ship::s_blf_chunk_hopper_description_table::*;
+pub use halo3::v10015_07_05_14_2217_delta::s_blf_chunk_hopper_description_table::*;
 pub use halo3::v12070_08_09_05_2031_halo3_ship::s_blf_chunk_online_file_manifest::*;
 pub use halo3::v10015_07_05_14_2217_delta::s_blf_chunk_content_header::*;
 pub use halo3::v12070_08_09_05_2031_halo3_ship::s_blf_chunk_user_recent_players::*;

@@ -4,6 +4,7 @@ use filesize::PathExt;
 use blf_lib::blf::chunks::DynTitleAndBuild;
 use blf_lib::result::{BLFLibError, BLFLibResult};
 use crate::title_storage::ares::v_untracked_ares::v_untracked_ares;
+use crate::title_storage::halo3::v10015_07_05_14_2217_delta::v10015_07_05_14_2217_delta;
 use crate::title_storage::halo3::v11856_07_08_20_2332_release::v11856_07_08_20_2332_release;
 use crate::title_storage::halo3::v12070_08_09_05_2031_halo3_ship::v12070_08_09_05_2031_halo3_ship;
 use crate::title_storage::halo3odst::v13895_09_04_27_2201_atlas_release::v13895_09_04_27_2201_atlas_release;
@@ -42,6 +43,7 @@ fn get_title_converters() -> Vec<Box<dyn TitleConverter>> {
 
         // Pre-Releases
         Box::new(v11856_07_08_20_2332_release::default()),          // Halo 3 (Epsilon)
+        Box::new(v10015_07_05_14_2217_delta::default()),          // Halo 3 (Beta TU1)
         Box::new(v09730_10_04_09_1309_omaha_delta::default()),      // Halo: Reach (Public Beta)
         Box::new(v09449_10_03_25_1545_omaha_beta::default()),       // Halo: Reach (Private Beta)
         Box::new(v08516_10_02_19_1607_omaha_alpha::default()),      // Halo: Reach (Private Alpha)

@@ -77,10 +77,6 @@ mod title_storage_output {
     pub const motd_image_width: usize = 476;
     pub const motd_image_height: usize = 190;
 
-    pub const motd_popup_image_max_size: usize = 61440;
-    pub const motd_popup_image_width: usize = 308;
-    pub const motd_popup_image_height: usize = 466;
-
     // Root Directory
     // storage/title/tracked/12070/default_hoppers/
     pub fn network_configuration_file_name() -> String {
