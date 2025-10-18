@@ -39,7 +39,7 @@ impl s_blf_chunk_author {
                 .expect("s_blf_chunk_author::for_build has a bad program name! This should never happen"),
             build_number,
             build_number_sequence: 1,
-            build_string: StaticString::from_string(T::get_build_string()[..min(T::get_build_string().len(), 28)].to_string())
+            build_string: StaticString::from_string(T::get_build_string()[..min(T::get_build_string().len(), 16)].to_string())
                 .expect("s_blf_chunk_author::for_build has a bad build string! This should never happen"),
             author_name: Default::default(),
         }

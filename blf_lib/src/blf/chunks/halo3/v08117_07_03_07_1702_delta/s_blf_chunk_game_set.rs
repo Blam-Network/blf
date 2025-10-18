@@ -8,7 +8,7 @@ use blf_lib_derive::BlfChunk;
 use crate::types::c_string::StaticString;
 
 #[derive(BlfChunk,Default,PartialEq,Debug,Clone,Serialize,Deserialize)]
-#[Header("gset", 1.0)] // unsure on minor version
+#[Header("gset", 1.1)] // unsure on minor version
 pub struct s_blf_chunk_game_set
 {
     game_entry_count: usize,

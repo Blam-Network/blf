@@ -1,2 +1,4 @@
 pub mod s_blf_chunk_network_configuration;
 pub mod s_blf_chunk_author;
+pub mod s_blf_chunk_hopper_configuration_table;
+pub mod s_blf_chunk_packed_game_variant;

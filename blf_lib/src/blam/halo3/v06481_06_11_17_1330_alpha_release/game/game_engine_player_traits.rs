@@ -128,10 +128,26 @@ pub struct c_player_trait_movement {
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite)]
+pub struct c_player_trait_appearance {
+    pub m_active_camo_setting: u8,
+    pub m_waypoint_setting: u8,
+    pub m_aura_setting: u8,
+    pub m_forced_change_color_setting: u8,
+}
+
+#[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite)]
+pub struct c_player_trait_sensors {
+    pub m_motion_tracker_setting: u16,
+    pub m_motion_tracker_range_setting: u16,
+}
+
+#[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite)]
 pub struct c_player_traits {
     pub m_shield_vitality_traits: c_player_trait_shield_vitality,
     pub m_weapon_traits: c_player_trait_weapons,
     pub m_movement_traits: c_player_trait_movement,
+    pub m_appearance_traits: c_player_trait_appearance,
+    pub m_sensor_traits: c_player_trait_sensors,
 }
 
 impl c_player_traits {
@@ -152,6 +168,12 @@ impl c_player_traits {
         bitstream.write_integer(self.m_movement_traits.m_speed_setting as u32, 4)?;
         bitstream.write_integer(self.m_movement_traits.m_gravity_setting as u32, 3)?;
         bitstream.write_integer(self.m_movement_traits.m_vehicle_usage_setting as u32, 2)?;
+        bitstream.write_integer(self.m_appearance_traits.m_active_camo_setting as u32, 3)?;
+        bitstream.write_integer(self.m_appearance_traits.m_waypoint_setting as u32, 2)?;
+        bitstream.write_integer(self.m_appearance_traits.m_aura_setting as u32, 3)?;
+        bitstream.write_integer(self.m_appearance_traits.m_forced_change_color_setting as u32, 2)?;
+        bitstream.write_integer(self.m_sensor_traits.m_motion_tracker_setting as u32, 3)?;
+        bitstream.write_integer(self.m_sensor_traits.m_motion_tracker_range_setting as u32, 3)?;
 
         Ok(())
     }
@@ -173,6 +195,12 @@ impl c_player_traits {
         self.m_movement_traits.m_speed_setting = bitstream.read_unnamed_integer(4)?;
         self.m_movement_traits.m_gravity_setting = bitstream.read_unnamed_integer(3)?;
         self.m_movement_traits.m_vehicle_usage_setting = bitstream.read_unnamed_integer(2)?;
+        self.m_appearance_traits.m_active_camo_setting = bitstream.read_unnamed_integer(3)?;
+        self.m_appearance_traits.m_waypoint_setting = bitstream.read_unnamed_integer(2)?;
+        self.m_appearance_traits.m_aura_setting = bitstream.read_unnamed_integer(3)?;
+        self.m_appearance_traits.m_forced_change_color_setting = bitstream.read_unnamed_integer(2)?;
+        self.m_sensor_traits.m_motion_tracker_setting = bitstream.read_unnamed_integer(3)?;
+        self.m_sensor_traits.m_motion_tracker_range_setting = bitstream.read_unnamed_integer(3)?;
 
         Ok(())
     }
