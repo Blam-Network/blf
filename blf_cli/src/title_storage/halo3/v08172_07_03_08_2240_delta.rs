@@ -72,10 +72,6 @@ mod title_storage_output {
     // applies to the root folder, eg "default_hoppers"
     pub const hopper_directory_name_max_length: usize = 64;
 
-    pub const motd_image_max_size: usize = 61440;
-    pub const motd_image_width: usize = 476;
-    pub const motd_image_height: usize = 190;
-
     // Root Directory
     // storage/title/tracked/12070/default_hoppers/
     pub fn network_configuration_file_name() -> String {
@@ -132,24 +128,6 @@ mod title_storage_output {
             hoppers_path,
             language_code,
             matchmaking_tips_file_name
-        )
-    }
-
-    pub const motd_file_name: &str = "motd.bin";
-    pub fn motd_file_path(hoppers_path: &String, language_code: &str) -> String {
-        build_path!(
-            hoppers_path,
-            language_code,
-            motd_file_name
-        )
-    }
-
-    pub const motd_image_file_name: &str = "motd_image.jpg";
-    pub fn motd_image_file_path(hoppers_path: &String, language_code: &str) -> String {
-        build_path!(
-            hoppers_path,
-            language_code,
-            motd_image_file_name
         )
     }
 
@@ -234,23 +212,6 @@ mod title_storage_config {
             config_folder,
             matchmaking_tips_folder_name,
             format!("{language_code}.txt")
-        )
-    }
-
-    pub const motd_folder_name: &str = "motd";
-    pub fn motd_file_path(config_folder: &String, language_code: &str) -> String {
-        build_path!(
-            config_folder,
-            motd_folder_name,
-            format!("{language_code}.txt")
-        )
-    }
-
-    pub fn motd_image_file_path(config_folder: &String, language_code: &str) -> String {
-        build_path!(
-            config_folder,
-            motd_folder_name,
-            format!("{language_code}.jpg")
         )
     }
 
@@ -401,7 +362,6 @@ impl TitleConverter for v08172_07_03_08_2240_delta {
 
                 Self::build_blf_banhammer_messages(&hopper_config_path, &hopper_blfs_path)?;
                 Self::build_blf_matchmaking_tips(&hopper_config_path, &hopper_blfs_path)?;
-                Self::build_blf_motds(&hopper_config_path, &hopper_blfs_path)?;
                 Self::build_blf_map_manifest(&hopper_config_path, &hopper_blfs_path)?;
                 Self::build_blf_game_variants(&hopper_config_path, &hopper_blfs_path, &build_temp_dir_path, &game_sets, &mut game_variant_hashes);
                 Self::build_blf_game_sets(&hopper_blfs_path, game_sets, &game_variant_hashes, &build_temp_dir_path)?;
@@ -456,7 +416,6 @@ impl TitleConverter for v08172_07_03_08_2240_delta {
                 println!("{} {}...", "Converting".bold(), hopper_directory.bold().bright_white());
                 Self::build_config_banhammer_messages(&hoppers_blf_path, &hoppers_config_path)?;
                 Self::build_config_matchmaking_tips(&hoppers_blf_path, &hoppers_config_path)?;
-                Self::build_config_motds(&hoppers_blf_path, &hoppers_config_path)?;
                 Self::build_config_game_variants(&hoppers_blf_path, &hoppers_config_path)?;
                 Self::build_config_game_sets(&hoppers_blf_path, &hoppers_config_path)?;
                 Self::build_config_hoppers(&hoppers_blf_path, &hoppers_config_path)?;
@@ -533,119 +492,6 @@ impl v08172_07_03_08_2240_delta {
         }
 
         やった!(task)
-    }
-
-    fn build_config_motds(hoppers_blf_path: &String, hoppers_config_path: &String) -> BLFLibResult {
-        let mut task = console_task::start("Converting MOTDs");
-
-        // BLFs
-        for language_code in k_language_suffixes {
-            let blf_file_path = title_storage_output::motd_file_path(
-                hoppers_blf_path,
-                language_code,
-            );
-
-            if !exists(&blf_file_path)? {
-                task.add_warning(format!(
-                    "No {} MOTD is present.",
-                    get_language_string(language_code),
-                ));
-
-                continue;
-            }
-
-            let motd = find_chunk_in_file::<s_blf_chunk_message_of_the_day>(
-                title_storage_output::motd_file_path(
-                    hoppers_blf_path,
-                    language_code,
-                )
-            )?;
-
-            write_text_file(
-                title_storage_config::motd_file_path(
-                    hoppers_config_path,
-                    language_code,
-                ),
-                motd.get_message()
-            )?;
-
-            let jpg_file_path = title_storage_output::motd_image_file_path(
-                hoppers_blf_path,
-                language_code,
-            );
-
-            let output_path = title_storage_config::motd_image_file_path(
-                hoppers_config_path,
-                language_code,
-            );
-
-            if !exists(&jpg_file_path)? {
-                task.add_warning(format!(
-                    "No {} MOTD image is present.",
-                    get_language_string(language_code),
-                ));
-
-                continue;
-            }
-
-            fs::copy(jpg_file_path, output_path)?;
-        }
-        // BLFs
-        for language_code in k_language_suffixes {
-            let blf_file_path = title_storage_output::motd_file_path(
-                hoppers_blf_path,
-                language_code,
-            );
-
-            if !exists(&blf_file_path)? {
-                task.add_warning(format!(
-                    "No {} MOTD is present.",
-                    get_language_string(language_code),
-                ));
-
-                continue;
-            }
-
-            let motd = find_chunk_in_file::<s_blf_chunk_message_of_the_day>(
-                title_storage_output::motd_file_path(
-                    hoppers_blf_path,
-                    language_code,
-                )
-            )?;
-
-            write_text_file(
-                title_storage_config::motd_file_path(
-                    hoppers_config_path,
-                    language_code,
-                ),
-                motd.get_message()
-            )?;
-
-            let jpg_file_path = title_storage_output::motd_image_file_path(
-                hoppers_blf_path,
-                language_code,
-            );
-
-            let output_path = title_storage_config::motd_image_file_path(
-                hoppers_config_path,
-                language_code,
-            );
-
-            if !exists(&jpg_file_path)? {
-                task.add_warning(format!(
-                    "No {} MOTD image is present.",
-                    get_language_string(language_code),
-                ));
-
-                continue;
-            }
-
-            fs::copy(jpg_file_path, output_path)?;
-        }
-
-
-        やった!(task)
-
     }
 
     fn build_config_game_variants(hoppers_blf_path: &String, hoppers_config_path: &String) -> BLFLibResult {
@@ -939,71 +785,6 @@ impl v08172_07_03_08_2240_delta {
         }
 
         やった!(task)
-    }
-
-    fn build_blf_motds(
-        hoppers_config_folder: &String,
-        hoppers_blf_folder: &String,
-    ) -> BLFLibResult
-    {
-        let mut task = console_task::start("Building MOTDs");
-
-        for language_code in k_language_suffixes {
-            let motd_config_path = title_storage_config::motd_file_path(
-                hoppers_config_folder,
-                language_code,
-            );
-
-            if !exists(&motd_config_path)? {
-                task.add_warning(format!(
-                    "No {} MOTD is present.",
-                    get_language_string(language_code),
-                ));
-                continue;
-            }
-
-            let motd = s_blf_chunk_message_of_the_day::new(read_file_to_string(
-                &motd_config_path
-            )?);
-
-            BlfFileBuilder::new()
-                .add_chunk(s_blf_chunk_start_of_file::default())
-                .add_chunk(s_blf_chunk_author::for_build::<v08172_07_03_08_2240_delta>())
-                .add_chunk(motd)
-                .add_chunk(s_blf_chunk_end_of_file::default())
-                .write_file(title_storage_output::motd_file_path(hoppers_blf_folder, language_code))?;
-
-            // copy images.
-            let image_source = title_storage_config::motd_image_file_path(
-                hoppers_config_folder,
-                language_code,
-            );
-
-            let image_valid = validate_jpeg(
-                &image_source,
-                title_storage_output::motd_image_width,
-                title_storage_output::motd_image_height,
-                Some(title_storage_output::motd_image_max_size)
-            );
-
-            if image_valid.is_err() {
-                task.add_warning(format!(
-                    "{} MOTD has an invalid Image: {}",
-                    get_language_string(language_code),
-                    image_valid.unwrap_err()
-                ));
-
-                continue;
-            }
-
-            fs::copy(image_source, title_storage_output::motd_image_file_path(
-                hoppers_blf_folder,
-                language_code,
-            ))?;
-        }
-
-        task.complete();
-        Ok(())
     }
 
     fn build_blf_map_manifest(hoppers_config_path: &String, hoppers_blf_path: &String) -> BLFLibResult
