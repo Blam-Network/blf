@@ -26,12 +26,12 @@ impl c_game_engine_miscellaneous_options {
     }
 
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
-        SET_BIT!(self.m_flags, 0, bitstream.read_unnamed_bool()?);
-        SET_BIT!(self.m_flags, 1, bitstream.read_unnamed_bool()?);
-        SET_BIT!(self.m_flags, 2, bitstream.read_unnamed_bool()?);
-        self.m_round_time_limit_minutes = bitstream.read_unnamed_integer(8)?;
-        self.m_round_limit = bitstream.read_unnamed_integer(4)?;
-        self.m_early_victory_win_count = bitstream.read_unnamed_integer(4)?;
+        SET_BIT!(self.m_flags, 0, bitstream.read_bool("miscellaneous-options-teams")?);
+        SET_BIT!(self.m_flags, 1, bitstream.read_bool("miscellaneous-options-round-reset-players")?);
+        SET_BIT!(self.m_flags, 2, bitstream.read_bool("miscellaneous-options-round-reset-map")?);
+        self.m_round_time_limit_minutes = bitstream.read_integer("miscellaneous-options-round-time-limit-minutes", 8)?;
+        self.m_round_limit = bitstream.read_integer("miscellaneous-options-round-limit", 4)?;
+        self.m_early_victory_win_count = bitstream.read_integer("miscellaneous-options-early-victory-win-count", 4)?;
 
         Ok(())
     }
@@ -70,17 +70,17 @@ impl c_game_engine_respawn_options {
     }
 
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
-        SET_BIT!(self.m_flags, 0, bitstream.read_unnamed_bool()?);
-        SET_BIT!(self.m_flags, 1, bitstream.read_unnamed_bool()?);
-        SET_BIT!(self.m_flags, 2, bitstream.read_unnamed_bool()?);
-        SET_BIT!(self.m_flags, 3, bitstream.read_unnamed_bool()?);
-        self.m_lives_per_round = bitstream.read_unnamed_integer(6)?;
-        self.m_team_lives_per_round = bitstream.read_unnamed_integer(7)?;
-        self.m_respawn_time_seconds = bitstream.read_unnamed_integer(8)?;
-        self.m_suicide_penalty_seconds = bitstream.read_unnamed_integer(8)?;
-        self.m_betrayal_penalty_seconds = bitstream.read_unnamed_integer(8)?;
-        self.m_respawn_growth_seconds = bitstream.read_unnamed_integer(4)?;
-        self.m_respawn_player_traits_duration_seconds = bitstream.read_unnamed_integer(6)?;
+        SET_BIT!(self.m_flags, 0, bitstream.read_bool("respawn-options-inherit-respawn-time")?);
+        SET_BIT!(self.m_flags, 1, bitstream.read_bool("respawn-options-respawn-with-teammate")?);
+        SET_BIT!(self.m_flags, 2, bitstream.read_bool("respawn-options-respawn-at-location")?);
+        SET_BIT!(self.m_flags, 3, bitstream.read_bool("respawn-options-respawn-on-kills")?);
+        self.m_lives_per_round = bitstream.read_integer("respawn-options-lives-per-round", 6)?;
+        self.m_team_lives_per_round = bitstream.read_integer("respawn-options-team-lives-per-round", 7)?;
+        self.m_respawn_time_seconds = bitstream.read_integer("respawn-options-respawn-time", 8)?;
+        self.m_suicide_penalty_seconds = bitstream.read_integer("respawn-options-suicide-time", 8)?;
+        self.m_betrayal_penalty_seconds = bitstream.read_integer("respawn-options-betrayal-time", 8)?;
+        self.m_respawn_growth_seconds = bitstream.read_integer("respawn-options-respawn-growth-time", 4)?;
+        self.m_respawn_player_traits_duration_seconds = bitstream.read_integer("respawn-options-player-traits-duration", 6)?;
         self.m_respawn_player_traits.decode(bitstream)?;
 
         Ok(())

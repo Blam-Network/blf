@@ -67,15 +67,6 @@ impl c_map_variant {
                 bitstream.write_bool(true)?; // variant_object_exists
                 bitstream.write_integer(variant_object.flags as u32, 16)?;
 
-                if TEST_BIT!(variant_object.flags, 8) // spawns relative
-                {
-                    bitstream.write_bool(true)?; // parent-object-exists
-                }
-                else
-                {
-                    bitstream.write_bool(false)?; // parent-object-exists
-                }
-
                 if !TEST_BIT!(variant_object.flags, 1) && i < self.m_number_of_scenario_objects as usize  //edited
                 {
                     bitstream.write_bool(false)?;

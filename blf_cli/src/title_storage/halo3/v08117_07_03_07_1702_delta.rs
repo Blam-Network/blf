@@ -16,7 +16,7 @@ use lazy_static::lazy_static;
 use blf_lib::blam::halo3::v12070_08_09_05_2031_halo3_ship::cseries::language::{get_language_string, k_language_suffix_chinese_traditional, k_language_suffix_english, k_language_suffix_french, k_language_suffix_german, k_language_suffix_italian, k_language_suffix_japanese, k_language_suffix_korean, k_language_suffix_mexican, k_language_suffix_portuguese, k_language_suffix_spanish};
 use blf_lib::blf::{get_blf_file_hash, BlfFile, BlfFileBuilder};
 use blf_lib::blf::chunks::{find_chunk_in_file, BlfChunk};
-use blf_lib::blf::versions::halo3::v08172_07_03_08_2240_delta::{s_blf_chunk_hopper_description_table, s_blf_chunk_matchmaking_tips, s_blf_chunk_message_of_the_day, s_blf_chunk_network_configuration, s_blf_chunk_packed_game_variant, s_blf_chunk_packed_map_variant, s_blf_chunk_game_set, s_blf_chunk_author};
+use blf_lib::blf::versions::halo3::v08117_07_03_07_1702_delta::{s_blf_chunk_hopper_description_table, s_blf_chunk_matchmaking_tips, s_blf_chunk_message_of_the_day, s_blf_chunk_network_configuration, s_blf_chunk_packed_game_variant, s_blf_chunk_packed_map_variant, s_blf_chunk_game_set, s_blf_chunk_author};
 use crate::console::console_task;
 use regex::Regex;
 use tempdir::TempDir;
@@ -26,19 +26,19 @@ use tokio::task::JoinHandle;
 use blf_lib::blam::common::memory::crc::crc32;
 use blf_lib::blam::common::memory::secure_signature::s_network_http_request_hash;
 use blf_lib::blam::halo3::v10015_07_05_14_2217_delta::game::game_engine_variant::c_game_variant;
-use blf_lib::blf::versions::halo3::v08172_07_03_08_2240_delta::s_blf_chunk_hopper_configuration_table;
-use blf_lib::blf::versions::halo3::v08172_07_03_08_2240_delta::{s_blf_chunk_banhammer_messages, s_blf_chunk_online_file_manifest};
-use blf_lib::blf::versions::halo3::v08172_07_03_08_2240_delta::{s_blf_chunk_end_of_file, s_blf_chunk_game_set_entry, s_blf_chunk_map_manifest, s_blf_chunk_start_of_file};
+use blf_lib::blf::versions::halo3::v08117_07_03_07_1702_delta::s_blf_chunk_hopper_configuration_table;
+use blf_lib::blf::versions::halo3::v08117_07_03_07_1702_delta::{s_blf_chunk_banhammer_messages, s_blf_chunk_online_file_manifest};
+use blf_lib::blf::versions::halo3::v08117_07_03_07_1702_delta::{s_blf_chunk_end_of_file, s_blf_chunk_game_set_entry, s_blf_chunk_map_manifest, s_blf_chunk_start_of_file};
 use blf_lib::io::{read_file_to_string, read_json_file, write_json_file};
 use blf_lib::result::{BLFLibError, BLFLibResult};
 use blf_lib::types::c_string::StaticString;
-use crate::title_storage::halo3::v08172_07_03_08_2240_delta::title_storage_config::{get_hopper_id_from_hopper_folder_name, matchmaking_hopper_category_configuration_and_descriptions};
-use crate::title_storage::halo3::v08172_07_03_08_2240_delta::title_storage_output::hopper_directory_name_max_length;
+use crate::title_storage::halo3::v08117_07_03_07_1702_delta::title_storage_config::{get_hopper_id_from_hopper_folder_name, matchmaking_hopper_category_configuration_and_descriptions};
+use crate::title_storage::halo3::v08117_07_03_07_1702_delta::title_storage_output::hopper_directory_name_max_length;
 
 title_converter! (
     #[Title("Halo 3")]
-    #[Build("08172.07.03.08.2240.delta")]
-    pub struct v08172_07_03_08_2240_delta {}
+    #[Build("08117.07.03.07.1702.delta")]
+    pub struct v08117_07_03_07_1702_delta {}
 );
 
 // Halo 3's xex supports 12 languages, but only 10 were released.
@@ -66,7 +66,7 @@ lazy_static! {
 
 mod title_storage_output {
     use blf_lib::blf::chunks::BlfChunk;
-    use blf_lib::blf::versions::halo3::v08172_07_03_08_2240_delta::{s_blf_chunk_game_set, s_blf_chunk_hopper_configuration_table, s_blf_chunk_hopper_description_table, s_blf_chunk_network_configuration, s_blf_chunk_online_file_manifest, s_blf_chunk_packed_game_variant, s_blf_chunk_packed_map_variant};
+    use blf_lib::blf::versions::halo3::v08117_07_03_07_1702_delta::{s_blf_chunk_game_set, s_blf_chunk_hopper_configuration_table, s_blf_chunk_hopper_description_table, s_blf_chunk_network_configuration, s_blf_chunk_online_file_manifest, s_blf_chunk_packed_game_variant, s_blf_chunk_packed_map_variant};
     use crate::build_path;
 
     // applies to the root folder, eg "default_hoppers"
@@ -186,7 +186,7 @@ mod title_storage_config {
     use blf_lib::result::BLFLibResult;
     use crate::build_path;
     use crate::io::ordered_map;
-    use blf_lib::blf::versions::halo3::v08172_07_03_08_2240_delta::{c_hopper_configuration, s_game_hopper_custom_category};
+    use blf_lib::blf::versions::halo3::v08117_07_03_07_1702_delta::{c_hopper_configuration, s_game_hopper_custom_category};
 
     pub const banhammer_messages_folder_name: &str = "banhammer_messages";
     pub fn banhammer_messages_file_path(config_folder: &String, language_code: &str) -> String {
@@ -314,7 +314,7 @@ mod title_storage_config {
     }
 }
 
-impl TitleConverter for v08172_07_03_08_2240_delta {
+impl TitleConverter for v08117_07_03_07_1702_delta {
     fn build_blfs(&mut self, config_path: &String, blfs_path: &String) {
         let start_time = SystemTime::now();
 
@@ -430,7 +430,7 @@ impl TitleConverter for v08172_07_03_08_2240_delta {
     }
 }
 
-impl v08172_07_03_08_2240_delta {
+impl v08117_07_03_07_1702_delta {
     fn build_config_banhammer_messages(hoppers_blf_path: &String, hoppers_config_path: &String) -> BLFLibResult {
         let mut task = console_task::start("Converting Banhammer Messages");
 
@@ -751,7 +751,7 @@ impl v08172_07_03_08_2240_delta {
 
             BlfFileBuilder::new()
                 .add_chunk(s_blf_chunk_start_of_file::default())
-                .add_chunk(s_blf_chunk_author::for_build::<v08172_07_03_08_2240_delta>())
+                .add_chunk(s_blf_chunk_author::for_build::<v08117_07_03_07_1702_delta>())
                 .add_chunk(bhms)
                 .add_chunk(s_blf_chunk_end_of_file::default())
                 .write_file(title_storage_output::banhammer_messages_file_path(hoppers_blf_folder, language_code))?;
@@ -775,7 +775,7 @@ impl v08172_07_03_08_2240_delta {
 
             BlfFileBuilder::new()
                 .add_chunk(s_blf_chunk_start_of_file::default())
-                .add_chunk(s_blf_chunk_author::for_build::<v08172_07_03_08_2240_delta>())
+                .add_chunk(s_blf_chunk_author::for_build::<v08117_07_03_07_1702_delta>())
                 .add_chunk(s_blf_chunk_matchmaking_tips::create(matchmaking_tips)?)
                 .add_chunk(s_blf_chunk_end_of_file::default())
                 .write_file(title_storage_output::matchmaking_tips_file_path(
@@ -818,7 +818,7 @@ impl v08172_07_03_08_2240_delta {
 
         BlfFileBuilder::new()
             .add_chunk(s_blf_chunk_start_of_file::new("rsa manifest"))
-            .add_chunk(s_blf_chunk_author::for_build::<v08172_07_03_08_2240_delta>())
+            .add_chunk(s_blf_chunk_author::for_build::<v08117_07_03_07_1702_delta>())
             .add_chunk(map_manifest)
             .add_chunk(s_blf_chunk_end_of_file::default())
             .write_file(title_storage_output::rsa_manifest_file_path(
@@ -970,7 +970,7 @@ impl v08172_07_03_08_2240_delta {
 
                             BlfFileBuilder::new()
                                 .add_chunk(s_blf_chunk_start_of_file::new("game var"))
-                                .add_chunk(s_blf_chunk_author::for_build::<v08172_07_03_08_2240_delta>())
+                                .add_chunk(s_blf_chunk_author::for_build::<v08117_07_03_07_1702_delta>())
                                 .add_chunk(s_blf_chunk_packed_game_variant { game_variant })
                                 .add_chunk(s_blf_chunk_end_of_file::default())
                                 .write_file(&game_variant_blf_path)
@@ -1094,7 +1094,7 @@ impl v08172_07_03_08_2240_delta {
 
             BlfFileBuilder::new()
                 .add_chunk(s_blf_chunk_start_of_file::new("game set"))
-                .add_chunk(s_blf_chunk_author::for_build::<v08172_07_03_08_2240_delta>())
+                .add_chunk(s_blf_chunk_author::for_build::<v08117_07_03_07_1702_delta>())
                 .add_chunk(gset)
                 .add_chunk(s_blf_chunk_end_of_file::default())
                 .write_file(title_storage_output::game_set_file_path(
@@ -1186,7 +1186,7 @@ impl v08172_07_03_08_2240_delta {
 
         BlfFileBuilder::new()
             .add_chunk(s_blf_chunk_start_of_file::default())
-            .add_chunk(s_blf_chunk_author::for_build::<v08172_07_03_08_2240_delta>())
+            .add_chunk(s_blf_chunk_author::for_build::<v08117_07_03_07_1702_delta>())
             .add_chunk(mhdf)
             .add_chunk(s_blf_chunk_end_of_file::default())
             .write_file(title_storage_output::hopper_descriptions_file_path(
@@ -1195,7 +1195,7 @@ impl v08172_07_03_08_2240_delta {
 
         BlfFileBuilder::new()
             .add_chunk(s_blf_chunk_start_of_file::new("hopper config"))
-            .add_chunk(s_blf_chunk_author::for_build::<v08172_07_03_08_2240_delta>())
+            .add_chunk(s_blf_chunk_author::for_build::<v08117_07_03_07_1702_delta>())
             .add_chunk(mhcf)
             .add_chunk(s_blf_chunk_end_of_file::default())
             .write_file(title_storage_output::matchmaking_hopper_file_path(
@@ -1206,24 +1206,24 @@ impl v08172_07_03_08_2240_delta {
     }
 
     fn build_blf_network_configuration(
-        config_path: &String,
-        blfs_path: &String,
+        hoppers_config_path: &String,
+        hoppers_blfs_path: &String,
     ) -> BLFLibResult {
         let mut task = console_task::start("Building Network Configuration");
 
         let netc = s_blf_chunk_network_configuration {
             config: read_json_file(
-                title_storage_config::network_configuration_file_path(config_path)
+                title_storage_config::network_configuration_file_path(hoppers_config_path)
             )?,
         };
 
         BlfFileBuilder::new()
             .add_chunk(s_blf_chunk_start_of_file::new("halo3 net config"))
-            .add_chunk(s_blf_chunk_author::for_build::<v08172_07_03_08_2240_delta>())
+            .add_chunk(s_blf_chunk_author::for_build::<v08117_07_03_07_1702_delta>())
             .add_chunk(netc)
             .add_chunk(s_blf_chunk_end_of_file::default())
             .write_file(title_storage_output::network_configuration_file_path(
-                blfs_path,
+                hoppers_blfs_path,
             ))?;
 
         やった!(task)

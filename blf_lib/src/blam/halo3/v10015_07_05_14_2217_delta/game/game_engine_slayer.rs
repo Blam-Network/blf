@@ -24,6 +24,7 @@ pub struct c_game_engine_slayer_variant {
     #[brw(pad_after = 1)] // seems to be alignment pad
     pub m_killing_spree_points: i8,
     pub m_leader_traits: c_player_traits,
+    pub m_leader_team_traits: c_player_traits,
 }
 
 impl c_game_engine_slayer_variant {
@@ -44,6 +45,7 @@ impl c_game_engine_slayer_variant {
         bitstream.write_signed_integer(self.m_splatter_points as i32, 5)?;
         bitstream.write_signed_integer(self.m_killing_spree_points as i32, 5)?;
         self.m_leader_traits.encode(bitstream)?;
+        self.m_leader_team_traits.encode(bitstream)?;
 
         Ok(())
     }
@@ -65,6 +67,7 @@ impl c_game_engine_slayer_variant {
         self.m_splatter_points = bitstream.read_unnamed_signed_integer(5)?;
         self.m_killing_spree_points = bitstream.read_unnamed_signed_integer(5)?;
         self.m_leader_traits.decode(bitstream)?;
+        self.m_leader_team_traits.decode(bitstream)?;
 
         Ok(())
     }

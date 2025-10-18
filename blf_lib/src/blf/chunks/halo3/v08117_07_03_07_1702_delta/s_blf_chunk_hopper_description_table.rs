@@ -10,7 +10,7 @@ use blf_lib_derive::BlfChunk;
 use crate::types::c_string::StaticString;
 
 #[derive(BlfChunk,Default,PartialEq,Debug,Clone,Serialize,Deserialize)]
-#[Header("mhdf", 3.1)]
+#[Header("mhdf", 1.1)]
 pub struct s_blf_chunk_hopper_description_table {
     description_count: usize,
     descriptions: Vec<s_game_hopper_description>,
@@ -30,7 +30,7 @@ pub struct s_game_hopper_description {
 pub enum e_hopper_descripton_type {
     #[default]
     _hopper_description_type_selected = 0,
-    _hopper_description_type_restricted,   // 0.0
+    _hopper_description_type_restricted,
 }
 
 
@@ -63,7 +63,7 @@ impl BinRead for s_blf_chunk_hopper_description_table {
         let mut buffer = Vec::<u8>::new();
         reader.read_to_end(&mut buffer)?;
 
-        let mut bitstream = c_bitstream_reader::new(buffer.as_slice(), e_bitstream_byte_order::_bitstream_byte_order_big_endian);
+        let mut bitstream = c_bitstream_reader::new_with_legacy_settings(buffer.as_slice(), e_bitstream_byte_order::_bitstream_byte_order_big_endian);
         bitstream.begin_reading();
 
         let mut mhdf = Self::default();
@@ -90,7 +90,7 @@ impl BinWrite for s_blf_chunk_hopper_description_table {
     type Args<'a> = ();
 
     fn write_options<W: Write + Seek>(&self, writer: &mut W, endian: Endian, args: Self::Args<'_>) -> BinResult<()> {
-        let mut bitstream = c_bitstream_writer::new(0x4000, e_bitstream_byte_order::_bitstream_byte_order_big_endian);
+        let mut bitstream = c_bitstream_writer::new_with_legacy_settings(0x4000, e_bitstream_byte_order::_bitstream_byte_order_big_endian);
         bitstream.begin_writing();
 
         bitstream.write_integer(self.description_count as u32, 6)?;
