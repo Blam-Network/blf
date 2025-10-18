@@ -19,14 +19,12 @@ pub use halo3::v12070_08_09_05_2031_halo3_ship::s_blf_chunk_user_recent_players:
 pub use halo3::v08172_07_03_08_2240_delta::s_blf_chunk_player_data::*;
 pub use halo3::v12070_08_09_05_2031_halo3_ship::s_blf_chunk_compressed_data::*;
 pub use halo3::v12070_08_09_05_2031_halo3_ship::s_blf_chunk_matchmaking_hopper_statistics::*;
-pub use halo3::v08172_07_03_08_2240_delta::s_blf_chunk_map_variant::*;
+pub use halo3::v10015_07_05_14_2217_delta::s_blf_chunk_map_variant::*;
 pub use halo3::v10015_07_05_14_2217_delta::s_blf_chunk_packed_map_variant::*;
 pub use halo3::v10015_07_05_14_2217_delta::s_blf_chunk_game_variant::*;
 pub use halo3::v10015_07_05_14_2217_delta::s_blf_chunk_packed_game_variant::*;
-pub use halo3::v08172_07_03_08_2240_delta::s_blf_chunk_game_set::*;
-pub use halo3::v08172_07_03_08_2240_delta::s_blf_chunk_hopper_configuration_table::*;
 
 #[derive(TitleAndBuild)]
 #[Title("Halo 3")]
-#[Build("08172.07.03.08.2240.delta")]
-pub struct v08172_07_03_08_2240_delta {}
+#[Build("untracked version")]
+pub struct v_untracked_07_03_09_2215_delta {}
