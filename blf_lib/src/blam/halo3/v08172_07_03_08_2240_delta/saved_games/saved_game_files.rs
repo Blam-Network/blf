@@ -13,8 +13,7 @@ use blf_lib_derive::TestSize;
 use crate::types::bool::Bool;
 use crate::types::u64::Unsigned64;
 
-#[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite, TestSize)]
-#[Size(596)]
+#[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite)]
 #[cfg_attr(feature = "napi", napi(object, namespace = "halo3_08172_07_03_08_2240_delta"))]
 pub struct s_content_item_metadata {
     pub unique_id: Unsigned64,

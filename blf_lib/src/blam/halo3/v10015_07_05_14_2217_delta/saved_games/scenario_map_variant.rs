@@ -115,8 +115,7 @@ impl c_map_variant {
     }
 }
 
-#[derive(Default, PartialEq, Debug, Clone, Copy, Serialize, Deserialize, BinRead, BinWrite, TestSize)]
-#[Size(0x18)]
+#[derive(Default, PartialEq, Debug, Clone, Copy, Serialize, Deserialize, BinRead, BinWrite)]
 pub struct s_variant_multiplayer_object_properties_definition {
     pub game_engine_flags: u16,
     pub symmetry_placement_flags: u8, // foo
@@ -134,8 +133,7 @@ pub struct s_variant_multiplayer_object_properties_definition {
     pub unknown3: u32,
 }
 
-#[derive(Default, PartialEq, Debug, Clone, Copy, Serialize, Deserialize, BinRead, BinWrite, TestSize)]
-#[Size(0x54)]
+#[derive(Default, PartialEq, Debug, Clone, Copy, Serialize, Deserialize, BinRead, BinWrite)]
 pub struct s_variant_object_datum {
     pub flags: u16,
     pub reuse_timeout: u16,
