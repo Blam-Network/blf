@@ -16,7 +16,6 @@ use crate::types::u64::Unsigned64;
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite, TestSize)]
 #[Size(596)]
 #[cfg_attr(feature = "napi", napi(object, namespace = "halo3_08172_07_03_08_2240_delta"))]
-#[wasm_bindgen(getter_with_clone)]
 pub struct s_content_item_metadata {
     pub unique_id: Unsigned64,
     pub name: StaticWcharString<128>,
