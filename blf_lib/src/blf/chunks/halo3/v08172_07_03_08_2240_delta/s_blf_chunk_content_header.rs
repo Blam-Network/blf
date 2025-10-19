@@ -13,7 +13,6 @@ use blf_lib_derive::BlfChunk;
 #[Size(0xFC)]
 #[Header("chdr", 7.1)]
 #[brw(big)]
-#[wasm_bindgen(getter_with_clone)]
 pub struct s_blf_chunk_content_header
 {
     pub build_number: u16,
