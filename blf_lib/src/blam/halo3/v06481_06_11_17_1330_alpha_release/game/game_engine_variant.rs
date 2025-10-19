@@ -37,8 +37,7 @@ pub enum e_game_engine {
     infection = 10,
 }
 
-#[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, TestSize)]
-#[Size(0x264)]
+#[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct c_game_variant {
     pub m_game_engine: e_game_engine,
     pub m_description_index: u8,
