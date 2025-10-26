@@ -9,5 +9,6 @@ pub mod v_untracked_07_03_09_2215;
 pub mod v08172_07_03_08_2240_delta;
 pub mod v08117_07_03_07_1702_delta;
 pub mod v06481_06_11_17_1330_alpha_release;
+pub mod v11637_07_08_02_2348_release;
 
 pub const k_title_halo3: &str = "Halo 3";

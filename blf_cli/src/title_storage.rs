@@ -8,6 +8,8 @@ use crate::title_storage::halo3::v06481_06_11_17_1330_alpha_release::v06481_06_1
 use crate::title_storage::halo3::v08117_07_03_07_1702_delta::v08117_07_03_07_1702_delta;
 use crate::title_storage::halo3::v08172_07_03_08_2240_delta::v08172_07_03_08_2240_delta;
 use crate::title_storage::halo3::v10015_07_05_14_2217_delta::v10015_07_05_14_2217_delta;
+use crate::title_storage::halo3::v11637_07_08_02_2348_release::v11637_07_08_02_2348_release;
+use crate::title_storage::halo3::v11729_07_08_10_0021_main::v11729_07_08_10_0021_main;
 use crate::title_storage::halo3::v11856_07_08_20_2332_release::v11856_07_08_20_2332_release;
 use crate::title_storage::halo3::v12070_08_09_05_2031_halo3_ship::v12070_08_09_05_2031_halo3_ship;
 use crate::title_storage::halo3odst::v13895_09_04_27_2201_atlas_release::v13895_09_04_27_2201_atlas_release;
@@ -47,7 +49,9 @@ fn get_title_converters() -> Vec<Box<dyn TitleConverter>> {
         Box::new(v11860_10_07_24_0147_omaha_release::default()),    // Halo: Reach
 
         // Pre-Releases
-        Box::new(v11856_07_08_20_2332_release::default()),          // Halo 3 (Epsilon)
+        Box::new(v11856_07_08_20_2332_release::default()),          // Halo 3 (Epsilon Refresh)
+        Box::new(v11729_07_08_10_0021_main::default()),             // Halo 3 ("Expo")
+        Box::new(v11637_07_08_02_2348_release::default()),          // Halo 3 (Epsilon)
         Box::new(v10015_07_05_14_2217_delta::default()),            // Halo 3 (Beta TU1)
         Box::new(v08172_07_03_08_2240_delta::default()),            // Halo 3 (Pre-Release, March 8th 2007)
         Box::new(v08117_07_03_07_1702_delta::default()),            // Halo 3 (Pre-Release, March 7th 2007)
