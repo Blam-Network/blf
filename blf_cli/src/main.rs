@@ -5,14 +5,9 @@
 #![allow(dead_code)]
 #![allow(unused_variables)]
 
-use std::fs;
-use std::io::{Cursor, Read, Seek};
+use std::io::{Read, Seek};
 use binrw::BinWrite;
 use clap::{command, Parser};
-use blf_lib::blf::chunks::find_chunk_in_file;
-use blf_lib::blf::versions::haloreach::v08516_10_02_19_1607_omaha_alpha::{s_blf_chunk_hopper_configuration_table, s_blf_chunk_matchmaking_game_variant, s_blf_chunk_start_of_file};
-use blf_lib::blf::versions::haloreach::v08516_10_02_19_1607_omaha_alpha::s_blf_chunk_network_configuration;
-use blf_lib::io::write_json_file;
 use crate::commands::Commands;
 use crate::commands::Commands::{ConvertH3MCCMapVariants, TitleStorage};
 use crate::commands::convert_halo3mcc_map_variants::convert_halo3mcc_map_variants;
