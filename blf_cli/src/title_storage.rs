@@ -15,6 +15,7 @@ use crate::title_storage::haloonline::v1_106708_cert_ms23___release::v1_106708_c
 use crate::title_storage::haloreach::v09449_10_03_25_1545_omaha_beta::v09449_10_03_25_1545_omaha_beta;
 use crate::title_storage::haloreach::v09730_10_04_09_1309_omaha_delta::v09730_10_04_09_1309_omaha_delta;
 use crate::title_storage::haloreach::v12065_11_08_24_1738_tu1actual::v12065_11_08_24_1738_tu1actual;
+use crate::title_storage::haloreach::v11860_10_07_24_0147_omaha_release::v11860_10_07_24_0147_omaha_release;
 use crate::title_storage::haloreach::v08516_10_02_19_1607_omaha_alpha::v08516_10_02_19_1607_omaha_alpha;
 
 pub mod halo3;
@@ -43,6 +44,7 @@ fn get_title_converters() -> Vec<Box<dyn TitleConverter>> {
         Box::new(v12070_08_09_05_2031_halo3_ship::default()),       // Halo 3 (TU2)
         Box::new(v13895_09_04_27_2201_atlas_release::default()),    // Halo 3: ODST
         Box::new(v12065_11_08_24_1738_tu1actual::default()),        // Halo: Reach (TU1)
+        Box::new(v11860_10_07_24_0147_omaha_release::default()),    // Halo: Reach
 
         // Pre-Releases
         Box::new(v11856_07_08_20_2332_release::default()),          // Halo 3 (Epsilon)
