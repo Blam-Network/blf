@@ -10,7 +10,6 @@ use blf_lib_derive::BlfChunk;
 #[binrw]
 #[cfg_attr(feature = "napi", napi(object, namespace = "halo3_08117_07_03_07_1702_delta"))]
 #[derive(BlfChunk,Default,PartialEq,Debug,Clone,Serialize,Deserialize)]
-#[Size(0xFC)]
 #[Header("chdr", 7.1)]
 #[brw(big)]
 pub struct s_blf_chunk_content_header
