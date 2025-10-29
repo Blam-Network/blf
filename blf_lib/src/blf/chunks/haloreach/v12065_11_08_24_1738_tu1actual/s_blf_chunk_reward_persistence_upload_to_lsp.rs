@@ -14,7 +14,7 @@ use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::player_rewar
 #[Header("rpul", 3.1)]
 #[brw(big)]
 #[cfg_attr(feature = "napi", napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]
-pub struct s_blf_chunk_challenge_state {
+pub struct s_blf_chunk_reward_persistence_upload_to_lsp {
     pub alltime_cookie_count: u32,
     pub alltime_cookie_award_count: u32,
     pub alltime_commendation_progress: StaticArray<s_persistent_per_commendation_state, 128>,
