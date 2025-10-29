@@ -53,5 +53,5 @@ pub struct s_blf_chunk_reward_persistence_upload_to_lsp {
     pub persisted_rewards_data_78C: u32,
 }
 
-impl BlfChunkHooks for s_blf_chunk_challenge_state {}
+impl BlfChunkHooks for s_blf_chunk_reward_persistence_upload_to_lsp {}
 
