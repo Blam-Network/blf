@@ -9,3 +9,4 @@ pub mod megalogamengine;
 pub mod game_variant;
 pub mod game_engine_player_rating_parameters;
 pub mod game_engine_survival;
+pub mod player_rewards;

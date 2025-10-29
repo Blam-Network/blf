@@ -1,10 +1,12 @@
-use binrw::binrw;
+use binrw::{binrw, BinRead, BinWrite};
 use blf_lib::blf::chunks::BlfChunkHooks;
-use blf_lib::BlfChunk;
+use blf_lib::{bitfield, BlfChunk};
 use serde::{Deserialize, Serialize};
 use blf_lib::types::array::StaticArray;
 #[cfg(feature = "napi")]
 use napi_derive::napi;
+use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::player_rewards::e_purchase_state;
+use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::player_rewards::player_commendations::s_persistent_per_commendation_state;
 
 #[binrw]
 #[derive(BlfChunk,PartialEq,Debug,Clone,Serialize,Deserialize,Default)]
@@ -15,9 +17,9 @@ use napi_derive::napi;
 pub struct s_blf_chunk_rewards_persistance {
     // TODO: Map
     pub credits: u32,
-    pub unknown1: u32,
-    pub commendations: StaticArray<u16, 128>, // commendation state structs
-    pub purchased_items: StaticArray<u8, 256>,
+    pub unknown1: u32, // maybe bonus credits
+    pub commendations: StaticArray<s_persistent_per_commendation_state, 128>, // commendation state structs
+    pub purchased_items: StaticArray<e_purchase_state, 256>,
     pub unknown2: u16, // the stuff at the bottom is to do with bonuses
     pub unknown3: u32,
     pub unknown4: u32,

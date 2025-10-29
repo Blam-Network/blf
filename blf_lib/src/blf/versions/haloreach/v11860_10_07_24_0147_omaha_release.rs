@@ -18,7 +18,7 @@ pub use halo3odst::v13895_09_04_27_2201_atlas_release::s_blf_chunk_author::*;
 pub use haloreach::v12065_11_08_24_1738_tu1actual::s_blf_chunk_player_data::*;
 pub use haloreach::v12065_11_08_24_1738_tu1actual::s_blf_chunk_arena_hopper_stats::*;
 pub use haloreach::v12065_11_08_24_1738_tu1actual::s_blf_chunk_player_heartbeat_response::*;
-pub use haloreach::v12065_11_08_24_1738_tu1actual::s_blf_chunk_daily_challenges::*;
+pub use haloreach::v12065_11_08_24_1738_tu1actual::s_blf_chunk_challenge_state::*;
 pub use haloreach::v12065_11_08_24_1738_tu1actual::s_blf_chunk_rewards_persistence::*;
 pub use haloreach::v12065_11_08_24_1738_tu1actual::s_blf_chunk_service_record::*;
 pub use haloreach::v12065_11_08_24_1738_tu1actual::s_blf_chunk_hopper_configuration_table::*;
@@ -32,6 +32,8 @@ pub use haloreach::v12065_11_08_24_1738_tu1actual::s_blf_chunk_dlc_map_manifest:
 pub use haloreach::v12065_11_08_24_1738_tu1actual::s_blf_chunk_megalo_categories::*;
 pub use haloreach::v12065_11_08_24_1738_tu1actual::s_blf_chunk_predefined_queries::*;
 pub use haloreach::v12065_11_08_24_1738_tu1actual::s_blf_chunk_matchmaking_hopper_statistics::*;
+pub use haloreach::v12065_11_08_24_1738_tu1actual::s_blf_chunk_challenge_progress::*;
+pub use haloreach::v12065_11_08_24_1738_tu1actual::s_blf_chunk_reward_persistence_upload_to_lsp::*;
 
 #[derive(TitleAndBuild)]
 #[Title("Halo: Reach")]

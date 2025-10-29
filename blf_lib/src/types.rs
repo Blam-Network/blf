@@ -8,3 +8,4 @@ pub mod bool;
 pub mod numbers;
 pub mod net;
 pub mod u64;
+pub mod bitfield;
