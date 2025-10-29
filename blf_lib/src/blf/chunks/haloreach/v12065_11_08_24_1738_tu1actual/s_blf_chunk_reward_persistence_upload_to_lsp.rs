@@ -9,10 +9,9 @@ use crate::types::time::time64_t;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::player_rewards::e_purchase_state;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::player_rewards::player_commendations::s_persistent_per_commendation_state;
 use blf_lib::types::c_string::StaticString;
-use blf_lib_derive::TestSize;
 
 #[binrw]
-#[derive(BlfChunk,PartialEq,Debug,Clone,Serialize,Deserialize,Default,TestSize)]
+#[derive(BlfChunk,PartialEq,Debug,Clone,Serialize,Deserialize,Default)]
 #[Header("rpul", 3.1)]
 #[brw(big)]
 #[cfg_attr(feature = "napi", napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]
