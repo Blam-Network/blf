@@ -28,7 +28,7 @@ pub struct s_blf_chunk_reward_persistence_upload_to_lsp {
     pub cookies_earned_today_offline: u32,
     pub cookie_award_count_today_offline: StaticArray<u8, 4>,
     pub commendation_progress_today_offline: StaticArray<s_persistent_per_commendation_state, 128>,
-    pub unknown_51b: StaticArray<u8, 516>,
+    pub unknown_51b: StaticArray<u8, 516>, //Purchase order of item_absolute_index. Datatype is c_static_stack, with first 4 bytes being u32 of num of items. Populated in reward_persistence_cookie_purchasable_item_buy
     pub day_index: u32,
     pub user_timezone: u32,
     pub purchase_definition_checksum: u32,
