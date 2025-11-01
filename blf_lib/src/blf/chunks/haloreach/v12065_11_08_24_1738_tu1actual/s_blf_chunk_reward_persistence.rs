@@ -21,10 +21,10 @@ pub struct s_blf_chunk_rewards_persistance {
     pub unknown1: u32, // maybe bonus credits
     pub commendations: StaticArray<s_persistent_per_commendation_state, 128>, // commendation state structs
     pub purchased_items: StaticArray<e_purchase_state, 256>,
-    pub unknown2: u16, // the stuff at the bottom is to do with bonuses
+    pub unknown2: u16, //hopper id?
     pub unknown3: u32,
     pub unknown4: time64_t, // maybe lsp modified at
-    pub unknown5: u32,
+    pub awarded_credits: u32,
     pub unknown6: u8
 }
 

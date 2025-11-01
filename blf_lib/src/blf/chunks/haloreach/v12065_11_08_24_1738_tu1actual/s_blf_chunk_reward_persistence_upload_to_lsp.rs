@@ -42,7 +42,7 @@ pub struct s_blf_chunk_reward_persistence_upload_to_lsp {
     pub quit_last_game: u8,
     pub unknown754: u32,
     pub profile_unknown758: u32,
-    pub profile_unknown75c: i64,
+    pub profile_time_75c: time64_t,
     pub profile_unknown764: i16,
     pub profile_unknown766: i16,
     pub profile_unknown768: u32,
