@@ -33,7 +33,7 @@ pub struct s_blf_chunk_reward_persistence_upload_to_lsp {
     pub user_timezone: u32,
     pub purchase_definition_checksum: u32,
     pub unknown_728: u32,
-    pub last_modified_at: i64,
+    pub last_modified_at: time64_t,
     pub unknown_flag: u8,
     pub player_name: StaticString<16>,
     pub last_hopper_id: i16,
