@@ -7,6 +7,7 @@ use blf_lib::types::array::StaticArray;
 use napi_derive::napi;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::player_rewards::e_purchase_state;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::player_rewards::player_commendations::s_persistent_per_commendation_state;
+use blf_lib::types::time::time64_t;
 
 #[binrw]
 #[derive(BlfChunk,PartialEq,Debug,Clone,Serialize,Deserialize,Default)]
@@ -22,10 +23,9 @@ pub struct s_blf_chunk_rewards_persistance {
     pub purchased_items: StaticArray<e_purchase_state, 256>,
     pub unknown2: u16, // the stuff at the bottom is to do with bonuses
     pub unknown3: u32,
-    pub unknown4: u32,
+    pub unknown4: time64_t, // maybe lsp modified at
     pub unknown5: u32,
-    pub unknown6: u32,
-    pub unknown7: u8
+    pub unknown6: u8
 }
 
 impl BlfChunkHooks for s_blf_chunk_rewards_persistance {}
