@@ -21,7 +21,7 @@ pub struct s_blf_chunk_service_record
 {
     pub player_name: StaticWcharString<16>, // Wide, 16 characters max
     pub player_info_available: Bool,
-    pub unknown1: StaticArray<u8, 3>,
+    pub unknown1: StaticArray<u8, 4>,
     pub armour_primary_color: u8, // 0x25
     pub armour_secondary_color: u8, // 0x26
     pub armour_tertiary_color: u8, // 0x27
@@ -62,6 +62,7 @@ pub struct s_blf_chunk_service_record
     pub firefight_difficulty_stats: StaticArray<s_blf_chunk_service_record_firefight_difficulty_stats, 3>,
     pub firefight_commendations_count: u32,
     pub firefight_commendations: StaticArray<s_blf_chunk_service_record_commendation, 16>,
+
     pub matchmaking_record_available: Bool, // 0x228 Correct to here
     pub matchmaking_games_won: u32,
     pub matchmaking_kills: u32,
@@ -72,6 +73,7 @@ pub struct s_blf_chunk_service_record
     pub arena_season_stats: StaticArray<s_blf_chunk_service_record_arena_season_stats, 3>,
     pub matchmaking_commendations_count: u32,
     pub matchmaking_commendations: StaticArray<s_blf_chunk_service_record_commendation, 16>,
+
     pub custom_games_record_available: Bool, // 0xCFD
     pub custom_games_multiplayer_played: u32,
     pub custom_games_multiplayer_kills: u32,
@@ -89,8 +91,8 @@ pub struct s_blf_chunk_service_record
     pub halo3_multiplayer_kills: u32,
     pub odst_highest_difficulty: u32,
     pub odst_grunts_killed_in_firefight: u32,
-    // I'm not 100% sure this is here, and if it is, it could be padding
-    pub unknown5: u16,
+    // I'm not 100% sure this is here
+    pub unknown5: u8,
 }
 
 #[derive(Default,PartialEq,Debug,Clone,Serialize,Deserialize,BinRead,BinWrite,TestSize)]
@@ -149,9 +151,9 @@ pub struct s_blf_chunk_service_record_arena_season_stats {
 #[cfg_attr(feature = "napi", napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]
 pub struct s_blf_chunk_service_record_arena_hopper_stats {
     pub hopper_name: StaticString<32>,
-    pub hames_played_today: u32,
+    pub games_played_today: u32,
     pub current_best_set: u32,
-    pub yesterdays_best_Set: u32,
+    pub yesterdays_best_set: u32,
     pub days_rated: u32,
     pub division_standing: u32,
     pub division: u32,
