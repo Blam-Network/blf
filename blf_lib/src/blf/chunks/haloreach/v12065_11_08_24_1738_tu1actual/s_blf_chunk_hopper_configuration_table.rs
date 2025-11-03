@@ -169,9 +169,9 @@ pub struct s_hopper_configuration_per_team_data {
 
 #[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
 pub struct s_hopper_jackpot_configuration {
-    pub unknown1: u32,
-    pub unknown2: u32,
-    pub unknown3: u32,
+    pub chance: u32,
+    pub minimum_cookies: u32,
+    pub maximum_cookies: u32,
 }
 
 #[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
