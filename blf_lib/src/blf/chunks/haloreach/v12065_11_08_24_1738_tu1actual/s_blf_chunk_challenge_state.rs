@@ -179,7 +179,7 @@ impl BinWrite for s_challenge_state {
                 skull_flags.write_options(writer, endian, args)?;
             }
             None => {
-                -1i32.write_options(writer, endian, args)?;
+                (-1 as i32).write_options(writer, endian, args)?;
             }
         }
 
