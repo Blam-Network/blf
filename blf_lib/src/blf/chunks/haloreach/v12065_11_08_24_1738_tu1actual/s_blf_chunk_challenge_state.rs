@@ -1,4 +1,5 @@
-use binrw::{binrw, BinRead, BinWrite};
+use std::io::{Read, Seek, Write};
+use binrw::{binrw, BinRead, BinResult, BinWrite, Endian};
 use blf_lib::blf::chunks::BlfChunkHooks;
 use blf_lib::{bitfield, BlfChunk};
 use serde::{Deserialize, Serialize};
@@ -100,21 +101,93 @@ pub enum e_challenge_category {
     matchmaking = 4,
 }
 
-#[derive(PartialEq,Debug,Clone,Serialize,Deserialize,Default,BinRead,BinWrite)]
-#[brw(big)]
+#[derive(PartialEq,Debug,Clone,Serialize,Deserialize,Default)]
 #[cfg_attr(feature = "napi", napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]
 pub struct s_challenge_state {
     pub category: e_challenge_category,
     pub challenge: u8,
     // these are overrides, but some challenges dont have defaults so these become necessary.
-    // 0 = no override.
-    pub cookie_reward: u16,
-    pub required_progress: u32, // var00000004
-    pub minimum_score: u32, // &var00000009
-    pub maximum_level_completion_time: u32, // &var0000000a
-    pub skull_flags: e_challenge_skull_flags,
-    pub maximum_death_count: u32,
-    pub toast_progress_count: u32,
+    // -1 = no override.
+    pub cookie_reward: Option<i16>,
+    pub required_progress: Option<i32>, // var00000004
+    pub minimum_score: Option<i32>, // &var00000009
+    pub maximum_level_completion_time: Option<i32>, // &var0000000a
+    pub skull_flags: Option<e_challenge_skull_flags>,
+    pub maximum_death_count: Option<i32>,
+    pub toast_progress_count: Option<i32>,
+}
+
+impl BinRead for s_challenge_state {
+    type Args<'a> = ();
+
+    fn read_options<R: Read + Seek>(reader: &mut R, endian: Endian, args: Self::Args<'_>) -> BinResult<Self> {
+        let mut result = Self::default();
+        result.category = BinRead::read_options(reader, endian, args)?;
+        result.challenge = BinRead::read_options(reader, endian, args)?;
+
+        let cookie_reward = i16::read_options(reader, endian, args)?;
+        if cookie_reward != -1 {
+            result.cookie_reward = Some(cookie_reward);
+        }
+
+        let required_progress = i32::read_options(reader, endian, args)?;
+        if required_progress != -1 {
+            result.required_progress = Some(required_progress);
+        }
+
+        let minimum_score = i32::read_options(reader, endian, args)?;
+        if minimum_score != -1 {
+            result.minimum_score = Some(minimum_score);
+        }
+
+        let maximum_level_completion_time = i32::read_options(reader, endian, args)?;
+        if maximum_level_completion_time != -1 {
+            result.maximum_level_completion_time = Some(maximum_level_completion_time);
+        }
+
+        let skull_flags = i32::read_options(reader, endian, args)?;
+        if skull_flags != -1 {
+            result.skull_flags = Some(e_challenge_skull_flags::from_raw(skull_flags as u32));
+        }
+
+        let maximum_death_count = i32::read_options(reader, endian, args)?;
+        if maximum_death_count != -1 {
+            result.maximum_death_count = Some(maximum_death_count);
+        }
+
+        let toast_progress_count = i32::read_options(reader, endian, args)?;
+        if toast_progress_count != -1 {
+            result.toast_progress_count = Some(toast_progress_count);
+        }
+
+        Ok(result)
+    }
+}
+
+impl BinWrite for s_challenge_state {
+    type Args = ();
+    fn write_options<W: Write + Seek>(&self, writer: &mut W, endian: Endian, args: Self::Args<'_>) -> BinResult<()> {
+        self.category.write_options(writer, endian, args)?;
+        self.challenge.write_options(writer, endian, args)?;
+        self.cookie_reward.unwrap_or(-1).write_options(writer, endian, args)?;
+        self.required_progress.unwrap_or(-1).write_options(writer, endian, args)?;
+        self.minimum_score.unwrap_or(-1).write_options(writer, endian, args)?;
+        self.maximum_level_completion_time.unwrap_or(-1).write_options(writer, endian, args)?;
+        
+        match self.skull_flags {
+            Some(skull_flags) => {
+                skull_flags.write_options(writer, endian, args)?;
+            }
+            None => {
+                -1i32.write_options(writer, endian, args)?;
+            }
+        }
+
+        self.maximum_death_count.unwrap_or(-1).write_options(writer, endian, args)?;
+        self.toast_progress_count.unwrap_or(-1).write_options(writer, endian, args)?;
+        
+        Ok(())
+    }
 }
 
 impl BlfChunkHooks for s_blf_chunk_challenge_state {}
