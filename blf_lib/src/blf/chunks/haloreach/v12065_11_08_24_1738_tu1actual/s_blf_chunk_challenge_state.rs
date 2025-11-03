@@ -165,7 +165,7 @@ impl BinRead for s_challenge_state {
 }
 
 impl BinWrite for s_challenge_state {
-    type Args = ();
+    type Args<'a> = ();
     fn write_options<W: Write + Seek>(&self, writer: &mut W, endian: Endian, args: Self::Args<'_>) -> BinResult<()> {
         self.category.write_options(writer, endian, args)?;
         self.challenge.write_options(writer, endian, args)?;
