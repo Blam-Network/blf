@@ -12,7 +12,7 @@ use crate::types::array::StaticArray;
 use crate::types::c_string::StaticString;
 
 #[binrw]
-#[derive(BlfChunk,PartialEq,Debug,Clone,Serialize,Deserialize)]
+#[derive(BlfChunk,PartialEq,Debug,Clone,Serialize,Deserialize,Default)]
 #[Header("umsg", 1.0)]
 #[brw(big)]
 #[Size(0xC)]
