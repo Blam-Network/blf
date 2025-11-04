@@ -1632,8 +1632,8 @@ impl v11860_10_07_24_0147_omaha_release {
                     nag_message_id
                 );
 
-                let nag_message_img_dst_path = title_storage_config::user_nag_message_image_file_path(
-                    hoppers_config_folder,
+                let nag_message_img_dst_path = title_storage_output::user_nag_message_image_file_path(
+                    hoppers_blf_folder,
                     language_code,
                     nag_message_id
                 );
@@ -1651,8 +1651,7 @@ impl v11860_10_07_24_0147_omaha_release {
 
         }
 
-
-        Ok(())
+        やった!(task)
     }
 
     fn build_blf_map_manifests(hoppers_config_path: &String, hoppers_blf_path: &String) -> Result<(), Box<dyn Error>>

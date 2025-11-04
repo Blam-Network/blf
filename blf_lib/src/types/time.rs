@@ -143,7 +143,7 @@ impl filetime {
     // Converts FILETIME to time_t (in seconds since 1970)
     pub fn to_time_t(&self) -> u64 {
         if self.0 == 0 { return 0 }
-        (self.0 / 10_000_000) - Self::FILETIME_EPOCH_OFFSET
+        (self.0 / 10_000_000).checked_sub(Self::FILETIME_EPOCH_OFFSET).unwrap_or(0)
     }
 
     // Converts time_t (in seconds since 1970) to FILETIME (in 100-nanosecond intervals since 1601)

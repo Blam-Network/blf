@@ -15,10 +15,10 @@ use crate::types::c_string::StaticString;
 #[derive(BlfChunk,PartialEq,Debug,Clone,Serialize,Deserialize)]
 #[Header("umsg", 1.0)]
 #[brw(big)]
+#[Size(0xC)]
 #[cfg_attr(feature = "napi", napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]
 pub struct s_blf_chunk_user_messaging_data {
-    pub unknown0: Unsigned64, // might be unused.
-    pub message_index: Unsigned64,
+    pub message_index: u32,
     pub expires_at: time64_t,
 }
 
