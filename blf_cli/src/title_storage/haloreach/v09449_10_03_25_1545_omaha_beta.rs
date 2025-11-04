@@ -1499,8 +1499,8 @@ impl v09449_10_03_25_1545_omaha_beta {
                     nag_message_id
                 );
 
-                let nag_message_img_dst_path = title_storage_config::user_nag_message_image_file_path(
-                    hoppers_config_folder,
+                let nag_message_img_dst_path = title_storage_output::user_nag_message_image_file_path(
+                    hoppers_blf_folder,
                     language_code,
                     nag_message_id
                 );
