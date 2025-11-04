@@ -21,3 +21,5 @@ pub struct s_blf_chunk_user_messaging_data {
     pub message_index: u64,
     pub expires_at: time64_t,
 }
+
+impl BlfChunkHooks for s_blf_chunk_user_messaging_data {}
