@@ -29,9 +29,8 @@ pub struct s_blf_chunk_nag_message
     #[serde(skip_serializing,skip_deserializing)]
     message_size: u32,
     pub message: StaticWcharString<k_nag_message_body_max_length>,
-    pub unknown1: u32,
-    pub unknown2: u32,
-    pub unknown3: u32,
+    pub offer_id: u64,
+    pub view_count: u32,
 }
 
 impl BlfChunkHooks for s_blf_chunk_nag_message {
@@ -62,9 +61,8 @@ impl s_blf_chunk_nag_message {
         button_key: String,
         button_key_wait: String,
         message: String,
-        unknown1: u32,
-        unknown2: u32,
-        unknown3: u32,
+        offer_id: u64,
+        view_count: u32,
     ) -> BLFLibResult<Self> {
         Ok(s_blf_chunk_nag_message {
             title_index_identifier,
@@ -79,9 +77,8 @@ impl s_blf_chunk_nag_message {
             button_key_wait: StaticWcharString::from_string(&button_key_wait)?,
             message_size: 0,
             message: StaticWcharString::from_string(&message)?,
-            unknown1,
-            unknown2,
-            unknown3,
+            offer_id,
+            view_count,
         })
     }
 }

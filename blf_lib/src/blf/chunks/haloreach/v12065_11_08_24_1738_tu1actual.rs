@@ -21,3 +21,4 @@ pub mod s_blf_chunk_screenshot_camera;
 pub mod s_blf_chunk_signable_signature;
 pub mod s_blf_chunk_challenge_progress;
 pub mod s_blf_chunk_reward_persistence_upload_to_lsp;
+pub mod s_blf_chunk_user_messaging_data;
