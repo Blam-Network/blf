@@ -27,7 +27,7 @@ pub struct s_data_mine_header {
 #[cfg_attr(feature = "napi", napi(object, namespace = "common"))]
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default)]
 pub struct c_datamine_game_info {
-    pub game_instance: u64,
+    pub game_instance: Unsigned64,
     pub map: StaticString<260>,
 }
 
