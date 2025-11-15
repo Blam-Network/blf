@@ -230,7 +230,7 @@ impl ToNapiValue for filetime {
 #[cfg(feature = "napi")]
 impl FromNapiValue for filetime {
     unsafe fn from_napi_value(env: napi_env, napi_val: napi_value) -> napi::Result<Self> {
-        Ok(Self::from_time_t(Self(NaiveDateTime::from_napi_value(env, napi_val)?.and_utc().timestamp() as u64)))
+        Ok(Self::from_time_t(NaiveDateTime::from_napi_value(env, napi_val)?.and_utc().timestamp() as u64))
     }
 }
 
