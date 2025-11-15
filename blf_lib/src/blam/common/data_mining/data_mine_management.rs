@@ -58,7 +58,7 @@ pub enum e_datamine_parameter_type {
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default)]
 pub struct s_datamine_parameter_header {
     pub name: StaticString<32>,
-    pub r#type: e_datamine_parameter_type,
+    pub parameter_type: e_datamine_parameter_type,
 }
 
 // dont think this struct strictly exists in blam!, think it's anonymous usually.
@@ -79,7 +79,7 @@ pub struct s_datamine_value_string {
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, Default)]
 pub struct s_datamine_parameter {
     pub name: StaticString<32>,
-    pub r#type: e_datamine_parameter_type,
+    pub parameter_type: e_datamine_parameter_type,
 
     // These values are supposed to exist in a separate struct named s_datamine_value
     // but due to rust union complexities I've pulled it here.
@@ -97,7 +97,7 @@ impl BinRead for s_datamine_parameter {
         read_param.name = BinRead::read_options(reader, endian, args)?;
         read_param.r#type = BinRead::read_options(reader, endian, args)?;
 
-        match read_param.r#type {
+        match read_param.parameter_type {
             e_datamine_parameter_type::_datamine_parameter_type_long => {
                 read_param.value_long = Some(BinRead::read_options(reader, endian, args)?);
             }
@@ -121,9 +121,9 @@ impl BinWrite for s_datamine_parameter {
 
     fn write_options<W: Write + Seek>(&self, writer: &mut W, endian: Endian, args: Self::Args<'_>) -> BinResult<()> {
         self.name.write_options(writer, endian, args)?;
-        self.r#type.write_options(writer, endian, args)?;
+        self.parameter_type.write_options(writer, endian, args)?;
 
-        match self.r#type {
+        match self.parameter_type {
             e_datamine_parameter_type::_datamine_parameter_type_long => {
                 self.value_long.write_options(writer, endian, args)?;
             }
