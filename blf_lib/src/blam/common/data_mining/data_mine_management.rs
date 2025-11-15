@@ -5,6 +5,10 @@ use serde::{Deserialize, Serialize};
 use blf_lib::types::c_string::StaticString;
 use blf_lib::types::time::filetime;
 
+#[cfg(feature = "napi")]
+use napi_derive::napi;
+
+#[cfg_attr(feature = "napi", napi(object, namespace = "common"))]
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default)]
 pub struct s_data_mine_header {
     pub byte_order_marker_fffe: u16,
@@ -18,12 +22,14 @@ pub struct s_data_mine_header {
     pub session_start_date: filetime,
 }
 
+#[cfg_attr(feature = "napi", napi(object, namespace = "common"))]
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default)]
 pub struct c_datamine_game_info {
     pub game_instance: u64,
     pub map: StaticString<260>,
 }
 
+#[cfg_attr(feature = "napi", napi(object, namespace = "common"))]
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default)]
 pub struct s_datamine_event_header {
     pub total_size: u32,
@@ -35,6 +41,7 @@ pub struct s_datamine_event_header {
     pub event_date: filetime,
 }
 
+#[cfg_attr(feature = "napi", napi(object, namespace = "common"))]
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default)]
 #[brw(repr = u32)]
 pub enum e_datamine_parameter_type {
@@ -45,6 +52,7 @@ pub enum e_datamine_parameter_type {
     _datamine_parameter_type_string = 3,
 }
 
+#[cfg_attr(feature = "napi", napi(object, namespace = "common"))]
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default)]
 pub struct s_datamine_parameter_header {
     pub name: StaticString<32>,
@@ -52,6 +60,7 @@ pub struct s_datamine_parameter_header {
 }
 
 // dont think this struct strictly exists in blam!, think it's anonymous usually.
+#[cfg_attr(feature = "napi", napi(object, namespace = "common"))]
 #[binrw]
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, Default)]
 pub struct s_datamine_value_string {
@@ -62,6 +71,7 @@ pub struct s_datamine_value_string {
     pub string: String,
 }
 
+#[cfg_attr(feature = "napi", napi(object, namespace = "common"))]
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, Default)]
 pub struct s_datamine_parameter {
     pub name: StaticString<32>,
