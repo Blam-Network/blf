@@ -80,8 +80,8 @@ pub struct s_datamine_parameter {
     // These values are supposed to exist in a separate struct named s_datamine_value
     // but due to rust union complexities I've pulled it here.
     pub value_long: Option<u32>,
-    pub value_int64: Option<u64>,
-    pub value_float: Option<f32>,
+    pub value_int64: Option<Unsigned64>,
+    pub value_float: Option<Float32>,
     pub value_string: Option<s_datamine_value_string>,
 }
 
