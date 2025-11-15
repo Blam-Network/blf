@@ -223,7 +223,7 @@ impl FromNapiValue for time64_t {
 #[cfg(feature = "napi")]
 impl ToNapiValue for filetime {
     unsafe fn to_napi_value(env: napi_env, val: Self) -> napi::Result<napi_value> {
-        NaiveDateTime::to_napi_value(env, val.into())
+        NaiveDateTime::to_napi_value(env, NaiveDateTime::from_timestamp(val.to_time_t() as i64, 0))
     }
 }
 
