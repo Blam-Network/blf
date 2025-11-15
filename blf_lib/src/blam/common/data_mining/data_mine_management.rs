@@ -63,6 +63,7 @@ pub struct s_datamine_parameter_header {
 
 // dont think this struct strictly exists in blam!, think it's anonymous usually.
 #[binrw]
+#[cfg_attr(feature = "napi", napi(object, namespace = "common"))]
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, Default)]
 pub struct s_datamine_value_string {
     #[br(temp)]
