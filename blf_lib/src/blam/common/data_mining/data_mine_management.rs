@@ -62,12 +62,13 @@ pub struct s_datamine_parameter_header {
 }
 
 // dont think this struct strictly exists in blam!, think it's anonymous usually.
-#[cfg_attr(feature = "napi", napi(object, namespace = "common"))]
 #[binrw]
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, Default)]
 pub struct s_datamine_value_string {
+    #[br(temp)]
     #[bw(try_calc(u32::try_from(string.len())))]
     pub string_length: u32,
+
     #[br(count = string_length, try_map = |s: Vec<u8>| String::from_utf8(s))]
     #[bw(map = |s: &String| s.as_bytes())]
     pub string: String,
