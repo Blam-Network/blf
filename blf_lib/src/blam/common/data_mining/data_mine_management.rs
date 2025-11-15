@@ -36,7 +36,7 @@ pub struct s_datamine_event_header {
 }
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default)]
-#[brw(little, repr = u32)]
+#[brw(repr = u32)]
 pub enum e_datamine_parameter_type {
     #[default]
     _datamine_parameter_type_long = 0,
