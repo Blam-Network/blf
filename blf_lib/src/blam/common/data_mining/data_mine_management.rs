@@ -8,7 +8,7 @@ use blf_lib::types::time::filetime;
 #[cfg(feature = "napi")]
 use napi_derive::napi;
 
-#[cfg_attr(feature = "napi", napi(object, namespace = "common"))]
+#[cfg_attr(feature = "napi", napi(namespace = "common"))]
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default)]
 pub struct s_data_mine_header {
     pub byte_order_marker_fffe: u16,
