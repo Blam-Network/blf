@@ -223,14 +223,14 @@ impl FromNapiValue for time64_t {
 #[cfg(feature = "napi")]
 impl ToNapiValue for filetime {
     unsafe fn to_napi_value(env: napi_env, val: Self) -> napi::Result<napi_value> {
-        NaiveDateTime::to_napi_value(env, val.into())
+        NaiveDateTime::to_napi_value(env, val.to_time_t().into())
     }
 }
 
 #[cfg(feature = "napi")]
 impl FromNapiValue for filetime {
     unsafe fn from_napi_value(env: napi_env, napi_val: napi_value) -> napi::Result<Self> {
-        Ok(Self(NaiveDateTime::from_napi_value(env, napi_val)?.and_utc().timestamp() as u64))
+        Ok(Self::from_time_t(Self(NaiveDateTime::from_napi_value(env, napi_val)?.and_utc().timestamp() as u64)))
     }
 }
 
