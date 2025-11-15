@@ -95,7 +95,7 @@ impl BinRead for s_datamine_parameter {
     fn read_options<R: Read + Seek>(reader: &mut R, endian: Endian, args: Self::Args<'_>) -> BinResult<Self> {
         let mut read_param = Self::default();
         read_param.name = BinRead::read_options(reader, endian, args)?;
-        read_param.r#type = BinRead::read_options(reader, endian, args)?;
+        read_param.parameter_type = BinRead::read_options(reader, endian, args)?;
 
         match read_param.parameter_type {
             e_datamine_parameter_type::_datamine_parameter_type_long => {
