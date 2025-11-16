@@ -9,6 +9,7 @@ use napi_derive::napi;
 #[brw(repr = u32)]
 pub enum e_event_level
 {
+    #[default]
     _event_verbose = 0,
     _event_status = 1,
     _event_message = 2,
