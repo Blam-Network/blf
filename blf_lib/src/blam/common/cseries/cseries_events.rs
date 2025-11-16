@@ -18,7 +18,7 @@ pub enum e_event_level
 }
 
 #[cfg_attr(feature = "napi", napi(namespace = "common"))]
-pub const k_event_level_severity_strings = [
+pub const k_event_level_severity_strings: [&str; 6] = [
     "verbose",
     "status",
     "message",
