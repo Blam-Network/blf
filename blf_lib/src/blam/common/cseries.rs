@@ -1,3 +1,5 @@
+mod cseries_events;
+
 #[macro_export]
 macro_rules! FLAG {
     ($bit:expr) => {
