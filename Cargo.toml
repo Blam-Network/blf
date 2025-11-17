@@ -1,9 +1,10 @@
 [workspace]
 resolver = "2"
-members = [ "blf_lib-derivable", "blf_lib-derive", "blf_lib", 'blf_cli', "blf_bnet"]
+members = [ "blf_lib-derivable", "blf_lib-derive", "blf_lib", 'blf_cli', "blf_bnet", "test_harness"]
+default-run = "blf_cli"
 
 [workspace.package]
-version = "1.15.7"
+version = "1.15.8"
 edition = "2021"
 license = "MIT"
 
