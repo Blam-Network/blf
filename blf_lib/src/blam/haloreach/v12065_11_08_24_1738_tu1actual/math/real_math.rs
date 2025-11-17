@@ -337,8 +337,8 @@ pub fn dequantize_real_point3d_per_axis(
         bounds.x.lower,
         bounds.x.upper,
         1 << bits.x as usize,
-        exact_midpoints,
-        exact_endpoints,
+        false,
+        false,
     ));
 
     position.y = Float32::from(dequantize_real(
@@ -346,8 +346,8 @@ pub fn dequantize_real_point3d_per_axis(
         bounds.y.lower,
         bounds.y.upper,
         1 << bits.y as usize,
-        exact_midpoints,
-        exact_endpoints,
+        false,
+        false,
     ));
 
     position.z = Float32::from(dequantize_real(
@@ -355,7 +355,7 @@ pub fn dequantize_real_point3d_per_axis(
         bounds.z.lower,
         bounds.z.upper,
         1 << bits.z as usize,
-        exact_midpoints,
-        exact_endpoints,
+        false,
+        false,
     ));
 }
