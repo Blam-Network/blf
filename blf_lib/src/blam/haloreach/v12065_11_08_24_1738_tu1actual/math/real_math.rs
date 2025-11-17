@@ -216,8 +216,8 @@ pub fn dequantize_unit_vector3d(
             .into());
     }
 
-    let u = dequantize_real(qu, -1.0f32, 1.0f32, (quantized_value_count - 1) as usize, true, false);
-    let w = dequantize_real(qw, -1.0f32, 1.0f32, (quantized_value_count - 1) as usize, true, false);
+    let u = dequantize_real(qu, -1.0f32, 1.0f32, quantized_value_count as usize, true, false);
+    let w = dequantize_real(qw, -1.0f32, 1.0f32, quantized_value_count as usize, true, false);
 
     match face {
         0 => {
@@ -306,14 +306,20 @@ pub fn quantize_real_fast_guts<const EXACT_MIDPOINTS: bool, const EXACT_ENDPOINT
     }
 
     // Fallback to <1,0> logic
-    let step_size = (max - min) / step_count as f32;
+    let mut adjusted_step_count = step_count;
+    if EXACT_MIDPOINTS {
+        assert!(step_count >= 3, "step_count must be >= 3 for EXACT_MIDPOINTS");
+        adjusted_step_count -= 1;
+    }
+
+    let step_size = (max - min) / adjusted_step_count as f32;
     assert!(step_size > 0.0, "step_size must be positive");
 
     let v12 = ((value - min) / step_size) as i32;
     let mut index = (if v12 == 0 { 1 } else { 0 } + (v12 >> 31) - 1) & v12;
 
-    if index > step_count - 1 {
-        index = step_count - 1;
+    if index > adjusted_step_count - 1 {
+        index = adjusted_step_count - 1;
     }
 
     assert!(index >= 0 && index < step_count, "index out of range");

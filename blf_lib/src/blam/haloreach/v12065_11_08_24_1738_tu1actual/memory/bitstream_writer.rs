@@ -46,12 +46,11 @@ pub trait c_bitstream_writer_extensions {
     ) -> BLFLibResult {
         let mut writer = self.bitstream_writer();
 
-        let quantized_value_count = 1 << size_in_bits;
         let quantized_value = quantize_real_fast::<exact_midpoint, exact_endpoints>(
             value.into(),
             min_value,
             max_value,
-            quantized_value_count,
+            1 << size_in_bits,
         ) as u32;
 
         assert_ok!(writer.writing());
