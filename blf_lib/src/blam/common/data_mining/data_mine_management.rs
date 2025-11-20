@@ -18,7 +18,7 @@ pub struct s_data_mine_header {
     pub version_minor: u16,
     pub sessionid: StaticString<128>,
     pub build_string: StaticString<32>,
-    pub build_number: u32,
+    pub build_number: i32,
     pub systemid: StaticString<160>,
     pub title: StaticString<32>,
     pub session_start_date: filetime,
