@@ -7,3 +7,4 @@ pub mod s_blf_chunk_network_configuration;
 pub mod s_blf_chunk_banhammer_messages;
 pub mod s_blf_chunk_player_data;
 pub mod s_blf_chunk_matchmaking_hopper_statistics;
+pub mod s_blf_chunk_map_manifest;
