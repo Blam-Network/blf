@@ -1811,7 +1811,7 @@ impl v_untracked_ares {
                 hoppers_blfs_path,
                 *hopper_identifier,
             );
-            hopper_config.game_set_hash = s_network_http_request_hash::default();
+            hopper_config.game_set_hash = get_blf_file_hash(game_set_blf_file_path)?;
             mhcf.add_hopper_configuration(hopper_config)?
         }
 
