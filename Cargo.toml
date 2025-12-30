@@ -4,7 +4,7 @@ members = [ "blf_lib-derivable", "blf_lib-derive", "blf_lib", 'blf_cli', "blf_bn
 #default-members = [ "blf_cli" ]
 
 [workspace.package]
-version = "1.15.9"
+version = "1.15.10"
 edition = "2021"
 license = "MIT"
 
