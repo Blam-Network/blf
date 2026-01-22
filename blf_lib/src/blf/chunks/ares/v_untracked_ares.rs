@@ -8,3 +8,7 @@ pub mod s_blf_chunk_banhammer_messages;
 pub mod s_blf_chunk_player_data;
 pub mod s_blf_chunk_matchmaking_hopper_statistics;
 pub mod s_blf_chunk_map_manifest;
+pub mod s_blf_chunk_game_variant;
+pub mod s_blf_chunk_end_of_file;
+pub mod s_blf_chunk_file_transfers;
+pub mod s_blf_chunk_user_recent_players;

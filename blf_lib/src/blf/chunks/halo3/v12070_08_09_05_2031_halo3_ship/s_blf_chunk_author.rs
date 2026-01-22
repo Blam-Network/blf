@@ -16,8 +16,8 @@ use crate::types::c_string::StaticString;
 #[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 pub struct s_blf_chunk_author {
     pub program_name: StaticString<16>, // eg GameData.Halo3
-    pub build_number_sequence: u32,     // eg 1
-    pub build_number: u32,              // eg 12070
+    pub build_number_sequence: i32,     // eg 1
+    pub build_number: i32,              // eg 12070
     pub build_string: StaticString<28>, // eg 12070.08.09.05.2031.halo3_s
     pub author_name: StaticString<16>,  // eg sameling
 }
@@ -26,7 +26,7 @@ impl BlfChunkHooks for s_blf_chunk_author {}
 
 impl s_blf_chunk_author {
     pub fn for_build<T: TitleAndBuild>() -> s_blf_chunk_author {
-        let build_number = T::get_build_string()[..5].parse().unwrap_or(0xFFFFFFFF);
+        let build_number = T::get_build_string()[..5].parse().unwrap_or(-1);
 
         let version = env!("CARGO_PKG_VERSION");
         let name = env!("CARGO_PKG_NAME");

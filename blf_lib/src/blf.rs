@@ -101,6 +101,13 @@ impl BlfFileBuilder {
         Ok(self)
     }
 
+    pub fn read_file(&mut self, path: impl Into<String>) -> BLFLibResult<&mut BlfFileBuilder> {
+        let path = &path.into();
+        let data = std::fs::read(path)?;
+
+        self.read(&data)
+    }
+
     pub fn chunk_count(&self) -> usize {
         self.chunks.len()
     }
