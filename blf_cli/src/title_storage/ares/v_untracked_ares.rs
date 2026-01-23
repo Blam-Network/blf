@@ -1,7 +1,7 @@
 use std::collections::{HashMap, HashSet, VecDeque};
 use std::error::Error;
 use std::fs;
-use std::fs::{create_dir_all, exists, remove_file, File};
+use std::fs::{create_dir_all, remove_file, File};
 use std::io::{Read, Write};
 use std::path::Path;
 use std::str::FromStr;
@@ -62,7 +62,7 @@ lazy_static! {
     static ref hopper_folder_regex: Regex = Regex::new(r"^[0-9]{5}.*").unwrap();
     static ref map_variant_file_regex: Regex = Regex::new(&format!("_{:0>3}.bin$", s_blf_chunk_packed_map_variant::get_version().major)).unwrap();
     static ref game_variant_file_regex: Regex = Regex::new(&format!("_{:0>3}.bin$", s_blf_chunk_packed_game_variant::get_version().major)).unwrap();
-    static ref config_rsa_signature_file_map_id_regex: Regex = Regex::new(r"^[0-9]{1,}").unwrap();
+    static ref config_rsa_signature_file_map_id_regex: Regex = Regex::new(r"^[0-9]{1}").unwrap();
 }
 
 mod title_storage_output {
@@ -397,20 +397,17 @@ mod title_storage_config {
     pub struct matchmaking_hopper {
         #[serde(serialize_with = "ordered_map")]
         pub descriptions: HashMap<String, String>,
-        pub configuration: c_hopper_configuration,
-    }
+        pub configuration: c_hopper_configuration}
 
     #[derive(Serialize, Deserialize, Default, Clone)]
     pub struct matchmaking_hopper_category_configuration_and_descriptions {
         pub configuration: s_game_hopper_custom_category,
         #[serde(serialize_with = "ordered_map")]
-        pub descriptions: HashMap<String, String>,
-    }
+        pub descriptions: HashMap<String, String>}
 
     #[derive(Serialize, Deserialize, Default)]
     pub struct matchmaking_hopper_categories {
-        pub categories: Vec<matchmaking_hopper_category_configuration_and_descriptions>,
-    }
+        pub categories: Vec<matchmaking_hopper_category_configuration_and_descriptions>}
 
     #[derive(Serialize, Deserialize)]
     pub struct game_set_config_row {
@@ -419,12 +416,10 @@ mod title_storage_config {
         pub weight: u32,
         pub minimum_player_count: u8,
         pub skip_after_veto: bool,
-        pub optional: bool,
-    }
+        pub optional: bool}
 
     pub struct game_set_config {
-        pub entries: Vec<game_set_config_row>,
-    }
+        pub entries: Vec<game_set_config_row>}
 }
 
 impl TitleConverter for v_untracked_ares {
@@ -551,7 +546,7 @@ impl v_untracked_ares {
                 language_code
             );
 
-            if !exists(&blf_file_path)? {
+            if !check_file_exists(&blf_file_path) {
                 task.add_warning(format!(
                     "No {} banhammer messages are present.",
                     get_language_string(language_code),
@@ -582,7 +577,7 @@ impl v_untracked_ares {
                 language_code,
             );
 
-            if !exists(&blf_file_path)? {
+            if !check_file_exists(&blf_file_path) {
                 task.add_warning(format!(
                     "No {} matchmaking tips are present.",
                     get_language_string(language_code),
@@ -619,7 +614,7 @@ impl v_untracked_ares {
                     blue
                 );
 
-                if !exists(&blf_file_path)? {
+                if !check_file_exists(&blf_file_path) {
                     task.add_warning(format!(
                         "No {} MOTD is present.",
                         get_language_string(language_code),
@@ -657,7 +652,7 @@ impl v_untracked_ares {
                     blue
                 );
 
-                if !exists(&jpg_file_path)? {
+                if !check_file_exists(&jpg_file_path) {
                     task.add_warning(format!(
                         "No {} MOTD image is present.",
                         get_language_string(language_code),
@@ -690,7 +685,7 @@ impl v_untracked_ares {
                     blue
                 );
 
-                if !exists(&blf_file_path)? {
+                if !check_file_exists(&blf_file_path) {
                     task.add_warning(format!(
                         "No {} MOTD Popup is present.",
                         get_language_string(language_code),
@@ -714,7 +709,7 @@ impl v_untracked_ares {
                     blue
                 );
 
-                if exists(&image_path)? {
+                if check_file_exists(&image_path) {
                     fs::copy(&image_path, title_storage_config::motd_popup_image_file_path(
                         hoppers_config_path,
                         language_code,
@@ -760,7 +755,7 @@ impl v_untracked_ares {
             );
 
             // if this hoppers folder has no maps (perhaps incomplete), skip it.
-            if !exists(&map_variant_blfs_folder)? {
+            if !check_file_exists(&map_variant_blfs_folder) {
                 continue;
             }
 
@@ -798,7 +793,7 @@ impl v_untracked_ares {
                 }
 
                 // If this map already exists in the config folder from an older convert, we delete it to rewrite.
-                if exists(&map_variant_config_file_path)? {
+                if check_file_exists(&map_variant_config_file_path) {
                     remove_file(&map_variant_config_file_path)?
                 }
 
@@ -836,7 +831,7 @@ impl v_untracked_ares {
                 &subfolder
             );
 
-            if !exists(&game_variant_blfs_folder)? {
+            if !check_file_exists(&game_variant_blfs_folder) {
                 continue;
             }
 
@@ -874,7 +869,7 @@ impl v_untracked_ares {
                 }
 
                 // If this game already exists in the config folder from an older convert, we delete it to rewrite.
-                if exists(&game_variant_config_file_path)? {
+                if check_file_exists(&game_variant_config_file_path) {
                     remove_file(&game_variant_config_file_path)?;
                 }
 
@@ -909,7 +904,7 @@ impl v_untracked_ares {
                 hopper_id,
             );
 
-            if !exists(&game_set_blf_path).unwrap() {
+            if !check_file_exists(&game_set_blf_path) {
                 task.add_warning(format!("No game set was found for hopper \"{hopper_folder}\""));
                 continue;
             }
@@ -929,8 +924,7 @@ impl v_untracked_ares {
                     weight: game_set_entry.weight,
                     minimum_player_count: game_set_entry.minimum_player_count,
                     skip_after_veto: game_set_entry.skip_after_veto,
-                    optional: game_set_entry.optional,
-                })?
+                    optional: game_set_entry.optional})?
             }
 
             create_parent_folders(&game_set_config_path)?;
@@ -1011,8 +1005,7 @@ impl v_untracked_ares {
         for hopper_configuration in hopper_configurations {
             let mut hopper_configuration_json = title_storage_config::matchmaking_hopper {
                 descriptions: HashMap::new(),
-                configuration: hopper_configuration,
-            };
+                configuration: hopper_configuration};
 
             for language_code in k_language_suffixes {
                 if language_hopper_descriptions.contains_key(language_code)
@@ -1040,8 +1033,7 @@ impl v_untracked_ares {
         for category_configuration in category_configurations {
             let mut category_configuration_and_description = title_storage_config::matchmaking_hopper_category_configuration_and_descriptions {
                 descriptions: HashMap::new(),
-                configuration: category_configuration,
-            };
+                configuration: category_configuration};
 
             for language_code in k_language_suffixes {
                 if language_hopper_descriptions.contains_key(language_code)
@@ -1086,7 +1078,7 @@ impl v_untracked_ares {
         for language_code in k_language_suffixes {
             let config_path = title_storage_config::banhammer_messages_file_path(hoppers_config_folder, language_code);
 
-            if !exists(&config_path)? {
+            if !check_file_exists(&config_path) {
                 task.add_warning(format!("{} banhammer messages are missing.", get_language_string(language_code)));
                 continue;
             }
@@ -1114,7 +1106,7 @@ impl v_untracked_ares {
         for language_code in k_language_suffixes {
             let config_path = title_storage_config::matchmaking_tips_file_path(hoppers_config_folder, language_code);
 
-            if !exists(&config_path)? {
+            if !check_file_exists(&config_path) {
                 task.add_warning(format!("{} matchmaking tips are missing.", get_language_string(language_code)));
                 continue;
             }
@@ -1152,7 +1144,7 @@ impl v_untracked_ares {
                     blue
                 );
 
-                if !exists(&motd_config_path)? {
+                if !check_file_exists(&motd_config_path) {
                     task.add_warning(format!(
                         "No {} MOTD is present.",
                         get_language_string(language_code),
@@ -1223,7 +1215,7 @@ impl v_untracked_ares {
                     blue
                 );
 
-                if !exists(&motd_popup_config_path)? {
+                if !check_file_exists(&motd_popup_config_path) {
                     task.add_warning(format!(
                         "No {} MOTD Popup is present.",
                         get_language_string(language_code),
@@ -1288,7 +1280,7 @@ impl v_untracked_ares {
 
         let mut rsa_files = Vec::<String>::new();
 
-        if exists(&rsa_folder)? {
+        if check_file_exists(&rsa_folder) {
             rsa_files = get_files_in_folder(&rsa_folder)?;
         }
 
@@ -1357,7 +1349,7 @@ impl v_untracked_ares {
                 subfolder,
             );
 
-            if !exists(&game_set_csv_path).unwrap() {
+            if !check_file_exists(&game_set_csv_path) {
                 task.fail_with_error(format!("No game set was found for hopper \"{subfolder}\""));
                 panic!();
             }
@@ -1408,7 +1400,7 @@ impl v_untracked_ares {
         for game_variant in game_variants_to_convert {
             let game_variant_json_path = title_storage_config::game_variant_file_path(hoppers_config_path, &game_variant);
 
-            if !Path::new(&game_variant_json_path).exists() {
+            if !check_file_exists(&game_variant_json_path) {
                 task.fail_with_error(format!("Game variant \"{}\" could not be found.", game_variant));
                 panic!();
             }
@@ -1499,7 +1491,7 @@ impl v_untracked_ares {
             hoppers_config_path,
         );
 
-        if !exists(&rsa_folder).unwrap() {
+        if !check_file_exists(&rsa_folder) {
             return result;
         }
 
@@ -1563,7 +1555,7 @@ impl v_untracked_ares {
                 &map_variant,
             );
 
-            if !Path::new(&map_variant_json_path).exists() {
+            if !check_file_exists(&map_variant_json_path) {
                 task.fail_with_error(format!("Map variant \"{}\" could not be found.", map_variant));
                 panic!();
             }
@@ -1754,8 +1746,7 @@ impl v_untracked_ares {
                     game_variant_file_hash: game_variant_hashes.get(&row.game_variant_file_name)
                         .unwrap_or_else(|| panic!("No map variant hash found for {}", row.game_variant_file_name)).clone(),
                     map_id: *map_variant_map_ids.get(&row.map_variant_file_name)
-                        .unwrap_or_else(|| panic!("No map ID found for {}", row.map_variant_file_name)),
-                })?;
+                        .unwrap_or_else(|| panic!("No map ID found for {}", row.map_variant_file_name))})?;
             }
 
             BlfFileBuilder::new()
@@ -1790,7 +1781,7 @@ impl v_untracked_ares {
                 active_hopper_folder,
             );
 
-            if !exists(&configuration_path)? {
+            if !check_file_exists(&configuration_path) {
                 task.fail_with_error(format!("Couldn't find a configuration file for hopper {active_hopper_folder}!"));
                 return Err(BLFLibError::from("Failed to build hoppers."));
             }
@@ -1929,8 +1920,7 @@ impl v_untracked_ares {
         let netc = s_blf_chunk_network_configuration {
             config: read_json_file(
                 title_storage_config::network_configuration_file_path(hoppers_config_path)
-            )?,
-        };
+            )?};
 
         BlfFileBuilder::new()
             .add_chunk(s_blf_chunk_start_of_file::new("ares net config"))
@@ -1953,7 +1943,7 @@ impl v_untracked_ares {
         let hopper_directory_name = Path::new(hoppers_blfs_path).file_name().unwrap().to_str().unwrap();
 
         let mut add_hash_if_file_exists = |manifest_path: String, file_path: String| -> BLFLibResult {
-            if exists(&file_path)? {
+            if check_file_exists(&file_path) {
                 manifest_chunk.add_file_hash(
                     manifest_path,
                     s_network_http_request_hash::default(),
