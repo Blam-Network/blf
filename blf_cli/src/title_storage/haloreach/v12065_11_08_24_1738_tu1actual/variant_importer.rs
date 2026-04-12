@@ -7,6 +7,7 @@ use blf_lib::blf::chunks::search_for_chunk_in_file;
 use blf_lib::blf::versions::haloreach::v12065_11_08_24_1738_tu1actual::{s_blf_chunk_game_variant, s_blf_chunk_map_variant, s_blf_chunk_matchmaking_game_variant};
 use crate::build_path;
 use crate::console::console_task;
+use crate::title_storage::remove_invalid_characters;
 
 pub fn import_variant(hoppers_config_path: &String, variant_path: &String) {
     let mut task = console_task::start("Importing Variant");
@@ -28,14 +29,13 @@ pub fn import_variant(hoppers_config_path: &String, variant_path: &String) {
             Path::new(variant_path).file_name().unwrap().to_str().unwrap().to_string().replace(".bin", ".json")
         } else {
             format!("{}.json", game_variant.get_metadata().unwrap().name.get_string()
-                .replace(" ", "_")
-                .to_lowercase())
+                    .to_lowercase())
         };
 
         let output_file = File::create(build_path!(
             hoppers_config_path,
             "game_variants",
-            &output_file_name
+            remove_invalid_characters(&output_file_name)
         )).unwrap();
         serde_json::to_writer_pretty(output_file, &game_variant.clone()).unwrap();
 
@@ -55,15 +55,14 @@ pub fn import_variant(hoppers_config_path: &String, variant_path: &String) {
         let output_file_name = if variant_path.ends_with(".bin") {
             Path::new(variant_path).file_name().unwrap().to_str().unwrap().to_string().replace(".bin", ".json")
         } else {
-            format!("{}.json", map_variant.m_metadata.name.get_string()
-                .replace(" ", "_")
+            format!("{}.json",map_variant.m_metadata.name.get_string()
                 .to_lowercase())
         };
 
         let output_file = File::create(build_path!(
             hoppers_config_path,
             "map_variants",
-            &output_file_name
+            remove_invalid_characters(&output_file_name)
         )).unwrap();
 
         serde_json::to_writer_pretty(output_file, &map_variant.clone()).unwrap();

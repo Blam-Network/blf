@@ -112,3 +112,16 @@ pub fn validate_jpeg(path: impl Into<String>, width: usize, height: usize, max_f
 
     Ok(())
 }
+pub fn remove_invalid_characters(input: &str) -> String {
+    input
+        .replace(' ', "_")
+        .replace('<', "")
+        .replace('>', "")
+        .replace(':', "")
+        .replace('"', "")
+        .replace('/', "")
+        .replace('\\', "")
+        .replace('|', "")
+        .replace('?', "")
+        .replace('*', "")
+}
