@@ -167,8 +167,8 @@ pub fn quantize_unit_vector3d_fast<const N: usize>(v: &real_vector3d) -> BLFLibR
             w = z / ax;
         } else {
             face = if z <= 0.0 { 5 } else { 2 };
-            u = y / az;
-            w = x / az;
+            u = x / az;
+            w = y / az;
         }
     } else {
         if ay > az {
