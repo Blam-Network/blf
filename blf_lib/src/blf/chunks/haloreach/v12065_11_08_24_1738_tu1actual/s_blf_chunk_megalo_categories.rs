@@ -4,8 +4,6 @@ use blf_lib::types::c_string::StaticWcharString;
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
 use blf_lib_derive::BlfChunk;
 
-pub const k_manifest_maximum_maps_count: usize = 16;
-
 #[binrw]
 #[derive(BlfChunk,Default,PartialEq,Debug,Clone,Serialize,Deserialize)]
 #[Header("fmca", 1.1)]
