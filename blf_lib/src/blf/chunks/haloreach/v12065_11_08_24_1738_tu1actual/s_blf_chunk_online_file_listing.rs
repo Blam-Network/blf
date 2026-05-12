@@ -10,8 +10,10 @@ use crate::blam::haloreach::v12065_11_08_24_1738_tu1actual::networking::online::
 use crate::types::c_string::StaticString;
 use crate::types::u64::Unsigned64;
 
+/// `message_length` on the wire is the message length in **Unicode characters**
+/// (scalar values), not UTF-8 bytes or UTF-16 code units.
 fn message_len_byte(message: &String) -> BinResult<u8> {
-    let n = message.encode_utf16().count();
+    let n = message.chars().count();
     u8::try_from(n).map_err(|_| {
         BINRW_ERROR!(String::from(
             "online file listing message is too long for u8 message_length",
@@ -35,17 +37,10 @@ pub struct s_blf_chunk_online_file_listing {
     pub quota_byte_count: u32,
     #[brw(pad_after = 1)]
     pub quota_slot_count: u8,
-    #[bw(try_calc(
-        u16::try_from(entries.len()).map_err(|_| binrw::error::Error::Custom {
-            pos: u64::MAX,
-            err: Box::new(format!(
-                "online file listing has {} entries; slot_count is u16",
-                entries.len()
-            )),
-        })
-    ))]
+    #[bw(try_calc(u16::try_from(entries.len())))]
+    #[br(temp)]
     pub slot_count: u16,
-    #[bw(try_calc(message_len_byte(&message)))]
+    #[bw(try_calc(u8::try_from(message.chars().count())))]
     #[brw(pad_after = 3)]
     pub message_length: u8,
     #[br(count = slot_count)]
