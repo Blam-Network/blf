@@ -21,7 +21,7 @@ use blf_lib::OPTION_TO_RESULT;
 use blf_lib::types::numbers::Float32;
 use blf_lib_derivable::result::{BLFLibError, BLFLibResult};
 use crate::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::megalogamengine::megalogamengine_map_permissions::c_megalogamengine_map_permissions;
-use crate::blam::haloreach::v12065_11_08_24_1738_tu1actual::saved_games::saved_game_files::s_content_item_metadata;
+use crate::blam::haloreach::v12065_11_08_24_1738_tu1actual::saved_games::saved_game_files::c_content_item_metadata;
 use crate::types::array::StaticArray;
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
@@ -179,7 +179,7 @@ pub struct c_game_variant {
 }
 
 impl c_game_variant {
-    pub fn get_metadata(&self) -> BLFLibResult<&s_content_item_metadata> {
+    pub fn get_metadata(&self) -> BLFLibResult<&c_content_item_metadata> {
         match self.m_game_engine {
             e_game_mode::sandbox => {
                 Err("Forge variants are currently unsupported.".into())

@@ -18,28 +18,28 @@ use napi_derive::napi;
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite)]
 #[cfg_attr(feature = "napi", napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]
-pub struct s_content_item_metadata_film_data {
+pub struct s_content_item_film_metadata {
     #[brw(pad_after = 12)]
     pub seconds: i32,
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite)]
 #[cfg_attr(feature = "napi", napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]
-pub struct s_content_item_metadata_game_variant_data {
+pub struct s_content_item_game_variant_metadata {
     #[brw(pad_after = 15)]
     pub icon_index: i8,
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite)]
 #[cfg_attr(feature = "napi", napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]
-pub struct s_content_item_metadata_matchmaking_data {
+pub struct s_content_item_matchmaking_metadata {
     #[brw(pad_after = 14)]
     pub hopper_identifier: u16,
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite)]
 #[cfg_attr(feature = "napi", napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]
-pub struct s_content_item_metadata_campaign_data {
+pub struct s_content_item_campaign_metadata {
     pub campaign_id: i32,
     pub campaign_difficulty: i16,
     pub campaign_metagame_scoring: i16,
@@ -50,7 +50,7 @@ pub struct s_content_item_metadata_campaign_data {
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite)]
 #[cfg_attr(feature = "napi", napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]
-pub struct s_content_item_metadata_firefight_data {
+pub struct s_content_item_firefight_metadata {
     pub firefight_difficulty: i16,
     pub firefight_primary_skulls: i16,
     #[brw(pad_after = 10)]
@@ -59,7 +59,18 @@ pub struct s_content_item_metadata_firefight_data {
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite)]
 #[cfg_attr(feature = "napi", napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]
-pub struct s_content_item_metadata {
+pub struct s_content_item_history {
+    pub timestamp: time64_t,
+    #[serde(with = "SerHex::<StrictCap>")]
+    pub xuid: Unsigned64,
+    pub name: StaticString<16>,
+    #[brw(pad_after = 3)]
+    pub is_online: Bool,
+}
+
+#[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite)]
+#[cfg_attr(feature = "napi", napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]
+pub struct s_content_item_general_metadata {
     #[brw(pad_after = 3)]
     pub file_type: i8,
     pub size_in_bytes: u32,
@@ -72,109 +83,111 @@ pub struct s_content_item_metadata {
     #[brw(pad_after = 1)]
     pub game_engine_type: u8,
     pub map_id: i32,
+}
+
+#[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite)]
+#[cfg_attr(feature = "napi", napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]
+pub struct s_content_item_display_metadata {
     #[brw(pad_after = 7)]
     pub megalo_category_index: i8,
-    pub creation_time: time64_t,
-    #[serde(with = "SerHex::<StrictCap>")]
-    pub creator_xuid: Unsigned64,
-    pub creator_name: StaticString<16>,
-    #[brw(pad_after = 3)]
-    pub creator_xuid_is_online: Bool,
-    pub modification_time: time64_t,
-    #[serde(with = "SerHex::<StrictCap>")]
-    pub modifier_xuid: Unsigned64,
-    pub modifier_name: StaticString<16>,
-    #[brw(pad_after = 3)]
-    pub modifier_xuid_is_online: Bool,
+}
+
+#[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite)]
+#[cfg_attr(feature = "napi", napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]
+pub struct c_content_item_metadata {
+    pub general: s_content_item_general_metadata,
+    pub display: s_content_item_display_metadata,
+    pub creation_history: s_content_item_history,
+    pub modification_history: s_content_item_history,
     pub name: StaticWcharString<0x80>,
     pub description: StaticWcharString<0x80>,
 
-    #[br(if(file_type == 3))]
-    #[bw(if(*file_type == 3))]
+    #[br(if(general.file_type == 3))]
+    #[bw(if(general.file_type == 3))]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub film_data: Option<s_content_item_metadata_film_data>,
-    #[br(if(file_type == 6))]
-    #[bw(if(*file_type == 6))]
+    pub film_data: Option<s_content_item_film_metadata>,
+    #[br(if(general.file_type == 6))]
+    #[bw(if(general.file_type == 6))]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub game_variant_data: Option<s_content_item_metadata_game_variant_data>,
-    #[br(if(file_type != 6 && file_type != 3))]
-    #[bw(if(*file_type != 6 && *file_type != 3))]
+    pub game_variant_data: Option<s_content_item_game_variant_metadata>,
+    #[br(if(general.file_type != 6 && general.file_type != 3))]
+    #[bw(if(general.file_type != 6 && general.file_type != 3))]
     #[serde(skip_serializing,skip_deserializing)]
     pub pad1: StaticArray<u8, 16>,
 
-    #[br(if(activity == 3))]
-    #[bw(if(*activity == 3))]
+    #[br(if(general.activity == 3))]
+    #[bw(if(general.activity == 3))]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub matchmaking_data: Option<s_content_item_metadata_matchmaking_data>,
-    #[br(if(activity != 3))]
-    #[bw(if(*activity != 3))]
+    pub matchmaking_data: Option<s_content_item_matchmaking_metadata>,
+    #[br(if(general.activity != 3))]
+    #[bw(if(general.activity != 3))]
     #[serde(skip_serializing,skip_deserializing)]
     pub pad2: StaticArray<u8, 16>,
 
-    #[br(if(game_mode == 1))]
-    #[bw(if(*game_mode == 1))]
+    #[br(if(general.game_mode == 1))]
+    #[bw(if(general.game_mode == 1))]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub campaign_data: Option<s_content_item_metadata_campaign_data>,
-    #[br(if(game_mode == 2))]
-    #[bw(if(*game_mode == 2))]
+    pub campaign_data: Option<s_content_item_campaign_metadata>,
+    #[br(if(general.game_mode == 2))]
+    #[bw(if(general.game_mode == 2))]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub firefight_data: Option<s_content_item_metadata_firefight_data>,
-    #[br(if(game_mode != 1 && game_mode != 2))]
-    #[bw(if(*game_mode != 1 && *game_mode != 2))]
+    pub firefight_data: Option<s_content_item_firefight_metadata>,
+    #[br(if(general.game_mode != 1 && general.game_mode != 2))]
+    #[bw(if(general.game_mode != 1 && general.game_mode != 2))]
     #[serde(skip_serializing,skip_deserializing)]
     pub pad3: StaticArray<u8, 16>,
 }
 
-impl s_content_item_metadata {
+impl c_content_item_metadata {
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
-        self.file_type = bitstream.read_integer::<i8>("type", 4)? - 1;
-        self.size_in_bytes = bitstream.read_integer("file-size", 32)?;
-        self.unique_id = bitstream.read_qword(64)?;
-        self.parent_unique_id = bitstream.read_qword(64)?;
-        self.root_unique_id = bitstream.read_qword(64)?;
-        self.game_id = bitstream.read_qword(64)?;
-        self.activity = bitstream.read_integer::<i8>("activity", 3)? - 1;
-        self.game_mode = bitstream.read_integer("game-mode", 3)?;
-        self.game_engine_type = bitstream.read_integer("game-engine-type", 3)?;
-        self.map_id = bitstream.read_signed_integer("map-id", 32)?;
-        self.megalo_category_index = bitstream.read_signed_integer("megalo-category-index", 8)?;
-        self.creation_time = bitstream.read_qword(64)?;
-        self.creator_xuid = bitstream.read_qword(64)?;
-        self.creator_name = StaticString::from_string(bitstream.read_string_extended_ascii(16)?)?;
-        self.creator_xuid_is_online = bitstream.read_bool("author-flags")?;
-        self.modification_time = bitstream.read_qword(64)?;
-        self.modifier_xuid = bitstream.read_qword(64)?;
-        self.modifier_name = StaticString::from_string(bitstream.read_string_extended_ascii(16)?)?;
-        self.modifier_xuid_is_online = bitstream.read_bool("author-flags")?;
+        self.general.file_type = bitstream.read_integer::<i8>("type", 4)? - 1;
+        self.general.size_in_bytes = bitstream.read_integer("file-size", 32)?;
+        self.general.unique_id = bitstream.read_qword(64)?;
+        self.general.parent_unique_id = bitstream.read_qword(64)?;
+        self.general.root_unique_id = bitstream.read_qword(64)?;
+        self.general.game_id = bitstream.read_qword(64)?;
+        self.general.activity = bitstream.read_integer::<i8>("activity", 3)? - 1;
+        self.general.game_mode = bitstream.read_integer("game-mode", 3)?;
+        self.general.game_engine_type = bitstream.read_integer("game-engine-type", 3)?;
+        self.general.map_id = bitstream.read_signed_integer("map-id", 32)?;
+        self.display.megalo_category_index = bitstream.read_signed_integer("megalo-category-index", 8)?;
+        self.creation_history.timestamp = bitstream.read_qword(64)?;
+        self.creation_history.xuid = bitstream.read_qword(64)?;
+        self.creation_history.name = StaticString::from_string(bitstream.read_string_extended_ascii(16)?)?;
+        self.creation_history.is_online = bitstream.read_bool("author-flags")?;
+        self.modification_history.timestamp = bitstream.read_qword(64)?;
+        self.modification_history.xuid = bitstream.read_qword(64)?;
+        self.modification_history.name = StaticString::from_string(bitstream.read_string_extended_ascii(16)?)?;
+        self.modification_history.is_online = bitstream.read_bool("author-flags")?;
         self.name = StaticWcharString::from_string(bitstream.read_string_wchar(128)?)?;
         self.description = StaticWcharString::from_string(bitstream.read_string_wchar(128)?)?;
 
-        match self.file_type {
+        match self.general.file_type {
             3 | 4 => {
-                self.film_data = Some(s_content_item_metadata_film_data {
+                self.film_data = Some(s_content_item_film_metadata {
                     seconds: bitstream.read_unnamed_signed_integer(32)?
                 })
             }
             6 => {
-                self.game_variant_data = Some(s_content_item_metadata_game_variant_data {
+                self.game_variant_data = Some(s_content_item_game_variant_metadata {
                     icon_index: bitstream.read_unnamed_signed_integer(8)?,
                 })
             }
             _ => {}
         }
 
-        match self.activity {
+        match self.general.activity {
             2 => {
-                self.matchmaking_data = Some(s_content_item_metadata_matchmaking_data {
+                self.matchmaking_data = Some(s_content_item_matchmaking_metadata {
                     hopper_identifier: bitstream.read_unnamed_integer(16)?,
                 })
             }
             _ => {}
         }
 
-        match self.game_mode {
+        match self.general.game_mode {
             1 => {
-                self.campaign_data = Some(s_content_item_metadata_campaign_data {
+                self.campaign_data = Some(s_content_item_campaign_metadata {
                     campaign_id: bitstream.read_integer("campaign-id", 8)?,
                     campaign_difficulty: bitstream.read_integer("difficulty-level", 2)?,
                     campaign_metagame_scoring: bitstream.read_integer("metagame-scoring", 2)?,
@@ -184,7 +197,7 @@ impl s_content_item_metadata {
                 })
             }
             2 => {
-                self.firefight_data = Some(s_content_item_metadata_firefight_data {
+                self.firefight_data = Some(s_content_item_firefight_metadata {
                     firefight_difficulty: bitstream.read_integer("difficulty-level", 2)?,
                     firefight_primary_skulls: bitstream.read_integer("skull-flags", 16)?,
                     firefight_secondary_skulls: bitstream.read_integer("skull-flags", 16)?,
@@ -197,29 +210,29 @@ impl s_content_item_metadata {
     }
 
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
-        bitstream.write_integer((self.file_type + 1) as u32, 4)?;
-        bitstream.write_integer(self.size_in_bytes, 32)?;
-        bitstream.write_qword( self.unique_id, 64)?;
-        bitstream.write_qword(self.parent_unique_id, 64)?;
-        bitstream.write_qword(self.root_unique_id, 64)?;
-        bitstream.write_qword(self.game_id, 64)?;
-        bitstream.write_integer((self.activity + 1) as u32, 3)?;
-        bitstream.write_integer(self.game_mode, 3)?;
-        bitstream.write_integer(self.game_engine_type, 3)?;
-        bitstream.write_signed_integer(self.map_id, 32)?;
-        bitstream.write_signed_integer(self.megalo_category_index, 8)?;
-        bitstream.write_qword(self.creation_time, 64)?;
-        bitstream.write_qword(self.creator_xuid, 64)?;
-        bitstream.write_string_extended_ascii(&self.creator_name.get_string()?, 16)?;
-        bitstream.write_bool(self.creator_xuid_is_online)?;
-        bitstream.write_qword(self.modification_time, 64)?;
-        bitstream.write_qword(self.modifier_xuid, 64)?;
-        bitstream.write_string_extended_ascii(&self.modifier_name.get_string()?, 16)?;
-        bitstream.write_bool(self.modifier_xuid_is_online)?;
+        bitstream.write_integer((self.general.file_type + 1) as u32, 4)?;
+        bitstream.write_integer(self.general.size_in_bytes, 32)?;
+        bitstream.write_qword(self.general.unique_id, 64)?;
+        bitstream.write_qword(self.general.parent_unique_id, 64)?;
+        bitstream.write_qword(self.general.root_unique_id, 64)?;
+        bitstream.write_qword(self.general.game_id, 64)?;
+        bitstream.write_integer((self.general.activity + 1) as u32, 3)?;
+        bitstream.write_integer(self.general.game_mode, 3)?;
+        bitstream.write_integer(self.general.game_engine_type, 3)?;
+        bitstream.write_signed_integer(self.general.map_id, 32)?;
+        bitstream.write_signed_integer(self.display.megalo_category_index, 8)?;
+        bitstream.write_qword(self.creation_history.timestamp, 64)?;
+        bitstream.write_qword(self.creation_history.xuid, 64)?;
+        bitstream.write_string_extended_ascii(&self.creation_history.name.get_string()?, 16)?;
+        bitstream.write_bool(self.creation_history.is_online)?;
+        bitstream.write_qword(self.modification_history.timestamp, 64)?;
+        bitstream.write_qword(self.modification_history.xuid, 64)?;
+        bitstream.write_string_extended_ascii(&self.modification_history.name.get_string()?, 16)?;
+        bitstream.write_bool(self.modification_history.is_online)?;
         bitstream.write_string_wchar(&self.name.get_string(), 128)?;
         bitstream.write_string_wchar(&self.description.get_string(), 128)?;
 
-        match self.file_type {
+        match self.general.file_type {
             3 | 4 => {
                 bitstream.write_signed_integer(
                     OPTION_TO_RESULT!(
@@ -241,7 +254,7 @@ impl s_content_item_metadata {
             _ => {}
         }
 
-        match self.activity {
+        match self.general.activity {
             2 => {
                 bitstream.write_signed_integer(
                     OPTION_TO_RESULT!(
@@ -254,7 +267,7 @@ impl s_content_item_metadata {
             _ => {}
         }
 
-        match self.game_mode {
+        match self.general.game_mode {
             1 => {
                 let campaign_data = OPTION_TO_RESULT!(
                     &self.campaign_data,

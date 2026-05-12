@@ -10,7 +10,7 @@ use crate::blam::common::math::real_math::real_vector3d;
 use serde_hex::{SerHex,StrictCap};
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::string_table;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::memory::bitstream_writer::c_bitstream_writer_extensions;
-use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::saved_games::saved_game_files::s_content_item_metadata;
+use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::saved_games::saved_game_files::c_content_item_metadata;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::simulation::simulation_encoding::{simulation_read_position, simulation_write_position};
 use blf_lib_derive::TestSize;
 use blf_lib_derivable::result::BLFLibResult;
@@ -26,7 +26,7 @@ pub const k_maximum_variant_quotas: usize = 256;
 // This structure is not a direct representation of Halo: Reach's memory
 // As such it can only be written packed via the encode / decode functions.
 pub struct c_map_variant {
-    pub m_metadata: s_content_item_metadata,
+    pub m_metadata: c_content_item_metadata,
     pub m_map_variant_version: u16,
     pub m_number_of_placeable_object_quotas: u16,
     pub m_map_id: u32,

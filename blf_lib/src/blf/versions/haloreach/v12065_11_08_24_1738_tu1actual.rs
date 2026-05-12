@@ -40,6 +40,8 @@ pub use haloreach::v12065_11_08_24_1738_tu1actual::s_blf_chunk_challenge_progres
 pub use haloreach::v12065_11_08_24_1738_tu1actual::s_blf_chunk_reward_persistence_upload_to_lsp::*;
 pub use haloreach::v12065_11_08_24_1738_tu1actual::s_blf_chunk_user_messaging_data::*;
 pub use haloreach::v12065_11_08_24_1738_tu1actual::s_blf_chunk_xuid_list::*;
+pub use haloreach::v12065_11_08_24_1738_tu1actual::s_blf_chunk_online_file_listing::*;
+pub use haloreach::v12065_11_08_24_1738_tu1actual::s_blf_chunk_online_file_summary::*;
 
 #[derive(TitleAndBuild)]
 #[Title("Halo: Reach")]

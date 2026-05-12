@@ -3,3 +3,4 @@ pub mod memory;
 pub mod math;
 pub mod game;
 pub mod simulation;
+pub mod networking;

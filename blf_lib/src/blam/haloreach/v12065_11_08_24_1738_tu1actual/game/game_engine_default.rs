@@ -5,7 +5,7 @@ use blf_lib::{SET_BIT, TEST_BIT};
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::game_engine_loadout_traits::c_game_engine_loadout_traits;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::game_engine_team::c_game_engine_team_options;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::game_engine_traits::{c_game_engine_miscellaneous_options, c_game_engine_respawn_options};
-use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::saved_games::saved_game_files::s_content_item_metadata;
+use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::saved_games::saved_game_files::c_content_item_metadata;
 use blf_lib_derivable::result::BLFLibResult;
 
 pub const k_game_engine_type_count: usize = 11;
@@ -92,7 +92,7 @@ impl c_game_engine_map_override_options {
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct c_game_engine_base_variant {
-    pub m_metadata: s_content_item_metadata,
+    pub m_metadata: c_content_item_metadata,
     pub m_built_in: bool,
     pub m_miscellaneous_options: c_game_engine_miscellaneous_options,
     pub m_respawn_options: c_game_engine_respawn_options,
