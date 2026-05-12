@@ -7,6 +7,7 @@ pub mod game_engine_loadout_traits;
 pub mod game_engine_campaign;
 pub mod megalogamengine;
 pub mod game_variant;
+pub mod players;
 pub mod game_engine_player_rating_parameters;
 pub mod game_engine_survival;
 pub mod player_rewards;

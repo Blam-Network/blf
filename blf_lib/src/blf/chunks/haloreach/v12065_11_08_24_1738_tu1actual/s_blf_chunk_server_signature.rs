@@ -18,9 +18,9 @@ use napi_derive::napi;
 #[Header("ssig", 1.1)]
 #[brw(big)]
 // name is a guess
-pub struct s_blf_chunk_signable_signature
+pub struct s_blf_chunk_server_signature
 {
     pub data: StaticArray<u8, 44>,
 }
 
-impl BlfChunkHooks for s_blf_chunk_signable_signature {}
+impl BlfChunkHooks for s_blf_chunk_server_signature {}
