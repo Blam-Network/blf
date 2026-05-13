@@ -19,11 +19,11 @@ pub struct s_files_user_auto_download_queue_item {
     pub file_type: u8,
     pub activity: u8,
     #[brw(pad_after = 1)]
-    pub game_engine_type: u8,
+    pub game_engine_type: i8,
     #[brw(pad_after = 3)]
-    pub megalo_category_index: u8,
+    pub megalo_category_index: i8,
     #[brw(pad_after = 4)]
-    pub map_id: u32,
+    pub map_id: i32,
     pub modified_time: time64_t,
     pub modified_by: StaticString<16>,
     pub file_name: StaticWcharString<128>,
