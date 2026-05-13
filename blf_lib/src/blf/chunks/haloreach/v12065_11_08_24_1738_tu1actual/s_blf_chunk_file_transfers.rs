@@ -23,7 +23,7 @@ pub struct s_files_user_auto_download_queue_item {
     pub icon_index: i8,
     #[brw(pad_after = 3)]
     pub megalo_category_index: i8,
-    #[brw(pad_after = 4)]
+    pub size_in_bytes: u32,
     pub map_id: i32,
     pub modified_time: time64_t,
     pub modified_by: StaticString<16>,
