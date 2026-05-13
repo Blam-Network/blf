@@ -8,6 +8,7 @@ use blf_lib::types::c_string::StaticWcharString;
 use blf_lib::types::u64::Unsigned64;
 #[cfg(feature = "napi")]
 use napi_derive::napi;
+use blf_lib::types::time::time64_t;
 use crate::types::c_string::StaticString;
 
 #[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
@@ -23,7 +24,7 @@ pub struct s_files_user_auto_download_queue_item {
     pub megalo_category_index: u8,
     #[brw(pad_after = 4)]
     pub map_id: u32,
-    pub modified_time: Unsigned64,
+    pub modified_time: time64_t,
     pub modified_by: StaticString<16>,
     pub file_name: StaticWcharString<128>,
     pub download_share_id: Unsigned64,
