@@ -4,6 +4,7 @@ use napi_derive::napi;
 use blf_lib::TestSize;
 use blf_lib::types::c_string::StaticWcharString;
 use serde::{Deserialize, Serialize};
+use crate::types::array::StaticArray;
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, TestSize)]
 #[Size(20)]
@@ -35,8 +36,8 @@ pub struct s_player_appearance {
     pub emblem_secondary_color: i8,
     #[brw(pad_after = 2)]
     pub emblem_background_color: i8,
-    pub model_permutations: [i8; 8],
-    pub non_model_customization: [i8; 4],
+    pub model_permutations: StaticArray<u8, 8>,
+    pub non_model_customization: StaticArray<u8, 4>,
     #[brw(pad_after = 2)]
     pub service_tag: StaticWcharString<5>,
 }
