@@ -15,7 +15,8 @@ use crate::types::c_string::StaticString;
 #[cfg_attr(feature = "napi", napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]
 #[brw(big)]
 pub struct s_files_user_auto_download_queue_item {
-    pub server_id: Unsigned64, // i hope it is anyway!
+    pub share_id: Unsigned64,
+    pub server_id: Unsigned64,
     pub file_type: u8,
     pub activity: u8,
     pub game_engine_type: i8,
@@ -27,7 +28,6 @@ pub struct s_files_user_auto_download_queue_item {
     pub modified_time: time64_t,
     pub modified_by: StaticString<16>,
     pub file_name: StaticWcharString<128>,
-    pub download_share_id: Unsigned64,
 }
 
 #[binrw]
