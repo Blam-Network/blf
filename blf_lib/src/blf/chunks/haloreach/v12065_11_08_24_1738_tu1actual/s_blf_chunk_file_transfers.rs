@@ -38,7 +38,6 @@ pub struct s_files_user_auto_download_queue_item {
 pub struct s_blf_chunk_file_transfers
 {
     #[bw(try_calc(u32::try_from(transfers.len())))]
-    #[brw(pad_after = 8)]
     transfers_count: u32,
     #[br(count = transfers_count)]
     pub transfers: Vec<s_files_user_auto_download_queue_item>
