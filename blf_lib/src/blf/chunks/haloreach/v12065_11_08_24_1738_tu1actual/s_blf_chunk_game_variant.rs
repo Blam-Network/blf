@@ -8,6 +8,9 @@ use blf_lib_derive::BlfChunk;
 use crate::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::game_variant::c_game_variant;
 use crate::blf::get_buffer_hash;
 
+/// Total mpvr chunk body size (hash/header + gametype slot).
+pub const variant_storage_length: usize = 0x5000;
+
 #[derive(BlfChunk,PartialEq,Debug,Clone,Serialize,Deserialize,Default)]
 #[Header("mpvr", 54.1)]
 pub struct s_blf_chunk_game_variant
@@ -44,7 +47,7 @@ impl BinWrite for s_blf_chunk_game_variant {
     type Args<'a> = ();
 
     fn write_options<W: Write + Seek>(&self, writer: &mut W, endian: Endian, args: Self::Args<'_>) -> BinResult<()> {
-        let mut bitstream_writer = c_bitstream_writer::new(0x5028, e_bitstream_byte_order::_bitstream_byte_order_big_endian);
+        let mut bitstream_writer = c_bitstream_writer::new(variant_storage_length, e_bitstream_byte_order::_bitstream_byte_order_big_endian);
         bitstream_writer.begin_writing();
         self.game_variant.encode(&mut bitstream_writer)?;
         bitstream_writer.finish_writing();
@@ -62,6 +65,9 @@ impl BinWrite for s_blf_chunk_game_variant {
         unknown06.write_options(writer, Endian::Big, args)?;
         gametype_length.write_options(writer, Endian::Big, args)?;
         gametype_data.write_options(writer, Endian::Big, args)?;
+
+        // pad with zeros up to variant storage length
+        writer.write_all(&vec![0u8; variant_storage_length - gametype_data.len()])?;
 
         Ok(())
     }
