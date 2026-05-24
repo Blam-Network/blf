@@ -1,6 +1,6 @@
 {
   "name": "@blamnetwork/blf",
-  "version": "1.0.0-alpha.3",
+  "version": "1.0.0-alpha.4",
   "description": "BLF chunk library for Halo (TypeScript)",
   "type": "module",
   "main": "./dist-cjs/index.js",
