@@ -1,0 +1,57 @@
+{
+  "name": "@Blam-Network/blf",
+  "version": "0.1.0",
+  "description": "BLF chunk library for Halo (TypeScript)",
+  "type": "module",
+  "main": "./dist-cjs/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist-cjs/index.js",
+      "default": "./dist/index.js"
+    },
+    "./haloreach/*": {
+      "types": "./dist/versions/haloreach/*.d.ts",
+      "import": "./dist/versions/haloreach/*.js",
+      "require": "./dist-cjs/versions/haloreach/*.js",
+      "default": "./dist/versions/haloreach/*.js"
+    },
+    "./halo3/*": {
+      "types": "./dist/versions/halo3/*.d.ts",
+      "import": "./dist/versions/halo3/*.js",
+      "require": "./dist-cjs/versions/halo3/*.js",
+      "default": "./dist/versions/halo3/*.js"
+    },
+    "./halo3odst/*": {
+      "types": "./dist/versions/halo3odst/*.d.ts",
+      "import": "./dist/versions/halo3odst/*.js",
+      "require": "./dist-cjs/versions/halo3odst/*.js",
+      "default": "./dist/versions/halo3odst/*.js"
+    }
+  },
+  "files": [
+    "dist",
+    "dist-cjs"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json && tsc -p tsconfig.build.cjs.json && node scripts/write-cjs-package-json.mjs",
+    "test": "vitest run",
+    "validate": "npm run build && npm run test",
+    "prepack": "npm run build"
+  },
+  "dependencies": {
+    "@craftycodie/cstruct": "^1.0.0-alpha.9",
+    "js-sha1": "^0.7.0",
+    "pako": "^2.1.0"
+  },
+  "devDependencies": {
+    "@swc/core": "^1.15.33",
+    "@types/node": "^22",
+    "@types/pako": "^2.0.3",
+    "typescript": "^5",
+    "unplugin-swc": "^1.5.9",
+    "vitest": "^3.2.4"
+  }
+}

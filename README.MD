@@ -10,12 +10,14 @@ This is the core crate of this workspace, it defines many types of BLF chunks fo
 ### [blf_cli](./blf_cli/README.MD)
 This binary crate is a a very simple command-line-interface (CLI) for interacting with BLF files. This CLI is primarily used for managing Halo's "Title Storage", more information can be found in [it's readme](./blf_cli/README.MD).
 
+### [blf-ts](./blf-ts/)
+A TypeScript implementation of blf_lib for use on web browsers and node servers. Structures here are not exhaustive, blf_lib is considered the source-of-truth.
+
 ### [blf_bnet](./blf_bnet/README.MD)
 This crate contains BLF functions used by the client-side TypeScript code of [blam.network](https://www.blam.network/). It is compiled to [WebAssembly](https://webassembly.org/) using [wasm-pack](https://github.com/rustwasm/wasm-pack).
 
 ### blf_lib-private <kbd>Private</kbd>
 A closed-source counterpart to blf_lib held in the blf_private workspace. This package currently is only used for handling game data relating to online services.
-
 
 ### blf_lsp <kbd>Private</kbd>
 This crate contains BLF functions used by the server-side Typescript code of Blam Network's web-APIs. It is compiled via [napi-rs](https://github.com/napi-rs/napi-rs) and uses the Node.js [Node-API (napi)](https://nodejs.org/api/n-api.html)
