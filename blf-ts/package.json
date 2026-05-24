@@ -5,6 +5,13 @@
   "type": "module",
   "main": "./dist-cjs/index.js",
   "types": "./dist/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "haloreach/*": ["./dist/versions/haloreach/*"],
+      "halo3/*": ["./dist/versions/halo3/*"],
+      "halo3odst/*": ["./dist/versions/halo3odst/*"]
+    }
+  },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -42,7 +49,7 @@
     "prepack": "npm run build"
   },
   "dependencies": {
-    "@craftycodie/cstruct": "^1.0.0-alpha.9",
+    "@craftycodie/cstruct": "^1.0.0-alpha.10",
     "js-sha1": "^0.7.0",
     "pako": "^2.1.0"
   },

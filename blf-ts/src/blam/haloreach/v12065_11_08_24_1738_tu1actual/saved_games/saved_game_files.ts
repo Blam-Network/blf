@@ -1,5 +1,5 @@
 import { c } from "@craftycodie/cstruct";
-import { c_bitstream_reader, c_bitstream_writer } from "@Blam-Network/blf/bitstream";
+import { c_bitstream_reader, c_bitstream_writer } from "../../../../bitstream";
 
 export enum e_file_type {
   Screenshot = 2,
@@ -20,8 +20,8 @@ export class s_content_item_history {
   @c.field(c.String(16))
   name!: string;
 
-  @c.field("u8", { pad_after: 3 })
-  is_online!: number;
+  @c.field(c.Bool(), { pad_after: 3 })
+  is_online!: boolean;
 }
 
 @c.struct()
@@ -206,16 +206,12 @@ export function content_item_metadata_decode(
   metadata.creation_history.xuid = bitstream.read_qword(64);
   metadata.creation_history.name = bitstream.read_string_extended_ascii(16);
   metadata.creation_history.is_online = bitstream.read_bool("author-flags")
-    ? 1
-    : 0;
   metadata.modification_history.timestamp = new Date(
     Number(bitstream.read_qword(64)) * 1000,
   );
   metadata.modification_history.xuid = bitstream.read_qword(64);
   metadata.modification_history.name = bitstream.read_string_extended_ascii(16);
-  metadata.modification_history.is_online = bitstream.read_bool("author-flags")
-    ? 1
-    : 0;
+  metadata.modification_history.is_online = bitstream.read_bool("author-flags");
   metadata.name = bitstream.read_string_wchar(128);
   metadata.description = bitstream.read_string_wchar(128);
 
@@ -308,14 +304,14 @@ export function content_item_metadata_encode(
   );
   bitstream.write_qword(metadata.creation_history.xuid, 64);
   bitstream.write_string_extended_ascii(metadata.creation_history.name, 16);
-  bitstream.write_bool(metadata.creation_history.is_online !== 0);
+  bitstream.write_bool(metadata.creation_history.is_online);
   bitstream.write_qword(
     BigInt(Math.floor(metadata.modification_history.timestamp.getTime() / 1000)),
     64,
   );
   bitstream.write_qword(metadata.modification_history.xuid, 64);
   bitstream.write_string_extended_ascii(metadata.modification_history.name, 16);
-  bitstream.write_bool(metadata.modification_history.is_online !== 0);
+  bitstream.write_bool(metadata.modification_history.is_online);
   bitstream.write_string_wchar(metadata.name, 128);
   bitstream.write_string_wchar(metadata.description, 128);
 
