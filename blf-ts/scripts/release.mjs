@@ -69,7 +69,7 @@ run("npm run validate");
 
 run(`npm version ${version} --no-git-tag-version`);
 run("git add package.json package-lock.json");
-run(`git commit -m "${tag}"`);
+run(`git commit -m "blf_ts: ${tag}"`);
 run(`git tag ${tag}`);
 run("git push origin HEAD");
 run(`git push origin ${tag}`);

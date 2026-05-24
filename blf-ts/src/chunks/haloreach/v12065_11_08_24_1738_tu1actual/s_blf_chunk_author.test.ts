@@ -8,7 +8,7 @@ import { s_blf_chunk_author } from "./s_blf_chunk_author";
 
 describe("s_blf_chunk_author", () => {
   it("has a 0x44-byte body (big-endian)", () => {
-    expect(c.size(s_blf_chunk_author)).toBe(0x44);
+    expect(c.sizeof(s_blf_chunk_author)).toBe(0x44);
   });
 
   it("round-trips known field values", () => {

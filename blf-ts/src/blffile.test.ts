@@ -35,7 +35,7 @@ describe("s_blf_chunk_start_of_file", () => {
     original.byte_order_mark = e_byte_order_mark.little_endian;
     const bytes = original.write("big");
 
-    expect(bytes.length).toBe(c.size(s_blf_header) + 36);
+    expect(bytes.length).toBe(c.sizeof(s_blf_header) + 36);
 
     const parsed = new s_blf_chunk_start_of_file();
     parsed.read(bytes, "big");
@@ -54,7 +54,7 @@ describe("write_blffile", () => {
     expect(search_for_chunk(file, blf, "big")).toBe(true);
     expect(blf.name).toBe("file");
 
-    const eof_off = c.size(s_blf_header) + 36;
+    const eof_off = c.sizeof(s_blf_header) + 36;
     const parsed_eof = new s_blf_chunk_end_of_file();
     parsed_eof.read(file.subarray(eof_off), "big");
     expect(parsed_eof.file_size).toBe(eof_off);
@@ -66,12 +66,12 @@ describe("write_blffile", () => {
     const eof = new s_blf_chunk_end_of_file();
 
     const file = write_blffile("big", [body, eof]);
-    const expected_eof_offset = c.size(s_blf_header) + 4;
+    const expected_eof_offset = c.sizeof(s_blf_header) + 4;
 
     const parsed = new s_blf_chunk_end_of_file();
     parsed.read(file.subarray(expected_eof_offset), "big");
 
     expect(parsed.file_size).toBe(expected_eof_offset);
-    expect(file.length).toBe(expected_eof_offset + c.size(s_blf_header) + 5);
+    expect(file.length).toBe(expected_eof_offset + c.sizeof(s_blf_header) + 5);
   });
 });

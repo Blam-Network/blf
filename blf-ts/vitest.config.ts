@@ -18,6 +18,11 @@ export default defineConfig({
   resolve: {
     alias: [
       {
+        // Exact package root only (do not prefix-match subpaths).
+        find: /^@blamnetwork\/blf$/,
+        replacement: path.join(root, "src/index.ts"),
+      },
+      {
         // @blamnetwork/blf/haloreach/<build> → src/versions/haloreach/<build>.ts
         find: /^@blamnetwork\/blf\/(haloreach|halo3|halo3odst)\/(.+)$/,
         replacement: `${versionsRoot}/$1/$2.ts`,
@@ -35,6 +40,11 @@ export default defineConfig({
   ],
   test: {
     include: ["src/**/*.test.ts", "tests/**/*.test.ts"],
+    server: {
+      deps: {
+        inline: ["@craftycodie/cstruct"],
+      },
+    },
     deps: {
       optimizer: {
         swc: {
