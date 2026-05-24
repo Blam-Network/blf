@@ -1,5 +1,5 @@
 {
-  "name": "@Blam-Network/blf",
+  "name": "@blamnetwork/blf",
   "version": "1.0.0-alpha.1",
   "description": "BLF chunk library for Halo (TypeScript)",
   "type": "module",
