@@ -1,6 +1,6 @@
 import { c } from "@craftycodie/cstruct";
-import { BlfError } from "./error";
 import { chunkSignature } from "./chunk_signature";
+import { BlfError } from "./error";
 
 export function parse_blf_chunk_version(version: number | string) {
   if (typeof version === "number") {
@@ -13,7 +13,7 @@ export function parse_blf_chunk_version(version: number | string) {
 
   if (Number.isNaN(major) || Number.isNaN(minor)) {
     throw new BlfError(
-      `BLF chunk version must be major.minor (e.g. "1.1"), got "${version}"`,
+      `BLF chunk version must be major.minor (e.g. "1.1"), got "${version}"`
     );
   }
 
@@ -37,16 +37,16 @@ export class s_blf_header {
     signature: string,
     chunk_length: number,
     major: number,
-    minor: number,
+    minor: number
   ): s_blf_header {
     if (signature.length !== 4) {
       throw new BlfError(
-        `BLF chunk signature must be exactly 4 characters, got ${signature.length}: "${signature}"`,
+        `BLF chunk signature must be exactly 4 characters, got ${signature.length}: "${signature}"`
       );
     }
     if (!Number.isInteger(chunk_length) || chunk_length < 0) {
       throw new BlfError(
-        `BLF chunk length must be a non-negative integer, got ${chunk_length}`,
+        `BLF chunk length must be a non-negative integer, got ${chunk_length}`
       );
     }
     const header = new s_blf_header();
@@ -61,7 +61,7 @@ export class s_blf_header {
   static from_version_float(
     signature: string,
     chunk_length: number,
-    version: number,
+    version: number
   ): s_blf_header {
     const { major, minor } = parse_blf_chunk_version(version);
     return s_blf_header.create(signature, chunk_length, major, minor);

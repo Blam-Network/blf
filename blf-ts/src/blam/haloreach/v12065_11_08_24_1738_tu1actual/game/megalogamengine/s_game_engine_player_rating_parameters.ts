@@ -1,4 +1,7 @@
-import { type c_bitstream_reader, c_bitstream_writer } from "../../../../../bitstream";
+import type {
+  c_bitstream_reader,
+  c_bitstream_writer,
+} from "../../../../../bitstream";
 
 export class s_game_engine_player_rating_parameters {
   m_rating_scale = 0;
@@ -22,11 +25,14 @@ export class s_game_engine_player_rating_parameters {
     this.m_rating_scale = bitstream.read_float("player-rating-parameter", 32);
     this.m_kill_weight = bitstream.read_float("player-rating-parameter", 32);
     this.m_assist_weight = bitstream.read_float("player-rating-parameter", 32);
-    this.m_betrayal_weight = bitstream.read_float("player-rating-parameter", 32);
+    this.m_betrayal_weight = bitstream.read_float(
+      "player-rating-parameter",
+      32
+    );
     this.m_death_weight = bitstream.read_float("player-rating-parameter", 32);
     this.m_normalize_by_max_kills = bitstream.read_float(
       "player-rating-parameter",
-      32,
+      32
     );
     this.m_base = bitstream.read_float("player-rating-parameter", 32);
     this.m_range = bitstream.read_float("player-rating-parameter", 32);
@@ -42,20 +48,20 @@ export class s_game_engine_player_rating_parameters {
 
   encode(bitstream: c_bitstream_writer): void {
     bitstream.write_float(this.m_rating_scale, 32);
-            bitstream.write_float(this.m_kill_weight, 32);
-            bitstream.write_float(this.m_assist_weight, 32);
-            bitstream.write_float(this.m_betrayal_weight, 32);
-            bitstream.write_float(this.m_death_weight, 32);
-            bitstream.write_float(this.m_normalize_by_max_kills, 32);
-            bitstream.write_float(this.m_base, 32);
-            bitstream.write_float(this.m_range, 32);
-            bitstream.write_float(this.m_loss_scalar, 32);
-            bitstream.write_float(this.m_custom_stat_0, 32);
-            bitstream.write_float(this.m_custom_stat_1, 32);
-            bitstream.write_float(this.m_custom_stat_2, 32);
-            bitstream.write_float(this.m_custom_stat_3, 32);
-            bitstream.write_float(this.m_expansion_0, 32);
-            bitstream.write_float(this.m_expansion_1, 32);
-            bitstream.write_bool(this.m_show_in_scoreboard);
+    bitstream.write_float(this.m_kill_weight, 32);
+    bitstream.write_float(this.m_assist_weight, 32);
+    bitstream.write_float(this.m_betrayal_weight, 32);
+    bitstream.write_float(this.m_death_weight, 32);
+    bitstream.write_float(this.m_normalize_by_max_kills, 32);
+    bitstream.write_float(this.m_base, 32);
+    bitstream.write_float(this.m_range, 32);
+    bitstream.write_float(this.m_loss_scalar, 32);
+    bitstream.write_float(this.m_custom_stat_0, 32);
+    bitstream.write_float(this.m_custom_stat_1, 32);
+    bitstream.write_float(this.m_custom_stat_2, 32);
+    bitstream.write_float(this.m_custom_stat_3, 32);
+    bitstream.write_float(this.m_expansion_0, 32);
+    bitstream.write_float(this.m_expansion_1, 32);
+    bitstream.write_bool(this.m_show_in_scoreboard);
   }
 }

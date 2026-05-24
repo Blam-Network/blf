@@ -7,7 +7,7 @@ function write_then_read(
   writer: c_bitstream_writer,
   readerFactory: (data: Uint8Array) => c_bitstream_reader,
   writes: (w: c_bitstream_writer) => void,
-  reads: (r: c_bitstream_reader) => void,
+  reads: (r: c_bitstream_reader) => void
 ): void {
   writer.begin_writing();
   writes(writer);
@@ -23,7 +23,7 @@ describe("c_bitstream_writer", () => {
     const expected = new Uint8Array([0b10110_001, 0b00001001]);
     const sut = c_bitstream_writer.new_with_legacy_settings(
       2,
-      e_bitstream_byte_order._bitstream_byte_order_big_endian,
+      e_bitstream_byte_order._bitstream_byte_order_big_endian
     );
     sut.begin_writing();
     sut.write_integer(0b001, 3);
@@ -36,7 +36,7 @@ describe("c_bitstream_writer", () => {
     const expected = new Uint8Array([0b011111_001, 0b11111111]);
     const sut = c_bitstream_writer.new_with_legacy_settings(
       2,
-      e_bitstream_byte_order._bitstream_byte_order_little_endian,
+      e_bitstream_byte_order._bitstream_byte_order_little_endian
     );
     sut.begin_writing();
     sut.write_integer(0b001, 3);
@@ -49,7 +49,7 @@ describe("c_bitstream_writer", () => {
     const expected = new Uint8Array([0b001_11111, 0b11111111]);
     const sut = c_bitstream_writer.new(
       expected.length,
-      e_bitstream_byte_order._bitstream_byte_order_big_endian,
+      e_bitstream_byte_order._bitstream_byte_order_big_endian
     );
     sut.begin_writing();
     sut.write_integer(0b001, 3);
@@ -62,7 +62,7 @@ describe("c_bitstream_writer", () => {
     const expected = new Uint8Array([0b001_10000, 0b10000001]);
     const sut = c_bitstream_writer.new(
       expected.length,
-      e_bitstream_byte_order._bitstream_byte_order_little_endian,
+      e_bitstream_byte_order._bitstream_byte_order_little_endian
     );
     sut.begin_writing();
     sut.write_integer(0b001, 3);
@@ -75,7 +75,7 @@ describe("c_bitstream_writer", () => {
     const expected = new Uint8Array([0b00011111]);
     const sut = c_bitstream_writer.new(
       1,
-      e_bitstream_byte_order._bitstream_byte_order_big_endian,
+      e_bitstream_byte_order._bitstream_byte_order_big_endian
     );
     sut.begin_writing();
     sut.write_integer(0b000, 3);
@@ -88,7 +88,7 @@ describe("c_bitstream_writer", () => {
     const expected = new Uint8Array([0b11111000]);
     const sut = c_bitstream_writer.new_with_legacy_settings(
       1,
-      e_bitstream_byte_order._bitstream_byte_order_big_endian,
+      e_bitstream_byte_order._bitstream_byte_order_big_endian
     );
     sut.begin_writing();
     sut.write_integer(0b000, 3);
@@ -101,7 +101,7 @@ describe("c_bitstream_writer", () => {
     const expected = new Uint8Array([0b00000010, 0b01100000]);
     const sut = c_bitstream_writer.new(
       2,
-      e_bitstream_byte_order._bitstream_byte_order_big_endian,
+      e_bitstream_byte_order._bitstream_byte_order_big_endian
     );
     sut.begin_writing();
     sut.write_integer(0b00, 2);
@@ -118,7 +118,7 @@ describe("c_bitstream_writer", () => {
     ]);
     const sut = c_bitstream_writer.new_with_legacy_settings(
       13,
-      e_bitstream_byte_order._bitstream_byte_order_big_endian,
+      e_bitstream_byte_order._bitstream_byte_order_big_endian
     );
     sut.begin_writing();
     sut.write_integer(20, 6);
@@ -139,7 +139,7 @@ describe("c_bitstream_writer", () => {
     ]);
     const sut = c_bitstream_writer.new(
       13,
-      e_bitstream_byte_order._bitstream_byte_order_big_endian,
+      e_bitstream_byte_order._bitstream_byte_order_big_endian
     );
     sut.begin_writing();
     sut.write_integer(55, 6);
@@ -157,15 +157,12 @@ describe("c_bitstream_writer", () => {
     const cap = 0x5000;
     const source = c_bitstream_writer.new(
       cap,
-      e_bitstream_byte_order._bitstream_byte_order_big_endian,
+      e_bitstream_byte_order._bitstream_byte_order_big_endian
     );
     source.begin_writing();
     source.write_enum(2, 4);
     const [bytePos] = source.get_current_offset();
-    source.write_raw_data(
-      new Uint8Array(cap - bytePos),
-      (cap - bytePos) * 8,
-    );
+    source.write_raw_data(new Uint8Array(cap - bytePos), (cap - bytePos) * 8);
     source.finish_writing();
     const gametype_data = source.get_data();
     expect(gametype_data[0]).toBe(0x20);
@@ -173,7 +170,7 @@ describe("c_bitstream_writer", () => {
 
     const hashable = c_bitstream_writer.new(
       4 + cap,
-      e_bitstream_byte_order._bitstream_byte_order_big_endian,
+      e_bitstream_byte_order._bitstream_byte_order_big_endian
     );
     hashable.begin_writing();
     hashable.write_integer(1, 32);
@@ -187,14 +184,14 @@ describe("c_bitstream_writer", () => {
   it("round_trips_be integers", () => {
     const writer = c_bitstream_writer.new(
       4,
-      e_bitstream_byte_order._bitstream_byte_order_big_endian,
+      e_bitstream_byte_order._bitstream_byte_order_big_endian
     );
     write_then_read(
       writer,
       (data) =>
         c_bitstream_reader.new(
           data,
-          e_bitstream_byte_order._bitstream_byte_order_big_endian,
+          e_bitstream_byte_order._bitstream_byte_order_big_endian
         ),
       (w) => {
         w.write_integer(0b001, 3);
@@ -207,7 +204,7 @@ describe("c_bitstream_writer", () => {
         expect(r.read_integer("b", 13)).toBe(8191);
         expect(r.read_bool("c")).toBe(true);
         expect(r.read_signed_integer("d", 8)).toBe(-3);
-      },
+      }
     );
   });
 });

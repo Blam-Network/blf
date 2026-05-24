@@ -39,9 +39,7 @@ function decompressStringBlob(encoded: Uint8Array): Uint8Array {
 describe("c_string_table", () => {
   it("round-trips Latin-1 bytes (U+00A6) without UTF-8 expansion", () => {
     const table = new c_string_table(1, 32, 9, 9, 1);
-    table.strings = Array.from({ length: k_language_count }, () => [
-      "\u00a6",
-    ]);
+    table.strings = Array.from({ length: k_language_count }, () => ["\u00a6"]);
 
     const encoded = encodeTable(table);
 
@@ -58,5 +56,4 @@ describe("c_string_table", () => {
     expect(stringData[1]).toBe(0);
     expect(stringData[2]).not.toBe(0xc3);
   });
-
 });

@@ -1,5 +1,5 @@
-import {
-  type c_bitstream_reader,
+import type {
+  c_bitstream_reader,
   c_bitstream_writer,
 } from "../../../../bitstream";
 import { c_player_traits } from "./c_player_traits";
@@ -13,7 +13,7 @@ export class s_player_trait_option {
     this.m_name_string_index = bitstream.read_integer("name-string-index", 7);
     this.m_description_string_index = bitstream.read_integer(
       "description-string-index",
-      7,
+      7
     );
     this.m_player_traits.decode(bitstream);
   }

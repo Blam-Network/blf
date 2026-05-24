@@ -1,13 +1,13 @@
+import type { c } from "@craftycodie/cstruct";
 import {
   c_bitstream_reader,
   c_bitstream_writer,
   e_bitstream_byte_order,
 } from "../../../bitstream";
-import { blf, BLFChunkBase } from "../../../blf_chunk";
 import { security_calculate_hash } from "../../../blam/common/cache/security_functions";
-import type { c } from "@craftycodie/cstruct";
-import { BlfError } from "../../../error";
 import { c_game_variant } from "../../../blam/haloreach/v12065_11_08_24_1738_tu1actual/game/c_game_variant";
+import { BLFChunkBase, blf } from "../../../blf_chunk";
+import { BlfError } from "../../../error";
 
 /** Gametype storage slot size (bytes). */
 export const variant_storage_capacity = 0x5000;
@@ -67,7 +67,7 @@ export class s_blf_chunk_game_variant extends BLFChunkBase {
 
     const gametype_bitstream = c_bitstream_writer.new(
       variant_storage_capacity,
-      byte_order,
+      byte_order
     );
     gametype_bitstream.begin_writing();
     this.game_variant.encode(gametype_bitstream);
@@ -77,13 +77,13 @@ export class s_blf_chunk_game_variant extends BLFChunkBase {
 
     if (gametype_length > variant_storage_capacity) {
       throw new BlfError(
-        `mpvr gametype too large: ${gametype_length} bytes (max ${variant_storage_capacity})`,
+        `mpvr gametype too large: ${gametype_length} bytes (max ${variant_storage_capacity})`
       );
     }
 
     const hashable_bitstream = c_bitstream_writer.new(
       4 + gametype_length,
-      byte_order,
+      byte_order
     );
     hashable_bitstream.begin_writing();
     hashable_bitstream.write_integer(gametype_length, 32);
@@ -93,7 +93,7 @@ export class s_blf_chunk_game_variant extends BLFChunkBase {
 
     const payload_bitstream = c_bitstream_writer.new(
       variant_storage_capacity,
-      byte_order,
+      byte_order
     );
     payload_bitstream.begin_writing();
     payload_bitstream.write_raw_data(hash, hash.length * 8);

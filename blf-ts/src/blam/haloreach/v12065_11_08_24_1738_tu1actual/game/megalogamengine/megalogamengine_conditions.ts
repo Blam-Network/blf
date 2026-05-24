@@ -27,7 +27,6 @@ export class s_condition_if_parameters {
     this.m_right.encode(bitstream);
     bitstream.write_integer(this.m_comparison, 3);
   }
-
 }
 
 export class s_condition_player_died_parameters {
@@ -43,7 +42,6 @@ export class s_condition_player_died_parameters {
     this.m_player.encode(bitstream);
     bitstream.write_integer(this.m_killer_type, 5);
   }
-
 }
 
 export class s_condition_team_disposition_parameters {
@@ -62,7 +60,6 @@ export class s_condition_team_disposition_parameters {
     this.m_team_2.encode(bitstream);
     bitstream.write_integer(this.m_disposition, 2);
   }
-
 }
 
 export class s_condition_object_matches_filter_parameters {
@@ -76,9 +73,8 @@ export class s_condition_object_matches_filter_parameters {
 
   encode(bitstream: c_bitstream_writer): void {
     this.m_object.encode(bitstream);
-        bitstream.write_index(this.m_filter_index, 16, 4);
+    bitstream.write_index(this.m_filter_index, 16, 4);
   }
-
 }
 
 export class c_condition {
@@ -108,7 +104,7 @@ export class c_condition {
     this.m_union_group = bitstream.read_integer("union-group", 9);
     this.m_execute_before_action = bitstream.read_integer(
       "execute-before-action",
-      10,
+      10
     );
 
     switch (this.m_type) {
@@ -247,5 +243,4 @@ export class c_condition {
         break;
     }
   }
-
 }

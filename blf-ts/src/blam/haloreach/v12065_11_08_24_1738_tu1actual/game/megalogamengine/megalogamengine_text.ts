@@ -1,5 +1,5 @@
-import {
-  type c_bitstream_reader,
+import type {
+  c_bitstream_reader,
   c_bitstream_writer,
 } from "../../../../../bitstream";
 import { BlfError } from "../../../../../error";
@@ -39,7 +39,9 @@ export class c_player_filter_modifier {
     bitstream.write_integer(this.m_type, 3);
     if (this.m_type === 4) {
       requireField(this.m_player, "m_player does not exist.").encode(bitstream);
-      requireField(this.m_variable, "m_variable does not exist.").encode(bitstream);
+      requireField(this.m_variable, "m_variable does not exist.").encode(
+        bitstream
+      );
     }
   }
 }
@@ -95,24 +97,28 @@ export class c_replaceable_token {
     bitstream.write_integer(this.m_type, 3);
     switch (this.m_type) {
       case 1:
-        requireField(this.m_player, "m_player does not exist.").encode(bitstream);
+        requireField(this.m_player, "m_player does not exist.").encode(
+          bitstream
+        );
         break;
       case 2:
         requireField(this.m_team, "m_team does not exist.").encode(bitstream);
         break;
       case 3:
-        requireField(this.m_object, "m_object does not exist.").encode(bitstream);
+        requireField(this.m_object, "m_object does not exist.").encode(
+          bitstream
+        );
         break;
       case 4:
         requireField(
           this.m_custom_variable,
-          "m_custom_variable does not exist.",
+          "m_custom_variable does not exist."
         ).encode(bitstream);
         break;
       case 5:
         requireField(
           this.m_custom_timer,
-          "m_custom_timer does not exist.",
+          "m_custom_timer does not exist."
         ).encode(bitstream);
         break;
       default:

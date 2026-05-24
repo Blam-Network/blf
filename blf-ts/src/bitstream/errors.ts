@@ -7,7 +7,7 @@ export class BitstreamError extends Error {
 
 export function assert_ok(
   condition: unknown,
-  message?: string,
+  message?: string
 ): asserts condition {
   if (!condition) {
     throw new BitstreamError(message ?? "assert_ok failed");

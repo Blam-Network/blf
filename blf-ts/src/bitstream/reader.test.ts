@@ -14,7 +14,7 @@ describe("c_bitstream_reader", () => {
 
     const sut = c_bitstream_reader.new(
       test_data,
-      e_bitstream_byte_order._bitstream_byte_order_big_endian,
+      e_bitstream_byte_order._bitstream_byte_order_big_endian
     );
     sut.begin_reading();
 
@@ -27,7 +27,7 @@ describe("c_bitstream_reader", () => {
 
     const sut = c_bitstream_reader.new(
       test_data,
-      e_bitstream_byte_order._bitstream_byte_order_little_endian,
+      e_bitstream_byte_order._bitstream_byte_order_little_endian
     );
     sut.begin_reading();
 
@@ -40,7 +40,7 @@ describe("c_bitstream_reader", () => {
 
     const sut = c_bitstream_reader.new_with_legacy_settings(
       test_data,
-      e_bitstream_byte_order._bitstream_byte_order_big_endian,
+      e_bitstream_byte_order._bitstream_byte_order_big_endian
     );
     sut.begin_reading();
 
@@ -53,7 +53,7 @@ describe("c_bitstream_reader", () => {
 
     const sut = c_bitstream_reader.new_with_legacy_settings(
       test_data,
-      e_bitstream_byte_order._bitstream_byte_order_little_endian,
+      e_bitstream_byte_order._bitstream_byte_order_little_endian
     );
     sut.begin_reading();
 
@@ -66,7 +66,7 @@ describe("c_bitstream_reader", () => {
 
     const sut = c_bitstream_reader.new(
       test_data,
-      e_bitstream_byte_order._bitstream_byte_order_big_endian,
+      e_bitstream_byte_order._bitstream_byte_order_big_endian
     );
     sut.begin_reading();
 
@@ -79,7 +79,7 @@ describe("c_bitstream_reader", () => {
 
     const sut = c_bitstream_reader.new_with_legacy_settings(
       test_data,
-      e_bitstream_byte_order._bitstream_byte_order_big_endian,
+      e_bitstream_byte_order._bitstream_byte_order_big_endian
     );
     sut.begin_reading();
 
@@ -90,13 +90,12 @@ describe("c_bitstream_reader", () => {
   it("read_h3_06481_game_set_data", () => {
     const test_data = new Uint8Array([
       0b10010100, 0b00000001, 0b00000000, 0b00000000, 0b00000000, 0b10110001,
-      0b00001001, 0b00000000, 0b00000000, 0b10010000, 0b10101011, 0b00000011,
-      0,
+      0b00001001, 0b00000000, 0b00000000, 0b10010000, 0b10101011, 0b00000011, 0,
     ]);
 
     const sut = c_bitstream_reader.new_with_legacy_settings(
       test_data,
-      e_bitstream_byte_order._bitstream_byte_order_big_endian,
+      e_bitstream_byte_order._bitstream_byte_order_big_endian
     );
     sut.begin_reading();
 
@@ -111,13 +110,12 @@ describe("c_bitstream_reader", () => {
   it("read_h3_12070_game_set_data", () => {
     const test_data = new Uint8Array([
       0b11011100, 0b00000000, 0b00000000, 0b00000000, 0b00000100, 0b01000000,
-      0b00000000, 0b00000000, 0b00100000, 0b10000011, 0b01010101, 0b11110000,
-      0,
+      0b00000000, 0b00000000, 0b00100000, 0b10000011, 0b01010101, 0b11110000, 0,
     ]);
 
     const sut = c_bitstream_reader.new(
       test_data,
-      e_bitstream_byte_order._bitstream_byte_order_big_endian,
+      e_bitstream_byte_order._bitstream_byte_order_big_endian
     );
     sut.begin_reading();
 
@@ -133,7 +131,7 @@ describe("c_bitstream_reader", () => {
   it("read_enum rejects undeclared members by default", () => {
     const sut = c_bitstream_reader.new(
       new Uint8Array([0b10000000]),
-      e_bitstream_byte_order._bitstream_byte_order_big_endian,
+      e_bitstream_byte_order._bitstream_byte_order_big_endian
     );
     sut.begin_reading();
     expect(() => sut.read_enum("mode", 4, e_sample)).toThrow(BitstreamError);
@@ -142,7 +140,7 @@ describe("c_bitstream_reader", () => {
   it("read_enum accepts declared members", () => {
     const sut = c_bitstream_reader.new(
       new Uint8Array([0b00100000]),
-      e_bitstream_byte_order._bitstream_byte_order_big_endian,
+      e_bitstream_byte_order._bitstream_byte_order_big_endian
     );
     sut.begin_reading();
     expect(sut.read_enum("mode", 4, e_sample)).toBe(e_sample.b);
@@ -151,11 +149,9 @@ describe("c_bitstream_reader", () => {
   it("read_enum within_bits allows reserved values", () => {
     const sut = c_bitstream_reader.new(
       new Uint8Array([0b11100000]),
-      e_bitstream_byte_order._bitstream_byte_order_big_endian,
+      e_bitstream_byte_order._bitstream_byte_order_big_endian
     );
     sut.begin_reading();
-    expect(
-      sut.read_enum("mode", 3, e_sample, { within_bits: true }),
-    ).toBe(7);
+    expect(sut.read_enum("mode", 3, e_sample, { within_bits: true })).toBe(7);
   });
 });

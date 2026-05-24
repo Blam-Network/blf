@@ -1,15 +1,10 @@
 {
-  "extends": "../../../tsconfig.json",
+  "extends": "../tsconfig.json",
   "compilerOptions": {
     "strictPropertyInitialization": false,
     "plugins": [],
-    "baseUrl": "..",
-    "paths": {
-      "@Blam-Network/blf/bitstream": ["src/bitstream/index.ts"],
-      "@Blam-Network/blf/haloreach/*": ["src/versions/haloreach/*"],
-      "@Blam-Network/blf/halo3/*": ["src/versions/halo3/*"]
-    }
+    "baseUrl": ".."
   },
-  "include": ["./**/*.ts", "../bitstream/**/*.ts"],
+  "include": ["./**/*.ts"],
   "exclude": ["**/*.test.ts"]
 }

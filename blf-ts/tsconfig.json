@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@Blam-Network/blf": ["./src/index.ts"],
+      "@Blam-Network/blf/haloreach/*": ["./src/versions/haloreach/*"],
+      "@Blam-Network/blf/halo3/*": ["./src/versions/halo3/*"],
+      "@Blam-Network/blf/halo3odst/*": ["./src/versions/halo3odst/*"]
+    },
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "strict": true,
+    "strictPropertyInitialization": false,
+    "useDefineForClassFields": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "types": ["node"]
+  },
+  "include": ["src/**/*.ts", "tests/**/*.ts"],
+  "exclude": ["src/**/*.test.ts"]
+}

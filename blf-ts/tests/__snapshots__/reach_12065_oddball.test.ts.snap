@@ -9,7 +9,7 @@ exports[`haloreach_gea0_map.blf > reads chdr (content header) 1`] = `
       "hopper_identifier": 0,
     },
     "creation_history": {
-      "is_online": 1,
+      "is_online": true,
       "name": "¦",
       "timestamp": {
         "$date": "2010-09-14T00:00:00.000Z",
@@ -47,7 +47,7 @@ exports[`haloreach_gea0_map.blf > reads chdr (content header) 1`] = `
       },
     },
     "modification_history": {
-      "is_online": 1,
+      "is_online": true,
       "name": "¦",
       "timestamp": {
         "$date": "2010-09-14T00:00:00.000Z",
@@ -547,7 +547,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
         "m_metadata": {
           "activity_data": null,
           "creation_history": {
-            "is_online": 1,
+            "is_online": true,
             "name": "¦",
             "timestamp": {
               "$date": "2010-09-14T00:00:00.000Z",
@@ -585,7 +585,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
             },
           },
           "modification_history": {
-            "is_online": 1,
+            "is_online": true,
             "name": "¦",
             "timestamp": {
               "$date": "2010-09-14T00:00:00.000Z",

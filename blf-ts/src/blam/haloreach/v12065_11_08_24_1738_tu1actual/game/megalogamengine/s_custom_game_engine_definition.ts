@@ -1,18 +1,18 @@
-import {
-  type c_bitstream_reader,
+import type {
+  c_bitstream_reader,
   c_bitstream_writer,
 } from "../../../../../bitstream";
-import { c_condition } from "./megalogamengine_conditions";
-import { c_action } from "./megalogamengine_actions";
-import { c_trigger } from "./c_trigger";
 import { c_megalo_game_statistic } from "./c_megalo_game_statistic";
+import { c_object_filter } from "./c_object_filter";
+import { c_trigger } from "./c_trigger";
+import { c_action } from "./megalogamengine_actions";
+import { c_condition } from "./megalogamengine_conditions";
 import {
   s_variable_metadata_global,
   s_variable_metadata_object,
   s_variable_metadata_player,
   s_variable_metadata_team,
 } from "./s_variable_metadata";
-import { c_object_filter } from "./c_object_filter";
 
 export class s_custom_game_engine_definition {
   m_conditions: c_condition[] = [];
@@ -75,31 +75,31 @@ export class s_custom_game_engine_definition {
 
     this.m_initialization_trigger_index = bitstream.read_integer(
       "initial-trigger-index",
-      9,
+      9
     );
     this.m_local_initialization_trigger_index = bitstream.read_integer(
       "local-initialization-trigger-index",
-      9,
+      9
     );
     this.m_host_migration_trigger_index = bitstream.read_integer(
       "host-migration-trigger-index",
-      9,
+      9
     );
     this.m_double_migration_trigger_index = bitstream.read_integer(
       "double-migration-trigger-index",
-      9,
+      9
     );
     this.m_object_death_event_trigger_index = bitstream.read_integer(
       "death-event-trigger-index",
-      9,
+      9
     );
     this.m_local_trigger_index = bitstream.read_integer(
       "local-trigger-index",
-      9,
+      9
     );
     this.m_pregame_trigger_index = bitstream.read_integer(
       "pregame-trigger-index",
-      9,
+      9
     );
 
     for (let i = 0; i < 2048; i++) {
@@ -108,7 +108,7 @@ export class s_custom_game_engine_definition {
 
     const object_filter_count = bitstream.read_integer(
       "object-filter-count",
-      5,
+      5
     );
     for (let i = 0; i < object_filter_count; i++) {
       const filter = new c_object_filter();

@@ -1,6 +1,6 @@
+import type { BLFChunk, BLFChunkConstructor, s_blf_header } from "./blf_chunk";
 import { BlfError } from "./error";
 import { parse_blf_chunk_version } from "./s_blf_header";
-import type { BLFChunk, BLFChunkConstructor, s_blf_header } from "./blf_chunk";
 
 type StringLength<
   S extends string,
@@ -36,7 +36,9 @@ export type BLFChunkInfo = ChunkMetadata;
 
 /** Constructor after `@blf.chunk` — instances include {@link ChunkMetadata}. */
 export type ChunkDecorator<
-  T extends abstract new (...args: any[]) => BLFChunk,
+  T extends abstract new (
+    ...args: any[]
+  ) => BLFChunk,
   TSignature extends BLFSignature<string>,
   TVersion extends BLFVersion,
 > = (abstract new (
@@ -54,7 +56,7 @@ export type BLFChunkLookup = BLFChunkConstructor | BLFChunk;
 
 function attach_chunk_metadata(
   target: abstract new (...args: any[]) => BLFChunk,
-  info: BLFChunkInfo,
+  info: BLFChunkInfo
 ): void {
   Object.defineProperty(target, BLF_CHUNK_META, {
     value: info,
@@ -79,7 +81,7 @@ function chunk_info<
 >(signature: TSignature, version: TVersion) {
   if (signature.length !== 4) {
     throw new BlfError(
-      `BLF chunk signature must be exactly 4 characters, got ${signature.length}: "${signature}"`,
+      `BLF chunk signature must be exactly 4 characters, got ${signature.length}: "${signature}"`
     );
   }
   const parsed = parse_blf_chunk_version(version);
@@ -103,7 +105,7 @@ export function chunk<
 
   return <T extends abstract new (...args: any[]) => BLFChunk>(
     target: T,
-    _context: ClassDecoratorContext,
+    _context: ClassDecoratorContext
   ): ChunkDecorator<T, TSignature, TVersion> => {
     attach_chunk_metadata(target, info);
     return target as ChunkDecorator<T, TSignature, TVersion>;
@@ -134,7 +136,7 @@ export function getBlfChunkMeta(from: BLFChunkLookup): BLFChunkInfo {
 }
 
 export function createBlfChunk<T extends new (...args: any[]) => object>(
-  ctor: T,
+  ctor: T
 ): InstanceType<T> {
   return new ctor() as InstanceType<T>;
 }

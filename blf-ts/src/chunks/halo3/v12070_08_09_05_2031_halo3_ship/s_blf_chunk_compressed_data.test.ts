@@ -13,7 +13,7 @@ describe("s_blf_chunk_compressed_data", () => {
 
     const cmp = s_blf_chunk_compressed_data.create(
       s_blf_chunk_game_variant,
-      original,
+      original
     );
     const payload = cmp.write("big");
 
@@ -22,13 +22,13 @@ describe("s_blf_chunk_compressed_data", () => {
 
     expect(roundtrip.compression_type).toBe(0);
     expect(roundtrip.chunk.game_variant.m_game_engine).toBe(
-      original.game_variant.m_game_engine,
+      original.game_variant.m_game_engine
     );
     expect(
       roundtrip.chunk.game_variant.m_custom_variant!.m_base_variant.m_metadata
-        .name,
+        .name
     ).toBe(
-      original.game_variant.m_custom_variant!.m_base_variant.m_metadata.name,
+      original.game_variant.m_custom_variant!.m_base_variant.m_metadata.name
     );
   });
 });

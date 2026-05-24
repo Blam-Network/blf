@@ -1,5 +1,5 @@
-import {
-  type c_bitstream_reader,
+import type {
+  c_bitstream_reader,
   c_bitstream_writer,
 } from "../../../../../bitstream";
 import { BlfError } from "../../../../../error";
@@ -71,14 +71,18 @@ export class s_variant_variable {
       case 0:
         requireField(
           this.m_custom_variable,
-          "m_custom_variable does not exist.",
+          "m_custom_variable does not exist."
         ).encode(bitstream);
         break;
       case 1:
-        requireField(this.m_player, "m_player does not exist.").encode(bitstream);
+        requireField(this.m_player, "m_player does not exist.").encode(
+          bitstream
+        );
         break;
       case 2:
-        requireField(this.m_object, "m_object does not exist.").encode(bitstream);
+        requireField(this.m_object, "m_object does not exist.").encode(
+          bitstream
+        );
         break;
       case 3:
         requireField(this.m_team, "m_team does not exist.").encode(bitstream);
@@ -86,7 +90,7 @@ export class s_variant_variable {
       case 4:
         requireField(
           this.m_custom_timer,
-          "m_custom_timer does not exist.",
+          "m_custom_timer does not exist."
         ).encode(bitstream);
         break;
       default:

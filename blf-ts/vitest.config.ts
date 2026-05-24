@@ -18,10 +18,6 @@ export default defineConfig({
   resolve: {
     alias: [
       {
-        find: "@Blam-Network/blf/bitstream",
-        replacement: path.join(root, "src/bitstream/index.ts"),
-      },
-      {
         // @Blam-Network/blf/haloreach/<build> → src/versions/haloreach/<build>.ts
         find: /^@Blam-Network\/blf\/(haloreach|halo3|halo3odst)\/(.+)$/,
         replacement: `${versionsRoot}/$1/$2.ts`,

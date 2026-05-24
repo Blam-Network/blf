@@ -1,7 +1,6 @@
-import { blf } from "../../../blf_chunk";
-import { CStructBLFChunk } from "../../../blf_chunk";
 import { c } from "@craftycodie/cstruct";
 import pkg from "../../../../package.json";
+import { blf, CStructBLFChunk } from "../../../blf_chunk";
 
 /** BLF author chunk (`athr` 3.1) — same layout as Halo 3: ODST Atlas. */
 @blf.chunk("athr", 3.1)
@@ -42,7 +41,7 @@ export class s_blf_chunk_author extends CStructBLFChunk {
     chunk.program_name = options?.programName ?? `blf-ts ${pkg.version}`;
     chunk.build_number = options?.buildNumber ?? 0;
     chunk.build_number_sequence = options?.buildNumberSequence ?? 0;
-    chunk.build_string = (options?.buildString ?? '').slice(0, 28);
+    chunk.build_string = (options?.buildString ?? "").slice(0, 28);
     chunk.author_name = options?.authorName ?? "";
     return chunk;
   }

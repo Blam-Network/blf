@@ -1,0 +1,35 @@
+name: blf-ts CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "blf-ts/**"
+      - ".github/workflows/blf_ts_ci.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "blf-ts/**"
+      - ".github/workflows/blf_ts_ci.yml"
+
+defaults:
+  run:
+    working-directory: blf-ts
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: blf-ts/package-lock.json
+
+      - run: npm ci
+      - run: npm run check
+      - run: npm run typecheck
+      - run: npm run build
+      - run: npm test

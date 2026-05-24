@@ -1,4 +1,7 @@
-import { type c_bitstream_reader, c_bitstream_writer } from "../../../../../bitstream";
+import type {
+  c_bitstream_reader,
+  c_bitstream_writer,
+} from "../../../../../bitstream";
 
 export class c_megalo_game_statistic {
   m_name_string_index = 0;
@@ -15,8 +18,8 @@ export class c_megalo_game_statistic {
 
   encode(bitstream: c_bitstream_writer): void {
     bitstream.write_integer(this.m_name_string_index, 7);
-            bitstream.write_integer(this.m_format, 2);
-            bitstream.write_integer(this.m_sort_order, 2);
-            bitstream.write_integer(this.m_growuping, 1);
+    bitstream.write_integer(this.m_format, 2);
+    bitstream.write_integer(this.m_sort_order, 2);
+    bitstream.write_integer(this.m_growuping, 1);
   }
 }

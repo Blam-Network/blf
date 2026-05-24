@@ -1,0 +1,163 @@
+{
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+  "extends": ["ultracite/biome/core"],
+  "files": {
+    "includes": ["!dist", "!dist-cjs", "!node_modules"]
+  },
+  "linter": {
+    "rules": {
+      "style": {
+        "useNumericSeparators": "off",
+        "useFilenamingConvention": "off"
+      },
+      "performance": {
+        "noBarrelFile": "off"
+      }
+    }
+  },
+  "overrides": [
+    {
+      "includes": ["src/index.ts"],
+      "linter": {
+        "rules": {
+          "performance": {
+            "noBarrelFile": "off"
+          },
+          "style": {
+            "noNamespace": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["src/decorators.ts", "src/blf_chunk.ts"],
+      "linter": {
+        "rules": {
+          "performance": {
+            "noBarrelFile": "off"
+          },
+          "suspicious": {
+            "noExplicitAny": "off"
+          },
+          "complexity": {
+            "noExcessiveCognitiveComplexity": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["src/bitstream/**"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "noBitwiseOperators": "off"
+          },
+          "complexity": {
+            "noExcessiveCognitiveComplexity": "off"
+          },
+          "style": {
+            "noEnum": "off",
+            "noNamespace": "off",
+            "noNonNullAssertion": "off",
+            "useDefaultSwitchClause": "off",
+            "useConsistentTypeDefinitions": "off",
+            "useReadonlyClassProperties": "off"
+          },
+          "correctness": {
+            "noUnusedPrivateClassMembers": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["src/blam/**", "src/chunks/**"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "noBitwiseOperators": "off",
+            "noExplicitAny": "off",
+            "noSelfCompare": "off"
+          },
+          "complexity": {
+            "noExcessiveCognitiveComplexity": "off",
+            "noBannedTypes": "off"
+          },
+          "style": {
+            "useReadonlyClassProperties": "off",
+            "noNonNullAssertion": "off",
+            "useDefaultSwitchClause": "off",
+            "noParameterProperties": "off",
+            "noParameterAssign": "off",
+            "noEnum": "off",
+            "noExportedImports": "off"
+          },
+          "correctness": {
+            "noUnusedPrivateClassMembers": "off",
+            "noUnusedFunctionParameters": "off"
+          },
+          "performance": {
+            "useTopLevelRegex": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": [
+        "src/blf_chunk.ts",
+        "src/decorators.ts",
+        "src/chunk_signature.ts",
+        "src/chunk_signature.test.ts",
+        "src/blffile.ts",
+        "src/s_blf_header.ts"
+      ],
+      "linter": {
+        "rules": {
+          "style": {
+            "noParameterAssign": "off",
+            "noExportedImports": "off",
+            "noNonNullAssertion": "off",
+            "useConsistentTypeDefinitions": "off"
+          },
+          "suspicious": {
+            "noExplicitAny": "off"
+          },
+          "performance": {
+            "useTopLevelRegex": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["src/**/*.test.ts", "tests/**"],
+      "linter": {
+        "rules": {
+          "style": {
+            "useReadonlyClassProperties": "off",
+            "noEnum": "off",
+            "noNonNullAssertion": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["scripts/**"],
+      "linter": {
+        "rules": {
+          "correctness": {
+            "noUnusedVariables": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["scripts/**"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "noConsole": "off"
+          }
+        }
+      }
+    }
+  ]
+}

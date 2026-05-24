@@ -1,6 +1,5 @@
-import { blf } from "../../../blf_chunk";
-import { CStructBLFChunk } from "../../../blf_chunk";
 import { c } from "@craftycodie/cstruct";
+import { blf, CStructBLFChunk } from "../../../blf_chunk";
 
 /** Wire values for {@link s_blf_chunk_start_of_file.byte_order_mark}. */
 export enum e_byte_order_mark {

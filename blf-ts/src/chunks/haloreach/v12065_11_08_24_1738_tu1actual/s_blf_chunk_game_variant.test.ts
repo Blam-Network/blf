@@ -2,8 +2,8 @@ import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { reach_12065_oddball_fixture } from "../../../../tests/fixtures/paths";
 import { security_calculate_hash } from "../../../blam/common/cache/security_functions";
-import { search_for_chunk } from "../../../blf_chunk";
 import { e_game_mode } from "../../../blam/haloreach/v12065_11_08_24_1738_tu1actual/game/c_game_variant";
+import { search_for_chunk } from "../../../blf_chunk";
 import {
   MPVR_PAYLOAD_SIZE,
   s_blf_chunk_game_variant,
@@ -48,11 +48,13 @@ describe("s_blf_chunk_game_variant", () => {
     expect(roundtrip.hash).toEqual(original.hash);
     expect(roundtrip.variant_length).toBe(original.variant_length);
     expect(roundtrip.game_variant.m_game_engine).toBe(
-      original.game_variant.m_game_engine,
+      original.game_variant.m_game_engine
     );
     expect(
-      roundtrip.game_variant.m_custom_variant!.m_base_variant.m_metadata.name,
-    ).toBe(original.game_variant.m_custom_variant!.m_base_variant.m_metadata.name);
+      roundtrip.game_variant.m_custom_variant!.m_base_variant.m_metadata.name
+    ).toBe(
+      original.game_variant.m_custom_variant!.m_base_variant.m_metadata.name
+    );
   });
 
   it("finds and reads the Reach MPVR chunk (big-endian)", () => {
@@ -66,13 +68,13 @@ describe("s_blf_chunk_game_variant", () => {
     expect(mpvr.game_variant.m_custom_variant!.m_encoding_version).toBe(107);
     expect(mpvr.game_variant.m_custom_variant!.m_build_number).toBe(12065);
     expect(
-      mpvr.game_variant.m_custom_variant!.m_base_variant.m_metadata.name,
+      mpvr.game_variant.m_custom_variant!.m_base_variant.m_metadata.name
     ).toBe("Oddball");
     expect(
-      mpvr.game_variant.m_custom_variant!.m_game_engine.m_conditions.length,
+      mpvr.game_variant.m_custom_variant!.m_game_engine.m_conditions.length
     ).toBeGreaterThan(0);
     expect(
-      mpvr.game_variant.m_custom_variant!.m_game_engine.m_triggers.length,
+      mpvr.game_variant.m_custom_variant!.m_game_engine.m_triggers.length
     ).toBeGreaterThan(0);
   });
 });

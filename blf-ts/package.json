@@ -7,9 +7,15 @@
   "types": "./dist/index.d.ts",
   "typesVersions": {
     "*": {
-      "haloreach/*": ["./dist/versions/haloreach/*"],
-      "halo3/*": ["./dist/versions/halo3/*"],
-      "halo3odst/*": ["./dist/versions/halo3odst/*"]
+      "haloreach/*": [
+        "./dist/versions/haloreach/*"
+      ],
+      "halo3/*": [
+        "./dist/versions/halo3/*"
+      ],
+      "halo3odst/*": [
+        "./dist/versions/halo3odst/*"
+      ]
     }
   },
   "exports": {
@@ -43,10 +49,37 @@
     "dist-cjs"
   ],
   "scripts": {
-    "build": "tsc -p tsconfig.build.json && tsc -p tsconfig.build.cjs.json && node scripts/write-cjs-package-json.mjs",
+    "build": "node scripts/clean-dist.mjs && tsc -p tsconfig.build.json && tsc -p tsconfig.build.cjs.json && node scripts/write-cjs-package-json.mjs",
+    "check": "ultracite check",
+    "fix": "ultracite fix",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "vitest run",
-    "validate": "npm run build && npm run test",
+    "validate": "npm run check && npm run test && npm run typecheck",
+    "release": "node scripts/release.mjs",
     "prepack": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Blam-Network/blf.git",
+    "directory": "blf-ts"
+  },
+  "bugs": {
+    "url": "https://github.com/Blam-Network/blf/issues"
+  },
+  "homepage": "https://github.com/Blam-Network/blf/tree/main/blf-ts#readme",
+  "keywords": [
+    "blf",
+    "halo",
+    "haloreach",
+    "halo3",
+    "halo3odst",
+    "chunks",
+    "binary",
+    "fileshare"
+  ],
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
   },
   "dependencies": {
     "@craftycodie/cstruct": "^1.0.0-alpha.10",
@@ -54,10 +87,12 @@
     "pako": "^2.1.0"
   },
   "devDependencies": {
+    "@biomejs/biome": "2.4.15",
     "@swc/core": "^1.15.33",
     "@types/node": "^22",
     "@types/pako": "^2.0.3",
     "typescript": "^5",
+    "ultracite": "7.7.0",
     "unplugin-swc": "^1.5.9",
     "vitest": "^3.2.4"
   }

@@ -24,7 +24,7 @@ export function dot_product3d(a: real_vector3d, b: real_vector3d): number {
 export function cross_product3d(
   a: real_vector3d,
   b: real_vector3d,
-  out: real_vector3d,
+  out: real_vector3d
 ): void {
   out.i = a.j * b.k - a.k * b.j;
   out.j = a.k * b.i - a.i * b.k;
@@ -42,7 +42,7 @@ export function quantize_real(
   max_value: number,
   quantized_value_count: number,
   exact_midpoint: boolean,
-  exact_endpoints: boolean,
+  exact_endpoints: boolean
 ): number {
   let adjusted_count = quantized_value_count;
   if (exact_midpoint) {
@@ -80,7 +80,7 @@ export function dequantize_real(
   max_value: number,
   quantized_value_count: number,
   exact_midpoints: boolean,
-  exact_endpoints: boolean,
+  exact_endpoints: boolean
 ): number {
   let value_count = quantized_value_count;
   if (exact_midpoints) {
@@ -125,7 +125,7 @@ export function assert_valid_real_normal3d(v: real_vector3d): boolean {
 
 export function valid_real_vector3d_axes2(
   a: real_vector3d,
-  b: real_vector3d,
+  b: real_vector3d
 ): boolean {
   return Math.abs(dot_product3d(a, b)) <= k_real_epsilon;
 }
@@ -133,7 +133,7 @@ export function valid_real_vector3d_axes2(
 export function valid_real_vector3d_axes3(
   a: real_vector3d,
   b: real_vector3d,
-  c: real_vector3d,
+  c: real_vector3d
 ): boolean {
   return (
     valid_real_vector3d_axes2(a, b) &&
@@ -146,7 +146,7 @@ export function rotate_vector_about_axis(
   vector: real_vector3d,
   axis: real_vector3d,
   sine: number,
-  cosine: number,
+  cosine: number
 ): void {
   const cross: real_vector3d = { i: 0, j: 0, k: 0 };
   cross_product3d(axis, vector, cross);
@@ -154,23 +154,17 @@ export function rotate_vector_about_axis(
   const one_minus_cosine = 1 - cosine;
 
   vector.i =
-    vector.i * cosine +
-    cross.i * sine +
-    axis.i * dot * one_minus_cosine;
+    vector.i * cosine + cross.i * sine + axis.i * dot * one_minus_cosine;
   vector.j =
-    vector.j * cosine +
-    cross.j * sine +
-    axis.j * dot * one_minus_cosine;
+    vector.j * cosine + cross.j * sine + axis.j * dot * one_minus_cosine;
   vector.k =
-    vector.k * cosine +
-    cross.k * sine +
-    axis.k * dot * one_minus_cosine;
+    vector.k * cosine + cross.k * sine + axis.k * dot * one_minus_cosine;
 }
 
 export function axes_compute_reference_internal(
   up: real_vector3d,
   forward_reference: real_vector3d,
-  left_reference: real_vector3d,
+  left_reference: real_vector3d
 ): void {
   assert_ok(assert_valid_real_normal3d(up));
 
@@ -186,7 +180,7 @@ export function axes_compute_reference_internal(
   const forward_magnitude = normalize3d(forward_reference);
   assert_ok(
     forward_magnitude > k_real_epsilon,
-    "forward_magnitude>k_real_epsilon",
+    "forward_magnitude>k_real_epsilon"
   );
 
   cross_product3d(up, forward_reference, left_reference);
@@ -194,28 +188,26 @@ export function axes_compute_reference_internal(
   const left_magnitude = normalize3d(left_reference);
   assert_ok(left_magnitude > k_real_epsilon, "left_magnitude>k_real_epsilon");
 
-  assert_ok(
-    valid_real_vector3d_axes3(forward_reference, left_reference, up),
-  );
+  assert_ok(valid_real_vector3d_axes3(forward_reference, left_reference, up));
 }
 
 export function axes_to_angle_internal(
   forward: real_vector3d,
-  up: real_vector3d,
+  up: real_vector3d
 ): number {
   const forward_reference = real_vector3d_default();
   const left_reference = real_vector3d_default();
   axes_compute_reference_internal(up, forward_reference, left_reference);
   return arctangent(
     dot_product3d(left_reference, forward),
-    dot_product3d(forward_reference, forward),
+    dot_product3d(forward_reference, forward)
   );
 }
 
 export function angle_to_axes_internal(
   up: real_vector3d,
   angle: number,
-  forward: real_vector3d,
+  forward: real_vector3d
 ): void {
   const forward_reference = real_vector3d_default();
   const left_reference = real_vector3d_default();

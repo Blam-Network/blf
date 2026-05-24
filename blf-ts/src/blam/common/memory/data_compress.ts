@@ -16,7 +16,7 @@ export function zlib_compress(data: Uint8Array): Uint8Array {
 /** Reach runtime blob: BE `u32` uncompressed size + zlib payload. */
 export function runtime_data_compress(
   source: Uint8Array,
-  big_endian = true,
+  big_endian = true
 ): Uint8Array {
   const compressed = zlib_compress(source);
   const out = new Uint8Array(4 + compressed.length);
@@ -28,11 +28,11 @@ export function runtime_data_compress(
 /** Reach runtime blob: BE `u32` uncompressed size + zlib payload. */
 export function runtime_data_decompress(
   source: Uint8Array,
-  big_endian = true,
+  big_endian = true
 ): Uint8Array {
   if (source.length < 4) {
     throw new BlfError(
-      `runtime_data_decompress needs at least 4 bytes, got ${source.length}`,
+      `runtime_data_decompress needs at least 4 bytes, got ${source.length}`
     );
   }
   return inflate(source.subarray(4));

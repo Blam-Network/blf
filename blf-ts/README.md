@@ -1,62 +1,82 @@
 # @Blam-Network/blf
 
-TypeScript BLF chunk library (Halo Reach / Halo 3).
+[![npm](https://img.shields.io/npm/v/@Blam-Network/blf)](https://www.npmjs.com/package/@Blam-Network/blf)
 
-## Consumers (apps importing this package)
+TypeScript library for reading and writing Halo **BLF** (binary layout file) chunks — Reach, Halo 3, and Halo 3: ODST builds.
 
-Install the package and import from published **`dist/`** exports only (do not point TypeScript `paths` at `src/`).
+Built on [@craftycodie/cstruct](https://www.npmjs.com/package/@craftycodie/cstruct) for packed struct layouts and a Halo-style **bitstream** for custom chunk bodies.
 
-Decorators are compiled away at publish time (`__esDecorate` in emitted JS). **You do not need `experimentalDecorators` or any decorator flags** to use exported chunk classes, `search_for_chunk`, `find_chunk`, etc.
+## Features
 
-`npm install` runs `prepare` → `tsc` so `dist/` exists for `file:` workspace links.
+- Chunk discovery with `search_for_chunk` and `find_chunk`
+- Per-game **version bundles** (`haloreach/*`, `halo3/*`, `halo3odst/*`) with chunk classes and blam types for a specific exe build
+- Struct-backed chunks via `CStructBLFChunk` and `@blf.chunk` decorators (compiled away in published `dist/`)
+- Bitstream reader/writer exported from the package root
+- Little- and big-endian BLF headers
 
-## Chunk authoring (library / fork development)
+## Install
 
-Chunks are defined under `src/chunks/` (per implementation build). Each game **version** under `src/versions/` re-exports the chunk set that build uses (often mixing chunks from another title’s folder, e.g. Reach TU1 reusing Halo 3 ship start/end-of-file chunks).
+```bash
+npm install @Blam-Network/blf @craftycodie/cstruct
+```
 
-**Import a game build** (chunks + blam types for that exe):
+Consumers import from published **`dist/`** exports only. Decorators are lowered at build time — **you do not need `experimentalDecorators`** to use exported chunk classes.
+
+## Usage
+
+### Find and read chunks
 
 ```ts
+import { readFileSync } from "node:fs";
+import { search_for_chunk } from "@Blam-Network/blf";
 import {
-  s_blf_chunk_author,
-  s_blf_chunk_start_of_file,
-  e_file_type,
-  c_game_variant,
+  s_blf_chunk_content_header,
+  s_blf_chunk_game_variant,
 } from "@Blam-Network/blf/haloreach/v12065_11_08_24_1738_tu1actual";
 
-const author = new s_blf_chunk_author();
-const sof = new s_blf_chunk_start_of_file();
+const file = new Uint8Array(readFileSync("map.blf"));
+
+const chdr = new s_blf_chunk_content_header();
+search_for_chunk(file, chdr, "big");
+
+const mpvr = new s_blf_chunk_game_variant();
+search_for_chunk(file, mpvr, "big");
 ```
 
-Add a new published build by creating `src/versions/<game>/<build>.ts` and wiring its chunk/blam re-exports. No per-version entries are needed in `package.json`, `vitest.config.ts`, or `tsconfig` — those use wildcards (`./haloreach/*`, `@Blam-Network/blf/haloreach/*`).
-
-**Struct chunks** (`@blf.chunk` + `@c.struct`):
+### Bitstream (root export only)
 
 ```ts
-import { blf } from "@Blam-Network/blf";
-import { blf_chunk_cstruct } from "@Blam-Network/blf";
-import { c } from "@craftycodie/cstruct";
+import { bitstream } from "@Blam-Network/blf";
 
-@blf.chunk("chdr", 10.2)
-@c.struct()
-export class s_blf_chunk_content_header extends blf_chunk_cstruct {
-  @c.field("u16")
-  build_number!: number;
-}
+const reader = new bitstream.BitstreamReader(buffer, "little");
+const mode = reader.read_enum("game-mode", 4, e_game_mode);
 ```
 
-`blf_chunk_cstruct` provides default `read_body` / `write_body` from the cstruct layout; `read` / `write` add the BLF header.
+### Game build subpaths
 
-**Custom chunks** (bitstream or other I/O): extend `BLFChunkBase`, implement `read_body` / `write_body`, and use `@blf.chunk("four", 1.0)`.
+Each implementation build is a single module:
 
-Authoring new decorated chunks in **your app** requires the same TS 5 stage-3 decorator setup used to build this repo (or add chunks here and consume via `dist/`).
+| Import | Build |
+|--------|--------|
+| `@Blam-Network/blf/haloreach/v12065_11_08_24_1738_tu1actual` | Reach TU1 |
+| `@Blam-Network/blf/halo3/v12070_08_09_05_2031_halo3_ship` | Halo 3 ship |
+| `@Blam-Network/blf/halo3odst/v13895_09_04_27_2201_atlas_release` | ODST Atlas |
 
-Decorator order: `@blf.chunk` on top, `@c.struct` below, `@c.field` on properties.
+Add a build by creating `src/versions/<game>/<build_id>.ts` and re-exporting its chunks — wildcard `exports` in `package.json` pick it up automatically.
 
-## Scripts
+## Development
+
+From `blf-ts/`:
 
 ```bash
 npm install
+npm run validate   # lint, test, typecheck
 npm run build
-npm test
+npm run release    # bump version, tag, push (CI publishes on tag)
 ```
+
+Chunk authoring (forking the library) uses Stage 3 decorators (`@blf.chunk`, `@c.struct`) with the same SWC/Vitest setup as the repo. Decorator order: `@blf.chunk` on the class, `@c.struct` below, `@c.field` on properties.
+
+## License
+
+MIT

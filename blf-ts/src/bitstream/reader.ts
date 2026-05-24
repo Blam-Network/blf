@@ -1,21 +1,21 @@
 import {
-  e_bitstream_byte_fill_direction,
-  e_bitstream_byte_order,
-  e_bitstream_state,
-} from "./enums";
-import {
   assertFitsInBits,
   type EnumNumber,
   isNumericEnumValue,
   type NumericEnum,
 } from "./enum";
+import {
+  e_bitstream_byte_fill_direction,
+  e_bitstream_byte_order,
+  e_bitstream_state,
+} from "./enums";
 import { assert_ok, BitstreamError } from "./errors";
 import {
   angle_to_axes_internal as angle_to_axes,
   axes_compute_reference_internal as axes_compute_reference,
   axes_to_angle_internal as axes_to_angle,
   dequantize_real,
-  real_vector3d,
+  type real_vector3d,
 } from "./math";
 
 const {
@@ -37,7 +37,7 @@ export class c_bitstream_reader {
 
   static new(
     data: Uint8Array,
-    byte_order: e_bitstream_byte_order,
+    byte_order: e_bitstream_byte_order
   ): c_bitstream_reader {
     return new c_bitstream_reader(data, byte_order, {
       packed_byte_order: byte_order,
@@ -51,7 +51,7 @@ export class c_bitstream_reader {
   /** Use this when dealing with bitstream data from the Halo 3 Beta or prior. */
   static new_with_legacy_settings(
     data: Uint8Array,
-    byte_order: e_bitstream_byte_order,
+    byte_order: e_bitstream_byte_order
   ): c_bitstream_reader {
     return new c_bitstream_reader(data, byte_order, {
       packed_byte_order: e_bitstream_byte_order.swap(byte_order),
@@ -62,7 +62,7 @@ export class c_bitstream_reader {
 
   static new_from_instance(
     data: Uint8Array,
-    instance: c_bitstream_reader,
+    instance: c_bitstream_reader
   ): c_bitstream_reader {
     return new c_bitstream_reader(data, instance.get_byte_order(), {
       packed_byte_order: instance.m_packed_byte_order,
@@ -78,7 +78,7 @@ export class c_bitstream_reader {
       packed_byte_order: e_bitstream_byte_order;
       byte_pack_direction: e_bitstream_byte_fill_direction;
       byte_unpack_direction: e_bitstream_byte_fill_direction;
-    },
+    }
   ) {
     this.m_data = data;
     this.m_data_size_bytes = data.length;
@@ -97,8 +97,7 @@ export class c_bitstream_reader {
 
   seek_relative(bits: number): void {
     const current_bit_position =
-      this.current_stream_byte_position * 8 +
-      this.current_stream_bit_position;
+      this.current_stream_byte_position * 8 + this.current_stream_bit_position;
     const new_bit_position = current_bit_position + bits;
     assert_ok(new_bit_position / 8 < this.m_data_size_bytes);
 
@@ -143,20 +142,18 @@ export class c_bitstream_reader {
     const remaining_stream_bytes =
       end_stream_position - (this.current_stream_byte_position + 1);
     const remaining_stream_bits =
-      8 -
-      this.current_stream_bit_position +
-      remaining_stream_bytes * 8;
+      8 - this.current_stream_bit_position + remaining_stream_bytes * 8;
 
     const size_in_bytes = Math.ceil(size_in_bits / 8);
     if (end_memory_position < size_in_bytes) {
       throw new BitstreamError(
-        `Tried to read ${size_in_bytes} bytes (${size_in_bits} bits) into a ${end_memory_position} byte buffer!`,
+        `Tried to read ${size_in_bytes} bytes (${size_in_bits} bits) into a ${end_memory_position} byte buffer!`
       );
     }
 
     if (remaining_stream_bits < size_in_bits) {
       throw new BitstreamError(
-        `Tried to read ${size_in_bits} bits but the stream only has ${remaining_stream_bits} bits left!`,
+        `Tried to read ${size_in_bits} bits but the stream only has ${remaining_stream_bits} bits left!`
       );
     }
 
@@ -172,11 +169,10 @@ export class c_bitstream_reader {
       let bits_read = 0;
 
       if (this.current_stream_bit_position !== 0) {
-        const remaining_bits_at_position =
-          8 - this.current_stream_bit_position;
+        const remaining_bits_at_position = 8 - this.current_stream_bit_position;
         const reading_bits_at_position = Math.min(
           remaining_bits_at_position,
-          remaining_bits_to_read,
+          remaining_bits_to_read
         );
 
         let bits = this.m_data[this.current_stream_byte_position]!;
@@ -205,13 +201,12 @@ export class c_bitstream_reader {
         output_byte = bits;
         bits_read += reading_bits_at_position;
 
-        if (remaining_bits_at_position > remaining_bits_at_position) {
+        if (reading_bits_at_position > remaining_bits_at_position) {
           throw new BitstreamError(
-            "bitstream reader believes it has read more bits than available. This should never happen.",
+            "bitstream reader believes it has read more bits than available. This should never happen."
           );
-        } else if (
-          reading_bits_at_position === remaining_bits_at_position
-        ) {
+        }
+        if (reading_bits_at_position === remaining_bits_at_position) {
           this.current_stream_bit_position = 0;
           this.current_stream_byte_position += 1;
         } else {
@@ -224,7 +219,7 @@ export class c_bitstream_reader {
       if (remaining_bits_to_read > 0) {
         const reading_bits_at_position = Math.min(
           8 - bits_read,
-          remaining_bits_to_read,
+          remaining_bits_to_read
         );
         let bits = this.m_data[this.current_stream_byte_position]!;
 
@@ -270,8 +265,7 @@ export class c_bitstream_reader {
       switch (this.m_packed_byte_order) {
         case e_bitstream_byte_order._bitstream_byte_order_big_endian: {
           const surplus_bits = (8 - (size_in_bits % 8)) % 8;
-          const shifted =
-            ((output_byte & 0xff) << (8 - surplus_bits)) & 0xffff;
+          const shifted = ((output_byte & 0xff) << (8 - surplus_bits)) & 0xffff;
           const left_output = (shifted >> 8) & 0xff;
           const right_output = shifted & 0xff;
           output[output_byte_index]! |= left_output;
@@ -303,18 +297,18 @@ export class c_bitstream_reader {
     name: string,
     size_in_bits: number,
     enumObj: E,
-    options?: { within_bits?: boolean },
+    options?: { within_bits?: boolean }
   ): EnumNumber<E>;
   read_enum<T extends number>(
     name: string,
     size_in_bits: number,
-    from_u32: (value: number) => T | undefined,
+    from_u32: (value: number) => T | undefined
   ): T;
   read_enum(
     name: string,
     size_in_bits: number,
     enumObjOrParser: NumericEnum | ((value: number) => number | undefined),
-    options?: { within_bits?: boolean },
+    options?: { within_bits?: boolean }
   ): number {
     const integer = this.read_integer(name, size_in_bits);
 
@@ -322,7 +316,7 @@ export class c_bitstream_reader {
       const value = enumObjOrParser(integer);
       if (value === undefined) {
         throw new BitstreamError(
-          `Unexpected enum value for ${name}: ${integer}`,
+          `Unexpected enum value for ${name}: ${integer}`
         );
       }
       return value;
@@ -334,9 +328,7 @@ export class c_bitstream_reader {
     }
 
     if (!isNumericEnumValue(enumObjOrParser, integer)) {
-      throw new BitstreamError(
-        `Unexpected enum value for ${name}: ${integer}`,
-      );
+      throw new BitstreamError(`Unexpected enum value for ${name}: ${integer}`);
     }
     return integer;
   }
@@ -378,7 +370,7 @@ export class c_bitstream_reader {
     max_value: number,
     size_in_bits: number,
     exact_midpoint: boolean,
-    exact_endpoints: boolean,
+    exact_endpoints: boolean
   ): number {
     const quantized = this.read_integer("quantized-real", size_in_bits);
     return dequantize_real(
@@ -387,7 +379,7 @@ export class c_bitstream_reader {
       max_value,
       1 << size_in_bits,
       exact_midpoint,
-      exact_endpoints,
+      exact_endpoints
     );
   }
 
@@ -452,10 +444,10 @@ export class c_bitstream_reader {
 
   read_point3d(
     point: { x: number; y: number; z: number },
-    axis_encoding_size_in_bits: number,
+    axis_encoding_size_in_bits: number
   ): void {
     assert_ok(
-      0 < axis_encoding_size_in_bits && axis_encoding_size_in_bits <= 32,
+      axis_encoding_size_in_bits > 0 && axis_encoding_size_in_bits <= 32
     );
 
     point.x = this.read_integer("???", axis_encoding_size_in_bits);
@@ -465,19 +457,16 @@ export class c_bitstream_reader {
 
   read_point3d_efficient(
     point: { x: number; y: number; z: number },
-    axis_encoding_size_in_bits: { x: number; y: number; z: number },
+    axis_encoding_size_in_bits: { x: number; y: number; z: number }
   ): void {
     assert_ok(
-      0 < axis_encoding_size_in_bits.x &&
-        axis_encoding_size_in_bits.x <= 32,
+      axis_encoding_size_in_bits.x > 0 && axis_encoding_size_in_bits.x <= 32
     );
     assert_ok(
-      0 < axis_encoding_size_in_bits.y &&
-        axis_encoding_size_in_bits.y <= 32,
+      axis_encoding_size_in_bits.y > 0 && axis_encoding_size_in_bits.y <= 32
     );
     assert_ok(
-      0 < axis_encoding_size_in_bits.z &&
-        axis_encoding_size_in_bits.z <= 32,
+      axis_encoding_size_in_bits.z > 0 && axis_encoding_size_in_bits.z <= 32
     );
 
     point.x = this.read_integer("???", axis_encoding_size_in_bits.x);
@@ -496,7 +485,7 @@ export class c_bitstream_reader {
   angle_to_axes_internal(
     up: real_vector3d,
     angle: number,
-    forward: real_vector3d,
+    forward: real_vector3d
   ): void {
     angle_to_axes(up, angle, forward);
   }
@@ -520,9 +509,7 @@ export class c_bitstream_reader {
       }
     }
 
-    throw new BitstreamError(
-      "Exceeded max string size reading utf8 string.",
-    );
+    throw new BitstreamError("Exceeded max string size reading utf8 string.");
   }
 
   read_string_extended_ascii(max_string_size: number): string {
@@ -540,9 +527,7 @@ export class c_bitstream_reader {
       }
     }
 
-    throw new BitstreamError(
-      "Exceeded max string size reading utf8 string.",
-    );
+    throw new BitstreamError("Exceeded max string size reading utf8 string.");
   }
 
   read_string_wchar(max_string_size: number): string {
@@ -560,15 +545,10 @@ export class c_bitstream_reader {
       characters.push(String.fromCharCode(character));
     }
 
-    throw new BitstreamError(
-      "Exceeded max string size reading wchar string.",
-    );
+    throw new BitstreamError("Exceeded max string size reading wchar string.");
   }
 
-  read_unit_vector(
-    _unit_vector: unknown,
-    _size_in_bits: number,
-  ): void {
+  read_unit_vector(_unit_vector: unknown, _size_in_bits: number): void {
     throw new Error("unimplemented");
   }
 
@@ -577,7 +557,7 @@ export class c_bitstream_reader {
     _min_value: number,
     _max_value: number,
     _step_count_size_in_bits: number,
-    _size_in_bits: number,
+    _size_in_bits: number
   ): void {
     throw new Error("unimplemented");
   }
@@ -625,14 +605,14 @@ export class c_bitstream_reader {
   static axes_compute_reference_internal(
     up: real_vector3d,
     forward_reference: real_vector3d,
-    left_reference: real_vector3d,
+    left_reference: real_vector3d
   ): void {
     axes_compute_reference(up, forward_reference, left_reference);
   }
 
   private static axes_to_angle_internal(
     forward: real_vector3d,
-    up: real_vector3d,
+    up: real_vector3d
   ): number {
     return axes_to_angle(forward, up);
   }

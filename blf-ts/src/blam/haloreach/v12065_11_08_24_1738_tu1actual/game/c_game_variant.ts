@@ -1,12 +1,12 @@
 import {
   c_bitstream_reader,
-  c_bitstream_writer,
+  type c_bitstream_writer,
   e_bitstream_byte_order,
 } from "../../../../bitstream";
 import { BlfError } from "../../../../error";
 import type { s_content_item_metadata } from "../saved_games/saved_game_files";
-import { c_game_engine_base_variant } from "./c_game_engine_default";
 import { c_game_engine_custom_variant } from "./c_game_engine_custom_variant";
+import { c_game_engine_base_variant } from "./c_game_engine_default";
 import { c_game_engine_survival_variant } from "./c_game_engine_survival_variant";
 
 /** Matches `e_game_mode` in blf_lib. */
@@ -33,7 +33,7 @@ export class c_game_variant {
     switch (this.m_game_engine) {
       case e_game_mode.sandbox:
         throw new BlfError(
-          "Decoding forge (sandbox) game variants is not supported yet",
+          "Decoding forge (sandbox) game variants is not supported yet"
         );
       case e_game_mode.custom: {
         const custom = new c_game_engine_custom_variant();
@@ -90,7 +90,7 @@ export class c_game_variant {
   static decode_bytes(gametype_bytes: Uint8Array): c_game_variant {
     const bitstream = c_bitstream_reader.new(
       gametype_bytes,
-      e_bitstream_byte_order._bitstream_byte_order_big_endian,
+      e_bitstream_byte_order._bitstream_byte_order_big_endian
     );
     bitstream.begin_reading();
     const variant = new c_game_variant();

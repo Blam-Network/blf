@@ -1,4 +1,7 @@
-import { type c_bitstream_reader, c_bitstream_writer } from "../../../../../bitstream";
+import type {
+  c_bitstream_reader,
+  c_bitstream_writer,
+} from "../../../../../bitstream";
 import { c_object_type_reference } from "./megalogamengine_references";
 
 export class c_object_filter {

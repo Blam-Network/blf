@@ -25,7 +25,7 @@ export class c_bitstream_writer {
 
   static new(
     size: number,
-    byte_order: e_bitstream_byte_order,
+    byte_order: e_bitstream_byte_order
   ): c_bitstream_writer {
     return new c_bitstream_writer(size, byte_order, {
       packed_byte_order: byte_order,
@@ -37,7 +37,7 @@ export class c_bitstream_writer {
   /** Use this when dealing with bitstream data from the Halo 3 Beta or prior. */
   static new_with_legacy_settings(
     size: number,
-    byte_order: e_bitstream_byte_order,
+    byte_order: e_bitstream_byte_order
   ): c_bitstream_writer {
     return new c_bitstream_writer(size, byte_order, {
       packed_byte_order: e_bitstream_byte_order.swap(byte_order),
@@ -48,7 +48,7 @@ export class c_bitstream_writer {
 
   static new_from_instance(
     size: number,
-    instance: c_bitstream_writer,
+    instance: c_bitstream_writer
   ): c_bitstream_writer {
     return new c_bitstream_writer(size, instance.get_byte_order(), {
       packed_byte_order: instance.m_packed_byte_order,
@@ -64,7 +64,7 @@ export class c_bitstream_writer {
       packed_byte_order: e_bitstream_byte_order;
       byte_pack_direction: e_bitstream_byte_fill_direction;
       byte_unpack_direction: e_bitstream_byte_fill_direction;
-    },
+    }
   ) {
     this.m_data = new Uint8Array(size);
     this.m_data_size_bytes = size;
@@ -180,7 +180,7 @@ export class c_bitstream_writer {
     max_value: number,
     size_in_bits: number,
     exact_midpoint: boolean,
-    exact_endpoints: boolean,
+    exact_endpoints: boolean
   ): void {
     const quantized = quantize_real(
       value,
@@ -188,17 +188,17 @@ export class c_bitstream_writer {
       max_value,
       1 << size_in_bits,
       exact_midpoint,
-      exact_endpoints,
+      exact_endpoints
     );
     this.write_integer(quantized, size_in_bits);
   }
 
   write_point3d(
     point: { x: number; y: number; z: number },
-    axis_encoding_size_in_bits: number,
+    axis_encoding_size_in_bits: number
   ): void {
     assert_ok(
-      axis_encoding_size_in_bits > 0 && axis_encoding_size_in_bits <= 32,
+      axis_encoding_size_in_bits > 0 && axis_encoding_size_in_bits <= 32
     );
     assert_ok(point.x < 1 << axis_encoding_size_in_bits);
     assert_ok(point.y < 1 << axis_encoding_size_in_bits);
@@ -210,16 +210,16 @@ export class c_bitstream_writer {
 
   write_point3d_efficient(
     point: { x: number; y: number; z: number },
-    axis_encoding_size_in_bits: { x: number; y: number; z: number },
+    axis_encoding_size_in_bits: { x: number; y: number; z: number }
   ): void {
     assert_ok(
-      axis_encoding_size_in_bits.x > 0 && axis_encoding_size_in_bits.x <= 32,
+      axis_encoding_size_in_bits.x > 0 && axis_encoding_size_in_bits.x <= 32
     );
     assert_ok(
-      axis_encoding_size_in_bits.y > 0 && axis_encoding_size_in_bits.y <= 32,
+      axis_encoding_size_in_bits.y > 0 && axis_encoding_size_in_bits.y <= 32
     );
     assert_ok(
-      axis_encoding_size_in_bits.z > 0 && axis_encoding_size_in_bits.z <= 32,
+      axis_encoding_size_in_bits.z > 0 && axis_encoding_size_in_bits.z <= 32
     );
     assert_ok(point.x >>> 0 < 1 << axis_encoding_size_in_bits.x);
     assert_ok(point.y >>> 0 < 1 << axis_encoding_size_in_bits.y);
@@ -241,7 +241,10 @@ export class c_bitstream_writer {
     this.write_value_internal(new Uint8Array([0]), 8);
   }
 
-  write_string_extended_ascii(char_string: string, max_string_size: number): void {
+  write_string_extended_ascii(
+    char_string: string,
+    max_string_size: number
+  ): void {
     assert_ok(this.writing());
     assert_ok(max_string_size > 0);
     assert_ok(char_string.length <= max_string_size);
@@ -291,7 +294,7 @@ export class c_bitstream_writer {
     this.m_data_size_bytes = Math.ceil(
       (this.current_stream_byte_position * 8 +
         this.current_stream_bit_position) /
-        8,
+        8
     );
   }
 
@@ -308,7 +311,7 @@ export class c_bitstream_writer {
     const size_in_bytes = Math.ceil(size_in_bits / 8);
     if (data.length < size_in_bytes) {
       throw new BitstreamError(
-        `Tried to write ${size_in_bits} bits but only ${data.length * 8} were provided`,
+        `Tried to write ${size_in_bits} bits but only ${data.length * 8} were provided`
       );
     }
 
@@ -319,7 +322,7 @@ export class c_bitstream_writer {
 
     while (remaining_bits_to_write > 0) {
       const bytes_written = Math.floor(
-        (size_in_bits - remaining_bits_to_write) / 8,
+        (size_in_bits - remaining_bits_to_write) / 8
       );
       let bits_written = 0;
 
@@ -341,8 +344,7 @@ export class c_bitstream_writer {
             remaining_bits_to_write > 8 - surplus_bits
           ) {
             bits |=
-              (data[bytes_written + surplus_bytes + 1]! >>
-                (8 - surplus_bits)) &
+              (data[bytes_written + surplus_bytes + 1]! >> (8 - surplus_bits)) &
               0xff;
           }
           writing_byte = bits;
@@ -354,10 +356,9 @@ export class c_bitstream_writer {
 
       const writing_bits_at_position = Math.min(
         8 - this.current_stream_bit_position,
-        remaining_bits_to_write,
+        remaining_bits_to_write
       );
-      const remaining_bits_at_position =
-        8 - this.current_stream_bit_position;
+      const remaining_bits_at_position = 8 - this.current_stream_bit_position;
 
       let bits: number;
       switch (this.m_byte_unpack_direction) {
@@ -376,8 +377,7 @@ export class c_bitstream_writer {
       switch (this.m_byte_pack_direction) {
         case _bitstream_byte_fill_direction_lsb_to_msb:
           bits >>>=
-            8 -
-            (this.current_stream_bit_position + writing_bits_at_position);
+            8 - (this.current_stream_bit_position + writing_bits_at_position);
           break;
         case _bitstream_byte_fill_direction_msb_to_lsb:
           bits >>>= this.current_stream_bit_position;
@@ -400,14 +400,13 @@ export class c_bitstream_writer {
       if (remaining_bits_to_write > 0 && bits_written < 8) {
         const extra_bits_at_position = Math.min(
           remaining_bits_to_write,
-          8 - bits_written,
+          8 - bits_written
         );
 
         let extra_bits: number;
         switch (this.m_byte_unpack_direction) {
           case _bitstream_byte_fill_direction_lsb_to_msb:
-            extra_bits =
-              writing_byte & (0xff << (8 - extra_bits_at_position));
+            extra_bits = writing_byte & (0xff << (8 - extra_bits_at_position));
             break;
           case _bitstream_byte_fill_direction_msb_to_lsb:
             extra_bits = (writing_byte << bits_written) & 0xff;

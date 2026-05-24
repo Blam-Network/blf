@@ -3,7 +3,10 @@ import {
   c_bitstream_writer,
   e_bitstream_byte_order,
 } from "../../../../bitstream";
-import { runtime_data_compress, runtime_data_decompress } from "../../../common/memory/data_compress";
+import {
+  runtime_data_compress,
+  runtime_data_decompress,
+} from "../../../common/memory/data_compress";
 
 export const k_language_count = 12;
 
@@ -23,7 +26,7 @@ function read_null_terminated_string(data: Uint8Array, offset: number): string {
 function write_null_terminated_string(
   writer: c_bitstream_writer,
   value: string,
-  max_length: number,
+  max_length: number
 ): void {
   writer.write_string_extended_ascii(value, max_length);
 }
@@ -33,7 +36,7 @@ function string_byte_length(value: string): number {
   for (let i = 0; i < value.length; i++) {
     if (value.charCodeAt(i) > 0xff) {
       throw new Error(
-        `String table entry U+${value.charCodeAt(i).toString(16)} cannot be encoded as Latin-1`,
+        `String table entry U+${value.charCodeAt(i).toString(16)} cannot be encoded as Latin-1`
       );
     }
   }
@@ -44,7 +47,7 @@ function write_buffer_blob(
   bitstream: c_bitstream_writer,
   buffer: Uint8Array,
   buffer_size_bit_length: number,
-  is_compressed: boolean,
+  is_compressed: boolean
 ): void {
   bitstream.write_integer(buffer.length, buffer_size_bit_length);
   if (is_compressed) {
@@ -67,14 +70,14 @@ export class c_single_language_string_table {
     readonly max_string_length: number,
     readonly offset_bit_length: number,
     readonly buffer_size_bit_length: number,
-    readonly count_bit_length: number,
+    readonly count_bit_length: number
   ) {}
 
   decode(bitstream: c_bitstream_reader): void {
     this.strings = [];
     const string_count = bitstream.read_integer(
       "string-count",
-      this.count_bit_length,
+      this.count_bit_length
     );
     if (string_count === 0) {
       return;
@@ -83,9 +86,7 @@ export class c_single_language_string_table {
     const offsets: number[] = [];
     for (let i = 0; i < string_count; i++) {
       if (bitstream.read_bool("exists")) {
-        offsets.push(
-          bitstream.read_integer("offset", this.offset_bit_length),
-        );
+        offsets.push(bitstream.read_integer("offset", this.offset_bit_length));
       } else {
         offsets.push(0);
       }
@@ -93,7 +94,7 @@ export class c_single_language_string_table {
 
     const buffer_size = bitstream.read_integer(
       "size",
-      this.buffer_size_bit_length,
+      this.buffer_size_bit_length
     );
     this.m_buffer_is_compressed = bitstream.read_bool("compressed");
     const string_data = this.m_buffer_is_compressed
@@ -101,9 +102,9 @@ export class c_single_language_string_table {
           bitstream.read_raw_data(
             bitstream.read_integer(
               "compressed-buffer-size",
-              this.buffer_size_bit_length,
-            ) * 8,
-          ),
+              this.buffer_size_bit_length
+            ) * 8
+          )
         )
       : bitstream.read_raw_data(buffer_size * 8);
 
@@ -120,7 +121,7 @@ export class c_single_language_string_table {
 
     const string_writer = c_bitstream_writer.new_from_instance(
       this.max_string_count * this.max_string_length,
-      bitstream,
+      bitstream
     );
     string_writer.begin_writing();
     let offset = 0;
@@ -131,7 +132,7 @@ export class c_single_language_string_table {
       write_null_terminated_string(
         string_writer,
         string,
-        this.max_string_length,
+        this.max_string_length
       );
       offset += string_byte_length(string) + 1;
     }
@@ -142,13 +143,16 @@ export class c_single_language_string_table {
       bitstream,
       buffer,
       this.buffer_size_bit_length,
-      this.m_buffer_is_compressed,
+      this.m_buffer_is_compressed
     );
   }
 }
 
 export class c_string_table {
-  strings: (string | null)[][] = Array.from({ length: k_language_count }, () => []);
+  strings: (string | null)[][] = Array.from(
+    { length: k_language_count },
+    () => []
+  );
   m_buffer_is_compressed = true;
 
   constructor(
@@ -156,34 +160,37 @@ export class c_string_table {
     readonly max_string_length: number,
     readonly offset_bit_length: number,
     readonly buffer_size_bit_length: number,
-    readonly count_bit_length: number,
+    readonly count_bit_length: number
   ) {}
 
   decode(bitstream: c_bitstream_reader): void {
     this.strings = Array.from({ length: k_language_count }, () => []);
     const string_count = bitstream.read_integer(
       "string-count",
-      this.count_bit_length,
+      this.count_bit_length
     );
     if (string_count === 0) {
       return;
     }
 
     const offsets: number[][] = Array.from({ length: k_language_count }, () =>
-      Array.from({ length: string_count }, () => -1),
+      Array.from({ length: string_count }, () => -1)
     );
 
     for (let j = 0; j < string_count; j++) {
       for (let i = 0; i < k_language_count; i++) {
         if (bitstream.read_bool("exists")) {
-          offsets[i]![j] = bitstream.read_integer("index", this.offset_bit_length);
+          offsets[i]![j] = bitstream.read_integer(
+            "index",
+            this.offset_bit_length
+          );
         }
       }
     }
 
     const buffer_size = bitstream.read_integer(
       "size",
-      this.buffer_size_bit_length,
+      this.buffer_size_bit_length
     );
     this.m_buffer_is_compressed = bitstream.read_bool("compressed");
     const string_data = this.m_buffer_is_compressed
@@ -191,9 +198,9 @@ export class c_string_table {
           bitstream.read_raw_data(
             bitstream.read_integer(
               "compressed-buffer-size",
-              this.buffer_size_bit_length,
-            ) * 8,
-          ),
+              this.buffer_size_bit_length
+            ) * 8
+          )
         )
       : bitstream.read_raw_data(buffer_size * 8);
 
@@ -204,7 +211,7 @@ export class c_string_table {
           this.strings[i]!.push(null);
         } else {
           this.strings[i]!.push(
-            read_null_terminated_string(string_data, offset),
+            read_null_terminated_string(string_data, offset)
           );
         }
       }
@@ -220,7 +227,7 @@ export class c_string_table {
 
     const string_writer = c_bitstream_writer.new(
       k_language_count * this.max_string_count * this.max_string_length,
-      e_bitstream_byte_order._bitstream_byte_order_big_endian,
+      e_bitstream_byte_order._bitstream_byte_order_big_endian
     );
     string_writer.begin_writing();
     let offset = 0;
@@ -251,7 +258,7 @@ export class c_string_table {
           write_null_terminated_string(
             string_writer,
             string,
-            this.max_string_length,
+            this.max_string_length
           );
           offset += string_byte_length(string) + 1;
         }
@@ -261,7 +268,7 @@ export class c_string_table {
         write_null_terminated_string(
           string_writer,
           reference,
-          this.max_string_length,
+          this.max_string_length
         );
         offset += string_byte_length(reference) + 1;
       }
@@ -273,7 +280,7 @@ export class c_string_table {
       bitstream,
       buffer,
       this.buffer_size_bit_length,
-      this.m_buffer_is_compressed,
+      this.m_buffer_is_compressed
     );
   }
 }

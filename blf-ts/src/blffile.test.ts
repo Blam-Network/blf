@@ -1,14 +1,13 @@
-import { describe, expect, it } from "vitest";
 import { c } from "@craftycodie/cstruct";
-import { s_blf_header } from "./s_blf_header";
-import { write_blffile } from "./index";
+import { describe, expect, it } from "vitest";
+import { BLFChunkBase, blf, search_for_chunk } from "./blf_chunk";
 import { s_blf_chunk_end_of_file } from "./chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_end_of_file";
 import {
   e_byte_order_mark,
   s_blf_chunk_start_of_file,
 } from "./chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_start_of_file";
-import { search_for_chunk } from "./blf_chunk";
-import { blf, BLFChunkBase } from "./blf_chunk";
+import { write_blffile } from "./index";
+import { s_blf_header } from "./s_blf_header";
 
 @blf.chunk("test", 1.0)
 class s_blf_chunk_test_stub extends BLFChunkBase {
@@ -18,7 +17,7 @@ class s_blf_chunk_test_stub extends BLFChunkBase {
     const view = new DataView(
       payload.buffer,
       payload.byteOffset,
-      payload.byteLength,
+      payload.byteLength
     );
     this.value = view.getUint32(0, endian === "little");
   }
@@ -67,8 +66,7 @@ describe("write_blffile", () => {
     const eof = new s_blf_chunk_end_of_file();
 
     const file = write_blffile("big", [body, eof]);
-    const expected_eof_offset =
-      c.size(s_blf_header) + 4;
+    const expected_eof_offset = c.size(s_blf_header) + 4;
 
     const parsed = new s_blf_chunk_end_of_file();
     parsed.read(file.subarray(expected_eof_offset), "big");

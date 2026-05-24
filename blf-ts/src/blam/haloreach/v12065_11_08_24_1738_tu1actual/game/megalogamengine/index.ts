@@ -1,5 +1,5 @@
-export * from "./c_megalogamengine_map_permissions";
 export * from "./c_megalo_game_statistic";
+export * from "./c_megalogamengine_map_permissions";
 export * from "./c_object_filter";
 export * from "./c_trigger";
 export * from "./megalogamengine_actions";

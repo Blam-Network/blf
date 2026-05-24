@@ -9,11 +9,11 @@ export class ChunkSignature extends c.AdvancedType<string> {
     bytes: Uint8Array,
     offset: number,
     endian: c.Endian,
-    _label: string,
+    _label: string
   ): string {
     if (offset + this.byteSize > bytes.length) {
       throw new BlfError(
-        `Cannot read chunk signature: need ${this.byteSize} bytes at offset ${offset}, have ${bytes.length - offset}`,
+        `Cannot read chunk signature: need ${this.byteSize} bytes at offset ${offset}, have ${bytes.length - offset}`
       );
     }
     const w0 = bytes[offset]!;
@@ -31,16 +31,16 @@ export class ChunkSignature extends c.AdvancedType<string> {
     offset: number,
     value: string,
     endian: c.Endian,
-    _label: string,
+    _label: string
   ): void {
     if (value.length !== this.byteSize) {
       throw new BlfError(
-        `BLF chunk signature must be exactly 4 characters, got ${value.length}: "${value}"`,
+        `BLF chunk signature must be exactly 4 characters, got ${value.length}: "${value}"`
       );
     }
     if (offset + this.byteSize > bytes.length) {
       throw new BlfError(
-        `Cannot write chunk signature: need ${this.byteSize} bytes at offset ${offset}, have ${bytes.length - offset}`,
+        `Cannot write chunk signature: need ${this.byteSize} bytes at offset ${offset}, have ${bytes.length - offset}`
       );
     }
     const a = value.charCodeAt(0);

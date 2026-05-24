@@ -1,5 +1,5 @@
-import { readFileSync, writeFileSync, readdirSync, statSync } from "node:fs";
-import { join, relative, dirname } from "node:path";
+import { readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
+import { dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const srcRoot = join(fileURLToPath(new URL("..", import.meta.url)), "src");
@@ -12,17 +12,21 @@ function walk(dir) {
       walk(p);
       continue;
     }
-    if (!p.endsWith(".ts")) continue;
+    if (!p.endsWith(".ts")) {
+      continue;
+    }
 
-    let content = readFileSync(p, "utf8");
-    if (!content.includes("bitstream")) continue;
+    const content = readFileSync(p, "utf8");
+    if (!content.includes("bitstream")) {
+      continue;
+    }
 
     const relPath = relative(dirname(p), bitstreamRoot).split("\\").join("/");
     const target = relPath.startsWith(".") ? relPath : `./${relPath}`;
 
     const next = content.replace(
       /from ["'](?:@Blam-Network\/blf\/bitstream|\.[^"']*bitstream)["']/g,
-      `from "${target}"`,
+      `from "${target}"`
     );
 
     if (next !== content) {

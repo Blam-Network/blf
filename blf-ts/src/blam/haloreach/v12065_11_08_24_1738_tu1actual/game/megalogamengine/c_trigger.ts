@@ -1,4 +1,7 @@
-import { type c_bitstream_reader, c_bitstream_writer } from "../../../../../bitstream";
+import type {
+  c_bitstream_reader,
+  c_bitstream_writer,
+} from "../../../../../bitstream";
 
 export enum e_trigger_execution_mode {
   normal = 0,
@@ -37,13 +40,13 @@ export class c_trigger {
       "execution-mode",
       3,
       e_trigger_execution_mode,
-      { within_bits: true },
+      { within_bits: true }
     );
     this.m_trigger_type = bitstream.read_enum(
       "trigger-type",
       3,
       e_trigger_type,
-      { within_bits: true },
+      { within_bits: true }
     );
     if (
       this.m_execution_mode ===
@@ -52,7 +55,7 @@ export class c_trigger {
       this.m_object_filter_index = bitstream.read_index(
         "object-filter-index",
         16,
-        4,
+        4
       );
     } else {
       this.m_object_filter_index = -1;

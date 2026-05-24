@@ -1,14 +1,14 @@
-import {
-  type c_bitstream_reader,
+import type {
+  c_bitstream_reader,
   c_bitstream_writer,
 } from "../../../../bitstream";
 import {
   content_item_metadata_decode,
   content_item_metadata_encode,
-  s_content_item_metadata,
   s_content_item_display_metadata,
   s_content_item_general_metadata,
   s_content_item_history,
+  s_content_item_metadata,
 } from "../saved_games/saved_game_files";
 import { c_player_traits } from "./c_player_traits";
 import { c_string_table } from "./c_string_table";
@@ -27,29 +27,29 @@ export class c_game_engine_miscellaneous_options {
   decode(bitstream: c_bitstream_reader): void {
     this.m_teams_enabled = bitstream.read_bool("miscellaneous-options-teams");
     this.m_round_reset_players = bitstream.read_bool(
-      "miscellaneous-options-round-reset-players",
+      "miscellaneous-options-round-reset-players"
     );
     this.m_round_reset_map = bitstream.read_bool(
-      "miscellaneous-options-round-reset-map",
+      "miscellaneous-options-round-reset-map"
     );
     this.m_perfection_enabled = bitstream.read_bool(
-      "miscellaneous-options-perfection-enabled",
+      "miscellaneous-options-perfection-enabled"
     );
     this.m_round_time_limit_minutes = bitstream.read_integer(
       "miscellaneous-options-round-time-limit-minutes",
-      8,
+      8
     );
     this.m_round_limit = bitstream.read_integer(
       "miscellaneous-options-round-limit",
-      5,
+      5
     );
     this.m_early_victory_win_count = bitstream.read_integer(
       "miscellaneous-options-early-victory-win-count",
-      4,
+      4
     );
     this.m_sudden_death_time = bitstream.read_integer(
       "sudden-death-time-limit",
-      7,
+      7
     );
     this.m_grace_period = bitstream.read_integer("grace-period", 5);
   }
@@ -84,48 +84,48 @@ export class c_game_engine_respawn_options {
 
   decode(bitstream: c_bitstream_reader): void {
     this.m_inherit_respawn_time = bitstream.read_bool(
-      "respawn-options-inherit-respawn-time",
+      "respawn-options-inherit-respawn-time"
     );
     this.m_respawn_with_teammate = bitstream.read_bool(
-      "respawn-options-respawn-with-teammate",
+      "respawn-options-respawn-with-teammate"
     );
     this.m_respawn_at_location = bitstream.read_bool(
-      "respawn-options-respawn-at-location",
+      "respawn-options-respawn-at-location"
     );
     this.m_respawn_on_kills = bitstream.read_bool(
-      "respawn-options-respawn-on-kills",
+      "respawn-options-respawn-on-kills"
     );
     this.m_lives_per_round = bitstream.read_integer(
       "respawn-options-lives-per-round",
-      6,
+      6
     );
     this.m_team_lives_per_round = bitstream.read_integer(
       "respawn-options-team-lives-per-round",
-      7,
+      7
     );
     this.m_respawn_time_seconds = bitstream.read_integer(
       "respawn-options-respawn-time",
-      8,
+      8
     );
     this.m_suicide_penalty_seconds = bitstream.read_integer(
       "respawn-options-suicide-time",
-      8,
+      8
     );
     this.m_betrayal_penalty_seconds = bitstream.read_integer(
       "respawn-options-betrayal-time",
-      8,
+      8
     );
     this.m_respawn_growth_seconds = bitstream.read_integer(
       "respawn-options-respawn-growth-time",
-      4,
+      4
     );
     this.m_loadout_cam_time = bitstream.read_integer(
       "respawn-options-initial-loadout-selection-time",
-      4,
+      4
     );
     this.m_respawn_player_traits_duration_seconds = bitstream.read_integer(
       "respawn-options-player-traits-duration",
-      6,
+      6
     );
     this.m_respawn_player_traits.decode(bitstream);
   }
@@ -188,26 +188,26 @@ export class c_game_engine_map_override_options {
     this.m_base_player_traits.decode(bitstream);
     this.m_weapon_set_absolute_index = bitstream.read_signed_integer(
       "map-override-weapon-set",
-      8,
+      8
     );
     this.m_vehicle_set_absolute_index = bitstream.read_signed_integer(
       "map-override-vehicle-set",
-      8,
+      8
     );
     this.m_red_powerup_traits.decode(bitstream);
     this.m_blue_powerup_traits.decode(bitstream);
     this.m_yellow_powerup_traits.decode(bitstream);
     this.m_red_powerup_duration_seconds = bitstream.read_integer(
       "map-override-red-powerup-duration",
-      7,
+      7
     );
     this.m_blue_powerup_duration_seconds = bitstream.read_integer(
       "map-override-blue-powerup-duration",
-      7,
+      7
     );
     this.m_yellow_powerup_duration_seconds = bitstream.read_integer(
       "map-override-yellow-powerup-duration",
-      7,
+      7
     );
   }
 
@@ -242,32 +242,32 @@ export class c_game_engine_team_options_team {
 
   decode(bitstream: c_bitstream_reader): void {
     this.m_override_color_ui_bitmap = bitstream.read_bool(
-      "team-override-ui-bitmap-color",
+      "team-override-ui-bitmap-color"
     );
     this.m_override_color_ui_text = bitstream.read_bool(
-      "team-override-ui-text-color",
+      "team-override-ui-text-color"
     );
     this.m_override_color_armour = bitstream.read_bool(
-      "team-override-armour-color",
+      "team-override-armour-color"
     );
     this.m_team_enabled = bitstream.read_bool("team-enabled");
     this.m_name.decode(bitstream);
     this.m_team_initial_designator = bitstream.read_integer(
       "team-initial-designator",
-      4,
+      4
     );
     this.m_model_override = bitstream.read_integer("team-model-override", 1);
     this.m_team_color_override = bitstream.read_integer(
       "team-color-override",
-      32,
+      32
     );
     this.m_team_ui_text_tint_color_override = bitstream.read_integer(
       "team-ui-text-tint-color-override",
-      32,
+      32
     );
     this.m_team_ui_bitmap_tint_color_override = bitstream.read_integer(
       "team-ui-bitmap-tint-color-override",
-      32,
+      32
     );
     this.m_fireteam_count = bitstream.read_integer("fireteam-count", 5);
   }
@@ -292,14 +292,14 @@ export class c_game_engine_team_options {
   m_designator_switch_type = 0;
   m_teams = Array.from(
     { length: k_game_variant_team_count },
-    () => new c_game_engine_team_options_team(),
+    () => new c_game_engine_team_options_team()
   );
 
   decode(bitstream: c_bitstream_reader): void {
     this.m_model_override = bitstream.read_integer("model-override", 3);
     this.m_designator_switch_type = bitstream.read_integer(
       "designator-switch-type",
-      2,
+      2
     );
     for (const team of this.m_teams) {
       team.decode(bitstream);
@@ -326,27 +326,31 @@ export class c_loadout_traits {
   decode(bitstream: c_bitstream_reader): void {
     this.m_visible = bitstream.read_bool("flags");
     this.m_name = bitstream.read_index("name", 128, 7);
-    this.m_initial_primary_weapon_absolute_index = bitstream.read_signed_integer(
-      "initial-primary-weapon",
-      8,
-    );
+    this.m_initial_primary_weapon_absolute_index =
+      bitstream.read_signed_integer("initial-primary-weapon", 8);
     this.m_initial_secondary_weapon_absolute_index =
       bitstream.read_signed_integer("initial-secondary-weapon", 8);
     this.m_initial_equipment_absolute_index = bitstream.read_signed_integer(
       "initial-equipment",
-      8,
+      8
     );
     this.m_initial_grenade_count_setting = bitstream.read_integer(
       "initial-grenade-count",
-      4,
+      4
     );
   }
 
   encode(bitstream: c_bitstream_writer): void {
     bitstream.write_bool(this.m_visible);
     bitstream.write_index(this.m_name, 128, 7);
-    bitstream.write_signed_integer(this.m_initial_primary_weapon_absolute_index, 8);
-    bitstream.write_signed_integer(this.m_initial_secondary_weapon_absolute_index, 8);
+    bitstream.write_signed_integer(
+      this.m_initial_primary_weapon_absolute_index,
+      8
+    );
+    bitstream.write_signed_integer(
+      this.m_initial_secondary_weapon_absolute_index,
+      8
+    );
     bitstream.write_signed_integer(this.m_initial_equipment_absolute_index, 8);
     bitstream.write_integer(this.m_initial_grenade_count_setting, 4);
   }
@@ -372,7 +376,7 @@ export class c_game_engine_loadout_traits {
   m_flags = 0;
   m_loadout_palettes = Array.from(
     { length: 6 },
-    () => new c_loadout_palette_traits(),
+    () => new c_loadout_palette_traits()
   );
 
   decode(bitstream: c_bitstream_reader): void {
@@ -417,7 +421,7 @@ export class c_game_engine_base_variant {
     this.m_map_override_options.decode(bitstream);
     this.m_team_scoring_method = bitstream.read_integer(
       "team-scoring-method",
-      3,
+      3
     );
     this.m_team_options.decode(bitstream);
     this.m_loadouts.decode(bitstream);

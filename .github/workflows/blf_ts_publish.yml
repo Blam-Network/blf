@@ -1,0 +1,61 @@
+name: blf-ts Publish
+
+# Push a version tag to publish, e.g. git tag v0.1.0 && git push origin v0.1.0
+# Tag must match blf-ts/package.json "version" (without the leading v).
+# Prerelease versions publish to the npm dist-tag "next", not "latest".
+#
+# npm trusted publishing (OIDC): configure Blam-Network/blf → blf_ts_publish.yml on npm.
+# Do not set registry-url on setup-node (avoids a broken always-auth .npmrc); npm publish
+# exchanges the GitHub OIDC token at publish time.
+on:
+  push:
+    tags:
+      - "v*"
+
+defaults:
+  run:
+    working-directory: blf-ts
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: blf-ts/package-lock.json
+
+      - name: Verify tag matches package.json version
+        run: |
+          TAG_VERSION="${GITHUB_REF_NAME#v}"
+          PKG_VERSION=$(node -p "require('./package.json').version")
+          if [ "$TAG_VERSION" != "$PKG_VERSION" ]; then
+            echo "Tag v${TAG_VERSION} does not match package.json version ${PKG_VERSION}"
+            exit 1
+          fi
+
+      - run: npm ci
+      - run: npm run validate
+      - run: npm run build
+
+      - name: Publish to npm
+        run: |
+          PKG_NAME=$(node -p "require('./package.json').name")
+          PKG_VERSION=$(node -p "require('./package.json').version")
+          NPM_TAG=latest
+          if echo "$PKG_VERSION" | grep -q '-'; then
+            NPM_TAG=next
+          fi
+          echo "Publishing ${PKG_NAME}@${PKG_VERSION} with dist-tag ${NPM_TAG}"
+          npx npm@latest publish --provenance --access public --tag "$NPM_TAG"
+
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true

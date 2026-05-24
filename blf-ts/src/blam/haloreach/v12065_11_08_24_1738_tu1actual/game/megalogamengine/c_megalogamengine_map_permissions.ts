@@ -1,4 +1,7 @@
-import { type c_bitstream_reader, c_bitstream_writer } from "../../../../../bitstream";
+import type {
+  c_bitstream_reader,
+  c_bitstream_writer,
+} from "../../../../../bitstream";
 
 export class c_megalogamengine_map_permissions {
   m_except_map_ids: number[] = [];

@@ -21,7 +21,7 @@ describe("s_blf_chunk_content_header", () => {
     expect(chdr.metadata.general.game_mode).toBe(3);
     expect(chdr.metadata.name).toBe("Oddball");
     expect(chdr.metadata.description).toBe(
-      "Hold the skull to earn points. It's like Hamlet with guns.",
+      "Hold the skull to earn points. It's like Hamlet with guns."
     );
     expect(chdr.metadata.file_type_data).toEqual({ icon_index: 2 });
     expect(chdr.metadata.activity_data).not.toBeNull();

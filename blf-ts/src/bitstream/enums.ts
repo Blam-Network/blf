@@ -4,9 +4,7 @@ export enum e_bitstream_byte_order {
 }
 
 export namespace e_bitstream_byte_order {
-  export function swap(
-    order: e_bitstream_byte_order,
-  ): e_bitstream_byte_order {
+  export function swap(order: e_bitstream_byte_order): e_bitstream_byte_order {
     switch (order) {
       case e_bitstream_byte_order._bitstream_byte_order_little_endian:
         return e_bitstream_byte_order._bitstream_byte_order_big_endian;
@@ -23,11 +21,11 @@ export enum e_bitstream_byte_fill_direction {
 
 export enum e_bitstream_state {
   _bitstream_state_initial = 0,
-  _bitstream_state_writing,
-  _bitstream_state_write_finished,
-  _bitstream_state_reading,
-  _bitstream_state_read_only_for_consistency,
-  _bitstream_state_read_finished,
+  _bitstream_state_writing = 1,
+  _bitstream_state_write_finished = 2,
+  _bitstream_state_reading = 3,
+  _bitstream_state_read_only_for_consistency = 4,
+  _bitstream_state_read_finished = 5,
 
-  k_bitstream_state_count,
+  k_bitstream_state_count = 6,
 }

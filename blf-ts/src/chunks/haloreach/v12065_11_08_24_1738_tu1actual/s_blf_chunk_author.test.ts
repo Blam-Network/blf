@@ -4,9 +4,7 @@ import { search_for_chunk } from "../../../blf_chunk";
 import { write_blffile } from "../../../index";
 import { s_blf_chunk_end_of_file } from "../../halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_end_of_file";
 import { s_blf_chunk_start_of_file } from "../../halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_start_of_file";
-import {
-  s_blf_chunk_author,
-} from "./s_blf_chunk_author";
+import { s_blf_chunk_author } from "./s_blf_chunk_author";
 
 describe("s_blf_chunk_author", () => {
   it("has a 0x44-byte body (big-endian)", () => {

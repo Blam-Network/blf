@@ -1,13 +1,8 @@
-import { type c_bitstream_reader, c_bitstream_writer } from "../../../../../bitstream";
-import { BlfError } from "../../../../../error";
-
-function requireField<T>(value: T | undefined, message: string): T {
-  if (value === undefined) {
-    throw new BlfError(message);
-  }
-  return value;
-}
-import { c_player_traits } from "../c_player_traits";
+import type {
+  c_bitstream_reader,
+  c_bitstream_writer,
+} from "../../../../../bitstream";
+import type { c_player_traits } from "../c_player_traits";
 import {
   c_custom_timer_reference,
   c_custom_variable_reference,
@@ -34,8 +29,6 @@ export class s_team_or_player_target {
   m_target = 0;
   m_team?: c_team_reference;
   m_player?: c_player_reference;
-
-
 
   decode(bitstream: c_bitstream_reader): void {
     this.m_target = bitstream.read_integer("target", 2);
@@ -68,16 +61,12 @@ export class s_team_or_player_target {
         break;
     }
   }
-
-
 }
 
 export class s_action_set_score_parameters {
   m_target = new s_team_or_player_target();
   m_operation = 0;
   m_variable = new c_custom_variable_reference();
-
-
 
   decode(bitstream: c_bitstream_reader): void {
     this.m_target.decode(bitstream);
@@ -87,12 +76,9 @@ export class s_action_set_score_parameters {
 
   encode(bitstream: c_bitstream_writer): void {
     this.m_target.encode(bitstream);
-            bitstream.write_integer(this.m_operation, 4);
-            this.m_variable.encode(bitstream);
+    bitstream.write_integer(this.m_operation, 4);
+    this.m_variable.encode(bitstream);
   }
-
-
-
 }
 
 export class s_action_create_object_parameters {
@@ -103,8 +89,6 @@ export class s_action_create_object_parameters {
   m_flags = 0;
   m_offset = 0;
   m_variant_name_index = 0;
-
-
 
   decode(bitstream: c_bitstream_reader): void {
     this.m_object_type.decode(bitstream);
@@ -118,24 +102,19 @@ export class s_action_create_object_parameters {
 
   encode(bitstream: c_bitstream_writer): void {
     this.m_object_type.encode(bitstream);
-            this.m_object_reference_1.encode(bitstream);
-            this.m_object_reference_2.encode(bitstream);
-            bitstream.write_index(this.m_filter_index, 16, 4);
-            bitstream.write_integer(this.m_flags, 3);
-            bitstream.write_integer(this.m_offset, 24);
-            bitstream.write_integer(this.m_variant_name_index, 8);
+    this.m_object_reference_1.encode(bitstream);
+    this.m_object_reference_2.encode(bitstream);
+    bitstream.write_index(this.m_filter_index, 16, 4);
+    bitstream.write_integer(this.m_flags, 3);
+    bitstream.write_integer(this.m_offset, 24);
+    bitstream.write_integer(this.m_variant_name_index, 8);
   }
-
-
-
 }
 
 export class s_action_navpoint_set_icon_parameters {
   m_object = new c_object_reference();
   m_navpoint_icon = 0;
   m_variable?: c_custom_variable_reference;
-
-
 
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
@@ -154,15 +133,11 @@ export class s_action_navpoint_set_icon_parameters {
       this.m_variable!.encode(bitstream);
     }
   }
-
-
 }
 
 export class s_action_navpoint_set_priority_parameters {
   m_object = new c_object_reference();
   m_priority = 0;
-
-
 
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
@@ -171,18 +146,13 @@ export class s_action_navpoint_set_priority_parameters {
 
   encode(bitstream: c_bitstream_writer): void {
     this.m_object.encode(bitstream);
-            bitstream.write_integer(this.m_priority, 2);
+    bitstream.write_integer(this.m_priority, 2);
   }
-
-
-
 }
 
 export class s_action_navpoint_set_timer_parameters {
   m_object = new c_object_reference();
   m_timer_index = 0;
-
-
 
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
@@ -191,19 +161,14 @@ export class s_action_navpoint_set_timer_parameters {
 
   encode(bitstream: c_bitstream_writer): void {
     this.m_object.encode(bitstream);
-            bitstream.write_index(this.m_timer_index, 4, 2);
+    bitstream.write_index(this.m_timer_index, 4, 2);
   }
-
-
-
 }
 
 export class s_action_navpoint_set_visible_range_parameters {
   m_object = new c_object_reference();
   m_variable_1 = new c_custom_variable_reference();
   m_variable_2 = new c_custom_variable_reference();
-
-
 
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
@@ -213,20 +178,15 @@ export class s_action_navpoint_set_visible_range_parameters {
 
   encode(bitstream: c_bitstream_writer): void {
     this.m_object.encode(bitstream);
-            this.m_variable_1.encode(bitstream);
-            this.m_variable_2.encode(bitstream);
+    this.m_variable_1.encode(bitstream);
+    this.m_variable_2.encode(bitstream);
   }
-
-
-
 }
 
 export class s_action_set_parameters {
   m_variable_1 = new s_variant_variable();
   m_variable_2 = new s_variant_variable();
   m_operation = 0;
-
-
 
   decode(bitstream: c_bitstream_reader): void {
     this.m_variable_1.decode(bitstream);
@@ -236,12 +196,9 @@ export class s_action_set_parameters {
 
   encode(bitstream: c_bitstream_writer): void {
     this.m_variable_1.encode(bitstream);
-            this.m_variable_2.encode(bitstream);
-            bitstream.write_integer(this.m_operation, 4);
+    this.m_variable_2.encode(bitstream);
+    bitstream.write_integer(this.m_operation, 4);
   }
-
-
-
 }
 
 export class s_action_set_boundary_parameters {
@@ -251,8 +208,6 @@ export class s_action_set_boundary_parameters {
   m_variable_2?: c_custom_variable_reference;
   m_variable_3?: c_custom_variable_reference;
   m_variable_4?: c_custom_variable_reference;
-
-
 
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
@@ -319,15 +274,11 @@ export class s_action_set_boundary_parameters {
         break;
     }
   }
-
-
 }
 
 export class s_action_apply_player_traits_parameters {
   m_player = new c_player_reference();
   m_trait_index = 0;
-
-
 
   decode(bitstream: c_bitstream_reader): void {
     this.m_player.decode(bitstream);
@@ -336,18 +287,13 @@ export class s_action_apply_player_traits_parameters {
 
   encode(bitstream: c_bitstream_writer): void {
     this.m_player.encode(bitstream);
-            bitstream.write_integer(this.m_trait_index, 4);
+    bitstream.write_integer(this.m_trait_index, 4);
   }
-
-
-
 }
 
 export class s_action_set_fireteam_respawn_filter_parameters {
   m_object = new c_object_reference();
   m_fireteam_filter = 0;
-
-
 
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
@@ -356,19 +302,14 @@ export class s_action_set_fireteam_respawn_filter_parameters {
 
   encode(bitstream: c_bitstream_writer): void {
     this.m_object.encode(bitstream);
-            bitstream.write_integer(this.m_fireteam_filter, 8);
+    bitstream.write_integer(this.m_fireteam_filter, 8);
   }
-
-
-
 }
 
 export class s_action_set_progress_bar_parameters {
   m_object = new c_object_reference();
   m_player_filter_modifier = new c_player_filter_modifier();
   m_timer_index = 0;
-
-
 
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
@@ -378,20 +319,15 @@ export class s_action_set_progress_bar_parameters {
 
   encode(bitstream: c_bitstream_writer): void {
     this.m_object.encode(bitstream);
-            this.m_player_filter_modifier.encode(bitstream);
-            bitstream.write_index(this.m_timer_index, 4, 2);
+    this.m_player_filter_modifier.encode(bitstream);
+    bitstream.write_index(this.m_timer_index, 4, 2);
   }
-
-
-
 }
 
 export class s_action_hud_post_message_parameters {
   m_target = new s_team_or_player_target();
   m_sound_index = 0;
   m_string = new c_dynamic_string();
-
-
 
   decode(bitstream: c_bitstream_reader): void {
     this.m_target.decode(bitstream);
@@ -401,19 +337,14 @@ export class s_action_hud_post_message_parameters {
 
   encode(bitstream: c_bitstream_writer): void {
     this.m_target.encode(bitstream);
-            bitstream.write_integer(this.m_sound_index, 7);
-            this.m_string.encode(bitstream);
+    bitstream.write_integer(this.m_sound_index, 7);
+    this.m_string.encode(bitstream);
   }
-
-
-
 }
 
 export class s_action_timer_set_rate_parameters {
   m_timer = new c_custom_timer_reference();
   m_rate = 0;
-
-
 
   decode(bitstream: c_bitstream_reader): void {
     this.m_timer.decode(bitstream);
@@ -422,17 +353,12 @@ export class s_action_timer_set_rate_parameters {
 
   encode(bitstream: c_bitstream_writer): void {
     this.m_timer.encode(bitstream);
-            bitstream.write_integer(this.m_rate, 5);
+    bitstream.write_integer(this.m_rate, 5);
   }
-
-
-
 }
 
 export class s_action_for_each_parameters {
   m_trigger_index = 0;
-
-
 
   decode(bitstream: c_bitstream_reader): void {
     this.m_trigger_index = bitstream.read_integer("trigger-index", 9);
@@ -441,16 +367,11 @@ export class s_action_for_each_parameters {
   encode(bitstream: c_bitstream_writer): void {
     bitstream.write_integer(this.m_trigger_index, 9);
   }
-
-
-
 }
 
 export class s_action_object_destroy_parameters {
   m_object = new c_object_reference();
   m_no_statistics = false;
-
-
 
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
@@ -459,11 +380,8 @@ export class s_action_object_destroy_parameters {
 
   encode(bitstream: c_bitstream_writer): void {
     this.m_object.encode(bitstream);
-            bitstream.write_bool(this.m_no_statistics);
+    bitstream.write_bool(this.m_no_statistics);
   }
-
-
-
 }
 
 export class s_action_object_attach_parameters {
@@ -471,8 +389,6 @@ export class s_action_object_attach_parameters {
   m_object_2 = new c_object_reference();
   m_offset = 0;
   m_absolute_orientation = false;
-
-
 
   decode(bitstream: c_bitstream_reader): void {
     this.m_object_1.decode(bitstream);
@@ -483,21 +399,16 @@ export class s_action_object_attach_parameters {
 
   encode(bitstream: c_bitstream_writer): void {
     this.m_object_1.encode(bitstream);
-            this.m_object_2.encode(bitstream);
-            bitstream.write_integer(this.m_offset, 24);
-            bitstream.write_bool(this.m_absolute_orientation);
+    this.m_object_2.encode(bitstream);
+    bitstream.write_integer(this.m_offset, 24);
+    bitstream.write_bool(this.m_absolute_orientation);
   }
-
-
-
 }
 
 export class s_action_player_adjust_money_parameters {
   m_player = new c_player_reference();
   m_math_operation = 0;
   m_variable = new c_custom_variable_reference();
-
-
 
   decode(bitstream: c_bitstream_reader): void {
     this.m_player.decode(bitstream);
@@ -507,20 +418,15 @@ export class s_action_player_adjust_money_parameters {
 
   encode(bitstream: c_bitstream_writer): void {
     this.m_player.encode(bitstream);
-            bitstream.write_integer(this.m_math_operation, 4);
-            this.m_variable.encode(bitstream);
+    bitstream.write_integer(this.m_math_operation, 4);
+    this.m_variable.encode(bitstream);
   }
-
-
-
 }
 
 export class s_action_player_enable_purchases_parameters {
   m_player = new c_player_reference();
   m_variable = new c_custom_variable_reference();
   m_mode = 0;
-
-
 
   decode(bitstream: c_bitstream_reader): void {
     this.m_player.decode(bitstream);
@@ -530,42 +436,32 @@ export class s_action_player_enable_purchases_parameters {
 
   encode(bitstream: c_bitstream_writer): void {
     this.m_player.encode(bitstream);
-            this.m_variable.encode(bitstream);
-            bitstream.write_integer(this.m_mode, 5);
+    this.m_variable.encode(bitstream);
+    bitstream.write_integer(this.m_mode, 5);
   }
-
-
-
 }
 
 export class s_action_weapon_set_pickup_priority_parameters {
   m_object = new c_object_reference();
   m_weapon_pickup_priority = 0;
 
-
-
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
     this.m_weapon_pickup_priority = bitstream.read_integer(
       "weapon-pickup-priority",
-      2,
+      2
     );
   }
 
   encode(bitstream: c_bitstream_writer): void {
     this.m_object.encode(bitstream);
-            bitstream.write_integer(this.m_weapon_pickup_priority, 2);
+    bitstream.write_integer(this.m_weapon_pickup_priority, 2);
   }
-
-
-
 }
 
 export class s_action_hud_widget_text_base {
   m_widget_index = 0;
   m_string = new c_dynamic_string();
-
-
 
   decode(bitstream: c_bitstream_reader): void {
     this.m_widget_index = bitstream.read_index("widget-index", 4, 2);
@@ -574,11 +470,8 @@ export class s_action_hud_widget_text_base {
 
   encode(bitstream: c_bitstream_writer): void {
     bitstream.write_index(this.m_widget_index, 4, 2);
-            this.m_string.encode(bitstream);
+    this.m_string.encode(bitstream);
   }
-
-
-
 }
 
 export class c_megalogamengine_hud_meter_input {
@@ -586,8 +479,6 @@ export class c_megalogamengine_hud_meter_input {
   m_variable_1?: c_custom_variable_reference;
   m_variable_2?: c_custom_variable_reference;
   m_timer?: c_custom_timer_reference;
-
-
 
   decode(bitstream: c_bitstream_reader): void {
     this.m_type = bitstream.read_integer("type", 2);
@@ -625,15 +516,11 @@ export class c_megalogamengine_hud_meter_input {
         break;
     }
   }
-
-
 }
 
 export class s_action_hud_widget_set_meter_parameters {
   m_widget_index = 0;
   m_meter_input = new c_megalogamengine_hud_meter_input();
-
-
 
   decode(bitstream: c_bitstream_reader): void {
     this.m_widget_index = bitstream.read_index("widget-index", 4, 2);
@@ -642,18 +529,13 @@ export class s_action_hud_widget_set_meter_parameters {
 
   encode(bitstream: c_bitstream_writer): void {
     bitstream.write_index(this.m_widget_index, 4, 2);
-            this.m_meter_input.encode(bitstream);
+    this.m_meter_input.encode(bitstream);
   }
-
-
-
 }
 
 export class s_action_hud_widget_set_icon_parameters {
   m_widget_index = 0;
   m_icon_index = 0;
-
-
 
   decode(bitstream: c_bitstream_reader): void {
     this.m_widget_index = bitstream.read_index("widget-index", 4, 2);
@@ -662,19 +544,14 @@ export class s_action_hud_widget_set_icon_parameters {
 
   encode(bitstream: c_bitstream_writer): void {
     bitstream.write_index(this.m_widget_index, 4, 2);
-            bitstream.write_index(this.m_icon_index, 64, 6);
+    bitstream.write_index(this.m_icon_index, 64, 6);
   }
-
-
-
 }
 
 export class s_action_hud_widget_set_visibility_parameters {
   m_widget_index = 0;
   m_player = new c_player_reference();
   m_visible = false;
-
-
 
   decode(bitstream: c_bitstream_reader): void {
     this.m_widget_index = bitstream.read_index("widget-index", 4, 2);
@@ -684,20 +561,15 @@ export class s_action_hud_widget_set_visibility_parameters {
 
   encode(bitstream: c_bitstream_writer): void {
     bitstream.write_index(this.m_widget_index, 4, 2);
-            this.m_player.encode(bitstream);
-            bitstream.write_bool(this.m_visible);
+    this.m_player.encode(bitstream);
+    bitstream.write_bool(this.m_visible);
   }
-
-
-
 }
 
 export class s_action_play_sound_parameters {
   m_sound_index = 0;
   m_immediate = false;
   m_target = new s_team_or_player_target();
-
-
 
   decode(bitstream: c_bitstream_reader): void {
     this.m_sound_index = bitstream.read_integer("sound-index", 7);
@@ -707,19 +579,14 @@ export class s_action_play_sound_parameters {
 
   encode(bitstream: c_bitstream_writer): void {
     bitstream.write_integer(this.m_sound_index, 7);
-            bitstream.write_bool(this.m_immediate);
-            this.m_target.encode(bitstream);
+    bitstream.write_bool(this.m_immediate);
+    this.m_target.encode(bitstream);
   }
-
-
-
 }
 
 export class s_action_player_set_objective_allegiance_icon_parameters {
   m_player = new c_player_reference();
   m_icon_index = 0;
-
-
 
   decode(bitstream: c_bitstream_reader): void {
     this.m_player.decode(bitstream);
@@ -728,18 +595,13 @@ export class s_action_player_set_objective_allegiance_icon_parameters {
 
   encode(bitstream: c_bitstream_writer): void {
     this.m_player.encode(bitstream);
-            bitstream.write_index(this.m_icon_index, 128, 7);
+    bitstream.write_index(this.m_icon_index, 128, 7);
   }
-
-
-
 }
 
 export class s_action_team_set_coop_spawning_parameters {
   m_team = new c_team_reference();
   m_enabled = false;
-
-
 
   decode(bitstream: c_bitstream_reader): void {
     this.m_team.decode(bitstream);
@@ -748,19 +610,14 @@ export class s_action_team_set_coop_spawning_parameters {
 
   encode(bitstream: c_bitstream_writer): void {
     this.m_team.encode(bitstream);
-            bitstream.write_bool(this.m_enabled);
+    bitstream.write_bool(this.m_enabled);
   }
-
-
-
 }
 
 export class s_action_vitality_adjustment_parameters {
   m_object = new c_object_reference();
   m_operation = 0;
   m_variable = new c_custom_variable_reference();
-
-
 
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
@@ -770,20 +627,15 @@ export class s_action_vitality_adjustment_parameters {
 
   encode(bitstream: c_bitstream_writer): void {
     this.m_object.encode(bitstream);
-            bitstream.write_integer(this.m_operation, 4);
-            this.m_variable.encode(bitstream);
+    bitstream.write_integer(this.m_operation, 4);
+    this.m_variable.encode(bitstream);
   }
-
-
-
 }
 
 export class s_action_object_get_distance_parameters {
   m_object_1 = new c_object_reference();
   m_object_2 = new c_object_reference();
   m_variable = new c_custom_variable_reference();
-
-
 
   decode(bitstream: c_bitstream_reader): void {
     this.m_object_1.decode(bitstream);
@@ -793,19 +645,14 @@ export class s_action_object_get_distance_parameters {
 
   encode(bitstream: c_bitstream_writer): void {
     this.m_object_1.encode(bitstream);
-            this.m_object_2.encode(bitstream);
-            this.m_variable.encode(bitstream);
+    this.m_object_2.encode(bitstream);
+    this.m_variable.encode(bitstream);
   }
-
-
-
 }
 
 export class s_action_player_set_requisition_palette_parameters {
   m_player = new c_player_reference();
   m_new_palette = 0;
-
-
 
   decode(bitstream: c_bitstream_reader): void {
     this.m_player.decode(bitstream);
@@ -814,11 +661,8 @@ export class s_action_player_set_requisition_palette_parameters {
 
   encode(bitstream: c_bitstream_writer): void {
     this.m_player.encode(bitstream);
-            bitstream.write_integer(this.m_new_palette, 4);
+    bitstream.write_integer(this.m_new_palette, 4);
   }
-
-
-
 }
 
 export class s_action_adjust_grenades_parameters {
@@ -826,8 +670,6 @@ export class s_action_adjust_grenades_parameters {
   m_grenade_type = 0;
   m_math_operation = 0;
   m_variable = new c_custom_variable_reference();
-
-
 
   decode(bitstream: c_bitstream_reader): void {
     this.m_player.decode(bitstream);
@@ -838,21 +680,16 @@ export class s_action_adjust_grenades_parameters {
 
   encode(bitstream: c_bitstream_writer): void {
     this.m_player.encode(bitstream);
-            bitstream.write_integer(this.m_grenade_type, 1);
-            bitstream.write_integer(this.m_math_operation, 4);
-            this.m_variable.encode(bitstream);
+    bitstream.write_integer(this.m_grenade_type, 1);
+    bitstream.write_integer(this.m_math_operation, 4);
+    this.m_variable.encode(bitstream);
   }
-
-
-
 }
 
 export class s_action_submit_incident_parameters {
   m_incident_id = 0;
   m_target_1 = new s_team_or_player_target();
   m_target_2 = new s_team_or_player_target();
-
-
 
   decode(bitstream: c_bitstream_reader): void {
     this.m_incident_id = bitstream.read_integer("incident-id", 10);
@@ -862,12 +699,9 @@ export class s_action_submit_incident_parameters {
 
   encode(bitstream: c_bitstream_writer): void {
     bitstream.write_integer(this.m_incident_id, 10);
-            this.m_target_1.encode(bitstream);
-            this.m_target_2.encode(bitstream);
+    this.m_target_1.encode(bitstream);
+    this.m_target_2.encode(bitstream);
   }
-
-
-
 }
 
 export class s_action_submit_incident_with_custom_value_parameters {
@@ -876,8 +710,6 @@ export class s_action_submit_incident_with_custom_value_parameters {
   m_target_2 = new s_team_or_player_target();
   m_variable = new c_custom_variable_reference();
 
-
-
   decode(bitstream: c_bitstream_reader): void {
     this.m_incident_id = bitstream.read_integer("incident-id", 10);
     this.m_target_1.decode(bitstream);
@@ -887,36 +719,28 @@ export class s_action_submit_incident_with_custom_value_parameters {
 
   encode(bitstream: c_bitstream_writer): void {
     bitstream.write_integer(this.m_incident_id, 10);
-            this.m_target_1.encode(bitstream);
-            this.m_target_2.encode(bitstream);
-            this.m_variable.encode(bitstream);
+    this.m_target_1.encode(bitstream);
+    this.m_target_2.encode(bitstream);
+    this.m_variable.encode(bitstream);
   }
-
-
-
 }
 
 export class s_action_set_loadout_palette_parameters {
   m_target = new s_team_or_player_target();
   m_loadout_palette_index = 0;
 
-
-
   decode(bitstream: c_bitstream_reader): void {
     this.m_target.decode(bitstream);
     this.m_loadout_palette_index = bitstream.read_integer(
       "loadout-palette-index",
-      3,
+      3
     );
   }
 
   encode(bitstream: c_bitstream_writer): void {
     this.m_target.encode(bitstream);
-            bitstream.write_integer(this.m_loadout_palette_index, 3);
+    bitstream.write_integer(this.m_loadout_palette_index, 3);
   }
-
-
-
 }
 
 export class s_action_device_set_position_track_parameters {
@@ -924,22 +748,20 @@ export class s_action_device_set_position_track_parameters {
   m_animation_name_index = 0;
   m_variable = new c_custom_variable_reference();
 
-
-
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
-    this.m_animation_name_index = bitstream.read_integer("animation-name-index", 8);
+    this.m_animation_name_index = bitstream.read_integer(
+      "animation-name-index",
+      8
+    );
     this.m_variable.decode(bitstream);
   }
 
   encode(bitstream: c_bitstream_writer): void {
     this.m_object.encode(bitstream);
-            bitstream.write_integer(this.m_animation_name_index, 8);
-            this.m_variable.encode(bitstream);
+    bitstream.write_integer(this.m_animation_name_index, 8);
+    this.m_variable.encode(bitstream);
   }
-
-
-
 }
 
 export class s_action_device_animate_position_parameters {
@@ -948,8 +770,6 @@ export class s_action_device_animate_position_parameters {
   m_variable_2 = new c_custom_variable_reference();
   m_variable_3 = new c_custom_variable_reference();
   m_variable_4 = new c_custom_variable_reference();
-
-
 
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
@@ -961,22 +781,17 @@ export class s_action_device_animate_position_parameters {
 
   encode(bitstream: c_bitstream_writer): void {
     this.m_object.encode(bitstream);
-            this.m_variable_1.encode(bitstream);
-            this.m_variable_2.encode(bitstream);
-            this.m_variable_3.encode(bitstream);
-            this.m_variable_4.encode(bitstream);
+    this.m_variable_1.encode(bitstream);
+    this.m_variable_2.encode(bitstream);
+    this.m_variable_3.encode(bitstream);
+    this.m_variable_4.encode(bitstream);
   }
-
-
-
 }
 
 export class s_action_player_get_weapon_parameters {
   m_player = new c_player_reference();
   m_primary = false;
   m_object = new c_object_reference();
-
-
 
   decode(bitstream: c_bitstream_reader): void {
     this.m_player.decode(bitstream);
@@ -986,12 +801,9 @@ export class s_action_player_get_weapon_parameters {
 
   encode(bitstream: c_bitstream_writer): void {
     this.m_player.encode(bitstream);
-            bitstream.write_bool(this.m_primary);
-            this.m_object.encode(bitstream);
+    bitstream.write_bool(this.m_primary);
+    this.m_object.encode(bitstream);
   }
-
-
-
 }
 
 export class s_action_create_tunnel_parameters {
@@ -1000,8 +812,6 @@ export class s_action_create_tunnel_parameters {
   m_object_type = new c_object_reference();
   m_variable = new c_custom_variable_reference();
   m_object_3 = new c_player_reference();
-
-
 
   decode(bitstream: c_bitstream_reader): void {
     this.m_object_1.decode(bitstream);
@@ -1013,21 +823,16 @@ export class s_action_create_tunnel_parameters {
 
   encode(bitstream: c_bitstream_writer): void {
     this.m_object_1.encode(bitstream);
-            this.m_object_2.encode(bitstream);
-            this.m_object_type.encode(bitstream);
-            this.m_variable.encode(bitstream);
-            this.m_object_3.encode(bitstream);
+    this.m_object_2.encode(bitstream);
+    this.m_object_type.encode(bitstream);
+    this.m_variable.encode(bitstream);
+    this.m_object_3.encode(bitstream);
   }
-
-
-
 }
 
 export class s_action_player_set_coop_spawning_parameters {
   m_player = new c_player_reference();
   m_enabled = false;
-
-
 
   decode(bitstream: c_bitstream_reader): void {
     this.m_player.decode(bitstream);
@@ -1036,19 +841,14 @@ export class s_action_player_set_coop_spawning_parameters {
 
   encode(bitstream: c_bitstream_writer): void {
     this.m_player.encode(bitstream);
-            bitstream.write_bool(this.m_enabled);
+    bitstream.write_bool(this.m_enabled);
   }
-
-
-
 }
 
 export class s_action_object_set_orientation_parameters {
   m_object_1 = new c_object_reference();
   m_object_2 = new c_object_reference();
   m_absolute_orientation = false;
-
-
 
   decode(bitstream: c_bitstream_reader): void {
     this.m_object_1.decode(bitstream);
@@ -1058,20 +858,15 @@ export class s_action_object_set_orientation_parameters {
 
   encode(bitstream: c_bitstream_writer): void {
     this.m_object_1.encode(bitstream);
-            this.m_object_2.encode(bitstream);
-            bitstream.write_bool(this.m_absolute_orientation);
+    this.m_object_2.encode(bitstream);
+    bitstream.write_bool(this.m_absolute_orientation);
   }
-
-
-
 }
 
 export class s_action_object_face_object_parameters {
   m_object_1 = new c_object_reference();
   m_object_2 = new c_object_reference();
   m_offset = 0;
-
-
 
   decode(bitstream: c_bitstream_reader): void {
     this.m_object_1.decode(bitstream);
@@ -1081,20 +876,15 @@ export class s_action_object_face_object_parameters {
 
   encode(bitstream: c_bitstream_writer): void {
     this.m_object_1.encode(bitstream);
-            this.m_object_2.encode(bitstream);
-            bitstream.write_integer(this.m_offset, 24);
+    this.m_object_2.encode(bitstream);
+    bitstream.write_integer(this.m_offset, 24);
   }
-
-
-
 }
 
 export class s_action_biped_give_weapon_parameters {
   m_object = new c_object_reference();
   m_object_type = new c_object_type_reference();
   m_mode = 0;
-
-
 
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
@@ -1104,20 +894,15 @@ export class s_action_biped_give_weapon_parameters {
 
   encode(bitstream: c_bitstream_writer): void {
     this.m_object.encode(bitstream);
-            this.m_object_type.encode(bitstream);
-            bitstream.write_integer(this.m_mode, 2);
+    this.m_object_type.encode(bitstream);
+    bitstream.write_integer(this.m_mode, 2);
   }
-
-
-
 }
 
 export class s_action_biped_drop_weapon_parameters {
   m_object = new c_object_reference();
   m_primary = false;
   m_delete_on_drop = false;
-
-
 
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
@@ -1127,20 +912,15 @@ export class s_action_biped_drop_weapon_parameters {
 
   encode(bitstream: c_bitstream_writer): void {
     this.m_object.encode(bitstream);
-            bitstream.write_bool(this.m_primary);
-            bitstream.write_bool(this.m_delete_on_drop);
+    bitstream.write_bool(this.m_primary);
+    bitstream.write_bool(this.m_delete_on_drop);
   }
-
-
-
 }
 
 export class s_action_get_random_object_parameters {
   m_object_1 = new c_object_reference();
   m_object_2 = new c_object_reference();
   m_filter_index = 0;
-
-
 
   decode(bitstream: c_bitstream_reader): void {
     this.m_object_1.decode(bitstream);
@@ -1150,19 +930,14 @@ export class s_action_get_random_object_parameters {
 
   encode(bitstream: c_bitstream_writer): void {
     this.m_object_1.encode(bitstream);
-            this.m_object_2.encode(bitstream);
-            bitstream.write_index(this.m_filter_index, 16, 4);
+    this.m_object_2.encode(bitstream);
+    bitstream.write_index(this.m_filter_index, 16, 4);
   }
-
-
-
 }
 
 export class s_action_boundary_set_player_color_parameters {
   m_object = new c_object_reference();
   m_player_index = 0;
-
-
 
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
@@ -1171,11 +946,8 @@ export class s_action_boundary_set_player_color_parameters {
 
   encode(bitstream: c_bitstream_writer): void {
     this.m_object.encode(bitstream);
-            bitstream.write_index(this.m_player_index, 4, 2);
+    bitstream.write_index(this.m_player_index, 4, 2);
   }
-
-
-
 }
 
 export class c_action {
@@ -1235,8 +1007,6 @@ export class c_action {
   m_get_random_object_parameters?: s_action_get_random_object_parameters;
   m_boundary_set_player_color_parameters?: s_action_boundary_set_player_color_parameters;
   m_player_traits?: c_player_traits;
-
-
 
   decode(bitstream: c_bitstream_reader): void {
     this.m_type = bitstream.read_integer("action-type", 7);
@@ -1311,13 +1081,15 @@ export class c_action {
         break;
       }
       case 11: {
-        const applyPlayerTraitsParameters = new s_action_apply_player_traits_parameters();
+        const applyPlayerTraitsParameters =
+          new s_action_apply_player_traits_parameters();
         applyPlayerTraitsParameters.decode(bitstream);
         this.m_apply_player_traits_parameters = applyPlayerTraitsParameters;
         break;
       }
       case 14: {
-        const parameters = new s_action_set_fireteam_respawn_filter_parameters();
+        const parameters =
+          new s_action_set_fireteam_respawn_filter_parameters();
         parameters.decode(bitstream);
         this.m_set_fireteam_respawn_filter_parameters = parameters;
         break;
@@ -1533,7 +1305,8 @@ export class c_action {
         break;
       }
       case 58: {
-        const parameters = new s_action_player_set_objective_allegiance_icon_parameters();
+        const parameters =
+          new s_action_player_set_objective_allegiance_icon_parameters();
         parameters.decode(bitstream);
         this.m_player_set_objective_allegiance_icon_parameters = parameters;
         break;
@@ -1569,7 +1342,8 @@ export class c_action {
         break;
       }
       case 69: {
-        const parameters = new s_action_player_set_requisition_palette_parameters();
+        const parameters =
+          new s_action_player_set_requisition_palette_parameters();
         parameters.decode(bitstream);
         this.m_player_set_requisition_palette_parameters = parameters;
         break;
@@ -1587,7 +1361,8 @@ export class c_action {
         break;
       }
       case 76: {
-        const parameters = new s_action_submit_incident_with_custom_value_parameters();
+        const parameters =
+          new s_action_submit_incident_with_custom_value_parameters();
         parameters.decode(bitstream);
         this.m_submit_incident_with_custom_value_parameters = parameters;
         break;
@@ -1883,7 +1658,9 @@ export class c_action {
         break;
       }
       case 58: {
-        this.m_player_set_objective_allegiance_icon_parameters!.encode(bitstream);
+        this.m_player_set_objective_allegiance_icon_parameters!.encode(
+          bitstream
+        );
         break;
       }
       case 59: {
@@ -1983,8 +1760,4 @@ export class c_action {
         break;
     }
   }
-  
-  
-
-
 }

@@ -3,13 +3,6 @@
     "target": "ES2022",
     "module": "ESNext",
     "moduleResolution": "bundler",
-    "baseUrl": ".",
-    "paths": {
-      "@Blam-Network/blf/bitstream": ["src/bitstream/index.ts"],
-      "@Blam-Network/blf/haloreach/*": ["src/versions/haloreach/*"],
-      "@Blam-Network/blf/halo3/*": ["src/versions/halo3/*"],
-      "@Blam-Network/blf/halo3odst/*": ["src/versions/halo3odst/*"]
-    },
     "esModuleInterop": true,
     "types": ["node"],
     "strict": true,
