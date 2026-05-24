@@ -25,7 +25,7 @@ function walk(dir) {
     const target = relPath.startsWith(".") ? relPath : `./${relPath}`;
 
     const next = content.replace(
-      /from ["'](?:@Blam-Network\/blf\/bitstream|\.[^"']*bitstream)["']/g,
+      /from ["'](?:@blamnetwork\/blf\/bitstream|\.[^"']*bitstream)["']/g,
       `from "${target}"`
     );
 

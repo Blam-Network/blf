@@ -1,9 +1,9 @@
-import { search_for_chunk } from "@Blam-Network/blf";
+import { readFileSync } from "node:fs";
+import { search_for_chunk } from "@blamnetwork/blf";
 import {
   s_blf_chunk_content_header,
   s_blf_chunk_game_variant,
-} from "@Blam-Network/blf/haloreach/v12065_11_08_24_1738_tu1actual";
-import { readFileSync } from "node:fs";
+} from "@blamnetwork/blf/haloreach/v12065_11_08_24_1738_tu1actual";
 import { describe, expect, it } from "vitest";
 import { reach_12065_oddball_fixture } from "./fixtures/paths";
 import { deepSnapshot } from "./lib/snapshot";

@@ -18,8 +18,8 @@ export default defineConfig({
   resolve: {
     alias: [
       {
-        // @Blam-Network/blf/haloreach/<build> → src/versions/haloreach/<build>.ts
-        find: /^@Blam-Network\/blf\/(haloreach|halo3|halo3odst)\/(.+)$/,
+        // @blamnetwork/blf/haloreach/<build> → src/versions/haloreach/<build>.ts
+        find: /^@blamnetwork\/blf\/(haloreach|halo3|halo3odst)\/(.+)$/,
         replacement: `${versionsRoot}/$1/$2.ts`,
       },
     ],

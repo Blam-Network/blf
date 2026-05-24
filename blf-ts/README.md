@@ -1,6 +1,6 @@
-# @Blam-Network/blf
+# @blamnetwork/blf
 
-[![npm](https://img.shields.io/npm/v/@Blam-Network/blf)](https://www.npmjs.com/package/@Blam-Network/blf)
+[![npm](https://img.shields.io/npm/v/@blamnetwork/blf)](https://www.npmjs.com/package/@blamnetwork/blf)
 
 TypeScript library for reading and writing Halo **BLF** (binary layout file) chunks — Reach, Halo 3, and Halo 3: ODST builds.
 
@@ -17,7 +17,7 @@ Built on [@craftycodie/cstruct](https://www.npmjs.com/package/@craftycodie/cstru
 ## Install
 
 ```bash
-npm install @Blam-Network/blf @craftycodie/cstruct
+npm install @blamnetwork/blf @craftycodie/cstruct
 ```
 
 Consumers import from published **`dist/`** exports only. Decorators are lowered at build time — **you do not need `experimentalDecorators`** to use exported chunk classes.
@@ -28,11 +28,11 @@ Consumers import from published **`dist/`** exports only. Decorators are lowered
 
 ```ts
 import { readFileSync } from "node:fs";
-import { search_for_chunk } from "@Blam-Network/blf";
+import { search_for_chunk } from "@blamnetwork/blf";
 import {
   s_blf_chunk_content_header,
   s_blf_chunk_game_variant,
-} from "@Blam-Network/blf/haloreach/v12065_11_08_24_1738_tu1actual";
+} from "@blamnetwork/blf/haloreach/v12065_11_08_24_1738_tu1actual";
 
 const file = new Uint8Array(readFileSync("map.blf"));
 
@@ -46,7 +46,7 @@ search_for_chunk(file, mpvr, "big");
 ### Bitstream (root export only)
 
 ```ts
-import { bitstream } from "@Blam-Network/blf";
+import { bitstream } from "@blamnetwork/blf";
 
 const reader = new bitstream.BitstreamReader(buffer, "little");
 const mode = reader.read_enum("game-mode", 4, e_game_mode);
@@ -58,9 +58,9 @@ Each implementation build is a single module:
 
 | Import | Build |
 |--------|--------|
-| `@Blam-Network/blf/haloreach/v12065_11_08_24_1738_tu1actual` | Reach TU1 |
-| `@Blam-Network/blf/halo3/v12070_08_09_05_2031_halo3_ship` | Halo 3 ship |
-| `@Blam-Network/blf/halo3odst/v13895_09_04_27_2201_atlas_release` | ODST Atlas |
+| `@blamnetwork/blf/haloreach/v12065_11_08_24_1738_tu1actual` | Reach TU1 |
+| `@blamnetwork/blf/halo3/v12070_08_09_05_2031_halo3_ship` | Halo 3 ship |
+| `@blamnetwork/blf/halo3odst/v13895_09_04_27_2201_atlas_release` | ODST Atlas |
 
 Add a build by creating `src/versions/<game>/<build_id>.ts` and re-exporting its chunks — wildcard `exports` in `package.json` pick it up automatically.
 

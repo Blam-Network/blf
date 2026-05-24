@@ -60,13 +60,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Blam-Network/blf.git",
+    "url": "git+https://github.com/blamnetwork/blf.git",
     "directory": "blf-ts"
   },
   "bugs": {
-    "url": "https://github.com/Blam-Network/blf/issues"
+    "url": "https://github.com/blamnetwork/blf/issues"
   },
-  "homepage": "https://github.com/Blam-Network/blf/tree/main/blf-ts#readme",
+  "homepage": "https://github.com/blamnetwork/blf/tree/main/blf-ts#readme",
   "keywords": [
     "blf",
     "halo",

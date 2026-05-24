@@ -2,10 +2,10 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@Blam-Network/blf": ["./src/index.ts"],
-      "@Blam-Network/blf/haloreach/*": ["./src/versions/haloreach/*"],
-      "@Blam-Network/blf/halo3/*": ["./src/versions/halo3/*"],
-      "@Blam-Network/blf/halo3odst/*": ["./src/versions/halo3odst/*"]
+      "@blamnetwork/blf": ["./src/index.ts"],
+      "@blamnetwork/blf/haloreach/*": ["./src/versions/haloreach/*"],
+      "@blamnetwork/blf/halo3/*": ["./src/versions/halo3/*"],
+      "@blamnetwork/blf/halo3odst/*": ["./src/versions/halo3odst/*"]
     },
     "target": "ES2022",
     "module": "ESNext",
