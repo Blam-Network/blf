@@ -40,6 +40,20 @@ export default defineConfig({
   base: "/blf/",
   cleanUrls: true,
   appearance: "force-dark",
+  head: [
+    ["link", { rel: "preconnect", href: "https://fonts.googleapis.com" }],
+    [
+      "link",
+      { rel: "preconnect", href: "https://fonts.gstatic.com", crossorigin: "" },
+    ],
+    [
+      "link",
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Overpass:wght@400;600;700&display=swap",
+      },
+    ],
+  ],
   markdown: {
     theme: {
       light: "github-light",
@@ -47,7 +61,10 @@ export default defineConfig({
     },
   },
   themeConfig: {
+    siteTitle:
+      '<span class="blf-site-title"><span class="blf-scope">@blamnetwork/</span><span class="blf-name">blf</span></span>',
     nav: [
+      { text: "Blam Network", link: "https://blam.network" },
       { text: "Guide", link: "/guide/quick-start" },
       {
         text: "npm",

@@ -1,0 +1,47 @@
+/* Fixedsys Excelsior — open replacement for classic Fixedsys */
+@font-face {
+  font-family: "Fixedsys";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  -webkit-font-smoothing: none;
+  -moz-osx-font-smoothing: unset;
+  font-smooth: never;
+  src: url("/blf/fonts/fixedsys-excelsior.woff2") format("woff2");
+}
+
+/* Conduit ITC — uses locally installed font when available (e.g. Halo tooling) */
+@font-face {
+  font-family: "Conduit ITC";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src:
+    local("Conduit ITC Medium"),
+    local("ConduitITC-Medium"),
+    local("Conduit Medium"),
+    local("ConduitSCITC-Medium"),
+    local("Conduit ITC");
+}
+
+@font-face {
+  font-family: "Conduit ITC";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src:
+    local("Conduit ITC Bold"),
+    local("ConduitITC-Bold"),
+    local("ConduitSCITC-Bold");
+}
+
+@font-face {
+  font-family: "Conduit ITC";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src:
+    local("Conduit ITC Black"),
+    local("ConduitITC-Black"),
+    local("ConduitSCITC-Black");
+}
