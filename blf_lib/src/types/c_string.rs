@@ -206,17 +206,14 @@ impl<const N: usize> StaticString<N> {
         self.buf[..min(bytes.len(), N - 1)].copy_from_slice(&bytes[..min(bytes.len(), N - 1)]);
     }
 
-    /// Decode as ISO-8859-1 (extended ASCII), matching `read_string_extended_ascii`.
     pub fn get_string(&self) -> BLFLibResult<String> {
-        let null_index = self.buf.iter().position(|c| c == &0u8).unwrap_or(N);
-        Ok(self.buf[0..null_index]
-            .iter()
-            .map(|&b| b as char)
-            .collect())
+        let null_index = self.buf.iter().position(|c|c == &0u8).unwrap_or(N);
+        Ok(String::from_utf8(self.buf.as_slice()[0..null_index].to_vec())?)
     }
 
     pub unsafe fn get_string_unchecked(&self) -> String {
-        self.get_string().unwrap()
+        let null_index = self.buf.iter().position(|c|c == &0u8).unwrap_or(N);
+        String::from_utf8_unchecked(self.buf.as_slice()[0..null_index].to_vec())
     }
 }
 
