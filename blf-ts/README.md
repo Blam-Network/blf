@@ -8,7 +8,7 @@ Built on [@craftycodie/cstruct](https://www.npmjs.com/package/@craftycodie/cstru
 
 ## Features
 
-- Chunk discovery with `search_for_chunk` and `find_chunk`
+- Chunk discovery with `find_chunk` and `search_for_chunk`
 - Per-game **version bundles** (`haloreach/*`, `haloreach_mcc/*`, `halo3/*`, `halo3odst/*`) with chunk classes and blam types for a specific exe build
 - **`@blamnetwork/blf/helpers`** for cross-version Reach gametype conversion (TU1 ↔ MCC)
 - Struct-backed chunks via `CStructBLFChunk` and `@blf.chunk` decorators (compiled away in published `dist/`)
@@ -18,7 +18,7 @@ Built on [@craftycodie/cstruct](https://www.npmjs.com/package/@craftycodie/cstru
 ## Install
 
 ```bash
-npm install @blamnetwork/blf @craftycodie/cstruct
+npm install @blamnetwork/blf
 ```
 
 Consumers import from published **`dist/`** exports only. Decorators are lowered at build time — **you do not need `experimentalDecorators`** to use exported chunk classes.
@@ -29,7 +29,7 @@ Consumers import from published **`dist/`** exports only. Decorators are lowered
 
 ```ts
 import { readFileSync } from "node:fs";
-import { search_for_chunk } from "@blamnetwork/blf";
+import { find_chunk } from "@blamnetwork/blf";
 import {
   s_blf_chunk_content_header,
   s_blf_chunk_game_variant,
@@ -38,10 +38,10 @@ import {
 const file = new Uint8Array(readFileSync("map.blf"));
 
 const chdr = new s_blf_chunk_content_header();
-search_for_chunk(file, chdr, "big");
+find_chunk(file, chdr, "big");
 
 const mpvr = new s_blf_chunk_game_variant();
-search_for_chunk(file, mpvr, "big");
+find_chunk(file, mpvr, "big");
 ```
 
 ### Bitstream (root export only)
@@ -66,13 +66,21 @@ Each implementation build is a single module:
 
 Add a build by creating `src/versions/<game>/<build_id>.ts` and re-exporting its chunks — wildcard `exports` in `package.json` pick it up automatically.
 
+Reach TU1 ↔ MCC gametype conversion: `@blamnetwork/blf/helpers` — see [Converting Reach Gametypes](https://blam-network.github.io/blf/guide/converting-reach-gametypes). Version import paths: [docs](https://blam-network.github.io/blf/guide/versions/).
+
+## Documentation
+
+Full guide: **[blam-network.github.io/blf](https://blam-network.github.io/blf/)** (VitePress, same setup as [cstruct](https://github.com/craftycodie/cstruct)).
+
+From `blf-ts/`: `npm run docs` (dev), `npm run docs:build`.
+
 ## Development
 
 From `blf-ts/`:
 
 ```bash
 npm install
-npm run validate   # lint, test, typecheck
+npm run validate   # lint, test, typecheck, docs build
 npm run build
 npm run release    # bump version, tag, push (CI publishes on tag)
 ```

@@ -1,0 +1,63 @@
+{
+  "bundles": [
+    {
+      "game": "halo3",
+      "buildId": "v12070_08_09_05_2031_halo3_ship",
+      "label": "Halo 3",
+      "buildLabel": "Title Update 2 (Latest)",
+      "importPath": "@blamnetwork/blf/halo3/v12070_08_09_05_2031_halo3_ship",
+      "docLink": "/guide/versions/halo3/v12070_08_09_05_2031_halo3_ship",
+      "chunks": [
+        "s_blf_chunk_compressed_data",
+        "s_blf_chunk_end_of_file",
+        "s_blf_chunk_start_of_file"
+      ]
+    },
+    {
+      "game": "halo3odst",
+      "buildId": "v13895_09_04_27_2201_atlas_release",
+      "label": "Halo 3: ODST",
+      "buildLabel": "Release (Latest)",
+      "importPath": "@blamnetwork/blf/halo3odst/v13895_09_04_27_2201_atlas_release",
+      "docLink": "/guide/versions/halo3odst/v13895_09_04_27_2201_atlas_release",
+      "chunks": [
+        "s_blf_chunk_compressed_data",
+        "s_blf_chunk_end_of_file",
+        "s_blf_chunk_start_of_file"
+      ]
+    },
+    {
+      "game": "haloreach",
+      "buildId": "v12065_11_08_24_1738_tu1actual",
+      "label": "Halo Reach",
+      "buildLabel": "Title Update 1 (Latest)",
+      "importPath": "@blamnetwork/blf/haloreach/v12065_11_08_24_1738_tu1actual",
+      "docLink": "/guide/versions/haloreach/v12065_11_08_24_1738_tu1actual",
+      "chunks": [
+        "s_blf_chunk_author",
+        "s_blf_chunk_compressed_data",
+        "s_blf_chunk_content_header",
+        "s_blf_chunk_end_of_file",
+        "s_blf_chunk_game_variant",
+        "s_blf_chunk_packed_game_variant",
+        "s_blf_chunk_start_of_file"
+      ]
+    },
+    {
+      "game": "haloreach_mcc",
+      "buildId": "v_untracked_25_08_19_1352",
+      "label": "Halo Reach MCC",
+      "buildLabel": "19th Aug 2025 (Latest)",
+      "importPath": "@blamnetwork/blf/haloreach_mcc/v_untracked_25_08_19_1352",
+      "docLink": "/guide/versions/haloreach_mcc/v_untracked_25_08_19_1352",
+      "chunks": [
+        "s_blf_chunk_compressed_data",
+        "s_blf_chunk_content_header",
+        "s_blf_chunk_end_of_file",
+        "s_blf_chunk_game_variant",
+        "s_blf_chunk_packed_game_variant",
+        "s_blf_chunk_start_of_file"
+      ]
+    }
+  ]
+}

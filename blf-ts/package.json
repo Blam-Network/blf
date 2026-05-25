@@ -69,9 +69,15 @@
     "fix": "ultracite fix",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "vitest run",
-    "validate": "npm run check && npm run test && npm run typecheck",
+    "docs:gen": "node scripts/generate-docs-version-exports.mjs",
+    "docs": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs",
+    "validate": "npm run check && npm run test && npm run typecheck && npm run docs:build",
     "release": "node scripts/release.mjs",
-    "prepack": "npm run build"
+    "prepack": "npm run build",
+    "predocs": "npm run docs:gen",
+    "predocs:build": "npm run docs:gen"
   },
   "repository": {
     "type": "git",
@@ -81,7 +87,7 @@
   "bugs": {
     "url": "https://github.com/Blam-Network/blf/issues"
   },
-  "homepage": "https://github.com/Blam-Network/blf/tree/main/blf-ts#readme",
+  "homepage": "https://blam-network.github.io/blf/",
   "keywords": [
     "blf",
     "halo",
@@ -106,6 +112,7 @@
     "typescript": "^5",
     "ultracite": "7.7.0",
     "unplugin-swc": "^1.5.9",
+    "vitepress": "^1.6.4",
     "vitest": "^3.2.4"
   }
 }

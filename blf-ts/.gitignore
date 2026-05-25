@@ -1,3 +1,5 @@
 node_modules/
 dist/
 dist-cjs/
+docs/.vitepress/dist/
+docs/.vitepress/cache/
