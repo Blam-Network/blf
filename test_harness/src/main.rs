@@ -10,29 +10,6 @@ fn main() {
     do_your_thing();
 }
 
-// FINDINGS:
-// - Issue is consistent with blamnet prod, there's a fault in decode, encode or both.
-// - Re-reading a blf_lib encoded file provides different values. Inconsistent encode/decode.
-// - Position and rotation affected, but only position Y
 fn do_your_thing() {
-    read_reach_map("/Users/codiestella/Desktop/bnet/reach_map_debug/bungie_backup.bin");
-    read_reach_map("/Users/codiestella/Desktop/bnet/reach_map_debug/prod.bin");
-
-    // Re-encode bungies
-    let mvar = find_chunk_in_file::<s_blf_chunk_map_variant>("/Users/codiestella/Desktop/bnet/reach_map_debug/bungie_backup.bin").unwrap();
-    let mut blffile = BlfFileBuilder::new();
-    blffile.add_chunk(s_blf_chunk_start_of_file::default())
-        .add_chunk(s_blf_chunk_map_variant::default())
-        .add_chunk(s_blf_chunk_end_of_file::default());
-
-    let read = blffile.read_file("/Users/codiestella/Desktop/bnet/reach_map_debug/prod.bin").unwrap();
-    read.write_file("/Users/codiestella/Desktop/bnet/reach_map_debug/prod_rebuild.bin");
-
-    read_reach_map("/Users/codiestella/Desktop/bnet/reach_map_debug/prod_rebuild.bin");
-
-}
-
-fn read_reach_map(path: &str) {
-    let mvar = find_chunk_in_file::<s_blf_chunk_map_variant>(path).unwrap();
-    write_json_file(&mvar, path.replace(".bin", "_fixed.json")).unwrap();
+    
 }
