@@ -1,6 +1,6 @@
 [workspace]
 resolver = "2"
-members = [ "blf_lib-derivable", "blf_lib-derive", "blf_lib", 'blf_cli', "blf_bnet", "test_harness"]
+members = [ "blf_lib-derivable", "blf_lib-derive", "blf_lib", 'blf_cli', "test_harness"]
 #default-members = [ "blf_cli" ]
 
 [workspace.package]

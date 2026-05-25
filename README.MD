@@ -13,7 +13,8 @@ This binary crate is a a very simple command-line-interface (CLI) for interactin
 ### [blf-ts](./blf-ts/)
 A TypeScript implementation of blf_lib for use on web browsers and node servers. Structures here are not exhaustive, blf_lib is considered the source-of-truth.
 
-### [blf_bnet](./blf_bnet/README.MD)
+### [blf_bnet](./blf_bnet/README.MD) <kbd>Deprecated</kbd>
+**Deprecated**: Please use blf-ts instead.
 This crate contains BLF functions used by the client-side TypeScript code of [blam.network](https://www.blam.network/). It is compiled to [WebAssembly](https://webassembly.org/) using [wasm-pack](https://github.com/rustwasm/wasm-pack).
 
 ### blf_lib-private <kbd>Private</kbd>
