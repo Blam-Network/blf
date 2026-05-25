@@ -2,12 +2,7 @@
   "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
   "extends": ["ultracite/biome/core"],
   "files": {
-    "includes": [
-      "!dist",
-      "!dist-cjs",
-      "!docs/.vitepress",
-      "!node_modules"
-    ]
+    "includes": ["!dist", "!dist-cjs", "!docs/.vitepress", "!node_modules"]
   },
   "linter": {
     "rules": {

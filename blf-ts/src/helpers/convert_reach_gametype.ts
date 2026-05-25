@@ -14,17 +14,17 @@
 import {
   type c_game_variant as c_game_variant_tu1,
   e_game_mode as e_game_mode_tu1,
-} from "./blam/haloreach/v12065_11_08_24_1738_tu1actual/game/c_game_variant";
-import { e_math_operation as e_math_operation_tu1 } from "./blam/haloreach/v12065_11_08_24_1738_tu1actual/game/megalogamengine/megalogamengine_actions";
+} from "../blam/haloreach/v12065_11_08_24_1738_tu1actual/game/c_game_variant";
+import { e_math_operation as e_math_operation_tu1 } from "../blam/haloreach/v12065_11_08_24_1738_tu1actual/game/megalogamengine/megalogamengine_actions";
 import {
   c_game_variant as c_game_variant_mcc,
   e_game_mode as e_game_mode_mcc,
-} from "./blam/haloreach_mcc/v_untracked_25_08_19_1352/game/c_game_variant";
-import { e_math_operation as e_math_operation_mcc } from "./blam/haloreach_mcc/v_untracked_25_08_19_1352/game/megalogamengine/megalogamengine_actions";
-import { e_explicit_object_type as e_explicit_object_type_mcc } from "./blam/haloreach_mcc/v_untracked_25_08_19_1352/game/megalogamengine/megalogamengine_explicit_object";
-import { e_explicit_player_type as e_explicit_player_type_mcc } from "./blam/haloreach_mcc/v_untracked_25_08_19_1352/game/megalogamengine/megalogamengine_explicit_player";
-import { e_explicit_team_type as e_explicit_team_type_mcc } from "./blam/haloreach_mcc/v_untracked_25_08_19_1352/game/megalogamengine/megalogamengine_explicit_team";
-import { BlfError } from "./error";
+} from "../blam/haloreach_mcc/v_untracked_25_08_19_1352/game/c_game_variant";
+import { e_math_operation as e_math_operation_mcc } from "../blam/haloreach_mcc/v_untracked_25_08_19_1352/game/megalogamengine/megalogamengine_actions";
+import { e_explicit_object_type as e_explicit_object_type_mcc } from "../blam/haloreach_mcc/v_untracked_25_08_19_1352/game/megalogamengine/megalogamengine_explicit_object";
+import { e_explicit_player_type as e_explicit_player_type_mcc } from "../blam/haloreach_mcc/v_untracked_25_08_19_1352/game/megalogamengine/megalogamengine_explicit_player";
+import { e_explicit_team_type as e_explicit_team_type_mcc } from "../blam/haloreach_mcc/v_untracked_25_08_19_1352/game/megalogamengine/megalogamengine_explicit_team";
+import { BlfError } from "../error";
 
 /** MCC math ops with no TU1 equivalent (`<<=`, `>>=`). */
 const MCC_ONLY_MATH_OPS: readonly number[] = [
