@@ -16,11 +16,9 @@ The Master Chief Collection added megalo features that Xbox 360 builds do not ha
 
 - **Temporary variables** for objects, players, and teams
 - **Additional math operators** (`<<=`, `>>=`)
-- **“Network Test 1”** firefight mode and other survival fields carried in MCC-only layout data
+- **“Network Test 1”** firefight mode
 
-Those cannot be represented on Xbox 360. Converting **MCC → Xbox 360** returns `false` when the source gametype uses any of them (including non-zero survival `m_additional_flags`). Converting **Xbox 360 → MCC** always succeeds for supported gametype modes.
-
-Forge (**sandbox**) variants are not supported yet. Converting two variants from the same build throws `BlfError`.
+`convert_reach_gametype(MCC, Xbox360)` will return false if any of the above features are being used by the gametype. In addition, Forge gametypes are not yet supported.
 
 ## Example (MCC → TU1)
 
