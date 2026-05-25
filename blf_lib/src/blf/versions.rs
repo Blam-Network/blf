@@ -3,3 +3,4 @@ pub mod halo3odst;
 pub mod haloreach;
 pub mod ares;
 pub mod haloonline;
+pub mod haloreach_mcc;

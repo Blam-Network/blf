@@ -10,6 +10,9 @@
       "haloreach/*": [
         "./dist/versions/haloreach/*"
       ],
+      "haloreach_mcc/*": [
+        "./dist/versions/haloreach_mcc/*"
+      ],
       "halo3/*": [
         "./dist/versions/halo3/*"
       ],
@@ -25,11 +28,23 @@
       "require": "./dist-cjs/index.js",
       "default": "./dist/index.js"
     },
+    "./helpers": {
+      "types": "./dist/helpers.d.ts",
+      "import": "./dist/helpers.js",
+      "require": "./dist-cjs/helpers.js",
+      "default": "./dist/helpers.js"
+    },
     "./haloreach/*": {
       "types": "./dist/versions/haloreach/*.d.ts",
       "import": "./dist/versions/haloreach/*.js",
       "require": "./dist-cjs/versions/haloreach/*.js",
       "default": "./dist/versions/haloreach/*.js"
+    },
+    "./haloreach_mcc/*": {
+      "types": "./dist/versions/haloreach_mcc/*.d.ts",
+      "import": "./dist/versions/haloreach_mcc/*.js",
+      "require": "./dist-cjs/versions/haloreach_mcc/*.js",
+      "default": "./dist/versions/haloreach_mcc/*.js"
     },
     "./halo3/*": {
       "types": "./dist/versions/halo3/*.d.ts",

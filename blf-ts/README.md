@@ -9,7 +9,8 @@ Built on [@craftycodie/cstruct](https://www.npmjs.com/package/@craftycodie/cstru
 ## Features
 
 - Chunk discovery with `search_for_chunk` and `find_chunk`
-- Per-game **version bundles** (`haloreach/*`, `halo3/*`, `halo3odst/*`) with chunk classes and blam types for a specific exe build
+- Per-game **version bundles** (`haloreach/*`, `haloreach_mcc/*`, `halo3/*`, `halo3odst/*`) with chunk classes and blam types for a specific exe build
+- **`@blamnetwork/blf/helpers`** for cross-version Reach gametype conversion (TU1 ↔ MCC)
 - Struct-backed chunks via `CStructBLFChunk` and `@blf.chunk` decorators (compiled away in published `dist/`)
 - Bitstream reader/writer exported from the package root
 - Little- and big-endian BLF headers
@@ -59,6 +60,7 @@ Each implementation build is a single module:
 | Import | Build |
 |--------|--------|
 | `@blamnetwork/blf/haloreach/v12065_11_08_24_1738_tu1actual` | Reach TU1 |
+| `@blamnetwork/blf/haloreach_mcc/v_untracked_25_08_19_1352` | Reach MCC (untracked) |
 | `@blamnetwork/blf/halo3/v12070_08_09_05_2031_halo3_ship` | Halo 3 ship |
 | `@blamnetwork/blf/halo3odst/v13895_09_04_27_2201_atlas_release` | ODST Atlas |
 

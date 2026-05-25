@@ -3,6 +3,7 @@ pub(crate) mod halo3odst;
 pub(crate) mod haloreach;
 pub(crate) mod ares;
 pub(crate) mod haloonline;
+pub(crate) mod haloreach_mcc;
 
 use std::error::Error;
 use std::fs;

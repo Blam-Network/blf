@@ -7,16 +7,111 @@ import {
   e_game_engine_timer_rate,
   e_weapon_pickup_priority,
 } from "../game_engine_enums";
-import {
-  e_action_team_or_player_target,
-  e_biped_give_weapon_mode,
-  e_chud_navpoint_icon_type,
-  e_create_object_flags,
-  e_grenade_type,
-  e_math_operation,
-  e_megalogamengine_hud_meter_input_type,
-  e_navpoint_priority,
-} from "./megalogamengine_enums";
+import { e_megalogamengine_hud_meter_input_type } from "./megalogamengine_hud_widgets";
+
+/** Matches `e_action_team_or_player_target` in blf_lib `megalogamengine_actions.rs`. */
+export enum e_action_team_or_player_target {
+  team = 0,
+  player = 1,
+  all_players = 2,
+}
+
+/** Matches `e_math_operation` in blf_lib `megalogamengine_actions.rs`. */
+export enum e_math_operation {
+  add = 0,
+  subtract = 1,
+  multiply_by = 2,
+  divide_by = 3,
+  set_to = 4,
+  modulo_by = 5,
+  bitwise_and_with = 6,
+  bitwise_or_with = 7,
+  bitwise_xor_with = 8,
+  bitwise_not_with = 9,
+  set_to_absolute = 10,
+}
+
+export enum e_grenade_type {
+  frag_grenade = 0,
+  plasma_grenade = 1,
+}
+
+export enum e_biped_give_weapon_mode {
+  as_primary_weapon = 0,
+  normally = 1,
+  silently = 2,
+}
+
+export enum e_player_filter_type {
+  no_one = 0,
+  everyone = 1,
+  allies = 2,
+  enemies = 3,
+  specific_player = 4,
+  normal = 5,
+}
+
+export enum e_chud_navpoint_icon_type {
+  speaker = 0,
+  dead_teammate_marker = 1,
+  lightning_bolt = 2,
+  bullseye = 3,
+  diamond = 4,
+  bomb = 5,
+  flag = 6,
+  skull = 7,
+  crown = 8,
+  vip = 9,
+  padlock = 10,
+  territory_a = 11,
+  territory_b = 12,
+  territory_c = 13,
+  territory_d = 14,
+  territory_e = 15,
+  territory_f = 16,
+  territory_g = 17,
+  territory_h = 18,
+  territory_i = 19,
+  supply = 20,
+  supply_health = 21,
+  supply_air_drop = 22,
+  supply_ammo = 23,
+  arrow = 24,
+  defend = 25,
+  ordnance = 26,
+  inward = 27,
+}
+
+export enum e_navpoint_priority {
+  low = 0,
+  normal = 1,
+  high = 2,
+  blink = 3,
+}
+
+/** Matches `e_create_object_flags` in blf_lib `megalogamengine_actions.rs`. */
+export class e_create_object_flags {
+  never_garbage_collect = false;
+  suppress_effect = false;
+  absolute_orientation = false;
+
+  to_raw(): number {
+    return (
+      (this.never_garbage_collect ? 1 : 0) |
+      (this.suppress_effect ? 1 << 1 : 0) |
+      (this.absolute_orientation ? 1 << 2 : 0)
+    );
+  }
+
+  static from_raw(raw: number): e_create_object_flags {
+    const flags = new e_create_object_flags();
+    flags.never_garbage_collect = (raw & 1) !== 0;
+    flags.suppress_effect = (raw & (1 << 1)) !== 0;
+    flags.absolute_orientation = (raw & (1 << 2)) !== 0;
+    return flags;
+  }
+}
+
 import {
   c_custom_timer_reference,
   c_custom_variable_reference,

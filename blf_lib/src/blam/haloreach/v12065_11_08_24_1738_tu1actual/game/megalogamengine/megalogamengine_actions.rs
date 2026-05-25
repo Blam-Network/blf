@@ -359,6 +359,7 @@ pub enum e_math_operation {
     bitwise_or_with = 7, // |=
     bitwise_xor_with = 8, // ^=
     bitwise_not_with = 9, // ~= (a ~= b) == (a &= ~b)
+    set_to_absolute = 10, // abs=
 }
 
 #[repr(u8)]
