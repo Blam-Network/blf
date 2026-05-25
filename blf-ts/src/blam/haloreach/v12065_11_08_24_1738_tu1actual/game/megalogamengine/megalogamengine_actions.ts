@@ -4,6 +4,20 @@ import type {
 } from "../../../../../bitstream";
 import type { c_player_traits } from "../c_player_traits";
 import {
+  e_game_engine_timer_rate,
+  e_weapon_pickup_priority,
+} from "../game_engine_enums";
+import {
+  e_action_team_or_player_target,
+  e_biped_give_weapon_mode,
+  e_chud_navpoint_icon_type,
+  e_create_object_flags,
+  e_grenade_type,
+  e_math_operation,
+  e_megalogamengine_hud_meter_input_type,
+  e_navpoint_priority,
+} from "./megalogamengine_enums";
+import {
   c_custom_timer_reference,
   c_custom_variable_reference,
   c_object_reference,
@@ -26,38 +40,45 @@ enum e_boundary_shape {
 }
 
 export class s_team_or_player_target {
-  m_target = 0;
+  m_target: e_action_team_or_player_target =
+    e_action_team_or_player_target.team;
   m_team?: c_team_reference;
   m_player?: c_player_reference;
 
   decode(bitstream: c_bitstream_reader): void {
-    this.m_target = bitstream.read_integer("target", 2);
+    this.m_target = bitstream.read_enum(
+      "target",
+      2,
+      e_action_team_or_player_target
+    );
     switch (this.m_target) {
-      case 0: {
+      case e_action_team_or_player_target.team: {
         const team = new c_team_reference();
         team.decode(bitstream);
         this.m_team = team;
         break;
       }
-      case 1: {
+      case e_action_team_or_player_target.player: {
         const player = new c_player_reference();
         player.decode(bitstream);
         this.m_player = player;
         break;
       }
-      default:
+      case e_action_team_or_player_target.all_players:
         break;
     }
   }
 
   encode(bitstream: c_bitstream_writer): void {
-    bitstream.write_integer(this.m_target, 2);
+    bitstream.write_enum(this.m_target, 2);
     switch (this.m_target) {
-      case 0:
+      case e_action_team_or_player_target.team:
         this.m_team?.encode(bitstream);
         break;
-      case 1:
+      case e_action_team_or_player_target.player:
         this.m_player?.encode(bitstream);
+        break;
+      case e_action_team_or_player_target.all_players:
         break;
     }
   }
@@ -65,18 +86,18 @@ export class s_team_or_player_target {
 
 export class s_action_set_score_parameters {
   m_target = new s_team_or_player_target();
-  m_operation = 0;
+  m_operation: e_math_operation = e_math_operation.add;
   m_variable = new c_custom_variable_reference();
 
   decode(bitstream: c_bitstream_reader): void {
     this.m_target.decode(bitstream);
-    this.m_operation = bitstream.read_integer("operation", 4);
+    this.m_operation = bitstream.read_enum("operation", 4, e_math_operation);
     this.m_variable.decode(bitstream);
   }
 
   encode(bitstream: c_bitstream_writer): void {
     this.m_target.encode(bitstream);
-    bitstream.write_integer(this.m_operation, 4);
+    bitstream.write_enum(this.m_operation, 4);
     this.m_variable.encode(bitstream);
   }
 }
@@ -86,7 +107,7 @@ export class s_action_create_object_parameters {
   m_object_reference_1 = new c_object_reference();
   m_object_reference_2 = new c_object_reference();
   m_filter_index = 0;
-  m_flags = 0;
+  m_flags = new e_create_object_flags();
   m_offset = 0;
   m_variant_name_index = 0;
 
@@ -95,7 +116,9 @@ export class s_action_create_object_parameters {
     this.m_object_reference_1.decode(bitstream);
     this.m_object_reference_2.decode(bitstream);
     this.m_filter_index = bitstream.read_index("filter_index", 16, 4);
-    this.m_flags = bitstream.read_integer("flags", 3);
+    this.m_flags = e_create_object_flags.from_raw(
+      bitstream.read_integer("flags", 3)
+    );
     this.m_offset = bitstream.read_integer("offset", 24);
     this.m_variant_name_index = bitstream.read_integer("variant-name-index", 8);
   }
@@ -105,7 +128,7 @@ export class s_action_create_object_parameters {
     this.m_object_reference_1.encode(bitstream);
     this.m_object_reference_2.encode(bitstream);
     bitstream.write_index(this.m_filter_index, 16, 4);
-    bitstream.write_integer(this.m_flags, 3);
+    bitstream.write_integer(this.m_flags.to_raw(), 3);
     bitstream.write_integer(this.m_offset, 24);
     bitstream.write_integer(this.m_variant_name_index, 8);
   }
@@ -113,13 +136,18 @@ export class s_action_create_object_parameters {
 
 export class s_action_navpoint_set_icon_parameters {
   m_object = new c_object_reference();
-  m_navpoint_icon = 0;
+  m_navpoint_icon: e_chud_navpoint_icon_type =
+    e_chud_navpoint_icon_type.speaker;
   m_variable?: c_custom_variable_reference;
 
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
-    this.m_navpoint_icon = bitstream.read_integer("navpoint-icon", 5);
-    if (this.m_navpoint_icon === 12) {
+    this.m_navpoint_icon = bitstream.read_enum(
+      "navpoint-icon",
+      5,
+      e_chud_navpoint_icon_type
+    );
+    if (this.m_navpoint_icon === e_chud_navpoint_icon_type.territory_b) {
       const variable = new c_custom_variable_reference();
       variable.decode(bitstream);
       this.m_variable = variable;
@@ -128,8 +156,8 @@ export class s_action_navpoint_set_icon_parameters {
 
   encode(bitstream: c_bitstream_writer): void {
     this.m_object.encode(bitstream);
-    bitstream.write_integer(this.m_navpoint_icon, 5);
-    if (this.m_navpoint_icon === 12) {
+    bitstream.write_enum(this.m_navpoint_icon, 5);
+    if (this.m_navpoint_icon === e_chud_navpoint_icon_type.territory_b) {
       this.m_variable!.encode(bitstream);
     }
   }
@@ -137,16 +165,16 @@ export class s_action_navpoint_set_icon_parameters {
 
 export class s_action_navpoint_set_priority_parameters {
   m_object = new c_object_reference();
-  m_priority = 0;
+  m_priority: e_navpoint_priority = e_navpoint_priority.low;
 
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
-    this.m_priority = bitstream.read_integer("priority", 2);
+    this.m_priority = bitstream.read_enum("priority", 2, e_navpoint_priority);
   }
 
   encode(bitstream: c_bitstream_writer): void {
     this.m_object.encode(bitstream);
-    bitstream.write_integer(this.m_priority, 2);
+    bitstream.write_enum(this.m_priority, 2);
   }
 }
 
@@ -186,18 +214,18 @@ export class s_action_navpoint_set_visible_range_parameters {
 export class s_action_set_parameters {
   m_variable_1 = new s_variant_variable();
   m_variable_2 = new s_variant_variable();
-  m_operation = 0;
+  m_operation: e_math_operation = e_math_operation.add;
 
   decode(bitstream: c_bitstream_reader): void {
     this.m_variable_1.decode(bitstream);
     this.m_variable_2.decode(bitstream);
-    this.m_operation = bitstream.read_integer("operation", 4);
+    this.m_operation = bitstream.read_enum("operation", 4, e_math_operation);
   }
 
   encode(bitstream: c_bitstream_writer): void {
     this.m_variable_1.encode(bitstream);
     this.m_variable_2.encode(bitstream);
-    bitstream.write_integer(this.m_operation, 4);
+    bitstream.write_enum(this.m_operation, 4);
   }
 }
 
@@ -344,16 +372,20 @@ export class s_action_hud_post_message_parameters {
 
 export class s_action_timer_set_rate_parameters {
   m_timer = new c_custom_timer_reference();
-  m_rate = 0;
+  m_rate: e_game_engine_timer_rate = e_game_engine_timer_rate.zero;
 
   decode(bitstream: c_bitstream_reader): void {
     this.m_timer.decode(bitstream);
-    this.m_rate = bitstream.read_integer("timer-rate", 5);
+    this.m_rate = bitstream.read_enum(
+      "timer-rate",
+      5,
+      e_game_engine_timer_rate
+    );
   }
 
   encode(bitstream: c_bitstream_writer): void {
     this.m_timer.encode(bitstream);
-    bitstream.write_integer(this.m_rate, 5);
+    bitstream.write_enum(this.m_rate, 5);
   }
 }
 
@@ -407,18 +439,22 @@ export class s_action_object_attach_parameters {
 
 export class s_action_player_adjust_money_parameters {
   m_player = new c_player_reference();
-  m_math_operation = 0;
+  m_math_operation: e_math_operation = e_math_operation.add;
   m_variable = new c_custom_variable_reference();
 
   decode(bitstream: c_bitstream_reader): void {
     this.m_player.decode(bitstream);
-    this.m_math_operation = bitstream.read_integer("math-operation", 4);
+    this.m_math_operation = bitstream.read_enum(
+      "math-operation",
+      4,
+      e_math_operation
+    );
     this.m_variable.decode(bitstream);
   }
 
   encode(bitstream: c_bitstream_writer): void {
     this.m_player.encode(bitstream);
-    bitstream.write_integer(this.m_math_operation, 4);
+    bitstream.write_enum(this.m_math_operation, 4);
     this.m_variable.encode(bitstream);
   }
 }
@@ -443,19 +479,21 @@ export class s_action_player_enable_purchases_parameters {
 
 export class s_action_weapon_set_pickup_priority_parameters {
   m_object = new c_object_reference();
-  m_weapon_pickup_priority = 0;
+  m_weapon_pickup_priority: e_weapon_pickup_priority =
+    e_weapon_pickup_priority.normal;
 
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
-    this.m_weapon_pickup_priority = bitstream.read_integer(
+    this.m_weapon_pickup_priority = bitstream.read_enum(
       "weapon-pickup-priority",
-      2
+      2,
+      e_weapon_pickup_priority
     );
   }
 
   encode(bitstream: c_bitstream_writer): void {
     this.m_object.encode(bitstream);
-    bitstream.write_integer(this.m_weapon_pickup_priority, 2);
+    bitstream.write_enum(this.m_weapon_pickup_priority, 2);
   }
 }
 
@@ -475,15 +513,20 @@ export class s_action_hud_widget_text_base {
 }
 
 export class c_megalogamengine_hud_meter_input {
-  m_type = 0;
+  m_type: e_megalogamengine_hud_meter_input_type =
+    e_megalogamengine_hud_meter_input_type.none;
   m_variable_1?: c_custom_variable_reference;
   m_variable_2?: c_custom_variable_reference;
   m_timer?: c_custom_timer_reference;
 
   decode(bitstream: c_bitstream_reader): void {
-    this.m_type = bitstream.read_integer("type", 2);
+    this.m_type = bitstream.read_enum(
+      "type",
+      2,
+      e_megalogamengine_hud_meter_input_type
+    );
     switch (this.m_type) {
-      case 1: {
+      case e_megalogamengine_hud_meter_input_type.number: {
         const variable1 = new c_custom_variable_reference();
         const variable2 = new c_custom_variable_reference();
         variable1.decode(bitstream);
@@ -492,27 +535,29 @@ export class c_megalogamengine_hud_meter_input {
         this.m_variable_2 = variable2;
         break;
       }
-      case 2: {
+      case e_megalogamengine_hud_meter_input_type.timer: {
         const timer = new c_custom_timer_reference();
         timer.decode(bitstream);
         this.m_timer = timer;
         break;
       }
-      default:
+      case e_megalogamengine_hud_meter_input_type.none:
         break;
     }
   }
 
   encode(bitstream: c_bitstream_writer): void {
     switch (this.m_type) {
-      case 1:
-        bitstream.write_integer(1, 2);
+      case e_megalogamengine_hud_meter_input_type.number:
+        bitstream.write_enum(e_megalogamengine_hud_meter_input_type.number, 2);
         this.m_variable_1!.encode(bitstream);
         this.m_variable_2!.encode(bitstream);
         break;
-      case 2:
-        bitstream.write_integer(2, 2);
+      case e_megalogamengine_hud_meter_input_type.timer:
+        bitstream.write_enum(e_megalogamengine_hud_meter_input_type.timer, 2);
         this.m_timer!.encode(bitstream);
+        break;
+      case e_megalogamengine_hud_meter_input_type.none:
         break;
     }
   }
@@ -616,18 +661,18 @@ export class s_action_team_set_coop_spawning_parameters {
 
 export class s_action_vitality_adjustment_parameters {
   m_object = new c_object_reference();
-  m_operation = 0;
+  m_operation: e_math_operation = e_math_operation.add;
   m_variable = new c_custom_variable_reference();
 
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
-    this.m_operation = bitstream.read_integer("operation", 4);
+    this.m_operation = bitstream.read_enum("operation", 4, e_math_operation);
     this.m_variable.decode(bitstream);
   }
 
   encode(bitstream: c_bitstream_writer): void {
     this.m_object.encode(bitstream);
-    bitstream.write_integer(this.m_operation, 4);
+    bitstream.write_enum(this.m_operation, 4);
     this.m_variable.encode(bitstream);
   }
 }
@@ -667,21 +712,29 @@ export class s_action_player_set_requisition_palette_parameters {
 
 export class s_action_adjust_grenades_parameters {
   m_player = new c_player_reference();
-  m_grenade_type = 0;
-  m_math_operation = 0;
+  m_grenade_type: e_grenade_type = e_grenade_type.frag_grenade;
+  m_math_operation: e_math_operation = e_math_operation.add;
   m_variable = new c_custom_variable_reference();
 
   decode(bitstream: c_bitstream_reader): void {
     this.m_player.decode(bitstream);
-    this.m_grenade_type = bitstream.read_integer("grenade-type", 1);
-    this.m_math_operation = bitstream.read_integer("math-operation", 4);
+    this.m_grenade_type = bitstream.read_enum(
+      "grenade-type",
+      1,
+      e_grenade_type
+    );
+    this.m_math_operation = bitstream.read_enum(
+      "math-operation",
+      4,
+      e_math_operation
+    );
     this.m_variable.decode(bitstream);
   }
 
   encode(bitstream: c_bitstream_writer): void {
     this.m_player.encode(bitstream);
-    bitstream.write_integer(this.m_grenade_type, 1);
-    bitstream.write_integer(this.m_math_operation, 4);
+    bitstream.write_enum(this.m_grenade_type, 1);
+    bitstream.write_enum(this.m_math_operation, 4);
     this.m_variable.encode(bitstream);
   }
 }
@@ -884,18 +937,18 @@ export class s_action_object_face_object_parameters {
 export class s_action_biped_give_weapon_parameters {
   m_object = new c_object_reference();
   m_object_type = new c_object_type_reference();
-  m_mode = 0;
+  m_mode: e_biped_give_weapon_mode = e_biped_give_weapon_mode.as_primary_weapon;
 
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
     this.m_object_type.decode(bitstream);
-    this.m_mode = bitstream.read_integer("mode", 2);
+    this.m_mode = bitstream.read_enum("mode", 2, e_biped_give_weapon_mode);
   }
 
   encode(bitstream: c_bitstream_writer): void {
     this.m_object.encode(bitstream);
     this.m_object_type.encode(bitstream);
-    bitstream.write_integer(this.m_mode, 2);
+    bitstream.write_enum(this.m_mode, 2);
   }
 }
 

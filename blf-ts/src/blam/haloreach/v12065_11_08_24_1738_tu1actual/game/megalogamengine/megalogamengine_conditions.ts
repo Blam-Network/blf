@@ -2,6 +2,7 @@ import type {
   c_bitstream_reader,
   c_bitstream_writer,
 } from "../../../../../bitstream";
+import { e_numeric_comparison } from "./megalogamengine_enums";
 import {
   c_custom_timer_reference,
   c_object_reference,
@@ -14,18 +15,22 @@ import { s_variant_variable } from "./s_variant_variable";
 export class s_condition_if_parameters {
   m_left = new s_variant_variable();
   m_right = new s_variant_variable();
-  m_comparison = 0;
+  m_comparison: e_numeric_comparison = e_numeric_comparison.less_than;
 
   decode(bitstream: c_bitstream_reader): void {
     this.m_left.decode(bitstream);
     this.m_right.decode(bitstream);
-    this.m_comparison = bitstream.read_integer("comparison", 3);
+    this.m_comparison = bitstream.read_enum(
+      "comparison",
+      3,
+      e_numeric_comparison
+    );
   }
 
   encode(bitstream: c_bitstream_writer): void {
     this.m_left.encode(bitstream);
     this.m_right.encode(bitstream);
-    bitstream.write_integer(this.m_comparison, 3);
+    bitstream.write_enum(this.m_comparison, 3);
   }
 }
 

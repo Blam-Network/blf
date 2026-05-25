@@ -1,3 +1,8 @@
+pub mod variant_exporter;
+pub mod variant_importer;
+
+pub const k_build_string_omaha_delta_09730: &str = "09730.10.04.09.1309.omaha_delta";
+
 use std::collections::{HashMap, HashSet, VecDeque};
 use std::error::Error;
 use std::fs;

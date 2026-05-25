@@ -3,6 +3,17 @@ import type {
   c_bitstream_writer,
 } from "../../../../../bitstream";
 import { BlfError } from "../../../../../error";
+import {
+  e_explicit_object_type,
+  e_explicit_player_type,
+  e_explicit_team_type,
+} from "./megalogamengine_enums";
+
+export {
+  e_explicit_object_type,
+  e_explicit_player_type,
+  e_explicit_team_type,
+} from "./megalogamengine_enums";
 
 function requireField<T>(value: T | undefined, message: string): T {
   if (value === undefined) {
@@ -22,44 +33,52 @@ export enum e_custom_timer_type {
 }
 
 export class c_explicit_player {
-  m_explicit_player_type = 0;
+  m_explicit_player_type: e_explicit_player_type =
+    e_explicit_player_type.no_player;
 
   decode(bitstream: c_bitstream_reader): void {
-    this.m_explicit_player_type = bitstream.read_integer(
+    this.m_explicit_player_type = bitstream.read_enum(
       "explicit-player-type",
-      5
+      5,
+      e_explicit_player_type
     );
   }
 
   encode(bitstream: c_bitstream_writer): void {
-    bitstream.write_integer(this.m_explicit_player_type, 5);
+    bitstream.write_enum(this.m_explicit_player_type, 5);
   }
 }
 
 export class c_explicit_object {
-  m_explicit_object_type = 0;
+  m_explicit_object_type: e_explicit_object_type =
+    e_explicit_object_type.no_object;
 
   decode(bitstream: c_bitstream_reader): void {
-    this.m_explicit_object_type = bitstream.read_integer(
+    this.m_explicit_object_type = bitstream.read_enum(
       "explicit-object-type",
-      5
+      5,
+      e_explicit_object_type
     );
   }
 
   encode(bitstream: c_bitstream_writer): void {
-    bitstream.write_integer(this.m_explicit_object_type, 5);
+    bitstream.write_enum(this.m_explicit_object_type, 5);
   }
 }
 
 export class c_explicit_team {
-  m_explicit_team_type = 0;
+  m_explicit_team_type: e_explicit_team_type = e_explicit_team_type.no_team;
 
   decode(bitstream: c_bitstream_reader): void {
-    this.m_explicit_team_type = bitstream.read_integer("explicit-team-type", 5);
+    this.m_explicit_team_type = bitstream.read_enum(
+      "explicit-team-type",
+      5,
+      e_explicit_team_type
+    );
   }
 
   encode(bitstream: c_bitstream_writer): void {
-    bitstream.write_integer(this.m_explicit_team_type, 5);
+    bitstream.write_enum(this.m_explicit_team_type, 5);
   }
 }
 

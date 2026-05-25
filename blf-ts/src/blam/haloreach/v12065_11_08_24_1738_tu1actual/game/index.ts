@@ -6,4 +6,5 @@ export * from "./c_game_engine_traits";
 export * from "./c_game_variant";
 export * from "./c_player_traits";
 export * from "./c_string_table";
+export * from "./game_engine_enums";
 export * from "./megalogamengine";

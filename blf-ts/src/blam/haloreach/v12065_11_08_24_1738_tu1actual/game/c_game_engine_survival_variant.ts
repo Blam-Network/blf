@@ -7,6 +7,7 @@ import {
   c_game_engine_respawn_options,
 } from "./c_game_engine_default";
 import { c_player_traits } from "./c_player_traits";
+import { e_survival_variant_flags } from "./game_engine_enums";
 
 export class c_ai_traits {
   m_vision = 0;
@@ -125,7 +126,7 @@ export class s_survival_round_properties {
 
 export class c_game_engine_survival_variant {
   m_base_variant = new c_game_engine_base_variant();
-  m_variant_flags = 0;
+  m_variant_flags = new e_survival_variant_flags();
   m_campaign_difficulty_level = 0;
   m_set_count = 0;
   m_bonus_lives_awarded = 0;
@@ -152,7 +153,9 @@ export class c_game_engine_survival_variant {
 
   decode(bitstream: c_bitstream_reader): void {
     this.m_base_variant.decode(bitstream);
-    this.m_variant_flags = bitstream.read_integer("m_variant_flags", 5);
+    this.m_variant_flags = e_survival_variant_flags.from_raw(
+      bitstream.read_integer("m_variant_flags", 5)
+    );
     this.m_campaign_difficulty_level = bitstream.read_integer(
       "campaign-difficulty-level",
       3
@@ -198,7 +201,7 @@ export class c_game_engine_survival_variant {
 
   encode(bitstream: c_bitstream_writer): void {
     this.m_base_variant.encode(bitstream);
-    bitstream.write_integer(this.m_variant_flags, 5);
+    bitstream.write_integer(this.m_variant_flags.to_raw(), 5);
     bitstream.write_integer(this.m_campaign_difficulty_level, 3);
     bitstream.write_integer(this.m_set_count, 8);
     bitstream.write_integer(this.m_bonus_lives_awarded, 4);

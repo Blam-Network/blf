@@ -7172,7 +7172,11 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
             "m_boundary_set_player_color_parameters": undefined,
             "m_create_object_parameters": {
               "m_filter_index": -1,
-              "m_flags": 1,
+              "m_flags": {
+                "absolute_orientation": false,
+                "never_garbage_collect": true,
+                "suppress_effect": false,
+              },
               "m_object_reference_1": {
                 "m_object": {
                   "m_explicit_object_type": 1,
@@ -7395,7 +7399,11 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
             "m_boundary_set_player_color_parameters": undefined,
             "m_create_object_parameters": {
               "m_filter_index": -1,
-              "m_flags": 1,
+              "m_flags": {
+                "absolute_orientation": false,
+                "never_garbage_collect": true,
+                "suppress_effect": false,
+              },
               "m_object_reference_1": {
                 "m_object": {
                   "m_explicit_object_type": 1,
@@ -8106,7 +8114,11 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
             "m_boundary_set_player_color_parameters": undefined,
             "m_create_object_parameters": {
               "m_filter_index": -1,
-              "m_flags": 1,
+              "m_flags": {
+                "absolute_orientation": false,
+                "never_garbage_collect": true,
+                "suppress_effect": false,
+              },
               "m_object_reference_1": {
                 "m_object": {
                   "m_explicit_object_type": 2,
@@ -16068,7 +16080,11 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
             "m_boundary_set_player_color_parameters": undefined,
             "m_create_object_parameters": {
               "m_filter_index": -1,
-              "m_flags": 1,
+              "m_flags": {
+                "absolute_orientation": false,
+                "never_garbage_collect": true,
+                "suppress_effect": false,
+              },
               "m_object_reference_1": {
                 "m_object": {
                   "m_explicit_object_type": 2,
@@ -16291,7 +16307,11 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
             "m_boundary_set_player_color_parameters": undefined,
             "m_create_object_parameters": {
               "m_filter_index": -1,
-              "m_flags": 1,
+              "m_flags": {
+                "absolute_orientation": false,
+                "never_garbage_collect": true,
+                "suppress_effect": false,
+              },
               "m_object_reference_1": {
                 "m_object": {
                   "m_explicit_object_type": 2,
@@ -17172,7 +17192,11 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
             "m_boundary_set_player_color_parameters": undefined,
             "m_create_object_parameters": {
               "m_filter_index": -1,
-              "m_flags": 1,
+              "m_flags": {
+                "absolute_orientation": false,
+                "never_garbage_collect": true,
+                "suppress_effect": false,
+              },
               "m_object_reference_1": {
                 "m_object": {
                   "m_explicit_object_type": 3,
@@ -24178,7 +24202,11 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
             "m_boundary_set_player_color_parameters": undefined,
             "m_create_object_parameters": {
               "m_filter_index": -1,
-              "m_flags": 1,
+              "m_flags": {
+                "absolute_orientation": false,
+                "never_garbage_collect": true,
+                "suppress_effect": false,
+              },
               "m_object_reference_1": {
                 "m_object": {
                   "m_explicit_object_type": 0,

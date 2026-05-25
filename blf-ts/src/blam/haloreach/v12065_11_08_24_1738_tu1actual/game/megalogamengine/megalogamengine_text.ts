@@ -3,6 +3,7 @@ import type {
   c_bitstream_writer,
 } from "../../../../../bitstream";
 import { BlfError } from "../../../../../error";
+import { e_player_filter_type } from "./megalogamengine_enums";
 import {
   c_custom_timer_reference,
   c_custom_variable_reference,
@@ -19,13 +20,13 @@ function requireField<T>(value: T | undefined, message: string): T {
 }
 
 export class c_player_filter_modifier {
-  m_type = 0;
+  m_type: e_player_filter_type = e_player_filter_type.no_one;
   m_player?: c_player_reference;
   m_variable?: c_custom_variable_reference;
 
   decode(bitstream: c_bitstream_reader): void {
-    this.m_type = bitstream.read_integer("type", 3);
-    if (this.m_type === 4) {
+    this.m_type = bitstream.read_enum("type", 3, e_player_filter_type);
+    if (this.m_type === e_player_filter_type.specific_player) {
       const player = new c_player_reference();
       const variable = new c_custom_variable_reference();
       player.decode(bitstream);
@@ -36,8 +37,8 @@ export class c_player_filter_modifier {
   }
 
   encode(bitstream: c_bitstream_writer): void {
-    bitstream.write_integer(this.m_type, 3);
-    if (this.m_type === 4) {
+    bitstream.write_enum(this.m_type, 3);
+    if (this.m_type === e_player_filter_type.specific_player) {
       requireField(this.m_player, "m_player does not exist.").encode(bitstream);
       requireField(this.m_variable, "m_variable does not exist.").encode(
         bitstream

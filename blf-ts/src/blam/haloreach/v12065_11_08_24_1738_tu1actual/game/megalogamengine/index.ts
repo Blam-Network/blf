@@ -4,6 +4,7 @@ export * from "./c_object_filter";
 export * from "./c_trigger";
 export * from "./megalogamengine_actions";
 export * from "./megalogamengine_conditions";
+export * from "./megalogamengine_enums";
 export * from "./megalogamengine_references";
 export * from "./megalogamengine_text";
 export * from "./s_custom_game_engine_definition";

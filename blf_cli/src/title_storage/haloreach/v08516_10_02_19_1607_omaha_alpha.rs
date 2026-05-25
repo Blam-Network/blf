@@ -1,3 +1,8 @@
+pub mod variant_exporter;
+pub mod variant_importer;
+
+pub const k_build_string_omaha_alpha_08516: &str = "08516.10.02.19.1607.omaha_alpha";
+
 use std::collections::{HashMap, HashSet, VecDeque};
 use std::error::Error;
 use std::fs;

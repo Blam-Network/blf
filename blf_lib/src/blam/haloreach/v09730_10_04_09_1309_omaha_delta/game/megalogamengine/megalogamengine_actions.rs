@@ -13,10 +13,18 @@ use blf_lib::io::bitstream::{c_bitstream_reader, c_bitstream_writer};
 use blf_lib_derivable::result::{BLFLibError, BLFLibResult};
 use crate::blam::haloreach::v09730_10_04_09_1309_omaha_delta::game::megalogamengine::megalogamengine_custom_variable_reference::c_custom_variable_reference;
 use crate::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::megalogamengine::megalogamengine_object_reference::c_object_reference;
+use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::game_engine_megalo::e_weapon_pickup_priority;
+use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::game_engine_timer::e_game_engine_timer_rate;
+use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::megalogamengine::megalogamengine_hud_widgets::e_megalogamengine_hud_meter_input_type;
+use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::megalogamengine::megalogamengine_actions::{
+    e_action_team_or_player_target, e_biped_give_weapon_mode, e_chud_navpoint_icon_type,
+    e_create_object_flags, e_grenade_type, e_math_operation, e_navpoint_priority,
+    e_player_filter_type,
+};
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct s_team_or_player_target {
-    pub m_target: u8, // 2 bits
+    pub m_target: e_action_team_or_player_target, // 2 bits
     #[serde(skip_serializing_if = "Option::is_none")]
     pub m_team: Option<c_team_reference>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -25,36 +33,35 @@ pub struct s_team_or_player_target {
 
 impl s_team_or_player_target {
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
-        bitstream.write_integer(self.m_target, 2)?;
+        bitstream.write_enum(self.m_target, 2)?;
         match (self.m_target, &self.m_team, &self.m_player) {
-            (0, Some(team), None) => {
+            (e_action_team_or_player_target::team, Some(team), None) => {
                 team.encode(bitstream)?;
             }
-            (1, None, Some(player)) => {
+            (e_action_team_or_player_target::player, None, Some(player)) => {
                 player.encode(bitstream)?;
             }
-            _ => {
-
-            }
+            (e_action_team_or_player_target::all_players, None, None) => {}
+            _ => {}
         }
 
         Ok(())
     }
 
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
-        self.m_target = bitstream.read_integer("target", 2)?;
+        self.m_target = bitstream.read_enum("target", 2)?;
         match self.m_target {
-            0 => {
+            e_action_team_or_player_target::team => {
                 let mut team = c_team_reference::default();
                 team.decode(bitstream)?;
                 self.m_team = Some(team);
             }
-            1 => {
+            e_action_team_or_player_target::player => {
                 let mut player = c_player_reference::default();
                 player.decode(bitstream)?;
                 self.m_player = Some(player);
             }
-            _ => {}
+            e_action_team_or_player_target::all_players => {}
         }
 
         Ok(())
@@ -64,14 +71,14 @@ impl s_team_or_player_target {
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct s_action_set_score_parameters {
     pub m_target: s_team_or_player_target,
-    pub m_operation: u8, // 4 bits
+    pub m_operation: e_math_operation, // 4 bits
     pub m_variable: c_custom_variable_reference
 }
 
 impl s_action_set_score_parameters {
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
         self.m_target.encode(bitstream)?;
-        bitstream.write_integer(self.m_operation, 4)?;
+        bitstream.write_enum(self.m_operation, 4)?;
         self.m_variable.encode(bitstream)?;
 
         Ok(())
@@ -79,7 +86,7 @@ impl s_action_set_score_parameters {
 
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
         self.m_target.decode(bitstream)?;
-        self.m_operation = bitstream.read_integer("operation", 4)?;
+        self.m_operation = bitstream.read_enum("operation", 4)?;
         self.m_variable.decode(bitstream)?;
 
         Ok(())
@@ -92,7 +99,7 @@ pub struct s_action_create_object_parameters {
     pub m_object_reference_1: c_object_reference,
     pub m_object_reference_2: c_object_reference,
     pub m_filter_index: i8, // 4 bits
-    pub m_flags: u8, // 3 bits
+    pub m_flags: e_create_object_flags, // 3 bits
     pub m_offset: u32, // 24 bits
 }
 
@@ -102,7 +109,7 @@ impl s_action_create_object_parameters {
         self.m_object_reference_1.encode(bitstream)?;
         self.m_object_reference_2.encode(bitstream)?;
         bitstream.write_index::<16>(self.m_filter_index, 4)?;
-        bitstream.write_integer(self.m_flags, 3)?;
+        bitstream.write_integer(self.m_flags.to_raw(), 3)?;
         bitstream.write_integer(self.m_offset, 24)?;
 
         Ok(())
@@ -113,7 +120,7 @@ impl s_action_create_object_parameters {
         self.m_object_reference_1.decode(bitstream)?;
         self.m_object_reference_2.decode(bitstream)?;
         self.m_filter_index = bitstream.read_index::<16>("filter_index", 4)? as i8;
-        self.m_flags = bitstream.read_integer("flags", 3)?;
+        self.m_flags = e_create_object_flags::from_raw(bitstream.read_integer("flags", 3)?);
         self.m_offset = bitstream.read_integer("offset", 24)?;
 
         Ok(())
@@ -122,7 +129,7 @@ impl s_action_create_object_parameters {
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct c_player_filter_modifier {
-    pub m_type: u8,
+    pub m_type: e_player_filter_type, // 3 bits
     #[serde(skip_serializing_if = "Option::is_none")]
     pub m_player: Option<c_player_reference>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -131,9 +138,9 @@ pub struct c_player_filter_modifier {
 
 impl c_player_filter_modifier {
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
-        bitstream.write_integer(self.m_type, 3)?;
+        bitstream.write_enum(self.m_type, 3)?;
         match (self.m_type, &self.m_player, &self.m_variable) {
-            (4, Some(player), Some(variable)) => {
+            (e_player_filter_type::specific_player, Some(player), Some(variable)) => {
                 player.encode(bitstream)?;
                 variable.encode(bitstream)?;
             }
@@ -144,8 +151,8 @@ impl c_player_filter_modifier {
     }
 
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
-        self.m_type = bitstream.read_integer("type", 3)?;
-        if self.m_type == 4 {
+        self.m_type = bitstream.read_enum("type", 3)?;
+        if self.m_type == e_player_filter_type::specific_player {
             let mut player = c_player_reference::default();
             let mut variable = c_custom_variable_reference::default();
             player.decode(bitstream)?;
@@ -161,7 +168,7 @@ impl c_player_filter_modifier {
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct s_action_navpoint_set_icon_parameters {
     pub m_object: c_object_reference,
-    pub m_navpoint_icon: u8, // 5 bits
+    pub m_navpoint_icon: e_chud_navpoint_icon_type, // 5 bits
     #[serde(skip_serializing_if = "Option::is_none")]
     pub m_variable: Option<c_custom_variable_reference>,
 }
@@ -169,10 +176,10 @@ pub struct s_action_navpoint_set_icon_parameters {
 impl s_action_navpoint_set_icon_parameters {
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
         self.m_object.encode(bitstream)?;
-        bitstream.write_integer(self.m_navpoint_icon, 5)?;
+        bitstream.write_enum(self.m_navpoint_icon, 5)?;
 
         match (self.m_navpoint_icon, &self.m_variable) {
-            (12, Some(variable)) => {
+            (e_chud_navpoint_icon_type::territory_b, Some(variable)) => {
                 variable.encode(bitstream)?;
             }
             _ => {}
@@ -183,9 +190,9 @@ impl s_action_navpoint_set_icon_parameters {
 
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
         self.m_object.decode(bitstream)?;
-        self.m_navpoint_icon = bitstream.read_integer("navpoint-icon", 5)?;
+        self.m_navpoint_icon = bitstream.read_enum("navpoint-icon", 5)?;
 
-        if self.m_navpoint_icon == 12 {
+        if self.m_navpoint_icon == e_chud_navpoint_icon_type::territory_b {
             let mut variable = c_custom_variable_reference::default();
             variable.decode(bitstream)?;
             self.m_variable = Some(variable);
@@ -198,20 +205,20 @@ impl s_action_navpoint_set_icon_parameters {
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct s_action_navpoint_set_priority_parameters {
     pub m_object: c_object_reference,
-    pub m_priority: u8, // 2 bits
+    pub m_priority: e_navpoint_priority, // 2 bits
 }
 
 impl s_action_navpoint_set_priority_parameters {
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
         self.m_object.encode(bitstream)?;
-        bitstream.write_integer(self.m_priority, 2)?;
+        bitstream.write_enum(self.m_priority, 2)?;
 
         Ok(())
     }
 
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
         self.m_object.decode(bitstream)?;
-        self.m_priority = bitstream.read_integer("priority", 2)?;
+        self.m_priority = bitstream.read_enum("priority", 2)?;
 
         Ok(())
     }
@@ -268,14 +275,14 @@ impl s_action_navpoint_set_visible_range_parameters {
 pub struct s_action_set_parameters {
     pub m_variable_1: s_variant_variable,
     pub m_variable_2: s_variant_variable,
-    pub m_operation: u8, // 4 bits
+    pub m_operation: e_math_operation, // 4 bits
 }
 
 impl s_action_set_parameters {
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
         self.m_variable_1.encode(bitstream)?;
         self.m_variable_2.encode(bitstream)?;
-        bitstream.write_integer(self.m_operation, 4)?;
+        bitstream.write_enum(self.m_operation, 4)?;
 
         Ok(())
     }
@@ -283,7 +290,7 @@ impl s_action_set_parameters {
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
         self.m_variable_1.decode(bitstream)?;
         self.m_variable_2.decode(bitstream)?;
-        self.m_operation = bitstream.read_integer("operation", 4)?;
+        self.m_operation = bitstream.read_enum("operation", 4)?;
 
         Ok(())
     }
@@ -467,20 +474,20 @@ impl s_action_hud_post_message_parameters {
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct s_action_timer_set_rate_parameters {
     pub m_timer: c_custom_timer_reference,
-    pub m_rate: u8, // 5 bits
+    pub m_rate: e_game_engine_timer_rate, // 5 bits
 }
 
 impl s_action_timer_set_rate_parameters {
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
         self.m_timer.encode(bitstream)?;
-        bitstream.write_integer(self.m_rate, 5)?;
+        bitstream.write_enum(self.m_rate, 5)?;
 
         Ok(())
     }
 
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
         self.m_timer.decode(bitstream)?;
-        self.m_rate = bitstream.read_integer("timer-rate", 5)?;
+        self.m_rate = bitstream.read_enum("timer-rate", 5)?;
 
         Ok(())
     }
@@ -555,14 +562,14 @@ impl s_action_object_attach_parameters {
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct s_action_player_adjust_money_parameters {
     pub m_player: c_player_reference,
-    pub m_math_operation: u8,
+    pub m_math_operation: e_math_operation, // 4 bits
     pub m_variable: c_custom_variable_reference,
 }
 
 impl s_action_player_adjust_money_parameters {
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
         self.m_player.encode(bitstream)?;
-        bitstream.write_integer(self.m_math_operation, 4)?;
+        bitstream.write_enum(self.m_math_operation, 4)?;
         self.m_variable.encode(bitstream)?;
 
         Ok(())
@@ -570,7 +577,7 @@ impl s_action_player_adjust_money_parameters {
 
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
         self.m_player.decode(bitstream)?;
-        self.m_math_operation = bitstream.read_integer("math-operation", 4)?;
+        self.m_math_operation = bitstream.read_enum("math-operation", 4)?;
         self.m_variable.decode(bitstream)?;
 
         Ok(())
@@ -606,20 +613,20 @@ impl s_action_player_enable_purchases_parameters {
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct s_action_weapon_set_pickup_priority_parameters {
     pub m_object: c_object_reference,
-    pub m_weapon_pickup_priority: u8, // 5 bits
+    pub m_weapon_pickup_priority: e_weapon_pickup_priority, // 2 bits
 }
 
 impl s_action_weapon_set_pickup_priority_parameters {
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
         self.m_object.encode(bitstream)?;
-        bitstream.write_integer(self.m_weapon_pickup_priority, 2)?;
+        bitstream.write_enum(self.m_weapon_pickup_priority, 2)?;
 
         Ok(())
     }
 
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
         self.m_object.decode(bitstream)?;
-        self.m_weapon_pickup_priority = bitstream.read_integer("weapon-pickup-priority", 2)?;
+        self.m_weapon_pickup_priority = bitstream.read_enum("weapon-pickup-priority", 2)?;
 
         Ok(())
     }
@@ -650,7 +657,7 @@ impl s_action_hud_widget_text_base {
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct c_megalogamengine_hud_meter_input {
-    pub m_type: u8, // 2 bits
+    pub m_type: e_megalogamengine_hud_meter_input_type, // 2 bits
     #[serde(skip_serializing_if = "Option::is_none")]
     pub m_variable_1: Option<c_custom_variable_reference>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -661,17 +668,17 @@ pub struct c_megalogamengine_hud_meter_input {
 
 impl c_megalogamengine_hud_meter_input {
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
-
         match (self.m_type, &self.m_variable_1, &self.m_variable_2, &self.m_timer) {
-            (1, Some(variable1), Some(variable2), None) => {
-                bitstream.write_integer(1u8, 2)?;
+            (e_megalogamengine_hud_meter_input_type::number, Some(variable1), Some(variable2), None) => {
+                bitstream.write_enum(e_megalogamengine_hud_meter_input_type::number, 2)?;
                 variable1.encode(bitstream)?;
                 variable2.encode(bitstream)?;
             }
-            (2, None, None, Some(timer)) => {
-                bitstream.write_integer(2u8, 2)?;
+            (e_megalogamengine_hud_meter_input_type::timer, None, None, Some(timer)) => {
+                bitstream.write_enum(e_megalogamengine_hud_meter_input_type::timer, 2)?;
                 timer.encode(bitstream)?;
             }
+            (e_megalogamengine_hud_meter_input_type::none, _, _, _) => {}
             _ => {}
         }
 
@@ -679,9 +686,9 @@ impl c_megalogamengine_hud_meter_input {
     }
 
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
-        self.m_type = bitstream.read_integer("type", 2)?;
+        self.m_type = bitstream.read_enum("type", 2)?;
         match self.m_type {
-            1 => {
+            e_megalogamengine_hud_meter_input_type::number => {
                 let mut variable1 = c_custom_variable_reference::default();
                 let mut variable2 = c_custom_variable_reference::default();
                 variable1.decode(bitstream)?;
@@ -689,12 +696,12 @@ impl c_megalogamengine_hud_meter_input {
                 self.m_variable_1 = Some(variable1);
                 self.m_variable_2 = Some(variable2);
             }
-            2 => {
-                let mut timer= c_custom_timer_reference::default();
+            e_megalogamengine_hud_meter_input_type::timer => {
+                let mut timer = c_custom_timer_reference::default();
                 timer.decode(bitstream)?;
                 self.m_timer = Some(timer);
             }
-            _ => {}
+            e_megalogamengine_hud_meter_input_type::none => {}
         }
 
         Ok(())
@@ -842,14 +849,14 @@ impl s_action_team_set_coop_spawning_parameters {
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct s_action_vitality_adjustment_parameters {
     pub m_object: c_object_reference,
-    pub m_operation: u8, // 4 bits
+    pub m_operation: e_math_operation, // 4 bits
     pub m_variable: c_custom_variable_reference,
 }
 
 impl s_action_vitality_adjustment_parameters {
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
         self.m_object.encode(bitstream)?;
-        bitstream.write_integer(self.m_operation, 4)?;
+        bitstream.write_enum(self.m_operation, 4)?;
         self.m_variable.encode(bitstream)?;
 
         Ok(())
@@ -857,7 +864,7 @@ impl s_action_vitality_adjustment_parameters {
 
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
         self.m_object.decode(bitstream)?;
-        self.m_operation = bitstream.read_integer("operation", 4)?;
+        self.m_operation = bitstream.read_enum("operation", 4)?;
         self.m_variable.decode(bitstream)?;
 
         Ok(())
@@ -914,16 +921,16 @@ impl s_action_player_set_requisition_palette_parameters {
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct s_action_adjust_grenades_parameters {
     pub m_player: c_player_reference,
-    pub m_grenade_type: u8, // 1 bit
-    pub m_math_operation: u8, // 4 bits
+    pub m_grenade_type: e_grenade_type, // 1 bit
+    pub m_math_operation: e_math_operation, // 4 bits
     pub m_variable: c_custom_variable_reference,
 }
 
 impl s_action_adjust_grenades_parameters {
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
         self.m_player.encode(bitstream)?;
-        bitstream.write_integer(self.m_grenade_type, 1)?;
-        bitstream.write_integer(self.m_math_operation, 4)?;
+        bitstream.write_enum(self.m_grenade_type, 1)?;
+        bitstream.write_enum(self.m_math_operation, 4)?;
         self.m_variable.encode(bitstream)?;
 
         Ok(())
@@ -931,8 +938,8 @@ impl s_action_adjust_grenades_parameters {
 
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
         self.m_player.decode(bitstream)?;
-        self.m_grenade_type = bitstream.read_integer("grenade-type", 1)?;
-        self.m_math_operation = bitstream.read_integer("math-operation", 4)?;
+        self.m_grenade_type = bitstream.read_enum("grenade-type", 1)?;
+        self.m_math_operation = bitstream.read_enum("math-operation", 4)?;
         self.m_variable.decode(bitstream)?;
 
         Ok(())
@@ -1209,14 +1216,14 @@ impl s_action_object_face_object_parameters {
 pub struct s_action_biped_give_weapon_parameters {
     pub m_object: c_object_reference,
     pub m_object_type: c_object_type_reference,
-    pub m_mode: u8, // 2 bits
+    pub m_mode: e_biped_give_weapon_mode, // 2 bits
 }
 
 impl s_action_biped_give_weapon_parameters {
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
         self.m_object.encode(bitstream)?;
         self.m_object_type.encode(bitstream)?;
-        bitstream.write_integer(self.m_mode, 2)?;
+        bitstream.write_enum(self.m_mode, 2)?;
 
         Ok(())
     }
@@ -1224,7 +1231,7 @@ impl s_action_biped_give_weapon_parameters {
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
         self.m_object.decode(bitstream)?;
         self.m_object_type.decode(bitstream)?;
-        self.m_mode = bitstream.read_integer("mode", 2)?;
+        self.m_mode = bitstream.read_enum("mode", 2)?;
 
         Ok(())
     }

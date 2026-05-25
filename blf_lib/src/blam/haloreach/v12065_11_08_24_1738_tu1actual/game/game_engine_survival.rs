@@ -1,4 +1,5 @@
 use serde::{Deserialize, Serialize};
+use blf_lib::bitfield;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::game_engine_default::c_game_engine_base_variant;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::game_engine_traits::{c_game_engine_respawn_options};
 use blf_lib::io::bitstream::{c_bitstream_reader, c_bitstream_writer};
@@ -6,10 +7,21 @@ use blf_lib::types::array::StaticArray;
 use blf_lib_derivable::result::BLFLibResult;
 use crate::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::game_engine_player_traits::c_player_traits;
 
+bitfield! {
+    #[derive(Serialize, Deserialize)]
+    pub struct e_survival_variant_flags: u8 {
+        hazards_enabled,
+        all_generators_must_survive,
+        random_generator_spawns,
+        weapon_drops_enabled,
+        ammo_crates_enabled,
+    }
+}
+
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct c_game_engine_survival_variant {
     pub m_base_variant: c_game_engine_base_variant,
-    pub m_variant_flags: u8, // 5 bits
+    pub m_variant_flags: e_survival_variant_flags, // 5 bits
     pub m_campaign_difficulty_level: u8, // 3 bits
     pub m_set_count: u8, // 8 bits
     pub m_bonus_lives_awarded: u8, // 4 bits
@@ -38,7 +50,7 @@ pub struct c_game_engine_survival_variant {
 impl c_game_engine_survival_variant {
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
         self.m_base_variant.encode(bitstream)?;
-        bitstream.write_integer(self.m_variant_flags, 5)?;
+        bitstream.write_integer(self.m_variant_flags.to_raw(), 5)?;
         bitstream.write_integer(self.m_campaign_difficulty_level, 3)?;
         bitstream.write_integer(self.m_set_count, 8)?;
         bitstream.write_integer(self.m_bonus_lives_awarded, 4)?;
@@ -68,7 +80,7 @@ impl c_game_engine_survival_variant {
 
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
         self.m_base_variant.decode(bitstream)?;
-        self.m_variant_flags = bitstream.read_integer("m_variant_flags", 5)?;
+        self.m_variant_flags = e_survival_variant_flags::from_raw(bitstream.read_integer("m_variant_flags", 5)?);
         self.m_campaign_difficulty_level = bitstream.read_integer("campaign-difficulty-level", 3)?;
         self.m_set_count = bitstream.read_integer("set-count", 8)?;
         self.m_bonus_lives_awarded = bitstream.read_integer("bonus-lives-awarded", 4)?;

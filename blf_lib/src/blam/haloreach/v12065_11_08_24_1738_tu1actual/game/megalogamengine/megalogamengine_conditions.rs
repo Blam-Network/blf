@@ -1,3 +1,4 @@
+use num_derive::{FromPrimitive, ToPrimitive};
 use serde::{Deserialize, Serialize};
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::megalogamengine::megalogamengine_custom_timer_reference::c_custom_timer_reference;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::megalogamengine::megalogamengine_object_type_reference::c_object_type_reference;
@@ -9,18 +10,30 @@ use blf_lib::OPTION_TO_RESULT;
 use blf_lib_derivable::result::BLFLibResult;
 use crate::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::megalogamengine::megalogamengine_object_reference::c_object_reference;
 
+#[repr(u8)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, ToPrimitive, FromPrimitive, Default, Serialize, Deserialize)]
+pub enum e_numeric_comparison {
+    #[default]
+    less_than = 0, // <
+    greater_than = 1, // >
+    equal_to = 2, // ==
+    less_than_or_equal_to = 3, // <=
+    greater_than_or_equal_to = 4, // >=
+    not_equal_to = 5, // !=
+}
+
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct s_condition_if_parameters {
     pub m_left: s_variant_variable,
     pub m_right: s_variant_variable,
-    pub m_comparison: u8, // 3 bit
+    pub m_comparison: e_numeric_comparison, // 3 bits
 }
 
 impl s_condition_if_parameters {
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
         self.m_left.encode(bitstream)?;
         self.m_right.encode(bitstream)?;
-        bitstream.write_integer(self.m_comparison, 3)?;
+        bitstream.write_enum(self.m_comparison, 3)?;
 
         Ok(())
     }
@@ -28,7 +41,7 @@ impl s_condition_if_parameters {
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
         self.m_left.decode(bitstream)?;
         self.m_right.decode(bitstream)?;
-        self.m_comparison = bitstream.read_integer("comparison", 3)?;
+        self.m_comparison = bitstream.read_enum("comparison", 3)?;
 
         Ok(())
     }
