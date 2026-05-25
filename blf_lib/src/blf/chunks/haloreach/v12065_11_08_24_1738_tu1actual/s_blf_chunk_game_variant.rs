@@ -29,7 +29,7 @@ impl BinRead for s_blf_chunk_game_variant {
         bitstream.begin_reading();
 
         let hash: s_network_http_request_hash = bitstream.read_raw(0x14 * 8)?;
-        let unknown04: i16 = bitstream.read_integer("unknown04", 16)?;
+        let unknown04: i16 = bitstream.read_signed_integer("unknown04", 16)?;
         let unknown06: u16 = bitstream.read_integer("unknown06", 16)?;
         let variant_length: u32 = bitstream.read_integer("variant-length", 32)?;
 
