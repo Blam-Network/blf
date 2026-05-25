@@ -39,9 +39,20 @@ export default defineConfig({
     "TypeScript library for reading and writing Halo BLF chunk files.",
   base: "/blf/",
   cleanUrls: true,
+  appearance: "force-dark",
+  markdown: {
+    theme: {
+      light: "github-light",
+      dark: "github-dark",
+    },
+  },
   themeConfig: {
     nav: [
       { text: "Guide", link: "/guide/quick-start" },
+      {
+        text: "npm",
+        link: "https://www.npmjs.com/package/@blamnetwork/blf",
+      },
       {
         text: "GitHub",
         link: "https://github.com/Blam-Network/blf",
@@ -82,9 +93,24 @@ export default defineConfig({
     ],
     socialLinks: [
       {
+        icon: "npm",
+        link: "https://www.npmjs.com/package/@blamnetwork/blf",
+        ariaLabel: "npm",
+      },
+      {
         icon: "github",
         link: "https://github.com/Blam-Network/blf",
       },
+      {
+        icon: "discord",
+        link: "https://discord.gg/77ZAgXv8a6",
+        ariaLabel: "Discord",
+      },
     ],
+    footer: {
+      message: "MIT Licensed",
+      copyright:
+        'Copyright © <a href="https://discord.gg/77ZAgXv8a6" target="_blank" rel="noopener noreferrer">Blam Network</a>',
+    },
   },
 });

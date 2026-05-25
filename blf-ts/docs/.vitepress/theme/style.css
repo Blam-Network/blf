@@ -1,0 +1,185 @@
+/**
+ * blf-ts docs — dark theme with green highlights
+ * https://github.com/vuejs/vitepress/blob/main/src/client/theme-default/styles/vars.css
+ */
+
+/* Let hero background show through layout chrome */
+html.dark body {
+  background-color: transparent;
+}
+
+.dark {
+  --vp-sidebar-bg-color: rgba(12, 16, 12, 0.72);
+}
+
+.dark .VPContent,
+.dark .VPNavBar,
+.dark .VPSidebar,
+.dark .VPLocalNav,
+.dark .VPDoc .container,
+.dark .VPDoc .content,
+.dark .VPDoc .aside-container,
+.dark .VPFooter {
+  background-color: transparent;
+}
+
+.dark .VPNavBar,
+.dark .VPSidebar,
+.dark .VPLocalNav,
+.dark .VPFooter {
+  background-color: rgba(8, 10, 8, 0.65);
+  backdrop-filter: blur(8px);
+}
+
+.dark .VPNavBar {
+  background-color: rgba(8, 10, 8, 0.75);
+}
+
+.dark .VPNavBar:not(.scrolled) {
+  background-color: rgba(8, 10, 8, 0.5);
+}
+
+.dark .VPSidebar .curtain {
+  background-color: rgba(8, 10, 8, 0.75);
+}
+
+.dark .VPDoc .aside-curtain {
+  background: linear-gradient(transparent, rgba(8, 10, 8, 0.8) 70%);
+}
+
+.dark div[class*="language-"],
+.dark .vp-code-group,
+.dark .vp-adaptive-theme {
+  background-color: rgba(15, 20, 15, 0.9);
+}
+
+.dark {
+  /* Palette — brighter greens for links, accents, and active nav */
+  --vp-c-green-1: #6ee7a8;
+  --vp-c-green-2: #34d399;
+  --vp-c-green-3: #059669;
+  --vp-c-green-soft: rgba(52, 211, 153, 0.14);
+
+  /* Surfaces — near-black with a slight green cast */
+  --vp-c-bg: #080a08;
+  --vp-c-bg-alt: #0c100c;
+  --vp-c-bg-elv: #111611;
+  --vp-c-bg-soft: #0f140f;
+
+  /* Borders & dividers */
+  --vp-c-border: #243524;
+  --vp-c-divider: #1a261a;
+  --vp-c-gutter: #060806;
+
+  /* Text */
+  --vp-c-text-1: #e2ebe4;
+  --vp-c-text-2: #9aab9e;
+  --vp-c-text-3: #5c6b5f;
+
+  /* Brand = green */
+  --vp-c-brand-1: var(--vp-c-green-1);
+  --vp-c-brand-2: var(--vp-c-green-2);
+  --vp-c-brand-3: var(--vp-c-green-3);
+  --vp-c-brand-soft: var(--vp-c-green-soft);
+
+  --vp-c-tip-1: var(--vp-c-green-1);
+  --vp-c-tip-2: var(--vp-c-green-2);
+  --vp-c-tip-3: var(--vp-c-green-3);
+  --vp-c-tip-soft: var(--vp-c-green-soft);
+
+  --vp-c-note-1: var(--vp-c-green-1);
+  --vp-c-note-2: var(--vp-c-green-2);
+  --vp-c-note-3: var(--vp-c-green-3);
+  --vp-c-note-soft: var(--vp-c-green-soft);
+
+  /* Shadows — softer on dark green bg */
+  --vp-shadow-1: 0 1px 2px rgba(0, 0, 0, 0.45), 0 1px 3px rgba(52, 211, 153, 0.04);
+  --vp-shadow-2: 0 4px 12px rgba(0, 0, 0, 0.5), 0 2px 6px rgba(52, 211, 153, 0.06);
+  --vp-shadow-3: 0 12px 32px rgba(0, 0, 0, 0.55), 0 4px 12px rgba(52, 211, 153, 0.08);
+  --vp-shadow-4: 0 20px 48px rgba(0, 0, 0, 0.6), 0 8px 20px rgba(52, 211, 153, 0.1);
+}
+
+:root {
+  --vp-c-brand-1: var(--vp-c-green-1);
+  --vp-c-brand-2: var(--vp-c-green-2);
+  --vp-c-brand-3: var(--vp-c-green-3);
+  --vp-c-brand-soft: var(--vp-c-green-soft);
+
+  --vp-c-tip-1: var(--vp-c-brand-1);
+  --vp-c-tip-2: var(--vp-c-brand-2);
+  --vp-c-tip-3: var(--vp-c-brand-3);
+  --vp-c-tip-soft: var(--vp-c-brand-soft);
+}
+
+:root {
+  --vp-button-brand-border: transparent;
+  --vp-button-brand-text: var(--vp-c-white);
+  --vp-button-brand-bg: var(--vp-c-brand-3);
+  --vp-button-brand-hover-border: transparent;
+  --vp-button-brand-hover-text: var(--vp-c-white);
+  --vp-button-brand-hover-bg: var(--vp-c-brand-2);
+  --vp-button-brand-active-border: transparent;
+  --vp-button-brand-active-text: var(--vp-c-white);
+  --vp-button-brand-active-bg: var(--vp-c-brand-1);
+}
+
+:root {
+  --vp-home-hero-name-color: transparent;
+  --vp-home-hero-name-background: linear-gradient(
+    120deg,
+    #6ee7a8 30%,
+    #34d399 70%
+  );
+
+  --vp-home-hero-image-background-image: linear-gradient(
+    -45deg,
+    #059669 50%,
+    #34d399 50%
+  );
+}
+
+:root {
+  --vp-custom-block-tip-border: var(--vp-c-brand-1);
+  --vp-custom-block-tip-text: var(--vp-c-text-1);
+  --vp-custom-block-tip-bg: var(--vp-c-brand-soft);
+  --vp-custom-block-tip-code-bg: rgba(52, 211, 153, 0.1);
+}
+
+/* Nav bar accent when scrolled */
+.dark .VPNav.scrolled {
+  border-bottom-color: var(--vp-c-divider);
+  box-shadow: 0 1px 0 rgba(52, 211, 153, 0.08);
+}
+
+/* Sidebar active item */
+.dark .VPSidebarItem.is-active > .item > .link {
+  color: var(--vp-c-brand-1);
+}
+
+/* Inline code in prose */
+.dark :not(pre) > code {
+  color: var(--vp-c-green-1);
+  background-color: rgba(52, 211, 153, 0.1);
+  border: 1px solid rgba(52, 211, 153, 0.18);
+}
+
+/* Code block chrome */
+.dark div[class*="language-"] {
+  border: 1px solid var(--vp-c-divider);
+}
+
+/* Tables */
+.dark table th {
+  background-color: var(--vp-c-bg-soft);
+  border-color: var(--vp-c-divider);
+}
+
+.dark table td {
+  border-color: var(--vp-c-divider);
+}
+
+/* Blockquotes */
+.dark blockquote {
+  border-left-color: var(--vp-c-brand-2);
+  background-color: var(--vp-c-brand-soft);
+}
