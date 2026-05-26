@@ -42,7 +42,7 @@ if (search_for_chunk(file, fsm, "big")) {
 }
 ```
 
-See [MCC `v_25_08_16`](/guide/versions/mcc/v_25_08_16) for the version bundle.
+See [MCC `v_25_08_16`](/guide/versions/mcc/v_25_08_16) for the version bundle ([`s_blf_chunk_fileshare_metadata` source](https://github.com/Blam-Network/blf/blob/main/blf-ts/src/chunks/mcc/s_blf_chunk_fileshare_metadata.ts)).
 
 ## Errors
 

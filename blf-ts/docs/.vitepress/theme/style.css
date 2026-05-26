@@ -320,6 +320,84 @@ html.dark body {
   border-color: var(--vp-c-divider);
 }
 
+/* Version chunk export tables — undo vp-doc `display:block` on tables */
+.dark .vp-doc .version-chunk-exports {
+  width: 100%;
+}
+
+.dark .vp-doc .version-chunk-exports table.chunk-table {
+  display: table;
+  width: 100%;
+  margin: 0;
+  border-collapse: collapse;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 8px;
+  overflow: hidden;
+  font-size: 0.95em;
+  line-height: 1.5;
+}
+
+.dark .vp-doc .version-chunk-exports table.chunk-table thead {
+  background: rgba(52, 211, 153, 0.06);
+}
+
+.dark .vp-doc .version-chunk-exports table.chunk-table th {
+  padding: 0.65rem 1.1rem;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--vp-c-text-2);
+  border-bottom: 1px solid var(--vp-c-divider);
+}
+
+.dark .vp-doc .version-chunk-exports table.chunk-table td {
+  padding: 0.75rem 1.1rem;
+  vertical-align: middle;
+  border-top: 1px solid var(--vp-c-divider);
+}
+
+.dark .vp-doc .version-chunk-exports table.chunk-table tbody tr:hover td {
+  background: rgba(52, 211, 153, 0.04);
+}
+
+@media (max-width: 640px) {
+  .dark .vp-doc .version-chunk-exports table.chunk-table {
+    display: block;
+    overflow-x: auto;
+  }
+
+  .dark .vp-doc .version-chunk-exports table.chunk-table thead {
+    display: none;
+  }
+
+  .dark .vp-doc .version-chunk-exports table.chunk-table tbody,
+  .dark .vp-doc .version-chunk-exports table.chunk-table tr,
+  .dark .vp-doc .version-chunk-exports table.chunk-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .dark .vp-doc .version-chunk-exports table.chunk-table tr {
+    padding: 0.75rem 1rem;
+  }
+
+  .dark .vp-doc .version-chunk-exports table.chunk-table tr + tr {
+    border-top: 1px solid var(--vp-c-divider);
+  }
+
+  .dark .vp-doc .version-chunk-exports table.chunk-table td {
+    padding: 0.25rem 0;
+    border-top: none;
+    text-align: left;
+  }
+
+  .dark .vp-doc .version-chunk-exports table.chunk-table td.col-link-header {
+    padding-top: 0.5rem;
+  }
+}
+
 /* Blockquotes */
 .dark blockquote {
   border-left-color: var(--vp-c-brand-2);

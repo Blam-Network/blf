@@ -14,6 +14,9 @@ const outPath = path.join(root, "docs", ".vitepress", "version-exports.json");
 const TS_EXT = /\.ts$/;
 const AUTOGEN_MARKER = "<!-- autogen:version-build -->";
 
+/** GitHub blob base for chunk source links in the docs. */
+const SOURCE_REPO_BASE = "https://github.com/Blam-Network/blf/blob/main/blf-ts";
+
 /** @type {Record<string, string>} */
 const GAME_LABELS = {
   haloreach: "Halo Reach",
@@ -41,26 +44,64 @@ const BUILD_DESCRIPTIONS = {
   v13895_09_04_27_2201_atlas_release: "Halo 3: ODST - Release",
 };
 
-/** @param {string} filePath */
-function parseChunkExports(filePath) {
-  const text = fs.readFileSync(filePath, "utf8");
-  /** @type {string[]} */
-  const chunks = [];
+const CHUNK_DECORATOR_RE =
+  /@blf\.chunk\(\s*["']([^"']+)["']\s*,\s*([\d.]+)\s*\)/;
+
+/**
+ * @param {string} chunkFilePath
+ * @returns {{ signature: string; version: string } | null}
+ */
+function parseChunkHeader(chunkFilePath) {
+  const text = fs.readFileSync(chunkFilePath, "utf8");
+  const match = text.match(CHUNK_DECORATOR_RE);
+  if (!match) {
+    return null;
+  }
+  return { signature: match[1], version: match[2] };
+}
+
+/**
+ * @param {string} barrelPath Absolute path to `src/versions/<game>/<build>.ts`
+ * @returns {{ name: string; source: string; signature: string; version: string }[]}
+ */
+function parseChunkExports(barrelPath) {
+  const text = fs.readFileSync(barrelPath, "utf8");
+  const barrelDir = path.dirname(barrelPath);
+  /** @type {Map<string, { name: string; source: string; signature: string; version: string }>} */
+  const chunks = new Map();
   for (const match of text.matchAll(/export \* from ["']([^"']+)["']/g)) {
     const exportPath = match[1];
     if (!exportPath.includes("/chunks/")) {
       continue;
     }
-    chunks.push(path.basename(exportPath).replace(TS_EXT, ""));
+    const name = path.basename(exportPath).replace(TS_EXT, "");
+    let resolved = path.normalize(path.join(barrelDir, exportPath));
+    if (!resolved.endsWith(".ts")) {
+      resolved += ".ts";
+    }
+    const source = path.relative(root, resolved).replace(/\\/g, "/");
+    const header = parseChunkHeader(resolved);
+    chunks.set(name, {
+      name,
+      source,
+      signature: header?.signature ?? "—",
+      version: header?.version ?? "—",
+    });
   }
-  return [...new Set(chunks)].sort();
+  return [...chunks.values()].sort((a, b) => {
+    const sig = a.signature.localeCompare(b.signature);
+    if (sig !== 0) {
+      return sig;
+    }
+    return a.name.localeCompare(b.name);
+  });
 }
 
-/** @param {{ game: string; buildId: string; label: string; buildLabel: string; importPath: string; docLink: string; chunks: string[] }} bundle */
+/** @param {{ game: string; buildId: string; label: string; buildLabel: string; importPath: string; docLink: string; chunks: { name: string; source: string; signature: string; version: string }[] }} bundle */
 function buildPageMarkdown(bundle) {
   const description =
     BUILD_DESCRIPTIONS[bundle.buildId] ?? `${bundle.label} build.`;
-  const sampleChunk = bundle.chunks[0] ?? "s_blf_chunk_start_of_file";
+  const sampleChunk = bundle.chunks[0]?.name ?? "s_blf_chunk_start_of_file";
 
   return `${AUTOGEN_MARKER}
 
@@ -78,7 +119,7 @@ import { ${sampleChunk} } from "${bundle.importPath}";
 `;
 }
 
-/** @type {{ game: string; buildId: string; label: string; buildLabel: string; importPath: string; docLink: string; chunks: string[] }[]} */
+/** @type {{ game: string; buildId: string; label: string; buildLabel: string; importPath: string; docLink: string; chunks: { name: string; source: string; signature: string; version: string }[] }[]} */
 const bundles = [];
 /** @type {Set<string>} */
 const expectedBuildPages = new Set();
@@ -133,7 +174,10 @@ for (const game of fs.readdirSync(docsVersionsDir)) {
 }
 
 fs.mkdirSync(path.dirname(outPath), { recursive: true });
-fs.writeFileSync(outPath, `${JSON.stringify({ bundles }, null, 2)}\n`);
+fs.writeFileSync(
+  outPath,
+  `${JSON.stringify({ sourceRepoBase: SOURCE_REPO_BASE, bundles }, null, 2)}\n`
+);
 console.log(
   `Wrote ${path.relative(root, outPath)} (${bundles.length} bundles, ${expectedBuildPages.size} build pages)`
 );
