@@ -42,8 +42,21 @@ const MCC_SURVIVAL_ENCODING_VERSION = 2;
 // JSON helpers
 // ---------------------------------------------------------------------------
 
+const JSON_BIGINT_TAG = "__bigint__";
+
 function json_clone<T>(value: T): T {
-  return JSON.parse(JSON.stringify(value));
+  return JSON.parse(
+    JSON.stringify(value, (_key, v) =>
+      typeof v === "bigint" ? { [JSON_BIGINT_TAG]: v.toString() } : v
+    ),
+    (_key, v) =>
+      v !== null &&
+      typeof v === "object" &&
+      JSON_BIGINT_TAG in v &&
+      typeof (v as Record<string, string>)[JSON_BIGINT_TAG] === "string"
+        ? BigInt((v as Record<string, string>)[JSON_BIGINT_TAG])
+        : v
+  );
 }
 
 interface GameVariantJson {
