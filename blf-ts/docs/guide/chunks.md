@@ -28,6 +28,22 @@ Use this when the buffer does not only contain a BLF — for example, reading a 
 
 Use `write_blffile` from the package root when assembling a BLF from chunk instances and `s_blf_header`.
 
+## Fileshare metadata (`_fsm`)
+
+MCC fileshare exports append a `_fsm` 1.1 chunk (464 bytes) with digests, a PlayFab-style item id, and an attestation blob. Use `search_for_chunk` when the buffer is a full BLF that ends with `_eof` then `_fsm`:
+
+```ts
+import { search_for_chunk } from "@blamnetwork/blf";
+import { s_blf_chunk_fileshare_metadata } from "@blamnetwork/blf/mcc/v_25_08_16";
+
+const fsm = new s_blf_chunk_fileshare_metadata();
+if (search_for_chunk(file, fsm, "big")) {
+  console.log(fsm.unknown98); // 40-char hex item id
+}
+```
+
+See [MCC `v_25_08_16`](/guide/versions/mcc/v_25_08_16) for the version bundle.
+
 ## Errors
 
 Layout and chunk failures throw `BlfError`.

@@ -13,6 +13,9 @@
       "haloreach_mcc/*": [
         "./dist/versions/haloreach_mcc/*"
       ],
+      "mcc/*": [
+        "./dist/versions/mcc/*"
+      ],
       "halo3/*": [
         "./dist/versions/halo3/*"
       ],
@@ -45,6 +48,12 @@
       "import": "./dist/versions/haloreach_mcc/*.js",
       "require": "./dist-cjs/versions/haloreach_mcc/*.js",
       "default": "./dist/versions/haloreach_mcc/*.js"
+    },
+    "./mcc/*": {
+      "types": "./dist/versions/mcc/*.d.ts",
+      "import": "./dist/versions/mcc/*.js",
+      "require": "./dist-cjs/versions/mcc/*.js",
+      "default": "./dist/versions/mcc/*.js"
     },
     "./halo3/*": {
       "types": "./dist/versions/halo3/*.d.ts",

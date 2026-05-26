@@ -6,6 +6,7 @@ Each game build is a separate npm subpath export. Import chunks and blam types f
 |------|---------------|-------|
 | Halo Reach | `@blamnetwork/blf/haloreach/` | [Reach](/guide/versions/haloreach/) |
 | Halo Reach MCC | `@blamnetwork/blf/haloreach_mcc/` | [Reach MCC](/guide/versions/haloreach_mcc/) |
+| Halo: The Master Chief Collection | `@blamnetwork/blf/mcc/` | [MCC](/guide/versions/mcc/) |
 | Halo 3 | `@blamnetwork/blf/halo3/` | [Halo 3](/guide/versions/halo3/) |
 | Halo 3: ODST | `@blamnetwork/blf/halo3odst/` | [ODST](/guide/versions/halo3odst/) |
 
