@@ -27,19 +27,19 @@ impl c_replaceable_token {
         bitstream.write_integer(self.m_type, 3)?;
 
         match (self.m_type, &self.m_player, &self.m_object, &self.m_team, &self.m_custom_timer, &self.m_custom_variable) {
-            (1, Some(player), None, None, None, None) => {
+            (0, Some(player), None, None, None, None) => {
                 player.encode(bitstream)?;
             }
-            (2, None, None, Some(team), None, None) => {
+            (1, None, None, Some(team), None, None) => {
                 team.encode(bitstream)?;
             }
-            (3, None, Some(object), None, None, None) => {
+            (2, None, Some(object), None, None, None) => {
                 object.encode(bitstream)?;
             }
-            (4, None, None, None, None, Some(custom_variable)) => {
-                custom_variable.encode(bitstream)?; // seems ok
+            (3, None, None, None, None, Some(custom_variable)) => {
+                custom_variable.encode(bitstream)?;
             }
-            (5, None, None, None, Some(timer), None) => {
+            (4, None, None, None, Some(timer), None) => {
                 timer.encode(bitstream)?;
             }
             _ => {
@@ -54,27 +54,27 @@ impl c_replaceable_token {
         self.m_type = bitstream.read_integer("token-type", 3)?;
 
         match self.m_type {
-            1 => {
+            0 => {
                 let mut player = c_player_reference::default();
                 player.decode(bitstream)?;
                 self.m_player = Some(player);
             }
-            2 => {
+            1 => {
                 let mut team = c_team_reference::default();
                 team.decode(bitstream)?;
                 self.m_team = Some(team);
             }
-            3 => {
+            2 => {
                 let mut object = c_object_reference::default();
                 object.decode(bitstream)?;
                 self.m_object = Some(object);
             }
-            4 => {
+            3 => {
                 let mut custom_variable = c_custom_variable_reference::default();
                 custom_variable.decode(bitstream)?;
                 self.m_custom_variable = Some(custom_variable);
             }
-            5 => {
+            4 => {
                 let mut custom_timer = c_custom_timer_reference::default();
                 custom_timer.decode(bitstream)?;
                 self.m_custom_timer = Some(custom_timer);
