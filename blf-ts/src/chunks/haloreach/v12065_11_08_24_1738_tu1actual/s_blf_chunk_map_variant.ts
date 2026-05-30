@@ -1,4 +1,4 @@
-import type { c } from "@craftycodie/cstruct";
+import { type c as CStruct } from "@craftycodie/cstruct";
 import {
   c_bitstream_reader,
   c_bitstream_writer,
@@ -15,7 +15,9 @@ export const map_variant_storage_capacity = 0x7000;
 /**
  * Reach map variant chunk (`mvar` 31.1).
  *
- * Payload layout matches blf_lib: SHA1 hash + big-endian length + packed bitstream.
+ * Payload layout: SHA1 hash + BE `packed_length` + 0x7000 packed storage + 4 zero pad.
+ * Hash covers only `packed_length` (4 BE bytes) + the packed bitstream bytes (not 0x7000
+ * storage slack or the 4-byte tail pad).
  */
 @blf.chunk("mvar", 31.1)
 export class s_blf_chunk_map_variant extends BLFChunkBase {
@@ -29,7 +31,7 @@ export class s_blf_chunk_map_variant extends BLFChunkBase {
     return chunk;
   }
 
-  read_body(payload: Uint8Array, _endian: c.Endian): void {
+  read_body(payload: Uint8Array, _endian: CStruct.Endian): void {
     if (payload.length < 24) {
       throw new BlfError("mvar chunk payload is too short");
     }
@@ -44,8 +46,12 @@ export class s_blf_chunk_map_variant extends BLFChunkBase {
     const packed_on_disk = payload.subarray(24);
     const decode_length =
       this.packed_length > 0
-        ? Math.min(this.packed_length, packed_on_disk.length)
-        : packed_on_disk.length;
+        ? Math.min(
+            this.packed_length,
+            map_variant_storage_capacity,
+            packed_on_disk.length
+          )
+        : Math.min(map_variant_storage_capacity, packed_on_disk.length);
     const packed_data = packed_on_disk.subarray(0, decode_length);
     const bitstream = c_bitstream_reader.new(
       packed_data,
@@ -58,7 +64,7 @@ export class s_blf_chunk_map_variant extends BLFChunkBase {
     bitstream.finish_reading();
   }
 
-  write_body(_endian: c.Endian): Uint8Array {
+  write_body(_endian: CStruct.Endian): Uint8Array {
     const bitstream = c_bitstream_writer.new(
       map_variant_storage_capacity,
       e_bitstream_byte_order._bitstream_byte_order_big_endian
@@ -84,7 +90,7 @@ export class s_blf_chunk_map_variant extends BLFChunkBase {
     hashable.set(packed_data, 4);
     const hash = security_calculate_hash(hashable);
 
-    const payload = new Uint8Array(20 + 4 + map_variant_storage_capacity);
+    const payload = new Uint8Array(20 + 4 + map_variant_storage_capacity + 4);
     payload.set(hash, 0);
     payload.set(length_bytes, 20);
     payload.set(packed_storage, 24);

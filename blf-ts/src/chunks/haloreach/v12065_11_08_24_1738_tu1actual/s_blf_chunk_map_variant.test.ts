@@ -5,6 +5,7 @@ import {
   e_bitstream_byte_order,
 } from "../../../bitstream";
 import { global_up3d } from "../../../bitstream/math";
+import { security_calculate_hash } from "../../../blam/common/cache/security_functions";
 import { get_unit_vector_encoding_constants } from "../../../blam/common/math/unit_vector_quantization";
 import { e_file_type } from "../../../blam/haloreach/v12065_11_08_24_1738_tu1actual/saved_games/saved_game_files";
 import {
@@ -134,17 +135,43 @@ describe("c_map_variant", () => {
 });
 
 describe("s_blf_chunk_map_variant", () => {
-  it("writes fixed-size packed storage with zero padding", () => {
+  it("writes fixed-size packed storage with 4-byte tail padding", () => {
     const chunk = new s_blf_chunk_map_variant();
     chunk.map_variant = create_minimal_map_variant();
 
     const payload = chunk.write_body("big");
+    const corePayloadLength = 20 + 4 + map_variant_storage_capacity;
+
     expect(map_variant_storage_capacity).toBe(0x7000);
-    expect(payload.length).toBe(20 + 4 + map_variant_storage_capacity);
+    expect(payload.length).toBe(corePayloadLength + 4);
     expect(chunk.packed_length).toBeLessThan(map_variant_storage_capacity);
     expect(
-      payload.subarray(24 + chunk.packed_length).every((b) => b === 0)
+      payload
+        .subarray(24 + chunk.packed_length, 24 + map_variant_storage_capacity)
+        .every((b) => b === 0)
     ).toBe(true);
+    expect(payload.subarray(corePayloadLength).every((b) => b === 0)).toBe(
+      true
+    );
+  });
+
+  it("hashes only packed_length and actual packed bytes", () => {
+    const chunk = new s_blf_chunk_map_variant();
+    chunk.map_variant = create_minimal_map_variant();
+    chunk.write_body("big");
+
+    const payload = chunk.write("big").subarray(12);
+    const lengthBytes = new Uint8Array(4);
+    new DataView(lengthBytes.buffer).setUint32(0, chunk.packed_length, false);
+    const packedOnly = payload.subarray(24, 24 + chunk.packed_length);
+    const hashable = new Uint8Array(4 + packedOnly.length);
+    hashable.set(lengthBytes, 0);
+    hashable.set(packedOnly, 4);
+
+    expect(chunk.hash).toEqual(security_calculate_hash(hashable));
+    expect(chunk.hash).not.toEqual(
+      security_calculate_hash(payload.subarray(20))
+    );
   });
 
   it("round-trips a minimal mvar chunk payload", () => {

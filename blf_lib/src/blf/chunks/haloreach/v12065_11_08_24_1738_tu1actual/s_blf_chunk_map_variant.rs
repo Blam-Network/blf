@@ -16,7 +16,7 @@ pub const MAP_VARIANT_STORAGE_CAPACITY: usize = 0x7000;
 #[derive(Default)]
 pub struct s_blf_chunk_map_variant
 {
-    // in the file, this is a length followed by packed data
+    // Hash + BE packed_length + 0x7000 storage + 4-byte pad; hash is over length + packed bytes only.
     pub map_variant: c_map_variant,
 }
 
@@ -33,9 +33,11 @@ impl BinRead for s_blf_chunk_map_variant {
         let mut buffer = Vec::<u8>::new();
         reader.read_to_end(&mut buffer)?;
         let decode_length = if packed_variant_length > 0 {
-            packed_variant_length.min(buffer.len())
+            packed_variant_length
+                .min(MAP_VARIANT_STORAGE_CAPACITY)
+                .min(buffer.len())
         } else {
-            buffer.len()
+            MAP_VARIANT_STORAGE_CAPACITY.min(buffer.len())
         };
 
         let mut bitstream = c_bitstream_reader::new(
@@ -74,7 +76,10 @@ impl BinWrite for s_blf_chunk_map_variant {
 
         writer.write_ne(&get_buffer_hash(&hash_buffer)?)?;
         packed_data_length.write_options(writer, Endian::Big, ())?;
-        writer.write_ne(&packed_storage)?
+        writer.write_all(&packed_storage)?;
+        writer.write_all(&[0u8; 4])?;
+
+        Ok(())
     }
 }
 
