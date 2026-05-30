@@ -111,11 +111,11 @@
     },
     {
       "game": "haloreach_mcc",
-      "buildId": "v_untracked_25_08_19_1352",
+      "buildId": "v_untracked_25_08_16_1352",
       "label": "Halo: MCC - Halo: Reach",
-      "buildLabel": "19th Aug 2025 (Latest)",
-      "importPath": "@blamnetwork/blf/haloreach_mcc/v_untracked_25_08_19_1352",
-      "docLink": "/guide/versions/haloreach_mcc/v_untracked_25_08_19_1352",
+      "buildLabel": "16th Aug 2025 (Latest)",
+      "importPath": "@blamnetwork/blf/haloreach_mcc/v_untracked_25_08_16_1352",
+      "docLink": "/guide/versions/haloreach_mcc/v_untracked_25_08_16_1352",
       "chunks": [
         {
           "name": "s_blf_chunk_start_of_file",
@@ -143,13 +143,13 @@
         },
         {
           "name": "s_blf_chunk_packed_game_variant",
-          "source": "src/chunks/haloreach_mcc/v_untracked_25_08_19_1352/s_blf_chunk_packed_game_variant.ts",
+          "source": "src/chunks/haloreach_mcc/v_untracked_25_08_16_1352/s_blf_chunk_packed_game_variant.ts",
           "signature": "gvar",
           "version": "54.1"
         },
         {
           "name": "s_blf_chunk_game_variant",
-          "source": "src/chunks/haloreach_mcc/v_untracked_25_08_19_1352/s_blf_chunk_game_variant.ts",
+          "source": "src/chunks/haloreach_mcc/v_untracked_25_08_16_1352/s_blf_chunk_game_variant.ts",
           "signature": "mpvr",
           "version": "54.1"
         }
@@ -157,11 +157,11 @@
     },
     {
       "game": "mcc",
-      "buildId": "v_25_08_16",
+      "buildId": "v2025_08_16_178512_1_release",
       "label": "Halo: MCC",
-      "buildLabel": "16th Aug 2025 (Latest)",
-      "importPath": "@blamnetwork/blf/mcc/v_25_08_16",
-      "docLink": "/guide/versions/mcc/v_25_08_16",
+      "buildLabel": "2025.08.16.178512.1-Release (Latest)",
+      "importPath": "@blamnetwork/blf/mcc/v2025_08_16_178512_1_release",
+      "docLink": "/guide/versions/mcc/v2025_08_16_178512_1_release",
       "chunks": [
         {
           "name": "s_blf_chunk_fileshare_metadata",

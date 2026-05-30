@@ -5,7 +5,7 @@ Cross-build utilities live on a dedicated entry point (not the package root):
 ```ts
 import { convert_reach_gametype } from "@blamnetwork/blf/helpers";
 import { c_game_variant as tu1_variant } from "@blamnetwork/blf/haloreach/v12065_11_08_24_1738_tu1actual";
-import { c_game_variant as mcc_variant } from "@blamnetwork/blf/haloreach_mcc/v_untracked_25_08_19_1352";
+import { c_game_variant as mcc_variant } from "@blamnetwork/blf/haloreach_mcc/v_untracked_25_08_16_1352";
 ```
 
 ## `convert_reach_gametype(from, to)`
@@ -34,7 +34,7 @@ import {
   s_blf_chunk_game_variant as tu1_mpvr,
   s_blf_chunk_start_of_file,
 } from "@blamnetwork/blf/haloreach/v12065_11_08_24_1738_tu1actual";
-import { s_blf_chunk_game_variant as mcc_mpvr } from "@blamnetwork/blf/haloreach_mcc/v_untracked_25_08_19_1352";
+import { s_blf_chunk_game_variant as mcc_mpvr } from "@blamnetwork/blf/haloreach_mcc/v_untracked_25_08_16_1352";
 
 const buffer = new Uint8Array(readFileSync("mcc-variant.blf"));
 

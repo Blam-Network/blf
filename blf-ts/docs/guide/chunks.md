@@ -34,7 +34,7 @@ MCC fileshare exports append a `_fsm` 1.1 chunk (464 bytes) with digests, a Play
 
 ```ts
 import { search_for_chunk } from "@blamnetwork/blf";
-import { s_blf_chunk_fileshare_metadata } from "@blamnetwork/blf/mcc/v_25_08_16";
+import { s_blf_chunk_fileshare_metadata } from "@blamnetwork/blf/mcc/v2025_08_16_178512_1_release";
 
 const fsm = new s_blf_chunk_fileshare_metadata();
 if (search_for_chunk(file, fsm, "big")) {
@@ -42,7 +42,7 @@ if (search_for_chunk(file, fsm, "big")) {
 }
 ```
 
-See [MCC `v_25_08_16`](/guide/versions/mcc/v_25_08_16) for the version bundle ([`s_blf_chunk_fileshare_metadata` source](https://github.com/Blam-Network/blf/blob/main/blf-ts/src/chunks/mcc/s_blf_chunk_fileshare_metadata.ts)).
+See [MCC `v2025_08_16_178512_1_release`](/guide/versions/mcc/v2025_08_16_178512_1_release) for the version bundle ([`s_blf_chunk_fileshare_metadata` source](https://github.com/Blam-Network/blf/blob/main/blf-ts/src/chunks/mcc/s_blf_chunk_fileshare_metadata.ts)).
 
 ## Errors
 

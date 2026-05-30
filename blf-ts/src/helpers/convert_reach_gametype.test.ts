@@ -5,19 +5,19 @@ import {
   e_game_mode as e_game_mode_tu1,
 } from "../blam/haloreach/v12065_11_08_24_1738_tu1actual/game/c_game_variant";
 import { e_math_operation as e_math_operation_tu1 } from "../blam/haloreach/v12065_11_08_24_1738_tu1actual/game/megalogamengine/megalogamengine_actions";
-import { c_game_engine_custom_variant as c_game_engine_custom_variant_mcc } from "../blam/haloreach_mcc/v_untracked_25_08_19_1352/game/c_game_engine_custom_variant";
-import { c_game_engine_survival_variant as c_game_engine_survival_variant_mcc } from "../blam/haloreach_mcc/v_untracked_25_08_19_1352/game/c_game_engine_survival_variant";
+import { c_game_engine_custom_variant as c_game_engine_custom_variant_mcc } from "../blam/haloreach_mcc/v_untracked_25_08_16_1352/game/c_game_engine_custom_variant";
+import { c_game_engine_survival_variant as c_game_engine_survival_variant_mcc } from "../blam/haloreach_mcc/v_untracked_25_08_16_1352/game/c_game_engine_survival_variant";
 import {
   c_game_variant as c_game_variant_mcc,
   e_game_mode as e_game_mode_mcc,
-} from "../blam/haloreach_mcc/v_untracked_25_08_19_1352/game/c_game_variant";
+} from "../blam/haloreach_mcc/v_untracked_25_08_16_1352/game/c_game_variant";
 import {
   c_action,
   e_math_operation as e_math_operation_mcc,
-} from "../blam/haloreach_mcc/v_untracked_25_08_19_1352/game/megalogamengine/megalogamengine_actions";
-import { e_explicit_player_type } from "../blam/haloreach_mcc/v_untracked_25_08_19_1352/game/megalogamengine/megalogamengine_explicit_player";
-import { c_explicit_player } from "../blam/haloreach_mcc/v_untracked_25_08_19_1352/game/megalogamengine/megalogamengine_references";
-import { s_custom_game_engine_definition } from "../blam/haloreach_mcc/v_untracked_25_08_19_1352/game/megalogamengine/s_custom_game_engine_definition";
+} from "../blam/haloreach_mcc/v_untracked_25_08_16_1352/game/megalogamengine/megalogamengine_actions";
+import { e_explicit_player_type } from "../blam/haloreach_mcc/v_untracked_25_08_16_1352/game/megalogamengine/megalogamengine_explicit_player";
+import { c_explicit_player } from "../blam/haloreach_mcc/v_untracked_25_08_16_1352/game/megalogamengine/megalogamengine_references";
+import { s_custom_game_engine_definition } from "../blam/haloreach_mcc/v_untracked_25_08_16_1352/game/megalogamengine/s_custom_game_engine_definition";
 import { BlfError } from "../error";
 import { convert_reach_gametype } from "./convert_reach_gametype";
 

@@ -239,7 +239,14 @@ export function search_for_chunk(
       continue;
     }
 
-    loadChunkAt(buffer, offset, header, chunk, endian);
+    try {
+      // We've encoutered files that have fragmeneted chunks before the actual blf file starts,
+      // so we ignore read errors so we can try the next matching header.
+      loadChunkAt(buffer, offset, header, chunk, endian);
+    } catch {
+      continue;
+    }
+
     return true;
   }
 
