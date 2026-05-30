@@ -111,7 +111,7 @@
   "dependencies": {
     "@automapper/classes": "^8.8.1",
     "@automapper/core": "^8.8.1",
-    "@craftycodie/cstruct": "^1.1.0",
+    "@craftycodie/cstruct": "^1.1.1",
     "js-sha1": "^0.7.0",
     "pako": "^2.1.0"
   },
