@@ -43,7 +43,7 @@ impl BinWrite for s_blf_chunk_map_variant {
     type Args<'a> = ();
 
     fn write_options<W: Write + Seek>(&self, writer: &mut W, endian: Endian, args: Self::Args<'_>) -> BinResult<()> {
-        let mut bitstream = c_bitstream_writer::new(0xD9B0, e_bitstream_byte_order::_bitstream_byte_order_big_endian);
+        let mut bitstream = c_bitstream_writer::new(0x7000, e_bitstream_byte_order::_bitstream_byte_order_big_endian);
         bitstream.begin_writing();
 
         self.map_variant.encode(&mut bitstream)?;

@@ -12,7 +12,10 @@ import {
   s_variant_object_datum,
 } from "../../../blam/haloreach/v12065_11_08_24_1738_tu1actual/saved_games/scenario_map_variant";
 import { search_for_chunk } from "../../../blf_chunk";
-import { s_blf_chunk_map_variant } from "./s_blf_chunk_map_variant";
+import {
+  map_variant_storage_capacity,
+  s_blf_chunk_map_variant,
+} from "./s_blf_chunk_map_variant";
 
 function create_minimal_map_variant(): c_map_variant {
   const map_variant = new c_map_variant();
@@ -131,6 +134,19 @@ describe("c_map_variant", () => {
 });
 
 describe("s_blf_chunk_map_variant", () => {
+  it("writes fixed-size packed storage with zero padding", () => {
+    const chunk = new s_blf_chunk_map_variant();
+    chunk.map_variant = create_minimal_map_variant();
+
+    const payload = chunk.write_body("big");
+    expect(map_variant_storage_capacity).toBe(0x7000);
+    expect(payload.length).toBe(20 + 4 + map_variant_storage_capacity);
+    expect(chunk.packed_length).toBeLessThan(map_variant_storage_capacity);
+    expect(
+      payload.subarray(24 + chunk.packed_length).every((b) => b === 0)
+    ).toBe(true);
+  });
+
   it("round-trips a minimal mvar chunk payload", () => {
     const original = new s_blf_chunk_map_variant();
     original.map_variant = create_minimal_map_variant();

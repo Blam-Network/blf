@@ -9,8 +9,8 @@ import { c_map_variant } from "../../../blam/haloreach/v12065_11_08_24_1738_tu1a
 import { BLFChunkBase, blf } from "../../../blf_chunk";
 import { BlfError } from "../../../error";
 
-/** Reach map variant chunk packed body capacity (bytes). */
-export const map_variant_storage_capacity = 0xd9b0;
+/** Reach map variant chunk packed bitstream storage (bytes). */
+export const map_variant_storage_capacity = 0x7000;
 
 /**
  * Reach map variant chunk (`mvar` 31.1).
@@ -41,7 +41,12 @@ export class s_blf_chunk_map_variant extends BLFChunkBase {
       4
     ).getUint32(0, false);
 
-    const packed_data = payload.subarray(24);
+    const packed_on_disk = payload.subarray(24);
+    const decode_length =
+      this.packed_length > 0
+        ? Math.min(this.packed_length, packed_on_disk.length)
+        : packed_on_disk.length;
+    const packed_data = packed_on_disk.subarray(0, decode_length);
     const bitstream = c_bitstream_reader.new(
       packed_data,
       e_bitstream_byte_order._bitstream_byte_order_big_endian
@@ -62,6 +67,14 @@ export class s_blf_chunk_map_variant extends BLFChunkBase {
     this.map_variant.encode(bitstream);
     bitstream.finish_writing();
     const packed_data = bitstream.get_data();
+    if (packed_data.length > map_variant_storage_capacity) {
+      throw new BlfError(
+        `packed map variant exceeds storage capacity (${packed_data.length} > ${map_variant_storage_capacity})`
+      );
+    }
+
+    const packed_storage = new Uint8Array(map_variant_storage_capacity);
+    packed_storage.set(packed_data, 0);
 
     const length_bytes = new Uint8Array(4);
     new DataView(length_bytes.buffer).setUint32(0, packed_data.length, false);
@@ -71,10 +84,10 @@ export class s_blf_chunk_map_variant extends BLFChunkBase {
     hashable.set(packed_data, 4);
     const hash = security_calculate_hash(hashable);
 
-    const payload = new Uint8Array(20 + 4 + packed_data.length);
+    const payload = new Uint8Array(20 + 4 + map_variant_storage_capacity);
     payload.set(hash, 0);
     payload.set(length_bytes, 20);
-    payload.set(packed_data, 24);
+    payload.set(packed_storage, 24);
 
     this.hash = hash;
     this.packed_length = packed_data.length;

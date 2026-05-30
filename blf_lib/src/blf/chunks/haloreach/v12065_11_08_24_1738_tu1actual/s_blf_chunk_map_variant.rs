@@ -8,6 +8,9 @@ use blf_lib_derivable::blf::chunks::BlfChunkHooks;
 use blf_lib_derive::BlfChunk;
 use crate::blf::get_buffer_hash;
 
+/// Reach map variant chunk packed bitstream storage (bytes).
+pub const MAP_VARIANT_STORAGE_CAPACITY: usize = 0x7000;
+
 #[derive(BlfChunk,PartialEq,Debug,Clone,Serialize,Deserialize)]
 #[Header("mvar", 31.1)]
 #[derive(Default)]
@@ -27,10 +30,18 @@ impl BinRead for s_blf_chunk_map_variant {
         s_network_http_request_hash::read_options(reader, endian, ())?;
         let packed_variant_length = u32::read_options(reader, Endian::Big, ())? as usize;
 
-        let mut buffer = Vec::<u8>::with_capacity(packed_variant_length);
+        let mut buffer = Vec::<u8>::new();
         reader.read_to_end(&mut buffer)?;
+        let decode_length = if packed_variant_length > 0 {
+            packed_variant_length.min(buffer.len())
+        } else {
+            buffer.len()
+        };
 
-        let mut bitstream = c_bitstream_reader::new(buffer.as_slice(), e_bitstream_byte_order::_bitstream_byte_order_big_endian);
+        let mut bitstream = c_bitstream_reader::new(
+            &buffer[..decode_length],
+            e_bitstream_byte_order::_bitstream_byte_order_big_endian,
+        );
         bitstream.begin_reading();
 
         packed_map_variant.map_variant.decode(&mut bitstream)?;
@@ -43,7 +54,10 @@ impl BinWrite for s_blf_chunk_map_variant {
     type Args<'a> = ();
 
     fn write_options<W: Write + Seek>(&self, writer: &mut W, endian: Endian, args: Self::Args<'_>) -> BinResult<()> {
-        let mut bitstream = c_bitstream_writer::new(0xD9B0, e_bitstream_byte_order::_bitstream_byte_order_big_endian);
+        let mut bitstream = c_bitstream_writer::new(
+            MAP_VARIANT_STORAGE_CAPACITY,
+            e_bitstream_byte_order::_bitstream_byte_order_big_endian,
+        );
         bitstream.begin_writing();
 
         self.map_variant.encode(&mut bitstream)?;
@@ -55,9 +69,12 @@ impl BinWrite for s_blf_chunk_map_variant {
         let mut hash_buffer = packed_data_length.to_be_bytes().to_vec();
         hash_buffer.extend_from_slice(&packed_data);
 
+        let mut packed_storage = vec![0u8; MAP_VARIANT_STORAGE_CAPACITY];
+        packed_storage[..packed_data.len()].copy_from_slice(&packed_data);
+
         writer.write_ne(&get_buffer_hash(&hash_buffer)?)?;
         packed_data_length.write_options(writer, Endian::Big, ())?;
-        writer.write_ne(&bitstream.get_data()?)
+        writer.write_ne(&packed_storage)?
     }
 }
 
