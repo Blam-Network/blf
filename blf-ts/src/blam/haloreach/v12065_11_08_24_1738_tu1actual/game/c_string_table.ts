@@ -10,17 +10,13 @@ import {
 
 export const k_language_count = 12;
 
-/** One wire byte per code unit (U+00–U+FF), matching blf_lib extended ASCII / NullString slots. */
+/** Null-terminated UTF-8 bytes (matches blf_lib `write_string_utf8` / `String::as_bytes()`). */
 function read_null_terminated_string(data: Uint8Array, offset: number): string {
   let end = offset;
   while (end < data.length && data[end] !== 0) {
     end++;
   }
-  let out = "";
-  for (let i = offset; i < end; i++) {
-    out += String.fromCharCode(data[i]!);
-  }
-  return out;
+  return new TextDecoder("utf-8").decode(data.subarray(offset, end));
 }
 
 function write_null_terminated_string(
@@ -28,19 +24,12 @@ function write_null_terminated_string(
   value: string,
   max_length: number
 ): void {
-  writer.write_string_extended_ascii(value, max_length);
+  writer.write_string_utf8(value, max_length);
 }
 
-/** Wire byte length (one byte per decoded code unit). */
+/** Wire byte length (UTF-8 encoded, excluding NUL). */
 function string_byte_length(value: string): number {
-  for (let i = 0; i < value.length; i++) {
-    if (value.charCodeAt(i) > 0xff) {
-      throw new Error(
-        `String table entry U+${value.charCodeAt(i).toString(16)} cannot be encoded as Latin-1`
-      );
-    }
-  }
-  return value.length;
+  return new TextEncoder().encode(value).length;
 }
 
 function write_buffer_blob(

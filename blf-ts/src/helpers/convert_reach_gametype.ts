@@ -5,7 +5,7 @@
  * between builds, then write the four top-level fields onto `to`.
  *
  * Differences handled here:
- * - MCC-only: temporary explicit refs, `<<=`, `>>=`
+ * - MCC-only: temporary explicit refs, `<<=`, `>>=`, action types 99–106
  * - `set_to_absolute` exists in both builds but moved (TU1 = 10, MCC = 12)
  * - Survival: unrelated fields — MCC→TU1 sets `m_campaign_difficulty_level` to 1;
  *   TU1→MCC sets `m_encoding_version` to 2; `m_additional_flags` only on MCC
@@ -20,7 +20,10 @@ import {
   c_game_variant as c_game_variant_mcc,
   e_game_mode as e_game_mode_mcc,
 } from "../blam/haloreach_mcc/v_untracked_25_08_16_1352/game/c_game_variant";
-import { e_math_operation as e_math_operation_mcc } from "../blam/haloreach_mcc/v_untracked_25_08_16_1352/game/megalogamengine/megalogamengine_actions";
+import {
+  e_action_type as e_action_type_mcc,
+  e_math_operation as e_math_operation_mcc,
+} from "../blam/haloreach_mcc/v_untracked_25_08_16_1352/game/megalogamengine/megalogamengine_actions";
 import { e_explicit_object_type as e_explicit_object_type_mcc } from "../blam/haloreach_mcc/v_untracked_25_08_16_1352/game/megalogamengine/megalogamengine_explicit_object";
 import { e_explicit_player_type as e_explicit_player_type_mcc } from "../blam/haloreach_mcc/v_untracked_25_08_16_1352/game/megalogamengine/megalogamengine_explicit_player";
 import { e_explicit_team_type as e_explicit_team_type_mcc } from "../blam/haloreach_mcc/v_untracked_25_08_16_1352/game/megalogamengine/megalogamengine_explicit_team";
@@ -30,6 +33,18 @@ import { BlfError } from "../error";
 const MCC_ONLY_MATH_OPS: readonly number[] = [
   e_math_operation_mcc.shift_left_with,
   e_math_operation_mcc.shift_right_with,
+];
+
+/** MCC action types with no TU1 equivalent (99–106). */
+const MCC_ONLY_ACTION_TYPES: readonly number[] = [
+  e_action_type_mcc.begin,
+  e_action_type_mcc.hs_function_call,
+  e_action_type_mcc.get_button_time,
+  e_action_type_mcc.team_set_vehicle_spawning,
+  e_action_type_mcc.player_set_vehicle_spawning,
+  e_action_type_mcc.set_player_respawn_vehicle,
+  e_action_type_mcc.set_team_respawn_vehicle,
+  e_action_type_mcc.hide_object,
 ];
 
 /** TU1 survival `m_campaign_difficulty_level` when converting from MCC. */
@@ -180,6 +195,25 @@ function variant_uses_mcc_only_math_ops(variant: c_game_variant_mcc): boolean {
   return found;
 }
 
+function variant_uses_mcc_only_action_types(
+  variant: c_game_variant_mcc
+): boolean {
+  let found = false;
+  visit_object_tree(variant, (obj) => {
+    if (found) {
+      return;
+    }
+    const actionType = obj.m_type;
+    if (
+      typeof actionType === "number" &&
+      MCC_ONLY_ACTION_TYPES.includes(actionType)
+    ) {
+      found = true;
+    }
+  });
+  return found;
+}
+
 /** Returns false when MCC features cannot be represented in TU1. */
 function can_convert_mcc_game_variant_to_tu1(
   from: c_game_variant_mcc
@@ -195,6 +229,9 @@ function can_convert_mcc_game_variant_to_tu1(
     return false;
   }
   if (variant_uses_mcc_only_math_ops(from)) {
+    return false;
+  }
+  if (variant_uses_mcc_only_action_types(from)) {
     return false;
   }
   return true;

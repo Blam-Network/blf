@@ -9,6 +9,21 @@ use crate::blam::common::memory::data_compress::{runtime_data_compress, runtime_
 use crate::io::bitstream::{c_bitstream_reader, c_bitstream_writer};
 use crate::io::bitstream::e_bitstream_byte_order::_bitstream_byte_order_big_endian;
 
+fn read_null_terminated_utf8(data: &[u8], offset: u64) -> BLFLibResult<String> {
+    let start = offset as usize;
+    if start >= data.len() {
+        return Err(format!("String offset {offset} out of bounds").into());
+    }
+
+    let end = data[start..]
+        .iter()
+        .position(|&byte| byte == 0)
+        .map(|position| start + position)
+        .ok_or("String missing null terminator")?;
+
+    Ok(String::from_utf8(data[start..end].to_vec())?)
+}
+
 #[derive(Default, Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct c_single_language_string_table<
     const max_string_count: usize,
@@ -65,10 +80,10 @@ c_single_language_string_table<
 
         let mut string_reader = Cursor::new(string_data);
         for &offset in &offsets {
-            string_reader.seek(SeekFrom::Start(offset))?;
-            self.strings.push(NullString::read(&mut string_reader)?.to_string());
-
-            string_reader.seek(SeekFrom::Start(offset))?;
+            self.strings.push(read_null_terminated_utf8(
+                string_reader.get_ref(),
+                offset as u64,
+            )?);
         }
 
         Ok(())
@@ -168,7 +183,6 @@ c_string_table<
             bitstream.read_raw_data(buffer_size * 8)?
         };
 
-        let mut string_reader = Cursor::new(string_data);
         for (language_index, language_offsets) in offsets.iter().enumerate() {
             for &offset in language_offsets {
                 if offset == -1 {
@@ -176,10 +190,11 @@ c_string_table<
                     continue;
                 }
                 assert_ok!(offset >= 0);
-                let offset = offset as u64;
 
-                string_reader.seek(SeekFrom::Start(offset))?;
-                self.strings[language_index].push(Some(NullString::read(&mut string_reader)?.to_string()));
+                self.strings[language_index].push(Some(read_null_terminated_utf8(
+                    &string_data,
+                    offset as u64,
+                )?));
             }
         }
 

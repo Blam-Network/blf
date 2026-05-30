@@ -19,7 +19,7 @@ To my knowledge, Bungie have never shared the meaning of the BLF acronym; the na
 | `0x8` | 2 | Major version |
 | `0xA` | 2 | Minor version |
 
-When using this library, pass `"big"` or `"little"` for header endianness to `find_chunk` / `search_for_chunk`. Most of the time BLF chunks are big-endian but little-endian chunks have been observed on occasion, usually with PC halo builds.
+When using this library, pass `"big"` or `"little"` as the payload endian to `find_chunk` / `search_for_chunk`. BLF chunk headers are typically big-endian; the argument controls how the chunk body is read or written. Most of the time BLF chunks are big-endian but little-endian chunks have been observed on occasion, usually with PC halo builds.
 
 ## What this package provides
 

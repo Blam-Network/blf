@@ -96,7 +96,7 @@ impl c_player_traits {
         bitstream.write_integer(self.m_movement_traits.m_double_jump_setting, 2)?;
         if self.m_movement_traits.m_jump_modifier != -1 {
             bitstream.write_bool(true)?;
-            bitstream.write_integer(self.m_movement_traits.m_jump_modifier, 9)?;
+            bitstream.write_signed_integer(self.m_movement_traits.m_jump_modifier, 9)?;
         } else {
             bitstream.write_bool(false)?;
         }

@@ -39,7 +39,8 @@ const BUILD_LABELS = {
 const BUILD_DESCRIPTIONS = {
   v12065_11_08_24_1738_tu1actual: "Halo: Reach - Title Update 1",
   v_untracked_25_08_16_1352: "Halo: Reach MCC - 16th August 2025",
-  v2025_08_16_178512_1_release: "Halo: The Master Chief Collection - 16th August 2025",
+  v2025_08_16_178512_1_release:
+    "Halo: The Master Chief Collection - 16th August 2025",
   v12070_08_09_05_2031_halo3_ship: "Halo 3 - Title Update 2",
   v13895_09_04_27_2201_atlas_release: "Halo 3: ODST - Release",
 };

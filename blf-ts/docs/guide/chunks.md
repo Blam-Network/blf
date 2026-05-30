@@ -1,5 +1,7 @@
 # Reading chunks
 
+BLF chunk headers (signature, length, version) are typically **big-endian**. The `endian` argument to the helpers below applies to the chunk **payload** only.
+
 ## `find_chunk`
 
 Walks the buffer from the start as a BLF file: read each chunk header in order until the requested signature matches, then decode that chunk in place.
@@ -23,6 +25,8 @@ const found = search_for_chunk(file, chunk, "big");
 ```
 
 Use this when the buffer does not only contain a BLF — for example, reading a gametype variant out of a larger Xbox 360 console dump where the `mpvr` / `gvar` chunk is embedded among other data. `find_chunk` assumes valid BLF structure from offset 0; `search_for_chunk` does not.
+
+Pass `"little"` when the payload is little-endian (for example Reach MCC hopper `chdr` metadata). Headers are still read as big-endian.
 
 ## Writing BLFs
 

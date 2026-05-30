@@ -505,7 +505,7 @@ export class c_bitstream_reader {
       bytes[i] = byte;
 
       if (byte === 0) {
-        return String.fromCharCode(...Array.from(bytes.subarray(0, i)));
+        return new TextDecoder("utf-8").decode(bytes.subarray(0, i));
       }
     }
 

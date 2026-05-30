@@ -18,13 +18,16 @@ export {
 } from "./decorators";
 export { parse_blf_chunk_version, s_blf_header };
 
+/** BLF chunk headers are always big-endian. */
+const BLF_HEADER_ENDIAN = "big" as const;
+
 /** BLF chunk I/O; metadata from `@blf.chunk`. */
 export interface BLFChunk {
-  /** Parse header + payload. */
+  /** Parse header + payload. `endian` is payload only; the 12-byte header is always big-endian. */
   read(bytes: Uint8Array, endian: c.Endian): void;
   /** Parse chunk payload only (no 12-byte BLF header). */
   read_body(payload: Uint8Array, endian: c.Endian): void;
-  /** Serialize header + payload. */
+  /** Serialize header + payload. `endian` is payload only; the 12-byte header is always big-endian. */
   write(endian: c.Endian): Uint8Array;
   /** Serialize chunk payload only. */
   write_body(endian: c.Endian): Uint8Array;
@@ -39,7 +42,7 @@ export abstract class BLFChunkBase implements BLFChunk {
     const header = c.read(
       s_blf_header,
       bytes.subarray(0, c.sizeof(s_blf_header)),
-      endian
+      BLF_HEADER_ENDIAN
     );
     const meta = getBlfChunkMeta(this);
 
@@ -74,7 +77,7 @@ export abstract class BLFChunkBase implements BLFChunk {
         major,
         minor
       ),
-      endian
+      BLF_HEADER_ENDIAN
     );
 
     const out = new Uint8Array(header_bytes.length + body.length);
@@ -119,8 +122,7 @@ export type BLFChunkConstructor<T extends BLFChunk = BLFChunk> = new (
 
 function tryReadHeader(
   buffer: Uint8Array,
-  byte_offset: number,
-  endian: c.Endian
+  byte_offset: number
 ): s_blf_header | null {
   if (byte_offset + c.sizeof(s_blf_header) > buffer.length) {
     return null;
@@ -129,7 +131,7 @@ function tryReadHeader(
     return c.read(
       s_blf_header,
       buffer.subarray(byte_offset, byte_offset + c.sizeof(s_blf_header)),
-      endian
+      BLF_HEADER_ENDIAN
     );
   } catch {
     return null;
@@ -178,7 +180,7 @@ export function find_chunk(
       header = c.read(
         s_blf_header,
         buffer.subarray(offset, offset + c.sizeof(s_blf_header)),
-        endian
+        BLF_HEADER_ENDIAN
       );
     } catch {
       return false;
@@ -212,24 +214,19 @@ export function search_for_chunk(
 ): boolean {
   const meta = getBlfChunkMeta(chunk);
   const last_offset = buffer.length - c.sizeof(s_blf_header);
-
   const sig = meta.signature;
-  const sig0 = endian === "little" ? sig.charCodeAt(3) : sig.charCodeAt(0);
-  const sig1 = endian === "little" ? sig.charCodeAt(2) : sig.charCodeAt(1);
-  const sig2 = endian === "little" ? sig.charCodeAt(1) : sig.charCodeAt(2);
-  const sig3 = endian === "little" ? sig.charCodeAt(0) : sig.charCodeAt(3);
 
   for (let offset = 0; offset <= last_offset; offset++) {
     if (
-      buffer[offset] !== sig0 ||
-      buffer[offset + 1] !== sig1 ||
-      buffer[offset + 2] !== sig2 ||
-      buffer[offset + 3] !== sig3
+      buffer[offset] !== sig.charCodeAt(0) ||
+      buffer[offset + 1] !== sig.charCodeAt(1) ||
+      buffer[offset + 2] !== sig.charCodeAt(2) ||
+      buffer[offset + 3] !== sig.charCodeAt(3)
     ) {
       continue;
     }
 
-    const header = tryReadHeader(buffer, offset, endian);
+    const header = tryReadHeader(buffer, offset);
 
     if (header === null || !chunkMatches(header, meta)) {
       continue;

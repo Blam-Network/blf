@@ -11,3 +11,9 @@ export const reachmcc_zb_slayer_team_dmr_054_fixture = join(
   import.meta.dirname,
   "reachmcc_zb_slayer_team_dmr_054.bin"
 );
+
+/** Reach MCC hopper gametype (3nvasion DLC). */
+export const reach_mcc_3nvasion_dlc_fixture = join(
+  import.meta.dirname,
+  "3nvasion_dlc_054.bin"
+);

@@ -167,7 +167,7 @@ pub struct s_action_navpoint_set_icon_parameters {
     pub m_object: c_object_reference,
     pub m_navpoint_icon: e_chud_navpoint_icon_type, // 5 bits
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub m_variable: Option<c_custom_variable_reference>,
+    pub m_navpoint_number: Option<c_custom_variable_reference>,
 }
 
 impl s_action_navpoint_set_icon_parameters {
@@ -175,9 +175,9 @@ impl s_action_navpoint_set_icon_parameters {
         self.m_object.encode(bitstream)?;
         bitstream.write_enum(self.m_navpoint_icon, 5)?;
 
-        match (self.m_navpoint_icon, &self.m_variable) {
-            (e_chud_navpoint_icon_type::territory_b, Some(variable)) => {
-                variable.encode(bitstream)?;
+        match (self.m_navpoint_icon, &self.m_navpoint_number) {
+            (e_chud_navpoint_icon_type::num, Some(navpoint_number)) => {
+                navpoint_number.encode(bitstream)?;
             }
             _ => {}
         }
@@ -189,10 +189,10 @@ impl s_action_navpoint_set_icon_parameters {
         self.m_object.decode(bitstream)?;
         self.m_navpoint_icon = bitstream.read_enum("navpoint-icon", 5)?;
 
-        if self.m_navpoint_icon == e_chud_navpoint_icon_type::territory_b {
-            let mut variable = c_custom_variable_reference::default();
-            variable.decode(bitstream)?;
-            self.m_variable = Some(variable);
+        if self.m_navpoint_icon == e_chud_navpoint_icon_type::num {
+            let mut navpoint_number = c_custom_variable_reference::default();
+            navpoint_number.decode(bitstream)?;
+            self.m_navpoint_number = Some(navpoint_number);
         }
 
         Ok(())

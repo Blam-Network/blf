@@ -37,7 +37,30 @@ function decompressStringBlob(encoded: Uint8Array): Uint8Array {
 }
 
 describe("c_string_table", () => {
-  it("round-trips Latin-1 bytes (U+00A6) without UTF-8 expansion", () => {
+  it("round-trips UTF-8 script strings", () => {
+    const table = new c_string_table(1, 32, 9, 9, 1);
+    table.strings = Array.from({ length: k_language_count }, () => [
+      "Abkühlungseigenschaften",
+    ]);
+
+    const encoded = encodeTable(table);
+
+    const reader = c_bitstream_reader.new(encoded, BE);
+    reader.begin_reading();
+    const roundtrip = new c_string_table(1, 32, 9, 9, 1);
+    roundtrip.decode(reader);
+    reader.finish_reading();
+
+    expect(roundtrip.strings[0]![0]).toBe("Abkühlungseigenschaften");
+
+    const stringData = decompressStringBlob(encoded);
+    expect(stringData[0]).toBe(0x41);
+    expect(stringData[3]).toBe(0xc3);
+    expect(stringData[4]).toBe(0xbc);
+    expect(stringData[24]).toBe(0);
+  });
+
+  it("round-trips non-ASCII UTF-8 bytes (U+00A6)", () => {
     const table = new c_string_table(1, 32, 9, 9, 1);
     table.strings = Array.from({ length: k_language_count }, () => ["\u00a6"]);
 
@@ -52,8 +75,8 @@ describe("c_string_table", () => {
     expect(roundtrip.strings[0]![0]).toBe("\u00a6");
 
     const stringData = decompressStringBlob(encoded);
-    expect(stringData[0]).toBe(0xa6);
-    expect(stringData[1]).toBe(0);
-    expect(stringData[2]).not.toBe(0xc3);
+    expect(stringData[0]).toBe(0xc2);
+    expect(stringData[1]).toBe(0xa6);
+    expect(stringData[2]).toBe(0);
   });
 });

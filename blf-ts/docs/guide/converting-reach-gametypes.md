@@ -16,7 +16,18 @@ The Master Chief Collection added megalo features that Xbox 360 builds do not ha
 
 - **Temporary variables** for objects, players, and teams
 - **Additional math operators** (`<<=`, `>>=`)
+- **Eight MCC-only action types**:
+  - `begin`
+  - `hs_function_call` 
+  - `get_button_time`
+  - `team_set_vehicle_spawning`
+  - `player_set_vehicle_spawning`
+  - `set_player_respawn_vehicle`
+  - `set_team_respawn_vehicle`
+  - `hide_object`
 - **“Network Test 1”** firefight mode
+
+See [Megalo MCC changes](/guide/megalo-mcc-changes) for action names, payloads, and version bundle renames.
 
 `convert_reach_gametype(MCC, Xbox360)` will return false if any of the above features are being used by the gametype. In addition, Forge gametypes are not yet supported.
 

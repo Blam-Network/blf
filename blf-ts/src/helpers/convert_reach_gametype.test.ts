@@ -13,6 +13,7 @@ import {
 } from "../blam/haloreach_mcc/v_untracked_25_08_16_1352/game/c_game_variant";
 import {
   c_action,
+  e_action_type,
   e_math_operation as e_math_operation_mcc,
 } from "../blam/haloreach_mcc/v_untracked_25_08_16_1352/game/megalogamengine/megalogamengine_actions";
 import { e_explicit_player_type } from "../blam/haloreach_mcc/v_untracked_25_08_16_1352/game/megalogamengine/megalogamengine_explicit_player";
@@ -103,6 +104,21 @@ describe("convert_reach_gametype", () => {
     action.m_set_score_parameters = {
       m_operation: e_math_operation_mcc.shift_left_with,
     } as never;
+    engine.m_actions.push(action);
+    custom.m_game_engine = engine;
+    from.m_custom_variant = custom;
+
+    const to = new c_game_variant_tu1();
+    expect(convert_reach_gametype(from, to)).toBe(false);
+  });
+
+  it("fails MCC → TU1 when an MCC-only action type is used", () => {
+    const from = new c_game_variant_mcc();
+    from.m_game_engine = e_game_mode_mcc.custom;
+    const custom = new c_game_engine_custom_variant_mcc();
+    const engine = new s_custom_game_engine_definition();
+    const action = new c_action();
+    action.m_type = e_action_type.hide_object;
     engine.m_actions.push(action);
     custom.m_game_engine = engine;
     from.m_custom_variant = custom;
