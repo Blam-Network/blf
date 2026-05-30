@@ -1,4 +1,4 @@
-import { type c as CStruct } from "@craftycodie/cstruct";
+import type { c as CStruct } from "@craftycodie/cstruct";
 import {
   c_bitstream_reader,
   c_bitstream_writer,
