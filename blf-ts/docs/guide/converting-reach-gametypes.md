@@ -3,7 +3,10 @@
 Cross-build utilities live on a dedicated entry point (not the package root):
 
 ```ts
-import { convert_reach_gametype } from "@blamnetwork/blf/helpers";
+import {
+  convert_reach_gametype,
+  e_reach_gametype_conversion_error,
+} from "@blamnetwork/blf/helpers";
 import { c_game_variant as tu1_variant } from "@blamnetwork/blf/haloreach/v12065_11_08_24_1738_tu1actual";
 import { c_game_variant as mcc_variant } from "@blamnetwork/blf/haloreach_mcc/v_untracked_25_08_16_1352";
 ```
@@ -16,20 +19,12 @@ The Master Chief Collection added megalo features that Xbox 360 builds do not ha
 
 - **Temporary variables** for objects, players, and teams
 - **Additional math operators** (`<<=`, `>>=`)
-- **Eight MCC-only action types**:
-  - `begin`
-  - `hs_function_call` 
-  - `get_button_time`
-  - `team_set_vehicle_spawning`
-  - `player_set_vehicle_spawning`
-  - `set_player_respawn_vehicle`
-  - `set_team_respawn_vehicle`
-  - `hide_object`
+- **Eight MCC-only action types**
 - **“Network Test 1”** firefight mode
 
 See [Megalo MCC changes](/guide/megalo-mcc-changes) for action names, payloads, and version bundle renames.
 
-`convert_reach_gametype(MCC, Xbox360)` will return false if any of the above features are being used by the gametype. In addition, Forge gametypes are not yet supported.
+`convert_reach_gametype(MCC, Xbox360)` returns `e_reach_gametype_conversion_error.ok` on success. On failure it returns a specific error code — for example `mcc_exclusive_action`, `mcc_exclusive_math_operator`, `mcc_survival_additional_flags`, `insufficient_global_slots`, `forge_variant`, or `campaign_variant`. Forge and campaign gametypes are not yet supported.
 
 ## Example (MCC → TU1)
 
@@ -37,7 +32,10 @@ Read an MCC `mpvr` from a buffer (use `find_chunk` instead of `search_for_chunk`
 
 ```ts
 import { readFileSync, writeFileSync } from "node:fs";
-import { convert_reach_gametype } from "@blamnetwork/blf/helpers";
+import {
+  convert_reach_gametype,
+  e_reach_gametype_conversion_error,
+} from "@blamnetwork/blf/helpers";
 import { search_for_chunk, write_blffile } from "@blamnetwork/blf";
 import { c_game_variant as tu1_variant } from "@blamnetwork/blf/haloreach/v12065_11_08_24_1738_tu1actual";
 import {
@@ -57,7 +55,7 @@ if (!search_for_chunk(buffer, mccChunk, "big")) {
 const from = mccChunk.game_variant;
 const to = new tu1_variant();
 
-if (!convert_reach_gametype(from, to)) {
+if (convert_reach_gametype(from, to) !== e_reach_gametype_conversion_error.ok) {
   throw new Error("MCC gametype cannot be represented as TU1");
 }
 

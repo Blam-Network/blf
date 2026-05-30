@@ -4,32 +4,34 @@ import {
   e_bitstream_byte_order,
 } from "../../../../bitstream";
 import { BlfError } from "../../../../error";
+import { AutoMap } from "../../../../helpers/automap";
 import type { s_content_item_metadata } from "../saved_games/saved_game_files";
 import { c_game_engine_custom_variant } from "./c_game_engine_custom_variant";
 import { c_game_engine_base_variant } from "./c_game_engine_default";
 import { c_game_engine_survival_variant } from "./c_game_engine_survival_variant";
-
-/** Matches `e_game_mode` in blf_lib. */
+/** Matches `e_game_mode` in blf_lib. Wire index 0 is unused. */
 export enum e_game_mode {
+  unused = 0,
   sandbox = 1,
   custom = 2,
   campaign = 3,
   survival = 4,
 }
-
 /**
  * Halo Reach game variant gametype bitstream body (after the `mpvr` hash header).
  * Mirrors `c_game_variant` in blf_lib — decode-only.
  */
 export class c_game_variant {
+  @AutoMap(() => e_game_mode)
   m_game_engine: e_game_mode = e_game_mode.custom;
+  @AutoMap(() => c_game_engine_base_variant)
   m_campaign_variant?: c_game_engine_base_variant;
+  @AutoMap(() => c_game_engine_custom_variant)
   m_custom_variant?: c_game_engine_custom_variant;
+  @AutoMap(() => c_game_engine_survival_variant)
   m_survival_variant?: c_game_engine_survival_variant;
-
   decode(bitstream: c_bitstream_reader): void {
     this.m_game_engine = bitstream.read_enum("game-engine", 4, e_game_mode);
-
     switch (this.m_game_engine) {
       case e_game_mode.sandbox:
         throw new BlfError(
@@ -57,9 +59,8 @@ export class c_game_variant {
         throw new BlfError(`Unrecognized game engine ${this.m_game_engine}`);
     }
   }
-
   encode(bitstream: c_bitstream_writer): void {
-    bitstream.write_enum(this.m_game_engine, 4);
+    bitstream.write_enum(this.m_game_engine, 4, e_game_mode);
     switch (this.m_game_engine) {
       case e_game_mode.sandbox:
         throw new BlfError("Encoding forge variants is currently unsupported");
@@ -85,7 +86,6 @@ export class c_game_variant {
         throw new BlfError(`Unrecognized game engine ${this.m_game_engine}`);
     }
   }
-
   /** Decode gametype bytes from a standalone buffer (convenience wrapper). */
   static decode_bytes(gametype_bytes: Uint8Array): c_game_variant {
     const bitstream = c_bitstream_reader.new(
@@ -98,7 +98,6 @@ export class c_game_variant {
     bitstream.finish_reading();
     return variant;
   }
-
   get_metadata(): s_content_item_metadata {
     switch (this.m_game_engine) {
       case e_game_mode.sandbox:

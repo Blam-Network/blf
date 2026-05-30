@@ -3,6 +3,7 @@ import type {
   c_bitstream_writer,
 } from "../../../../../bitstream";
 import { BlfError } from "../../../../../error";
+import { AutoMap } from "../../../../../helpers/automap";
 import { e_player_filter_type } from "./megalogamengine_actions";
 import {
   c_custom_timer_reference,
@@ -18,12 +19,13 @@ function requireField<T>(value: T | undefined, message: string): T {
   }
   return value;
 }
-
 export class c_player_filter_modifier {
+  @AutoMap(() => e_player_filter_type)
   m_type: e_player_filter_type = e_player_filter_type.no_one;
+  @AutoMap(() => c_player_reference)
   m_player?: c_player_reference;
+  @AutoMap(() => c_custom_variable_reference)
   m_variable?: c_custom_variable_reference;
-
   decode(bitstream: c_bitstream_reader): void {
     this.m_type = bitstream.read_enum("type", 3, e_player_filter_type);
     if (this.m_type === e_player_filter_type.specific_player) {
@@ -35,9 +37,8 @@ export class c_player_filter_modifier {
       this.m_variable = variable;
     }
   }
-
   encode(bitstream: c_bitstream_writer): void {
-    bitstream.write_enum(this.m_type, 3);
+    bitstream.write_enum(this.m_type, 3, e_player_filter_type);
     if (this.m_type === e_player_filter_type.specific_player) {
       requireField(this.m_player, "m_player does not exist.").encode(bitstream);
       requireField(this.m_variable, "m_variable does not exist.").encode(
@@ -46,18 +47,21 @@ export class c_player_filter_modifier {
     }
   }
 }
-
 export class c_replaceable_token {
+  @AutoMap(() => Number)
   m_type = 0;
+  @AutoMap(() => c_player_reference)
   m_player?: c_player_reference;
+  @AutoMap(() => c_object_reference)
   m_object?: c_object_reference;
+  @AutoMap(() => c_team_reference)
   m_team?: c_team_reference;
+  @AutoMap(() => c_custom_timer_reference)
   m_custom_timer?: c_custom_timer_reference;
+  @AutoMap(() => c_custom_variable_reference)
   m_custom_variable?: c_custom_variable_reference;
-
   decode(bitstream: c_bitstream_reader): void {
     this.m_type = bitstream.read_integer("token-type", 3);
-
     switch (this.m_type) {
       case 1: {
         const player = new c_player_reference();
@@ -93,7 +97,6 @@ export class c_replaceable_token {
         break;
     }
   }
-
   encode(bitstream: c_bitstream_writer): void {
     bitstream.write_integer(this.m_type, 3);
     switch (this.m_type) {
@@ -127,11 +130,11 @@ export class c_replaceable_token {
     }
   }
 }
-
 export class c_dynamic_string {
+  @AutoMap(() => Number)
   m_string_index = 0;
+  @AutoMap(() => [c_replaceable_token])
   m_tokens: c_replaceable_token[] = [];
-
   decode(bitstream: c_bitstream_reader): void {
     this.m_string_index = bitstream.read_integer("string-index", 7);
     const tokenCount = bitstream.read_integer("token-count", 2);
@@ -141,7 +144,6 @@ export class c_dynamic_string {
       this.m_tokens.push(token);
     }
   }
-
   encode(bitstream: c_bitstream_writer): void {
     bitstream.write_integer(this.m_string_index, 7);
     bitstream.write_integer(this.m_tokens.length, 2);

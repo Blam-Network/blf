@@ -3,13 +3,12 @@ import {
   c_bitstream_writer,
   e_bitstream_byte_order,
 } from "../../../../bitstream";
+import { AutoMap } from "../../../../helpers/automap";
 import {
   runtime_data_compress,
   runtime_data_decompress,
 } from "../../../common/memory/data_compress";
-
 export const k_language_count = 12;
-
 /** Null-terminated UTF-8 bytes (matches blf_lib `write_string_utf8` / `String::as_bytes()`). */
 function read_null_terminated_string(data: Uint8Array, offset: number): string {
   let end = offset;
@@ -18,7 +17,6 @@ function read_null_terminated_string(data: Uint8Array, offset: number): string {
   }
   return new TextDecoder("utf-8").decode(data.subarray(offset, end));
 }
-
 function write_null_terminated_string(
   writer: c_bitstream_writer,
   value: string,
@@ -26,12 +24,10 @@ function write_null_terminated_string(
 ): void {
   writer.write_string_utf8(value, max_length);
 }
-
 /** Wire byte length (UTF-8 encoded, excluding NUL). */
 function string_byte_length(value: string): number {
   return new TextEncoder().encode(value).length;
 }
-
 function write_buffer_blob(
   bitstream: c_bitstream_writer,
   buffer: Uint8Array,
@@ -49,11 +45,11 @@ function write_buffer_blob(
     bitstream.write_raw_data(buffer, buffer.length * 8);
   }
 }
-
 export class c_single_language_string_table {
+  @AutoMap(() => [String])
   strings: string[] = [];
+  @AutoMap(() => Boolean)
   m_buffer_is_compressed = true;
-
   constructor(
     readonly max_string_count: number,
     readonly max_string_length: number,
@@ -61,7 +57,6 @@ export class c_single_language_string_table {
     readonly buffer_size_bit_length: number,
     readonly count_bit_length: number
   ) {}
-
   decode(bitstream: c_bitstream_reader): void {
     this.strings = [];
     const string_count = bitstream.read_integer(
@@ -71,7 +66,6 @@ export class c_single_language_string_table {
     if (string_count === 0) {
       return;
     }
-
     const offsets: number[] = [];
     for (let i = 0; i < string_count; i++) {
       if (bitstream.read_bool("exists")) {
@@ -80,7 +74,6 @@ export class c_single_language_string_table {
         offsets.push(0);
       }
     }
-
     const buffer_size = bitstream.read_integer(
       "size",
       this.buffer_size_bit_length
@@ -96,25 +89,21 @@ export class c_single_language_string_table {
           )
         )
       : bitstream.read_raw_data(buffer_size * 8);
-
     for (const offset of offsets) {
       this.strings.push(read_null_terminated_string(string_data, offset));
     }
   }
-
   encode(bitstream: c_bitstream_writer): void {
     bitstream.write_integer(this.strings.length, this.count_bit_length);
     if (this.strings.length === 0) {
       return;
     }
-
     const string_writer = c_bitstream_writer.new_from_instance(
       this.max_string_count * this.max_string_length,
       bitstream
     );
     string_writer.begin_writing();
     let offset = 0;
-
     for (const string of this.strings) {
       bitstream.write_bool(true);
       bitstream.write_integer(offset, this.offset_bit_length);
@@ -125,7 +114,6 @@ export class c_single_language_string_table {
       );
       offset += string_byte_length(string) + 1;
     }
-
     string_writer.finish_writing();
     const buffer = string_writer.get_data();
     write_buffer_blob(
@@ -136,14 +124,14 @@ export class c_single_language_string_table {
     );
   }
 }
-
 export class c_string_table {
+  @AutoMap(() => [String])
   strings: (string | null)[][] = Array.from(
     { length: k_language_count },
     () => []
   );
+  @AutoMap(() => Boolean)
   m_buffer_is_compressed = true;
-
   constructor(
     readonly max_string_count: number,
     readonly max_string_length: number,
@@ -151,7 +139,6 @@ export class c_string_table {
     readonly buffer_size_bit_length: number,
     readonly count_bit_length: number
   ) {}
-
   decode(bitstream: c_bitstream_reader): void {
     this.strings = Array.from({ length: k_language_count }, () => []);
     const string_count = bitstream.read_integer(
@@ -161,11 +148,9 @@ export class c_string_table {
     if (string_count === 0) {
       return;
     }
-
     const offsets: number[][] = Array.from({ length: k_language_count }, () =>
       Array.from({ length: string_count }, () => -1)
     );
-
     for (let j = 0; j < string_count; j++) {
       for (let i = 0; i < k_language_count; i++) {
         if (bitstream.read_bool("exists")) {
@@ -176,7 +161,6 @@ export class c_string_table {
         }
       }
     }
-
     const buffer_size = bitstream.read_integer(
       "size",
       this.buffer_size_bit_length
@@ -192,7 +176,6 @@ export class c_string_table {
           )
         )
       : bitstream.read_raw_data(buffer_size * 8);
-
     for (let i = 0; i < k_language_count; i++) {
       for (let j = 0; j < string_count; j++) {
         const offset = offsets[i]![j]!;
@@ -206,21 +189,18 @@ export class c_string_table {
       }
     }
   }
-
   encode(bitstream: c_bitstream_writer): void {
     const string_count = this.strings[0]?.length ?? 0;
     bitstream.write_integer(string_count, this.count_bit_length);
     if (string_count === 0) {
       return;
     }
-
     const string_writer = c_bitstream_writer.new(
       k_language_count * this.max_string_count * this.max_string_length,
       e_bitstream_byte_order._bitstream_byte_order_big_endian
     );
     string_writer.begin_writing();
     let offset = 0;
-
     for (let j = 0; j < string_count; j++) {
       let deduplicate = true;
       const reference = this.strings[0]?.[j] ?? null;
@@ -234,7 +214,6 @@ export class c_string_table {
           }
         }
       }
-
       for (let i = 0; i < k_language_count; i++) {
         const string = this.strings[i]?.[j] ?? null;
         if (string === null) {
@@ -252,7 +231,6 @@ export class c_string_table {
           offset += string_byte_length(string) + 1;
         }
       }
-
       if (deduplicate && reference !== null) {
         write_null_terminated_string(
           string_writer,
@@ -262,7 +240,6 @@ export class c_string_table {
         offset += string_byte_length(reference) + 1;
       }
     }
-
     string_writer.finish_writing();
     const buffer = string_writer.get_data();
     write_buffer_blob(

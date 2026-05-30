@@ -142,11 +142,11 @@
       }
     },
     {
-      "includes": ["scripts/**"],
+      "includes": ["src/helpers/**", "src/automapper/**"],
       "linter": {
         "rules": {
-          "correctness": {
-            "noUnusedVariables": "off"
+          "style": {
+            "noEnum": "off"
           }
         }
       }
@@ -155,6 +155,12 @@
       "includes": ["scripts/**"],
       "linter": {
         "rules": {
+          "correctness": {
+            "noUnusedVariables": "off"
+          },
+          "performance": {
+            "useTopLevelRegex": "off"
+          },
           "suspicious": {
             "noConsole": "off"
           }

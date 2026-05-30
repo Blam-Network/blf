@@ -1,19 +1,12 @@
 {
+  "extends": "./tsconfig.json",
   "compilerOptions": {
-    "target": "ES2022",
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "esModuleInterop": true,
-    "types": ["node"],
-    "strict": true,
-    "strictPropertyInitialization": false,
-    "useDefineForClassFields": true,
+    "noEmit": false,
     "declaration": true,
     "declarationMap": true,
     "outDir": "dist",
     "rootDir": "src",
-    "resolveJsonModule": true,
-    "skipLibCheck": true
+    "esModuleInterop": true
   },
   "include": ["src/**/*.ts"],
   "exclude": ["src/**/*.test.ts", "**/*.bisect.test.ts"]

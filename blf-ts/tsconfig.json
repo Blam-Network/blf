@@ -4,6 +4,7 @@
     "paths": {
       "@blamnetwork/blf": ["./src/index.ts"],
       "@blamnetwork/blf/haloreach/*": ["./src/versions/haloreach/*"],
+      "@blamnetwork/blf/haloreach_mcc/*": ["./src/versions/haloreach_mcc/*"],
       "@blamnetwork/blf/halo3/*": ["./src/versions/halo3/*"],
       "@blamnetwork/blf/halo3odst/*": ["./src/versions/halo3odst/*"]
     },
@@ -17,7 +18,8 @@
     "noEmit": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
-    "types": ["node"]
+    "types": ["node"],
+    "lib": ["ES2022", "ESNext"]
   },
   "include": ["src/**/*.ts", "tests/**/*.ts"],
   "exclude": ["src/**/*.test.ts"]

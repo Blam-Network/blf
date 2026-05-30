@@ -137,9 +137,9 @@ describe("c_bitstream_reader", () => {
     expect(() => sut.read_enum("mode", 4, e_sample)).toThrow(BitstreamError);
   });
 
-  it("read_enum accepts declared members", () => {
+  it("read_enum maps wire index to enum member", () => {
     const sut = c_bitstream_reader.new(
-      new Uint8Array([0b00100000]),
+      new Uint8Array([0b00010000]),
       e_bitstream_byte_order._bitstream_byte_order_big_endian
     );
     sut.begin_reading();

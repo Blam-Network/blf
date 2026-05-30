@@ -1,3 +1,4 @@
+import { enumWireIndexFromMember, type NumericEnum } from "./enum";
 import {
   e_bitstream_byte_fill_direction,
   e_bitstream_byte_order,
@@ -88,8 +89,11 @@ export class c_bitstream_writer {
     ];
   }
 
-  write_enum(value: number, size_in_bits: number): void {
-    this.write_integer(value, size_in_bits);
+  write_enum(value: number, size_in_bits: number, enumObj: NumericEnum): void {
+    this.write_integer(
+      enumWireIndexFromMember(enumObj, value, "enum"),
+      size_in_bits
+    );
   }
 
   write_integer(value: number, size_in_bits: number): void {

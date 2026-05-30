@@ -23,6 +23,10 @@ export default defineConfig({
         replacement: path.join(root, "src/index.ts"),
       },
       {
+        find: /^@blamnetwork\/blf\/helpers$/,
+        replacement: path.join(root, "src/helpers/index.ts"),
+      },
+      {
         // @blamnetwork/blf/haloreach/<build> → src/versions/haloreach/<build>.ts
         find: /^@blamnetwork\/blf\/(haloreach|halo3|halo3odst|haloreach_mcc)\/(.+)$/,
         replacement: `${versionsRoot}/$1/$2.ts`,

@@ -160,7 +160,7 @@ describe("c_bitstream_writer", () => {
       e_bitstream_byte_order._bitstream_byte_order_big_endian
     );
     source.begin_writing();
-    source.write_enum(2, 4);
+    source.write_integer(2, 4);
     const [bytePos] = source.get_current_offset();
     source.write_raw_data(new Uint8Array(cap - bytePos), (cap - bytePos) * 8);
     source.finish_writing();

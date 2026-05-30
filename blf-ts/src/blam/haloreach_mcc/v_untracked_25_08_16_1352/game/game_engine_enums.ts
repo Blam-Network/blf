@@ -1,3 +1,4 @@
+import { AutoMap } from "../../../../helpers/automap";
 export enum e_game_engine_timer_rate {
   zero = 0,
   minus_10x = 1,
@@ -27,21 +28,23 @@ export enum e_game_engine_timer_rate {
   _500x = 25,
   _1000x = 26,
 }
-
 export enum e_weapon_pickup_priority {
   normal = 0,
   high = 1,
   automatic = 2,
 }
-
 /** Matches `e_survival_variant_flags` in blf_lib `game_engine_survival.rs`. */
 export class e_survival_variant_flags {
+  @AutoMap(() => Boolean)
   hazards_enabled = false;
+  @AutoMap(() => Boolean)
   all_generators_must_survive = false;
+  @AutoMap(() => Boolean)
   random_generator_spawns = false;
+  @AutoMap(() => Boolean)
   weapon_drops_enabled = false;
+  @AutoMap(() => Boolean)
   ammo_crates_enabled = false;
-
   to_raw(): number {
     return (
       (this.hazards_enabled ? 1 : 0) |
@@ -51,7 +54,6 @@ export class e_survival_variant_flags {
       (this.ammo_crates_enabled ? 1 << 4 : 0)
     );
   }
-
   static from_raw(raw: number): e_survival_variant_flags {
     const flags = new e_survival_variant_flags();
     flags.hazards_enabled = (raw & 1) !== 0;

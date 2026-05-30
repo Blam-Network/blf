@@ -1,7 +1,7 @@
 import {
   assertFitsInBits,
   type EnumNumber,
-  isNumericEnumValue,
+  enumMemberFromWireIndex,
   type NumericEnum,
 } from "./enum";
 import {
@@ -327,10 +327,7 @@ export class c_bitstream_reader {
       return integer;
     }
 
-    if (!isNumericEnumValue(enumObjOrParser, integer)) {
-      throw new BitstreamError(`Unexpected enum value for ${name}: ${integer}`);
-    }
-    return integer;
+    return enumMemberFromWireIndex(enumObjOrParser, integer, name);
   }
 
   read_integer(_name: string, size_in_bits: number): number {

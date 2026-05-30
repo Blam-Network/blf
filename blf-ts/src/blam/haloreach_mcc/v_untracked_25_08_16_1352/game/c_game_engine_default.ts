@@ -2,6 +2,8 @@ import type {
   c_bitstream_reader,
   c_bitstream_writer,
 } from "../../../../bitstream";
+import { AutoMap } from "../../../../helpers/automap";
+import { type StaticArray, staticArray } from "../../../../types/static_array";
 import {
   content_item_metadata_decode,
   content_item_metadata_encode,
@@ -12,18 +14,25 @@ import {
 } from "../saved_games/saved_game_files";
 import { c_player_traits } from "./c_player_traits";
 import { c_string_table } from "./c_string_table";
-
 export class c_game_engine_miscellaneous_options {
+  @AutoMap(() => Boolean)
   m_teams_enabled = false;
+  @AutoMap(() => Boolean)
   m_round_reset_players = false;
+  @AutoMap(() => Boolean)
   m_round_reset_map = false;
+  @AutoMap(() => Boolean)
   m_perfection_enabled = false;
+  @AutoMap(() => Number)
   m_round_time_limit_minutes = 0;
+  @AutoMap(() => Number)
   m_round_limit = 0;
+  @AutoMap(() => Number)
   m_early_victory_win_count = 0;
+  @AutoMap(() => Number)
   m_sudden_death_time = 0;
+  @AutoMap(() => Number)
   m_grace_period = 0;
-
   decode(bitstream: c_bitstream_reader): void {
     this.m_teams_enabled = bitstream.read_bool("miscellaneous-options-teams");
     this.m_round_reset_players = bitstream.read_bool(
@@ -53,7 +62,6 @@ export class c_game_engine_miscellaneous_options {
     );
     this.m_grace_period = bitstream.read_integer("grace-period", 5);
   }
-
   encode(bitstream: c_bitstream_writer): void {
     bitstream.write_bool(this.m_teams_enabled);
     bitstream.write_bool(this.m_round_reset_players);
@@ -66,22 +74,33 @@ export class c_game_engine_miscellaneous_options {
     bitstream.write_integer(this.m_grace_period, 5);
   }
 }
-
 export class c_game_engine_respawn_options {
+  @AutoMap(() => Boolean)
   m_inherit_respawn_time = false;
+  @AutoMap(() => Boolean)
   m_respawn_with_teammate = false;
+  @AutoMap(() => Boolean)
   m_respawn_at_location = false;
+  @AutoMap(() => Boolean)
   m_respawn_on_kills = false;
+  @AutoMap(() => Number)
   m_lives_per_round = 0;
+  @AutoMap(() => Number)
   m_team_lives_per_round = 0;
+  @AutoMap(() => Number)
   m_respawn_time_seconds = 0;
+  @AutoMap(() => Number)
   m_suicide_penalty_seconds = 0;
+  @AutoMap(() => Number)
   m_betrayal_penalty_seconds = 0;
+  @AutoMap(() => Number)
   m_respawn_growth_seconds = 0;
+  @AutoMap(() => Number)
   m_loadout_cam_time = 0;
+  @AutoMap(() => Number)
   m_respawn_player_traits_duration_seconds = 0;
+  @AutoMap(() => c_player_traits)
   m_respawn_player_traits = new c_player_traits();
-
   decode(bitstream: c_bitstream_reader): void {
     this.m_inherit_respawn_time = bitstream.read_bool(
       "respawn-options-inherit-respawn-time"
@@ -129,7 +148,6 @@ export class c_game_engine_respawn_options {
     );
     this.m_respawn_player_traits.decode(bitstream);
   }
-
   encode(bitstream: c_bitstream_writer): void {
     bitstream.write_bool(this.m_inherit_respawn_time);
     bitstream.write_bool(this.m_respawn_with_teammate);
@@ -146,12 +164,13 @@ export class c_game_engine_respawn_options {
     this.m_respawn_player_traits.encode(bitstream);
   }
 }
-
 export class c_game_engine_social_options {
+  @AutoMap(() => Number)
   m_flags = 0;
+  @AutoMap(() => Number)
   m_team_changing = 0;
+  @AutoMap(() => Boolean)
   m_observers_enabled = false;
-
   decode(bitstream: c_bitstream_reader): void {
     this.m_observers_enabled = bitstream.read_bool("observers-enabled");
     this.m_team_changing = bitstream.read_integer("team-changing", 2);
@@ -161,7 +180,6 @@ export class c_game_engine_social_options {
       }
     }
   }
-
   encode(bitstream: c_bitstream_writer): void {
     bitstream.write_bool(this.m_observers_enabled);
     bitstream.write_integer(this.m_team_changing, 2);
@@ -170,19 +188,27 @@ export class c_game_engine_social_options {
     }
   }
 }
-
 export class c_game_engine_map_override_options {
+  @AutoMap(() => Number)
   m_flags = 0;
+  @AutoMap(() => c_player_traits)
   m_base_player_traits = new c_player_traits();
+  @AutoMap(() => Number)
   m_weapon_set_absolute_index = 0;
+  @AutoMap(() => Number)
   m_vehicle_set_absolute_index = 0;
+  @AutoMap(() => c_player_traits)
   m_red_powerup_traits = new c_player_traits();
+  @AutoMap(() => c_player_traits)
   m_blue_powerup_traits = new c_player_traits();
+  @AutoMap(() => c_player_traits)
   m_yellow_powerup_traits = new c_player_traits();
+  @AutoMap(() => Number)
   m_red_powerup_duration_seconds = 0;
+  @AutoMap(() => Number)
   m_blue_powerup_duration_seconds = 0;
+  @AutoMap(() => Number)
   m_yellow_powerup_duration_seconds = 0;
-
   decode(bitstream: c_bitstream_reader): void {
     this.m_flags = bitstream.read_integer("flags", 6);
     this.m_base_player_traits.decode(bitstream);
@@ -210,7 +236,6 @@ export class c_game_engine_map_override_options {
       7
     );
   }
-
   encode(bitstream: c_bitstream_writer): void {
     bitstream.write_integer(this.m_flags, 6);
     this.m_base_player_traits.encode(bitstream);
@@ -224,22 +249,33 @@ export class c_game_engine_map_override_options {
     bitstream.write_integer(this.m_yellow_powerup_duration_seconds, 7);
   }
 }
-
-export const k_game_variant_team_count = 8;
+export const k_game_variant_team_count = 8 as const;
+export const k_loadout_traits_per_palette = 5 as const;
+export const k_loadout_palette_count = 6 as const;
 
 export class c_game_engine_team_options_team {
+  @AutoMap(() => Boolean)
   m_team_enabled = false;
+  @AutoMap(() => Boolean)
   m_override_color_armour = false;
+  @AutoMap(() => Boolean)
   m_override_color_ui_text = false;
+  @AutoMap(() => Boolean)
   m_override_color_ui_bitmap = false;
+  @AutoMap(() => c_string_table)
   m_name = new c_string_table(1, 32, 5, 6, 1);
+  @AutoMap(() => Number)
   m_team_initial_designator = 0;
+  @AutoMap(() => Number)
   m_model_override = 0;
+  @AutoMap(() => Number)
   m_team_color_override = 0;
+  @AutoMap(() => Number)
   m_team_ui_text_tint_color_override = 0;
+  @AutoMap(() => Number)
   m_team_ui_bitmap_tint_color_override = 0;
+  @AutoMap(() => Number)
   m_fireteam_count = 0;
-
   decode(bitstream: c_bitstream_reader): void {
     this.m_override_color_ui_bitmap = bitstream.read_bool(
       "team-override-ui-bitmap-color"
@@ -271,7 +307,6 @@ export class c_game_engine_team_options_team {
     );
     this.m_fireteam_count = bitstream.read_integer("fireteam-count", 5);
   }
-
   encode(bitstream: c_bitstream_writer): void {
     bitstream.write_bool(this.m_override_color_ui_bitmap);
     bitstream.write_bool(this.m_override_color_ui_text);
@@ -286,15 +321,19 @@ export class c_game_engine_team_options_team {
     bitstream.write_integer(this.m_fireteam_count, 5);
   }
 }
-
 export class c_game_engine_team_options {
+  @AutoMap(() => Number)
   m_model_override = 0;
+  @AutoMap(() => Number)
   m_designator_switch_type = 0;
-  m_teams = Array.from(
-    { length: k_game_variant_team_count },
+  @AutoMap(() => [c_game_engine_team_options_team])
+  m_teams: StaticArray<
+    c_game_engine_team_options_team,
+    typeof k_game_variant_team_count
+  > = staticArray(
+    k_game_variant_team_count,
     () => new c_game_engine_team_options_team()
   );
-
   decode(bitstream: c_bitstream_reader): void {
     this.m_model_override = bitstream.read_integer("model-override", 3);
     this.m_designator_switch_type = bitstream.read_integer(
@@ -305,7 +344,6 @@ export class c_game_engine_team_options {
       team.decode(bitstream);
     }
   }
-
   encode(bitstream: c_bitstream_writer): void {
     bitstream.write_integer(this.m_model_override, 3);
     bitstream.write_integer(this.m_designator_switch_type, 2);
@@ -314,15 +352,19 @@ export class c_game_engine_team_options {
     }
   }
 }
-
 export class c_loadout_traits {
+  @AutoMap(() => Boolean)
   m_visible = false;
+  @AutoMap(() => Number)
   m_name = 0;
+  @AutoMap(() => Number)
   m_initial_primary_weapon_absolute_index = 0;
+  @AutoMap(() => Number)
   m_initial_secondary_weapon_absolute_index = 0;
+  @AutoMap(() => Number)
   m_initial_equipment_absolute_index = 0;
+  @AutoMap(() => Number)
   m_initial_grenade_count_setting = 0;
-
   decode(bitstream: c_bitstream_reader): void {
     this.m_visible = bitstream.read_bool("flags");
     this.m_name = bitstream.read_index("name", 128, 7);
@@ -339,7 +381,6 @@ export class c_loadout_traits {
       4
     );
   }
-
   encode(bitstream: c_bitstream_writer): void {
     bitstream.write_bool(this.m_visible);
     bitstream.write_index(this.m_name, 128, 7);
@@ -355,37 +396,40 @@ export class c_loadout_traits {
     bitstream.write_integer(this.m_initial_grenade_count_setting, 4);
   }
 }
-
 export class c_loadout_palette_traits {
-  m_loadouts = Array.from({ length: 5 }, () => new c_loadout_traits());
-
+  @AutoMap(() => [c_loadout_traits])
+  m_loadouts: StaticArray<
+    c_loadout_traits,
+    typeof k_loadout_traits_per_palette
+  > = staticArray(k_loadout_traits_per_palette, () => new c_loadout_traits());
   decode(bitstream: c_bitstream_reader): void {
     for (const loadout of this.m_loadouts) {
       loadout.decode(bitstream);
     }
   }
-
   encode(bitstream: c_bitstream_writer): void {
     for (const loadout of this.m_loadouts) {
       loadout.encode(bitstream);
     }
   }
 }
-
 export class c_game_engine_loadout_traits {
+  @AutoMap(() => Number)
   m_flags = 0;
-  m_loadout_palettes = Array.from(
-    { length: 6 },
+  @AutoMap(() => [c_loadout_palette_traits])
+  m_loadout_palettes: StaticArray<
+    c_loadout_palette_traits,
+    typeof k_loadout_palette_count
+  > = staticArray(
+    k_loadout_palette_count,
     () => new c_loadout_palette_traits()
   );
-
   decode(bitstream: c_bitstream_reader): void {
     this.m_flags = bitstream.read_integer("loadout-flags", 2);
     for (const palette of this.m_loadout_palettes) {
       palette.decode(bitstream);
     }
   }
-
   encode(bitstream: c_bitstream_writer): void {
     bitstream.write_integer(this.m_flags, 2);
     for (const palette of this.m_loadout_palettes) {
@@ -393,8 +437,8 @@ export class c_game_engine_loadout_traits {
     }
   }
 }
-
 export class c_game_engine_base_variant {
+  @AutoMap(() => s_content_item_metadata)
   m_metadata = (() => {
     const metadata = new s_content_item_metadata();
     metadata.general = new s_content_item_general_metadata();
@@ -403,15 +447,22 @@ export class c_game_engine_base_variant {
     metadata.modification_history = new s_content_item_history();
     return metadata;
   })();
+  @AutoMap(() => Boolean)
   m_built_in = false;
+  @AutoMap(() => c_game_engine_miscellaneous_options)
   m_miscellaneous_options = new c_game_engine_miscellaneous_options();
+  @AutoMap(() => c_game_engine_respawn_options)
   m_respawn_options = new c_game_engine_respawn_options();
+  @AutoMap(() => c_game_engine_social_options)
   m_social_options = new c_game_engine_social_options();
+  @AutoMap(() => c_game_engine_map_override_options)
   m_map_override_options = new c_game_engine_map_override_options();
+  @AutoMap(() => Number)
   m_team_scoring_method = 0;
+  @AutoMap(() => c_game_engine_team_options)
   m_team_options = new c_game_engine_team_options();
+  @AutoMap(() => c_game_engine_loadout_traits)
   m_loadouts = new c_game_engine_loadout_traits();
-
   decode(bitstream: c_bitstream_reader): void {
     content_item_metadata_decode(bitstream, this.m_metadata);
     this.m_built_in = bitstream.read_bool("variant-built-in");
@@ -426,7 +477,6 @@ export class c_game_engine_base_variant {
     this.m_team_options.decode(bitstream);
     this.m_loadouts.decode(bitstream);
   }
-
   encode(bitstream: c_bitstream_writer): void {
     content_item_metadata_encode(bitstream, this.m_metadata);
     bitstream.write_bool(this.m_built_in);
@@ -439,5 +489,4 @@ export class c_game_engine_base_variant {
     this.m_loadouts.encode(bitstream);
   }
 }
-
 export type c_game_engine_campaign_variant = c_game_engine_base_variant;

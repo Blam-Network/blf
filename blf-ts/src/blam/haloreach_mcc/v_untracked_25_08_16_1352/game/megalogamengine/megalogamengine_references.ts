@@ -3,6 +3,7 @@ import type {
   c_bitstream_writer,
 } from "../../../../../bitstream";
 import { BlfError } from "../../../../../error";
+import { AutoMap } from "../../../../../helpers/automap";
 import { e_explicit_object_type } from "./megalogamengine_explicit_object";
 import { e_explicit_player_type } from "./megalogamengine_explicit_player";
 import { e_explicit_team_type } from "./megalogamengine_explicit_team";
@@ -17,7 +18,6 @@ function requireField<T>(value: T | undefined, message: string): T {
   }
   return value;
 }
-
 export enum e_custom_timer_type {
   global = 0,
   player = 1,
@@ -27,11 +27,10 @@ export enum e_custom_timer_type {
   sudden_death = 5,
   grace_period = 6,
 }
-
 export class c_explicit_player {
+  @AutoMap(() => e_explicit_player_type)
   m_explicit_player_type: e_explicit_player_type =
     e_explicit_player_type.no_player;
-
   decode(bitstream: c_bitstream_reader): void {
     this.m_explicit_player_type = bitstream.read_enum(
       "explicit-player-type",
@@ -39,16 +38,18 @@ export class c_explicit_player {
       e_explicit_player_type
     );
   }
-
   encode(bitstream: c_bitstream_writer): void {
-    bitstream.write_enum(this.m_explicit_player_type, 5);
+    bitstream.write_enum(
+      this.m_explicit_player_type,
+      5,
+      e_explicit_player_type
+    );
   }
 }
-
 export class c_explicit_object {
+  @AutoMap(() => e_explicit_object_type)
   m_explicit_object_type: e_explicit_object_type =
     e_explicit_object_type.no_object;
-
   decode(bitstream: c_bitstream_reader): void {
     this.m_explicit_object_type = bitstream.read_enum(
       "explicit-object-type",
@@ -56,15 +57,17 @@ export class c_explicit_object {
       e_explicit_object_type
     );
   }
-
   encode(bitstream: c_bitstream_writer): void {
-    bitstream.write_enum(this.m_explicit_object_type, 5);
+    bitstream.write_enum(
+      this.m_explicit_object_type,
+      5,
+      e_explicit_object_type
+    );
   }
 }
-
 export class c_explicit_team {
+  @AutoMap(() => e_explicit_team_type)
   m_explicit_team_type: e_explicit_team_type = e_explicit_team_type.no_team;
-
   decode(bitstream: c_bitstream_reader): void {
     this.m_explicit_team_type = bitstream.read_enum(
       "explicit-team-type",
@@ -72,22 +75,23 @@ export class c_explicit_team {
       e_explicit_team_type
     );
   }
-
   encode(bitstream: c_bitstream_writer): void {
-    bitstream.write_enum(this.m_explicit_team_type, 5);
+    bitstream.write_enum(this.m_explicit_team_type, 5, e_explicit_team_type);
   }
 }
-
 export class c_object_reference {
+  @AutoMap(() => Number)
   m_type = 0;
+  @AutoMap(() => c_explicit_player)
   m_player?: c_explicit_player;
+  @AutoMap(() => c_explicit_object)
   m_object?: c_explicit_object;
+  @AutoMap(() => c_explicit_team)
   m_team?: c_explicit_team;
+  @AutoMap(() => Number)
   m_variable_index?: number;
-
   decode(bitstream: c_bitstream_reader): void {
     this.m_type = bitstream.read_integer("type", 3);
-
     switch (this.m_type) {
       case 0: {
         const object = new c_explicit_object();
@@ -147,7 +151,6 @@ export class c_object_reference {
         break;
     }
   }
-
   encode(bitstream: c_bitstream_writer): void {
     bitstream.write_integer(this.m_type, 3);
     switch (this.m_type) {
@@ -234,17 +237,19 @@ export class c_object_reference {
     }
   }
 }
-
 export class c_player_reference {
+  @AutoMap(() => Number)
   m_type = 0;
+  @AutoMap(() => c_explicit_player)
   m_player?: c_explicit_player;
+  @AutoMap(() => c_explicit_object)
   m_object?: c_explicit_object;
+  @AutoMap(() => c_explicit_team)
   m_team?: c_explicit_team;
+  @AutoMap(() => Number)
   m_variable_index?: number;
-
   decode(bitstream: c_bitstream_reader): void {
     this.m_type = bitstream.read_integer("type", 2);
-
     switch (this.m_type) {
       case 0: {
         const player = new c_explicit_player();
@@ -277,7 +282,6 @@ export class c_player_reference {
         break;
     }
   }
-
   encode(bitstream: c_bitstream_writer): void {
     bitstream.write_integer(this.m_type, 2);
     switch (this.m_type) {
@@ -325,17 +329,19 @@ export class c_player_reference {
     }
   }
 }
-
 export class c_team_reference {
+  @AutoMap(() => Number)
   m_type = 0;
+  @AutoMap(() => c_explicit_player)
   m_player?: c_explicit_player;
+  @AutoMap(() => c_explicit_object)
   m_object?: c_explicit_object;
+  @AutoMap(() => c_explicit_team)
   m_team?: c_explicit_team;
+  @AutoMap(() => Number)
   m_variable_index?: number;
-
   decode(bitstream: c_bitstream_reader): void {
     this.m_type = bitstream.read_integer("type", 3);
-
     switch (this.m_type) {
       case 0: {
         const team = new c_explicit_team();
@@ -380,7 +386,6 @@ export class c_team_reference {
         break;
     }
   }
-
   encode(bitstream: c_bitstream_writer): void {
     bitstream.write_integer(this.m_type, 3);
     switch (this.m_type) {
@@ -436,20 +441,25 @@ export class c_team_reference {
     }
   }
 }
-
 export class c_custom_variable_reference {
+  @AutoMap(() => Number)
   m_type = 0;
+  @AutoMap(() => Number)
   m_immediate_value?: number;
+  @AutoMap(() => c_explicit_player)
   m_player?: c_explicit_player;
+  @AutoMap(() => c_explicit_object)
   m_object?: c_explicit_object;
+  @AutoMap(() => c_explicit_team)
   m_team?: c_explicit_team;
+  @AutoMap(() => Number)
   m_variable_index?: number;
+  @AutoMap(() => Number)
   m_option_index?: number;
+  @AutoMap(() => Number)
   m_statistic_index?: number;
-
   decode(bitstream: c_bitstream_reader): void {
     this.m_type = bitstream.read_integer("type", 6);
-
     switch (this.m_type) {
       case 0:
         this.m_immediate_value = bitstream.read_signed_integer(
@@ -522,7 +532,6 @@ export class c_custom_variable_reference {
         break;
     }
   }
-
   encode(bitstream: c_bitstream_writer): void {
     bitstream.write_integer(this.m_type, 6);
     switch (this.m_type) {
@@ -624,17 +633,19 @@ export class c_custom_variable_reference {
     }
   }
 }
-
 export class c_custom_timer_reference {
+  @AutoMap(() => e_custom_timer_type)
   m_type: e_custom_timer_type = e_custom_timer_type.global;
+  @AutoMap(() => c_explicit_player)
   m_player?: c_explicit_player;
+  @AutoMap(() => c_explicit_object)
   m_object?: c_explicit_object;
+  @AutoMap(() => c_explicit_team)
   m_team?: c_explicit_team;
+  @AutoMap(() => Number)
   m_variable_index?: number;
-
   decode(bitstream: c_bitstream_reader): void {
     this.m_type = bitstream.read_enum("type", 3, e_custom_timer_type);
-
     switch (this.m_type) {
       case e_custom_timer_type.global:
         this.m_variable_index = bitstream.read_integer(
@@ -680,9 +691,8 @@ export class c_custom_timer_reference {
         break;
     }
   }
-
   encode(bitstream: c_bitstream_writer): void {
-    bitstream.write_enum(this.m_type, 3);
+    bitstream.write_enum(this.m_type, 3, e_custom_timer_type);
     switch (this.m_type) {
       case e_custom_timer_type.global:
         bitstream.write_integer(
@@ -738,10 +748,9 @@ export class c_custom_timer_reference {
     }
   }
 }
-
 export class c_object_type_reference {
+  @AutoMap(() => Number)
   m_object_type_index = 0;
-
   decode(bitstream: c_bitstream_reader): void {
     this.m_object_type_index = bitstream.read_index(
       "object-type-index",
@@ -749,7 +758,6 @@ export class c_object_type_reference {
       11
     );
   }
-
   encode(bitstream: c_bitstream_writer): void {
     bitstream.write_index(this.m_object_type_index, 2048, 11);
   }

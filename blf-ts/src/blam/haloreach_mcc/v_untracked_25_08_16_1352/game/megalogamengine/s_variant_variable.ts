@@ -3,6 +3,7 @@ import type {
   c_bitstream_writer,
 } from "../../../../../bitstream";
 import { BlfError } from "../../../../../error";
+import { AutoMap } from "../../../../../helpers/automap";
 import {
   c_custom_timer_reference,
   c_custom_variable_reference,
@@ -17,18 +18,21 @@ function requireField<T>(value: T | undefined, message: string): T {
   }
   return value;
 }
-
 export class s_variant_variable {
+  @AutoMap(() => Number)
   m_type = 0;
+  @AutoMap(() => c_player_reference)
   m_player?: c_player_reference;
+  @AutoMap(() => c_object_reference)
   m_object?: c_object_reference;
+  @AutoMap(() => c_team_reference)
   m_team?: c_team_reference;
+  @AutoMap(() => c_custom_timer_reference)
   m_custom_timer?: c_custom_timer_reference;
+  @AutoMap(() => c_custom_variable_reference)
   m_custom_variable?: c_custom_variable_reference;
-
   decode(bitstream: c_bitstream_reader): void {
     this.m_type = bitstream.read_integer("type", 3);
-
     switch (this.m_type) {
       case 0: {
         const custom_variable = new c_custom_variable_reference();
@@ -64,7 +68,6 @@ export class s_variant_variable {
         break;
     }
   }
-
   encode(bitstream: c_bitstream_writer): void {
     bitstream.write_integer(this.m_type, 3);
     switch (this.m_type) {

@@ -2,15 +2,19 @@ import type {
   c_bitstream_reader,
   c_bitstream_writer,
 } from "../../../../../bitstream";
+import { AutoMap } from "../../../../../helpers/automap";
 import { c_custom_variable_reference } from "./megalogamengine_references";
-
 export class s_variable_metadata {
+  @AutoMap(() => [c_custom_variable_reference])
   m_numeric_variables: [c_custom_variable_reference, number][] = [];
+  @AutoMap(() => [c_custom_variable_reference])
   m_timer_variables: c_custom_variable_reference[] = [];
+  @AutoMap(() => [Number])
   m_team_variables: [number, number][] = [];
+  @AutoMap(() => [Number])
   m_player_variables: number[] = [];
+  @AutoMap(() => [Number])
   m_object_variables: number[] = [];
-
   constructor(
     private readonly numeric_variable_count_bits: number,
     private readonly timer_variable_count_bits: number,
@@ -18,7 +22,6 @@ export class s_variable_metadata {
     private readonly player_variable_count_bits: number,
     private readonly object_variable_count_bits: number
   ) {}
-
   decode(bitstream: c_bitstream_reader): void {
     const numeric_variable_count = bitstream.read_integer(
       "numeric-variable-count",
@@ -30,7 +33,6 @@ export class s_variable_metadata {
       const network_state = bitstream.read_integer("network-state", 2);
       this.m_numeric_variables.push([numeric_variable, network_state]);
     }
-
     const timer_variable_count = bitstream.read_integer(
       "timer-variable-count",
       this.timer_variable_count_bits
@@ -40,7 +42,6 @@ export class s_variable_metadata {
       timer_variable.decode(bitstream);
       this.m_timer_variables.push(timer_variable);
     }
-
     const team_variable_count = bitstream.read_integer(
       "team-variable-count",
       this.team_variable_count_bits
@@ -53,7 +54,6 @@ export class s_variable_metadata {
       const network_state = bitstream.read_integer("network-state", 2);
       this.m_team_variables.push([team_variable_value, network_state]);
     }
-
     const player_variable_count = bitstream.read_integer(
       "player-variable-count",
       this.player_variable_count_bits
@@ -61,7 +61,6 @@ export class s_variable_metadata {
     for (let i = 0; i < player_variable_count; i++) {
       this.m_player_variables.push(bitstream.read_integer("network-state", 2));
     }
-
     const object_variable_count = bitstream.read_integer(
       "object-variable-count",
       this.object_variable_count_bits
@@ -70,7 +69,6 @@ export class s_variable_metadata {
       this.m_object_variables.push(bitstream.read_integer("network-state", 2));
     }
   }
-
   encode(bitstream: c_bitstream_writer): void {
     bitstream.write_integer(
       this.m_numeric_variables.length,
@@ -111,19 +109,15 @@ export class s_variable_metadata {
     }
   }
 }
-
 export function s_variable_metadata_global(): s_variable_metadata {
   return new s_variable_metadata(4, 4, 4, 4, 5);
 }
-
 export function s_variable_metadata_player(): s_variable_metadata {
   return new s_variable_metadata(4, 3, 3, 3, 3);
 }
-
 export function s_variable_metadata_object(): s_variable_metadata {
   return new s_variable_metadata(4, 3, 2, 3, 3);
 }
-
 export function s_variable_metadata_team(): s_variable_metadata {
   return new s_variable_metadata(4, 3, 3, 3, 3);
 }

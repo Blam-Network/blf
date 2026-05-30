@@ -3,6 +3,7 @@ import type {
   c_bitstream_writer,
 } from "../../../../bitstream";
 import { BlfError } from "../../../../error";
+import { AutoMap } from "../../../../helpers/automap";
 import { c_game_engine_custom_variant_au1_settings } from "./c_game_engine_custom_variant_au1_settings";
 import { c_game_engine_base_variant } from "./c_game_engine_default";
 import { s_player_trait_option } from "./c_game_engine_traits";
@@ -11,44 +12,65 @@ import { c_megalogamengine_map_permissions } from "./megalogamengine/c_megalogam
 import { s_custom_game_engine_definition } from "./megalogamengine/s_custom_game_engine_definition";
 import { s_game_engine_player_rating_parameters } from "./megalogamengine/s_game_engine_player_rating_parameters";
 import { s_user_defined_option } from "./megalogamengine/s_user_defined_option";
-
 export class c_game_engine_custom_variant {
+  @AutoMap(() => Number)
   m_encoding_version = 0;
+  @AutoMap(() => Number)
   m_build_number = 0;
+  @AutoMap(() => c_game_engine_base_variant)
   m_base_variant = new c_game_engine_base_variant();
+  @AutoMap(() => [s_player_trait_option])
   m_player_traits: s_player_trait_option[] = [];
+  @AutoMap(() => [s_user_defined_option])
   m_user_defined_options: s_user_defined_option[] = [];
+  @AutoMap(() => c_string_table)
   m_script_strings = new c_string_table(112, 0x4c00, 15, 15, 7);
+  @AutoMap(() => Number)
   m_base_name_string_index = 0;
+  @AutoMap(() => c_string_table)
   m_localized_name = new c_string_table(1, 0x180, 9, 9, 1);
+  @AutoMap(() => c_string_table)
   m_localized_description = new c_string_table(1, 0xc00, 12, 12, 1);
+  @AutoMap(() => c_string_table)
   m_localized_category = new c_string_table(1, 0x180, 9, 9, 1);
+  @AutoMap(() => Number)
   m_engine_icon = 0;
+  @AutoMap(() => Number)
   m_engine_category = 0;
+  @AutoMap(() => c_megalogamengine_map_permissions)
   m_map_permissions = new c_megalogamengine_map_permissions();
+  @AutoMap(() => s_game_engine_player_rating_parameters)
   m_player_ratings = new s_game_engine_player_rating_parameters();
+  @AutoMap(() => Number)
   m_score_to_win_round = 0;
+  @AutoMap(() => Boolean)
   m_fire_teams_enabled = false;
+  @AutoMap(() => Boolean)
   m_symmetric_gametype = false;
+  @AutoMap(() => [Boolean])
   m_base_variant_parameters_locked: boolean[] = Array.from(
     { length: 1280 },
     () => false
   );
+  @AutoMap(() => [Boolean])
   m_base_variant_parameters_hidden: boolean[] = Array.from(
     { length: 1280 },
     () => false
   );
+  @AutoMap(() => [Boolean])
   m_user_defined_options_locked: boolean[] = Array.from(
     { length: 32 },
     () => false
   );
+  @AutoMap(() => [Boolean])
   m_user_defined_options_hidden: boolean[] = Array.from(
     { length: 32 },
     () => false
   );
+  @AutoMap(() => s_custom_game_engine_definition)
   m_game_engine = new s_custom_game_engine_definition();
+  @AutoMap(() => c_game_engine_custom_variant_au1_settings)
   m_au1_settings?: c_game_engine_custom_variant_au1_settings;
-
   decode(bitstream: c_bitstream_reader): void {
     this.m_encoding_version = bitstream.read_signed_integer(
       "encoding-version",
@@ -56,14 +78,12 @@ export class c_game_engine_custom_variant {
     );
     this.m_build_number = bitstream.read_signed_integer("version", 32);
     this.m_base_variant.decode(bitstream);
-
     const player_trait_count = bitstream.read_integer("player-trait-count", 5);
     for (let i = 0; i < player_trait_count; i++) {
       const traits = new s_player_trait_option();
       traits.decode(bitstream);
       this.m_player_traits.push(traits);
     }
-
     const user_defined_option_count = bitstream.read_integer(
       "user-defined-option-count",
       5
@@ -73,7 +93,6 @@ export class c_game_engine_custom_variant {
       option.decode(bitstream);
       this.m_user_defined_options.push(option);
     }
-
     this.m_script_strings.decode(bitstream);
     this.m_base_name_string_index = bitstream.read_integer(
       "base-name-string-index",
@@ -92,7 +111,6 @@ export class c_game_engine_custom_variant {
     );
     this.m_fire_teams_enabled = bitstream.read_bool("fire-teams-enabled");
     this.m_symmetric_gametype = bitstream.read_bool("symmetric-gametype");
-
     for (let i = 0; i < 1280; i++) {
       this.m_base_variant_parameters_locked[i] = bitstream.read_bool(
         "base-variant-parameters-locked"
@@ -113,16 +131,13 @@ export class c_game_engine_custom_variant {
         "user-defined-options-hidden"
       );
     }
-
     this.m_game_engine.decode(bitstream);
-
     if (this.m_encoding_version > 106) {
       const au1 = new c_game_engine_custom_variant_au1_settings();
       au1.decode(bitstream);
       this.m_au1_settings = au1;
     }
   }
-
   encode(bitstream: c_bitstream_writer): void {
     bitstream.write_signed_integer(this.m_encoding_version, 32);
     bitstream.write_signed_integer(this.m_build_number, 32);

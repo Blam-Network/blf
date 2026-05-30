@@ -2,64 +2,98 @@ import type {
   c_bitstream_reader,
   c_bitstream_writer,
 } from "../../../../bitstream";
-
+import { AutoMap } from "../../../../helpers/automap";
 export class c_player_trait_shield_vitality {
+  @AutoMap(() => Number)
   m_damage_resistance_percentage_setting = 0;
+  @AutoMap(() => Number)
   m_body_multiplier = 0;
+  @AutoMap(() => Number)
   m_body_recharge_rate = 0;
+  @AutoMap(() => Number)
   m_shield_multiplier = 0;
+  @AutoMap(() => Number)
   m_shield_recharge_rate = 0;
+  @AutoMap(() => Number)
   m_overshield_recharge_rate = 0;
+  @AutoMap(() => Number)
   m_headshot_immunity_setting = 0;
+  @AutoMap(() => Number)
   m_vampirism_percentage_setting = 0;
+  @AutoMap(() => Number)
   m_assasination_immunity = 0;
+  @AutoMap(() => Number)
   m_cannot_die_from_damage = 0;
 }
-
 export class c_player_trait_weapons {
+  @AutoMap(() => Number)
   m_damage_modifier_percentage_setting = 0;
+  @AutoMap(() => Number)
   m_melee_damage_modifier_percentage_setting = 0;
+  @AutoMap(() => Number)
   m_initial_primary_weapon_absolute_index = 0;
+  @AutoMap(() => Number)
   m_initial_secondary_weapon_absolute_index = 0;
+  @AutoMap(() => Number)
   m_initial_grenade_count_setting = 0;
+  @AutoMap(() => Number)
   m_infinite_ammo_setting = 0;
+  @AutoMap(() => Number)
   m_recharging_grenades_setting = 0;
+  @AutoMap(() => Number)
   m_weapon_pickup_setting = 0;
+  @AutoMap(() => Number)
   m_equipment_usage_setting = 0;
+  @AutoMap(() => Number)
   m_equipment_drop_on_death_setting = 0;
+  @AutoMap(() => Number)
   m_infinite_equipment_setting = 0;
+  @AutoMap(() => Number)
   m_initial_equipment_absolute_index = 0;
 }
-
 export class c_player_trait_movement {
+  @AutoMap(() => Number)
   m_speed_setting = 0;
+  @AutoMap(() => Number)
   m_gravity_setting = 0;
+  @AutoMap(() => Number)
   m_vehicle_usage_setting = 0;
+  @AutoMap(() => Number)
   m_double_jump_setting = 0;
+  @AutoMap(() => Number)
   m_jump_modifier = -1;
 }
-
 export class c_player_trait_appearance {
+  @AutoMap(() => Number)
   m_active_camo_setting = 0;
+  @AutoMap(() => Number)
   m_waypoint_setting = 0;
+  @AutoMap(() => Number)
   m_gamertag_setting = 0;
+  @AutoMap(() => Number)
   m_aura_setting = 0;
+  @AutoMap(() => Number)
   m_forced_change_color_setting = 0;
 }
-
 export class c_player_trait_sensors {
+  @AutoMap(() => Number)
   m_motion_tracker_setting = 0;
+  @AutoMap(() => Number)
   m_motion_tracker_range_setting = 0;
+  @AutoMap(() => Number)
   m_directional_damage_setting = 0;
 }
-
 export class c_player_traits {
+  @AutoMap(() => c_player_trait_shield_vitality)
   m_shield_vitality_traits = new c_player_trait_shield_vitality();
+  @AutoMap(() => c_player_trait_weapons)
   m_weapon_traits = new c_player_trait_weapons();
+  @AutoMap(() => c_player_trait_movement)
   m_movement_traits = new c_player_trait_movement();
+  @AutoMap(() => c_player_trait_appearance)
   m_appearance_traits = new c_player_trait_appearance();
+  @AutoMap(() => c_player_trait_sensors)
   m_sensor_traits = new c_player_trait_sensors();
-
   decode(bitstream: c_bitstream_reader): void {
     const sv = this.m_shield_vitality_traits;
     sv.m_damage_resistance_percentage_setting = bitstream.read_integer(
@@ -90,7 +124,6 @@ export class c_player_traits {
       "cannot-die-from-damage",
       2
     );
-
     const w = this.m_weapon_traits;
     w.m_damage_modifier_percentage_setting = bitstream.read_integer(
       "damage-modifier",
@@ -140,7 +173,6 @@ export class c_player_traits {
       "player-trait-initial-equipment",
       8
     );
-
     const m = this.m_movement_traits;
     m.m_speed_setting = bitstream.read_integer("player-speed", 5);
     m.m_gravity_setting = bitstream.read_integer("player-gravity", 4);
@@ -160,7 +192,6 @@ export class c_player_traits {
     } else {
       m.m_jump_modifier = -1;
     }
-
     const a = this.m_appearance_traits;
     a.m_active_camo_setting = bitstream.read_integer(
       "player-traits-appearance-active-camo",
@@ -182,7 +213,6 @@ export class c_player_traits {
       "player-traits-appearance-forced-change-color",
       4
     );
-
     const s = this.m_sensor_traits;
     s.m_motion_tracker_setting = bitstream.read_integer(
       "player-traits-sensors-motion-tracker",
@@ -197,7 +227,6 @@ export class c_player_traits {
       2
     );
   }
-
   encode(bitstream: c_bitstream_writer): void {
     bitstream.write_integer(
       this.m_shield_vitality_traits.m_damage_resistance_percentage_setting,
@@ -283,7 +312,7 @@ export class c_player_traits {
       bitstream.write_bool(false);
     } else {
       bitstream.write_bool(true);
-      bitstream.write_signed_integer(this.m_movement_traits.m_jump_modifier, 9);
+      bitstream.write_integer(this.m_movement_traits.m_jump_modifier, 9);
     }
     bitstream.write_integer(this.m_appearance_traits.m_active_camo_setting, 3);
     bitstream.write_integer(this.m_appearance_traits.m_waypoint_setting, 2);

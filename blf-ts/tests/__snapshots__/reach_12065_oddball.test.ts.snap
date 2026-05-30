@@ -8383,7 +8383,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
             "m_hud_widget_set_visibility_parameters": undefined,
             "m_hud_widget_text_base": undefined,
             "m_navpoint_set_icon_parameters": {
-              "m_navpoint_icon": 8,
+              "m_navpoint_icon": 7,
               "m_navpoint_number": undefined,
               "m_object": {
                 "m_object": {
@@ -11373,7 +11373,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
             "m_hud_widget_set_visibility_parameters": undefined,
             "m_hud_widget_text_base": undefined,
             "m_navpoint_set_icon_parameters": {
-              "m_navpoint_icon": 0,
+              "m_navpoint_icon": -1,
               "m_navpoint_number": undefined,
               "m_object": {
                 "m_object": undefined,
@@ -12670,7 +12670,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
             "m_hud_widget_set_visibility_parameters": undefined,
             "m_hud_widget_text_base": undefined,
             "m_navpoint_set_icon_parameters": {
-              "m_navpoint_icon": 8,
+              "m_navpoint_icon": 7,
               "m_navpoint_number": undefined,
               "m_object": {
                 "m_object": {
@@ -13324,7 +13324,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
             "m_hud_widget_set_visibility_parameters": undefined,
             "m_hud_widget_text_base": undefined,
             "m_navpoint_set_icon_parameters": {
-              "m_navpoint_icon": 8,
+              "m_navpoint_icon": 7,
               "m_navpoint_number": undefined,
               "m_object": {
                 "m_object": undefined,
@@ -14054,7 +14054,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
             "m_hud_widget_set_visibility_parameters": undefined,
             "m_hud_widget_text_base": undefined,
             "m_navpoint_set_icon_parameters": {
-              "m_navpoint_icon": 6,
+              "m_navpoint_icon": 5,
               "m_navpoint_number": undefined,
               "m_object": {
                 "m_object": {
@@ -14912,7 +14912,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
             "m_hud_widget_set_visibility_parameters": undefined,
             "m_hud_widget_text_base": undefined,
             "m_navpoint_set_icon_parameters": {
-              "m_navpoint_icon": 6,
+              "m_navpoint_icon": 5,
               "m_navpoint_number": undefined,
               "m_object": {
                 "m_object": undefined,
@@ -17555,7 +17555,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
             "m_hud_widget_set_visibility_parameters": undefined,
             "m_hud_widget_text_base": undefined,
             "m_navpoint_set_icon_parameters": {
-              "m_navpoint_icon": 8,
+              "m_navpoint_icon": 7,
               "m_navpoint_number": undefined,
               "m_object": {
                 "m_object": {

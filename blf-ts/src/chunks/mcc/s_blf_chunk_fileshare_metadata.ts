@@ -8,7 +8,7 @@ export class s_blf_chunk_fileshare_metadata extends CStructBLFChunk {
   unknown0 = 0n;
 
   @c.field("u8", { count: 32 })
-  unknown8 = new Uint8Array(32);
+  unknown8 = Array.from({ length: 32 }, () => 0);
 
   @c.field(c.String(36))
   unknown28 = "";
@@ -17,7 +17,7 @@ export class s_blf_chunk_fileshare_metadata extends CStructBLFChunk {
   unknown4c = 0n;
 
   @c.field("u8", { count: 32 })
-  unknown54 = new Uint8Array(32);
+  unknown54 = Array.from({ length: 32 }, () => 0);
 
   @c.field(c.String(36))
   unknown74 = "";
@@ -26,5 +26,5 @@ export class s_blf_chunk_fileshare_metadata extends CStructBLFChunk {
   unknown98 = "";
 
   @c.field("u8", { count: 256, pad_after: 4 })
-  attestation_signature = new Uint8Array(256);
+  attestation_signature = Array.from({ length: 256 }, () => 0);
 }

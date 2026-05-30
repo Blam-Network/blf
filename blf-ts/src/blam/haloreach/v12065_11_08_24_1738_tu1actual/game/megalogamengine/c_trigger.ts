@@ -2,7 +2,7 @@ import type {
   c_bitstream_reader,
   c_bitstream_writer,
 } from "../../../../../bitstream";
-
+import { AutoMap } from "../../../../../helpers/automap";
 export enum e_trigger_execution_mode {
   normal = 0,
   for_each_player = 1,
@@ -13,7 +13,6 @@ export enum e_trigger_execution_mode {
   unknown6 = 6,
   unknown7 = 7,
 }
-
 export enum e_trigger_type {
   normal = 0,
   subroutine = 1,
@@ -25,16 +24,21 @@ export enum e_trigger_type {
   pregame = 7,
   incident = 8,
 }
-
 export class c_trigger {
+  @AutoMap(() => e_trigger_execution_mode)
   m_execution_mode: e_trigger_execution_mode = e_trigger_execution_mode.normal;
+  @AutoMap(() => e_trigger_type)
   m_trigger_type: e_trigger_type = e_trigger_type.normal;
+  @AutoMap(() => Number)
   m_object_filter_index = -1;
+  @AutoMap(() => Number)
   m_first_condition = 0;
+  @AutoMap(() => Number)
   m_condition_count = 0;
+  @AutoMap(() => Number)
   m_first_action = 0;
+  @AutoMap(() => Number)
   m_action_count = 0;
-
   decode(bitstream: c_bitstream_reader): void {
     this.m_execution_mode = bitstream.read_enum(
       "execution-mode",
@@ -65,10 +69,9 @@ export class c_trigger {
     this.m_first_action = bitstream.read_integer("first-action", 10);
     this.m_action_count = bitstream.read_integer("action-count", 11);
   }
-
   encode(bitstream: c_bitstream_writer): void {
-    bitstream.write_enum(this.m_execution_mode, 3);
-    bitstream.write_enum(this.m_trigger_type, 3);
+    bitstream.write_enum(this.m_execution_mode, 3, e_trigger_execution_mode);
+    bitstream.write_enum(this.m_trigger_type, 3, e_trigger_type);
     if (
       this.m_execution_mode ===
       e_trigger_execution_mode.for_each_object_with_label

@@ -2,25 +2,34 @@ import type {
   c_bitstream_reader,
   c_bitstream_writer,
 } from "../../../../bitstream";
+import { AutoMap } from "../../../../helpers/automap";
 import {
   c_game_engine_base_variant,
   c_game_engine_respawn_options,
 } from "./c_game_engine_default";
 import { c_player_traits } from "./c_player_traits";
 import { e_survival_variant_flags } from "./game_engine_enums";
-
 export class c_ai_traits {
+  @AutoMap(() => Number)
   m_vision = 0;
+  @AutoMap(() => Number)
   m_sound = 0;
+  @AutoMap(() => Number)
   m_luck = 0;
+  @AutoMap(() => Number)
   m_weapon = 0;
+  @AutoMap(() => Number)
   m_grenade = 0;
+  @AutoMap(() => Number)
   m_equipment_drop_setting = 0;
+  @AutoMap(() => Number)
   m_assasination_immunity_setting = 0;
+  @AutoMap(() => Number)
   m_headshot_immunity_setting = 0;
+  @AutoMap(() => Number)
   m_damage_resistance = 0;
+  @AutoMap(() => Number)
   m_damage_modifier = 0;
-
   decode(bitstream: c_bitstream_reader): void {
     this.m_vision = bitstream.read_integer("vision", 3);
     this.m_sound = bitstream.read_integer("sound", 2);
@@ -42,7 +51,6 @@ export class c_ai_traits {
     this.m_damage_resistance = bitstream.read_integer("damage-resistance", 4);
     this.m_damage_modifier = bitstream.read_integer("damage-modifier", 4);
   }
-
   encode(bitstream: c_bitstream_writer): void {
     bitstream.write_integer(this.m_vision, 3);
     bitstream.write_integer(this.m_sound, 2);
@@ -56,13 +64,15 @@ export class c_ai_traits {
     bitstream.write_integer(this.m_damage_modifier, 4);
   }
 }
-
 export class s_survival_wave_properties {
+  @AutoMap(() => Number)
   m_wave_flags = 0;
+  @AutoMap(() => Number)
   m_wave_squad_advance_type = 0;
+  @AutoMap(() => Number)
   m_wave_squad_count = 0;
+  @AutoMap(() => [Number])
   m_squads: number[] = Array.from({ length: 12 }, () => 0);
-
   decode(bitstream: c_bitstream_reader): void {
     this.m_wave_flags = bitstream.read_integer("wave_flags", 1);
     this.m_wave_squad_advance_type = bitstream.read_integer(
@@ -74,7 +84,6 @@ export class s_survival_wave_properties {
       this.m_squads[i] = bitstream.read_integer("possible-wave-squad", 8);
     }
   }
-
   encode(bitstream: c_bitstream_writer): void {
     bitstream.write_integer(this.m_wave_flags, 1);
     bitstream.write_integer(this.m_wave_squad_advance_type, 1);
@@ -84,38 +93,39 @@ export class s_survival_wave_properties {
     }
   }
 }
-
 export class s_custom_skull {
+  @AutoMap(() => c_player_traits)
   m_spartan_traits = new c_player_traits();
+  @AutoMap(() => c_player_traits)
   m_elite_traits = new c_player_traits();
+  @AutoMap(() => c_ai_traits)
   m_wave_traits = new c_ai_traits();
-
   decode(bitstream: c_bitstream_reader): void {
     this.m_spartan_traits.decode(bitstream);
     this.m_elite_traits.decode(bitstream);
     this.m_wave_traits.decode(bitstream);
   }
-
   encode(bitstream: c_bitstream_writer): void {
     this.m_spartan_traits.encode(bitstream);
     this.m_elite_traits.encode(bitstream);
     this.m_wave_traits.encode(bitstream);
   }
 }
-
 export class s_survival_round_properties {
+  @AutoMap(() => Number)
   m_skull_flags = 0;
+  @AutoMap(() => s_survival_wave_properties)
   m_initial_wave_options = new s_survival_wave_properties();
+  @AutoMap(() => s_survival_wave_properties)
   m_main_wave_options = new s_survival_wave_properties();
+  @AutoMap(() => s_survival_wave_properties)
   m_boss_wave_options = new s_survival_wave_properties();
-
   decode(bitstream: c_bitstream_reader): void {
     this.m_skull_flags = bitstream.read_integer("skull-flags", 18);
     this.m_initial_wave_options.decode(bitstream);
     this.m_main_wave_options.decode(bitstream);
     this.m_boss_wave_options.decode(bitstream);
   }
-
   encode(bitstream: c_bitstream_writer): void {
     bitstream.write_integer(this.m_skull_flags, 18);
     this.m_initial_wave_options.encode(bitstream);
@@ -123,34 +133,57 @@ export class s_survival_round_properties {
     this.m_boss_wave_options.encode(bitstream);
   }
 }
-
 export class c_game_engine_survival_variant {
+  @AutoMap(() => c_game_engine_base_variant)
   m_base_variant = new c_game_engine_base_variant();
+  @AutoMap(() => e_survival_variant_flags)
   m_variant_flags = new e_survival_variant_flags();
+  @AutoMap(() => Number)
   m_campaign_difficulty_level = 0;
+  @AutoMap(() => Number)
   m_set_count = 0;
+  @AutoMap(() => Number)
   m_bonus_lives_awarded = 0;
+  @AutoMap(() => Number)
   m_bonus_target = 0;
+  @AutoMap(() => Number)
   m_bonus_lives_on_elite_player_death = 0;
+  @AutoMap(() => Number)
   m_shared_team_life_count = 0;
+  @AutoMap(() => Number)
   m_elite_life_count = 0;
+  @AutoMap(() => Number)
   m_extra_life_score_target = 0;
+  @AutoMap(() => Number)
   m_maximum_lives = 0;
+  @AutoMap(() => Number)
   m_generator_count = 0;
+  @AutoMap(() => c_player_traits)
   m_spartan_traits = new c_player_traits();
+  @AutoMap(() => c_player_traits)
   m_elite_traits = new c_player_traits();
+  @AutoMap(() => c_ai_traits)
   m_ai_traits = new c_ai_traits();
+  @AutoMap(() => s_custom_skull)
   m_red_skull = new s_custom_skull();
+  @AutoMap(() => s_custom_skull)
   m_blue_skull = new s_custom_skull();
+  @AutoMap(() => s_custom_skull)
   m_yellow_skull = new s_custom_skull();
+  @AutoMap(() => c_game_engine_respawn_options)
   m_elite_respawn_options = new c_game_engine_respawn_options();
+  @AutoMap(() => s_survival_round_properties)
   m_round_1_properties = new s_survival_round_properties();
+  @AutoMap(() => s_survival_round_properties)
   m_round_2_properties = new s_survival_round_properties();
+  @AutoMap(() => s_survival_round_properties)
   m_round_3_properties = new s_survival_round_properties();
+  @AutoMap(() => Number)
   m_bonus_round_duration = 0;
+  @AutoMap(() => Number)
   m_bonus_round_skull_flags = 0;
+  @AutoMap(() => s_survival_wave_properties)
   m_bonus_round_properties = new s_survival_wave_properties();
-
   decode(bitstream: c_bitstream_reader): void {
     this.m_base_variant.decode(bitstream);
     this.m_variant_flags = e_survival_variant_flags.from_raw(
@@ -198,7 +231,6 @@ export class c_game_engine_survival_variant {
     this.m_bonus_round_skull_flags = bitstream.read_integer("skull-flags", 18);
     this.m_bonus_round_properties.decode(bitstream);
   }
-
   encode(bitstream: c_bitstream_writer): void {
     this.m_base_variant.encode(bitstream);
     bitstream.write_integer(this.m_variant_flags.to_raw(), 5);

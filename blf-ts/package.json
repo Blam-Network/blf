@@ -76,7 +76,7 @@
     "build": "node scripts/clean-dist.mjs && tsc -p tsconfig.build.json && tsc -p tsconfig.build.cjs.json && node scripts/write-cjs-package-json.mjs",
     "check": "ultracite check",
     "fix": "ultracite fix",
-    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.build.json --noEmit && tsc -p tsconfig.build.cjs.json --noEmit",
     "test": "vitest run",
     "docs:gen": "node scripts/generate-docs-version-exports.mjs",
     "docs": "vitepress dev docs",
@@ -109,7 +109,9 @@
     "access": "public"
   },
   "dependencies": {
-    "@craftycodie/cstruct": "^1.0.0-alpha.10",
+    "@automapper/classes": "^8.8.1",
+    "@automapper/core": "^8.8.1",
+    "@craftycodie/cstruct": "^1.1.0",
     "js-sha1": "^0.7.0",
     "pako": "^2.1.0"
   },

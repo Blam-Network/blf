@@ -2,12 +2,14 @@ import type {
   c_bitstream_reader,
   c_bitstream_writer,
 } from "../../../../../bitstream";
-
+import { AutoMap } from "../../../../../helpers/automap";
 export class s_user_defined_option_value {
+  @AutoMap(() => Number)
   m_value = 0;
+  @AutoMap(() => Number)
   m_name_string_index?: number;
+  @AutoMap(() => Number)
   m_description_string_index?: number;
-
   decode(bitstream: c_bitstream_reader, is_range: boolean): void {
     this.m_value = bitstream.read_signed_integer("value", 10);
     if (is_range) {
@@ -21,7 +23,6 @@ export class s_user_defined_option_value {
       );
     }
   }
-
   encode(bitstream: c_bitstream_writer, is_range: boolean): void {
     bitstream.write_signed_integer(this.m_value, 10);
     if (!is_range) {
@@ -30,25 +31,31 @@ export class s_user_defined_option_value {
     }
   }
 }
-
 export class s_user_defined_option {
+  @AutoMap(() => Number)
   m_name_string_index = 0;
+  @AutoMap(() => Number)
   m_description_string_index = 0;
+  @AutoMap(() => s_user_defined_option_value)
   m_range_default_value?: s_user_defined_option_value;
+  @AutoMap(() => s_user_defined_option_value)
   m_range_min_value?: s_user_defined_option_value;
+  @AutoMap(() => s_user_defined_option_value)
   m_range_max_value?: s_user_defined_option_value;
+  @AutoMap(() => Number)
   m_range_current_value?: number;
+  @AutoMap(() => Number)
   m_default_value_index?: number;
+  @AutoMap(() => [s_user_defined_option_value])
   m_values?: s_user_defined_option_value[];
+  @AutoMap(() => Number)
   m_current_value_index?: number;
-
   decode(bitstream: c_bitstream_reader): void {
     this.m_name_string_index = bitstream.read_integer("name-string-index", 7);
     this.m_description_string_index = bitstream.read_integer(
       "description-string-index",
       7
     );
-
     if (bitstream.read_bool("is-ranged-option")) {
       const range_default = new s_user_defined_option_value();
       const range_min = new s_user_defined_option_value();
@@ -82,11 +89,9 @@ export class s_user_defined_option {
       );
     }
   }
-
   encode(bitstream: c_bitstream_writer): void {
     bitstream.write_integer(this.m_name_string_index, 7);
     bitstream.write_integer(this.m_description_string_index, 7);
-
     if (this.m_range_default_value === undefined) {
       bitstream.write_bool(false);
       bitstream.write_integer(this.m_default_value_index!, 3);
