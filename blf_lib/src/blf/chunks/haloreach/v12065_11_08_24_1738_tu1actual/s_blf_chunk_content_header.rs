@@ -17,7 +17,7 @@ use blf_lib_derive::BlfChunk;
 pub struct s_blf_chunk_content_header
 {
     pub build_number: u16,
-    pub map_minor_version: u16,
+    pub build_sequence_number: u16,
     pub metadata: c_content_item_metadata,
 }
 
@@ -27,7 +27,7 @@ impl s_blf_chunk_content_header {
     pub fn create_for_game_variant(game_variant: &c_game_variant) -> BLFLibResult<s_blf_chunk_content_header> {
         Ok(s_blf_chunk_content_header {
             build_number: 12065,
-            map_minor_version: 0,
+            build_sequence_number: 0,
             metadata: game_variant.get_metadata()?.clone(),
         })
     }
@@ -35,7 +35,7 @@ impl s_blf_chunk_content_header {
     pub fn create_for_map_variant(map_variant: &c_map_variant) -> s_blf_chunk_content_header {
         s_blf_chunk_content_header {
             build_number: 12065,
-            map_minor_version: 0,
+            build_sequence_number: 0,
             metadata: map_variant.m_metadata.clone(),
         }
     }

@@ -9,7 +9,7 @@ export class s_blf_chunk_content_header extends CStructBLFChunk {
   build_number!: number;
 
   @c.field("u16")
-  map_minor_version!: number;
+  build_sequence_number!: number;
 
   @c.field(s_content_item_metadata)
   metadata!: s_content_item_metadata;

@@ -14,7 +14,7 @@ use napi_derive::napi;
 pub struct s_blf_chunk_content_header
 {
     pub build_number: u16,
-    pub map_minor_version: u16,
+    pub build_sequence_number: u16,
     pub metadata: s_content_item_metadata,
 }
 

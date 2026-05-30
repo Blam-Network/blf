@@ -12,7 +12,7 @@ describe("s_blf_chunk_content_header", () => {
     expect(search_for_chunk(file, chdr, "big")).toBe(true);
 
     expect(chdr.build_number).toBe(12065);
-    expect(chdr.map_minor_version).toBe(0);
+    expect(chdr.build_sequence_number).toBe(0);
 
     expect(chdr.metadata.general.file_type).toBe(6); // e_file_type.GameVariant
     expect(chdr.metadata.general.size_in_bytes).toBe(21289);

@@ -3,7 +3,7 @@
 exports[`haloreach_gea0_map.blf > reads chdr (content header) 1`] = `
 {
   "build_number": 12065,
-  "map_minor_version": 0,
+  "build_sequence_number": 0,
   "metadata": {
     "activity_data": {
       "hopper_identifier": 0,

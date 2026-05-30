@@ -3,7 +3,7 @@
 exports[`3nvasion_dlc_054.bin > reads content header 1`] = `
 {
   "build_number": 65535,
-  "map_minor_version": 0,
+  "build_sequence_number": 0,
   "metadata": {
     "activity_data": {
       "hopper_identifier": 0,

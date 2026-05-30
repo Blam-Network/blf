@@ -106,6 +106,12 @@
           "source": "src/chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_game_variant.ts",
           "signature": "mpvr",
           "version": "54.1"
+        },
+        {
+          "name": "s_blf_chunk_map_variant",
+          "source": "src/chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_map_variant.ts",
+          "signature": "mvar",
+          "version": "31.1"
         }
       ]
     },
@@ -152,6 +158,12 @@
           "source": "src/chunks/haloreach_mcc/v_untracked_25_08_16_1352/s_blf_chunk_game_variant.ts",
           "signature": "mpvr",
           "version": "54.1"
+        },
+        {
+          "name": "s_blf_chunk_map_variant",
+          "source": "src/chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_map_variant.ts",
+          "signature": "mvar",
+          "version": "31.1"
         }
       ]
     },

@@ -17,3 +17,9 @@ export const reach_mcc_3nvasion_dlc_fixture = join(
   import.meta.dirname,
   "3nvasion_dlc_054.bin"
 );
+
+/** Reach MCC hopper map variant (Forge World). */
+export const reach_mcc_skeeball_court_xtreme_fixture = join(
+  import.meta.dirname,
+  "skeeball_court_xtreme_031.mvar"
+);
