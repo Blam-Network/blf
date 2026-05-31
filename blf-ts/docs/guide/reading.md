@@ -1,6 +1,17 @@
 # Reading chunks
 
-BLF chunk headers (signature, length, version) are typically **big-endian**. The `endian` argument to the helpers below applies to the chunk **payload** only.
+BLF chunk headers (signature, length, version) are always **big-endian**. The `endian` argument to the helpers below applies to the chunk **payload** only.
+
+## Instantiate and decode
+
+Each chunk is a class from a [version bundle](/guide/versions/). Create an instance, then decode into it in place:
+
+```ts
+const chdr = new s_blf_chunk_content_header();
+find_chunk(file, chdr, "big");
+```
+
+Every chunk implements `read(bytes, endian)` (header + payload) and `read_body(payload, endian)` (payload only). Discovery helpers call `read` for you.
 
 ## `find_chunk`
 
@@ -28,10 +39,6 @@ Use this when the buffer does not only contain a BLF — for example, reading a 
 
 Pass `"little"` when the payload is little-endian (for example Reach MCC hopper `chdr` metadata). Headers are still read as big-endian.
 
-## Writing BLFs
-
-Use `write_blffile` from the package root when assembling a BLF from chunk instances and `s_blf_header`.
-
 ## Fileshare metadata (`_fsm`)
 
 MCC fileshare exports append a `_fsm` 1.1 chunk (464 bytes) with digests, a PlayFab-style item id, and an attestation blob. Use `search_for_chunk` when the buffer is a full BLF that ends with `_eof` then `_fsm`:
@@ -51,3 +58,5 @@ See [MCC `v2025_08_16_178512_1_release`](/guide/versions/mcc/v2025_08_16_178512_
 ## Errors
 
 Layout and chunk failures throw `BlfError`.
+
+See also: [Writing chunks](/guide/writing).

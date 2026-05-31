@@ -66,6 +66,7 @@ export default defineConfig({
     nav: [
       { text: "Blam Network", link: "https://blam.network" },
       { text: "Guide", link: "/guide/quick-start" },
+      { text: "Changelog", link: "/changelog" },
       {
         text: "npm",
         link: "https://www.npmjs.com/package/@blamnetwork/blf",
@@ -86,7 +87,8 @@ export default defineConfig({
       {
         text: "Usage",
         items: [
-          { text: "Reading chunks", link: "/guide/chunks" },
+          { text: "Reading chunks", link: "/guide/reading" },
+          { text: "Writing chunks", link: "/guide/writing" },
           { text: "Bitstream", link: "/guide/bitstream" },
         ],
       },
@@ -106,6 +108,10 @@ export default defineConfig({
       {
         text: "Contributing",
         items: [{ text: "Development", link: "/guide/development" }],
+      },
+      {
+        text: "Reference",
+        items: [{ text: "Changelog", link: "/changelog" }],
       },
     ],
     socialLinks: [

@@ -24,7 +24,7 @@ When using this library, pass `"big"` or `"little"` as the payload endian to `fi
 ## What this package provides
 
 - **Version bundles** — import `@blamnetwork/blf/<game>/<build_id>` for structures for a given Title and Build.
-- **Chunk I/O** — Function for reading and writng BLF chunks and files, eg. `find_chunk`.
+- **Chunk I/O** — [Reading](/guide/reading) (`find_chunk`, `search_for_chunk`) and [writing](/guide/writing) (`write_blffile`, per-chunk `write`) BLF chunks and files.
 - **Bitstream** — Halo-style reader/writer for reading bit-packed data ([Bitstream](/guide/bitstream)).
 - **Helpers** — Helper functions implemented by Blam Network to assist in common BLF tasks such as converting chunks between Builds.
 
@@ -33,3 +33,5 @@ Struct layouts are built with [@craftycodie/cstruct](https://www.npmjs.com/packa
 ## Get started
 
 See [Install & quick start](/guide/quick-start).
+
+Release history: [Changelog](/changelog).

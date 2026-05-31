@@ -28,7 +28,7 @@ See [Megalo MCC changes](/guide/megalo-mcc-changes) for action names, payloads, 
 
 ## Example (MCC → TU1)
 
-Read an MCC `mpvr` from a buffer (use `find_chunk` instead of `search_for_chunk` when the file is a normal BLF), convert the decoded gametype, then write a TU1 BLF:
+Read an MCC `mpvr` from a buffer ([`find_chunk`](/guide/reading) for a normal BLF; [`search_for_chunk`](/guide/reading) for embedded data), convert the decoded gametype, then [write](/guide/writing) a TU1 BLF:
 
 ```ts
 import { readFileSync, writeFileSync } from "node:fs";
