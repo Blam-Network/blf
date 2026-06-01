@@ -19,6 +19,7 @@ pub mod s_blf_chunk_matchmaking_hopper_statistics;
 pub mod s_blf_chunk_game_variant;
 pub mod s_blf_chunk_screenshot_data;
 pub mod s_blf_chunk_screenshot_camera;
+pub mod s_blf_chunk_auth_upload_image;
 pub mod s_blf_chunk_server_signature;
 pub mod s_blf_chunk_challenge_progress;
 pub mod s_blf_chunk_reward_persistence_upload_to_lsp;

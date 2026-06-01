@@ -59,6 +59,40 @@
     },
     {
       "game": "haloreach",
+      "buildId": "v11860_10_07_24_0147_omaha_release",
+      "label": "Halo Reach",
+      "buildLabel": "Release",
+      "importPath": "@blamnetwork/blf/haloreach/v11860_10_07_24_0147_omaha_release",
+      "docLink": "/guide/versions/haloreach/v11860_10_07_24_0147_omaha_release",
+      "chunks": [
+        {
+          "name": "s_blf_chunk_start_of_file",
+          "source": "src/chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_start_of_file.ts",
+          "signature": "_blf",
+          "version": "1.2"
+        },
+        {
+          "name": "s_blf_chunk_end_of_file",
+          "source": "src/chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_end_of_file.ts",
+          "signature": "_eof",
+          "version": "1.1"
+        },
+        {
+          "name": "s_blf_chunk_player_heartbeat_response",
+          "source": "src/chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_player_heartbeat_response.ts",
+          "signature": "phbr",
+          "version": "2.1"
+        },
+        {
+          "name": "s_blf_chunk_network_lsp_heartbeat_data",
+          "source": "src/chunks/haloreach/v11860_10_07_24_0147_omaha_release/s_blf_chunk_network_lsp_heartbeat_data.ts",
+          "signature": "phbt",
+          "version": "5.1"
+        }
+      ]
+    },
+    {
+      "game": "haloreach",
       "buildId": "v12065_11_08_24_1738_tu1actual",
       "label": "Halo Reach",
       "buildLabel": "Title Update 1 (Latest)",
@@ -90,6 +124,12 @@
           "version": "3.1"
         },
         {
+          "name": "s_blf_chunk_auth_upload_image",
+          "source": "src/chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_auth_upload_image.ts",
+          "signature": "auiu",
+          "version": "1.2"
+        },
+        {
           "name": "s_blf_chunk_content_header",
           "source": "src/chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_content_header.ts",
           "signature": "chdr",
@@ -106,6 +146,12 @@
           "source": "src/chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_packed_game_variant.ts",
           "signature": "gvar",
           "version": "54.1"
+        },
+        {
+          "name": "s_blf_chunk_hopper_configuration_table",
+          "source": "src/chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_hopper_configuration_table.ts",
+          "signature": "mhcf",
+          "version": "27.1"
         },
         {
           "name": "s_blf_chunk_matchmaking_hopper_statistics",
@@ -135,7 +181,7 @@
           "name": "s_blf_chunk_network_lsp_heartbeat_data",
           "source": "src/chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_network_lsp_heartbeat_data.ts",
           "signature": "phbt",
-          "version": "5.1"
+          "version": "6.0"
         }
       ]
     },

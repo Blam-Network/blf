@@ -37,6 +37,7 @@ pub use haloreach::v12065_11_08_24_1738_tu1actual::s_blf_chunk_matchmaking_hoppe
 pub use haloreach::v12065_11_08_24_1738_tu1actual::s_blf_chunk_game_variant::*;
 pub use haloreach::v12065_11_08_24_1738_tu1actual::s_blf_chunk_screenshot_data::*;
 pub use haloreach::v12065_11_08_24_1738_tu1actual::s_blf_chunk_screenshot_camera::*;
+pub use haloreach::v12065_11_08_24_1738_tu1actual::s_blf_chunk_auth_upload_image::*;
 pub use haloreach::v12065_11_08_24_1738_tu1actual::s_blf_chunk_server_signature::*;
 pub use haloreach::v12065_11_08_24_1738_tu1actual::s_blf_chunk_challenge_progress::*;
 pub use haloreach::v12065_11_08_24_1738_tu1actual::s_blf_chunk_reward_persistence_upload_to_lsp::*;

@@ -28,6 +28,7 @@ const GAME_LABELS = {
 
 /** @type {Record<string, string>} */
 const BUILD_LABELS = {
+  v11860_10_07_24_0147_omaha_release: "Release",
   v12065_11_08_24_1738_tu1actual: "Title Update 1 (Latest)",
   v_untracked_25_08_16_1352: "16th Aug 2025 (Latest)",
   v2025_08_16_178512_1_release: "16th Aug 2025 (Latest)",
@@ -37,6 +38,8 @@ const BUILD_LABELS = {
 
 /** @type {Record<string, string>} */
 const BUILD_DESCRIPTIONS = {
+  v11860_10_07_24_0147_omaha_release:
+    "Halo: Reach - Release",
   v12065_11_08_24_1738_tu1actual: "Halo: Reach - Title Update 1",
   v_untracked_25_08_16_1352: "Halo: Reach MCC - 16th August 2025",
   v2025_08_16_178512_1_release:

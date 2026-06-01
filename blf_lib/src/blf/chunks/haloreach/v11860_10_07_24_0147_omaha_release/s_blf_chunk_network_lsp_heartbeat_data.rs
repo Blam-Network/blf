@@ -9,11 +9,11 @@ pub use crate::blam::haloreach::v12065_11_08_24_1738_tu1actual::networking::logi
     s_network_lsp_heartbeat_player_data, s_network_lsp_heartbeat_session_data,
 };
 
-/// Reach TU1 LSP presence heartbeat upload (`phbt` 6.0, 0x667-byte body).
+/// Reach release LSP presence heartbeat upload (`phbt` 5.1, 0x1BB-byte body).
 #[binrw]
 #[derive(BlfChunk, Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
-#[Header("phbt", 6.0)]
-#[Size(0x667)]
+#[Header("phbt", 5.1)]
+#[Size(0x1BB)]
 #[brw(big)]
 pub struct s_blf_chunk_network_lsp_heartbeat_data {
     pub has_players: u8,
@@ -22,8 +22,6 @@ pub struct s_blf_chunk_network_lsp_heartbeat_data {
     pub machine_id: Unsigned64,
     pub unknowneeA: StaticArray<u8, 8>,
     pub session_data: s_network_lsp_heartbeat_session_data,
-    /// Trailing TU1 extension (layout not yet reversed).
-    pub extra: StaticArray<u8, 0x4AC>,
 }
 
 impl BlfChunkHooks for s_blf_chunk_network_lsp_heartbeat_data {}

@@ -50,7 +50,7 @@ pub struct s_network_lsp_heartbeat_player_data {
     pub player_appearance: s_player_appearance,
 }
 
-/// 443-byte LSP presence heartbeat body (`phbt` chunk payload).
+/// 443-byte LSP presence heartbeat core (`phbt` 5.1 body; prefix of `phbt` 6.0).
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, TestSize)]
 #[Size(0x1BB)]
 #[cfg_attr(feature = "napi", napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]

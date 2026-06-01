@@ -5,8 +5,8 @@ import {
 } from "../../../blam/haloreach/v12065_11_08_24_1738_tu1actual/networking/logic/network_lsp_presence";
 import { blf, CStructBLFChunk } from "../../../blf_chunk";
 
-/** Reach TU1 LSP presence heartbeat upload (`phbt` 6.0, 0x667-byte body). */
-@blf.chunk("phbt", 6.0)
+/** Reach release LSP presence heartbeat upload (`phbt` 5.1, 0x1BB-byte body). */
+@blf.chunk("phbt", 5.1)
 @c.struct()
 export class s_blf_chunk_network_lsp_heartbeat_data extends CStructBLFChunk {
   @c.field("u8")
@@ -29,8 +29,4 @@ export class s_blf_chunk_network_lsp_heartbeat_data extends CStructBLFChunk {
 
   @c.field(s_network_lsp_heartbeat_session_data)
   session_data = new s_network_lsp_heartbeat_session_data();
-
-  /** Trailing TU1 extension (layout not yet reversed). */
-  @c.field("u8", { count: 0x4ac })
-  extra = Array.from({ length: 0x4ac }, () => 0);
 }

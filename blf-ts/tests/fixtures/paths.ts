@@ -24,8 +24,20 @@ export const reach_mcc_skeeball_court_xtreme_fixture = join(
   "skeeball_court_xtreme_031.mvar"
 );
 
-/** Reach TU1 LSP presence heartbeat upload (`phbt` 5.1, 455 bytes). */
+/** Reach release LSP presence heartbeat upload (`phbt` 5.1, 455 bytes). */
 export const reach_presence_heartbeat_1780307835656_fixture = join(
   import.meta.dirname,
   "reach_presence_heartbeat_1780307835656.blob"
+);
+
+/** Reach `UserUpdateImage` Spartan render (`_cmp` wrapping `auiu` 1.2, 320×704 RGBA). */
+export const reach_spartan_render_auiu_cmp_fixture = join(
+  import.meta.dirname,
+  "reach_spartan_render_auiu_cmp.blf"
+);
+
+/** PNG snapshot produced from {@link reach_spartan_render_auiu_cmp_fixture}. */
+export const reach_spartan_render_auiu_png_snapshot = join(
+  import.meta.dirname,
+  "reach_spartan_render_auiu_cmp.png"
 );
