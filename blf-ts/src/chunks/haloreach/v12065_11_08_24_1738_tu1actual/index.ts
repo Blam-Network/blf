@@ -5,4 +5,11 @@ export { s_blf_chunk_author } from "./s_blf_chunk_author";
 export { s_blf_chunk_content_header } from "./s_blf_chunk_content_header";
 export { s_blf_chunk_game_variant } from "./s_blf_chunk_game_variant";
 export { s_blf_chunk_map_variant } from "./s_blf_chunk_map_variant";
+export {
+  build_hopper_statistics_file,
+  hopper_population,
+  s_blf_chunk_matchmaking_hopper_statistics,
+} from "./s_blf_chunk_matchmaking_hopper_statistics";
+export { s_blf_chunk_network_lsp_heartbeat_data } from "./s_blf_chunk_network_lsp_heartbeat_data";
+export { s_blf_chunk_online_file_summary } from "./s_blf_chunk_online_file_summary";
 export { s_blf_chunk_packed_game_variant as s_blf_chunk_matchmaking_game_variant } from "./s_blf_chunk_packed_game_variant";

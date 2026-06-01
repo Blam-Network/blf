@@ -23,3 +23,9 @@ export const reach_mcc_skeeball_court_xtreme_fixture = join(
   import.meta.dirname,
   "skeeball_court_xtreme_031.mvar"
 );
+
+/** Reach TU1 LSP presence heartbeat upload (`phbt` 5.1, 455 bytes). */
+export const reach_presence_heartbeat_1780307835656_fixture = join(
+  import.meta.dirname,
+  "reach_presence_heartbeat_1780307835656.blob"
+);

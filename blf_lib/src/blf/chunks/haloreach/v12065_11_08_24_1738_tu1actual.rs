@@ -1,4 +1,5 @@
 pub mod s_blf_chunk_player_data;
+pub mod s_blf_chunk_network_lsp_heartbeat_data;
 pub mod s_blf_chunk_player_heartbeat_response;
 pub mod s_blf_chunk_arena_hopper_stats;
 pub mod s_blf_chunk_reward_persistence;
