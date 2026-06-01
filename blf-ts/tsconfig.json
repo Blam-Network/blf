@@ -3,6 +3,7 @@
     "baseUrl": ".",
     "paths": {
       "@blamnetwork/blf": ["./src/index.ts"],
+      "@blamnetwork/blf/helpers": ["./src/helpers/index.ts"],
       "@blamnetwork/blf/haloreach/*": ["./src/versions/haloreach/*"],
       "@blamnetwork/blf/haloreach_mcc/*": ["./src/versions/haloreach_mcc/*"],
       "@blamnetwork/blf/halo3/*": ["./src/versions/halo3/*"],

@@ -7,6 +7,9 @@
   "types": "./dist/index.d.ts",
   "typesVersions": {
     "*": {
+      "helpers": [
+        "./dist/helpers/index.d.ts"
+      ],
       "haloreach/*": [
         "./dist/versions/haloreach/*"
       ],
