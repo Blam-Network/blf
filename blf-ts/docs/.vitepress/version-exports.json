@@ -108,6 +108,12 @@
           "version": "54.1"
         },
         {
+          "name": "s_blf_chunk_matchmaking_hopper_statistics",
+          "source": "src/chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_matchmaking_hopper_statistics.ts",
+          "signature": "mmhs",
+          "version": "4.1"
+        },
+        {
           "name": "s_blf_chunk_game_variant",
           "source": "src/chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_game_variant.ts",
           "signature": "mpvr",
@@ -118,6 +124,18 @@
           "source": "src/chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_map_variant.ts",
           "signature": "mvar",
           "version": "31.1"
+        },
+        {
+          "name": "s_blf_chunk_player_heartbeat_response",
+          "source": "src/chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_player_heartbeat_response.ts",
+          "signature": "phbr",
+          "version": "2.1"
+        },
+        {
+          "name": "s_blf_chunk_network_lsp_heartbeat_data",
+          "source": "src/chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_network_lsp_heartbeat_data.ts",
+          "signature": "phbt",
+          "version": "5.1"
         }
       ]
     },
