@@ -160,6 +160,12 @@
           "version": "4.1"
         },
         {
+          "name": "s_blf_chunk_multiplayer_players",
+          "source": "src/chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_multiplayer_players.ts",
+          "signature": "mppl",
+          "version": "8.1"
+        },
+        {
           "name": "s_blf_chunk_game_variant",
           "source": "src/chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_game_variant.ts",
           "signature": "mpvr",
