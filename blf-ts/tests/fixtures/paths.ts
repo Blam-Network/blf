@@ -30,6 +30,12 @@ export const reach_presence_heartbeat_1780307835656_fixture = join(
   "reach_presence_heartbeat_1780307835656.blob"
 );
 
+/** Reach TU1 carnage report upload (`mppl` 8.1 inside a full multi BLF). */
+export const reach_carnage_report_1779581359260_fixture = join(
+  import.meta.dirname,
+  "reach_carnage_report_1779581359260.blob"
+);
+
 /** Reach `UserUpdateImage` Spartan render (`_cmp` wrapping `auiu` 1.2, 320×704 RGBA). */
 export const reach_spartan_render_auiu_cmp_fixture = join(
   import.meta.dirname,

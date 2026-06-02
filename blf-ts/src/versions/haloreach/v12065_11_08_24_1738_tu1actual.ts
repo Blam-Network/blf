@@ -10,6 +10,7 @@ export * from "../../chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk
 export * from "../../chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_hopper_configuration_table";
 export * from "../../chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_map_variant";
 export * from "../../chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_matchmaking_hopper_statistics";
+export * from "../../chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_multiplayer_players";
 export * from "../../chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_network_lsp_heartbeat_data";
 export * from "../../chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_online_file_summary";
 export * from "../../chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_packed_game_variant";
