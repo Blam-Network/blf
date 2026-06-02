@@ -26,6 +26,12 @@
           "source": "src/chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_end_of_file.ts",
           "signature": "_eof",
           "version": "1.1"
+        },
+        {
+          "name": "s_blf_chunk_screenshot_data",
+          "source": "src/chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_screenshot_data.ts",
+          "signature": "scnd",
+          "version": "1.1"
         }
       ]
     },
@@ -53,6 +59,12 @@
           "name": "s_blf_chunk_end_of_file",
           "source": "src/chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_end_of_file.ts",
           "signature": "_eof",
+          "version": "1.1"
+        },
+        {
+          "name": "s_blf_chunk_screenshot_data",
+          "source": "src/chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_screenshot_data.ts",
+          "signature": "scnd",
           "version": "1.1"
         }
       ]
