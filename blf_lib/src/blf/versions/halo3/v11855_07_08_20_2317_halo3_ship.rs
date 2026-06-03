@@ -11,6 +11,7 @@ pub use halo3::v12070_08_09_05_2031_halo3_ship::s_blf_chunk_message_of_the_day::
 pub use halo3::v12070_08_09_05_2031_halo3_ship::s_blf_chunk_banhammer_messages::*;
 pub use halo3::v12070_08_09_05_2031_halo3_ship::s_blf_chunk_matchmaking_tips::*;
 pub use halo3::v11855_07_08_20_2317_halo3_ship::s_blf_chunk_network_configuration::*;
+pub use halo3::v11855_07_08_20_2317_halo3_ship::s_blf_chunk_campaign::*;
 pub use halo3::v12070_08_09_05_2031_halo3_ship::s_blf_chunk_map_manifest::*;
 pub use halo3::v12070_08_09_05_2031_halo3_ship::s_blf_chunk_map_variant::*;
 pub use halo3::v12070_08_09_05_2031_halo3_ship::s_blf_chunk_packed_map_variant::*;
