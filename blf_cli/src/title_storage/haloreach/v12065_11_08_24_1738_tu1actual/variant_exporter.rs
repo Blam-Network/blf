@@ -25,7 +25,15 @@ pub fn export_variant(source_json_path: &str, desination_path: &str) {
         blf_file.add_chunk(s_blf_chunk_game_variant::create(game_variant));
     }
     else {
-        task.fail_with_error("Unrecognized variant file type.");
+        if let Err(e) = map_variant {
+            task.fail_with_error(format!("Error reading map variant: {}", e));
+        }
+        else if let Err(e) = game_variant {
+            task.fail_with_error(format!("Error reading game variant: {}", e));
+        }
+        else {
+            task.fail_with_error("Unknown error reading variant file.");
+        }
     }
 
     blf_file.add_chunk(s_blf_chunk_end_of_file::default());

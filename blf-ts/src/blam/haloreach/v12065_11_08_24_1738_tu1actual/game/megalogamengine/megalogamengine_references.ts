@@ -27,6 +27,52 @@ export enum e_custom_timer_type {
   sudden_death = 5,
   grace_period = 6,
 }
+export enum e_custom_variable_type {
+  constant = 0,
+  player = 1,
+  object = 2,
+  team = 3,
+  global = 4,
+  option = 5,
+  explicit_object = 6,
+  team_score = 7,
+  player_score = 8,
+  money = 9,
+  rating = 10,
+  player_statistic = 11,
+  team_statistic = 12,
+  round = 13,
+  get_symmetric_gametype = 14,
+  symmetric_gametype = 15,
+  score_to_win_round = 16,
+  unk_f7a6 = 17,
+  teams_enabled = 18,
+  round_time_limit = 19,
+  round_count = 20,
+  perfection_enabled = 21,
+  early_victory_win_count = 22,
+  sudden_death_time_limit = 23,
+  grace_period_time_limit = 24,
+  lives_per_round = 25,
+  team_lives_per_round = 26,
+  respawn_time = 27,
+  suicide_respawn_penalty = 28,
+  betrayal_respawn_penalty = 29,
+  respawn_time_growth = 30,
+  loadout_selection_time = 31,
+  respawn_traits_duration = 32,
+  friendly_fire_enabled = 33,
+  betrayal_booting_enabled = 34,
+  enemy_voice_enabled = 35,
+  open_channel_voice_enabled = 36,
+  dead_player_voice_enabled = 37,
+  grenades_on_map = 38,
+  indestructible_vehicles = 39,
+  red_powerup_duration = 40,
+  blue_powerup_duration = 41,
+  yellow_powerup_duration = 42,
+  object_death_damage_type = 43,
+}
 export class c_explicit_player {
   @AutoMap(() => e_explicit_player_type)
   m_explicit_player_type: e_explicit_player_type =
@@ -442,8 +488,8 @@ export class c_team_reference {
   }
 }
 export class c_custom_variable_reference {
-  @AutoMap(() => Number)
-  m_type = 0;
+  @AutoMap(() => e_custom_variable_type)
+  m_type: e_custom_variable_type = e_custom_variable_type.constant;
   @AutoMap(() => Number)
   m_immediate_value?: number;
   @AutoMap(() => c_explicit_player)
@@ -459,69 +505,69 @@ export class c_custom_variable_reference {
   @AutoMap(() => Number)
   m_statistic_index?: number;
   decode(bitstream: c_bitstream_reader): void {
-    this.m_type = bitstream.read_integer("type", 6);
+    this.m_type = bitstream.read_enum("type", 6, e_custom_variable_type);
     switch (this.m_type) {
-      case 0:
+      case e_custom_variable_type.constant:
         this.m_immediate_value = bitstream.read_signed_integer(
           "immediate-value",
           16
         );
         break;
-      case 1: {
+      case e_custom_variable_type.player: {
         const player = new c_explicit_player();
         player.decode(bitstream);
         this.m_player = player;
         this.m_variable_index = bitstream.read_integer("variable-index", 3);
         break;
       }
-      case 2: {
+      case e_custom_variable_type.object: {
         const object = new c_explicit_object();
         object.decode(bitstream);
         this.m_object = object;
         this.m_variable_index = bitstream.read_integer("variable-index", 3);
         break;
       }
-      case 3: {
+      case e_custom_variable_type.team: {
         const team = new c_explicit_team();
         team.decode(bitstream);
         this.m_team = team;
         this.m_variable_index = bitstream.read_integer("variable-index", 3);
         break;
       }
-      case 4:
+      case e_custom_variable_type.global:
         this.m_variable_index = bitstream.read_integer("variable-index", 4);
         break;
-      case 5:
+      case e_custom_variable_type.option:
         this.m_option_index = bitstream.read_integer("option-index", 4);
         break;
-      case 6: {
+      case e_custom_variable_type.explicit_object: {
         const object = new c_explicit_object();
         object.decode(bitstream);
         this.m_object = object;
         break;
       }
-      case 7: {
+      case e_custom_variable_type.team_score: {
         const team = new c_explicit_team();
         team.decode(bitstream);
         this.m_team = team;
         break;
       }
-      case 8:
-      case 9:
-      case 10: {
+      case e_custom_variable_type.player_score:
+      case e_custom_variable_type.money:
+      case e_custom_variable_type.rating: {
         const player = new c_explicit_player();
         player.decode(bitstream);
         this.m_player = player;
         break;
       }
-      case 11: {
+      case e_custom_variable_type.player_statistic: {
         const player = new c_explicit_player();
         player.decode(bitstream);
         this.m_player = player;
         this.m_statistic_index = bitstream.read_integer("statistic-index", 2);
         break;
       }
-      case 12: {
+      case e_custom_variable_type.team_statistic: {
         const team = new c_explicit_team();
         team.decode(bitstream);
         this.m_team = team;
@@ -533,9 +579,9 @@ export class c_custom_variable_reference {
     }
   }
   encode(bitstream: c_bitstream_writer): void {
-    bitstream.write_integer(this.m_type, 6);
+    bitstream.write_enum(this.m_type, 6, e_custom_variable_type);
     switch (this.m_type) {
-      case 0:
+      case e_custom_variable_type.constant:
         bitstream.write_signed_integer(
           requireField(
             this.m_immediate_value,
@@ -544,7 +590,7 @@ export class c_custom_variable_reference {
           16
         );
         break;
-      case 1:
+      case e_custom_variable_type.player:
         requireField(this.m_player, "m_player does not exist.").encode(
           bitstream
         );
@@ -556,7 +602,7 @@ export class c_custom_variable_reference {
           3
         );
         break;
-      case 2:
+      case e_custom_variable_type.object:
         requireField(this.m_object, "m_object does not exist.").encode(
           bitstream
         );
@@ -568,7 +614,7 @@ export class c_custom_variable_reference {
           3
         );
         break;
-      case 3:
+      case e_custom_variable_type.team:
         requireField(this.m_team, "m_team does not exist.").encode(bitstream);
         bitstream.write_integer(
           requireField(
@@ -578,7 +624,7 @@ export class c_custom_variable_reference {
           3
         );
         break;
-      case 4:
+      case e_custom_variable_type.global:
         bitstream.write_integer(
           requireField(
             this.m_variable_index,
@@ -587,28 +633,28 @@ export class c_custom_variable_reference {
           4
         );
         break;
-      case 5:
+      case e_custom_variable_type.option:
         bitstream.write_integer(
           requireField(this.m_option_index, "m_option_index does not exist."),
           4
         );
         break;
-      case 6:
+      case e_custom_variable_type.explicit_object:
         requireField(this.m_object, "m_object does not exist.").encode(
           bitstream
         );
         break;
-      case 7:
+      case e_custom_variable_type.team_score:
         requireField(this.m_team, "m_team does not exist.").encode(bitstream);
         break;
-      case 8:
-      case 9:
-      case 10:
+      case e_custom_variable_type.player_score:
+      case e_custom_variable_type.money:
+      case e_custom_variable_type.rating:
         requireField(this.m_player, "m_player does not exist.").encode(
           bitstream
         );
         break;
-      case 11:
+      case e_custom_variable_type.player_statistic:
         requireField(this.m_player, "m_player does not exist.").encode(
           bitstream
         );
@@ -620,7 +666,7 @@ export class c_custom_variable_reference {
           2
         );
         break;
-      case 12:
+      case e_custom_variable_type.team_statistic:
         requireField(this.m_team, "m_team does not exist.").encode(bitstream);
         bitstream.write_integer(
           requireField(

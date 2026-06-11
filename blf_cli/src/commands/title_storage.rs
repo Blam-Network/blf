@@ -37,10 +37,17 @@ pub enum TitleStorageSubcommands {
         title: String,
         version: String,
     },
-    #[command(arg_required_else_help = true)]
+    #[command(name = "export-variant", arg_required_else_help = true)]
     ExportVariant {
         variant_json_path: String,
         destination_path: String,
+        title: String,
+        version: String,
+    },
+    #[command(name = "build-megalo", arg_required_else_help = true)]
+    BuildMegalo {
+        json_input_folder: String,
+        mglo_output_folder: String,
         title: String,
         version: String,
     },

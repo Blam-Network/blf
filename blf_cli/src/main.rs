@@ -15,6 +15,7 @@ use crate::commands::dump_film_data::dump_film_data;
 use crate::commands::import_rsa_signatures::import_rsa_signatures;
 use crate::commands::import_variant::import_variant;
 use crate::commands::export_variant::export_variant;
+use crate::commands::build_megalo::build_megalo;
 use crate::commands::title_storage::TitleStorageSubcommands;
 use crate::commands::unpack_screenshot::unpack_screenshot;
 
@@ -67,6 +68,9 @@ fn main() {
             },
             TitleStorageSubcommands::ExportVariant { variant_json_path, destination_path, title, version } => {
                 export_variant(variant_json_path, destination_path, title, version);
+            }
+            TitleStorageSubcommands::BuildMegalo { json_input_folder, mglo_output_folder, title, version } => {
+                build_megalo(json_input_folder, mglo_output_folder, title, version);
             }
         },
         ConvertH3MCCMapVariants { mcc_maps_folder, converted_maps_folder} => {

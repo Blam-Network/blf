@@ -12,12 +12,12 @@ use blf_lib::blam::haloreach::v08516_10_02_19_1607_omaha_alpha::game::megalogame
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::megalogamengine::megalogamengine_user_defined_options::s_user_defined_option;
 use blf_lib::blam::haloreach::v08516_10_02_19_1607_omaha_alpha::game::megalogamengine::megalogamengine_variable_metadata::s_variable_metadata;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::string_table::c_string_table;
-use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::memory::bitstream_reader::c_bitstream_reader_extensions;
+use blf_lib::blam::halo3::v12070_08_09_05_2031_halo3_ship::memory::bitstream_reader::c_bitstream_reader_extensions;
 use blf_lib::io::bitstream::{c_bitstream_reader, c_bitstream_writer};
 use blf_lib_derivable::result::BLFLibResult;
 use crate::blam::haloreach::v09730_10_04_09_1309_omaha_delta::game::game_engine_loadout_traits::{s_loadout_palette_unknown_struct, s_loadout_unknown_struct};
 use crate::blam::haloreach::v09730_10_04_09_1309_omaha_delta::game::megalogamengine::megalogamengine_requisitions::s_requisition_palette;
-use crate::blam::haloreach::v12065_11_08_24_1738_tu1actual::memory::bitstream_writer::c_bitstream_writer_extensions;
+use crate::blam::halo3::v12070_08_09_05_2031_halo3_ship::memory::bitstream_writer::c_bitstream_writer_extensions;
 use crate::types::array::StaticArray;
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]

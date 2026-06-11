@@ -16,6 +16,7 @@ use blf_lib::bitfield;
 use blf_lib::io::bitstream::{c_bitstream_reader, c_bitstream_writer};
 use blf_lib::OPTION_TO_RESULT;
 use blf_lib_derivable::result::{BLFLibError, BLFLibResult};
+use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::game_variant_icon::e_game_variant_icon;
 use crate::blam::haloreach_mcc::v_untracked_25_08_16_1352::game::megalogamengine::megalogamengine_custom_variable_reference::c_custom_variable_reference;
 use crate::blam::haloreach_mcc::v_untracked_25_08_16_1352::game::megalogamengine::megalogamengine_object_reference::c_object_reference;
 
@@ -848,20 +849,22 @@ impl s_action_hud_widget_set_meter_parameters {
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct s_action_hud_widget_set_icon_parameters {
     pub m_widget_index: i8, // 2 bits
-    pub m_icon_index: i8, // 6 bits
+    pub m_icon_index: e_game_variant_icon, // 6 bits
 }
 
 impl s_action_hud_widget_set_icon_parameters {
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
         bitstream.write_index::<4>(self.m_widget_index, 2)?;
-        bitstream.write_index::<64>(self.m_icon_index, 6)?;
+        bitstream.write_index::<64>(i8::from(self.m_icon_index), 6)?;
 
         Ok(())
     }
 
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
         self.m_widget_index = bitstream.read_index::<4>("widget-index", 2)? as i8;
-        self.m_icon_index = bitstream.read_index::<64>("icon-index", 6)? as i8;
+        self.m_icon_index = e_game_variant_icon::from_i8(
+            bitstream.read_index::<64>("icon-index", 6)? as i8,
+        )?;
 
         Ok(())
     }
@@ -920,20 +923,22 @@ impl s_action_play_sound_parameters {
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct s_action_player_set_objective_allegiance_icon_parameters {
     pub m_player: c_player_reference,
-    pub m_icon_index: i8, // 7 bits
+    pub m_icon_index: e_game_variant_icon, // 7 bits
 }
 
 impl s_action_player_set_objective_allegiance_icon_parameters {
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
         self.m_player.encode(bitstream)?;
-        bitstream.write_index::<128>(self.m_icon_index, 7)?;
+        bitstream.write_index::<128>(i8::from(self.m_icon_index), 7)?;
 
         Ok(())
     }
 
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
         self.m_player.decode(bitstream)?;
-        self.m_icon_index = bitstream.read_index::<128>("icon-index", 7)? as i8;
+        self.m_icon_index = e_game_variant_icon::from_i8(
+            bitstream.read_index::<128>("icon-index", 7)? as i8,
+        )?;
 
         Ok(())
     }

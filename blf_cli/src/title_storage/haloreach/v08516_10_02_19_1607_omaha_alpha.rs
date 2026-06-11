@@ -1,5 +1,6 @@
 pub mod variant_exporter;
 pub mod variant_importer;
+pub mod megalo_builder;
 
 pub const k_build_string_omaha_alpha_08516: &str = "08516.10.02.19.1607.omaha_alpha";
 
@@ -988,6 +989,8 @@ impl v08516_10_02_19_1607_omaha_alpha {
                 else {
                     converted_games.push(game_variant_blf_file_name.clone());
                 }
+
+                println!("game_variant_blf_file_name: {}", game_variant_blf_file_name);
 
                 // If this game already exists in the config folder from an older convert, we delete it to rewrite.
                 if exists(&game_variant_config_file_path)? {

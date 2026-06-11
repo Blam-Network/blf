@@ -1,6 +1,7 @@
 pub mod import_rsa_signatures;
 pub mod import_variant;
 pub mod export_variant;
+pub mod build_megalo;
 pub mod title_storage;
 pub mod convert_halo3mcc_map_variants;
 pub mod unpack_screenshot;

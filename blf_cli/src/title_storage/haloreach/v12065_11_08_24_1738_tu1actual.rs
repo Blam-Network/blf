@@ -1,5 +1,6 @@
 pub mod variant_exporter;
 pub mod variant_importer;
+pub mod megalo_builder;
 
 use std::collections::{HashMap, HashSet, VecDeque};
 use std::error::Error;

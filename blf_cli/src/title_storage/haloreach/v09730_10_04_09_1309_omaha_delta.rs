@@ -1,5 +1,6 @@
 pub mod variant_exporter;
 pub mod variant_importer;
+pub mod megalo_builder;
 
 pub const k_build_string_omaha_delta_09730: &str = "09730.10.04.09.1309.omaha_delta";
 
