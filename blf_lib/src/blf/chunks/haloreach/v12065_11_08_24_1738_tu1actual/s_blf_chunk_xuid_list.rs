@@ -1,6 +1,6 @@
-use binrw::{binrw, BinRead, BinWrite};
+﻿use binrw::{binrw, BinRead, BinWrite};
 use serde::{Deserialize, Serialize};
-use blf_lib::types::c_string::StaticWcharString;
+use blf_lib::types::string::StaticWcharString;
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
 use blf_lib_derive::BlfChunk;
 

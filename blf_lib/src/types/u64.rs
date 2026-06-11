@@ -9,8 +9,6 @@ use napi::sys::{napi_env, napi_value};
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use serde_hex::{HexConf, SerHex};
 use shrinkwraprs::Shrinkwrap;
-use wasm_bindgen::convert::{FromWasmAbi, IntoWasmAbi};
-use wasm_bindgen::describe::WasmDescribe;
 
 #[derive(Debug, Clone, PartialEq, Copy, Default, Shrinkwrap)]
 #[shrinkwrap(mutable)]
@@ -155,27 +153,5 @@ impl BinWrite for Unsigned64 {
         }
 
         Ok(())
-    }
-}
-
-impl WasmDescribe for Unsigned64 {
-    fn describe() {
-        u64::describe()
-    }
-}
-
-impl IntoWasmAbi for Unsigned64 {
-    type Abi = <u64 as IntoWasmAbi>::Abi;
-
-    fn into_abi(self) -> Self::Abi {
-        u64::into_abi(self.0)
-    }
-}
-
-impl FromWasmAbi for Unsigned64 {
-    type Abi = <u64 as FromWasmAbi>::Abi;
-
-    unsafe fn from_abi(js: Self::Abi) -> Self {
-        Unsigned64(u64::from_abi(js))
     }
 }

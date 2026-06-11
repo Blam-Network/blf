@@ -1,8 +1,8 @@
-use binrw::{BinRead, BinWrite};
+﻿use binrw::{BinRead, BinWrite};
 #[cfg(feature = "napi")]
 use napi_derive::napi;
 use blf_lib::TestSize;
-use blf_lib::types::c_string::StaticWcharString;
+use blf_lib::types::string::StaticWcharString;
 use serde::{Deserialize, Serialize};
 use crate::types::array::StaticArray;
 

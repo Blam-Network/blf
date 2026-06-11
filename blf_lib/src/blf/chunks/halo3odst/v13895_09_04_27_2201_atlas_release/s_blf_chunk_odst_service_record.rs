@@ -1,4 +1,4 @@
-use std::u32;
+﻿use std::u32;
 use binrw::{binrw, BinRead, BinWrite};
 #[cfg(feature = "napi")]
 use napi_derive::napi;
@@ -7,7 +7,7 @@ use blf_lib_derivable::blf::chunks::BlfChunkHooks;
 use blf_lib_derive::BlfChunk;
 use num_derive::FromPrimitive;
 use blf_lib::types::bool::Bool;
-use blf_lib::types::c_string::StaticWcharString;
+use blf_lib::types::string::StaticWcharString;
 
 #[binrw]
 #[derive(BlfChunk,Default,PartialEq,Debug,Clone,Serialize,Deserialize)]

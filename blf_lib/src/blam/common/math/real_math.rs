@@ -11,7 +11,6 @@ use binrw::{BinRead, BinWrite};
 #[cfg(feature = "napi")]
 use napi_derive::napi;
 use serde::{Deserialize, Serialize};
-use wasm_bindgen::prelude::wasm_bindgen;
 use blf_lib::blam::common::math::integer_math::int32_point3d;
 use blf_lib::blam::common::math::unit_vector_quanitzation::get_unit_vector_encoding_constants;
 use blf_lib_derivable::result::BLFLibResult;
@@ -22,7 +21,6 @@ const k_3d_count: usize = 3;
 
 #[cfg_attr(feature = "napi", napi(object))]
 #[derive(Default, PartialEq, Debug, Clone, Copy, Serialize, Deserialize, BinRead, BinWrite)]
-#[wasm_bindgen]
 pub struct real_vector3d {
     pub i: Float32,
     pub j: Float32,
@@ -37,7 +35,6 @@ impl real_vector3d {
 
 #[cfg_attr(feature = "napi", napi(object))]
 #[derive(Default, PartialEq, Debug, Clone, Copy, Serialize, Deserialize, BinRead, BinWrite)]
-#[wasm_bindgen(getter_with_clone)]
 pub struct real_vector2d {
     pub i: Float32,
     pub j: Float32,
@@ -45,7 +42,6 @@ pub struct real_vector2d {
 
 #[cfg_attr(feature = "napi", napi(object))]
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite, Copy)]
-#[wasm_bindgen(getter_with_clone)]
 pub struct real_bounds {
     pub lower: Float32,
     pub upper: Float32,
@@ -53,7 +49,6 @@ pub struct real_bounds {
 
 #[cfg_attr(feature = "napi", napi(object))]
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite, Copy)]
-#[wasm_bindgen(getter_with_clone)]
 pub struct real_rectangle3d {
     pub x: real_bounds,
     pub y: real_bounds,
@@ -68,7 +63,6 @@ pub fn point_in_rectangle3d(point: &real_point3d, rect: &real_rectangle3d) -> bo
 
 #[cfg_attr(feature = "napi", napi(object))]
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite, Copy)]
-#[wasm_bindgen(getter_with_clone)]
 pub struct real_rectangle2d {
     pub x: real_bounds,
     pub y: real_bounds,
@@ -76,7 +70,6 @@ pub struct real_rectangle2d {
 
 #[derive(Default, PartialEq, Debug, Clone, Copy, Serialize, Deserialize, BinRead, BinWrite, TestSize)]
 #[Size(0xC)]
-#[wasm_bindgen(getter_with_clone)]
 #[cfg_attr(feature = "napi", napi(object))]
 pub struct real_point3d {
     pub x: Float32,
@@ -87,7 +80,6 @@ pub struct real_point3d {
 #[cfg_attr(feature = "napi", napi(object))]
 #[derive(Default, PartialEq, Debug, Clone, Copy, Serialize, Deserialize, BinRead, BinWrite, TestSize)]
 #[Size(0x8)]
-#[wasm_bindgen(getter_with_clone)]
 pub struct real_point2d {
     pub x: Float32,
     pub y: Float32,
@@ -95,7 +87,6 @@ pub struct real_point2d {
 
 #[cfg_attr(feature = "napi", napi(object))]
 #[derive(Default, PartialEq, Debug, Clone, Copy, Serialize, Deserialize, BinRead, BinWrite)]
-#[wasm_bindgen(getter_with_clone)]
 pub struct real_matrix3x3 {
     pub forward: real_vector3d,
     pub left: real_vector3d,
@@ -104,7 +95,6 @@ pub struct real_matrix3x3 {
 
 #[cfg_attr(feature = "napi", napi(object))]
 #[derive(Default, PartialEq, Debug, Clone, Copy, Serialize, Deserialize, BinRead, BinWrite)]
-#[wasm_bindgen(getter_with_clone)]
 pub struct real_matrix4x3 {
     pub scale: Float32,
     pub matrix: real_matrix3x3,
@@ -113,7 +103,6 @@ pub struct real_matrix4x3 {
 
 #[cfg_attr(feature = "napi", napi(object))]
 #[derive(Default, PartialEq, Debug, Clone, Copy, Serialize, Deserialize, BinRead, BinWrite)]
-#[wasm_bindgen(getter_with_clone)]
 pub struct real_plane3d {
     pub n: real_vector3d,
     pub d: Float32,

@@ -1,4 +1,4 @@
-use binrw::{BinRead, BinWrite};
+﻿use binrw::{BinRead, BinWrite};
 use serde::{Deserialize, Serialize};
 use blf_lib_derive::TestSize;
 use crate::blam::halo3::v12070_08_09_05_2031_halo3_ship::game::game_engine_variant::c_game_variant;
@@ -6,7 +6,7 @@ use crate::blam::halo3::v12070_08_09_05_2031_halo3_ship::game::players::{s_playe
 use crate::blam::halo3::v12070_08_09_05_2031_halo3_ship::saved_games::scenario_map_variant::c_map_variant;
 use crate::types::array::StaticArray;
 use crate::types::bool::Bool;
-use crate::types::c_string::{StaticString, StaticWcharString};
+use crate::types::string::{StaticString, StaticWcharString};
 use crate::types::numbers::Float32;
 use crate::types::u64::Unsigned64;
 #[cfg(feature = "napi")]

@@ -1,7 +1,7 @@
-use std::io::{Read, Write};
+﻿use std::io::{Read, Write};
 use serde::{Deserialize, Serialize};
 use blf_lib::types::array::StaticArray;
-use crate::types::c_string::StaticString;
+use crate::types::string::StaticString;
 use binrw::io::{Cursor, Seek};
 use binrw::{binrw, BinRead, BinResult, BinWrite};
 use binrw::BinReaderExt;

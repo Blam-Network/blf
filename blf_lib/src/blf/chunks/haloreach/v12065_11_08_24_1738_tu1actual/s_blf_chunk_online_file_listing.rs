@@ -1,4 +1,4 @@
-use binrw::{binrw, BinResult, NullWideString};
+﻿use binrw::{binrw, BinResult, NullWideString};
 use serde::{Deserialize, Serialize};
 use serde_hex::{SerHex, StrictCap};
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
@@ -7,7 +7,7 @@ use crate::BINRW_ERROR;
 use crate::blam::haloreach::v12065_11_08_24_1738_tu1actual::networking::online::files::online_file_metadata::{
     s_online_file_metadata, s_online_file_tag,
 };
-use crate::types::c_string::StaticString;
+use crate::types::string::StaticString;
 use crate::types::u64::Unsigned64;
 
 /// `message_length` on the wire is the message length in **Unicode characters**

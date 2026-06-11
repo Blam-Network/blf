@@ -3,13 +3,13 @@ use std::cmp::min;
 use std::error::Error;
 use std::io::Cursor;
 use binrw::BinWrite;
-use num_traits::{FromPrimitive, ToPrimitive};
+use num_traits::ToPrimitive;
 use widestring::U16CString;
 use blf_lib::{assert_ok, OPTION_TO_RESULT};
 use blf_lib::blam::common::math::real_math::{assert_valid_real_normal3d, cross_product3d, dot_product3d, k_real_epsilon, global_forward3d, global_left3d, global_up3d, normalize3d, valid_real_vector3d_axes3, arctangent, k_pi};
 use blf_lib::io::bitstream::e_bitstream_byte_fill_direction;
 use blf_lib::io::bitstream::e_bitstream_byte_fill_direction::{_bitstream_byte_fill_direction_lsb_to_msb, _bitstream_byte_fill_direction_msb_to_lsb};
-use blf_lib_derivable::result::BLFLibResult;
+use blf_lib_derivable::result::{BLFLibError, BLFLibResult};
 use crate::blam::common::math::integer_math::int32_point3d;
 use crate::blam::common::math::real_math::real_vector3d;
 use crate::blam::halo3::v12070_08_09_05_2031_halo3_ship::networking::transport::transport_security::s_transport_secure_address;
@@ -91,9 +91,22 @@ impl c_bitstream_writer {
 
     // WRITES
 
-    pub fn write_enum<T: ToPrimitive + std::fmt::Debug>(&mut self, value: T, size_in_bits: usize) -> BLFLibResult {
-        let value = OPTION_TO_RESULT!(value.to_u32(), format!("Failed to convert value {value:?} to an integer."))?;
-        self.write_integer(value, size_in_bits)
+    /// Write a fully-known `c_enum` by declaration-order index.
+    pub fn write_enum<T: crate::types::c_enum>(&mut self, value: T) -> BLFLibResult {
+        self.write_integer(value.to_index()?, T::size_in_bits())
+    }
+
+    /// Write a loose enum by primitive on-disk value (`ToPrimitive`).
+    #[deprecated(note = "loose enums pending migration to c_enum; use write_enum once migrated")]
+    pub fn write_enum_raw<T>(&mut self, value: T, size_in_bits: usize) -> BLFLibResult
+    where
+        T: ToPrimitive + std::fmt::Debug,
+    {
+        let integer = OPTION_TO_RESULT!(
+            ToPrimitive::to_u32(&value),
+            BLFLibError::from(format!("Failed to convert value {value:?} to an integer."))
+        )?;
+        self.write_integer(integer, size_in_bits)
     }
 
     pub fn write_integer(&mut self, value: impl Into<u32>, size_in_bits: usize) -> BLFLibResult {

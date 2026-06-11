@@ -311,13 +311,31 @@ impl<'a> c_bitstream_reader<'a> {
         Ok(())
     }
 
-    pub fn read_unnamed_enum<T: FromPrimitive>(&mut self, size_in_bits: usize) -> BLFLibResult<T> {
-        self.read_enum("???", size_in_bits)
+    /// Read a fully-known `c_enum` by declaration-order index.
+    pub fn read_enum<T: crate::types::c_enum>(&mut self, name: &str) -> BLFLibResult<T> {
+        let integer: u32 = self.read_integer(name, T::size_in_bits())?;
+        T::from_index_named(name, integer)
     }
 
-    pub fn read_enum<T: FromPrimitive>(&mut self, name: &str, size_in_bits: usize) -> BLFLibResult<T> {
+    /// Read a loose enum by primitive on-disk value (`FromPrimitive`).
+    #[deprecated(note = "loose enums pending migration to c_enum; use read_enum once migrated")]
+    pub fn read_enum_raw<T>(&mut self, name: &str, size_in_bits: usize) -> BLFLibResult<T>
+    where
+        T: FromPrimitive + std::fmt::Debug,
+    {
         let integer: u32 = self.read_integer(name, size_in_bits)?;
-        OPTION_TO_RESULT!(FromPrimitive::from_u32(integer), format!("Unexpected enum value for {name}: {}", integer).into())
+        OPTION_TO_RESULT!(
+            FromPrimitive::from_u32(integer),
+            BLFLibError::from(format!("Unexpected enum value for {name}: {integer}"))
+        )
+    }
+
+    #[deprecated(note = "loose enums pending migration to c_enum; use read_enum once migrated")]
+    pub fn read_unnamed_enum_raw<T>(&mut self, size_in_bits: usize) -> BLFLibResult<T>
+    where
+        T: FromPrimitive + std::fmt::Debug,
+    {
+        self.read_enum_raw("???", size_in_bits)
     }
 
     pub fn read_integer<T>(&mut self, name: &str, size_in_bits: usize) -> BLFLibResult<T>

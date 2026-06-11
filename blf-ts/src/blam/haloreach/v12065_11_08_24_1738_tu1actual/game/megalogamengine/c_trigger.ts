@@ -43,14 +43,12 @@ export class c_trigger {
     this.m_execution_mode = bitstream.read_enum(
       "execution-mode",
       3,
-      e_trigger_execution_mode,
-      { within_bits: true }
+      e_trigger_execution_mode
     );
     this.m_trigger_type = bitstream.read_enum(
       "trigger-type",
       3,
-      e_trigger_type,
-      { within_bits: true }
+      e_trigger_type
     );
     if (
       this.m_execution_mode ===

@@ -33,7 +33,7 @@ impl s_condition_if_parameters {
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
         self.m_left.encode(bitstream)?;
         self.m_right.encode(bitstream)?;
-        bitstream.write_enum(self.m_comparison, 3)?;
+        bitstream.write_enum_raw(self.m_comparison, 3)?;
 
         Ok(())
     }
@@ -41,7 +41,7 @@ impl s_condition_if_parameters {
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
         self.m_left.decode(bitstream)?;
         self.m_right.decode(bitstream)?;
-        self.m_comparison = bitstream.read_enum("comparison", 3)?;
+        self.m_comparison = bitstream.read_enum_raw("comparison", 3)?;
 
         Ok(())
     }

@@ -1,10 +1,10 @@
-use std::u32;
+﻿use std::u32;
 use binrw::binrw;
 use serde::{Deserialize, Serialize};
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
 use blf_lib_derive::BlfChunk;
 use blf_lib_derivable::result::BLFLibResult;
-use crate::types::c_string::StaticString;
+use crate::types::string::StaticString;
 
 const k_banhammmer_messages_max_messages: usize = 32usize;
 const k_banhammer_message_max_length: usize = 0x100;

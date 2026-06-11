@@ -16,8 +16,6 @@ use napi::bindgen_prelude::{FromNapiValue, ToNapiValue, TypeName, ValidateNapiVa
 use napi::{Env, JsString, ValueType};
 #[cfg(feature = "napi")]
 use napi::JsValue;
-use wasm_bindgen::convert::{FromWasmAbi, IntoWasmAbi};
-use wasm_bindgen::describe::WasmDescribe;
 use blf_lib_derivable::result::BLFLibResult;
 use blf_lib::{SERDE_DESERIALIZE_RESULT, SERDE_SERIALIZE_RESULT};
 
@@ -349,48 +347,3 @@ impl<const N: usize> ValidateNapiValue for StaticString<N> {
 
 }
 
-impl<const N: usize> WasmDescribe for StaticString<N> {
-    fn describe() {
-        String::describe()
-    }
-}
-
-impl<const N: usize> IntoWasmAbi for StaticString<N> {
-    type Abi = <String as IntoWasmAbi>::Abi;
-    fn into_abi(self) -> Self::Abi {
-        unsafe { self.get_string_unchecked().into_abi() }
-    }
-}
-
-impl<const N: usize> FromWasmAbi for StaticString<N> {
-    type Abi = <String as IntoWasmAbi>::Abi;
-
-    unsafe fn from_abi(js: Self::Abi) -> Self {
-        let mut res = Self {buf: [0;N]};
-        res.set_string_trimmed(&String::from_abi(js));
-        res
-    }
-}
-
-impl<const N: usize> WasmDescribe for StaticWcharString<N> {
-    fn describe() {
-        String::describe()
-    }
-}
-
-impl<const N: usize> IntoWasmAbi for StaticWcharString<N> {
-    type Abi = <String as IntoWasmAbi>::Abi;
-    fn into_abi(self) -> Self::Abi {
-        self.get_string().into_abi()
-    }
-}
-
-impl<const N: usize> FromWasmAbi for StaticWcharString<N> {
-    type Abi = <String as IntoWasmAbi>::Abi;
-
-    unsafe fn from_abi(js: Self::Abi) -> Self {
-        let mut res = Self {buf: StaticArray::default()};
-        res.set_string_trimmed_unchecked(&String::from_abi(js));
-        res
-    }
-}
