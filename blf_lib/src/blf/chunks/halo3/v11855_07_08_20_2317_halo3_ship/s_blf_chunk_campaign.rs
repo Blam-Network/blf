@@ -12,11 +12,11 @@ use blf_lib::types::c_string::StaticWcharString;
 #[Header("cmpn", 1.0)]
 #[brw(big)]
 pub struct s_blf_chunk_campaign {
-    pub campaign_id: e_campaign_id,
+    pub campaign_id: i32,
     pub flags: e_campaign_flags,
     pub name: StaticArray<StaticWcharString<64>, k_language_count>,
     pub description: StaticArray<StaticWcharString<128>, k_language_count>,
-    pub scenarios: StaticArray<e_map_id, 64>,
+    pub scenarios: StaticArray<i32, 64>,
     pub pad: u32,
 }
 
@@ -30,10 +30,3 @@ bitfield! {
     }
 }
 
-#[derive(Clone, Copy, PartialEq, Eq, Debug, Default, Serialize, Deserialize, binrw::BinRead, binrw::BinWrite)]
-#[brw(transparent)]
-pub struct e_campaign_id(pub i32);
-
-#[derive(Clone, Copy, PartialEq, Eq, Debug, Default, Serialize, Deserialize, binrw::BinRead, binrw::BinWrite)]
-#[brw(transparent)]
-pub struct e_map_id(pub i32);
