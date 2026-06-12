@@ -1,10 +1,10 @@
-use binrw::{BinRead, BinWrite};
+﻿use binrw::{BinRead, BinWrite};
 use serde::{Deserialize, Serialize};
 use blf_lib::blam::halo3::v10015_07_05_14_2217_delta::game::game_engine_player_traits::c_player_traits;
 use blf_lib::blam::halo3::v10015_07_05_14_2217_delta::game::game_engine_traits::{c_game_engine_miscellaneous_options, c_game_engine_respawn_options};
 use blf_lib::io::bitstream::{c_bitstream_reader, c_bitstream_writer};
 use blf_lib::{SET_BIT, TEST_BIT};
-use blf_lib::types::c_string::StaticWcharString;
+use blf_lib::types::string::StaticWcharString;
 use blf_lib_derivable::result::BLFLibResult;
 
 pub const k_game_engine_type_count: usize = 11;

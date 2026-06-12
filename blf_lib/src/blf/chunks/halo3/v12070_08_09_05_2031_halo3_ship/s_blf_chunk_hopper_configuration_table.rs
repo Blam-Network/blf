@@ -1,10 +1,10 @@
-use std::io::{Read, Seek, Write};
+﻿use std::io::{Read, Seek, Write};
 use binrw::{BinRead, BinResult, BinWrite, BinWriterExt, Endian};
 use serde::{Deserialize, Serialize};
 use blf_lib::blam::common::memory::secure_signature::s_network_http_request_hash;
 use blf_lib::io::bitstream::{c_bitstream_reader, c_bitstream_writer, e_bitstream_byte_order};
 use blf_lib::types::array::StaticArray;
-use crate::types::c_string::StaticString;
+use crate::types::string::StaticString;
 use blf_lib::types::time::{filetime};
 use serde_hex::{SerHex,StrictCap};
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;

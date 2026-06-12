@@ -45,8 +45,8 @@ pub struct c_trigger {
 
 impl c_trigger {
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
-        bitstream.write_enum(self.m_execution_mode, 3)?;
-        bitstream.write_enum(self.m_trigger_type, 3)?;
+        bitstream.write_enum_raw(self.m_execution_mode, 3)?;
+        bitstream.write_enum_raw(self.m_trigger_type, 3)?;
         if self.m_execution_mode == for_each_object_with_label {
             bitstream.write_index::<16>(self.m_object_filter_index, 4)?;
         }
@@ -59,8 +59,8 @@ impl c_trigger {
     }
 
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
-        self.m_execution_mode = bitstream.read_enum("execution-mode", 3)?;
-        self.m_trigger_type = bitstream.read_enum("trigger-type", 3)?;
+        self.m_execution_mode = bitstream.read_enum_raw("execution-mode", 3)?;
+        self.m_trigger_type = bitstream.read_enum_raw("trigger-type", 3)?;
         if self.m_execution_mode == for_each_object_with_label {
             self.m_object_filter_index = bitstream.read_index::<16>("object-filter-index", 4)? as i8;
         } else {

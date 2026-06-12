@@ -117,7 +117,7 @@ pub struct c_game_variant {
 
 impl c_game_variant {
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
-        bitstream.write_enum(self.m_game_engine.clone(), 4)?;
+        bitstream.write_enum_raw(self.m_game_engine.clone(), 4)?;
 
         match (&self.m_game_engine, &self.m_custom_variant, &self.m_campaign_variant, &self.m_survival_variant) {
             (e_game_mode::sandbox, None, None, None) => {
@@ -142,7 +142,7 @@ impl c_game_variant {
     }
 
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
-        self.m_game_engine = bitstream.read_unnamed_enum(4)?;
+        self.m_game_engine = bitstream.read_unnamed_enum_raw(4)?;
 
         match self.m_game_engine {
             e_game_mode::sandbox => {

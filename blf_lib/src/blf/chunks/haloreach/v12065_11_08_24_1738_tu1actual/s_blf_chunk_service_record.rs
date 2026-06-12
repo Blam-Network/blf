@@ -1,4 +1,4 @@
-use std::u32;
+﻿use std::u32;
 use binrw::{binrw, BinRead, BinWrite};
 #[cfg(feature = "napi")]
 use napi_derive::napi;
@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 use blf_lib::types::bool::Bool;
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
 use blf_lib_derive::{BlfChunk, TestSize};
-use blf_lib::types::c_string::{StaticString, StaticWcharString};
+use blf_lib::types::string::{StaticString, StaticWcharString};
 use blf_lib::types::time::time32_t;
 use crate::types::array::StaticArray;
 use crate::types::numbers::Float32;

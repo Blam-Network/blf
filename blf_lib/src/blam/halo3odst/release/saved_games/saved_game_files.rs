@@ -1,7 +1,7 @@
-use binrw::{BinRead, BinWrite};
+﻿use binrw::{BinRead, BinWrite};
 use serde::{Deserialize, Serialize};
-use crate::types::c_string::StaticString;
-use crate::types::c_string::StaticWcharString;
+use crate::types::string::StaticString;
+use crate::types::string::StaticWcharString;
 use serde_hex::{SerHex,StrictCap};
 use blf_lib::types::time::time64_t;
 use blf_lib_derive::TestSize;

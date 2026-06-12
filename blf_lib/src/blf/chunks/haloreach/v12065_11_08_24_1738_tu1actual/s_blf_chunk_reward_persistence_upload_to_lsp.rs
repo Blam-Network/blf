@@ -1,4 +1,4 @@
-use binrw::{binrw, BinRead, BinWrite};
+﻿use binrw::{binrw, BinRead, BinWrite};
 use blf_lib::blf::chunks::BlfChunkHooks;
 use blf_lib::{bitfield, BlfChunk};
 use serde::{Deserialize, Serialize};
@@ -8,7 +8,7 @@ use napi_derive::napi;
 use crate::types::time::time64_t;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::player_rewards::e_purchase_state;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::player_rewards::player_commendations::s_persistent_per_commendation_state;
-use blf_lib::types::c_string::StaticString;
+use blf_lib::types::string::StaticString;
 
 #[binrw]
 #[derive(BlfChunk,PartialEq,Debug,Clone,Serialize,Deserialize,Default)]

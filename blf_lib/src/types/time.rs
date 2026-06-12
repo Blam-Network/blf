@@ -7,8 +7,6 @@ use chrono::{DateTime, NaiveDateTime, TimeZone, Utc};
 use napi::bindgen_prelude::{FromNapiValue, ToNapiValue};
 #[cfg(feature = "napi")]
 use napi::sys::{napi_env, napi_value};
-use wasm_bindgen::convert::{FromWasmAbi, IntoWasmAbi};
-use wasm_bindgen::describe::WasmDescribe;
 use blf_lib::types::u64::Unsigned64;
 
 #[derive(Default, Clone, Debug, PartialEq, BinRead, BinWrite, Copy)]
@@ -231,42 +229,5 @@ impl ToNapiValue for filetime {
 impl FromNapiValue for filetime {
     unsafe fn from_napi_value(env: napi_env, napi_val: napi_value) -> napi::Result<Self> {
         Ok(Self::from_time_t(NaiveDateTime::from_napi_value(env, napi_val)?.and_utc().timestamp() as u64))
-    }
-}
-
-impl WasmDescribe for time32_t {
-    fn describe() {
-        u32::describe()
-    }
-}
-
-impl IntoWasmAbi for time32_t {
-    type Abi = <u32 as IntoWasmAbi>::Abi;
-
-    fn into_abi(self) -> Self::Abi {
-        // TODO: Date obj
-       u32::into_abi(self.0)
-    }
-}
-
-impl WasmDescribe for time64_t {
-    fn describe() {
-        u64::describe()
-    }
-}
-
-impl IntoWasmAbi for time64_t {
-    type Abi = <u64 as IntoWasmAbi>::Abi;
-
-    fn into_abi(self) -> Self::Abi {
-        // TODO: Date obj
-        u64::into_abi(self.0)
-    }
-}
-
-impl FromWasmAbi for time64_t {
-    type Abi = <u64 as FromWasmAbi>::Abi;
-    unsafe fn from_abi(js: Self::Abi) -> Self {
-        time64_t::from(u64::from_abi(js))
     }
 }

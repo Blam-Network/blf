@@ -1,4 +1,4 @@
-use binrw::{BinRead, BinWrite};
+﻿use binrw::{BinRead, BinWrite};
 use serde::{Deserialize, Serialize};
 use blf_lib::io::bitstream::{c_bitstream_reader, c_bitstream_writer};
 use blf_lib::TEST_BIT;
@@ -10,7 +10,7 @@ use crate::blam::halo3::v12070_08_09_05_2031_halo3_ship::simulation::simulation_
 use serde_hex::{SerHex,StrictCap};
 use blf_lib::blam::halo3::v12070_08_09_05_2031_halo3_ship::memory::bitstream_reader::c_bitstream_reader_extensions;
 use blf_lib::blam::halo3::v12070_08_09_05_2031_halo3_ship::simulation::simulation_encoding::simulation_read_quantized_position;
-use blf_lib::types::c_string::StaticWcharString;
+use blf_lib::types::string::StaticWcharString;
 use blf_lib_derive::TestSize;
 use blf_lib_derivable::result::BLFLibResult;
 use crate::blam::halo3::v12070_08_09_05_2031_halo3_ship::memory::bitstream_writer::c_bitstream_writer_extensions;

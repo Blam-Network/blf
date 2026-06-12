@@ -2,7 +2,6 @@ use binrw::binrw;
 #[cfg(feature = "napi")]
 use napi_derive::napi;
 use serde::{Deserialize, Serialize};
-use wasm_bindgen::prelude::wasm_bindgen;
 use blf_lib::blam::halo3::v12070_08_09_05_2031_halo3_ship::saved_games::saved_game_files::s_content_item_metadata;
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
 use blf_lib_derive::BlfChunk;

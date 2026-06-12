@@ -1,11 +1,11 @@
-use std::fs::File;
+﻿use std::fs::File;
 use std::io::{Cursor, Read};
 use binrw::{BinRead, BinReaderExt, BinWrite};
 use std::ffi::c_char;
 use blf_lib_derivable::result::BLFLibResult;
 use blf_lib::types::array::StaticArray;
-use crate::types::c_string::StaticString;
-use crate::types::c_string::to_string;
+use crate::types::string::StaticString;
+use crate::types::string::to_string;
 
 #[derive(Debug, BinRead, BinWrite)]
 #[brw(big)]

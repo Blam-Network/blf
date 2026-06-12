@@ -4,7 +4,6 @@ use std::ops::Not;
 use binrw::{BinRead, BinReaderExt, BinResult, BinWrite, Endian};
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use shrinkwraprs::Shrinkwrap;
-use wasm_bindgen::prelude::wasm_bindgen;
 
 #[cfg(feature = "napi")]
 use napi::bindgen_prelude::{FromNapiValue, ToNapiValue};
@@ -13,7 +12,6 @@ use napi::sys::{napi_env, napi_value};
 
 #[derive(Debug, Clone, PartialEq, Copy, Default, Shrinkwrap)]
 #[shrinkwrap(mutable)]
-#[wasm_bindgen(getter_with_clone)]
 pub struct Bool(pub bool);
 
 impl fmt::Display for Bool {

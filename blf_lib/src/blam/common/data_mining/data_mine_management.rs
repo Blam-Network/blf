@@ -1,8 +1,8 @@
-use std::io::{Read, Seek, Write};
+﻿use std::io::{Read, Seek, Write};
 use binrw::{binrw, BinRead, BinResult, BinWrite, Endian};
 use binrw::helpers::count;
 use serde::{Deserialize, Serialize};
-use blf_lib::types::c_string::StaticString;
+use blf_lib::types::string::StaticString;
 use blf_lib::types::time::filetime;
 use blf_lib::types::u64::Unsigned64;
 use blf_lib::types::numbers::Float32;

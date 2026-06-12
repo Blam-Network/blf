@@ -33,7 +33,7 @@ pub struct c_custom_timer_reference {
 
 impl c_custom_timer_reference {
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
-        bitstream.write_enum(self.m_type.clone(), 3)?;
+        bitstream.write_enum_raw(self.m_type.clone(), 3)?;
 
         match (self.m_type.clone(), self.m_player.as_ref(), self.m_object.as_ref(), self.m_team.as_ref(), self.m_variable_index.as_ref()) {
             (e_custom_timer_type::global, None, None, None, Some(variable_index)) => {
@@ -63,7 +63,7 @@ impl c_custom_timer_reference {
     }
 
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
-        self.m_type = bitstream.read_unnamed_enum(3)?;
+        self.m_type = bitstream.read_unnamed_enum_raw(3)?;
 
         match self.m_type {
             e_custom_timer_type::global => {

@@ -438,9 +438,7 @@ export class s_action_set_boundary_parameters {
   m_variable_4?: c_custom_variable_reference;
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
-    this.m_shape = bitstream.read_enum("shape", 2, e_boundary_shape, {
-      within_bits: true,
-    });
+    this.m_shape = bitstream.read_enum("shape", 2, e_boundary_shape);
     switch (this.m_shape) {
       case e_boundary_shape.sphere: {
         const radius = new c_custom_variable_reference();

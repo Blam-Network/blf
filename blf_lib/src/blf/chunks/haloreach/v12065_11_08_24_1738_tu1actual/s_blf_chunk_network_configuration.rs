@@ -1,13 +1,13 @@
-use std::io::{Cursor, Read, Seek, Write};
+﻿use std::io::{Cursor, Read, Seek, Write};
 use binrw::{binrw, BinRead, BinReaderExt, BinResult, BinWrite, Endian};
 use serde::{Deserialize, Serialize};
 use blf_lib::BINRW_RESULT;
 use blf_lib::types::array::StaticArray;
-use blf_lib::types::c_string::StaticString;
+use blf_lib::types::string::StaticString;
 use blf_lib::types::numbers::Float32;
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
 use blf_lib_derive::{BlfChunk, TestSize};
-use crate::types::c_string::StaticWcharString;
+use crate::types::string::StaticWcharString;
 use serde_hex::{SerHex,StrictCapPfx};
 use blf_lib::types::bool::Bool;
 use crate::blf::versions::haloreach::v11860_10_07_24_0147_omaha_release::{e_map_status, s_active_roster_configuration, s_alpha_configuration, s_bandwidth_configuration, s_banhammer_configuration, s_chicken_switches, s_crash_handling_configuration, s_data_mine_configuration, s_delivery_configuration, s_determinism_configuration, s_experience_and_credits_configuration, s_griefer_configuration, s_life_cycle_configuration, s_logic_configuration, s_lsp_configuration, s_network_file_download_configuration, s_network_files_configuration, s_network_memory_configuration, s_network_status_configuration, s_observer_configuration, s_replication_configuration, s_session_configuration, s_simulation_configuration, s_transport_configuration, s_user_interface, s_voice_configuration};

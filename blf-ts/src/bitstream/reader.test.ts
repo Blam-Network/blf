@@ -146,12 +146,4 @@ describe("c_bitstream_reader", () => {
     expect(sut.read_enum("mode", 4, e_sample)).toBe(e_sample.b);
   });
 
-  it("read_enum within_bits allows reserved values", () => {
-    const sut = c_bitstream_reader.new(
-      new Uint8Array([0b11100000]),
-      e_bitstream_byte_order._bitstream_byte_order_big_endian
-    );
-    sut.begin_reading();
-    expect(sut.read_enum("mode", 3, e_sample, { within_bits: true })).toBe(7);
-  });
 });

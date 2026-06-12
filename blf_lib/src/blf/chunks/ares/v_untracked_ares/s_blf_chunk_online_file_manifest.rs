@@ -1,10 +1,10 @@
-use std::error::Error;
+﻿use std::error::Error;
 use binrw::{binrw, BinRead, BinWrite};
 use serde::{Deserialize, Serialize};
 use blf_lib::blam::common::memory::secure_signature::s_network_http_request_hash;
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
 use blf_lib_derive::BlfChunk;
-use crate::types::c_string::StaticString;
+use crate::types::string::StaticString;
 
 pub const k_file_manifest_max_files: usize = 128;
 

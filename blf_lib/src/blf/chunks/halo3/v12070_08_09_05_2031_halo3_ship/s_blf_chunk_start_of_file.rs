@@ -1,11 +1,11 @@
-use binrw::binrw;
+﻿use binrw::binrw;
 #[cfg(feature = "napi")]
 use napi_derive::napi;
 use serde::{Deserialize, Serialize};
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
 use blf_lib_derive::BlfChunk;
 use crate::types::byte_order_mark::byte_order_mark;
-use crate::types::c_string::StaticString;
+use crate::types::string::StaticString;
 
 pub const k_tag_string_length: usize = 32;
 

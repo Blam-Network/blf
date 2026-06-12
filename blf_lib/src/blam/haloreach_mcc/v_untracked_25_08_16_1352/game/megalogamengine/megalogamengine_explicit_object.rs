@@ -46,13 +46,13 @@ pub struct c_explicit_object {
 
 impl c_explicit_object {
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
-        bitstream.write_enum(self.m_explicit_object_type, 5)?;
+        bitstream.write_enum_raw(self.m_explicit_object_type, 5)?;
 
         Ok(())
     }
 
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
-        self.m_explicit_object_type = bitstream.read_enum("explicit-object-type", 5)?;
+        self.m_explicit_object_type = bitstream.read_enum_raw("explicit-object-type", 5)?;
 
         Ok(())
     }

@@ -1,4 +1,4 @@
-use std::error::Error;
+﻿use std::error::Error;
 use std::io::{Read, Seek, Write};
 use binrw::{BinRead, BinResult, BinWrite, BinWriterExt, Endian};
 use num_derive::{FromPrimitive, ToPrimitive};
@@ -7,7 +7,7 @@ use blf_lib::BINRW_RESULT;
 use blf_lib::io::bitstream::{c_bitstream_reader, c_bitstream_writer, e_bitstream_byte_order};
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
 use blf_lib_derive::BlfChunk;
-use crate::types::c_string::StaticString;
+use crate::types::string::StaticString;
 
 #[derive(BlfChunk,Default,PartialEq,Debug,Clone,Serialize,Deserialize)]
 #[Header("mhdf", 3.1)]

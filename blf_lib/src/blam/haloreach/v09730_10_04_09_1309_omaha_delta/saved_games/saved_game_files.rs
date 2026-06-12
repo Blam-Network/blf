@@ -1,8 +1,8 @@
-use binrw::{BinRead, BinWrite};
+﻿use binrw::{BinRead, BinWrite};
 use serde::{Deserialize, Serialize};
 use blf_lib::io::bitstream::c_bitstream_reader;
-use crate::types::c_string::StaticString;
-use crate::types::c_string::StaticWcharString;
+use crate::types::string::StaticString;
+use crate::types::string::StaticWcharString;
 use blf_lib::types::time::time64_t;
 use crate::types::bool::Bool;
 use crate::types::u64::Unsigned64;

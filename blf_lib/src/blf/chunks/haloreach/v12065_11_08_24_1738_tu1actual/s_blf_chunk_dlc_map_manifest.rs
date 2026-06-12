@@ -1,9 +1,9 @@
-use binrw::{BinRead, BinWrite};
+﻿use binrw::{BinRead, BinWrite};
 use serde::{Deserialize, Serialize};
 use blf_lib::types::array::StaticArray;
-use crate::types::c_string::StaticString;
+use crate::types::string::StaticString;
 use serde_hex::{SerHex,StrictCap};
-use blf_lib::types::c_string::StaticWcharString;
+use blf_lib::types::string::StaticWcharString;
 use blf_lib::types::u64::Unsigned64;
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
 use blf_lib_derive::BlfChunk;
