@@ -1,4 +1,4 @@
-use binrw::{BinRead, BinWrite};
+﻿use binrw::{BinRead, BinWrite};
 use num_derive::{FromPrimitive, ToPrimitive};
 use num_traits::FromPrimitive;
 use serde::{Deserialize, Serialize};
@@ -196,7 +196,8 @@ impl c_player_filter_modifier {
 }
 
 #[repr(i8)]
-#[derive(Debug, Clone, Copy, PartialEq, Eq, ToPrimitive, FromPrimitive, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, ToPrimitive, FromPrimitive, Default, Serialize, Deserialize, crate::derive::c_enum)]
+#[bits(5)]
 pub enum e_chud_navpoint_icon_type {
     none = -1,
     #[default]
@@ -242,7 +243,7 @@ pub struct s_action_navpoint_set_icon_parameters {
 impl s_action_navpoint_set_icon_parameters {
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
         self.m_object.encode(bitstream)?;
-        bitstream.write_enum_raw(self.m_navpoint_icon, 5)?;
+        bitstream.write_enum(self.m_navpoint_icon)?;
 
         match (self.m_navpoint_icon, &self.m_navpoint_number) {
             (e_chud_navpoint_icon_type::num, Some(navpoint_number)) => {
@@ -256,7 +257,7 @@ impl s_action_navpoint_set_icon_parameters {
 
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
         self.m_object.decode(bitstream)?;
-        self.m_navpoint_icon = bitstream.read_enum_raw("navpoint-icon", 5)?;
+        self.m_navpoint_icon = bitstream.read_enum("navpoint-icon")?;
 
         if self.m_navpoint_icon == e_chud_navpoint_icon_type::num {
             let mut navpoint_number = c_custom_variable_reference::default();
