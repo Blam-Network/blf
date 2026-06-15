@@ -248,9 +248,16 @@ export class c_object_reference {
     }
   }
 }
+/** Matches `e_player_reference_type` in blf_lib `megalogamengine_player_reference.rs`. */
+export enum e_player_reference_type {
+  global_player = 0,
+  player_player = 1,
+  object_player = 2,
+  team_player = 3,
+}
 export class c_player_reference {
-  @AutoMap(() => Number)
-  m_type = 0;
+  @AutoMap(() => e_player_reference_type)
+  m_type: e_player_reference_type = e_player_reference_type.global_player;
   @AutoMap(() => c_explicit_player)
   m_player?: c_explicit_player;
   @AutoMap(() => c_explicit_object)
@@ -260,33 +267,33 @@ export class c_player_reference {
   @AutoMap(() => Number)
   m_variable_index?: number;
   decode(bitstream: c_bitstream_reader): void {
-    this.m_type = bitstream.read_integer("type", 2);
+    this.m_type = bitstream.read_enum("type", 2, e_player_reference_type);
     switch (this.m_type) {
-      case 0: {
+      case e_player_reference_type.global_player: {
         const player = new c_explicit_player();
         player.decode(bitstream);
         this.m_player = player;
         break;
       }
-      case 1: {
+      case e_player_reference_type.player_player: {
         const player = new c_explicit_player();
         player.decode(bitstream);
         this.m_player = player;
-        this.m_variable_index = bitstream.read_integer("m_variable_index", 2);
+        this.m_variable_index = bitstream.read_integer("variable-index", 2);
         break;
       }
-      case 2: {
+      case e_player_reference_type.object_player: {
         const object = new c_explicit_object();
         object.decode(bitstream);
         this.m_object = object;
-        this.m_variable_index = bitstream.read_integer("m_variable_index", 2);
+        this.m_variable_index = bitstream.read_integer("variable-index", 2);
         break;
       }
-      case 3: {
+      case e_player_reference_type.team_player: {
         const team = new c_explicit_team();
         team.decode(bitstream);
         this.m_team = team;
-        this.m_variable_index = bitstream.read_integer("m_variable_index", 2);
+        this.m_variable_index = bitstream.read_integer("variable-index", 2);
         break;
       }
       default:
@@ -294,14 +301,14 @@ export class c_player_reference {
     }
   }
   encode(bitstream: c_bitstream_writer): void {
-    bitstream.write_integer(this.m_type, 2);
+    bitstream.write_enum(this.m_type, 2, e_player_reference_type);
     switch (this.m_type) {
-      case 0:
+      case e_player_reference_type.global_player:
         requireField(this.m_player, "m_player does not exist.").encode(
           bitstream
         );
         break;
-      case 1:
+      case e_player_reference_type.player_player:
         requireField(this.m_player, "m_player does not exist.").encode(
           bitstream
         );
@@ -313,7 +320,7 @@ export class c_player_reference {
           2
         );
         break;
-      case 2:
+      case e_player_reference_type.object_player:
         requireField(this.m_object, "m_object does not exist.").encode(
           bitstream
         );
@@ -325,7 +332,7 @@ export class c_player_reference {
           2
         );
         break;
-      case 3:
+      case e_player_reference_type.team_player:
         requireField(this.m_team, "m_team does not exist.").encode(bitstream);
         bitstream.write_integer(
           requireField(
