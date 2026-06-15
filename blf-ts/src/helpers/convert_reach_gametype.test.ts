@@ -19,9 +19,13 @@ import {
   c_action,
   e_action_type,
   e_math_operation as e_math_operation_mcc,
+  s_action_object_get_orientation_parameters,
 } from "../blam/haloreach_mcc/v_untracked_25_08_16_1352/game/megalogamengine/megalogamengine_actions";
 import { e_explicit_player_type as e_explicit_player_type_mcc } from "../blam/haloreach_mcc/v_untracked_25_08_16_1352/game/megalogamengine/megalogamengine_explicit_player";
-import { c_explicit_player } from "../blam/haloreach_mcc/v_untracked_25_08_16_1352/game/megalogamengine/megalogamengine_references";
+import {
+  c_explicit_player,
+  c_object_reference,
+} from "../blam/haloreach_mcc/v_untracked_25_08_16_1352/game/megalogamengine/megalogamengine_references";
 import { s_custom_game_engine_definition } from "../blam/haloreach_mcc/v_untracked_25_08_16_1352/game/megalogamengine/s_custom_game_engine_definition";
 import { search_for_chunk } from "../blf_chunk";
 import { s_blf_chunk_game_variant as s_blf_chunk_game_variant_mcc } from "../chunks/haloreach_mcc/v_untracked_25_08_16_1352/s_blf_chunk_game_variant";
@@ -86,10 +90,15 @@ describe("convert_reach_gametype", () => {
 
   it("relocates a temporary player reference to a global slot MCC → TU1", () => {
     const action = new c_action();
-    action.m_type = 3;
+    action.m_type = e_action_type.object_get_orientation;
     const player = new c_explicit_player();
     player.m_explicit_player_type = e_explicit_player_type_mcc.temporary_0;
-    action.m_object = { m_player: player } as never;
+    const object = new c_object_reference();
+    object.m_type = 1;
+    object.m_player = player;
+    const parameters = new s_action_object_get_orientation_parameters();
+    parameters.m_object = object;
+    action.m_object_get_orientation_parameters = parameters;
 
     const from = mcc_custom_variant_with_action(action);
     const to = new c_game_variant_tu1();
@@ -99,7 +108,8 @@ describe("convert_reach_gametype", () => {
     );
 
     const copiedPlayer = to.m_custom_variant?.m_game_engine?.m_actions[0]
-      ?.m_object?.m_player as c_explicit_player | undefined;
+      ?.m_object_get_orientation_parameters?.m_object
+      ?.m_player as c_explicit_player | undefined;
     expect(copiedPlayer?.m_explicit_player_type).toBe(
       e_explicit_player_type_tu1.global_0
     );
@@ -120,10 +130,15 @@ describe("convert_reach_gametype", () => {
     );
 
     const action = new c_action();
-    action.m_type = 3;
+    action.m_type = e_action_type.object_get_orientation;
     const player = new c_explicit_player();
     player.m_explicit_player_type = e_explicit_player_type_mcc.temporary_0;
-    action.m_object = { m_player: player } as never;
+    const object = new c_object_reference();
+    object.m_type = 1;
+    object.m_player = player;
+    const parameters = new s_action_object_get_orientation_parameters();
+    parameters.m_object = object;
+    action.m_object_get_orientation_parameters = parameters;
     engine.m_actions.push(action);
 
     custom.m_game_engine = engine;

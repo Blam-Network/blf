@@ -2379,202 +2379,586 @@ export class c_action {
   decode(bitstream: c_bitstream_reader): void {
     this.m_type = bitstream.read_enum("action-type", 7, e_action_type);
     switch (this.m_type) {
-      case e_action_type.set_score:
+      case e_action_type.set_score: {
+        const set_score_parameters = new s_action_set_score_parameters();
+        set_score_parameters.decode(bitstream);
+        this.m_set_score_parameters = set_score_parameters;
         break;
-      case e_action_type.create_object:
+      }
+      case e_action_type.create_object: {
+        const create_object_parameters = new s_action_create_object_parameters();
+        create_object_parameters.decode(bitstream);
+        this.m_create_object_parameters = create_object_parameters;
         break;
-      case e_action_type.delete_object:
+      }
+      case e_action_type.delete_object: {
+        const delete_object_parameters = new s_action_delete_object_parameters();
+        delete_object_parameters.decode(bitstream);
+        this.m_delete_object_parameters = delete_object_parameters;
         break;
-      case e_action_type.navpoint_set_visible:
+      }
+      case e_action_type.navpoint_set_visible: {
+        const navpoint_set_visible_parameters = new s_action_navpoint_set_visible_parameters();
+        navpoint_set_visible_parameters.decode(bitstream);
+        this.m_navpoint_set_visible_parameters = navpoint_set_visible_parameters;
         break;
-      case e_action_type.navpoint_set_icon:
+      }
+      case e_action_type.navpoint_set_icon: {
+        const navpoint_set_icon_parameters = new s_action_navpoint_set_icon_parameters();
+        navpoint_set_icon_parameters.decode(bitstream);
+        this.m_navpoint_set_icon_parameters = navpoint_set_icon_parameters;
         break;
-      case e_action_type.navpoint_set_priority:
+      }
+      case e_action_type.navpoint_set_priority: {
+        const navpoint_set_priority_parameters = new s_action_navpoint_set_priority_parameters();
+        navpoint_set_priority_parameters.decode(bitstream);
+        this.m_navpoint_set_priority_parameters = navpoint_set_priority_parameters;
         break;
-      case e_action_type.navpoint_set_timer:
+      }
+      case e_action_type.navpoint_set_timer: {
+        const navpoint_set_timer_parameters = new s_action_navpoint_set_timer_parameters();
+        navpoint_set_timer_parameters.decode(bitstream);
+        this.m_navpoint_set_timer_parameters = navpoint_set_timer_parameters;
         break;
-      case e_action_type.navpoint_set_visible_range:
+      }
+      case e_action_type.navpoint_set_visible_range: {
+        const navpoint_set_visible_range_parameters = new s_action_navpoint_set_visible_range_parameters();
+        navpoint_set_visible_range_parameters.decode(bitstream);
+        this.m_navpoint_set_visible_range_parameters = navpoint_set_visible_range_parameters;
         break;
-      case e_action_type.set:
+      }
+      case e_action_type.set: {
+        const set_parameters = new s_action_set_parameters();
+        set_parameters.decode(bitstream);
+        this.m_set_parameters = set_parameters;
         break;
-      case e_action_type.set_boundary:
+      }
+      case e_action_type.set_boundary: {
+        const set_boundary_parameters = new s_action_set_boundary_parameters();
+        set_boundary_parameters.decode(bitstream);
+        this.m_set_boundary_parameters = set_boundary_parameters;
         break;
-      case e_action_type.apply_player_traits:
+      }
+      case e_action_type.apply_player_traits: {
+        const apply_player_traits_parameters = new s_action_apply_player_traits_parameters();
+        apply_player_traits_parameters.decode(bitstream);
+        this.m_apply_player_traits_parameters = apply_player_traits_parameters;
         break;
-      case e_action_type.set_pickup_filter:
+      }
+      case e_action_type.set_pickup_filter: {
+        const set_pickup_filter_parameters = new s_action_set_pickup_filter_parameters();
+        set_pickup_filter_parameters.decode(bitstream);
+        this.m_set_pickup_filter_parameters = set_pickup_filter_parameters;
         break;
-      case e_action_type.set_respawn_filter:
+      }
+      case e_action_type.set_respawn_filter: {
+        const set_respawn_filter_parameters = new s_action_set_respawn_filter_parameters();
+        set_respawn_filter_parameters.decode(bitstream);
+        this.m_set_respawn_filter_parameters = set_respawn_filter_parameters;
         break;
-      case e_action_type.set_fireteam_respawn_filter:
+      }
+      case e_action_type.set_fireteam_respawn_filter: {
+        const set_fireteam_respawn_filter_parameters = new s_action_set_fireteam_respawn_filter_parameters();
+        set_fireteam_respawn_filter_parameters.decode(bitstream);
+        this.m_set_fireteam_respawn_filter_parameters = set_fireteam_respawn_filter_parameters;
         break;
-      case e_action_type.set_progress_bar:
+      }
+      case e_action_type.set_progress_bar: {
+        const set_progress_bar_parameters = new s_action_set_progress_bar_parameters();
+        set_progress_bar_parameters.decode(bitstream);
+        this.m_set_progress_bar_parameters = set_progress_bar_parameters;
         break;
-      case e_action_type.hud_post_message:
+      }
+      case e_action_type.hud_post_message: {
+        const hud_post_message_parameters = new s_action_hud_post_message_parameters();
+        hud_post_message_parameters.decode(bitstream);
+        this.m_hud_post_message_parameters = hud_post_message_parameters;
         break;
-      case e_action_type.timer_set_rate:
+      }
+      case e_action_type.timer_set_rate: {
+        const timer_set_rate_parameters = new s_action_timer_set_rate_parameters();
+        timer_set_rate_parameters.decode(bitstream);
+        this.m_timer_set_rate_parameters = timer_set_rate_parameters;
         break;
-      case e_action_type.print_variable:
+      }
+      case e_action_type.print_variable: {
+        const print_variable_parameters = new s_action_print_variable_parameters();
+        print_variable_parameters.decode(bitstream);
+        this.m_print_variable_parameters = print_variable_parameters;
         break;
-      case e_action_type.get_player_holding_object:
+      }
+      case e_action_type.get_player_holding_object: {
+        const get_player_holding_object_parameters = new s_action_get_player_holding_object_parameters();
+        get_player_holding_object_parameters.decode(bitstream);
+        this.m_get_player_holding_object_parameters = get_player_holding_object_parameters;
         break;
-      case e_action_type.for_each:
+      }
+      case e_action_type.for_each: {
+        const for_each_parameters = new s_action_for_each_parameters();
+        for_each_parameters.decode(bitstream);
+        this.m_for_each_parameters = for_each_parameters;
         break;
+      }
       case e_action_type.end_round:
         break;
-      case e_action_type.boundary_set_visible:
+      case e_action_type.boundary_set_visible: {
+        const boundary_set_visible_parameters = new s_action_boundary_set_visible_parameters();
+        boundary_set_visible_parameters.decode(bitstream);
+        this.m_boundary_set_visible_parameters = boundary_set_visible_parameters;
         break;
-      case e_action_type.object_destroy:
+      }
+      case e_action_type.object_destroy: {
+        const object_destroy_parameters = new s_action_object_destroy_parameters();
+        object_destroy_parameters.decode(bitstream);
+        this.m_object_destroy_parameters = object_destroy_parameters;
         break;
-      case e_action_type.object_set_invincibility:
+      }
+      case e_action_type.object_set_invincibility: {
+        const object_set_invincibility_parameters = new s_action_object_set_invincibility_parameters();
+        object_set_invincibility_parameters.decode(bitstream);
+        this.m_object_set_invincibility_parameters = object_set_invincibility_parameters;
         break;
-      case e_action_type.random:
+      }
+      case e_action_type.random: {
+        const random_parameters = new s_action_random_parameters();
+        random_parameters.decode(bitstream);
+        this.m_random_parameters = random_parameters;
         break;
+      }
       case e_action_type.break_into_debugger:
         break;
-      case e_action_type.object_get_orientation:
-        break;
-      case e_action_type.object_get_velocity:
-        break;
-      case e_action_type.player_death_get_killing_player:
-        break;
-      case e_action_type.player_death_get_damage_type:
-        break;
-      case e_action_type.player_death_get_special_type:
-        break;
-      case e_action_type.debugging_enable_tracing:
-        break;
-      case e_action_type.object_attach:
-        break;
-      case e_action_type.object_detach:
-        break;
-      case e_action_type.player_get_place:
-        break;
-      case e_action_type.team_get_place:
-        break;
-      case e_action_type.player_get_killing_spree_count:
-        break;
-      case e_action_type.player_adjust_money:
-        break;
-      case e_action_type.player_enable_purchases:
-        break;
-      case e_action_type.player_get_vehicle:
-        break;
-      case e_action_type.player_set_vehicle:
-        break;
-      case e_action_type.player_set_unit:
-        break;
-      case e_action_type.timer_reset:
-        break;
-      case e_action_type.weapon_set_pickup_priority:
-        break;
-      case e_action_type.object_bounce:
-        break;
-      case e_action_type.hud_widget_set_text:
-        break;
-      case e_action_type.hud_widget_set_value:
-        break;
-      case e_action_type.hud_widget_set_meter:
-        break;
-      case e_action_type.hud_widget_set_icon:
-        break;
-      case e_action_type.hud_widget_set_visibility:
-        break;
-      case e_action_type.play_sound:
-        break;
-      case e_action_type.object_set_scale:
-        break;
-      case e_action_type.navpoint_set_text:
-        break;
-      case e_action_type.object_get_shield:
-        break;
-      case e_action_type.object_get_health:
-        break;
-      case e_action_type.player_set_objective:
-        break;
-      case e_action_type.player_set_objective_allegiance:
-        break;
-      case e_action_type.player_set_objective_allegiance_icon:
-        break;
-      case e_action_type.team_set_coop_spawning:
-        break;
-      case e_action_type.team_set_primary_respawn_object:
-        break;
-      case e_action_type.player_set_primary_respawn_object:
-        break;
-      case e_action_type.player_get_fireteam_index:
-        break;
-      case e_action_type.player_set_fireteam_index:
-        break;
-      case e_action_type.object_adjust_shield:
-        break;
-      case e_action_type.object_adjust_health:
-        break;
-      case e_action_type.object_get_distance:
-        break;
-      case e_action_type.object_adjust_maximum_shield:
-        break;
-      case e_action_type.object_adjust_maximum_health:
-        break;
-      case e_action_type.player_set_requisition_palette:
-        break;
-      case e_action_type.device_set_power:
-        break;
-      case e_action_type.device_get_power:
-        break;
-      case e_action_type.device_set_position:
-        break;
-      case e_action_type.device_get_position:
-        break;
-      case e_action_type.adjust_grenades:
-        break;
-      case e_action_type.submit_incident:
-        break;
-      case e_action_type.submit_incident_with_custom_value:
-        break;
-      case e_action_type.set_loadout_palette:
-        break;
-      case e_action_type.device_set_position_track:
-        break;
-      case e_action_type.device_animate_position:
-        break;
-      case e_action_type.device_set_position_immediate:
-        break;
-      case e_action_type.saved_film_insert_marker:
-        break;
-      case e_action_type.respawn_zone_enable:
-        break;
-      case e_action_type.player_get_weapon:
-        break;
-      case e_action_type.player_get_equipment:
-        break;
-      case e_action_type.object_set_never_garbage:
-        break;
-      case e_action_type.player_get_target_object:
-        break;
-      case e_action_type.create_tunnel:
-        break;
-      case e_action_type.debug_force_player_view_count:
-        break;
-      case e_action_type.player_pick_up_weapon:
-        break;
-      case e_action_type.player_set_coop_spawning:
-        break;
-      case e_action_type.object_set_orientation:
-        break;
-      case e_action_type.object_face_object:
-        break;
-      case e_action_type.biped_give_weapon:
-        break;
-      case e_action_type.biped_drop_weapon:
-        break;
-      case e_action_type.set_scenario_interpolator_state:
-        break;
-      case e_action_type.get_random_object:
-        break;
-      case e_action_type.game_grief_record_custom_penalty:
-        break;
-      case e_action_type.boundary_set_player_color:
-        break;
+      case e_action_type.object_get_orientation: {
+        const object_get_orientation_parameters = new s_action_object_get_orientation_parameters();
+        object_get_orientation_parameters.decode(bitstream);
+        this.m_object_get_orientation_parameters = object_get_orientation_parameters;
+        break;
+      }
+      case e_action_type.object_get_velocity: {
+        const object_get_velocity_parameters = new s_action_object_get_velocity_parameters();
+        object_get_velocity_parameters.decode(bitstream);
+        this.m_object_get_velocity_parameters = object_get_velocity_parameters;
+        break;
+      }
+      case e_action_type.player_death_get_killing_player: {
+        const player_death_get_killing_player_parameters = new s_action_player_death_get_killing_player_parameters();
+        player_death_get_killing_player_parameters.decode(bitstream);
+        this.m_player_death_get_killing_player_parameters = player_death_get_killing_player_parameters;
+        break;
+      }
+      case e_action_type.player_death_get_damage_type: {
+        const player_death_get_damage_type_parameters = new s_action_player_death_get_damage_type_parameters();
+        player_death_get_damage_type_parameters.decode(bitstream);
+        this.m_player_death_get_damage_type_parameters = player_death_get_damage_type_parameters;
+        break;
+      }
+      case e_action_type.player_death_get_special_type: {
+        const player_death_get_special_type_parameters = new s_action_player_death_get_special_type_parameters();
+        player_death_get_special_type_parameters.decode(bitstream);
+        this.m_player_death_get_special_type_parameters = player_death_get_special_type_parameters;
+        break;
+      }
+      case e_action_type.debugging_enable_tracing: {
+        const debugging_enable_tracing_parameters = new s_action_debugging_enable_tracing_parameters();
+        debugging_enable_tracing_parameters.decode(bitstream);
+        this.m_debugging_enable_tracing_parameters = debugging_enable_tracing_parameters;
+        break;
+      }
+      case e_action_type.object_attach: {
+        const object_attach_parameters = new s_action_object_attach_parameters();
+        object_attach_parameters.decode(bitstream);
+        this.m_object_attach_parameters = object_attach_parameters;
+        break;
+      }
+      case e_action_type.object_detach: {
+        const object_detach_parameters = new s_action_object_detach_parameters();
+        object_detach_parameters.decode(bitstream);
+        this.m_object_detach_parameters = object_detach_parameters;
+        break;
+      }
+      case e_action_type.player_get_place: {
+        const player_get_place_parameters = new s_action_player_get_place_parameters();
+        player_get_place_parameters.decode(bitstream);
+        this.m_player_get_place_parameters = player_get_place_parameters;
+        break;
+      }
+      case e_action_type.team_get_place: {
+        const team_get_place_parameters = new s_action_team_get_place_parameters();
+        team_get_place_parameters.decode(bitstream);
+        this.m_team_get_place_parameters = team_get_place_parameters;
+        break;
+      }
+      case e_action_type.player_get_killing_spree_count: {
+        const player_get_killing_spree_count_parameters = new s_action_player_get_killing_spree_count_parameters();
+        player_get_killing_spree_count_parameters.decode(bitstream);
+        this.m_player_get_killing_spree_count_parameters = player_get_killing_spree_count_parameters;
+        break;
+      }
+      case e_action_type.player_adjust_money: {
+        const player_adjust_money_parameters = new s_action_player_adjust_money_parameters();
+        player_adjust_money_parameters.decode(bitstream);
+        this.m_player_adjust_money_parameters = player_adjust_money_parameters;
+        break;
+      }
+      case e_action_type.player_enable_purchases: {
+        const player_enable_purchases_parameters = new s_action_player_enable_purchases_parameters();
+        player_enable_purchases_parameters.decode(bitstream);
+        this.m_player_enable_purchases_parameters = player_enable_purchases_parameters;
+        break;
+      }
+      case e_action_type.player_get_vehicle: {
+        const player_get_vehicle_parameters = new s_action_player_get_vehicle_parameters();
+        player_get_vehicle_parameters.decode(bitstream);
+        this.m_player_get_vehicle_parameters = player_get_vehicle_parameters;
+        break;
+      }
+      case e_action_type.player_set_vehicle: {
+        const player_set_vehicle_parameters = new s_action_player_set_vehicle_parameters();
+        player_set_vehicle_parameters.decode(bitstream);
+        this.m_player_set_vehicle_parameters = player_set_vehicle_parameters;
+        break;
+      }
+      case e_action_type.player_set_unit: {
+        const player_set_unit_parameters = new s_action_player_set_unit_parameters();
+        player_set_unit_parameters.decode(bitstream);
+        this.m_player_set_unit_parameters = player_set_unit_parameters;
+        break;
+      }
+      case e_action_type.timer_reset: {
+        const timer_reset_parameters = new s_action_timer_reset_parameters();
+        timer_reset_parameters.decode(bitstream);
+        this.m_timer_reset_parameters = timer_reset_parameters;
+        break;
+      }
+      case e_action_type.weapon_set_pickup_priority: {
+        const weapon_set_pickup_priority_parameters = new s_action_weapon_set_pickup_priority_parameters();
+        weapon_set_pickup_priority_parameters.decode(bitstream);
+        this.m_weapon_set_pickup_priority_parameters = weapon_set_pickup_priority_parameters;
+        break;
+      }
+      case e_action_type.object_bounce: {
+        const object_bounce_parameters = new s_action_object_bounce_parameters();
+        object_bounce_parameters.decode(bitstream);
+        this.m_object_bounce_parameters = object_bounce_parameters;
+        break;
+      }
+      case e_action_type.hud_widget_set_text: {
+        const hud_widget_set_text_parameters = new s_action_hud_widget_set_text_parameters();
+        hud_widget_set_text_parameters.decode(bitstream);
+        this.m_hud_widget_set_text_parameters = hud_widget_set_text_parameters;
+        break;
+      }
+      case e_action_type.hud_widget_set_value: {
+        const hud_widget_set_value_parameters = new s_action_hud_widget_set_value_parameters();
+        hud_widget_set_value_parameters.decode(bitstream);
+        this.m_hud_widget_set_value_parameters = hud_widget_set_value_parameters;
+        break;
+      }
+      case e_action_type.hud_widget_set_meter: {
+        const hud_widget_set_meter_parameters = new s_action_hud_widget_set_meter_parameters();
+        hud_widget_set_meter_parameters.decode(bitstream);
+        this.m_hud_widget_set_meter_parameters = hud_widget_set_meter_parameters;
+        break;
+      }
+      case e_action_type.hud_widget_set_icon: {
+        const hud_widget_set_icon_parameters = new s_action_hud_widget_set_icon_parameters();
+        hud_widget_set_icon_parameters.decode(bitstream);
+        this.m_hud_widget_set_icon_parameters = hud_widget_set_icon_parameters;
+        break;
+      }
+      case e_action_type.hud_widget_set_visibility: {
+        const hud_widget_set_visibility_parameters = new s_action_hud_widget_set_visibility_parameters();
+        hud_widget_set_visibility_parameters.decode(bitstream);
+        this.m_hud_widget_set_visibility_parameters = hud_widget_set_visibility_parameters;
+        break;
+      }
+      case e_action_type.play_sound: {
+        const play_sound_parameters = new s_action_play_sound_parameters();
+        play_sound_parameters.decode(bitstream);
+        this.m_play_sound_parameters = play_sound_parameters;
+        break;
+      }
+      case e_action_type.object_set_scale: {
+        const object_set_scale_parameters = new s_action_object_set_scale_parameters();
+        object_set_scale_parameters.decode(bitstream);
+        this.m_object_set_scale_parameters = object_set_scale_parameters;
+        break;
+      }
+      case e_action_type.navpoint_set_text: {
+        const navpoint_set_text_parameters = new s_action_navpoint_set_text_parameters();
+        navpoint_set_text_parameters.decode(bitstream);
+        this.m_navpoint_set_text_parameters = navpoint_set_text_parameters;
+        break;
+      }
+      case e_action_type.object_get_shield: {
+        const object_get_shield_parameters = new s_action_object_get_shield_parameters();
+        object_get_shield_parameters.decode(bitstream);
+        this.m_object_get_shield_parameters = object_get_shield_parameters;
+        break;
+      }
+      case e_action_type.object_get_health: {
+        const object_get_health_parameters = new s_action_object_get_health_parameters();
+        object_get_health_parameters.decode(bitstream);
+        this.m_object_get_health_parameters = object_get_health_parameters;
+        break;
+      }
+      case e_action_type.player_set_objective: {
+        const player_set_objective_parameters = new s_action_player_set_objective_parameters();
+        player_set_objective_parameters.decode(bitstream);
+        this.m_player_set_objective_parameters = player_set_objective_parameters;
+        break;
+      }
+      case e_action_type.player_set_objective_allegiance: {
+        const player_set_objective_allegiance_parameters = new s_action_player_set_objective_allegiance_parameters();
+        player_set_objective_allegiance_parameters.decode(bitstream);
+        this.m_player_set_objective_allegiance_parameters = player_set_objective_allegiance_parameters;
+        break;
+      }
+      case e_action_type.player_set_objective_allegiance_icon: {
+        const player_set_objective_allegiance_icon_parameters = new s_action_player_set_objective_allegiance_icon_parameters();
+        player_set_objective_allegiance_icon_parameters.decode(bitstream);
+        this.m_player_set_objective_allegiance_icon_parameters = player_set_objective_allegiance_icon_parameters;
+        break;
+      }
+      case e_action_type.team_set_coop_spawning: {
+        const team_set_coop_spawning_parameters = new s_action_team_set_coop_spawning_parameters();
+        team_set_coop_spawning_parameters.decode(bitstream);
+        this.m_team_set_coop_spawning_parameters = team_set_coop_spawning_parameters;
+        break;
+      }
+      case e_action_type.team_set_primary_respawn_object: {
+        const team_set_primary_respawn_object_parameters = new s_action_team_set_primary_respawn_object_parameters();
+        team_set_primary_respawn_object_parameters.decode(bitstream);
+        this.m_team_set_primary_respawn_object_parameters = team_set_primary_respawn_object_parameters;
+        break;
+      }
+      case e_action_type.player_set_primary_respawn_object: {
+        const player_set_primary_respawn_object_parameters = new s_action_player_set_primary_respawn_object_parameters();
+        player_set_primary_respawn_object_parameters.decode(bitstream);
+        this.m_player_set_primary_respawn_object_parameters = player_set_primary_respawn_object_parameters;
+        break;
+      }
+      case e_action_type.player_get_fireteam_index: {
+        const player_get_fireteam_index_parameters = new s_action_player_get_fireteam_index_parameters();
+        player_get_fireteam_index_parameters.decode(bitstream);
+        this.m_player_get_fireteam_index_parameters = player_get_fireteam_index_parameters;
+        break;
+      }
+      case e_action_type.player_set_fireteam_index: {
+        const player_set_fireteam_index_parameters = new s_action_player_set_fireteam_index_parameters();
+        player_set_fireteam_index_parameters.decode(bitstream);
+        this.m_player_set_fireteam_index_parameters = player_set_fireteam_index_parameters;
+        break;
+      }
+      case e_action_type.object_adjust_shield: {
+        const object_adjust_shield_parameters = new s_action_object_adjust_shield_parameters();
+        object_adjust_shield_parameters.decode(bitstream);
+        this.m_object_adjust_shield_parameters = object_adjust_shield_parameters;
+        break;
+      }
+      case e_action_type.object_adjust_health: {
+        const object_adjust_health_parameters = new s_action_object_adjust_health_parameters();
+        object_adjust_health_parameters.decode(bitstream);
+        this.m_object_adjust_health_parameters = object_adjust_health_parameters;
+        break;
+      }
+      case e_action_type.object_get_distance: {
+        const object_get_distance_parameters = new s_action_object_get_distance_parameters();
+        object_get_distance_parameters.decode(bitstream);
+        this.m_object_get_distance_parameters = object_get_distance_parameters;
+        break;
+      }
+      case e_action_type.object_adjust_maximum_shield: {
+        const object_adjust_maximum_shield_parameters = new s_action_object_adjust_maximum_shield_parameters();
+        object_adjust_maximum_shield_parameters.decode(bitstream);
+        this.m_object_adjust_maximum_shield_parameters = object_adjust_maximum_shield_parameters;
+        break;
+      }
+      case e_action_type.object_adjust_maximum_health: {
+        const object_adjust_maximum_health_parameters = new s_action_object_adjust_maximum_health_parameters();
+        object_adjust_maximum_health_parameters.decode(bitstream);
+        this.m_object_adjust_maximum_health_parameters = object_adjust_maximum_health_parameters;
+        break;
+      }
+      case e_action_type.player_set_requisition_palette: {
+        const player_set_requisition_palette_parameters = new s_action_player_set_requisition_palette_parameters();
+        player_set_requisition_palette_parameters.decode(bitstream);
+        this.m_player_set_requisition_palette_parameters = player_set_requisition_palette_parameters;
+        break;
+      }
+      case e_action_type.device_set_power: {
+        const device_set_power_parameters = new s_action_device_set_power_parameters();
+        device_set_power_parameters.decode(bitstream);
+        this.m_device_set_power_parameters = device_set_power_parameters;
+        break;
+      }
+      case e_action_type.device_get_power: {
+        const device_get_power_parameters = new s_action_device_get_power_parameters();
+        device_get_power_parameters.decode(bitstream);
+        this.m_device_get_power_parameters = device_get_power_parameters;
+        break;
+      }
+      case e_action_type.device_set_position: {
+        const device_set_position_parameters = new s_action_device_set_position_parameters();
+        device_set_position_parameters.decode(bitstream);
+        this.m_device_set_position_parameters = device_set_position_parameters;
+        break;
+      }
+      case e_action_type.device_get_position: {
+        const device_get_position_parameters = new s_action_device_get_position_parameters();
+        device_get_position_parameters.decode(bitstream);
+        this.m_device_get_position_parameters = device_get_position_parameters;
+        break;
+      }
+      case e_action_type.adjust_grenades: {
+        const adjust_grenades_parameters = new s_action_adjust_grenades_parameters();
+        adjust_grenades_parameters.decode(bitstream);
+        this.m_adjust_grenades_parameters = adjust_grenades_parameters;
+        break;
+      }
+      case e_action_type.submit_incident: {
+        const submit_incident_parameters = new s_action_submit_incident_parameters();
+        submit_incident_parameters.decode(bitstream);
+        this.m_submit_incident_parameters = submit_incident_parameters;
+        break;
+      }
+      case e_action_type.submit_incident_with_custom_value: {
+        const submit_incident_with_custom_value_parameters = new s_action_submit_incident_with_custom_value_parameters();
+        submit_incident_with_custom_value_parameters.decode(bitstream);
+        this.m_submit_incident_with_custom_value_parameters = submit_incident_with_custom_value_parameters;
+        break;
+      }
+      case e_action_type.set_loadout_palette: {
+        const set_loadout_palette_parameters = new s_action_set_loadout_palette_parameters();
+        set_loadout_palette_parameters.decode(bitstream);
+        this.m_set_loadout_palette_parameters = set_loadout_palette_parameters;
+        break;
+      }
+      case e_action_type.device_set_position_track: {
+        const device_set_position_track_parameters = new s_action_device_set_position_track_parameters();
+        device_set_position_track_parameters.decode(bitstream);
+        this.m_device_set_position_track_parameters = device_set_position_track_parameters;
+        break;
+      }
+      case e_action_type.device_animate_position: {
+        const device_animate_position_parameters = new s_action_device_animate_position_parameters();
+        device_animate_position_parameters.decode(bitstream);
+        this.m_device_animate_position_parameters = device_animate_position_parameters;
+        break;
+      }
+      case e_action_type.device_set_position_immediate: {
+        const device_set_position_immediate_parameters = new s_action_device_set_position_immediate_parameters();
+        device_set_position_immediate_parameters.decode(bitstream);
+        this.m_device_set_position_immediate_parameters = device_set_position_immediate_parameters;
+        break;
+      }
+      case e_action_type.saved_film_insert_marker: {
+        const saved_film_insert_marker_parameters = new s_action_saved_film_insert_marker_parameters();
+        saved_film_insert_marker_parameters.decode(bitstream);
+        this.m_saved_film_insert_marker_parameters = saved_film_insert_marker_parameters;
+        break;
+      }
+      case e_action_type.respawn_zone_enable: {
+        const respawn_zone_enable_parameters = new s_action_respawn_zone_enable_parameters();
+        respawn_zone_enable_parameters.decode(bitstream);
+        this.m_respawn_zone_enable_parameters = respawn_zone_enable_parameters;
+        break;
+      }
+      case e_action_type.player_get_weapon: {
+        const player_get_weapon_parameters = new s_action_player_get_weapon_parameters();
+        player_get_weapon_parameters.decode(bitstream);
+        this.m_player_get_weapon_parameters = player_get_weapon_parameters;
+        break;
+      }
+      case e_action_type.player_get_equipment: {
+        const player_get_equipment_parameters = new s_action_player_get_equipment_parameters();
+        player_get_equipment_parameters.decode(bitstream);
+        this.m_player_get_equipment_parameters = player_get_equipment_parameters;
+        break;
+      }
+      case e_action_type.object_set_never_garbage: {
+        const object_set_never_garbage_parameters = new s_action_object_set_never_garbage_parameters();
+        object_set_never_garbage_parameters.decode(bitstream);
+        this.m_object_set_never_garbage_parameters = object_set_never_garbage_parameters;
+        break;
+      }
+      case e_action_type.player_get_target_object: {
+        const player_get_target_object_parameters = new s_action_player_get_target_object_parameters();
+        player_get_target_object_parameters.decode(bitstream);
+        this.m_player_get_target_object_parameters = player_get_target_object_parameters;
+        break;
+      }
+      case e_action_type.create_tunnel: {
+        const create_tunnel_parameters = new s_action_create_tunnel_parameters();
+        create_tunnel_parameters.decode(bitstream);
+        this.m_create_tunnel_parameters = create_tunnel_parameters;
+        break;
+      }
+      case e_action_type.debug_force_player_view_count: {
+        const debug_force_player_view_count_parameters = new s_action_debug_force_player_view_count_parameters();
+        debug_force_player_view_count_parameters.decode(bitstream);
+        this.m_debug_force_player_view_count_parameters = debug_force_player_view_count_parameters;
+        break;
+      }
+      case e_action_type.player_pick_up_weapon: {
+        const player_pick_up_weapon_parameters = new s_action_player_pick_up_weapon_parameters();
+        player_pick_up_weapon_parameters.decode(bitstream);
+        this.m_player_pick_up_weapon_parameters = player_pick_up_weapon_parameters;
+        break;
+      }
+      case e_action_type.player_set_coop_spawning: {
+        const player_set_coop_spawning_parameters = new s_action_player_set_coop_spawning_parameters();
+        player_set_coop_spawning_parameters.decode(bitstream);
+        this.m_player_set_coop_spawning_parameters = player_set_coop_spawning_parameters;
+        break;
+      }
+      case e_action_type.object_set_orientation: {
+        const object_set_orientation_parameters = new s_action_object_set_orientation_parameters();
+        object_set_orientation_parameters.decode(bitstream);
+        this.m_object_set_orientation_parameters = object_set_orientation_parameters;
+        break;
+      }
+      case e_action_type.object_face_object: {
+        const object_face_object_parameters = new s_action_object_face_object_parameters();
+        object_face_object_parameters.decode(bitstream);
+        this.m_object_face_object_parameters = object_face_object_parameters;
+        break;
+      }
+      case e_action_type.biped_give_weapon: {
+        const biped_give_weapon_parameters = new s_action_biped_give_weapon_parameters();
+        biped_give_weapon_parameters.decode(bitstream);
+        this.m_biped_give_weapon_parameters = biped_give_weapon_parameters;
+        break;
+      }
+      case e_action_type.biped_drop_weapon: {
+        const biped_drop_weapon_parameters = new s_action_biped_drop_weapon_parameters();
+        biped_drop_weapon_parameters.decode(bitstream);
+        this.m_biped_drop_weapon_parameters = biped_drop_weapon_parameters;
+        break;
+      }
+      case e_action_type.set_scenario_interpolator_state: {
+        const set_scenario_interpolator_state_parameters = new s_action_set_scenario_interpolator_state_parameters();
+        set_scenario_interpolator_state_parameters.decode(bitstream);
+        this.m_set_scenario_interpolator_state_parameters = set_scenario_interpolator_state_parameters;
+        break;
+      }
+      case e_action_type.get_random_object: {
+        const get_random_object_parameters = new s_action_get_random_object_parameters();
+        get_random_object_parameters.decode(bitstream);
+        this.m_get_random_object_parameters = get_random_object_parameters;
+        break;
+      }
+      case e_action_type.game_grief_record_custom_penalty: {
+        const game_grief_record_custom_penalty_parameters = new s_action_game_grief_record_custom_penalty_parameters();
+        game_grief_record_custom_penalty_parameters.decode(bitstream);
+        this.m_game_grief_record_custom_penalty_parameters = game_grief_record_custom_penalty_parameters;
+        break;
+      }
+      case e_action_type.boundary_set_player_color: {
+        const boundary_set_player_color_parameters = new s_action_boundary_set_player_color_parameters();
+        boundary_set_player_color_parameters.decode(bitstream);
+        this.m_boundary_set_player_color_parameters = boundary_set_player_color_parameters;
+        break;
+      }
     }
   }
   encode(bitstream: c_bitstream_writer): void {

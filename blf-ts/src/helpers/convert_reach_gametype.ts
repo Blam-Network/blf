@@ -17,7 +17,10 @@ import {
 import { e_explicit_object_type as e_explicit_object_type_tu1 } from "../blam/haloreach/v12065_11_08_24_1738_tu1actual/game/megalogamengine/megalogamengine_explicit_object";
 import { e_explicit_player_type as e_explicit_player_type_tu1 } from "../blam/haloreach/v12065_11_08_24_1738_tu1actual/game/megalogamengine/megalogamengine_explicit_player";
 import { e_explicit_team_type as e_explicit_team_type_tu1 } from "../blam/haloreach/v12065_11_08_24_1738_tu1actual/game/megalogamengine/megalogamengine_explicit_team";
-import { c_custom_variable_reference as c_custom_variable_reference_tu1 } from "../blam/haloreach/v12065_11_08_24_1738_tu1actual/game/megalogamengine/megalogamengine_references";
+import {
+  c_custom_variable_reference as c_custom_variable_reference_tu1,
+  e_custom_variable_type as e_custom_variable_type_tu1,
+} from "../blam/haloreach/v12065_11_08_24_1738_tu1actual/game/megalogamengine/megalogamengine_references";
 import type { s_custom_game_engine_definition as s_custom_game_engine_definition_tu1 } from "../blam/haloreach/v12065_11_08_24_1738_tu1actual/game/megalogamengine/s_custom_game_engine_definition";
 import type { s_variable_metadata as s_variable_metadata_tu1 } from "../blam/haloreach/v12065_11_08_24_1738_tu1actual/game/megalogamengine/s_variable_metadata";
 import {
@@ -386,7 +389,10 @@ function collect_slot_usage_from_object(
     }
   }
 
-  if (obj.m_type === 4 && typeof obj.m_variable_index === "number") {
+  if (
+    obj.m_type === e_custom_variable_type_tu1.global_number &&
+    typeof obj.m_variable_index === "number"
+  ) {
     globals.numeric.add(obj.m_variable_index);
   }
 }
