@@ -9,6 +9,7 @@ import type { s_content_item_metadata } from "../saved_games/saved_game_files";
 import { c_game_engine_custom_variant } from "./c_game_engine_custom_variant";
 import { c_game_engine_base_variant } from "./c_game_engine_default";
 import { c_game_engine_survival_variant } from "./c_game_engine_survival_variant";
+import { c_game_engine_sandbox_variant } from "./c_game_engine_sandbox_variant";
 /** Matches `e_game_mode` in blf_lib. Wire index 0 is unused. */
 export enum e_game_mode {
   unused = 0,
@@ -30,13 +31,17 @@ export class c_game_variant {
   m_custom_variant?: c_game_engine_custom_variant;
   @AutoMap(() => c_game_engine_survival_variant)
   m_survival_variant?: c_game_engine_survival_variant;
+  @AutoMap(() => c_game_engine_sandbox_variant)
+  m_sandbox_variant?: c_game_engine_sandbox_variant;
   decode(bitstream: c_bitstream_reader): void {
     this.m_game_engine = bitstream.read_enum("game-engine", 4, e_game_mode);
     switch (this.m_game_engine) {
-      case e_game_mode.sandbox:
-        throw new BlfError(
-          "Decoding forge (sandbox) game variants is not supported yet"
-        );
+      case e_game_mode.sandbox: {
+        const sandbox = new c_game_engine_sandbox_variant();
+        sandbox.decode(bitstream);
+        this.m_sandbox_variant = sandbox;
+        break;
+      }
       case e_game_mode.custom: {
         const custom = new c_game_engine_custom_variant();
         custom.decode(bitstream);
@@ -63,7 +68,11 @@ export class c_game_variant {
     bitstream.write_enum(this.m_game_engine, 4, e_game_mode);
     switch (this.m_game_engine) {
       case e_game_mode.sandbox:
-        throw new BlfError("Encoding forge variants is currently unsupported");
+        if (!this.m_sandbox_variant) {
+          throw new BlfError("m_sandbox_variant does not exist");
+        }
+        this.m_sandbox_variant.encode(bitstream);
+        break;
       case e_game_mode.custom:
         if (!this.m_custom_variant) {
           throw new BlfError("m_custom_variant does not exist");
@@ -101,7 +110,10 @@ export class c_game_variant {
   get_metadata(): s_content_item_metadata {
     switch (this.m_game_engine) {
       case e_game_mode.sandbox:
-        throw new BlfError("Forge variants are currently unsupported");
+        if (!this.m_sandbox_variant) {
+          throw new BlfError("m_sandbox_variant does not exist");
+        }
+        return this.m_sandbox_variant.m_custom_variant.m_base_variant.m_metadata;
       case e_game_mode.custom:
         if (!this.m_custom_variant) {
           throw new BlfError("m_custom_variant does not exist");

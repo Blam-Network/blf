@@ -13,7 +13,13 @@ use crate::title_storage::remove_invalid_characters;
 fn game_variant_metadata_name(game_variant: &c_game_variant) -> BLFLibResult<String> {
     let metadata = match game_variant.m_game_engine {
         e_game_mode::sandbox => {
-            return Err("Forge variants are currently unsupported.".into());
+            &game_variant
+                .m_sandbox_variant
+                .as_ref()
+                .ok_or("m_sandbox_variant does not exist.")?
+                .m_custom_variant
+                .m_base_variant
+                .m_metadata
         }
         e_game_mode::custom => {
             &game_variant

@@ -2,6 +2,7 @@ export * from "./c_game_engine_custom_variant";
 export * from "./c_game_engine_custom_variant_au1_settings";
 export * from "./c_game_engine_default";
 export * from "./c_game_engine_survival_variant";
+export * from "./c_game_engine_sandbox_variant";
 export * from "./c_game_engine_traits";
 export * from "./c_game_variant";
 export * from "./c_player_traits";

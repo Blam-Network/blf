@@ -4,6 +4,7 @@ use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::game_engine_
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::game_engine_default::c_game_engine_base_variant;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::game_engine_player_rating_parameters::s_game_engine_player_rating_parameters;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::game_engine_survival::c_game_engine_survival_variant;
+use crate::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::game_engine_sandbox::c_game_engine_sandbox_variant;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::game_engine_team::{c_game_engine_team_options_team, k_game_variant_team_count};
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::game_engine_traits::s_player_trait_option;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::megalogamengine::megalogamengine_actions::c_action;
@@ -175,6 +176,8 @@ pub struct c_game_variant {
     pub m_custom_variant: Option<c_game_engine_custom_variant>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub m_survival_variant: Option<c_game_engine_survival_variant>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub m_sandbox_variant: Option<c_game_engine_sandbox_variant>,
 
 }
 
@@ -182,7 +185,11 @@ impl c_game_variant {
     pub fn get_metadata(&self) -> BLFLibResult<&c_content_item_metadata> {
         match self.m_game_engine {
             e_game_mode::sandbox => {
-                Err("Forge variants are currently unsupported.".into())
+                Ok(
+                    &self.m_sandbox_variant.as_ref()
+                        .ok_or_else(|| BLFLibError::from("m_sandbox_variant does not exist."))?
+                        .m_custom_variant.m_base_variant.m_metadata
+                )
             }
             e_game_mode::custom => {
                 Ok(
@@ -211,17 +218,17 @@ impl c_game_variant {
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
         bitstream.write_enum_raw(self.m_game_engine.clone(), 4)?;
 
-        match (&self.m_game_engine, &self.m_custom_variant, &self.m_campaign_variant, &self.m_survival_variant) {
-            (e_game_mode::sandbox, None, None, None) => {
-                return Err("Encoding forge variants is currently unsupported. If you have an example file, please send it to us!".into())
+        match (&self.m_game_engine, &self.m_custom_variant, &self.m_campaign_variant, &self.m_survival_variant, &self.m_sandbox_variant) {
+            (e_game_mode::sandbox, None, None, None, Some(sandbox_variant)) => {
+                sandbox_variant.encode(bitstream)?;
             }
-            (e_game_mode::custom, Some(custom_variant), None, None) => {
+            (e_game_mode::custom, Some(custom_variant), None, None, None) => {
                 custom_variant.encode(bitstream)?;
             }
-            (e_game_mode::campaign, None, Some(campaign_variant), None) => {
+            (e_game_mode::campaign, None, Some(campaign_variant), None, None) => {
                 campaign_variant.encode(bitstream)?;
             }
-            (e_game_mode::survival, None, None, Some(survival_variant)) => {
+            (e_game_mode::survival, None, None, Some(survival_variant), None) => {
                 survival_variant.encode(bitstream)?;
             }
             _ => {
@@ -238,7 +245,9 @@ impl c_game_variant {
 
         match self.m_game_engine {
             e_game_mode::sandbox => {
-                return Err("Decoding forge variants is currently unsupported. If you have an example file, please send it to us!".into())
+                let mut sandbox_variant = c_game_engine_sandbox_variant::default();
+                sandbox_variant.decode(bitstream)?;
+                self.m_sandbox_variant = Some(sandbox_variant);
             }
             e_game_mode::custom => {
                 // customs

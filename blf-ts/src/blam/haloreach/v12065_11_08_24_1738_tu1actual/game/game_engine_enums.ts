@@ -64,3 +64,27 @@ export class e_survival_variant_flags {
     return flags;
   }
 }
+/** Matches `e_sandbox_variant_flags` in blf_lib `game_engine_sandbox.rs`. */
+export class e_sandbox_variant_flags {
+  @AutoMap(() => Boolean)
+  open_channel_voice = false;
+  @AutoMap(() => Boolean)
+  requires_all_objects = false;
+  to_raw(): number {
+    return (
+      (this.open_channel_voice ? 1 : 0) |
+      (this.requires_all_objects ? 1 << 1 : 0)
+    );
+  }
+  static from_raw(raw: number): e_sandbox_variant_flags {
+    const flags = new e_sandbox_variant_flags();
+    flags.open_channel_voice = (raw & 1) !== 0;
+    flags.requires_all_objects = (raw & (1 << 1)) !== 0;
+    return flags;
+  }
+}
+/** Matches `e_sandbox_edit_mode_settings` in blf_lib `game_engine_sandbox.rs`. */
+export enum e_sandbox_edit_mode_settings {
+  all_players = 0,
+  only_leader = 1,
+}
