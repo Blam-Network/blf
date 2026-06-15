@@ -18,9 +18,19 @@ function requireField<T>(value: T | undefined, message: string): T {
   }
   return value;
 }
+
+/** Matches `e_variable_type` in blf_lib `megalogamengine_variant_variable.rs`. */
+export enum e_variable_type {
+  custom_variable = 0,
+  player = 1,
+  object = 2,
+  team = 3,
+  custom_timer = 4,
+}
+
 export class s_variant_variable {
-  @AutoMap(() => Number)
-  m_type = 0;
+  @AutoMap(() => e_variable_type)
+  m_type: e_variable_type = e_variable_type.custom_variable;
   @AutoMap(() => c_player_reference)
   m_player?: c_player_reference;
   @AutoMap(() => c_object_reference)
@@ -32,33 +42,33 @@ export class s_variant_variable {
   @AutoMap(() => c_custom_variable_reference)
   m_custom_variable?: c_custom_variable_reference;
   decode(bitstream: c_bitstream_reader): void {
-    this.m_type = bitstream.read_integer("type", 3);
+    this.m_type = bitstream.read_enum("type", 3, e_variable_type);
     switch (this.m_type) {
-      case 0: {
+      case e_variable_type.custom_variable: {
         const custom_variable = new c_custom_variable_reference();
         custom_variable.decode(bitstream);
         this.m_custom_variable = custom_variable;
         break;
       }
-      case 1: {
+      case e_variable_type.player: {
         const player = new c_player_reference();
         player.decode(bitstream);
         this.m_player = player;
         break;
       }
-      case 2: {
+      case e_variable_type.object: {
         const object = new c_object_reference();
         object.decode(bitstream);
         this.m_object = object;
         break;
       }
-      case 3: {
+      case e_variable_type.team: {
         const team = new c_team_reference();
         team.decode(bitstream);
         this.m_team = team;
         break;
       }
-      case 4: {
+      case e_variable_type.custom_timer: {
         const custom_timer = new c_custom_timer_reference();
         custom_timer.decode(bitstream);
         this.m_custom_timer = custom_timer;
@@ -69,28 +79,28 @@ export class s_variant_variable {
     }
   }
   encode(bitstream: c_bitstream_writer): void {
-    bitstream.write_integer(this.m_type, 3);
+    bitstream.write_enum(this.m_type, 3, e_variable_type);
     switch (this.m_type) {
-      case 0:
+      case e_variable_type.custom_variable:
         requireField(
           this.m_custom_variable,
           "m_custom_variable does not exist."
         ).encode(bitstream);
         break;
-      case 1:
+      case e_variable_type.player:
         requireField(this.m_player, "m_player does not exist.").encode(
           bitstream
         );
         break;
-      case 2:
+      case e_variable_type.object:
         requireField(this.m_object, "m_object does not exist.").encode(
           bitstream
         );
         break;
-      case 3:
+      case e_variable_type.team:
         requireField(this.m_team, "m_team does not exist.").encode(bitstream);
         break;
-      case 4:
+      case e_variable_type.custom_timer:
         requireField(
           this.m_custom_timer,
           "m_custom_timer does not exist."
