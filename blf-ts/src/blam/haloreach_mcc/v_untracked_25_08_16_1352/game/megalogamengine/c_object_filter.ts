@@ -18,11 +18,28 @@ export enum e_object_team_filter {
   neutral = 8,
 }
 
+/** Matches `e_filter_parameters` in blf_lib `megalogamengine_map_objects.rs`. */
+export type e_filter_parameters = {
+  object_type: boolean;
+  team: boolean;
+  user_data: boolean;
+};
+
+export const e_filter_parameters_fields = [
+  "object_type",
+  "team",
+  "user_data",
+] as const;
+
 export class c_object_filter {
   @AutoMap(() => Number)
   m_label_string_index = 0;
-  @AutoMap(() => Number)
-  m_valid_parameters = 0;
+  @AutoMap(() => Object)
+  m_valid_parameters: e_filter_parameters = {
+    object_type: false,
+    team: false,
+    user_data: false,
+  };
   @AutoMap(() => c_object_type_reference)
   m_object_type?: c_object_type_reference;
   @AutoMap(() => e_object_team_filter)
@@ -33,30 +50,38 @@ export class c_object_filter {
   m_min = 0;
   decode(bitstream: c_bitstream_reader): void {
     this.m_label_string_index = bitstream.read_integer("label-string-index", 7);
-    this.m_valid_parameters = bitstream.read_integer("valid-parameters", 3);
-    if ((this.m_valid_parameters & 1) !== 0) {
+    this.m_valid_parameters = bitstream.read_bitfield(
+      "valid-parameters",
+      3,
+      e_filter_parameters_fields
+    );
+    if (this.m_valid_parameters.object_type) {
       const object_type = new c_object_type_reference();
       object_type.decode(bitstream);
       this.m_object_type = object_type;
     }
-    if ((this.m_valid_parameters & 2) !== 0) {
+    if (this.m_valid_parameters.team) {
       this.m_team = bitstream.read_enum("team", 4, e_object_team_filter);
     }
-    if ((this.m_valid_parameters & 4) !== 0) {
+    if (this.m_valid_parameters.user_data) {
       this.m_user_data = bitstream.read_signed_integer("user-data", 16);
     }
     this.m_min = bitstream.read_integer("min", 7);
   }
   encode(bitstream: c_bitstream_writer): void {
     bitstream.write_integer(this.m_label_string_index, 7);
-    bitstream.write_integer(this.m_valid_parameters, 3);
-    if ((this.m_valid_parameters & 1) !== 0) {
+    bitstream.write_bitfield(
+      this.m_valid_parameters,
+      3,
+      e_filter_parameters_fields
+    );
+    if (this.m_valid_parameters.object_type) {
       this.m_object_type!.encode(bitstream);
     }
-    if ((this.m_valid_parameters & 2) !== 0) {
+    if (this.m_valid_parameters.team) {
       bitstream.write_enum(this.m_team!, 4, e_object_team_filter);
     }
-    if ((this.m_valid_parameters & 4) !== 0) {
+    if (this.m_valid_parameters.user_data) {
       bitstream.write_signed_integer(this.m_user_data!, 16);
     }
     bitstream.write_integer(this.m_min, 7);
