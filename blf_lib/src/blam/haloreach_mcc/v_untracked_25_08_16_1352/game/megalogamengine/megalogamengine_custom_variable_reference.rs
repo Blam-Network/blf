@@ -55,6 +55,7 @@ pub enum e_custom_variable_type {
     blue_powerup_duration = 41,
     yellow_powerup_duration = 42,
     object_death_damage_type = 43,
+    temporary_number = 44,
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
@@ -105,7 +106,7 @@ impl c_custom_variable_reference {
                 team.encode(bitstream)?;
                 bitstream.write_integer(variable_index, 3)?;
             }
-            (e_custom_variable_type::global_number, None, None, None, None, Some(variable_index), None, None) => {
+            (e_custom_variable_type::global_number | e_custom_variable_type::temporary_number, None, None, None, None, Some(variable_index), None, None) => {
                 bitstream.write_integer(variable_index, 4)?;
             }
             (e_custom_variable_type::option, None, None, None, None, None, Some(option_index), None) => {
@@ -172,7 +173,7 @@ impl c_custom_variable_reference {
                 self.m_team = Some(team);
                 self.m_variable_index = Some(bitstream.read_integer("variable-index", 3)?);
             }
-            e_custom_variable_type::global_number => {
+            e_custom_variable_type::global_number | e_custom_variable_type::temporary_number => {
                 self.m_variable_index = Some(bitstream.read_integer("variable-index", 4)?);
             }
             e_custom_variable_type::option => {

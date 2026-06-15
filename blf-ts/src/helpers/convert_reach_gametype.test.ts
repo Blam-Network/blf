@@ -9,6 +9,9 @@ import {
 } from "../blam/haloreach/v12065_11_08_24_1738_tu1actual/game/c_game_variant";
 import { e_math_operation as e_math_operation_tu1 } from "../blam/haloreach/v12065_11_08_24_1738_tu1actual/game/megalogamengine/megalogamengine_actions";
 import { e_explicit_player_type as e_explicit_player_type_tu1 } from "../blam/haloreach/v12065_11_08_24_1738_tu1actual/game/megalogamengine/megalogamengine_explicit_player";
+import {
+  e_custom_variable_type as e_custom_variable_type_tu1,
+} from "../blam/haloreach/v12065_11_08_24_1738_tu1actual/game/megalogamengine/megalogamengine_references";
 import { c_game_engine_custom_variant as c_game_engine_custom_variant_mcc } from "../blam/haloreach_mcc/v_untracked_25_08_16_1352/game/c_game_engine_custom_variant";
 import { c_game_engine_survival_variant as c_game_engine_survival_variant_mcc } from "../blam/haloreach_mcc/v_untracked_25_08_16_1352/game/c_game_engine_survival_variant";
 import {
@@ -20,11 +23,14 @@ import {
   e_action_type,
   e_math_operation as e_math_operation_mcc,
   s_action_object_get_orientation_parameters,
+  s_action_set_score_parameters,
 } from "../blam/haloreach_mcc/v_untracked_25_08_16_1352/game/megalogamengine/megalogamengine_actions";
 import { e_explicit_player_type as e_explicit_player_type_mcc } from "../blam/haloreach_mcc/v_untracked_25_08_16_1352/game/megalogamengine/megalogamengine_explicit_player";
 import {
+  c_custom_variable_reference,
   c_explicit_player,
   c_object_reference,
+  e_custom_variable_type as e_custom_variable_type_mcc,
   e_object_reference_type,
 } from "../blam/haloreach_mcc/v_untracked_25_08_16_1352/game/megalogamengine/megalogamengine_references";
 import { s_custom_game_engine_definition } from "../blam/haloreach_mcc/v_untracked_25_08_16_1352/game/megalogamengine/s_custom_game_engine_definition";
@@ -117,6 +123,33 @@ describe("convert_reach_gametype", () => {
     expect(
       to.m_custom_variant?.m_game_engine?.m_global_variable_metadata
         .m_player_variables
+    ).toHaveLength(1);
+  });
+
+  it("relocates a temporary_number reference to a global slot MCC → TU1", () => {
+    const action = new c_action();
+    action.m_type = e_action_type.set_score;
+    const parameters = new s_action_set_score_parameters();
+    const variable = new c_custom_variable_reference();
+    variable.m_type = e_custom_variable_type_mcc.temporary_number;
+    variable.m_variable_index = 0;
+    parameters.m_variable = variable;
+    action.m_set_score_parameters = parameters;
+
+    const from = mcc_custom_variant_with_action(action);
+    const to = new c_game_variant_tu1();
+
+    expect(convert_reach_gametype(from, to)).toBe(
+      e_reach_gametype_conversion_error.ok
+    );
+
+    const copiedVariable = to.m_custom_variant?.m_game_engine?.m_actions[0]
+      ?.m_set_score_parameters?.m_variable;
+    expect(copiedVariable?.m_type).toBe(e_custom_variable_type_tu1.global_number);
+    expect(copiedVariable?.m_variable_index).toBe(0);
+    expect(
+      to.m_custom_variant?.m_game_engine?.m_global_variable_metadata
+        .m_numeric_variables
     ).toHaveLength(1);
   });
 

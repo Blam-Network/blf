@@ -498,6 +498,7 @@ export enum e_custom_variable_type {
   blue_powerup_duration = 41,
   yellow_powerup_duration = 42,
   object_death_damage_type = 43,
+  temporary_number = 44,
 }
 export class c_custom_variable_reference {
   @AutoMap(() => e_custom_variable_type)
@@ -547,6 +548,7 @@ export class c_custom_variable_reference {
         break;
       }
       case e_custom_variable_type.global_number:
+      case e_custom_variable_type.temporary_number:
         this.m_variable_index = bitstream.read_integer("variable-index", 4);
         break;
       case e_custom_variable_type.option:
@@ -637,6 +639,7 @@ export class c_custom_variable_reference {
         );
         break;
       case e_custom_variable_type.global_number:
+      case e_custom_variable_type.temporary_number:
         bitstream.write_integer(
           requireField(
             this.m_variable_index,
