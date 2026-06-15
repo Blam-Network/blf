@@ -13,18 +13,29 @@ use blf_lib::OPTION_TO_RESULT;
 use blf_lib_derivable::result::BLFLibResult;
 
 
+#[repr(u8)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, Default, ToPrimitive, FromPrimitive, crate::derive::c_enum)]
+#[bits(2)]
+pub enum e_numeric_comparison {
+    #[default]
+    less_than = 0, // <
+    greater_than = 1, // >
+    equal_to = 2, // ==
+    // I think 3 is unused.
+}
+
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct s_condition_if_parameters {
     pub m_left: s_variant_variable,
     pub m_right: s_variant_variable,
-    pub m_comparison: u8, // 3 bit
+    pub m_comparison: e_numeric_comparison, // 2 bits
 }
 
 impl s_condition_if_parameters {
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
         self.m_left.encode(bitstream)?;
         self.m_right.encode(bitstream)?;
-        bitstream.write_integer(self.m_comparison, 2)?;
+        bitstream.write_enum(self.m_comparison)?;
 
         Ok(())
     }
@@ -32,7 +43,7 @@ impl s_condition_if_parameters {
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
         self.m_left.decode(bitstream)?;
         self.m_right.decode(bitstream)?;
-        self.m_comparison = bitstream.read_integer("comparison", 2)?;
+        self.m_comparison = bitstream.read_enum("comparison")?;
 
         Ok(())
     }

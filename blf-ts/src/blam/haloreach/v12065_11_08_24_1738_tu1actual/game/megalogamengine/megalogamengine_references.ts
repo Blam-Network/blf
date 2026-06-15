@@ -79,9 +79,20 @@ export class c_explicit_team {
     bitstream.write_enum(this.m_explicit_team_type, 5, e_explicit_team_type);
   }
 }
+/** Matches `e_object_reference_type` in blf_lib `megalogamengine_object_reference.rs`. */
+export enum e_object_reference_type {
+  global_object = 0,
+  player_object = 1,
+  object_object = 2,
+  team_object = 3,
+  player_biped = 4,
+  player_player_biped = 5,
+  object_player_biped = 6,
+  team_player_biped = 7,
+}
 export class c_object_reference {
-  @AutoMap(() => Number)
-  m_type = 0;
+  @AutoMap(() => e_object_reference_type)
+  m_type: e_object_reference_type = e_object_reference_type.global_object;
   @AutoMap(() => c_explicit_player)
   m_player?: c_explicit_player;
   @AutoMap(() => c_explicit_object)
@@ -91,56 +102,56 @@ export class c_object_reference {
   @AutoMap(() => Number)
   m_variable_index?: number;
   decode(bitstream: c_bitstream_reader): void {
-    this.m_type = bitstream.read_integer("type", 3);
+    this.m_type = bitstream.read_enum("type", 3, e_object_reference_type);
     switch (this.m_type) {
-      case 0: {
+      case e_object_reference_type.global_object: {
         const object = new c_explicit_object();
         object.decode(bitstream);
         this.m_object = object;
         break;
       }
-      case 1: {
+      case e_object_reference_type.player_object: {
         const player = new c_explicit_player();
         player.decode(bitstream);
         this.m_player = player;
         this.m_variable_index = bitstream.read_integer("variable-index", 2);
         break;
       }
-      case 2: {
+      case e_object_reference_type.object_object: {
         const object = new c_explicit_object();
         object.decode(bitstream);
         this.m_object = object;
         this.m_variable_index = bitstream.read_integer("variable-index", 2);
         break;
       }
-      case 3: {
+      case e_object_reference_type.team_object: {
         const team = new c_explicit_team();
         team.decode(bitstream);
         this.m_team = team;
         this.m_variable_index = bitstream.read_integer("variable-index", 3);
         break;
       }
-      case 4: {
+      case e_object_reference_type.player_biped: {
         const player = new c_explicit_player();
         player.decode(bitstream);
         this.m_player = player;
         break;
       }
-      case 5: {
+      case e_object_reference_type.player_player_biped: {
         const player = new c_explicit_player();
         player.decode(bitstream);
         this.m_player = player;
         this.m_variable_index = bitstream.read_integer("variable-index", 2);
         break;
       }
-      case 6: {
+      case e_object_reference_type.object_player_biped: {
         const object = new c_explicit_object();
         object.decode(bitstream);
         this.m_object = object;
         this.m_variable_index = bitstream.read_integer("variable-index", 2);
         break;
       }
-      case 7: {
+      case e_object_reference_type.team_player_biped: {
         const team = new c_explicit_team();
         team.decode(bitstream);
         this.m_team = team;
@@ -152,14 +163,14 @@ export class c_object_reference {
     }
   }
   encode(bitstream: c_bitstream_writer): void {
-    bitstream.write_integer(this.m_type, 3);
+    bitstream.write_enum(this.m_type, 3, e_object_reference_type);
     switch (this.m_type) {
-      case 0:
+      case e_object_reference_type.global_object:
         requireField(this.m_object, "m_object does not exist.").encode(
           bitstream
         );
         break;
-      case 1:
+      case e_object_reference_type.player_object:
         requireField(this.m_player, "m_player does not exist.").encode(
           bitstream
         );
@@ -171,7 +182,7 @@ export class c_object_reference {
           2
         );
         break;
-      case 2:
+      case e_object_reference_type.object_object:
         requireField(this.m_object, "m_object does not exist.").encode(
           bitstream
         );
@@ -183,7 +194,7 @@ export class c_object_reference {
           2
         );
         break;
-      case 3:
+      case e_object_reference_type.team_object:
         requireField(this.m_team, "m_team does not exist.").encode(bitstream);
         bitstream.write_integer(
           requireField(
@@ -193,12 +204,12 @@ export class c_object_reference {
           3
         );
         break;
-      case 4:
+      case e_object_reference_type.player_biped:
         requireField(this.m_player, "m_player does not exist.").encode(
           bitstream
         );
         break;
-      case 5:
+      case e_object_reference_type.player_player_biped:
         requireField(this.m_player, "m_player does not exist.").encode(
           bitstream
         );
@@ -210,7 +221,7 @@ export class c_object_reference {
           2
         );
         break;
-      case 6:
+      case e_object_reference_type.object_player_biped:
         requireField(this.m_object, "m_object does not exist.").encode(
           bitstream
         );
@@ -222,7 +233,7 @@ export class c_object_reference {
           2
         );
         break;
-      case 7:
+      case e_object_reference_type.team_player_biped:
         requireField(this.m_team, "m_team does not exist.").encode(bitstream);
         bitstream.write_integer(
           requireField(

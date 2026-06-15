@@ -25,6 +25,7 @@ import { e_explicit_player_type as e_explicit_player_type_mcc } from "../blam/ha
 import {
   c_explicit_player,
   c_object_reference,
+  e_object_reference_type,
 } from "../blam/haloreach_mcc/v_untracked_25_08_16_1352/game/megalogamengine/megalogamengine_references";
 import { s_custom_game_engine_definition } from "../blam/haloreach_mcc/v_untracked_25_08_16_1352/game/megalogamengine/s_custom_game_engine_definition";
 import { search_for_chunk } from "../blf_chunk";
@@ -94,7 +95,7 @@ describe("convert_reach_gametype", () => {
     const player = new c_explicit_player();
     player.m_explicit_player_type = e_explicit_player_type_mcc.temporary_0;
     const object = new c_object_reference();
-    object.m_type = 1;
+    object.m_type = e_object_reference_type.player_object;
     object.m_player = player;
     const parameters = new s_action_object_get_orientation_parameters();
     parameters.m_object = object;
@@ -134,7 +135,7 @@ describe("convert_reach_gametype", () => {
     const player = new c_explicit_player();
     player.m_explicit_player_type = e_explicit_player_type_mcc.temporary_0;
     const object = new c_object_reference();
-    object.m_type = 1;
+    object.m_type = e_object_reference_type.player_object;
     object.m_player = player;
     const parameters = new s_action_object_get_orientation_parameters();
     parameters.m_object = object;
