@@ -1,4 +1,5 @@
 use num_derive::{FromPrimitive, ToPrimitive};
+use num_traits::{FromPrimitive, ToPrimitive};
 use serde::{Deserialize, Serialize};
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::megalogamengine::megalogamengine_custom_timer_reference::c_custom_timer_reference;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::megalogamengine::megalogamengine_object_type_reference::c_object_type_reference;
@@ -118,9 +119,32 @@ impl s_condition_object_matches_filter_parameters {
     }
 }
 
+#[derive(Clone, PartialEq, Debug, Serialize, Deserialize, Default, ToPrimitive, FromPrimitive)]
+pub enum e_condition_type {
+    #[default]
+    none = 0,
+    compare = 1,
+    shape_contains = 2,
+    killer_type_is = 3,
+    has_alliance_status = 4,
+    is_zero = 5,
+    is_of_type = 6,
+    has_any_players = 7,
+    is_out_of_bounds = 8,
+    is_fireteam_leader = 9,
+    assisted_kill_of = 10,
+    has_forge_label = 11,
+    is_not_respawning = 12,
+    is_in_use = 13,
+    is_spartan = 14,
+    is_elite = 15,
+    is_monitor = 16,
+    is_in_forge = 17,
+}
+
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct c_condition {
-    pub m_type: u8, // 5 bits
+    pub m_type: e_condition_type, // 5 bits
     pub m_negated: bool,
     pub m_union_group: u16, // 9 bits
     pub m_execute_before_action: u16, // 10 bits
@@ -152,8 +176,8 @@ pub struct c_condition {
 
 impl c_condition {
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
-        bitstream.write_integer(self.m_type, 5)?;
-        if self.m_type == 0 {
+        bitstream.write_enum_raw(self.m_type.clone(), 5)?;
+        if self.m_type == e_condition_type::none {
             return Ok(());
         }
 
@@ -161,22 +185,22 @@ impl c_condition {
         bitstream.write_integer(self.m_union_group, 9)?;
         bitstream.write_integer(self.m_execute_before_action, 10)?;
 
-        match self.m_type {
+        match self.m_type.clone() as u32 {
             1 => {
                 let if_parameters = OPTION_TO_RESULT!(
                     &self.m_if_parameters,
-                    format!("Can't encode condition type {} without if_parameters", self.m_type)
+                    format!("Can't encode condition type {:?} without if_parameters", &self.m_type)
                 )?;
                 if_parameters.encode(bitstream)?; // OK
             }
             2 => {
                 let object_reference_1 = OPTION_TO_RESULT!(
                     &self.m_object_reference_1,
-                    format!("Can't encode condition type {} without object_reference_1", self.m_type)
+                    format!("Can't encode condition type {:?} without object_reference_1", &self.m_type)
                 )?;
                 let object_reference_2 = OPTION_TO_RESULT!(
                     &self.m_object_reference_2,
-                    format!("Can't encode condition type {} without object_reference_2", self.m_type)
+                    format!("Can't encode condition type {:?} without object_reference_2", &self.m_type)
                 )?;
                 object_reference_1.encode(bitstream)?;
                 object_reference_2.encode(bitstream)?;
@@ -184,32 +208,32 @@ impl c_condition {
             3 => {
                 let player_died_parameters = OPTION_TO_RESULT!(
                     &self.m_player_died_parameters,
-                    format!("Can't encode condition type {} without player_died_parameters", self.m_type)
+                    format!("Can't encode condition type {:?} without player_died_parameters", &self.m_type)
                 )?;
                 player_died_parameters.encode(bitstream)?;
             }
             4 => {
                 let team_disposition_parameters = OPTION_TO_RESULT!(
                     &self.m_team_disposition_parameters,
-                    format!("Can't encode condition type {} without team_disposition_parameters", self.m_type)
+                    format!("Can't encode condition type {:?} without team_disposition_parameters", &self.m_type)
                 )?;
                 team_disposition_parameters.encode(bitstream)?;
             }
             5 => {
                 let timer = OPTION_TO_RESULT!(
                     &self.m_timer,
-                    format!("Can't encode condition type {} without timer", self.m_type)
+                    format!("Can't encode condition type {:?} without timer", &self.m_type)
                 )?;
                 timer.encode(bitstream)?;
             }
             6 => {
                 let object_reference = OPTION_TO_RESULT!(
                     &self.m_object_reference_1,
-                    format!("Can't encode condition type {} without object_reference", self.m_type)
+                    format!("Can't encode condition type {:?} without object_reference", &self.m_type)
                 )?;
                 let object_type_reference = OPTION_TO_RESULT!(
                     &self.m_object_type_reference,
-                    format!("Can't encode condition type {} without object_type_reference", self.m_type)
+                    format!("Can't encode condition type {:?} without object_type_reference", &self.m_type)
                 )?;
                 object_reference.encode(bitstream)?;
                 object_type_reference.encode(bitstream)?;
@@ -217,32 +241,32 @@ impl c_condition {
             7 => {
                 let team = OPTION_TO_RESULT!(
                     &self.m_team_reference,
-                    format!("Can't encode condition type {} without team", self.m_type)
+                    format!("Can't encode condition type {:?} without team", &self.m_type)
                 )?;
                 team.encode(bitstream)?;
             }
             8 | 13 => {
                 let object = OPTION_TO_RESULT!(
                     &self.m_object_reference_1,
-                    format!("Can't encode condition type {} without object reference", self.m_type)
+                    format!("Can't encode condition type {:?} without object reference", &self.m_type)
                 )?;
                 object.encode(bitstream)?;
             }
             9 | 12 | 14 | 15 | 16 => {
                 let player = OPTION_TO_RESULT!(
                     &self.m_player_reference_1,
-                    format!("Can't encode condition type {} without player reference", self.m_type)
+                    format!("Can't encode condition type {:?} without player reference", &self.m_type)
                 )?;
                 player.encode(bitstream)?;
             }
             10 => {
                 let player_1 = OPTION_TO_RESULT!(
                     &self.m_player_reference_1,
-                    format!("Can't encode condition type {} without m_player_reference_1", self.m_type)
+                    format!("Can't encode condition type {:?} without m_player_reference_1", &self.m_type)
                 )?;
                 let player_2 = OPTION_TO_RESULT!(
                     &self.m_player_reference_2,
-                    format!("Can't encode condition type {} without m_player_reference_2", self.m_type)
+                    format!("Can't encode condition type {:?} without m_player_reference_2", &self.m_type)
                 )?;
                 player_1.encode(bitstream)?;
                 player_2.encode(bitstream)?;
@@ -250,7 +274,7 @@ impl c_condition {
             11 => {
                 let object_matches_filter_parameters = OPTION_TO_RESULT!(
                     &self.m_object_matches_filter_parameters,
-                    format!("Can't encode condition type {} without object_matches_filter_parameters", self.m_type)
+                    format!("Can't encode condition type {:?} without object_matches_filter_parameters", &self.m_type)
                 )?;
                 object_matches_filter_parameters.encode(bitstream)?;
             }
@@ -263,9 +287,14 @@ impl c_condition {
     }
 
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
-        self.m_type = bitstream.read_integer("type", 5)?;
+        let condition_type = bitstream.read_integer("condition-type", 5)?;
+        if let Some(condition_type) = FromPrimitive::from_u32(condition_type) {
+            self.m_type = condition_type;
+        } else {
+            return Ok(())
+        }
 
-        if self.m_type == 0 {
+        if self.m_type == e_condition_type::none {
             return Ok(());
         }
 
@@ -273,7 +302,7 @@ impl c_condition {
         self.m_union_group = bitstream.read_integer("union-group", 9)?;
         self.m_execute_before_action = bitstream.read_integer("execute-before-action", 10)?;
 
-        match self.m_type {
+        match self.m_type.clone() as u32 {
             1 => {
                 let mut if_parameters = s_condition_if_parameters::default();
                 if_parameters.decode(bitstream)?;

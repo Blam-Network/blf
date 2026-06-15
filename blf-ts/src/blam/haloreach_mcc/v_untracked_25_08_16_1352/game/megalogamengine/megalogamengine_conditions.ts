@@ -13,6 +13,28 @@ export enum e_numeric_comparison {
   not_equal_to = 5,
 }
 
+/** Matches `e_condition_type` in blf_lib `megalogamengine_conditions.rs`. */
+export enum e_condition_type {
+  none = 0,
+  compare = 1,
+  shape_contains = 2,
+  killer_type_is = 3,
+  has_alliance_status = 4,
+  is_zero = 5,
+  is_of_type = 6,
+  has_any_players = 7,
+  is_out_of_bounds = 8,
+  is_fireteam_leader = 9,
+  assisted_kill_of = 10,
+  has_forge_label = 11,
+  is_not_respawning = 12,
+  is_in_use = 13,
+  is_spartan = 14,
+  is_elite = 15,
+  is_monitor = 16,
+  is_in_forge = 17,
+}
+
 import {
   c_custom_timer_reference,
   c_object_reference,
@@ -90,8 +112,8 @@ export class s_condition_object_matches_filter_parameters {
   }
 }
 export class c_condition {
-  @AutoMap(() => Number)
-  m_type = 0;
+  @AutoMap(() => e_condition_type)
+  m_type: e_condition_type = e_condition_type.none;
   @AutoMap(() => Boolean)
   m_negated = false;
   @AutoMap(() => Number)
@@ -121,8 +143,12 @@ export class c_condition {
   @AutoMap(() => s_condition_object_matches_filter_parameters)
   m_object_matches_filter_parameters?: s_condition_object_matches_filter_parameters;
   decode(bitstream: c_bitstream_reader): void {
-    this.m_type = bitstream.read_integer("type", 5);
-    if (this.m_type === 0) {
+    this.m_type = bitstream.read_enum(
+      "condition-type",
+      5,
+      e_condition_type
+    );
+    if (this.m_type === e_condition_type.none) {
       return;
     }
     this.m_negated = bitstream.read_bool("negated");
@@ -215,8 +241,8 @@ export class c_condition {
     }
   }
   encode(bitstream: c_bitstream_writer): void {
-    bitstream.write_integer(this.m_type, 5);
-    if (this.m_type === 0) {
+    bitstream.write_enum(this.m_type, 5, e_condition_type);
+    if (this.m_type === e_condition_type.none) {
       return;
     }
     bitstream.write_bool(this.m_negated);
