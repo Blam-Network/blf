@@ -48,6 +48,27 @@ impl s_condition_if_parameters {
     }
 }
 
+#[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
+pub struct s_condition_object_in_area_parameters {
+    pub m_object_reference_1: c_object_reference,
+    pub m_object_reference_2: c_object_reference,
+}
+
+impl s_condition_object_in_area_parameters {
+    pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
+        self.m_object_reference_1.encode(bitstream)?;
+        self.m_object_reference_2.encode(bitstream)?;
+
+        Ok(())
+    }
+
+    pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
+        self.m_object_reference_1.decode(bitstream)?;
+        self.m_object_reference_2.decode(bitstream)?;
+
+        Ok(())
+    }
+}
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct s_condition_player_died_parameters {
@@ -70,7 +91,6 @@ impl s_condition_player_died_parameters {
         Ok(())
     }
 }
-
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct s_condition_team_disposition_parameters {
@@ -98,6 +118,126 @@ impl s_condition_team_disposition_parameters {
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
+pub struct s_condition_timer_expired_parameters {
+    pub m_timer: c_custom_timer_reference,
+}
+
+impl s_condition_timer_expired_parameters {
+    pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
+        self.m_timer.encode(bitstream)?;
+
+        Ok(())
+    }
+
+    pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
+        self.m_timer.decode(bitstream)?;
+
+        Ok(())
+    }
+}
+
+#[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
+pub struct s_condition_object_is_type_parameters {
+    pub m_object: c_object_reference,
+    pub m_object_type: c_object_type_reference,
+}
+
+impl s_condition_object_is_type_parameters {
+    pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
+        self.m_object.encode(bitstream)?;
+        self.m_object_type.encode(bitstream)?;
+
+        Ok(())
+    }
+
+    pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
+        self.m_object.decode(bitstream)?;
+        self.m_object_type.decode(bitstream)?;
+
+        Ok(())
+    }
+}
+
+#[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
+pub struct s_condition_team_is_active_parameters {
+    pub m_team: c_team_reference,
+}
+
+impl s_condition_team_is_active_parameters {
+    pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
+        self.m_team.encode(bitstream)?;
+
+        Ok(())
+    }
+
+    pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
+        self.m_team.decode(bitstream)?;
+
+        Ok(())
+    }
+}
+
+#[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
+pub struct s_condition_object_out_of_bounds_parameters {
+    pub m_object: c_object_reference,
+}
+
+impl s_condition_object_out_of_bounds_parameters {
+    pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
+        self.m_object.encode(bitstream)?;
+
+        Ok(())
+    }
+
+    pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
+        self.m_object.decode(bitstream)?;
+
+        Ok(())
+    }
+}
+
+#[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
+pub struct s_condition_player_is_fire_team_leader_parameters {
+    pub m_player: c_player_reference,
+}
+
+impl s_condition_player_is_fire_team_leader_parameters {
+    pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
+        self.m_player.encode(bitstream)?;
+
+        Ok(())
+    }
+
+    pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
+        self.m_player.decode(bitstream)?;
+
+        Ok(())
+    }
+}
+
+#[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
+pub struct s_condition_player_assisted_with_kill_parameters {
+    pub m_player_1: c_player_reference,
+    pub m_player_2: c_player_reference,
+}
+
+impl s_condition_player_assisted_with_kill_parameters {
+    pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
+        self.m_player_1.encode(bitstream)?;
+        self.m_player_2.encode(bitstream)?;
+
+        Ok(())
+    }
+
+    pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
+        self.m_player_1.decode(bitstream)?;
+        self.m_player_2.decode(bitstream)?;
+
+        Ok(())
+    }
+}
+
+#[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct s_condition_object_matches_filter_parameters {
     pub m_object: c_object_reference,
     pub m_filter_index: i8,
@@ -115,6 +255,114 @@ impl s_condition_object_matches_filter_parameters {
         self.m_object.decode(bitstream)?;
         self.m_filter_index = bitstream.read_index::<16>("filter-index", 4)? as i8;
 
+        Ok(())
+    }
+}
+
+#[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
+pub struct s_condition_player_is_active_parameters {
+    pub m_player: c_player_reference,
+}
+
+impl s_condition_player_is_active_parameters {
+    pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
+        self.m_player.encode(bitstream)?;
+
+        Ok(())
+    }
+
+    pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
+        self.m_player.decode(bitstream)?;
+
+        Ok(())
+    }
+}
+
+#[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
+pub struct s_condition_equipment_is_active_parameters {
+    pub m_object: c_object_reference,
+}
+
+impl s_condition_equipment_is_active_parameters {
+    pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
+        self.m_object.encode(bitstream)?;
+
+        Ok(())
+    }
+
+    pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
+        self.m_object.decode(bitstream)?;
+
+        Ok(())
+    }
+}
+
+#[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
+pub struct s_condition_player_is_spartan_parameters {
+    pub m_player: c_player_reference,
+}
+
+impl s_condition_player_is_spartan_parameters {
+    pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
+        self.m_player.encode(bitstream)?;
+
+        Ok(())
+    }
+
+    pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
+        self.m_player.decode(bitstream)?;
+
+        Ok(())
+    }
+}
+
+#[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
+pub struct s_condition_player_is_elite_parameters {
+    pub m_player: c_player_reference,
+}
+
+impl s_condition_player_is_elite_parameters {
+    pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
+        self.m_player.encode(bitstream)?;
+
+        Ok(())
+    }
+
+    pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
+        self.m_player.decode(bitstream)?;
+
+        Ok(())
+    }
+}
+
+#[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
+pub struct s_condition_player_is_editor_parameters {
+    pub m_player: c_player_reference,
+}
+
+impl s_condition_player_is_editor_parameters {
+    pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
+        self.m_player.encode(bitstream)?;
+
+        Ok(())
+    }
+
+    pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
+        self.m_player.decode(bitstream)?;
+
+        Ok(())
+    }
+}
+
+#[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
+pub struct s_condition_game_is_forge_parameters {}
+
+impl s_condition_game_is_forge_parameters {
+    pub fn encode(&self, _bitstream: &mut c_bitstream_writer) -> BLFLibResult {
+        Ok(())
+    }
+
+    pub fn decode(&mut self, _bitstream: &mut c_bitstream_reader) -> BLFLibResult {
         Ok(())
     }
 }
@@ -152,26 +400,37 @@ pub struct c_condition {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub m_if_parameters: Option<s_condition_if_parameters>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub m_object_reference_1: Option<c_object_reference>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub m_object_reference_2: Option<c_object_reference>,
+    pub m_object_in_area_parameters: Option<s_condition_object_in_area_parameters>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub m_player_died_parameters: Option<s_condition_player_died_parameters>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub m_timer: Option<c_custom_timer_reference>,
-    #[serde(skip_serializing_if = "Option::is_none")]
     pub m_team_disposition_parameters: Option<s_condition_team_disposition_parameters>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub m_object_type_reference: Option<c_object_type_reference>,
+    pub m_timer_expired_parameters: Option<s_condition_timer_expired_parameters>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub m_team_reference: Option<c_team_reference>,
+    pub m_object_is_type_parameters: Option<s_condition_object_is_type_parameters>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub m_player_reference_1: Option<c_player_reference>,
+    pub m_team_is_active_parameters: Option<s_condition_team_is_active_parameters>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub m_player_reference_2: Option<c_player_reference>,
+    pub m_object_out_of_bounds_parameters: Option<s_condition_object_out_of_bounds_parameters>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub m_object_matches_filter_parameters: Option<s_condition_object_matches_filter_parameters>
-
+    pub m_player_is_fire_team_leader_parameters: Option<s_condition_player_is_fire_team_leader_parameters>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub m_player_assisted_with_kill_parameters: Option<s_condition_player_assisted_with_kill_parameters>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub m_object_matches_filter_parameters: Option<s_condition_object_matches_filter_parameters>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub m_player_is_active_parameters: Option<s_condition_player_is_active_parameters>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub m_equipment_is_active_parameters: Option<s_condition_equipment_is_active_parameters>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub m_player_is_spartan_parameters: Option<s_condition_player_is_spartan_parameters>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub m_player_is_elite_parameters: Option<s_condition_player_is_elite_parameters>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub m_player_is_editor_parameters: Option<s_condition_player_is_editor_parameters>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub m_game_is_forge_parameters: Option<s_condition_game_is_forge_parameters>,
 }
 
 impl c_condition {
@@ -185,102 +444,127 @@ impl c_condition {
         bitstream.write_integer(self.m_union_group, 9)?;
         bitstream.write_integer(self.m_execute_before_action, 10)?;
 
-        match self.m_type.clone() as u32 {
-            1 => {
-                let if_parameters = OPTION_TO_RESULT!(
+        match self.m_type {
+            e_condition_type::compare => {
+                let parameters = OPTION_TO_RESULT!(
                     &self.m_if_parameters,
-                    format!("Can't encode condition type {:?} without if_parameters", &self.m_type)
+                    format!("Can't encode condition type {:?} without m_if_parameters", self.m_type)
                 )?;
-                if_parameters.encode(bitstream)?; // OK
+                parameters.encode(bitstream)?;
             }
-            2 => {
-                let object_reference_1 = OPTION_TO_RESULT!(
-                    &self.m_object_reference_1,
-                    format!("Can't encode condition type {:?} without object_reference_1", &self.m_type)
+            e_condition_type::shape_contains => {
+                let parameters = OPTION_TO_RESULT!(
+                    &self.m_object_in_area_parameters,
+                    format!("Can't encode condition type {:?} without m_object_in_area_parameters", self.m_type)
                 )?;
-                let object_reference_2 = OPTION_TO_RESULT!(
-                    &self.m_object_reference_2,
-                    format!("Can't encode condition type {:?} without object_reference_2", &self.m_type)
-                )?;
-                object_reference_1.encode(bitstream)?;
-                object_reference_2.encode(bitstream)?;
+                parameters.encode(bitstream)?;
             }
-            3 => {
-                let player_died_parameters = OPTION_TO_RESULT!(
+            e_condition_type::killer_type_is => {
+                let parameters = OPTION_TO_RESULT!(
                     &self.m_player_died_parameters,
-                    format!("Can't encode condition type {:?} without player_died_parameters", &self.m_type)
+                    format!("Can't encode condition type {:?} without m_player_died_parameters", self.m_type)
                 )?;
-                player_died_parameters.encode(bitstream)?;
+                parameters.encode(bitstream)?;
             }
-            4 => {
-                let team_disposition_parameters = OPTION_TO_RESULT!(
+            e_condition_type::has_alliance_status => {
+                let parameters = OPTION_TO_RESULT!(
                     &self.m_team_disposition_parameters,
-                    format!("Can't encode condition type {:?} without team_disposition_parameters", &self.m_type)
+                    format!("Can't encode condition type {:?} without m_team_disposition_parameters", self.m_type)
                 )?;
-                team_disposition_parameters.encode(bitstream)?;
+                parameters.encode(bitstream)?;
             }
-            5 => {
-                let timer = OPTION_TO_RESULT!(
-                    &self.m_timer,
-                    format!("Can't encode condition type {:?} without timer", &self.m_type)
+            e_condition_type::is_zero => {
+                let parameters = OPTION_TO_RESULT!(
+                    &self.m_timer_expired_parameters,
+                    format!("Can't encode condition type {:?} without m_timer_expired_parameters", self.m_type)
                 )?;
-                timer.encode(bitstream)?;
+                parameters.encode(bitstream)?;
             }
-            6 => {
-                let object_reference = OPTION_TO_RESULT!(
-                    &self.m_object_reference_1,
-                    format!("Can't encode condition type {:?} without object_reference", &self.m_type)
+            e_condition_type::is_of_type => {
+                let parameters = OPTION_TO_RESULT!(
+                    &self.m_object_is_type_parameters,
+                    format!("Can't encode condition type {:?} without m_object_is_type_parameters", self.m_type)
                 )?;
-                let object_type_reference = OPTION_TO_RESULT!(
-                    &self.m_object_type_reference,
-                    format!("Can't encode condition type {:?} without object_type_reference", &self.m_type)
-                )?;
-                object_reference.encode(bitstream)?;
-                object_type_reference.encode(bitstream)?;
+                parameters.encode(bitstream)?;
             }
-            7 => {
-                let team = OPTION_TO_RESULT!(
-                    &self.m_team_reference,
-                    format!("Can't encode condition type {:?} without team", &self.m_type)
+            e_condition_type::has_any_players => {
+                let parameters = OPTION_TO_RESULT!(
+                    &self.m_team_is_active_parameters,
+                    format!("Can't encode condition type {:?} without m_team_is_active_parameters", self.m_type)
                 )?;
-                team.encode(bitstream)?;
+                parameters.encode(bitstream)?;
             }
-            8 | 13 => {
-                let object = OPTION_TO_RESULT!(
-                    &self.m_object_reference_1,
-                    format!("Can't encode condition type {:?} without object reference", &self.m_type)
+            e_condition_type::is_out_of_bounds => {
+                let parameters = OPTION_TO_RESULT!(
+                    &self.m_object_out_of_bounds_parameters,
+                    format!("Can't encode condition type {:?} without m_object_out_of_bounds_parameters", self.m_type)
                 )?;
-                object.encode(bitstream)?;
+                parameters.encode(bitstream)?;
             }
-            9 | 12 | 14 | 15 | 16 => {
-                let player = OPTION_TO_RESULT!(
-                    &self.m_player_reference_1,
-                    format!("Can't encode condition type {:?} without player reference", &self.m_type)
+            e_condition_type::is_fireteam_leader => {
+                let parameters = OPTION_TO_RESULT!(
+                    &self.m_player_is_fire_team_leader_parameters,
+                    format!("Can't encode condition type {:?} without m_player_is_fire_team_leader_parameters", self.m_type)
                 )?;
-                player.encode(bitstream)?;
+                parameters.encode(bitstream)?;
             }
-            10 => {
-                let player_1 = OPTION_TO_RESULT!(
-                    &self.m_player_reference_1,
-                    format!("Can't encode condition type {:?} without m_player_reference_1", &self.m_type)
+            e_condition_type::assisted_kill_of => {
+                let parameters = OPTION_TO_RESULT!(
+                    &self.m_player_assisted_with_kill_parameters,
+                    format!("Can't encode condition type {:?} without m_player_assisted_with_kill_parameters", self.m_type)
                 )?;
-                let player_2 = OPTION_TO_RESULT!(
-                    &self.m_player_reference_2,
-                    format!("Can't encode condition type {:?} without m_player_reference_2", &self.m_type)
-                )?;
-                player_1.encode(bitstream)?;
-                player_2.encode(bitstream)?;
+                parameters.encode(bitstream)?;
             }
-            11 => {
-                let object_matches_filter_parameters = OPTION_TO_RESULT!(
+            e_condition_type::has_forge_label => {
+                let parameters = OPTION_TO_RESULT!(
                     &self.m_object_matches_filter_parameters,
-                    format!("Can't encode condition type {:?} without object_matches_filter_parameters", &self.m_type)
+                    format!("Can't encode condition type {:?} without m_object_matches_filter_parameters", self.m_type)
                 )?;
-                object_matches_filter_parameters.encode(bitstream)?;
+                parameters.encode(bitstream)?;
             }
-            _ => {
-                return Err(format!("Invalid c_condition: {self:?}").into())
+            e_condition_type::is_not_respawning => {
+                let parameters = OPTION_TO_RESULT!(
+                    &self.m_player_is_active_parameters,
+                    format!("Can't encode condition type {:?} without m_player_is_active_parameters", self.m_type)
+                )?;
+                parameters.encode(bitstream)?;
             }
+            e_condition_type::is_in_use => {
+                let parameters = OPTION_TO_RESULT!(
+                    &self.m_equipment_is_active_parameters,
+                    format!("Can't encode condition type {:?} without m_equipment_is_active_parameters", self.m_type)
+                )?;
+                parameters.encode(bitstream)?;
+            }
+            e_condition_type::is_spartan => {
+                let parameters = OPTION_TO_RESULT!(
+                    &self.m_player_is_spartan_parameters,
+                    format!("Can't encode condition type {:?} without m_player_is_spartan_parameters", self.m_type)
+                )?;
+                parameters.encode(bitstream)?;
+            }
+            e_condition_type::is_elite => {
+                let parameters = OPTION_TO_RESULT!(
+                    &self.m_player_is_elite_parameters,
+                    format!("Can't encode condition type {:?} without m_player_is_elite_parameters", self.m_type)
+                )?;
+                parameters.encode(bitstream)?;
+            }
+            e_condition_type::is_monitor => {
+                let parameters = OPTION_TO_RESULT!(
+                    &self.m_player_is_editor_parameters,
+                    format!("Can't encode condition type {:?} without m_player_is_editor_parameters", self.m_type)
+                )?;
+                parameters.encode(bitstream)?;
+            }
+            e_condition_type::is_in_forge => {
+                let parameters = OPTION_TO_RESULT!(
+                    &self.m_game_is_forge_parameters,
+                    format!("Can't encode condition type {:?} without m_game_is_forge_parameters", self.m_type)
+                )?;
+                parameters.encode(bitstream)?;
+            }
+            e_condition_type::none => unreachable!(),
         }
 
         Ok(())
@@ -302,72 +586,93 @@ impl c_condition {
         self.m_union_group = bitstream.read_integer("union-group", 9)?;
         self.m_execute_before_action = bitstream.read_integer("execute-before-action", 10)?;
 
-        match self.m_type.clone() as u32 {
-            1 => {
-                let mut if_parameters = s_condition_if_parameters::default();
-                if_parameters.decode(bitstream)?;
-                self.m_if_parameters = Some(if_parameters);
+        match self.m_type {
+            e_condition_type::compare => {
+                let mut parameters = s_condition_if_parameters::default();
+                parameters.decode(bitstream)?;
+                self.m_if_parameters = Some(parameters);
             }
-            2 => {
-                let mut object_reference_1 = c_object_reference::default();
-                let mut object_reference_2 = c_object_reference::default();
-                object_reference_1.decode(bitstream)?;
-                object_reference_2.decode(bitstream)?;
-                self.m_object_reference_1 = Some(object_reference_1);
-                self.m_object_reference_2 = Some(object_reference_2);
+            e_condition_type::shape_contains => {
+                let mut parameters = s_condition_object_in_area_parameters::default();
+                parameters.decode(bitstream)?;
+                self.m_object_in_area_parameters = Some(parameters);
             }
-            3 => {
-                let mut player_died_parameters = s_condition_player_died_parameters::default();
-                player_died_parameters.decode(bitstream)?;
-                self.m_player_died_parameters = Some(player_died_parameters);
+            e_condition_type::killer_type_is => {
+                let mut parameters = s_condition_player_died_parameters::default();
+                parameters.decode(bitstream)?;
+                self.m_player_died_parameters = Some(parameters);
             }
-            4 => {
-                let mut team_disposition_parameters = s_condition_team_disposition_parameters::default();
-                team_disposition_parameters.decode(bitstream)?;
-                self.m_team_disposition_parameters = Some(team_disposition_parameters);
+            e_condition_type::has_alliance_status => {
+                let mut parameters = s_condition_team_disposition_parameters::default();
+                parameters.decode(bitstream)?;
+                self.m_team_disposition_parameters = Some(parameters);
             }
-            5 => {
-                let mut timer = c_custom_timer_reference::default();
-                timer.decode(bitstream)?;
-                self.m_timer = Some(timer);
+            e_condition_type::is_zero => {
+                let mut parameters = s_condition_timer_expired_parameters::default();
+                parameters.decode(bitstream)?;
+                self.m_timer_expired_parameters = Some(parameters);
             }
-            6 => {
-                let mut object_reference = c_object_reference::default();
-                let mut object_type_reference = c_object_type_reference::default();
-                object_reference.decode(bitstream)?;
-                object_type_reference.decode(bitstream)?;
-                self.m_object_reference_1 = Some(object_reference);
-                self.m_object_type_reference = Some(object_type_reference);
+            e_condition_type::is_of_type => {
+                let mut parameters = s_condition_object_is_type_parameters::default();
+                parameters.decode(bitstream)?;
+                self.m_object_is_type_parameters = Some(parameters);
             }
-            7 => {
-                let mut team = c_team_reference::default();
-                team.decode(bitstream)?;
-                self.m_team_reference = Some(team);
+            e_condition_type::has_any_players => {
+                let mut parameters = s_condition_team_is_active_parameters::default();
+                parameters.decode(bitstream)?;
+                self.m_team_is_active_parameters = Some(parameters);
             }
-            8 | 13 => {
-                let mut object_reference = c_object_reference::default();
-                object_reference.decode(bitstream)?;
-                self.m_object_reference_1 = Some(object_reference);
+            e_condition_type::is_out_of_bounds => {
+                let mut parameters = s_condition_object_out_of_bounds_parameters::default();
+                parameters.decode(bitstream)?;
+                self.m_object_out_of_bounds_parameters = Some(parameters);
             }
-            9 | 12 | 14 | 15 | 16 => {
-                let mut player = c_player_reference::default();
-                player.decode(bitstream)?;
-                self.m_player_reference_1 = Some(player);
+            e_condition_type::is_fireteam_leader => {
+                let mut parameters = s_condition_player_is_fire_team_leader_parameters::default();
+                parameters.decode(bitstream)?;
+                self.m_player_is_fire_team_leader_parameters = Some(parameters);
             }
-            10 => {
-                let mut player_1 = c_player_reference::default();
-                let mut player_2 = c_player_reference::default();
-                player_1.decode(bitstream)?;
-                player_2.decode(bitstream)?;
-                self.m_player_reference_1 = Some(player_1);
-                self.m_player_reference_2 = Some(player_2);
+            e_condition_type::assisted_kill_of => {
+                let mut parameters = s_condition_player_assisted_with_kill_parameters::default();
+                parameters.decode(bitstream)?;
+                self.m_player_assisted_with_kill_parameters = Some(parameters);
             }
-            11 => {
-                let mut object_matches_filter_parameters = s_condition_object_matches_filter_parameters::default();
-                object_matches_filter_parameters.decode(bitstream)?;
-                self.m_object_matches_filter_parameters = Some(object_matches_filter_parameters);
+            e_condition_type::has_forge_label => {
+                let mut parameters = s_condition_object_matches_filter_parameters::default();
+                parameters.decode(bitstream)?;
+                self.m_object_matches_filter_parameters = Some(parameters);
             }
-            _ => {}
+            e_condition_type::is_not_respawning => {
+                let mut parameters = s_condition_player_is_active_parameters::default();
+                parameters.decode(bitstream)?;
+                self.m_player_is_active_parameters = Some(parameters);
+            }
+            e_condition_type::is_in_use => {
+                let mut parameters = s_condition_equipment_is_active_parameters::default();
+                parameters.decode(bitstream)?;
+                self.m_equipment_is_active_parameters = Some(parameters);
+            }
+            e_condition_type::is_spartan => {
+                let mut parameters = s_condition_player_is_spartan_parameters::default();
+                parameters.decode(bitstream)?;
+                self.m_player_is_spartan_parameters = Some(parameters);
+            }
+            e_condition_type::is_elite => {
+                let mut parameters = s_condition_player_is_elite_parameters::default();
+                parameters.decode(bitstream)?;
+                self.m_player_is_elite_parameters = Some(parameters);
+            }
+            e_condition_type::is_monitor => {
+                let mut parameters = s_condition_player_is_editor_parameters::default();
+                parameters.decode(bitstream)?;
+                self.m_player_is_editor_parameters = Some(parameters);
+            }
+            e_condition_type::is_in_forge => {
+                let mut parameters = s_condition_game_is_forge_parameters::default();
+                parameters.decode(bitstream)?;
+                self.m_game_is_forge_parameters = Some(parameters);
+            }
+            e_condition_type::none => {}
         }
 
         Ok(())
