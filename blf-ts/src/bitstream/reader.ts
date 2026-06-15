@@ -4,6 +4,11 @@ import {
   type NumericEnum,
 } from "./enum";
 import {
+  bitfieldFromRaw,
+  type BitfieldFields,
+  type BitfieldOf,
+} from "./bitfield";
+import {
   e_bitstream_byte_fill_direction,
   e_bitstream_byte_order,
   e_bitstream_state,
@@ -133,6 +138,14 @@ export class c_bitstream_reader {
 
   read_bool(_name: string): boolean {
     return this.read_integer(_name, 1) === 1;
+  }
+
+  read_bitfield<const F extends BitfieldFields>(
+    name: string,
+    size_in_bits: number,
+    fields: F
+  ): BitfieldOf<F> {
+    return bitfieldFromRaw(this.read_integer(name, size_in_bits), fields);
   }
 
   read_bits_internal(output: Uint8Array, size_in_bits: number): void {

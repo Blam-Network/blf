@@ -6,5 +6,7 @@ export {
 } from "./enums";
 export { assert_ok, BitstreamError } from "./errors";
 export * from "./math";
+export { bitfieldFromRaw, bitfieldToRaw } from "./bitfield";
+export type { BitfieldFields, BitfieldOf } from "./bitfield";
 export { c_bitstream_reader } from "./reader";
 export { c_bitstream_writer } from "./writer";

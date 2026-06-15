@@ -207,4 +207,27 @@ describe("c_bitstream_writer", () => {
       }
     );
   });
+
+  it("write_bitfield roundtrips", () => {
+    const fields = ["object_type", "team", "user_data"] as const;
+    const value = { object_type: true, team: false, user_data: true };
+    const writer = c_bitstream_writer.new(
+      1,
+      e_bitstream_byte_order._bitstream_byte_order_big_endian
+    );
+    write_then_read(
+      writer,
+      (data) =>
+        c_bitstream_reader.new(
+          data,
+          e_bitstream_byte_order._bitstream_byte_order_big_endian
+        ),
+      (w) => {
+        w.write_bitfield(value, 3, fields);
+      },
+      (r) => {
+        expect(r.read_bitfield("valid-parameters", 3, fields)).toEqual(value);
+      }
+    );
+  });
 });

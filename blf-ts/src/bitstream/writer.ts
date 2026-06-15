@@ -1,5 +1,11 @@
 import { enumWireIndexFromMember, type NumericEnum } from "./enum";
 import {
+  bitfieldFromRaw,
+  bitfieldToRaw,
+  type BitfieldFields,
+  type BitfieldOf,
+} from "./bitfield";
+import {
   e_bitstream_byte_fill_direction,
   e_bitstream_byte_order,
   e_bitstream_state,
@@ -126,6 +132,14 @@ export class c_bitstream_writer {
 
   write_bool(value: boolean): void {
     this.write_integer(value ? 1 : 0, 1);
+  }
+
+  write_bitfield<const F extends BitfieldFields>(
+    value: BitfieldOf<F>,
+    size_in_bits: number,
+    fields: F
+  ): void {
+    this.write_integer(bitfieldToRaw(value, fields), size_in_bits);
   }
 
   seek_relative(bits: number): void {
