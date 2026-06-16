@@ -29,8 +29,7 @@ export enum e_trigger_type {
 
 export class c_trigger {
   @AutoMap(() => e_trigger_execution_mode)
-  m_execution_mode: e_trigger_execution_mode =
-    e_trigger_execution_mode.normal;
+  m_execution_mode: e_trigger_execution_mode = e_trigger_execution_mode.normal;
   @AutoMap(() => e_trigger_type)
   m_trigger_type: e_trigger_type = e_trigger_type.normal;
   @AutoMap(() => Number)

@@ -7,8 +7,8 @@ import {
   c_game_engine_base_variant,
   c_game_engine_respawn_options,
 } from "./game_engine_default";
-import { c_player_traits } from "./game_engine_player_traits";
 import { e_survival_variant_flags } from "./game_engine_enums";
+import { c_player_traits } from "./game_engine_player_traits";
 export class c_ai_traits {
   @AutoMap(() => Number)
   m_vision = 0;

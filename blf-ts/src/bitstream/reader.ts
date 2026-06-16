@@ -1,13 +1,13 @@
 import {
+  type BitfieldFields,
+  type BitfieldOf,
+  bitfieldFromRaw,
+} from "./bitfield";
+import {
   type EnumNumber,
   enumMemberFromWireIndex,
   type NumericEnum,
 } from "./enum";
-import {
-  bitfieldFromRaw,
-  type BitfieldFields,
-  type BitfieldOf,
-} from "./bitfield";
 import {
   e_bitstream_byte_fill_direction,
   e_bitstream_byte_order,

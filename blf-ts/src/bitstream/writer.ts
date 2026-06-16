@@ -1,10 +1,9 @@
-import { enumWireIndexFromMember, type NumericEnum } from "./enum";
 import {
-  bitfieldFromRaw,
-  bitfieldToRaw,
   type BitfieldFields,
   type BitfieldOf,
+  bitfieldToRaw,
 } from "./bitfield";
+import { enumWireIndexFromMember, type NumericEnum } from "./enum";
 import {
   e_bitstream_byte_fill_direction,
   e_bitstream_byte_order,

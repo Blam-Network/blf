@@ -7,5 +7,5 @@ export * from "./megalogamengine_player_reference";
 export * from "./megalogamengine_team_reference";
 export * from "./megalogamengine_text";
 export * from "./megalogamengine_trigger";
-export * from "./megalogamengine_variant_variable";
 export * from "./megalogamengine_variable_metadata";
+export * from "./megalogamengine_variant_variable";

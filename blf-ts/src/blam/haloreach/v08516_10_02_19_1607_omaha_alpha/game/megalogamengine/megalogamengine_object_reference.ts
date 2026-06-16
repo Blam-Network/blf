@@ -105,21 +105,27 @@ export class c_object_reference {
         break;
       case e_object_reference_type.player_object:
         if (!this.m_player || this.m_variable_index === undefined) {
-          throw new BlfError("Invalid c_object_reference: missing m_player or m_variable_index");
+          throw new BlfError(
+            "Invalid c_object_reference: missing m_player or m_variable_index"
+          );
         }
         this.m_player.encode(bitstream);
         bitstream.write_integer(this.m_variable_index, 2);
         break;
       case e_object_reference_type.object_object:
         if (!this.m_object || this.m_variable_index === undefined) {
-          throw new BlfError("Invalid c_object_reference: missing m_object or m_variable_index");
+          throw new BlfError(
+            "Invalid c_object_reference: missing m_object or m_variable_index"
+          );
         }
         this.m_object.encode(bitstream);
         bitstream.write_integer(this.m_variable_index, 2);
         break;
       case e_object_reference_type.team_object:
         if (!this.m_team || this.m_variable_index === undefined) {
-          throw new BlfError("Invalid c_object_reference: missing m_team or m_variable_index");
+          throw new BlfError(
+            "Invalid c_object_reference: missing m_team or m_variable_index"
+          );
         }
         this.m_team.encode(bitstream);
         bitstream.write_integer(this.m_variable_index, 3);
@@ -132,21 +138,27 @@ export class c_object_reference {
         break;
       case e_object_reference_type.player_player_biped:
         if (!this.m_player || this.m_variable_index === undefined) {
-          throw new BlfError("Invalid c_object_reference: missing m_player or m_variable_index");
+          throw new BlfError(
+            "Invalid c_object_reference: missing m_player or m_variable_index"
+          );
         }
         this.m_player.encode(bitstream);
         bitstream.write_integer(this.m_variable_index, 1);
         break;
       case e_object_reference_type.object_player_biped:
         if (!this.m_object || this.m_variable_index === undefined) {
-          throw new BlfError("Invalid c_object_reference: missing m_object or m_variable_index");
+          throw new BlfError(
+            "Invalid c_object_reference: missing m_object or m_variable_index"
+          );
         }
         this.m_object.encode(bitstream);
         bitstream.write_integer(this.m_variable_index, 1);
         break;
       case e_object_reference_type.team_player_biped:
         if (!this.m_team || this.m_variable_index === undefined) {
-          throw new BlfError("Invalid c_object_reference: missing m_team or m_variable_index");
+          throw new BlfError(
+            "Invalid c_object_reference: missing m_team or m_variable_index"
+          );
         }
         this.m_team.encode(bitstream);
         bitstream.write_integer(this.m_variable_index, 2);

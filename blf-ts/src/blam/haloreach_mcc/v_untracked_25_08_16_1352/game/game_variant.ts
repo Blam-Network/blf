@@ -1,7 +1,6 @@
-import {
+import type {
   c_bitstream_reader,
   c_bitstream_writer,
-  e_bitstream_byte_order,
 } from "../../../../bitstream";
 import { BlfError } from "../../../../error";
 import { AutoMap } from "../../../../helpers/automap";
@@ -10,15 +9,14 @@ import { c_game_engine_base_variant } from "./game_engine_default";
 import { c_game_engine_sandbox_variant } from "./game_engine_sandbox";
 import { c_game_engine_survival_variant } from "./game_engine_survival";
 import { s_player_trait_option } from "./game_engine_traits";
-import { c_string_table } from "./string_table";
-import { c_megalogamengine_map_permissions } from "./megalogamengine/megalogamengine_map_permissions";
-import { c_megalo_game_statistic } from "./megalogamengine/megalogamengine_statistics";
-import { c_object_filter } from "./megalogamengine/megalogamengine_map_objects";
-import { c_trigger } from "./megalogamengine/megalogamengine_trigger";
-import { s_user_defined_option } from "./megalogamengine/megalogamengine_user_defined_options";
 import { s_game_engine_player_rating_parameters } from "./megalogamengine/game_engine_player_rating_parameters";
 import { c_action } from "./megalogamengine/megalogamengine_actions";
 import { c_condition } from "./megalogamengine/megalogamengine_conditions";
+import { c_object_filter } from "./megalogamengine/megalogamengine_map_objects";
+import { c_megalogamengine_map_permissions } from "./megalogamengine/megalogamengine_map_permissions";
+import { c_megalo_game_statistic } from "./megalogamengine/megalogamengine_statistics";
+import { c_trigger } from "./megalogamengine/megalogamengine_trigger";
+import { s_user_defined_option } from "./megalogamengine/megalogamengine_user_defined_options";
 import {
   s_variable_metadata,
   s_variable_metadata_global,
@@ -26,7 +24,7 @@ import {
   s_variable_metadata_player,
   s_variable_metadata_team,
 } from "./megalogamengine/megalogamengine_variable_metadata";
-
+import { c_string_table } from "./string_table";
 
 export class s_custom_game_engine_definition {
   @AutoMap(() => [c_condition])
@@ -181,8 +179,6 @@ export class s_custom_game_engine_definition {
   }
 }
 
-
-
 export class c_game_engine_custom_variant_au1_settings {
   @AutoMap(() => Number)
   m_flags = 0;
@@ -299,8 +295,6 @@ export class c_game_engine_custom_variant_au1_settings {
     );
   }
 }
-
-
 
 export class c_game_engine_custom_variant {
   @AutoMap(() => Number)
@@ -476,8 +470,6 @@ export class c_game_engine_custom_variant {
   }
 }
 
-
-
 /** Matches `e_game_mode` in blf_lib. Wire index 0 is unused. */
 export enum e_game_mode {
   unused = 0,
@@ -570,7 +562,8 @@ export class c_game_variant {
         if (!this.m_sandbox_variant) {
           throw new BlfError("m_sandbox_variant does not exist");
         }
-        return this.m_sandbox_variant.m_custom_variant.m_base_variant.m_metadata;
+        return this.m_sandbox_variant.m_custom_variant.m_base_variant
+          .m_metadata;
       case e_game_mode.custom:
         if (!this.m_custom_variant) {
           throw new BlfError("m_custom_variant does not exist");
@@ -591,4 +584,3 @@ export class c_game_variant {
     }
   }
 }
-

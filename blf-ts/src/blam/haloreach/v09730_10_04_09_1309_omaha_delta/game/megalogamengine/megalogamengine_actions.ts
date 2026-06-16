@@ -3,7 +3,6 @@ import type {
   c_bitstream_writer,
 } from "../../../../../bitstream";
 import { AutoMap } from "../../../../../helpers/automap";
-import { c_player_traits } from "../../../v12065_11_08_24_1738_tu1actual/game/game_engine_player_traits";
 import {
   e_game_engine_timer_rate,
   e_weapon_pickup_priority,
@@ -1096,83 +1095,66 @@ export class s_action_delete_object_parameters {
   @AutoMap(() => c_object_reference)
   m_object: c_object_reference = new c_object_reference();
   decode(bitstream: c_bitstream_reader): void {
-        this.m_object.decode(bitstream);
-
-        
-    }
+    this.m_object.decode(bitstream);
+  }
   encode(bitstream: c_bitstream_writer): void {
-        this.m_object.encode(bitstream);
-
-        
-    }
+    this.m_object.encode(bitstream);
+  }
 }
 export class s_action_navpoint_set_visible_parameters {
   @AutoMap(() => c_object_reference)
   m_object: c_object_reference = new c_object_reference();
   @AutoMap(() => c_player_filter_modifier)
-  m_player_filter_modifier: c_player_filter_modifier = new c_player_filter_modifier();
+  m_player_filter_modifier: c_player_filter_modifier =
+    new c_player_filter_modifier();
   decode(bitstream: c_bitstream_reader): void {
-        this.m_object.decode(bitstream);
-        this.m_player_filter_modifier.decode(bitstream);
-
-        
-    }
+    this.m_object.decode(bitstream);
+    this.m_player_filter_modifier.decode(bitstream);
+  }
   encode(bitstream: c_bitstream_writer): void {
-        this.m_object.encode(bitstream);
-        this.m_player_filter_modifier.encode(bitstream);
-
-        
-    }
+    this.m_object.encode(bitstream);
+    this.m_player_filter_modifier.encode(bitstream);
+  }
 }
 export class s_action_set_pickup_filter_parameters {
   @AutoMap(() => c_object_reference)
   m_object: c_object_reference = new c_object_reference();
   @AutoMap(() => c_player_filter_modifier)
-  m_player_filter_modifier: c_player_filter_modifier = new c_player_filter_modifier();
+  m_player_filter_modifier: c_player_filter_modifier =
+    new c_player_filter_modifier();
   decode(bitstream: c_bitstream_reader): void {
-        this.m_object.decode(bitstream);
-        this.m_player_filter_modifier.decode(bitstream);
-
-        
-    }
+    this.m_object.decode(bitstream);
+    this.m_player_filter_modifier.decode(bitstream);
+  }
   encode(bitstream: c_bitstream_writer): void {
-        this.m_object.encode(bitstream);
-        this.m_player_filter_modifier.encode(bitstream);
-
-        
-    }
+    this.m_object.encode(bitstream);
+    this.m_player_filter_modifier.encode(bitstream);
+  }
 }
 export class s_action_set_respawn_filter_parameters {
   @AutoMap(() => c_object_reference)
   m_object: c_object_reference = new c_object_reference();
   @AutoMap(() => c_player_filter_modifier)
-  m_player_filter_modifier: c_player_filter_modifier = new c_player_filter_modifier();
+  m_player_filter_modifier: c_player_filter_modifier =
+    new c_player_filter_modifier();
   decode(bitstream: c_bitstream_reader): void {
-        this.m_object.decode(bitstream);
-        this.m_player_filter_modifier.decode(bitstream);
-
-        
-    }
+    this.m_object.decode(bitstream);
+    this.m_player_filter_modifier.decode(bitstream);
+  }
   encode(bitstream: c_bitstream_writer): void {
-        this.m_object.encode(bitstream);
-        this.m_player_filter_modifier.encode(bitstream);
-
-        
-    }
+    this.m_object.encode(bitstream);
+    this.m_player_filter_modifier.encode(bitstream);
+  }
 }
 export class s_action_print_variable_parameters {
   @AutoMap(() => c_dynamic_string)
   m_string: c_dynamic_string = new c_dynamic_string();
   decode(bitstream: c_bitstream_reader): void {
-        this.m_string.decode(bitstream);
-
-        
-    }
+    this.m_string.decode(bitstream);
+  }
   encode(bitstream: c_bitstream_writer): void {
-        this.m_string.encode(bitstream);
-
-        
-    }
+    this.m_string.encode(bitstream);
+  }
 }
 export class s_action_get_player_holding_object_parameters {
   @AutoMap(() => c_object_reference)
@@ -1180,43 +1162,36 @@ export class s_action_get_player_holding_object_parameters {
   @AutoMap(() => c_player_reference)
   m_player: c_player_reference = new c_player_reference();
   decode(bitstream: c_bitstream_reader): void {
-        this.m_object.decode(bitstream);
-        this.m_player.decode(bitstream);
-
-        
-    }
+    this.m_object.decode(bitstream);
+    this.m_player.decode(bitstream);
+  }
   encode(bitstream: c_bitstream_writer): void {
-        this.m_object.encode(bitstream);
-        this.m_player.encode(bitstream);
-
-        
-    }
+    this.m_object.encode(bitstream);
+    this.m_player.encode(bitstream);
+  }
 }
 export class s_action_end_round_parameters {
   decode(_bitstream: c_bitstream_reader): void {
-        
-    }
+    /* no payload */
+  }
   encode(_bitstream: c_bitstream_writer): void {
-        
-    }
+    /* no payload */
+  }
 }
 export class s_action_boundary_set_visible_parameters {
   @AutoMap(() => c_object_reference)
   m_object: c_object_reference = new c_object_reference();
   @AutoMap(() => c_player_filter_modifier)
-  m_player_filter_modifier: c_player_filter_modifier = new c_player_filter_modifier();
+  m_player_filter_modifier: c_player_filter_modifier =
+    new c_player_filter_modifier();
   decode(bitstream: c_bitstream_reader): void {
-        this.m_object.decode(bitstream);
-        this.m_player_filter_modifier.decode(bitstream);
-
-        
-    }
+    this.m_object.decode(bitstream);
+    this.m_player_filter_modifier.decode(bitstream);
+  }
   encode(bitstream: c_bitstream_writer): void {
-        this.m_object.encode(bitstream);
-        this.m_player_filter_modifier.encode(bitstream);
-
-        
-    }
+    this.m_object.encode(bitstream);
+    this.m_player_filter_modifier.encode(bitstream);
+  }
 }
 export class s_action_object_set_invincibility_parameters {
   @AutoMap(() => c_object_reference)
@@ -1224,17 +1199,13 @@ export class s_action_object_set_invincibility_parameters {
   @AutoMap(() => c_custom_variable_reference)
   m_variable: c_custom_variable_reference = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
-        this.m_object.decode(bitstream);
-        this.m_variable.decode(bitstream);
-
-        
-    }
+    this.m_object.decode(bitstream);
+    this.m_variable.decode(bitstream);
+  }
   encode(bitstream: c_bitstream_writer): void {
-        this.m_object.encode(bitstream);
-        this.m_variable.encode(bitstream);
-
-        
-    }
+    this.m_object.encode(bitstream);
+    this.m_variable.encode(bitstream);
+  }
 }
 export class s_action_random_parameters {
   @AutoMap(() => c_custom_variable_reference)
@@ -1242,25 +1213,21 @@ export class s_action_random_parameters {
   @AutoMap(() => c_custom_variable_reference)
   m_variable_2: c_custom_variable_reference = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
-        this.m_variable_1.decode(bitstream);
-        this.m_variable_2.decode(bitstream);
-
-        
-    }
+    this.m_variable_1.decode(bitstream);
+    this.m_variable_2.decode(bitstream);
+  }
   encode(bitstream: c_bitstream_writer): void {
-        this.m_variable_1.encode(bitstream);
-        this.m_variable_2.encode(bitstream);
-
-        
-    }
+    this.m_variable_1.encode(bitstream);
+    this.m_variable_2.encode(bitstream);
+  }
 }
 export class s_action_break_into_debugger_parameters {
   decode(_bitstream: c_bitstream_reader): void {
-        
-    }
+    /* no payload */
+  }
   encode(_bitstream: c_bitstream_writer): void {
-        
-    }
+    /* no payload */
+  }
 }
 export class s_action_object_get_orientation_parameters {
   @AutoMap(() => c_object_reference)
@@ -1268,17 +1235,13 @@ export class s_action_object_get_orientation_parameters {
   @AutoMap(() => c_custom_variable_reference)
   m_variable: c_custom_variable_reference = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
-        this.m_object.decode(bitstream);
-        this.m_variable.decode(bitstream);
-
-        
-    }
+    this.m_object.decode(bitstream);
+    this.m_variable.decode(bitstream);
+  }
   encode(bitstream: c_bitstream_writer): void {
-        this.m_object.encode(bitstream);
-        this.m_variable.encode(bitstream);
-
-        
-    }
+    this.m_object.encode(bitstream);
+    this.m_variable.encode(bitstream);
+  }
 }
 export class s_action_object_get_velocity_parameters {
   @AutoMap(() => c_object_reference)
@@ -1286,17 +1249,13 @@ export class s_action_object_get_velocity_parameters {
   @AutoMap(() => c_custom_variable_reference)
   m_variable: c_custom_variable_reference = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
-        this.m_object.decode(bitstream);
-        this.m_variable.decode(bitstream);
-
-        
-    }
+    this.m_object.decode(bitstream);
+    this.m_variable.decode(bitstream);
+  }
   encode(bitstream: c_bitstream_writer): void {
-        this.m_object.encode(bitstream);
-        this.m_variable.encode(bitstream);
-
-        
-    }
+    this.m_object.encode(bitstream);
+    this.m_variable.encode(bitstream);
+  }
 }
 export class s_action_player_death_get_killing_player_parameters {
   @AutoMap(() => c_player_reference)
@@ -1304,17 +1263,13 @@ export class s_action_player_death_get_killing_player_parameters {
   @AutoMap(() => c_player_reference)
   m_player_2: c_player_reference = new c_player_reference();
   decode(bitstream: c_bitstream_reader): void {
-        this.m_player_1.decode(bitstream);
-        this.m_player_2.decode(bitstream);
-
-        
-    }
+    this.m_player_1.decode(bitstream);
+    this.m_player_2.decode(bitstream);
+  }
   encode(bitstream: c_bitstream_writer): void {
-        this.m_player_1.encode(bitstream);
-        this.m_player_2.encode(bitstream);
-
-        
-    }
+    this.m_player_1.encode(bitstream);
+    this.m_player_2.encode(bitstream);
+  }
 }
 export class s_action_player_death_get_damage_type_parameters {
   @AutoMap(() => c_player_reference)
@@ -1322,17 +1277,13 @@ export class s_action_player_death_get_damage_type_parameters {
   @AutoMap(() => c_custom_variable_reference)
   m_variable: c_custom_variable_reference = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
-        this.m_player.decode(bitstream);
-        this.m_variable.decode(bitstream);
-
-        
-    }
+    this.m_player.decode(bitstream);
+    this.m_variable.decode(bitstream);
+  }
   encode(bitstream: c_bitstream_writer): void {
-        this.m_player.encode(bitstream);
-        this.m_variable.encode(bitstream);
-
-        
-    }
+    this.m_player.encode(bitstream);
+    this.m_variable.encode(bitstream);
+  }
 }
 export class s_action_player_death_get_special_type_parameters {
   @AutoMap(() => c_player_reference)
@@ -1340,45 +1291,33 @@ export class s_action_player_death_get_special_type_parameters {
   @AutoMap(() => c_custom_variable_reference)
   m_variable: c_custom_variable_reference = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
-        this.m_player.decode(bitstream);
-        this.m_variable.decode(bitstream);
-
-        
-    }
+    this.m_player.decode(bitstream);
+    this.m_variable.decode(bitstream);
+  }
   encode(bitstream: c_bitstream_writer): void {
-        this.m_player.encode(bitstream);
-        this.m_variable.encode(bitstream);
-
-        
-    }
+    this.m_player.encode(bitstream);
+    this.m_variable.encode(bitstream);
+  }
 }
 export class s_action_debugging_enable_tracing_parameters {
   @AutoMap(() => Boolean)
-  m_tracing_enabled: boolean = false;
+  m_tracing_enabled = false;
   decode(bitstream: c_bitstream_reader): void {
-        this.m_tracing_enabled = bitstream.read_bool("tracing-enabled");
-
-        
-    }
+    this.m_tracing_enabled = bitstream.read_bool("tracing-enabled");
+  }
   encode(bitstream: c_bitstream_writer): void {
-        bitstream.write_bool(this.m_tracing_enabled);
-
-        
-    }
+    bitstream.write_bool(this.m_tracing_enabled);
+  }
 }
 export class s_action_object_detach_parameters {
   @AutoMap(() => c_object_reference)
   m_object: c_object_reference = new c_object_reference();
   decode(bitstream: c_bitstream_reader): void {
-        this.m_object.decode(bitstream);
-
-        
-    }
+    this.m_object.decode(bitstream);
+  }
   encode(bitstream: c_bitstream_writer): void {
-        this.m_object.encode(bitstream);
-
-        
-    }
+    this.m_object.encode(bitstream);
+  }
 }
 export class s_action_player_get_place_parameters {
   @AutoMap(() => c_player_reference)
@@ -1386,17 +1325,13 @@ export class s_action_player_get_place_parameters {
   @AutoMap(() => c_custom_variable_reference)
   m_variable: c_custom_variable_reference = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
-        this.m_player.decode(bitstream);
-        this.m_variable.decode(bitstream);
-
-        
-    }
+    this.m_player.decode(bitstream);
+    this.m_variable.decode(bitstream);
+  }
   encode(bitstream: c_bitstream_writer): void {
-        this.m_player.encode(bitstream);
-        this.m_variable.encode(bitstream);
-
-        
-    }
+    this.m_player.encode(bitstream);
+    this.m_variable.encode(bitstream);
+  }
 }
 export class s_action_team_get_place_parameters {
   @AutoMap(() => c_team_reference)
@@ -1404,17 +1339,13 @@ export class s_action_team_get_place_parameters {
   @AutoMap(() => c_custom_variable_reference)
   m_variable: c_custom_variable_reference = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
-        this.m_team.decode(bitstream);
-        this.m_variable.decode(bitstream);
-
-        
-    }
+    this.m_team.decode(bitstream);
+    this.m_variable.decode(bitstream);
+  }
   encode(bitstream: c_bitstream_writer): void {
-        this.m_team.encode(bitstream);
-        this.m_variable.encode(bitstream);
-
-        
-    }
+    this.m_team.encode(bitstream);
+    this.m_variable.encode(bitstream);
+  }
 }
 export class s_action_player_get_killing_spree_count_parameters {
   @AutoMap(() => c_player_reference)
@@ -1422,17 +1353,13 @@ export class s_action_player_get_killing_spree_count_parameters {
   @AutoMap(() => c_custom_variable_reference)
   m_variable: c_custom_variable_reference = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
-        this.m_player.decode(bitstream);
-        this.m_variable.decode(bitstream);
-
-        
-    }
+    this.m_player.decode(bitstream);
+    this.m_variable.decode(bitstream);
+  }
   encode(bitstream: c_bitstream_writer): void {
-        this.m_player.encode(bitstream);
-        this.m_variable.encode(bitstream);
-
-        
-    }
+    this.m_player.encode(bitstream);
+    this.m_variable.encode(bitstream);
+  }
 }
 export class s_action_player_get_vehicle_parameters {
   @AutoMap(() => c_player_reference)
@@ -1440,17 +1367,13 @@ export class s_action_player_get_vehicle_parameters {
   @AutoMap(() => c_object_reference)
   m_object: c_object_reference = new c_object_reference();
   decode(bitstream: c_bitstream_reader): void {
-        this.m_player.decode(bitstream);
-        this.m_object.decode(bitstream);
-
-        
-    }
+    this.m_player.decode(bitstream);
+    this.m_object.decode(bitstream);
+  }
   encode(bitstream: c_bitstream_writer): void {
-        this.m_player.encode(bitstream);
-        this.m_object.encode(bitstream);
-
-        
-    }
+    this.m_player.encode(bitstream);
+    this.m_object.encode(bitstream);
+  }
 }
 export class s_action_player_set_vehicle_parameters {
   @AutoMap(() => c_player_reference)
@@ -1458,17 +1381,13 @@ export class s_action_player_set_vehicle_parameters {
   @AutoMap(() => c_object_reference)
   m_object: c_object_reference = new c_object_reference();
   decode(bitstream: c_bitstream_reader): void {
-        this.m_player.decode(bitstream);
-        this.m_object.decode(bitstream);
-
-        
-    }
+    this.m_player.decode(bitstream);
+    this.m_object.decode(bitstream);
+  }
   encode(bitstream: c_bitstream_writer): void {
-        this.m_player.encode(bitstream);
-        this.m_object.encode(bitstream);
-
-        
-    }
+    this.m_player.encode(bitstream);
+    this.m_object.encode(bitstream);
+  }
 }
 export class s_action_player_set_unit_parameters {
   @AutoMap(() => c_player_reference)
@@ -1476,81 +1395,61 @@ export class s_action_player_set_unit_parameters {
   @AutoMap(() => c_object_reference)
   m_object: c_object_reference = new c_object_reference();
   decode(bitstream: c_bitstream_reader): void {
-        this.m_player.decode(bitstream);
-        this.m_object.decode(bitstream);
-
-        
-    }
+    this.m_player.decode(bitstream);
+    this.m_object.decode(bitstream);
+  }
   encode(bitstream: c_bitstream_writer): void {
-        this.m_player.encode(bitstream);
-        this.m_object.encode(bitstream);
-
-        
-    }
+    this.m_player.encode(bitstream);
+    this.m_object.encode(bitstream);
+  }
 }
 export class s_action_timer_reset_parameters {
   @AutoMap(() => c_custom_timer_reference)
   m_timer: c_custom_timer_reference = new c_custom_timer_reference();
   decode(bitstream: c_bitstream_reader): void {
-        this.m_timer.decode(bitstream);
-
-        
-    }
+    this.m_timer.decode(bitstream);
+  }
   encode(bitstream: c_bitstream_writer): void {
-        this.m_timer.encode(bitstream);
-
-        
-    }
+    this.m_timer.encode(bitstream);
+  }
 }
 export class s_action_object_bounce_parameters {
   @AutoMap(() => c_object_reference)
   m_object: c_object_reference = new c_object_reference();
   decode(bitstream: c_bitstream_reader): void {
-        this.m_object.decode(bitstream);
-
-        
-    }
+    this.m_object.decode(bitstream);
+  }
   encode(bitstream: c_bitstream_writer): void {
-        this.m_object.encode(bitstream);
-
-        
-    }
+    this.m_object.encode(bitstream);
+  }
 }
 export class s_action_hud_widget_set_text_parameters {
   @AutoMap(() => Number)
-  m_widget_index: number = 0;
+  m_widget_index = 0;
   @AutoMap(() => c_dynamic_string)
   m_string: c_dynamic_string = new c_dynamic_string();
   decode(bitstream: c_bitstream_reader): void {
-        this.m_widget_index = bitstream.read_index("widget-index", 4, 2) ;
-        this.m_string.decode(bitstream);
-
-        
-    }
+    this.m_widget_index = bitstream.read_index("widget-index", 4, 2);
+    this.m_string.decode(bitstream);
+  }
   encode(bitstream: c_bitstream_writer): void {
-        bitstream.write_index(this.m_widget_index, 4, 2);
-        this.m_string.encode(bitstream);
-
-        
-    }
+    bitstream.write_index(this.m_widget_index, 4, 2);
+    this.m_string.encode(bitstream);
+  }
 }
 export class s_action_hud_widget_set_value_parameters {
   @AutoMap(() => Number)
-  m_widget_index: number = 0;
+  m_widget_index = 0;
   @AutoMap(() => c_dynamic_string)
   m_string: c_dynamic_string = new c_dynamic_string();
   decode(bitstream: c_bitstream_reader): void {
-        this.m_widget_index = bitstream.read_index("widget-index", 4, 2) ;
-        this.m_string.decode(bitstream);
-
-        
-    }
+    this.m_widget_index = bitstream.read_index("widget-index", 4, 2);
+    this.m_string.decode(bitstream);
+  }
   encode(bitstream: c_bitstream_writer): void {
-        bitstream.write_index(this.m_widget_index, 4, 2);
-        this.m_string.encode(bitstream);
-
-        
-    }
+    bitstream.write_index(this.m_widget_index, 4, 2);
+    this.m_string.encode(bitstream);
+  }
 }
 export class s_action_object_set_scale_parameters {
   @AutoMap(() => c_object_reference)
@@ -1558,17 +1457,13 @@ export class s_action_object_set_scale_parameters {
   @AutoMap(() => c_custom_variable_reference)
   m_variable: c_custom_variable_reference = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
-        this.m_object.decode(bitstream);
-        this.m_variable.decode(bitstream);
-
-        
-    }
+    this.m_object.decode(bitstream);
+    this.m_variable.decode(bitstream);
+  }
   encode(bitstream: c_bitstream_writer): void {
-        this.m_object.encode(bitstream);
-        this.m_variable.encode(bitstream);
-
-        
-    }
+    this.m_object.encode(bitstream);
+    this.m_variable.encode(bitstream);
+  }
 }
 export class s_action_navpoint_set_text_parameters {
   @AutoMap(() => c_object_reference)
@@ -1576,17 +1471,13 @@ export class s_action_navpoint_set_text_parameters {
   @AutoMap(() => c_dynamic_string)
   m_string: c_dynamic_string = new c_dynamic_string();
   decode(bitstream: c_bitstream_reader): void {
-        this.m_object.decode(bitstream);
-        this.m_string.decode(bitstream);
-
-        
-    }
+    this.m_object.decode(bitstream);
+    this.m_string.decode(bitstream);
+  }
   encode(bitstream: c_bitstream_writer): void {
-        this.m_object.encode(bitstream);
-        this.m_string.encode(bitstream);
-
-        
-    }
+    this.m_object.encode(bitstream);
+    this.m_string.encode(bitstream);
+  }
 }
 export class s_action_object_get_shield_parameters {
   @AutoMap(() => c_object_reference)
@@ -1594,17 +1485,13 @@ export class s_action_object_get_shield_parameters {
   @AutoMap(() => c_custom_variable_reference)
   m_variable: c_custom_variable_reference = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
-        this.m_object.decode(bitstream);
-        this.m_variable.decode(bitstream);
-
-        
-    }
+    this.m_object.decode(bitstream);
+    this.m_variable.decode(bitstream);
+  }
   encode(bitstream: c_bitstream_writer): void {
-        this.m_object.encode(bitstream);
-        this.m_variable.encode(bitstream);
-
-        
-    }
+    this.m_object.encode(bitstream);
+    this.m_variable.encode(bitstream);
+  }
 }
 export class s_action_object_get_health_parameters {
   @AutoMap(() => c_object_reference)
@@ -1612,17 +1499,13 @@ export class s_action_object_get_health_parameters {
   @AutoMap(() => c_custom_variable_reference)
   m_variable: c_custom_variable_reference = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
-        this.m_object.decode(bitstream);
-        this.m_variable.decode(bitstream);
-
-        
-    }
+    this.m_object.decode(bitstream);
+    this.m_variable.decode(bitstream);
+  }
   encode(bitstream: c_bitstream_writer): void {
-        this.m_object.encode(bitstream);
-        this.m_variable.encode(bitstream);
-
-        
-    }
+    this.m_object.encode(bitstream);
+    this.m_variable.encode(bitstream);
+  }
 }
 export class s_action_player_set_objective_parameters {
   @AutoMap(() => c_player_reference)
@@ -1630,17 +1513,13 @@ export class s_action_player_set_objective_parameters {
   @AutoMap(() => c_dynamic_string)
   m_string: c_dynamic_string = new c_dynamic_string();
   decode(bitstream: c_bitstream_reader): void {
-        this.m_player.decode(bitstream);
-        this.m_string.decode(bitstream);
-
-        
-    }
+    this.m_player.decode(bitstream);
+    this.m_string.decode(bitstream);
+  }
   encode(bitstream: c_bitstream_writer): void {
-        this.m_player.encode(bitstream);
-        this.m_string.encode(bitstream);
-
-        
-    }
+    this.m_player.encode(bitstream);
+    this.m_string.encode(bitstream);
+  }
 }
 export class s_action_team_set_primary_respawn_object_parameters {
   @AutoMap(() => c_team_reference)
@@ -1648,17 +1527,13 @@ export class s_action_team_set_primary_respawn_object_parameters {
   @AutoMap(() => c_object_reference)
   m_object: c_object_reference = new c_object_reference();
   decode(bitstream: c_bitstream_reader): void {
-        this.m_team.decode(bitstream);
-        this.m_object.decode(bitstream);
-
-        
-    }
+    this.m_team.decode(bitstream);
+    this.m_object.decode(bitstream);
+  }
   encode(bitstream: c_bitstream_writer): void {
-        this.m_team.encode(bitstream);
-        this.m_object.encode(bitstream);
-
-        
-    }
+    this.m_team.encode(bitstream);
+    this.m_object.encode(bitstream);
+  }
 }
 export class s_action_player_set_primary_respawn_object_parameters {
   @AutoMap(() => c_player_reference)
@@ -1666,17 +1541,13 @@ export class s_action_player_set_primary_respawn_object_parameters {
   @AutoMap(() => c_object_reference)
   m_object: c_object_reference = new c_object_reference();
   decode(bitstream: c_bitstream_reader): void {
-        this.m_player.decode(bitstream);
-        this.m_object.decode(bitstream);
-
-        
-    }
+    this.m_player.decode(bitstream);
+    this.m_object.decode(bitstream);
+  }
   encode(bitstream: c_bitstream_writer): void {
-        this.m_player.encode(bitstream);
-        this.m_object.encode(bitstream);
-
-        
-    }
+    this.m_player.encode(bitstream);
+    this.m_object.encode(bitstream);
+  }
 }
 export class s_action_player_get_fireteam_index_parameters {
   @AutoMap(() => c_player_reference)
@@ -1684,17 +1555,13 @@ export class s_action_player_get_fireteam_index_parameters {
   @AutoMap(() => c_custom_variable_reference)
   m_variable: c_custom_variable_reference = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
-        this.m_player.decode(bitstream);
-        this.m_variable.decode(bitstream);
-
-        
-    }
+    this.m_player.decode(bitstream);
+    this.m_variable.decode(bitstream);
+  }
   encode(bitstream: c_bitstream_writer): void {
-        this.m_player.encode(bitstream);
-        this.m_variable.encode(bitstream);
-
-        
-    }
+    this.m_player.encode(bitstream);
+    this.m_variable.encode(bitstream);
+  }
 }
 export class s_action_player_set_fireteam_index_parameters {
   @AutoMap(() => c_player_reference)
@@ -1702,17 +1569,13 @@ export class s_action_player_set_fireteam_index_parameters {
   @AutoMap(() => c_custom_variable_reference)
   m_variable: c_custom_variable_reference = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
-        this.m_player.decode(bitstream);
-        this.m_variable.decode(bitstream);
-
-        
-    }
+    this.m_player.decode(bitstream);
+    this.m_variable.decode(bitstream);
+  }
   encode(bitstream: c_bitstream_writer): void {
-        this.m_player.encode(bitstream);
-        this.m_variable.encode(bitstream);
-
-        
-    }
+    this.m_player.encode(bitstream);
+    this.m_variable.encode(bitstream);
+  }
 }
 export class s_action_object_adjust_shield_parameters {
   @AutoMap(() => c_object_reference)
@@ -1722,19 +1585,15 @@ export class s_action_object_adjust_shield_parameters {
   @AutoMap(() => c_custom_variable_reference)
   m_variable: c_custom_variable_reference = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
-        this.m_object.decode(bitstream);
-        this.m_operation = bitstream.read_enum("operation", 4, e_math_operation);
-        this.m_variable.decode(bitstream);
-
-        
-    }
+    this.m_object.decode(bitstream);
+    this.m_operation = bitstream.read_enum("operation", 4, e_math_operation);
+    this.m_variable.decode(bitstream);
+  }
   encode(bitstream: c_bitstream_writer): void {
-        this.m_object.encode(bitstream);
-        bitstream.write_enum(this.m_operation, 4, e_math_operation);
-        this.m_variable.encode(bitstream);
-
-        
-    }
+    this.m_object.encode(bitstream);
+    bitstream.write_enum(this.m_operation, 4, e_math_operation);
+    this.m_variable.encode(bitstream);
+  }
 }
 export class s_action_object_adjust_health_parameters {
   @AutoMap(() => c_object_reference)
@@ -1744,19 +1603,15 @@ export class s_action_object_adjust_health_parameters {
   @AutoMap(() => c_custom_variable_reference)
   m_variable: c_custom_variable_reference = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
-        this.m_object.decode(bitstream);
-        this.m_operation = bitstream.read_enum("operation", 4, e_math_operation);
-        this.m_variable.decode(bitstream);
-
-        
-    }
+    this.m_object.decode(bitstream);
+    this.m_operation = bitstream.read_enum("operation", 4, e_math_operation);
+    this.m_variable.decode(bitstream);
+  }
   encode(bitstream: c_bitstream_writer): void {
-        this.m_object.encode(bitstream);
-        bitstream.write_enum(this.m_operation, 4, e_math_operation);
-        this.m_variable.encode(bitstream);
-
-        
-    }
+    this.m_object.encode(bitstream);
+    bitstream.write_enum(this.m_operation, 4, e_math_operation);
+    this.m_variable.encode(bitstream);
+  }
 }
 export class s_action_object_adjust_maximum_shield_parameters {
   @AutoMap(() => c_object_reference)
@@ -1766,19 +1621,15 @@ export class s_action_object_adjust_maximum_shield_parameters {
   @AutoMap(() => c_custom_variable_reference)
   m_variable: c_custom_variable_reference = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
-        this.m_object.decode(bitstream);
-        this.m_operation = bitstream.read_enum("operation", 4, e_math_operation);
-        this.m_variable.decode(bitstream);
-
-        
-    }
+    this.m_object.decode(bitstream);
+    this.m_operation = bitstream.read_enum("operation", 4, e_math_operation);
+    this.m_variable.decode(bitstream);
+  }
   encode(bitstream: c_bitstream_writer): void {
-        this.m_object.encode(bitstream);
-        bitstream.write_enum(this.m_operation, 4, e_math_operation);
-        this.m_variable.encode(bitstream);
-
-        
-    }
+    this.m_object.encode(bitstream);
+    bitstream.write_enum(this.m_operation, 4, e_math_operation);
+    this.m_variable.encode(bitstream);
+  }
 }
 export class s_action_object_adjust_maximum_health_parameters {
   @AutoMap(() => c_object_reference)
@@ -1788,19 +1639,15 @@ export class s_action_object_adjust_maximum_health_parameters {
   @AutoMap(() => c_custom_variable_reference)
   m_variable: c_custom_variable_reference = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
-        this.m_object.decode(bitstream);
-        this.m_operation = bitstream.read_enum("operation", 4, e_math_operation);
-        this.m_variable.decode(bitstream);
-
-        
-    }
+    this.m_object.decode(bitstream);
+    this.m_operation = bitstream.read_enum("operation", 4, e_math_operation);
+    this.m_variable.decode(bitstream);
+  }
   encode(bitstream: c_bitstream_writer): void {
-        this.m_object.encode(bitstream);
-        bitstream.write_enum(this.m_operation, 4, e_math_operation);
-        this.m_variable.encode(bitstream);
-
-        
-    }
+    this.m_object.encode(bitstream);
+    bitstream.write_enum(this.m_operation, 4, e_math_operation);
+    this.m_variable.encode(bitstream);
+  }
 }
 export class s_action_device_set_power_parameters {
   @AutoMap(() => c_object_reference)
@@ -1808,17 +1655,13 @@ export class s_action_device_set_power_parameters {
   @AutoMap(() => c_custom_variable_reference)
   m_variable: c_custom_variable_reference = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
-        this.m_object.decode(bitstream);
-        this.m_variable.decode(bitstream);
-
-        
-    }
+    this.m_object.decode(bitstream);
+    this.m_variable.decode(bitstream);
+  }
   encode(bitstream: c_bitstream_writer): void {
-        this.m_object.encode(bitstream);
-        this.m_variable.encode(bitstream);
-
-        
-    }
+    this.m_object.encode(bitstream);
+    this.m_variable.encode(bitstream);
+  }
 }
 export class s_action_device_get_power_parameters {
   @AutoMap(() => c_object_reference)
@@ -1826,17 +1669,13 @@ export class s_action_device_get_power_parameters {
   @AutoMap(() => c_custom_variable_reference)
   m_variable: c_custom_variable_reference = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
-        this.m_object.decode(bitstream);
-        this.m_variable.decode(bitstream);
-
-        
-    }
+    this.m_object.decode(bitstream);
+    this.m_variable.decode(bitstream);
+  }
   encode(bitstream: c_bitstream_writer): void {
-        this.m_object.encode(bitstream);
-        this.m_variable.encode(bitstream);
-
-        
-    }
+    this.m_object.encode(bitstream);
+    this.m_variable.encode(bitstream);
+  }
 }
 export class s_action_device_set_position_parameters {
   @AutoMap(() => c_object_reference)
@@ -1844,17 +1683,13 @@ export class s_action_device_set_position_parameters {
   @AutoMap(() => c_custom_variable_reference)
   m_variable: c_custom_variable_reference = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
-        this.m_object.decode(bitstream);
-        this.m_variable.decode(bitstream);
-
-        
-    }
+    this.m_object.decode(bitstream);
+    this.m_variable.decode(bitstream);
+  }
   encode(bitstream: c_bitstream_writer): void {
-        this.m_object.encode(bitstream);
-        this.m_variable.encode(bitstream);
-
-        
-    }
+    this.m_object.encode(bitstream);
+    this.m_variable.encode(bitstream);
+  }
 }
 export class s_action_device_get_position_parameters {
   @AutoMap(() => c_object_reference)
@@ -1862,17 +1697,13 @@ export class s_action_device_get_position_parameters {
   @AutoMap(() => c_custom_variable_reference)
   m_variable: c_custom_variable_reference = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
-        this.m_object.decode(bitstream);
-        this.m_variable.decode(bitstream);
-
-        
-    }
+    this.m_object.decode(bitstream);
+    this.m_variable.decode(bitstream);
+  }
   encode(bitstream: c_bitstream_writer): void {
-        this.m_object.encode(bitstream);
-        this.m_variable.encode(bitstream);
-
-        
-    }
+    this.m_object.encode(bitstream);
+    this.m_variable.encode(bitstream);
+  }
 }
 export class s_action_device_set_position_immediate_parameters {
   @AutoMap(() => c_object_reference)
@@ -1880,17 +1711,13 @@ export class s_action_device_set_position_immediate_parameters {
   @AutoMap(() => c_custom_variable_reference)
   m_variable: c_custom_variable_reference = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
-        this.m_object.decode(bitstream);
-        this.m_variable.decode(bitstream);
-
-        
-    }
+    this.m_object.decode(bitstream);
+    this.m_variable.decode(bitstream);
+  }
   encode(bitstream: c_bitstream_writer): void {
-        this.m_object.encode(bitstream);
-        this.m_variable.encode(bitstream);
-
-        
-    }
+    this.m_object.encode(bitstream);
+    this.m_variable.encode(bitstream);
+  }
 }
 export class s_action_saved_film_insert_marker_parameters {
   @AutoMap(() => c_custom_variable_reference)
@@ -1898,17 +1725,13 @@ export class s_action_saved_film_insert_marker_parameters {
   @AutoMap(() => c_dynamic_string)
   m_string: c_dynamic_string = new c_dynamic_string();
   decode(bitstream: c_bitstream_reader): void {
-        this.m_variable.decode(bitstream);
-        this.m_string.decode(bitstream);
-
-        
-    }
+    this.m_variable.decode(bitstream);
+    this.m_string.decode(bitstream);
+  }
   encode(bitstream: c_bitstream_writer): void {
-        this.m_variable.encode(bitstream);
-        this.m_string.encode(bitstream);
-
-        
-    }
+    this.m_variable.encode(bitstream);
+    this.m_string.encode(bitstream);
+  }
 }
 export class s_action_respawn_zone_enable_parameters {
   @AutoMap(() => c_object_reference)
@@ -1916,17 +1739,13 @@ export class s_action_respawn_zone_enable_parameters {
   @AutoMap(() => c_custom_variable_reference)
   m_variable: c_custom_variable_reference = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
-        this.m_object.decode(bitstream);
-        this.m_variable.decode(bitstream);
-
-        
-    }
+    this.m_object.decode(bitstream);
+    this.m_variable.decode(bitstream);
+  }
   encode(bitstream: c_bitstream_writer): void {
-        this.m_object.encode(bitstream);
-        this.m_variable.encode(bitstream);
-
-        
-    }
+    this.m_object.encode(bitstream);
+    this.m_variable.encode(bitstream);
+  }
 }
 export class s_action_player_get_equipment_parameters {
   @AutoMap(() => c_player_reference)
@@ -1934,17 +1753,13 @@ export class s_action_player_get_equipment_parameters {
   @AutoMap(() => c_object_reference)
   m_object: c_object_reference = new c_object_reference();
   decode(bitstream: c_bitstream_reader): void {
-        this.m_player.decode(bitstream);
-        this.m_object.decode(bitstream);
-
-        
-    }
+    this.m_player.decode(bitstream);
+    this.m_object.decode(bitstream);
+  }
   encode(bitstream: c_bitstream_writer): void {
-        this.m_player.encode(bitstream);
-        this.m_object.encode(bitstream);
-
-        
-    }
+    this.m_player.encode(bitstream);
+    this.m_object.encode(bitstream);
+  }
 }
 export class s_action_object_set_never_garbage_parameters {
   @AutoMap(() => c_object_reference)
@@ -1952,17 +1767,13 @@ export class s_action_object_set_never_garbage_parameters {
   @AutoMap(() => c_custom_variable_reference)
   m_variable: c_custom_variable_reference = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
-        this.m_object.decode(bitstream);
-        this.m_variable.decode(bitstream);
-
-        
-    }
+    this.m_object.decode(bitstream);
+    this.m_variable.decode(bitstream);
+  }
   encode(bitstream: c_bitstream_writer): void {
-        this.m_object.encode(bitstream);
-        this.m_variable.encode(bitstream);
-
-        
-    }
+    this.m_object.encode(bitstream);
+    this.m_variable.encode(bitstream);
+  }
 }
 export class s_action_player_get_target_object_parameters {
   @AutoMap(() => c_player_reference)
@@ -1970,31 +1781,23 @@ export class s_action_player_get_target_object_parameters {
   @AutoMap(() => c_object_reference)
   m_object: c_object_reference = new c_object_reference();
   decode(bitstream: c_bitstream_reader): void {
-        this.m_player.decode(bitstream);
-        this.m_object.decode(bitstream);
-
-        
-    }
+    this.m_player.decode(bitstream);
+    this.m_object.decode(bitstream);
+  }
   encode(bitstream: c_bitstream_writer): void {
-        this.m_player.encode(bitstream);
-        this.m_object.encode(bitstream);
-
-        
-    }
+    this.m_player.encode(bitstream);
+    this.m_object.encode(bitstream);
+  }
 }
 export class s_action_debug_force_player_view_count_parameters {
   @AutoMap(() => c_custom_variable_reference)
   m_variable: c_custom_variable_reference = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
-        this.m_variable.decode(bitstream);
-
-        
-    }
+    this.m_variable.decode(bitstream);
+  }
   encode(bitstream: c_bitstream_writer): void {
-        this.m_variable.encode(bitstream);
-
-        
-    }
+    this.m_variable.encode(bitstream);
+  }
 }
 export class s_action_player_pick_up_weapon_parameters {
   @AutoMap(() => c_player_reference)
@@ -2002,17 +1805,13 @@ export class s_action_player_pick_up_weapon_parameters {
   @AutoMap(() => c_object_reference)
   m_object: c_object_reference = new c_object_reference();
   decode(bitstream: c_bitstream_reader): void {
-        this.m_player.decode(bitstream);
-        this.m_object.decode(bitstream);
-
-        
-    }
+    this.m_player.decode(bitstream);
+    this.m_object.decode(bitstream);
+  }
   encode(bitstream: c_bitstream_writer): void {
-        this.m_player.encode(bitstream);
-        this.m_object.encode(bitstream);
-
-        
-    }
+    this.m_player.encode(bitstream);
+    this.m_object.encode(bitstream);
+  }
 }
 export class s_action_player_set_fireteam_tier_parameters {
   @AutoMap(() => c_player_reference)
@@ -2257,45 +2056,55 @@ export class c_action {
         break;
       }
       case e_action_type.create_object: {
-        const create_object_parameters = new s_action_create_object_parameters();
+        const create_object_parameters =
+          new s_action_create_object_parameters();
         create_object_parameters.decode(bitstream);
         this.m_create_object_parameters = create_object_parameters;
         break;
       }
       case e_action_type.delete_object: {
-        const delete_object_parameters = new s_action_delete_object_parameters();
+        const delete_object_parameters =
+          new s_action_delete_object_parameters();
         delete_object_parameters.decode(bitstream);
         this.m_delete_object_parameters = delete_object_parameters;
         break;
       }
       case e_action_type.navpoint_set_visible: {
-        const navpoint_set_visible_parameters = new s_action_navpoint_set_visible_parameters();
+        const navpoint_set_visible_parameters =
+          new s_action_navpoint_set_visible_parameters();
         navpoint_set_visible_parameters.decode(bitstream);
-        this.m_navpoint_set_visible_parameters = navpoint_set_visible_parameters;
+        this.m_navpoint_set_visible_parameters =
+          navpoint_set_visible_parameters;
         break;
       }
       case e_action_type.navpoint_set_icon: {
-        const navpoint_set_icon_parameters = new s_action_navpoint_set_icon_parameters();
+        const navpoint_set_icon_parameters =
+          new s_action_navpoint_set_icon_parameters();
         navpoint_set_icon_parameters.decode(bitstream);
         this.m_navpoint_set_icon_parameters = navpoint_set_icon_parameters;
         break;
       }
       case e_action_type.navpoint_set_priority: {
-        const navpoint_set_priority_parameters = new s_action_navpoint_set_priority_parameters();
+        const navpoint_set_priority_parameters =
+          new s_action_navpoint_set_priority_parameters();
         navpoint_set_priority_parameters.decode(bitstream);
-        this.m_navpoint_set_priority_parameters = navpoint_set_priority_parameters;
+        this.m_navpoint_set_priority_parameters =
+          navpoint_set_priority_parameters;
         break;
       }
       case e_action_type.navpoint_set_timer: {
-        const navpoint_set_timer_parameters = new s_action_navpoint_set_timer_parameters();
+        const navpoint_set_timer_parameters =
+          new s_action_navpoint_set_timer_parameters();
         navpoint_set_timer_parameters.decode(bitstream);
         this.m_navpoint_set_timer_parameters = navpoint_set_timer_parameters;
         break;
       }
       case e_action_type.navpoint_set_visible_range: {
-        const navpoint_set_visible_range_parameters = new s_action_navpoint_set_visible_range_parameters();
+        const navpoint_set_visible_range_parameters =
+          new s_action_navpoint_set_visible_range_parameters();
         navpoint_set_visible_range_parameters.decode(bitstream);
-        this.m_navpoint_set_visible_range_parameters = navpoint_set_visible_range_parameters;
+        this.m_navpoint_set_visible_range_parameters =
+          navpoint_set_visible_range_parameters;
         break;
       }
       case e_action_type.set: {
@@ -2311,57 +2120,68 @@ export class c_action {
         break;
       }
       case e_action_type.apply_player_traits: {
-        const apply_player_traits_parameters = new s_action_apply_player_traits_parameters();
+        const apply_player_traits_parameters =
+          new s_action_apply_player_traits_parameters();
         apply_player_traits_parameters.decode(bitstream);
         this.m_apply_player_traits_parameters = apply_player_traits_parameters;
         break;
       }
       case e_action_type.set_pickup_filter: {
-        const set_pickup_filter_parameters = new s_action_set_pickup_filter_parameters();
+        const set_pickup_filter_parameters =
+          new s_action_set_pickup_filter_parameters();
         set_pickup_filter_parameters.decode(bitstream);
         this.m_set_pickup_filter_parameters = set_pickup_filter_parameters;
         break;
       }
       case e_action_type.set_respawn_filter: {
-        const set_respawn_filter_parameters = new s_action_set_respawn_filter_parameters();
+        const set_respawn_filter_parameters =
+          new s_action_set_respawn_filter_parameters();
         set_respawn_filter_parameters.decode(bitstream);
         this.m_set_respawn_filter_parameters = set_respawn_filter_parameters;
         break;
       }
       case e_action_type.set_fireteam_respawn_filter: {
-        const set_fireteam_respawn_filter_parameters = new s_action_set_fireteam_respawn_filter_parameters();
+        const set_fireteam_respawn_filter_parameters =
+          new s_action_set_fireteam_respawn_filter_parameters();
         set_fireteam_respawn_filter_parameters.decode(bitstream);
-        this.m_set_fireteam_respawn_filter_parameters = set_fireteam_respawn_filter_parameters;
+        this.m_set_fireteam_respawn_filter_parameters =
+          set_fireteam_respawn_filter_parameters;
         break;
       }
       case e_action_type.set_progress_bar: {
-        const set_progress_bar_parameters = new s_action_set_progress_bar_parameters();
+        const set_progress_bar_parameters =
+          new s_action_set_progress_bar_parameters();
         set_progress_bar_parameters.decode(bitstream);
         this.m_set_progress_bar_parameters = set_progress_bar_parameters;
         break;
       }
       case e_action_type.hud_post_message: {
-        const hud_post_message_parameters = new s_action_hud_post_message_parameters();
+        const hud_post_message_parameters =
+          new s_action_hud_post_message_parameters();
         hud_post_message_parameters.decode(bitstream);
         this.m_hud_post_message_parameters = hud_post_message_parameters;
         break;
       }
       case e_action_type.timer_set_rate: {
-        const timer_set_rate_parameters = new s_action_timer_set_rate_parameters();
+        const timer_set_rate_parameters =
+          new s_action_timer_set_rate_parameters();
         timer_set_rate_parameters.decode(bitstream);
         this.m_timer_set_rate_parameters = timer_set_rate_parameters;
         break;
       }
       case e_action_type.print_variable: {
-        const print_variable_parameters = new s_action_print_variable_parameters();
+        const print_variable_parameters =
+          new s_action_print_variable_parameters();
         print_variable_parameters.decode(bitstream);
         this.m_print_variable_parameters = print_variable_parameters;
         break;
       }
       case e_action_type.get_player_holding_object: {
-        const get_player_holding_object_parameters = new s_action_get_player_holding_object_parameters();
+        const get_player_holding_object_parameters =
+          new s_action_get_player_holding_object_parameters();
         get_player_holding_object_parameters.decode(bitstream);
-        this.m_get_player_holding_object_parameters = get_player_holding_object_parameters;
+        this.m_get_player_holding_object_parameters =
+          get_player_holding_object_parameters;
         break;
       }
       case e_action_type.for_each: {
@@ -2373,21 +2193,26 @@ export class c_action {
       case e_action_type.end_round:
         break;
       case e_action_type.boundary_set_visible: {
-        const boundary_set_visible_parameters = new s_action_boundary_set_visible_parameters();
+        const boundary_set_visible_parameters =
+          new s_action_boundary_set_visible_parameters();
         boundary_set_visible_parameters.decode(bitstream);
-        this.m_boundary_set_visible_parameters = boundary_set_visible_parameters;
+        this.m_boundary_set_visible_parameters =
+          boundary_set_visible_parameters;
         break;
       }
       case e_action_type.object_destroy: {
-        const object_destroy_parameters = new s_action_object_destroy_parameters();
+        const object_destroy_parameters =
+          new s_action_object_destroy_parameters();
         object_destroy_parameters.decode(bitstream);
         this.m_object_destroy_parameters = object_destroy_parameters;
         break;
       }
       case e_action_type.object_set_invincibility: {
-        const object_set_invincibility_parameters = new s_action_object_set_invincibility_parameters();
+        const object_set_invincibility_parameters =
+          new s_action_object_set_invincibility_parameters();
         object_set_invincibility_parameters.decode(bitstream);
-        this.m_object_set_invincibility_parameters = object_set_invincibility_parameters;
+        this.m_object_set_invincibility_parameters =
+          object_set_invincibility_parameters;
         break;
       }
       case e_action_type.random: {
@@ -2399,97 +2224,120 @@ export class c_action {
       case e_action_type.break_into_debugger:
         break;
       case e_action_type.object_get_orientation: {
-        const object_get_orientation_parameters = new s_action_object_get_orientation_parameters();
+        const object_get_orientation_parameters =
+          new s_action_object_get_orientation_parameters();
         object_get_orientation_parameters.decode(bitstream);
-        this.m_object_get_orientation_parameters = object_get_orientation_parameters;
+        this.m_object_get_orientation_parameters =
+          object_get_orientation_parameters;
         break;
       }
       case e_action_type.object_get_velocity: {
-        const object_get_velocity_parameters = new s_action_object_get_velocity_parameters();
+        const object_get_velocity_parameters =
+          new s_action_object_get_velocity_parameters();
         object_get_velocity_parameters.decode(bitstream);
         this.m_object_get_velocity_parameters = object_get_velocity_parameters;
         break;
       }
       case e_action_type.player_death_get_killing_player: {
-        const player_death_get_killing_player_parameters = new s_action_player_death_get_killing_player_parameters();
+        const player_death_get_killing_player_parameters =
+          new s_action_player_death_get_killing_player_parameters();
         player_death_get_killing_player_parameters.decode(bitstream);
-        this.m_player_death_get_killing_player_parameters = player_death_get_killing_player_parameters;
+        this.m_player_death_get_killing_player_parameters =
+          player_death_get_killing_player_parameters;
         break;
       }
       case e_action_type.player_death_get_damage_type: {
-        const player_death_get_damage_type_parameters = new s_action_player_death_get_damage_type_parameters();
+        const player_death_get_damage_type_parameters =
+          new s_action_player_death_get_damage_type_parameters();
         player_death_get_damage_type_parameters.decode(bitstream);
-        this.m_player_death_get_damage_type_parameters = player_death_get_damage_type_parameters;
+        this.m_player_death_get_damage_type_parameters =
+          player_death_get_damage_type_parameters;
         break;
       }
       case e_action_type.player_death_get_special_type: {
-        const player_death_get_special_type_parameters = new s_action_player_death_get_special_type_parameters();
+        const player_death_get_special_type_parameters =
+          new s_action_player_death_get_special_type_parameters();
         player_death_get_special_type_parameters.decode(bitstream);
-        this.m_player_death_get_special_type_parameters = player_death_get_special_type_parameters;
+        this.m_player_death_get_special_type_parameters =
+          player_death_get_special_type_parameters;
         break;
       }
       case e_action_type.debugging_enable_tracing: {
-        const debugging_enable_tracing_parameters = new s_action_debugging_enable_tracing_parameters();
+        const debugging_enable_tracing_parameters =
+          new s_action_debugging_enable_tracing_parameters();
         debugging_enable_tracing_parameters.decode(bitstream);
-        this.m_debugging_enable_tracing_parameters = debugging_enable_tracing_parameters;
+        this.m_debugging_enable_tracing_parameters =
+          debugging_enable_tracing_parameters;
         break;
       }
       case e_action_type.object_attach: {
-        const object_attach_parameters = new s_action_object_attach_parameters();
+        const object_attach_parameters =
+          new s_action_object_attach_parameters();
         object_attach_parameters.decode(bitstream);
         this.m_object_attach_parameters = object_attach_parameters;
         break;
       }
       case e_action_type.object_detach: {
-        const object_detach_parameters = new s_action_object_detach_parameters();
+        const object_detach_parameters =
+          new s_action_object_detach_parameters();
         object_detach_parameters.decode(bitstream);
         this.m_object_detach_parameters = object_detach_parameters;
         break;
       }
       case e_action_type.player_get_place: {
-        const player_get_place_parameters = new s_action_player_get_place_parameters();
+        const player_get_place_parameters =
+          new s_action_player_get_place_parameters();
         player_get_place_parameters.decode(bitstream);
         this.m_player_get_place_parameters = player_get_place_parameters;
         break;
       }
       case e_action_type.team_get_place: {
-        const team_get_place_parameters = new s_action_team_get_place_parameters();
+        const team_get_place_parameters =
+          new s_action_team_get_place_parameters();
         team_get_place_parameters.decode(bitstream);
         this.m_team_get_place_parameters = team_get_place_parameters;
         break;
       }
       case e_action_type.player_get_killing_spree_count: {
-        const player_get_killing_spree_count_parameters = new s_action_player_get_killing_spree_count_parameters();
+        const player_get_killing_spree_count_parameters =
+          new s_action_player_get_killing_spree_count_parameters();
         player_get_killing_spree_count_parameters.decode(bitstream);
-        this.m_player_get_killing_spree_count_parameters = player_get_killing_spree_count_parameters;
+        this.m_player_get_killing_spree_count_parameters =
+          player_get_killing_spree_count_parameters;
         break;
       }
       case e_action_type.player_adjust_money: {
-        const player_adjust_money_parameters = new s_action_player_adjust_money_parameters();
+        const player_adjust_money_parameters =
+          new s_action_player_adjust_money_parameters();
         player_adjust_money_parameters.decode(bitstream);
         this.m_player_adjust_money_parameters = player_adjust_money_parameters;
         break;
       }
       case e_action_type.player_enable_purchases: {
-        const player_enable_purchases_parameters = new s_action_player_enable_purchases_parameters();
+        const player_enable_purchases_parameters =
+          new s_action_player_enable_purchases_parameters();
         player_enable_purchases_parameters.decode(bitstream);
-        this.m_player_enable_purchases_parameters = player_enable_purchases_parameters;
+        this.m_player_enable_purchases_parameters =
+          player_enable_purchases_parameters;
         break;
       }
       case e_action_type.player_get_vehicle: {
-        const player_get_vehicle_parameters = new s_action_player_get_vehicle_parameters();
+        const player_get_vehicle_parameters =
+          new s_action_player_get_vehicle_parameters();
         player_get_vehicle_parameters.decode(bitstream);
         this.m_player_get_vehicle_parameters = player_get_vehicle_parameters;
         break;
       }
       case e_action_type.player_set_vehicle: {
-        const player_set_vehicle_parameters = new s_action_player_set_vehicle_parameters();
+        const player_set_vehicle_parameters =
+          new s_action_player_set_vehicle_parameters();
         player_set_vehicle_parameters.decode(bitstream);
         this.m_player_set_vehicle_parameters = player_set_vehicle_parameters;
         break;
       }
       case e_action_type.player_set_unit: {
-        const player_set_unit_parameters = new s_action_player_set_unit_parameters();
+        const player_set_unit_parameters =
+          new s_action_player_set_unit_parameters();
         player_set_unit_parameters.decode(bitstream);
         this.m_player_set_unit_parameters = player_set_unit_parameters;
         break;
@@ -2501,45 +2349,56 @@ export class c_action {
         break;
       }
       case e_action_type.weapon_set_pickup_priority: {
-        const weapon_set_pickup_priority_parameters = new s_action_weapon_set_pickup_priority_parameters();
+        const weapon_set_pickup_priority_parameters =
+          new s_action_weapon_set_pickup_priority_parameters();
         weapon_set_pickup_priority_parameters.decode(bitstream);
-        this.m_weapon_set_pickup_priority_parameters = weapon_set_pickup_priority_parameters;
+        this.m_weapon_set_pickup_priority_parameters =
+          weapon_set_pickup_priority_parameters;
         break;
       }
       case e_action_type.object_bounce: {
-        const object_bounce_parameters = new s_action_object_bounce_parameters();
+        const object_bounce_parameters =
+          new s_action_object_bounce_parameters();
         object_bounce_parameters.decode(bitstream);
         this.m_object_bounce_parameters = object_bounce_parameters;
         break;
       }
       case e_action_type.hud_widget_set_text: {
-        const hud_widget_set_text_parameters = new s_action_hud_widget_set_text_parameters();
+        const hud_widget_set_text_parameters =
+          new s_action_hud_widget_set_text_parameters();
         hud_widget_set_text_parameters.decode(bitstream);
         this.m_hud_widget_set_text_parameters = hud_widget_set_text_parameters;
         break;
       }
       case e_action_type.hud_widget_set_value: {
-        const hud_widget_set_value_parameters = new s_action_hud_widget_set_value_parameters();
+        const hud_widget_set_value_parameters =
+          new s_action_hud_widget_set_value_parameters();
         hud_widget_set_value_parameters.decode(bitstream);
-        this.m_hud_widget_set_value_parameters = hud_widget_set_value_parameters;
+        this.m_hud_widget_set_value_parameters =
+          hud_widget_set_value_parameters;
         break;
       }
       case e_action_type.hud_widget_set_meter: {
-        const hud_widget_set_meter_parameters = new s_action_hud_widget_set_meter_parameters();
+        const hud_widget_set_meter_parameters =
+          new s_action_hud_widget_set_meter_parameters();
         hud_widget_set_meter_parameters.decode(bitstream);
-        this.m_hud_widget_set_meter_parameters = hud_widget_set_meter_parameters;
+        this.m_hud_widget_set_meter_parameters =
+          hud_widget_set_meter_parameters;
         break;
       }
       case e_action_type.hud_widget_set_icon: {
-        const hud_widget_set_icon_parameters = new s_action_hud_widget_set_icon_parameters();
+        const hud_widget_set_icon_parameters =
+          new s_action_hud_widget_set_icon_parameters();
         hud_widget_set_icon_parameters.decode(bitstream);
         this.m_hud_widget_set_icon_parameters = hud_widget_set_icon_parameters;
         break;
       }
       case e_action_type.hud_widget_set_visibility: {
-        const hud_widget_set_visibility_parameters = new s_action_hud_widget_set_visibility_parameters();
+        const hud_widget_set_visibility_parameters =
+          new s_action_hud_widget_set_visibility_parameters();
         hud_widget_set_visibility_parameters.decode(bitstream);
-        this.m_hud_widget_set_visibility_parameters = hud_widget_set_visibility_parameters;
+        this.m_hud_widget_set_visibility_parameters =
+          hud_widget_set_visibility_parameters;
         break;
       }
       case e_action_type.play_sound: {
@@ -2549,127 +2408,160 @@ export class c_action {
         break;
       }
       case e_action_type.object_set_scale: {
-        const object_set_scale_parameters = new s_action_object_set_scale_parameters();
+        const object_set_scale_parameters =
+          new s_action_object_set_scale_parameters();
         object_set_scale_parameters.decode(bitstream);
         this.m_object_set_scale_parameters = object_set_scale_parameters;
         break;
       }
       case e_action_type.navpoint_set_text: {
-        const navpoint_set_text_parameters = new s_action_navpoint_set_text_parameters();
+        const navpoint_set_text_parameters =
+          new s_action_navpoint_set_text_parameters();
         navpoint_set_text_parameters.decode(bitstream);
         this.m_navpoint_set_text_parameters = navpoint_set_text_parameters;
         break;
       }
       case e_action_type.object_get_shield: {
-        const object_get_shield_parameters = new s_action_object_get_shield_parameters();
+        const object_get_shield_parameters =
+          new s_action_object_get_shield_parameters();
         object_get_shield_parameters.decode(bitstream);
         this.m_object_get_shield_parameters = object_get_shield_parameters;
         break;
       }
       case e_action_type.object_get_health: {
-        const object_get_health_parameters = new s_action_object_get_health_parameters();
+        const object_get_health_parameters =
+          new s_action_object_get_health_parameters();
         object_get_health_parameters.decode(bitstream);
         this.m_object_get_health_parameters = object_get_health_parameters;
         break;
       }
       case e_action_type.player_set_objective: {
-        const player_set_objective_parameters = new s_action_player_set_objective_parameters();
+        const player_set_objective_parameters =
+          new s_action_player_set_objective_parameters();
         player_set_objective_parameters.decode(bitstream);
-        this.m_player_set_objective_parameters = player_set_objective_parameters;
+        this.m_player_set_objective_parameters =
+          player_set_objective_parameters;
         break;
       }
       case e_action_type.team_set_coop_spawning: {
-        const team_set_coop_spawning_parameters = new s_action_team_set_coop_spawning_parameters();
+        const team_set_coop_spawning_parameters =
+          new s_action_team_set_coop_spawning_parameters();
         team_set_coop_spawning_parameters.decode(bitstream);
-        this.m_team_set_coop_spawning_parameters = team_set_coop_spawning_parameters;
+        this.m_team_set_coop_spawning_parameters =
+          team_set_coop_spawning_parameters;
         break;
       }
       case e_action_type.team_set_primary_respawn_object: {
-        const team_set_primary_respawn_object_parameters = new s_action_team_set_primary_respawn_object_parameters();
+        const team_set_primary_respawn_object_parameters =
+          new s_action_team_set_primary_respawn_object_parameters();
         team_set_primary_respawn_object_parameters.decode(bitstream);
-        this.m_team_set_primary_respawn_object_parameters = team_set_primary_respawn_object_parameters;
+        this.m_team_set_primary_respawn_object_parameters =
+          team_set_primary_respawn_object_parameters;
         break;
       }
       case e_action_type.player_set_primary_respawn_object: {
-        const player_set_primary_respawn_object_parameters = new s_action_player_set_primary_respawn_object_parameters();
+        const player_set_primary_respawn_object_parameters =
+          new s_action_player_set_primary_respawn_object_parameters();
         player_set_primary_respawn_object_parameters.decode(bitstream);
-        this.m_player_set_primary_respawn_object_parameters = player_set_primary_respawn_object_parameters;
+        this.m_player_set_primary_respawn_object_parameters =
+          player_set_primary_respawn_object_parameters;
         break;
       }
       case e_action_type.player_get_fireteam_index: {
-        const player_get_fireteam_index_parameters = new s_action_player_get_fireteam_index_parameters();
+        const player_get_fireteam_index_parameters =
+          new s_action_player_get_fireteam_index_parameters();
         player_get_fireteam_index_parameters.decode(bitstream);
-        this.m_player_get_fireteam_index_parameters = player_get_fireteam_index_parameters;
+        this.m_player_get_fireteam_index_parameters =
+          player_get_fireteam_index_parameters;
         break;
       }
       case e_action_type.player_set_fireteam_index: {
-        const player_set_fireteam_index_parameters = new s_action_player_set_fireteam_index_parameters();
+        const player_set_fireteam_index_parameters =
+          new s_action_player_set_fireteam_index_parameters();
         player_set_fireteam_index_parameters.decode(bitstream);
-        this.m_player_set_fireteam_index_parameters = player_set_fireteam_index_parameters;
+        this.m_player_set_fireteam_index_parameters =
+          player_set_fireteam_index_parameters;
         break;
       }
       case e_action_type.object_adjust_shield: {
-        const object_adjust_shield_parameters = new s_action_object_adjust_shield_parameters();
+        const object_adjust_shield_parameters =
+          new s_action_object_adjust_shield_parameters();
         object_adjust_shield_parameters.decode(bitstream);
-        this.m_object_adjust_shield_parameters = object_adjust_shield_parameters;
+        this.m_object_adjust_shield_parameters =
+          object_adjust_shield_parameters;
         break;
       }
       case e_action_type.object_adjust_health: {
-        const object_adjust_health_parameters = new s_action_object_adjust_health_parameters();
+        const object_adjust_health_parameters =
+          new s_action_object_adjust_health_parameters();
         object_adjust_health_parameters.decode(bitstream);
-        this.m_object_adjust_health_parameters = object_adjust_health_parameters;
+        this.m_object_adjust_health_parameters =
+          object_adjust_health_parameters;
         break;
       }
       case e_action_type.object_get_distance: {
-        const object_get_distance_parameters = new s_action_object_get_distance_parameters();
+        const object_get_distance_parameters =
+          new s_action_object_get_distance_parameters();
         object_get_distance_parameters.decode(bitstream);
         this.m_object_get_distance_parameters = object_get_distance_parameters;
         break;
       }
       case e_action_type.object_adjust_maximum_shield: {
-        const object_adjust_maximum_shield_parameters = new s_action_object_adjust_maximum_shield_parameters();
+        const object_adjust_maximum_shield_parameters =
+          new s_action_object_adjust_maximum_shield_parameters();
         object_adjust_maximum_shield_parameters.decode(bitstream);
-        this.m_object_adjust_maximum_shield_parameters = object_adjust_maximum_shield_parameters;
+        this.m_object_adjust_maximum_shield_parameters =
+          object_adjust_maximum_shield_parameters;
         break;
       }
       case e_action_type.object_adjust_maximum_health: {
-        const object_adjust_maximum_health_parameters = new s_action_object_adjust_maximum_health_parameters();
+        const object_adjust_maximum_health_parameters =
+          new s_action_object_adjust_maximum_health_parameters();
         object_adjust_maximum_health_parameters.decode(bitstream);
-        this.m_object_adjust_maximum_health_parameters = object_adjust_maximum_health_parameters;
+        this.m_object_adjust_maximum_health_parameters =
+          object_adjust_maximum_health_parameters;
         break;
       }
       case e_action_type.player_set_requisition_palette: {
-        const player_set_requisition_palette_parameters = new s_action_player_set_requisition_palette_parameters();
+        const player_set_requisition_palette_parameters =
+          new s_action_player_set_requisition_palette_parameters();
         player_set_requisition_palette_parameters.decode(bitstream);
-        this.m_player_set_requisition_palette_parameters = player_set_requisition_palette_parameters;
+        this.m_player_set_requisition_palette_parameters =
+          player_set_requisition_palette_parameters;
         break;
       }
       case e_action_type.player_set_fireteam_tier: {
-        const player_set_fireteam_tier_parameters = new s_action_player_set_fireteam_tier_parameters();
+        const player_set_fireteam_tier_parameters =
+          new s_action_player_set_fireteam_tier_parameters();
         player_set_fireteam_tier_parameters.decode(bitstream);
-        this.m_player_set_fireteam_tier_parameters = player_set_fireteam_tier_parameters;
+        this.m_player_set_fireteam_tier_parameters =
+          player_set_fireteam_tier_parameters;
         break;
       }
       case e_action_type.device_set_power: {
-        const device_set_power_parameters = new s_action_device_set_power_parameters();
+        const device_set_power_parameters =
+          new s_action_device_set_power_parameters();
         device_set_power_parameters.decode(bitstream);
         this.m_device_set_power_parameters = device_set_power_parameters;
         break;
       }
       case e_action_type.device_get_power: {
-        const device_get_power_parameters = new s_action_device_get_power_parameters();
+        const device_get_power_parameters =
+          new s_action_device_get_power_parameters();
         device_get_power_parameters.decode(bitstream);
         this.m_device_get_power_parameters = device_get_power_parameters;
         break;
       }
       case e_action_type.device_set_position: {
-        const device_set_position_parameters = new s_action_device_set_position_parameters();
+        const device_set_position_parameters =
+          new s_action_device_set_position_parameters();
         device_set_position_parameters.decode(bitstream);
         this.m_device_set_position_parameters = device_set_position_parameters;
         break;
       }
       case e_action_type.device_get_position: {
-        const device_get_position_parameters = new s_action_device_get_position_parameters();
+        const device_get_position_parameters =
+          new s_action_device_get_position_parameters();
         device_get_position_parameters.decode(bitstream);
         this.m_device_get_position_parameters = device_get_position_parameters;
         break;
@@ -2681,21 +2573,25 @@ export class c_action {
         break;
       }
       case e_action_type.adjust_grenades: {
-        const adjust_grenades_parameters = new s_action_adjust_grenades_parameters();
+        const adjust_grenades_parameters =
+          new s_action_adjust_grenades_parameters();
         adjust_grenades_parameters.decode(bitstream);
         this.m_adjust_grenades_parameters = adjust_grenades_parameters;
         break;
       }
       case e_action_type.submit_incident: {
-        const submit_incident_parameters = new s_action_submit_incident_parameters();
+        const submit_incident_parameters =
+          new s_action_submit_incident_parameters();
         submit_incident_parameters.decode(bitstream);
         this.m_submit_incident_parameters = submit_incident_parameters;
         break;
       }
       case e_action_type.submit_incident_with_custom_value: {
-        const submit_incident_with_custom_value_parameters = new s_action_submit_incident_with_custom_value_parameters();
+        const submit_incident_with_custom_value_parameters =
+          new s_action_submit_incident_with_custom_value_parameters();
         submit_incident_with_custom_value_parameters.decode(bitstream);
-        this.m_submit_incident_with_custom_value_parameters = submit_incident_with_custom_value_parameters;
+        this.m_submit_incident_with_custom_value_parameters =
+          submit_incident_with_custom_value_parameters;
         break;
       }
       case e_action_type.set_loadout: {
@@ -2705,93 +2601,119 @@ export class c_action {
         break;
       }
       case e_action_type.set_loadout_palette: {
-        const set_loadout_palette_parameters = new s_action_set_loadout_palette_parameters();
+        const set_loadout_palette_parameters =
+          new s_action_set_loadout_palette_parameters();
         set_loadout_palette_parameters.decode(bitstream);
         this.m_set_loadout_palette_parameters = set_loadout_palette_parameters;
         break;
       }
       case e_action_type.device_set_position_track: {
-        const device_set_position_track_parameters = new s_action_device_set_position_track_parameters();
+        const device_set_position_track_parameters =
+          new s_action_device_set_position_track_parameters();
         device_set_position_track_parameters.decode(bitstream);
-        this.m_device_set_position_track_parameters = device_set_position_track_parameters;
+        this.m_device_set_position_track_parameters =
+          device_set_position_track_parameters;
         break;
       }
       case e_action_type.device_animate_position: {
-        const device_animate_position_parameters = new s_action_device_animate_position_parameters();
+        const device_animate_position_parameters =
+          new s_action_device_animate_position_parameters();
         device_animate_position_parameters.decode(bitstream);
-        this.m_device_animate_position_parameters = device_animate_position_parameters;
+        this.m_device_animate_position_parameters =
+          device_animate_position_parameters;
         break;
       }
       case e_action_type.device_set_position_immediate: {
-        const device_set_position_immediate_parameters = new s_action_device_set_position_immediate_parameters();
+        const device_set_position_immediate_parameters =
+          new s_action_device_set_position_immediate_parameters();
         device_set_position_immediate_parameters.decode(bitstream);
-        this.m_device_set_position_immediate_parameters = device_set_position_immediate_parameters;
+        this.m_device_set_position_immediate_parameters =
+          device_set_position_immediate_parameters;
         break;
       }
       case e_action_type.saved_film_insert_marker: {
-        const saved_film_insert_marker_parameters = new s_action_saved_film_insert_marker_parameters();
+        const saved_film_insert_marker_parameters =
+          new s_action_saved_film_insert_marker_parameters();
         saved_film_insert_marker_parameters.decode(bitstream);
-        this.m_saved_film_insert_marker_parameters = saved_film_insert_marker_parameters;
+        this.m_saved_film_insert_marker_parameters =
+          saved_film_insert_marker_parameters;
         break;
       }
       case e_action_type.respawn_zone_enable: {
-        const respawn_zone_enable_parameters = new s_action_respawn_zone_enable_parameters();
+        const respawn_zone_enable_parameters =
+          new s_action_respawn_zone_enable_parameters();
         respawn_zone_enable_parameters.decode(bitstream);
         this.m_respawn_zone_enable_parameters = respawn_zone_enable_parameters;
         break;
       }
       case e_action_type.player_get_weapon: {
-        const player_get_weapon_parameters = new s_action_player_get_weapon_parameters();
+        const player_get_weapon_parameters =
+          new s_action_player_get_weapon_parameters();
         player_get_weapon_parameters.decode(bitstream);
         this.m_player_get_weapon_parameters = player_get_weapon_parameters;
         break;
       }
       case e_action_type.player_get_equipment: {
-        const player_get_equipment_parameters = new s_action_player_get_equipment_parameters();
+        const player_get_equipment_parameters =
+          new s_action_player_get_equipment_parameters();
         player_get_equipment_parameters.decode(bitstream);
-        this.m_player_get_equipment_parameters = player_get_equipment_parameters;
+        this.m_player_get_equipment_parameters =
+          player_get_equipment_parameters;
         break;
       }
       case e_action_type.object_set_never_garbage: {
-        const object_set_never_garbage_parameters = new s_action_object_set_never_garbage_parameters();
+        const object_set_never_garbage_parameters =
+          new s_action_object_set_never_garbage_parameters();
         object_set_never_garbage_parameters.decode(bitstream);
-        this.m_object_set_never_garbage_parameters = object_set_never_garbage_parameters;
+        this.m_object_set_never_garbage_parameters =
+          object_set_never_garbage_parameters;
         break;
       }
       case e_action_type.player_get_target_object: {
-        const player_get_target_object_parameters = new s_action_player_get_target_object_parameters();
+        const player_get_target_object_parameters =
+          new s_action_player_get_target_object_parameters();
         player_get_target_object_parameters.decode(bitstream);
-        this.m_player_get_target_object_parameters = player_get_target_object_parameters;
+        this.m_player_get_target_object_parameters =
+          player_get_target_object_parameters;
         break;
       }
       case e_action_type.create_tunnel: {
-        const create_tunnel_parameters = new s_action_create_tunnel_parameters();
+        const create_tunnel_parameters =
+          new s_action_create_tunnel_parameters();
         create_tunnel_parameters.decode(bitstream);
         this.m_create_tunnel_parameters = create_tunnel_parameters;
         break;
       }
       case e_action_type.debug_force_player_view_count: {
-        const debug_force_player_view_count_parameters = new s_action_debug_force_player_view_count_parameters();
+        const debug_force_player_view_count_parameters =
+          new s_action_debug_force_player_view_count_parameters();
         debug_force_player_view_count_parameters.decode(bitstream);
-        this.m_debug_force_player_view_count_parameters = debug_force_player_view_count_parameters;
+        this.m_debug_force_player_view_count_parameters =
+          debug_force_player_view_count_parameters;
         break;
       }
       case e_action_type.player_pick_up_weapon: {
-        const player_pick_up_weapon_parameters = new s_action_player_pick_up_weapon_parameters();
+        const player_pick_up_weapon_parameters =
+          new s_action_player_pick_up_weapon_parameters();
         player_pick_up_weapon_parameters.decode(bitstream);
-        this.m_player_pick_up_weapon_parameters = player_pick_up_weapon_parameters;
+        this.m_player_pick_up_weapon_parameters =
+          player_pick_up_weapon_parameters;
         break;
       }
       case e_action_type.player_set_coop_spawning: {
-        const player_set_coop_spawning_parameters = new s_action_player_set_coop_spawning_parameters();
+        const player_set_coop_spawning_parameters =
+          new s_action_player_set_coop_spawning_parameters();
         player_set_coop_spawning_parameters.decode(bitstream);
-        this.m_player_set_coop_spawning_parameters = player_set_coop_spawning_parameters;
+        this.m_player_set_coop_spawning_parameters =
+          player_set_coop_spawning_parameters;
         break;
       }
       case e_action_type.object_set_orientation: {
-        const object_set_orientation_parameters = new s_action_object_set_orientation_parameters();
+        const object_set_orientation_parameters =
+          new s_action_object_set_orientation_parameters();
         object_set_orientation_parameters.decode(bitstream);
-        this.m_object_set_orientation_parameters = object_set_orientation_parameters;
+        this.m_object_set_orientation_parameters =
+          object_set_orientation_parameters;
         break;
       }
     }

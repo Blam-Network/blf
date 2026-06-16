@@ -261,8 +261,12 @@ export class s_condition_player_is_editor_parameters {
 }
 
 export class s_condition_game_is_forge_parameters {
-  decode(_bitstream: c_bitstream_reader): void {}
-  encode(_bitstream: c_bitstream_writer): void {}
+  decode(_bitstream: c_bitstream_reader): void {
+    /* no payload */
+  }
+  encode(_bitstream: c_bitstream_writer): void {
+    /* no payload */
+  }
 }
 
 export class c_condition {
@@ -310,11 +314,7 @@ export class c_condition {
   m_game_is_forge_parameters?: s_condition_game_is_forge_parameters;
 
   decode(bitstream: c_bitstream_reader): void {
-    this.m_type = bitstream.read_enum(
-      "condition-type",
-      5,
-      e_condition_type
-    );
+    this.m_type = bitstream.read_enum("condition-type", 5, e_condition_type);
     if (this.m_type === e_condition_type.none) {
       return;
     }

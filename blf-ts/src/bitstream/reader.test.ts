@@ -145,5 +145,4 @@ describe("c_bitstream_reader", () => {
     sut.begin_reading();
     expect(sut.read_enum("mode", 4, e_sample)).toBe(e_sample.b);
   });
-
 });

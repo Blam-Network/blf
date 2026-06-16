@@ -43,20 +43,23 @@ const BUILD_LABELS = {
 /** @type {Record<string, string>} */
 const BUILD_DESCRIPTIONS = {
   v08516_10_02_19_1607_omaha_alpha:
-    "Halo: Reach — pre-release Omaha Alpha (Oct 2009). Megalo blam types and matchmaking game variant (`gvar` 34.1).",
+    'The earliest available build of Halo: Reach. This build self-identifies as "Pre-Alpha" though it seems more likely to be a Private Alpha build.',
   v09449_10_03_25_1545_omaha_beta:
-    "Halo: Reach — pre-release Omaha Beta (Mar 2010). Reuses Omaha Delta megalo types and `gvar` 38.1.",
+    "A leaked Private Beta build of Halo: Reach.",
   v09664_10_04_06_2121_omaha_beta:
-    "Halo: Reach — pre-release Omaha Beta (Apr 2010). Reuses Omaha Delta megalo types and `gvar` 38.1.",
+    "A leaked Title Update for a leaked private beta version of Halo: Reach for the Xbox 360. This version was built days before the Public Beta build.",
   v09730_10_04_09_1309_omaha_delta:
-    "Halo: Reach — pre-release Omaha Delta (Oct 2009). Megalo blam types and matchmaking game variant (`gvar` 38.1).",
-  v11860_10_07_24_0147_omaha_release: "Halo: Reach - Release",
-  v12065_11_08_24_1738_tu1actual: "Halo: Reach - Title Update 1",
+    "The beta, it's super, the beta, it's super AWESOME",
+  v11860_10_07_24_0147_omaha_release:
+    "The initial release version of Halo: Reach on the Xbox 360.",
+  v12065_11_08_24_1738_tu1actual:
+    "Halo: Reach's first and only Xbox 360 Title Update.",
   v_untracked_25_08_16_1352: "Halo: Reach MCC - 16th August 2025",
   v2025_08_16_178512_1_release:
     "Halo: The Master Chief Collection - 16th August 2025",
-  v12070_08_09_05_2031_halo3_ship: "Halo 3 - Title Update 2",
-  v13895_09_04_27_2201_atlas_release: "Halo 3: ODST - Release",
+  v12070_08_09_05_2031_halo3_ship: "Halo 3's second and final Title Update.",
+  v13895_09_04_27_2201_atlas_release:
+    "The initial release version of Halo 3: ODST on the Xbox 360.",
 };
 
 const CHUNK_DECORATOR_RE =

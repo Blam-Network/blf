@@ -1,7 +1,9 @@
 /** Field names in declaration order; bit 0 is the first field. */
 export type BitfieldFields = readonly string[];
 
-export type BitfieldOf<F extends BitfieldFields> = { [K in F[number]]: boolean };
+export type BitfieldOf<F extends BitfieldFields> = {
+  [K in F[number]]: boolean;
+};
 
 export function bitfieldFromRaw<const F extends BitfieldFields>(
   raw: number,

@@ -88,21 +88,27 @@ export class c_team_reference {
         break;
       case e_team_reference_type.player_team:
         if (!this.m_player || this.m_variable_index === undefined) {
-          throw new BlfError("Invalid c_team_reference: missing m_player or m_variable_index");
+          throw new BlfError(
+            "Invalid c_team_reference: missing m_player or m_variable_index"
+          );
         }
         this.m_player.encode(bitstream);
         bitstream.write_integer(this.m_variable_index, 1);
         break;
       case e_team_reference_type.object_team:
         if (!this.m_object || this.m_variable_index === undefined) {
-          throw new BlfError("Invalid c_team_reference: missing m_object or m_variable_index");
+          throw new BlfError(
+            "Invalid c_team_reference: missing m_object or m_variable_index"
+          );
         }
         this.m_object.encode(bitstream);
         bitstream.write_integer(this.m_variable_index, 1);
         break;
       case e_team_reference_type.team_team:
         if (!this.m_team || this.m_variable_index === undefined) {
-          throw new BlfError("Invalid c_team_reference: missing m_team or m_variable_index");
+          throw new BlfError(
+            "Invalid c_team_reference: missing m_team or m_variable_index"
+          );
         }
         this.m_team.encode(bitstream);
         bitstream.write_integer(this.m_variable_index, 1);

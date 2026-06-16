@@ -4,21 +4,21 @@ import type {
 } from "../../../../bitstream";
 import { BlfError } from "../../../../error";
 import { AutoMap } from "../../../../helpers/automap";
+import { s_requisition_palette } from "../../v09730_10_04_09_1309_omaha_delta/game/megalogamengine/megalogamengine_requisitions";
 import { c_game_engine_base_variant } from "../../v12065_11_08_24_1738_tu1actual/game/game_engine_default";
 import { c_game_engine_sandbox_variant } from "../../v12065_11_08_24_1738_tu1actual/game/game_engine_sandbox";
 import { c_game_engine_survival_variant } from "../../v12065_11_08_24_1738_tu1actual/game/game_engine_survival";
 import { s_player_trait_option } from "../../v12065_11_08_24_1738_tu1actual/game/game_engine_traits";
-import { c_string_table } from "../../v12065_11_08_24_1738_tu1actual/game/string_table";
 import { c_object_filter } from "../../v12065_11_08_24_1738_tu1actual/game/megalogamengine/megalogamengine_map_objects";
 import { c_megalo_game_statistic } from "../../v12065_11_08_24_1738_tu1actual/game/megalogamengine/megalogamengine_statistics";
 import { s_user_defined_option } from "../../v12065_11_08_24_1738_tu1actual/game/megalogamengine/megalogamengine_user_defined_options";
+import { c_string_table } from "../../v12065_11_08_24_1738_tu1actual/game/string_table";
 import {
   s_loadout_palette_unknown_struct,
   s_loadout_unknown_struct,
 } from "./game_engine_loadout_traits";
 import { c_action } from "./megalogamengine/megalogamengine_actions";
 import { c_condition } from "./megalogamengine/megalogamengine_conditions";
-import { s_requisition_palette } from "../../v09730_10_04_09_1309_omaha_delta/game/megalogamengine/megalogamengine_requisitions";
 import { c_trigger } from "./megalogamengine/megalogamengine_trigger";
 import {
   s_variable_metadata,
@@ -274,7 +274,10 @@ export class c_game_engine_custom_variant {
     this.m_localized_name.decode(bitstream);
     this.m_localized_description.decode(bitstream);
     this.m_engine_icon = bitstream.read_index("engine-icon-index", 64, 6);
-    this.m_score_to_win_round = bitstream.read_integer("score-to-win-round", 16);
+    this.m_score_to_win_round = bitstream.read_integer(
+      "score-to-win-round",
+      16
+    );
     this.m_symmetric_gametype = bitstream.read_bool("symmetric-gametype");
     this.m_game_engine.decode(bitstream);
   }

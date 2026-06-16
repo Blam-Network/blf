@@ -3,12 +3,12 @@ import type {
   c_bitstream_writer,
 } from "../../../../bitstream";
 import { AutoMap } from "../../../../helpers/automap";
-import { c_game_engine_custom_variant } from "./game_variant";
-import { c_player_traits } from "./game_engine_player_traits";
 import {
   e_sandbox_edit_mode_settings,
   e_sandbox_variant_flags,
 } from "./game_engine_enums";
+import { c_player_traits } from "./game_engine_player_traits";
+import { c_game_engine_custom_variant } from "./game_variant";
 
 export class c_game_engine_sandbox_variant {
   @AutoMap(() => c_game_engine_custom_variant)
