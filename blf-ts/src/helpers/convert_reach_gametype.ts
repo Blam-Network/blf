@@ -22,7 +22,7 @@ import {
   c_custom_variable_reference as c_custom_variable_reference_tu1,
   e_custom_variable_type as e_custom_variable_type_tu1,
 } from "../blam/haloreach/v12065_11_08_24_1738_tu1actual/game/megalogamengine/megalogamengine_references";
-import type { s_variable_metadata as s_variable_metadata_tu1 } from "../blam/haloreach/v12065_11_08_24_1738_tu1actual/game/megalogamengine/s_variable_metadata";
+import type { s_variable_metadata as s_variable_metadata_tu1 } from "../blam/haloreach/v12065_11_08_24_1738_tu1actual/game/megalogamengine/megalogamengine_variable_metadata";
 import type { s_custom_game_engine_definition as s_custom_game_engine_definition_mcc } from "../blam/haloreach_mcc/v_untracked_25_08_16_1352/game/game_variant";
 import {
   c_game_variant as c_game_variant_mcc,
@@ -39,7 +39,7 @@ import {
   c_custom_variable_reference as c_custom_variable_reference_mcc,
   e_custom_variable_type as e_custom_variable_type_mcc,
 } from "../blam/haloreach_mcc/v_untracked_25_08_16_1352/game/megalogamengine/megalogamengine_references";
-import type { s_variable_metadata as s_variable_metadata_mcc } from "../blam/haloreach_mcc/v_untracked_25_08_16_1352/game/megalogamengine/s_variable_metadata";
+import type { s_variable_metadata as s_variable_metadata_mcc } from "../blam/haloreach_mcc/v_untracked_25_08_16_1352/game/megalogamengine/megalogamengine_variable_metadata";
 import type { c_string_table as c_string_table_mcc } from "../blam/haloreach_mcc/v_untracked_25_08_16_1352/game/string_table";
 import { BlfError } from "../error";
 import { mccToTu1Mapper, tu1ToMccMapper } from "./reach_gametype_automap";
