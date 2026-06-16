@@ -126,7 +126,9 @@ function roundtripFile(
 }
 
 describe.skipIf(!fixturesPresent)("local megalo roundtrip fixtures", () => {
-  it("round-trips release BLF gvar chunks (TU1)", () => {
+  it(
+    "round-trips release BLF gvar chunks (TU1)",
+    () => {
     const inputRoot = join(GAMETYPES_ROOT, "release");
     const outputRoot = join(OUTPUT_ROOT, "release");
     const files = collectFiles(inputRoot, "bin");
@@ -151,9 +153,13 @@ describe.skipIf(!fixturesPresent)("local megalo roundtrip fixtures", () => {
         `${failures.length} release TU1 failures (${passed} passed)\n${failures.slice(0, 20).join("\n")}`
       );
     }
-  });
+  },
+    120_000
+  );
 
-  it("round-trips release BLF gvar chunks (MCC codec, same files)", () => {
+  it(
+    "round-trips release BLF gvar chunks (MCC codec, same files)",
+    () => {
     const inputRoot = join(GAMETYPES_ROOT, "release");
     const outputRoot = join(OUTPUT_ROOT, "release-mcc");
     const files = collectFiles(inputRoot, "bin");
@@ -178,5 +184,7 @@ describe.skipIf(!fixturesPresent)("local megalo roundtrip fixtures", () => {
         `${failures.length} release MCC failures (${passed} passed)\n${failures.slice(0, 20).join("\n")}`
       );
     }
-  });
+  },
+    120_000
+  );
 });

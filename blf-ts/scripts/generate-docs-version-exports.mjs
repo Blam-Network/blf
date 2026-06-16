@@ -28,6 +28,10 @@ const GAME_LABELS = {
 
 /** @type {Record<string, string>} */
 const BUILD_LABELS = {
+  v08516_10_02_19_1607_omaha_alpha: "Private Alpha",
+  v09449_10_03_25_1545_omaha_beta: "Private Beta",
+  v09664_10_04_06_2121_omaha_beta: "Private Beta - Title Update 1",
+  v09730_10_04_09_1309_omaha_delta: "Public Beta",
   v11860_10_07_24_0147_omaha_release: "Release",
   v12065_11_08_24_1738_tu1actual: "Title Update 1 (Latest)",
   v_untracked_25_08_16_1352: "16th Aug 2025 (Latest)",
@@ -38,6 +42,14 @@ const BUILD_LABELS = {
 
 /** @type {Record<string, string>} */
 const BUILD_DESCRIPTIONS = {
+  v08516_10_02_19_1607_omaha_alpha:
+    "Halo: Reach — pre-release Omaha Alpha (Oct 2009). Megalo blam types and matchmaking game variant (`gvar` 34.1).",
+  v09449_10_03_25_1545_omaha_beta:
+    "Halo: Reach — pre-release Omaha Beta (Mar 2010). Reuses Omaha Delta megalo types and `gvar` 38.1.",
+  v09664_10_04_06_2121_omaha_beta:
+    "Halo: Reach — pre-release Omaha Beta (Apr 2010). Reuses Omaha Delta megalo types and `gvar` 38.1.",
+  v09730_10_04_09_1309_omaha_delta:
+    "Halo: Reach — pre-release Omaha Delta (Oct 2009). Megalo blam types and matchmaking game variant (`gvar` 38.1).",
   v11860_10_07_24_0147_omaha_release: "Halo: Reach - Release",
   v12065_11_08_24_1738_tu1actual: "Halo: Reach - Title Update 1",
   v_untracked_25_08_16_1352: "Halo: Reach MCC - 16th August 2025",

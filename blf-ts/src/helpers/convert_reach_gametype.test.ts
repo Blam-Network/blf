@@ -1,23 +1,23 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { reach_mcc_3nvasion_dlc_fixture } from "../../tests/fixtures/paths";
-import { c_game_engine_custom_variant as c_game_engine_custom_variant_tu1 } from "../blam/haloreach/v12065_11_08_24_1738_tu1actual/game/c_game_engine_custom_variant";
-import { c_game_engine_survival_variant as c_game_engine_survival_variant_tu1 } from "../blam/haloreach/v12065_11_08_24_1738_tu1actual/game/c_game_engine_survival_variant";
+import { c_game_engine_custom_variant as c_game_engine_custom_variant_tu1 } from "../blam/haloreach/v12065_11_08_24_1738_tu1actual/game/game_variant";
+import { c_game_engine_survival_variant as c_game_engine_survival_variant_tu1 } from "../blam/haloreach/v12065_11_08_24_1738_tu1actual/game/game_engine_survival";
 import {
   c_game_variant as c_game_variant_tu1,
   e_game_mode as e_game_mode_tu1,
-} from "../blam/haloreach/v12065_11_08_24_1738_tu1actual/game/c_game_variant";
+} from "../blam/haloreach/v12065_11_08_24_1738_tu1actual/game/game_variant";
 import { e_math_operation as e_math_operation_tu1 } from "../blam/haloreach/v12065_11_08_24_1738_tu1actual/game/megalogamengine/megalogamengine_actions";
 import { e_explicit_player_type as e_explicit_player_type_tu1 } from "../blam/haloreach/v12065_11_08_24_1738_tu1actual/game/megalogamengine/megalogamengine_explicit_player";
 import {
   e_custom_variable_type as e_custom_variable_type_tu1,
 } from "../blam/haloreach/v12065_11_08_24_1738_tu1actual/game/megalogamengine/megalogamengine_references";
-import { c_game_engine_custom_variant as c_game_engine_custom_variant_mcc } from "../blam/haloreach_mcc/v_untracked_25_08_16_1352/game/c_game_engine_custom_variant";
-import { c_game_engine_survival_variant as c_game_engine_survival_variant_mcc } from "../blam/haloreach_mcc/v_untracked_25_08_16_1352/game/c_game_engine_survival_variant";
+import { c_game_engine_custom_variant as c_game_engine_custom_variant_mcc } from "../blam/haloreach_mcc/v_untracked_25_08_16_1352/game/game_variant";
+import { c_game_engine_survival_variant as c_game_engine_survival_variant_mcc } from "../blam/haloreach_mcc/v_untracked_25_08_16_1352/game/game_engine_survival";
 import {
   c_game_variant as c_game_variant_mcc,
   e_game_mode as e_game_mode_mcc,
-} from "../blam/haloreach_mcc/v_untracked_25_08_16_1352/game/c_game_variant";
+} from "../blam/haloreach_mcc/v_untracked_25_08_16_1352/game/game_variant";
 import {
   c_action,
   e_action_type,
@@ -33,7 +33,7 @@ import {
   e_custom_variable_type as e_custom_variable_type_mcc,
   e_object_reference_type,
 } from "../blam/haloreach_mcc/v_untracked_25_08_16_1352/game/megalogamengine/megalogamengine_references";
-import { s_custom_game_engine_definition } from "../blam/haloreach_mcc/v_untracked_25_08_16_1352/game/megalogamengine/s_custom_game_engine_definition";
+import { s_custom_game_engine_definition } from "../blam/haloreach_mcc/v_untracked_25_08_16_1352/game/game_variant";
 import { search_for_chunk } from "../blf_chunk";
 import { s_blf_chunk_game_variant as s_blf_chunk_game_variant_mcc } from "../chunks/haloreach_mcc/v_untracked_25_08_16_1352/s_blf_chunk_game_variant";
 import { BlfError } from "../error";

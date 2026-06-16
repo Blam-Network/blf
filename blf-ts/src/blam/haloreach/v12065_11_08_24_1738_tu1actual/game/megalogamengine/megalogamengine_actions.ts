@@ -3,7 +3,7 @@ import type {
   c_bitstream_writer,
 } from "../../../../../bitstream";
 import { AutoMap } from "../../../../../helpers/automap";
-import { c_player_traits } from "../c_player_traits";
+import { c_player_traits } from "../game_engine_player_traits";
 import {
   e_game_engine_timer_rate,
   e_weapon_pickup_priority,
@@ -222,7 +222,7 @@ import {
   c_dynamic_string,
   c_player_filter_modifier,
 } from "./megalogamengine_text";
-import { s_variant_variable } from "./s_variant_variable";
+import { s_variant_variable } from "./megalogamengine_variant_variable";
 
 /** Matches `e_boundary_shape` in blf_lib `scenario_map_variant.rs`. */
 enum e_boundary_shape {

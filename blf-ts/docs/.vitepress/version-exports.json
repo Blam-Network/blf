@@ -71,6 +71,70 @@
     },
     {
       "game": "haloreach",
+      "buildId": "v08516_10_02_19_1607_omaha_alpha",
+      "label": "Halo Reach",
+      "buildLabel": "Private Alpha",
+      "importPath": "@blamnetwork/blf/haloreach/v08516_10_02_19_1607_omaha_alpha",
+      "docLink": "/guide/versions/haloreach/v08516_10_02_19_1607_omaha_alpha",
+      "chunks": [
+        {
+          "name": "s_blf_chunk_packed_game_variant",
+          "source": "src/chunks/haloreach/v08516_10_02_19_1607_omaha_alpha/s_blf_chunk_packed_game_variant.ts",
+          "signature": "gvar",
+          "version": "34.1"
+        }
+      ]
+    },
+    {
+      "game": "haloreach",
+      "buildId": "v09449_10_03_25_1545_omaha_beta",
+      "label": "Halo Reach",
+      "buildLabel": "Private Beta",
+      "importPath": "@blamnetwork/blf/haloreach/v09449_10_03_25_1545_omaha_beta",
+      "docLink": "/guide/versions/haloreach/v09449_10_03_25_1545_omaha_beta",
+      "chunks": [
+        {
+          "name": "s_blf_chunk_packed_game_variant",
+          "source": "src/chunks/haloreach/v09730_10_04_09_1309_omaha_delta/s_blf_chunk_packed_game_variant.ts",
+          "signature": "gvar",
+          "version": "38.1"
+        }
+      ]
+    },
+    {
+      "game": "haloreach",
+      "buildId": "v09664_10_04_06_2121_omaha_beta",
+      "label": "Halo Reach",
+      "buildLabel": "Private Beta - Title Update 1",
+      "importPath": "@blamnetwork/blf/haloreach/v09664_10_04_06_2121_omaha_beta",
+      "docLink": "/guide/versions/haloreach/v09664_10_04_06_2121_omaha_beta",
+      "chunks": [
+        {
+          "name": "s_blf_chunk_packed_game_variant",
+          "source": "src/chunks/haloreach/v09730_10_04_09_1309_omaha_delta/s_blf_chunk_packed_game_variant.ts",
+          "signature": "gvar",
+          "version": "38.1"
+        }
+      ]
+    },
+    {
+      "game": "haloreach",
+      "buildId": "v09730_10_04_09_1309_omaha_delta",
+      "label": "Halo Reach",
+      "buildLabel": "Public Beta",
+      "importPath": "@blamnetwork/blf/haloreach/v09730_10_04_09_1309_omaha_delta",
+      "docLink": "/guide/versions/haloreach/v09730_10_04_09_1309_omaha_delta",
+      "chunks": [
+        {
+          "name": "s_blf_chunk_packed_game_variant",
+          "source": "src/chunks/haloreach/v09730_10_04_09_1309_omaha_delta/s_blf_chunk_packed_game_variant.ts",
+          "signature": "gvar",
+          "version": "38.1"
+        }
+      ]
+    },
+    {
+      "game": "haloreach",
       "buildId": "v11860_10_07_24_0147_omaha_release",
       "label": "Halo Reach",
       "buildLabel": "Release",

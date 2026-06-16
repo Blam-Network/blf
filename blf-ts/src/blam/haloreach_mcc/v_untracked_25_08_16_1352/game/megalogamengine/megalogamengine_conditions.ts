@@ -42,7 +42,7 @@ import {
   c_player_reference,
   c_team_reference,
 } from "./megalogamengine_references";
-import { s_variant_variable } from "./s_variant_variable";
+import { s_variant_variable } from "./megalogamengine_variant_variable";
 
 export class s_condition_if_parameters {
   @AutoMap(() => s_variant_variable)

@@ -12,9 +12,9 @@ import {
   type ModulePair,
 } from "../automapper";
 import * as tu1_game from "../blam/haloreach/v12065_11_08_24_1738_tu1actual/game";
-import { c_game_variant as c_game_variant_tu1 } from "../blam/haloreach/v12065_11_08_24_1738_tu1actual/game/c_game_variant";
+import { c_game_variant as c_game_variant_tu1 } from "../blam/haloreach/v12065_11_08_24_1738_tu1actual/game/game_variant";
 import * as mcc_game from "../blam/haloreach_mcc/v_untracked_25_08_16_1352/game";
-import { c_game_variant as c_game_variant_mcc } from "../blam/haloreach_mcc/v_untracked_25_08_16_1352/game/c_game_variant";
+import { c_game_variant as c_game_variant_mcc } from "../blam/haloreach_mcc/v_untracked_25_08_16_1352/game/game_variant";
 
 function isClassConstructor(value: unknown): value is ClassConstructor {
   return (
