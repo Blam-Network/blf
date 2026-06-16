@@ -1,5 +1,9 @@
 import {
-  assertFitsInBits,
+  type BitfieldFields,
+  type BitfieldOf,
+  bitfieldFromRaw,
+} from "./bitfield";
+import {
   type EnumNumber,
   enumMemberFromWireIndex,
   type NumericEnum,
@@ -134,6 +138,14 @@ export class c_bitstream_reader {
 
   read_bool(_name: string): boolean {
     return this.read_integer(_name, 1) === 1;
+  }
+
+  read_bitfield<const F extends BitfieldFields>(
+    name: string,
+    size_in_bits: number,
+    fields: F
+  ): BitfieldOf<F> {
+    return bitfieldFromRaw(this.read_integer(name, size_in_bits), fields);
   }
 
   read_bits_internal(output: Uint8Array, size_in_bits: number): void {
@@ -287,17 +299,11 @@ export class c_bitstream_reader {
     }
   }
 
-  /**
-   * Read a numeric enum. Pass the enum object; no per-enum parser required.
-   *
-   * - Default: value must be a declared enum member.
-   * - `{ within_bits: true }`: any value that fits in `size_in_bits` (reserved slots).
-   */
+  /** Read a numeric enum by declaration-order wire index. */
   read_enum<E extends NumericEnum>(
     name: string,
     size_in_bits: number,
-    enumObj: E,
-    options?: { within_bits?: boolean }
+    enumObj: E
   ): EnumNumber<E>;
   read_enum<T extends number>(
     name: string,
@@ -307,8 +313,7 @@ export class c_bitstream_reader {
   read_enum(
     name: string,
     size_in_bits: number,
-    enumObjOrParser: NumericEnum | ((value: number) => number | undefined),
-    options?: { within_bits?: boolean }
+    enumObjOrParser: NumericEnum | ((value: number) => number | undefined)
   ): number {
     const integer = this.read_integer(name, size_in_bits);
 
@@ -320,11 +325,6 @@ export class c_bitstream_reader {
         );
       }
       return value;
-    }
-
-    if (options?.within_bits) {
-      assertFitsInBits(name, integer, size_in_bits);
-      return integer;
     }
 
     return enumMemberFromWireIndex(enumObjOrParser, integer, name);

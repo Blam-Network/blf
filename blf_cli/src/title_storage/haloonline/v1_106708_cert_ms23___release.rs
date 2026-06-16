@@ -17,7 +17,7 @@ use blf_lib::blf::versions::haloonline::v1_106708_cert_ms23___release::{s_blf_ch
 use blf_lib::blf::{get_blf_file_hash, BlfFile, BlfFileBuilder};
 use blf_lib::io::{read_file_to_string, read_json_file, write_json_file};
 use blf_lib::result::{BLFLibError, BLFLibResult};
-use blf_lib::types::c_string::StaticString;
+use blf_lib::types::string::StaticString;
 use colored::Colorize;
 use csv::{ReaderBuilder, WriterBuilder};
 use lazy_static::lazy_static;

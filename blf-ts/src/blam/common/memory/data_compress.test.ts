@@ -2,10 +2,10 @@ import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { c_bitstream_reader, e_bitstream_byte_order } from "../../../bitstream";
 import { s_blf_chunk_game_variant } from "../../../chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_game_variant.ts";
-import { c_game_engine_base_variant } from "../../haloreach/v12065_11_08_24_1738_tu1actual/game/c_game_engine_default.ts";
-import { s_player_trait_option } from "../../haloreach/v12065_11_08_24_1738_tu1actual/game/c_game_engine_traits.ts";
-import { c_string_table } from "../../haloreach/v12065_11_08_24_1738_tu1actual/game/c_string_table.ts";
-import { s_user_defined_option } from "../../haloreach/v12065_11_08_24_1738_tu1actual/game/megalogamengine/s_user_defined_option.ts";
+import { c_game_engine_base_variant } from "../../haloreach/v12065_11_08_24_1738_tu1actual/game/game_engine_default";
+import { s_player_trait_option } from "../../haloreach/v12065_11_08_24_1738_tu1actual/game/game_engine_traits";
+import { s_user_defined_option } from "../../haloreach/v12065_11_08_24_1738_tu1actual/game/megalogamengine/megalogamengine_user_defined_options";
+import { c_string_table } from "../../haloreach/v12065_11_08_24_1738_tu1actual/game/string_table";
 import { runtime_data_decompress, zlib_compress } from "./data_compress";
 
 const BE = e_bitstream_byte_order._bitstream_byte_order_big_endian;

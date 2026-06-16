@@ -28,6 +28,10 @@ const GAME_LABELS = {
 
 /** @type {Record<string, string>} */
 const BUILD_LABELS = {
+  v08516_10_02_19_1607_omaha_alpha: "Private Alpha",
+  v09449_10_03_25_1545_omaha_beta: "Private Beta",
+  v09664_10_04_06_2121_omaha_beta: "Private Beta - Title Update 1",
+  v09730_10_04_09_1309_omaha_delta: "Public Beta",
   v11860_10_07_24_0147_omaha_release: "Release",
   v12065_11_08_24_1738_tu1actual: "Title Update 1 (Latest)",
   v_untracked_25_08_16_1352: "16th Aug 2025 (Latest)",
@@ -38,13 +42,24 @@ const BUILD_LABELS = {
 
 /** @type {Record<string, string>} */
 const BUILD_DESCRIPTIONS = {
-  v11860_10_07_24_0147_omaha_release: "Halo: Reach - Release",
-  v12065_11_08_24_1738_tu1actual: "Halo: Reach - Title Update 1",
+  v08516_10_02_19_1607_omaha_alpha:
+    'The earliest available build of Halo: Reach. This build self-identifies as "Pre-Alpha" though it seems more likely to be a Private Alpha build.',
+  v09449_10_03_25_1545_omaha_beta:
+    "A leaked Private Beta build of Halo: Reach.",
+  v09664_10_04_06_2121_omaha_beta:
+    "A leaked Title Update for a leaked private beta version of Halo: Reach for the Xbox 360. This version was built days before the Public Beta build.",
+  v09730_10_04_09_1309_omaha_delta:
+    "The beta, it's super, the beta, it's super AWESOME",
+  v11860_10_07_24_0147_omaha_release:
+    "The initial release version of Halo: Reach on the Xbox 360.",
+  v12065_11_08_24_1738_tu1actual:
+    "Halo: Reach's first and only Xbox 360 Title Update.",
   v_untracked_25_08_16_1352: "Halo: Reach MCC - 16th August 2025",
   v2025_08_16_178512_1_release:
     "Halo: The Master Chief Collection - 16th August 2025",
-  v12070_08_09_05_2031_halo3_ship: "Halo 3 - Title Update 2",
-  v13895_09_04_27_2201_atlas_release: "Halo 3: ODST - Release",
+  v12070_08_09_05_2031_halo3_ship: "Halo 3's second and final Title Update.",
+  v13895_09_04_27_2201_atlas_release:
+    "The initial release version of Halo 3: ODST on the Xbox 360.",
 };
 
 const CHUNK_DECORATOR_RE =

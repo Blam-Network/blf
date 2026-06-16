@@ -1,4 +1,4 @@
-use binrw::{binrw, BinRead, BinWrite};
+﻿use binrw::{binrw, BinRead, BinWrite};
 #[cfg(feature = "napi")]
 use napi_derive::napi;
 use num_derive::FromPrimitive;
@@ -7,7 +7,7 @@ use blf_lib::types::bool::Bool;
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
 use blf_lib_derive::BlfChunk;
 use crate::types::array::StaticArray;
-use crate::types::c_string::StaticString;
+use crate::types::string::StaticString;
 
 #[binrw]
 #[derive(BlfChunk,PartialEq,Debug,Clone,Serialize,Deserialize)]

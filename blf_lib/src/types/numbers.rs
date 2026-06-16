@@ -10,8 +10,6 @@ use shrinkwraprs::Shrinkwrap;
 use napi::bindgen_prelude::{FromNapiValue, ToNapiValue};
 #[cfg(feature = "napi")]
 use napi::sys::{napi_env, napi_value};
-use wasm_bindgen::convert::{FromWasmAbi, IntoWasmAbi};
-use wasm_bindgen::describe::WasmDescribe;
 
 #[derive(Debug, Clone, PartialEq, Copy, Default, Shrinkwrap)]
 #[shrinkwrap(mutable)]
@@ -170,29 +168,6 @@ impl ToNapiValue for Float32 {
         f32::to_napi_value(env, val.0)
     }
 }
-
-impl WasmDescribe for Float32 {
-    fn describe() {
-        f32::describe()
-    }
-}
-
-impl IntoWasmAbi for Float32 {
-    type Abi = f32;
-
-    fn into_abi(self) -> Self::Abi {
-        f32::into_abi(self.0)
-    }
-}
-
-impl FromWasmAbi for Float32 {
-    type Abi = <f32 as FromWasmAbi>::Abi;
-
-    unsafe fn from_abi(js: Self::Abi) -> Self {
-        Self(f32::from_abi(js))
-    }
-}
-
 
 // Custom Serialize implementation
 impl Serialize for Float32 {

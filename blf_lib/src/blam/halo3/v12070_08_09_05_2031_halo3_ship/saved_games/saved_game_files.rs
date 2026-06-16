@@ -3,10 +3,9 @@ use binrw::{BinRead, BinWrite};
 use napi_derive::napi;
 use serde::{Deserialize, Serialize};
 use blf_lib::io::bitstream::{c_bitstream_reader, c_bitstream_writer};
-use crate::types::c_string::StaticString;
-use crate::types::c_string::StaticWcharString;
+use crate::types::string::StaticString;
+use crate::types::string::StaticWcharString;
 use serde_hex::{SerHex,StrictCap};
-use wasm_bindgen::prelude::wasm_bindgen;
 use blf_lib_derivable::result::BLFLibResult;
 use blf_lib::types::time::time64_t;
 use blf_lib_derive::TestSize;
@@ -33,7 +32,6 @@ pub const k_saved_game_file_type_count: u32 = 13;
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite, TestSize)]
 #[Size(0xF8)]
 #[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
-#[wasm_bindgen(getter_with_clone)]
 pub struct s_content_item_metadata {
     pub unique_id: Unsigned64,
     pub name: StaticWcharString<0x10>,

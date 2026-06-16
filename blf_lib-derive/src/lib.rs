@@ -29,3 +29,8 @@ pub fn blf_file(input: TokenStream) -> TokenStream {
 pub fn test_size(input: TokenStream) -> TokenStream {
     macros::test_size::test_size_macro(input)
 }
+
+#[proc_macro_derive(c_enum, attributes(bits))]
+pub fn c_enum_derive(input: TokenStream) -> TokenStream {
+    macros::c_enum::c_enum_macro(input)
+}

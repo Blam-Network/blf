@@ -10,21 +10,24 @@
  * player, or team references cannot be mapped onto free global slots.
  */
 
+import type { s_custom_game_engine_definition as s_custom_game_engine_definition_tu1 } from "../blam/haloreach/v12065_11_08_24_1738_tu1actual/game/game_variant";
 import {
   type c_game_variant as c_game_variant_tu1,
   e_game_mode as e_game_mode_tu1,
-} from "../blam/haloreach/v12065_11_08_24_1738_tu1actual/game/c_game_variant";
+} from "../blam/haloreach/v12065_11_08_24_1738_tu1actual/game/game_variant";
 import { e_explicit_object_type as e_explicit_object_type_tu1 } from "../blam/haloreach/v12065_11_08_24_1738_tu1actual/game/megalogamengine/megalogamengine_explicit_object";
 import { e_explicit_player_type as e_explicit_player_type_tu1 } from "../blam/haloreach/v12065_11_08_24_1738_tu1actual/game/megalogamengine/megalogamengine_explicit_player";
 import { e_explicit_team_type as e_explicit_team_type_tu1 } from "../blam/haloreach/v12065_11_08_24_1738_tu1actual/game/megalogamengine/megalogamengine_explicit_team";
-import { c_custom_variable_reference as c_custom_variable_reference_tu1 } from "../blam/haloreach/v12065_11_08_24_1738_tu1actual/game/megalogamengine/megalogamengine_references";
-import type { s_custom_game_engine_definition as s_custom_game_engine_definition_tu1 } from "../blam/haloreach/v12065_11_08_24_1738_tu1actual/game/megalogamengine/s_custom_game_engine_definition";
-import type { s_variable_metadata as s_variable_metadata_tu1 } from "../blam/haloreach/v12065_11_08_24_1738_tu1actual/game/megalogamengine/s_variable_metadata";
+import {
+  c_custom_variable_reference as c_custom_variable_reference_tu1,
+  e_custom_variable_type as e_custom_variable_type_tu1,
+} from "../blam/haloreach/v12065_11_08_24_1738_tu1actual/game/megalogamengine/megalogamengine_references";
+import type { s_variable_metadata as s_variable_metadata_tu1 } from "../blam/haloreach/v12065_11_08_24_1738_tu1actual/game/megalogamengine/megalogamengine_variable_metadata";
+import type { s_custom_game_engine_definition as s_custom_game_engine_definition_mcc } from "../blam/haloreach_mcc/v_untracked_25_08_16_1352/game/game_variant";
 import {
   c_game_variant as c_game_variant_mcc,
   e_game_mode as e_game_mode_mcc,
-} from "../blam/haloreach_mcc/v_untracked_25_08_16_1352/game/c_game_variant";
-import type { c_string_table as c_string_table_mcc } from "../blam/haloreach_mcc/v_untracked_25_08_16_1352/game/c_string_table";
+} from "../blam/haloreach_mcc/v_untracked_25_08_16_1352/game/game_variant";
 import {
   e_action_type as e_action_type_mcc,
   e_math_operation as e_math_operation_mcc,
@@ -32,9 +35,12 @@ import {
 import { e_explicit_object_type as e_explicit_object_type_mcc } from "../blam/haloreach_mcc/v_untracked_25_08_16_1352/game/megalogamengine/megalogamengine_explicit_object";
 import { e_explicit_player_type as e_explicit_player_type_mcc } from "../blam/haloreach_mcc/v_untracked_25_08_16_1352/game/megalogamengine/megalogamengine_explicit_player";
 import { e_explicit_team_type as e_explicit_team_type_mcc } from "../blam/haloreach_mcc/v_untracked_25_08_16_1352/game/megalogamengine/megalogamengine_explicit_team";
-import { c_custom_variable_reference as c_custom_variable_reference_mcc } from "../blam/haloreach_mcc/v_untracked_25_08_16_1352/game/megalogamengine/megalogamengine_references";
-import type { s_custom_game_engine_definition as s_custom_game_engine_definition_mcc } from "../blam/haloreach_mcc/v_untracked_25_08_16_1352/game/megalogamengine/s_custom_game_engine_definition";
-import type { s_variable_metadata as s_variable_metadata_mcc } from "../blam/haloreach_mcc/v_untracked_25_08_16_1352/game/megalogamengine/s_variable_metadata";
+import {
+  c_custom_variable_reference as c_custom_variable_reference_mcc,
+  e_custom_variable_type as e_custom_variable_type_mcc,
+} from "../blam/haloreach_mcc/v_untracked_25_08_16_1352/game/megalogamengine/megalogamengine_references";
+import type { s_variable_metadata as s_variable_metadata_mcc } from "../blam/haloreach_mcc/v_untracked_25_08_16_1352/game/megalogamengine/megalogamengine_variable_metadata";
+import type { c_string_table as c_string_table_mcc } from "../blam/haloreach_mcc/v_untracked_25_08_16_1352/game/string_table";
 import { BlfError } from "../error";
 import { mccToTu1Mapper, tu1ToMccMapper } from "./reach_gametype_automap";
 import {
@@ -68,13 +74,101 @@ const HR_GVAR_PREFIX = "$hr_gvar_";
 const MAX_OBJECT_GLOBALS = 16;
 const MAX_PLAYER_GLOBALS = 8;
 const MAX_TEAM_GLOBALS = 8;
+const MAX_NUMERIC_GLOBALS = 16;
 
 type JsonRecord = Record<string, unknown>;
 
 interface TemporaryToGlobalMaps {
+  numeric: Map<number, number>;
   object: Map<number, number>;
   player: Map<number, number>;
   team: Map<number, number>;
+}
+
+function remapTemporaryObjectType(
+  obj: JsonRecord,
+  maps: TemporaryToGlobalMaps
+): void {
+  const objectType = obj.m_explicit_object_type;
+  if (
+    typeof objectType !== "number" ||
+    objectType < e_explicit_object_type_mcc.temporary_0 ||
+    objectType > e_explicit_object_type_mcc.temporary_7
+  ) {
+    return;
+  }
+  const temporaryIndex = objectType - e_explicit_object_type_mcc.temporary_0;
+  const globalIndex = maps.object.get(temporaryIndex);
+  if (globalIndex !== undefined) {
+    obj.m_explicit_object_type =
+      e_explicit_object_type_tu1.global_0 + globalIndex;
+  }
+}
+
+function remapTemporaryPlayerType(
+  obj: JsonRecord,
+  maps: TemporaryToGlobalMaps
+): void {
+  const playerType = obj.m_explicit_player_type;
+  if (
+    typeof playerType !== "number" ||
+    playerType < e_explicit_player_type_mcc.temporary_0 ||
+    playerType > e_explicit_player_type_mcc.temporary_2
+  ) {
+    return;
+  }
+  const temporaryIndex = playerType - e_explicit_player_type_mcc.temporary_0;
+  const globalIndex = maps.player.get(temporaryIndex);
+  if (globalIndex !== undefined) {
+    obj.m_explicit_player_type =
+      e_explicit_player_type_tu1.global_0 + globalIndex;
+  }
+}
+
+function remapTemporaryTeamType(
+  obj: JsonRecord,
+  maps: TemporaryToGlobalMaps
+): void {
+  const teamType = obj.m_explicit_team_type;
+  if (
+    typeof teamType !== "number" ||
+    teamType < e_explicit_team_type_mcc.temporary_0 ||
+    teamType > e_explicit_team_type_mcc.temporary_5
+  ) {
+    return;
+  }
+  const temporaryIndex = teamType - e_explicit_team_type_mcc.temporary_0;
+  const globalIndex = maps.team.get(temporaryIndex);
+  if (globalIndex !== undefined) {
+    obj.m_explicit_team_type = e_explicit_team_type_tu1.global_0 + globalIndex;
+  }
+}
+
+function remapTemporaryNumericVariable(
+  obj: JsonRecord,
+  maps: TemporaryToGlobalMaps
+): void {
+  if (
+    obj.m_type !== e_custom_variable_type_mcc.temporary_number ||
+    typeof obj.m_variable_index !== "number"
+  ) {
+    return;
+  }
+  const globalIndex = maps.numeric.get(obj.m_variable_index);
+  if (globalIndex !== undefined) {
+    obj.m_type = e_custom_variable_type_tu1.global_number;
+    obj.m_variable_index = globalIndex;
+  }
+}
+
+function remapTemporaryExplicitRefsInObject(
+  obj: JsonRecord,
+  maps: TemporaryToGlobalMaps
+): void {
+  remapTemporaryObjectType(obj, maps);
+  remapTemporaryPlayerType(obj, maps);
+  remapTemporaryTeamType(obj, maps);
+  remapTemporaryNumericVariable(obj, maps);
 }
 
 function visit_object_tree(root: unknown, fn: (obj: JsonRecord) => void): void {
@@ -99,53 +193,12 @@ function remap_temporary_explicit_refs(
   maps: TemporaryToGlobalMaps
 ): void {
   visit_object_tree(root, (obj) => {
-    const objectType = obj.m_explicit_object_type;
-    if (
-      typeof objectType === "number" &&
-      objectType >= e_explicit_object_type_mcc.temporary_0 &&
-      objectType <= e_explicit_object_type_mcc.temporary_7
-    ) {
-      const temporaryIndex =
-        objectType - e_explicit_object_type_mcc.temporary_0;
-      const globalIndex = maps.object.get(temporaryIndex);
-      if (globalIndex !== undefined) {
-        obj.m_explicit_object_type =
-          e_explicit_object_type_tu1.global_0 + globalIndex;
-      }
-    }
-
-    const playerType = obj.m_explicit_player_type;
-    if (
-      typeof playerType === "number" &&
-      playerType >= e_explicit_player_type_mcc.temporary_0 &&
-      playerType <= e_explicit_player_type_mcc.temporary_2
-    ) {
-      const temporaryIndex =
-        playerType - e_explicit_player_type_mcc.temporary_0;
-      const globalIndex = maps.player.get(temporaryIndex);
-      if (globalIndex !== undefined) {
-        obj.m_explicit_player_type =
-          e_explicit_player_type_tu1.global_0 + globalIndex;
-      }
-    }
-
-    const teamType = obj.m_explicit_team_type;
-    if (
-      typeof teamType === "number" &&
-      teamType >= e_explicit_team_type_mcc.temporary_0 &&
-      teamType <= e_explicit_team_type_mcc.temporary_5
-    ) {
-      const temporaryIndex = teamType - e_explicit_team_type_mcc.temporary_0;
-      const globalIndex = maps.team.get(temporaryIndex);
-      if (globalIndex !== undefined) {
-        obj.m_explicit_team_type =
-          e_explicit_team_type_tu1.global_0 + globalIndex;
-      }
-    }
+    remapTemporaryExplicitRefsInObject(obj, maps);
   });
 }
 
 interface GlobalVariableMetadataSlots {
+  m_numeric_variables: [c_custom_variable_reference_tu1, number][];
   m_object_variables: number[];
   m_player_variables: number[];
   m_team_variables: [number, number][];
@@ -168,6 +221,14 @@ function extend_global_metadata(
   const maxTeamGlobal = Math.max(0, ...maps.team.values());
   while (metadata.m_team_variables.length <= maxTeamGlobal) {
     metadata.m_team_variables.push([0, 0]);
+  }
+
+  const maxNumericGlobal = Math.max(0, ...maps.numeric.values());
+  while (metadata.m_numeric_variables.length <= maxNumericGlobal) {
+    metadata.m_numeric_variables.push([
+      new c_custom_variable_reference_tu1(),
+      0,
+    ]);
   }
 }
 
@@ -255,6 +316,7 @@ interface GlobalSlotUsage {
 }
 
 interface TemporarySlotUsage {
+  numeric: Set<number>;
   object: Set<number>;
   player: Set<number>;
   team: Set<number>;
@@ -386,8 +448,18 @@ function collect_slot_usage_from_object(
     }
   }
 
-  if (obj.m_type === 4 && typeof obj.m_variable_index === "number") {
+  if (
+    obj.m_type === e_custom_variable_type_tu1.global_number &&
+    typeof obj.m_variable_index === "number"
+  ) {
     globals.numeric.add(obj.m_variable_index);
+  }
+
+  if (
+    obj.m_type === e_custom_variable_type_mcc.temporary_number &&
+    typeof obj.m_variable_index === "number"
+  ) {
+    temporaries.numeric.add(obj.m_variable_index);
   }
 }
 
@@ -405,6 +477,7 @@ function collect_slot_usage(root: unknown): {
     object: new Set(),
     player: new Set(),
     team: new Set(),
+    numeric: new Set(),
   };
 
   visit_object_tree(root, (obj) =>
@@ -435,6 +508,7 @@ function build_temporary_to_global_maps(
     object: new Map(),
     player: new Map(),
     team: new Map(),
+    numeric: new Map(),
   };
 
   for (const temporaryIndex of [...temporaries.object].sort((a, b) => a - b)) {
@@ -465,6 +539,17 @@ function build_temporary_to_global_maps(
       return;
     }
     maps.team.set(temporaryIndex, globalIndex);
+  }
+
+  for (const temporaryIndex of [...temporaries.numeric].sort((a, b) => a - b)) {
+    const globalIndex = allocate_global_slot(
+      globals.numeric,
+      MAX_NUMERIC_GLOBALS
+    );
+    if (globalIndex === undefined) {
+      return;
+    }
+    maps.numeric.set(temporaryIndex, globalIndex);
   }
 
   return maps;
@@ -630,7 +715,12 @@ function plan_temporary_relocation(
 ): TemporaryToGlobalMaps | undefined {
   const engine = get_custom_engine(variant);
   if (!engine) {
-    return { object: new Map(), player: new Map(), team: new Map() };
+    return {
+      object: new Map(),
+      player: new Map(),
+      team: new Map(),
+      numeric: new Map(),
+    };
   }
 
   const { globals, temporaries } = collect_slot_usage(engine);
@@ -639,9 +729,15 @@ function plan_temporary_relocation(
   if (
     temporaries.object.size === 0 &&
     temporaries.player.size === 0 &&
-    temporaries.team.size === 0
+    temporaries.team.size === 0 &&
+    temporaries.numeric.size === 0
   ) {
-    return { object: new Map(), player: new Map(), team: new Map() };
+    return {
+      object: new Map(),
+      player: new Map(),
+      team: new Map(),
+      numeric: new Map(),
+    };
   }
 
   return build_temporary_to_global_maps(globals, temporaries);

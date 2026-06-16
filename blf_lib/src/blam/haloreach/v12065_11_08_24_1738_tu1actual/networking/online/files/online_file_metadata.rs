@@ -1,7 +1,7 @@
-use binrw::{BinRead, BinWrite};
+﻿use binrw::{BinRead, BinWrite};
 use serde::{Deserialize, Serialize};
 use blf_lib::types::array::StaticArray;
-use crate::types::c_string::{StaticString, StaticWcharString};
+use crate::types::string::{StaticString, StaticWcharString};
 use crate::blam::haloreach::v12065_11_08_24_1738_tu1actual::saved_games::saved_game_files::{
     s_content_item_campaign_metadata,
     s_content_item_firefight_metadata,

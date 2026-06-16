@@ -1,28 +1,37 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { reach_mcc_3nvasion_dlc_fixture } from "../../tests/fixtures/paths";
-import { c_game_engine_custom_variant as c_game_engine_custom_variant_tu1 } from "../blam/haloreach/v12065_11_08_24_1738_tu1actual/game/c_game_engine_custom_variant";
-import { c_game_engine_survival_variant as c_game_engine_survival_variant_tu1 } from "../blam/haloreach/v12065_11_08_24_1738_tu1actual/game/c_game_engine_survival_variant";
+import { c_game_engine_survival_variant as c_game_engine_survival_variant_tu1 } from "../blam/haloreach/v12065_11_08_24_1738_tu1actual/game/game_engine_survival";
 import {
+  c_game_engine_custom_variant as c_game_engine_custom_variant_tu1,
   c_game_variant as c_game_variant_tu1,
   e_game_mode as e_game_mode_tu1,
-} from "../blam/haloreach/v12065_11_08_24_1738_tu1actual/game/c_game_variant";
+} from "../blam/haloreach/v12065_11_08_24_1738_tu1actual/game/game_variant";
 import { e_math_operation as e_math_operation_tu1 } from "../blam/haloreach/v12065_11_08_24_1738_tu1actual/game/megalogamengine/megalogamengine_actions";
 import { e_explicit_player_type as e_explicit_player_type_tu1 } from "../blam/haloreach/v12065_11_08_24_1738_tu1actual/game/megalogamengine/megalogamengine_explicit_player";
-import { c_game_engine_custom_variant as c_game_engine_custom_variant_mcc } from "../blam/haloreach_mcc/v_untracked_25_08_16_1352/game/c_game_engine_custom_variant";
-import { c_game_engine_survival_variant as c_game_engine_survival_variant_mcc } from "../blam/haloreach_mcc/v_untracked_25_08_16_1352/game/c_game_engine_survival_variant";
+import { e_custom_variable_type as e_custom_variable_type_tu1 } from "../blam/haloreach/v12065_11_08_24_1738_tu1actual/game/megalogamengine/megalogamengine_references";
+import { c_game_engine_survival_variant as c_game_engine_survival_variant_mcc } from "../blam/haloreach_mcc/v_untracked_25_08_16_1352/game/game_engine_survival";
 import {
+  c_game_engine_custom_variant as c_game_engine_custom_variant_mcc,
   c_game_variant as c_game_variant_mcc,
   e_game_mode as e_game_mode_mcc,
-} from "../blam/haloreach_mcc/v_untracked_25_08_16_1352/game/c_game_variant";
+  s_custom_game_engine_definition,
+} from "../blam/haloreach_mcc/v_untracked_25_08_16_1352/game/game_variant";
 import {
   c_action,
   e_action_type,
   e_math_operation as e_math_operation_mcc,
+  s_action_object_get_orientation_parameters,
+  s_action_set_score_parameters,
 } from "../blam/haloreach_mcc/v_untracked_25_08_16_1352/game/megalogamengine/megalogamengine_actions";
 import { e_explicit_player_type as e_explicit_player_type_mcc } from "../blam/haloreach_mcc/v_untracked_25_08_16_1352/game/megalogamengine/megalogamengine_explicit_player";
-import { c_explicit_player } from "../blam/haloreach_mcc/v_untracked_25_08_16_1352/game/megalogamengine/megalogamengine_references";
-import { s_custom_game_engine_definition } from "../blam/haloreach_mcc/v_untracked_25_08_16_1352/game/megalogamengine/s_custom_game_engine_definition";
+import {
+  c_custom_variable_reference,
+  c_explicit_player,
+  c_object_reference,
+  e_custom_variable_type as e_custom_variable_type_mcc,
+  e_object_reference_type,
+} from "../blam/haloreach_mcc/v_untracked_25_08_16_1352/game/megalogamengine/megalogamengine_references";
 import { search_for_chunk } from "../blf_chunk";
 import { s_blf_chunk_game_variant as s_blf_chunk_game_variant_mcc } from "../chunks/haloreach_mcc/v_untracked_25_08_16_1352/s_blf_chunk_game_variant";
 import { BlfError } from "../error";
@@ -86,10 +95,15 @@ describe("convert_reach_gametype", () => {
 
   it("relocates a temporary player reference to a global slot MCC → TU1", () => {
     const action = new c_action();
-    action.m_type = 3;
+    action.m_type = e_action_type.object_get_orientation;
     const player = new c_explicit_player();
     player.m_explicit_player_type = e_explicit_player_type_mcc.temporary_0;
-    action.m_object = { m_player: player } as never;
+    const object = new c_object_reference();
+    object.m_type = e_object_reference_type.player_object;
+    object.m_player = player;
+    const parameters = new s_action_object_get_orientation_parameters();
+    parameters.m_object = object;
+    action.m_object_get_orientation_parameters = parameters;
 
     const from = mcc_custom_variant_with_action(action);
     const to = new c_game_variant_tu1();
@@ -99,13 +113,45 @@ describe("convert_reach_gametype", () => {
     );
 
     const copiedPlayer = to.m_custom_variant?.m_game_engine?.m_actions[0]
-      ?.m_object?.m_player as c_explicit_player | undefined;
+      ?.m_object_get_orientation_parameters?.m_object?.m_player as
+      | c_explicit_player
+      | undefined;
     expect(copiedPlayer?.m_explicit_player_type).toBe(
       e_explicit_player_type_tu1.global_0
     );
     expect(
       to.m_custom_variant?.m_game_engine?.m_global_variable_metadata
         .m_player_variables
+    ).toHaveLength(1);
+  });
+
+  it("relocates a temporary_number reference to a global slot MCC → TU1", () => {
+    const action = new c_action();
+    action.m_type = e_action_type.set_score;
+    const parameters = new s_action_set_score_parameters();
+    const variable = new c_custom_variable_reference();
+    variable.m_type = e_custom_variable_type_mcc.temporary_number;
+    variable.m_variable_index = 0;
+    parameters.m_variable = variable;
+    action.m_set_score_parameters = parameters;
+
+    const from = mcc_custom_variant_with_action(action);
+    const to = new c_game_variant_tu1();
+
+    expect(convert_reach_gametype(from, to)).toBe(
+      e_reach_gametype_conversion_error.ok
+    );
+
+    const copiedVariable =
+      to.m_custom_variant?.m_game_engine?.m_actions[0]?.m_set_score_parameters
+        ?.m_variable;
+    expect(copiedVariable?.m_type).toBe(
+      e_custom_variable_type_tu1.global_number
+    );
+    expect(copiedVariable?.m_variable_index).toBe(0);
+    expect(
+      to.m_custom_variant?.m_game_engine?.m_global_variable_metadata
+        .m_numeric_variables
     ).toHaveLength(1);
   });
 
@@ -120,10 +166,15 @@ describe("convert_reach_gametype", () => {
     );
 
     const action = new c_action();
-    action.m_type = 3;
+    action.m_type = e_action_type.object_get_orientation;
     const player = new c_explicit_player();
     player.m_explicit_player_type = e_explicit_player_type_mcc.temporary_0;
-    action.m_object = { m_player: player } as never;
+    const object = new c_object_reference();
+    object.m_type = e_object_reference_type.player_object;
+    object.m_player = player;
+    const parameters = new s_action_object_get_orientation_parameters();
+    parameters.m_object = object;
+    action.m_object_get_orientation_parameters = parameters;
     engine.m_actions.push(action);
 
     custom.m_game_engine = engine;

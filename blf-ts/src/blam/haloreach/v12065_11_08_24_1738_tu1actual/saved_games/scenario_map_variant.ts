@@ -17,7 +17,7 @@ import {
   real_point3d_default,
   real_rectangle3d_default,
 } from "../../../common/math/real_types";
-import { c_single_language_string_table } from "../game/c_string_table";
+import { c_single_language_string_table } from "../game/string_table";
 import { read_axes, write_axes } from "../memory/bitstream_extensions";
 import {
   simulation_read_position,

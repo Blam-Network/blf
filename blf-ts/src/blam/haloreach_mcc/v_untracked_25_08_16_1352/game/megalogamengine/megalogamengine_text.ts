@@ -47,9 +47,17 @@ export class c_player_filter_modifier {
     }
   }
 }
+export enum e_replaceable_token_type {
+  none = -1,
+  player = 0,
+  team = 1,
+  object = 2,
+  custom_variable = 3,
+  custom_timer = 4,
+}
 export class c_replaceable_token {
-  @AutoMap(() => Number)
-  m_type = 0;
+  @AutoMap(() => e_replaceable_token_type)
+  m_type: e_replaceable_token_type = e_replaceable_token_type.player;
   @AutoMap(() => c_player_reference)
   m_player?: c_player_reference;
   @AutoMap(() => c_object_reference)
@@ -61,69 +69,75 @@ export class c_replaceable_token {
   @AutoMap(() => c_custom_variable_reference)
   m_custom_variable?: c_custom_variable_reference;
   decode(bitstream: c_bitstream_reader): void {
-    this.m_type = bitstream.read_integer("token-type", 3);
+    this.m_type = bitstream.read_enum(
+      "token-type",
+      3,
+      e_replaceable_token_type
+    );
     switch (this.m_type) {
-      case 1: {
+      case e_replaceable_token_type.player: {
         const player = new c_player_reference();
         player.decode(bitstream);
         this.m_player = player;
         break;
       }
-      case 2: {
+      case e_replaceable_token_type.team: {
         const team = new c_team_reference();
         team.decode(bitstream);
         this.m_team = team;
         break;
       }
-      case 3: {
+      case e_replaceable_token_type.object: {
         const object = new c_object_reference();
         object.decode(bitstream);
         this.m_object = object;
         break;
       }
-      case 4: {
+      case e_replaceable_token_type.custom_variable: {
         const customVariable = new c_custom_variable_reference();
         customVariable.decode(bitstream);
         this.m_custom_variable = customVariable;
         break;
       }
-      case 5: {
+      case e_replaceable_token_type.custom_timer: {
         const customTimer = new c_custom_timer_reference();
         customTimer.decode(bitstream);
         this.m_custom_timer = customTimer;
         break;
       }
-      default:
+      case e_replaceable_token_type.none:
         break;
     }
   }
   encode(bitstream: c_bitstream_writer): void {
-    bitstream.write_integer(this.m_type, 3);
+    bitstream.write_enum(this.m_type, 3, e_replaceable_token_type);
     switch (this.m_type) {
-      case 1:
+      case e_replaceable_token_type.player:
         requireField(this.m_player, "m_player does not exist.").encode(
           bitstream
         );
         break;
-      case 2:
+      case e_replaceable_token_type.team:
         requireField(this.m_team, "m_team does not exist.").encode(bitstream);
         break;
-      case 3:
+      case e_replaceable_token_type.object:
         requireField(this.m_object, "m_object does not exist.").encode(
           bitstream
         );
         break;
-      case 4:
+      case e_replaceable_token_type.custom_variable:
         requireField(
           this.m_custom_variable,
           "m_custom_variable does not exist."
         ).encode(bitstream);
         break;
-      case 5:
+      case e_replaceable_token_type.custom_timer:
         requireField(
           this.m_custom_timer,
           "m_custom_timer does not exist."
         ).encode(bitstream);
+        break;
+      case e_replaceable_token_type.none:
         break;
       default:
         throw new BlfError(`Invalid c_replaceable_token: type ${this.m_type}`);

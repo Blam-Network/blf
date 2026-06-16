@@ -1,4 +1,4 @@
-use std::io::{Cursor, Read, Seek, Write};
+﻿use std::io::{Cursor, Read, Seek, Write};
 use binrw::{BinRead, BinResult, BinWrite, BinWriterExt, Endian};
 use flate2::{Compress, Compression};
 use flate2::read::ZlibDecoder;
@@ -8,7 +8,7 @@ use blf_lib::blam::common::memory::secure_signature::s_network_http_request_hash
 use blf_lib::blf::versions::haloreach::v12065_11_08_24_1738_tu1actual::s_hopper_voting_configuration;
 use blf_lib::io::bitstream::{c_bitstream_reader, e_bitstream_byte_order};
 use blf_lib::types::array::StaticArray;
-use crate::types::c_string::StaticString;
+use crate::types::string::StaticString;
 use blf_lib::types::time::{filetime};
 use blf_lib::types::bool::Bool;
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;

@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { reach_12065_oddball_fixture } from "../../../../tests/fixtures/paths";
-import { e_game_mode } from "../../../blam/haloreach/v12065_11_08_24_1738_tu1actual/game/c_game_variant";
+import { e_game_mode } from "../../../blam/haloreach/v12065_11_08_24_1738_tu1actual/game/game_variant";
 import { search_for_chunk } from "../../../blf_chunk";
 import { BlfError } from "../../../error";
 import { write_blffile } from "../../../index";

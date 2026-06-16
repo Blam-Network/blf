@@ -1,15 +1,15 @@
-use std::u32;
+﻿use std::u32;
 use binrw::{binrw, BinRead, BinWrite};
 use serde::{Deserialize, Serialize};
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
 use blf_lib_derive::BlfChunk;
 use blf_lib::types::array::StaticArray;
-use blf_lib::types::c_string::StaticWcharString;
+use blf_lib::types::string::StaticWcharString;
 use blf_lib::types::u64::Unsigned64;
 #[cfg(feature = "napi")]
 use napi_derive::napi;
 use blf_lib::types::time::time64_t;
-use crate::types::c_string::StaticString;
+use crate::types::string::StaticString;
 
 #[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
 #[cfg_attr(feature = "napi", napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]

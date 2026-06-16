@@ -5,7 +5,7 @@ import {
   e_bitstream_byte_order,
 } from "../../../bitstream";
 import { security_calculate_hash } from "../../../blam/common/cache/security_functions";
-import { c_game_variant } from "../../../blam/haloreach_mcc/v_untracked_25_08_16_1352/game/c_game_variant";
+import { c_game_variant } from "../../../blam/haloreach_mcc/v_untracked_25_08_16_1352/game/game_variant";
 import { BLFChunkBase, blf } from "../../../blf_chunk";
 import { BlfError } from "../../../error";
 

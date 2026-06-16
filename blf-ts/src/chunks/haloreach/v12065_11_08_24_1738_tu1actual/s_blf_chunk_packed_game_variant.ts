@@ -4,7 +4,7 @@ import {
   c_bitstream_writer,
   e_bitstream_byte_order,
 } from "../../../bitstream";
-import { c_game_variant } from "../../../blam/haloreach/v12065_11_08_24_1738_tu1actual/game/c_game_variant";
+import { c_game_variant } from "../../../blam/haloreach/v12065_11_08_24_1738_tu1actual/game/game_variant";
 import { BLFChunkBase, blf } from "../../../blf_chunk";
 import { BlfError } from "../../../error";
 

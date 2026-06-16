@@ -31,7 +31,7 @@ use blf_lib::blf::versions::halo3::v08117_07_03_07_1702_delta::{s_blf_chunk_banh
 use blf_lib::blf::versions::halo3::v08117_07_03_07_1702_delta::{s_blf_chunk_end_of_file, s_blf_chunk_game_set_entry, s_blf_chunk_map_manifest, s_blf_chunk_start_of_file};
 use blf_lib::io::{read_file_to_string, read_json_file, write_json_file};
 use blf_lib::result::{BLFLibError, BLFLibResult};
-use blf_lib::types::c_string::StaticString;
+use blf_lib::types::string::StaticString;
 use crate::title_storage::halo3::v08117_07_03_07_1702_delta::title_storage_config::{get_hopper_id_from_hopper_folder_name, matchmaking_hopper_category_configuration_and_descriptions};
 use crate::title_storage::halo3::v08117_07_03_07_1702_delta::title_storage_output::hopper_directory_name_max_length;
 
