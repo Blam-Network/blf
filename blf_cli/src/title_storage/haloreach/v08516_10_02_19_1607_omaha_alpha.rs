@@ -1201,12 +1201,7 @@ impl v08516_10_02_19_1607_omaha_alpha {
 
         let netc = find_chunk_in_file::<s_blf_chunk_network_configuration>(network_configuration_source_path)?;
 
-        BlfFileBuilder::new()
-            .add_chunk(s_blf_chunk_start_of_file::new("omaha net config"))
-            .add_chunk(s_blf_chunk_author::for_build::<v08516_10_02_19_1607_omaha_alpha>())
-            .add_chunk(netc)
-            .add_chunk(s_blf_chunk_end_of_file::default())
-            .write_file(network_configuration_dest_path)?;
+        write_json_file(&netc.config, network_configuration_dest_path)?;
 
         やった!(task)
     }
