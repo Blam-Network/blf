@@ -210,14 +210,14 @@ impl c_condition {
                 )?;
                 parameters.encode(bitstream)?;
             }
-            e_condition_type::player_player_is_spartan => {
+            e_condition_type::player_is_spartan => {
                 let parameters = OPTION_TO_RESULT!(
                     &self.m_player_is_spartan_parameters,
                     format!("Can't encode condition type {:?} without m_player_is_spartan_parameters", self.m_type)
                 )?;
                 parameters.encode(bitstream)?;
             }
-            e_condition_type::player_player_is_elite => {
+            e_condition_type::player_is_elite => {
                 let parameters = OPTION_TO_RESULT!(
                     &self.m_player_is_elite_parameters,
                     format!("Can't encode condition type {:?} without m_player_is_elite_parameters", self.m_type)
@@ -326,12 +326,12 @@ impl c_condition {
                 parameters.decode(bitstream)?;
                 self.m_equipment_is_active_parameters = Some(parameters);
             }
-            e_condition_type::player_player_is_spartan => {
+            e_condition_type::player_is_spartan => {
                 let mut parameters = s_condition_player_is_spartan_parameters::default();
                 parameters.decode(bitstream)?;
                 self.m_player_is_spartan_parameters = Some(parameters);
             }
-            e_condition_type::player_player_is_elite => {
+            e_condition_type::player_is_elite => {
                 let mut parameters = s_condition_player_is_elite_parameters::default();
                 parameters.decode(bitstream)?;
                 self.m_player_is_elite_parameters = Some(parameters);
