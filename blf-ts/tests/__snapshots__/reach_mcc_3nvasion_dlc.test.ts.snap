@@ -376,7 +376,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               "m_infinite_ammo_setting": 0,
               "m_infinite_equipment_setting": 0,
               "m_initial_equipment_absolute_index": -3,
-              "m_initial_grenade_count_setting": 0,
+              "m_initial_grenade_count_setting": "none",
               "m_initial_primary_weapon_absolute_index": -3,
               "m_initial_secondary_weapon_absolute_index": -3,
               "m_melee_damage_modifier_percentage_setting": 0,
@@ -424,7 +424,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               "m_infinite_ammo_setting": 0,
               "m_infinite_equipment_setting": 0,
               "m_initial_equipment_absolute_index": -3,
-              "m_initial_grenade_count_setting": 0,
+              "m_initial_grenade_count_setting": "none",
               "m_initial_primary_weapon_absolute_index": -3,
               "m_initial_secondary_weapon_absolute_index": -3,
               "m_melee_damage_modifier_percentage_setting": 0,
@@ -473,7 +473,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               "m_infinite_ammo_setting": 0,
               "m_infinite_equipment_setting": 0,
               "m_initial_equipment_absolute_index": -3,
-              "m_initial_grenade_count_setting": 0,
+              "m_initial_grenade_count_setting": "none",
               "m_initial_primary_weapon_absolute_index": -3,
               "m_initial_secondary_weapon_absolute_index": -3,
               "m_melee_damage_modifier_percentage_setting": 0,
@@ -523,7 +523,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               "m_infinite_ammo_setting": 0,
               "m_infinite_equipment_setting": 0,
               "m_initial_equipment_absolute_index": -3,
-              "m_initial_grenade_count_setting": 0,
+              "m_initial_grenade_count_setting": "none",
               "m_initial_primary_weapon_absolute_index": -3,
               "m_initial_secondary_weapon_absolute_index": -3,
               "m_melee_damage_modifier_percentage_setting": 0,
@@ -640,7 +640,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               "m_infinite_ammo_setting": 0,
               "m_infinite_equipment_setting": 0,
               "m_initial_equipment_absolute_index": -3,
-              "m_initial_grenade_count_setting": 0,
+              "m_initial_grenade_count_setting": "none",
               "m_initial_primary_weapon_absolute_index": -3,
               "m_initial_secondary_weapon_absolute_index": -3,
               "m_melee_damage_modifier_percentage_setting": 0,
@@ -12927,7 +12927,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -12950,7 +12950,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -12975,7 +12975,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -13000,7 +13000,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -13025,7 +13025,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -13050,7 +13050,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -13075,7 +13075,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -13102,7 +13102,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -13127,7 +13127,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 1,
           },
           {
@@ -13150,7 +13150,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -13175,7 +13175,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -13200,7 +13200,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -13225,7 +13225,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -13250,7 +13250,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -13277,7 +13277,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -13302,7 +13302,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 1,
           },
           {
@@ -13325,7 +13325,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -13350,7 +13350,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -13375,7 +13375,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -13400,7 +13400,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -13425,7 +13425,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -13452,7 +13452,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -13477,7 +13477,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 1,
           },
           {
@@ -13500,7 +13500,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -13523,7 +13523,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -13549,7 +13549,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 1,
           },
           {
@@ -13576,7 +13576,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 2,
           },
           {
@@ -13599,7 +13599,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -13625,7 +13625,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 1,
           },
           {
@@ -13652,7 +13652,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 2,
           },
           {
@@ -13678,7 +13678,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -13693,7 +13693,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
                 "m_variable_index": 1,
               },
             },
-            "m_type": "is_zero",
+            "m_type": "timer_expired",
             "m_union_group": 1,
           },
           {
@@ -13716,7 +13716,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 2,
           },
           {
@@ -13739,7 +13739,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 3,
           },
           {
@@ -13753,7 +13753,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
                 "m_type": "global_team",
               },
             },
-            "m_type": "has_any_players",
+            "m_type": "team_is_active",
             "m_union_group": 0,
           },
           {
@@ -13780,7 +13780,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -13807,7 +13807,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -13830,7 +13830,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -13857,7 +13857,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -13884,7 +13884,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -13907,7 +13907,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -13934,7 +13934,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -13961,7 +13961,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -13984,7 +13984,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -14007,7 +14007,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -14030,7 +14030,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -14053,7 +14053,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -14076,7 +14076,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -14103,7 +14103,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -14130,7 +14130,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -14157,7 +14157,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -14184,7 +14184,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -14207,7 +14207,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -14234,7 +14234,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -14261,7 +14261,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -14284,7 +14284,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -14311,7 +14311,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -14338,7 +14338,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -14361,7 +14361,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -14384,7 +14384,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -14409,7 +14409,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -14437,7 +14437,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -14460,7 +14460,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -14485,7 +14485,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 1,
           },
           {
@@ -14508,7 +14508,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 2,
           },
           {
@@ -14531,7 +14531,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -14556,7 +14556,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 1,
           },
           {
@@ -14579,7 +14579,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 2,
           },
           {
@@ -14602,7 +14602,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -14627,7 +14627,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 1,
           },
           {
@@ -14650,7 +14650,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 2,
           },
           {
@@ -14675,7 +14675,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -14700,7 +14700,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -14725,7 +14725,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -14748,7 +14748,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -14771,7 +14771,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -14797,7 +14797,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -14812,7 +14812,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
                 "m_variable_index": 2,
               },
             },
-            "m_type": "is_zero",
+            "m_type": "timer_expired",
             "m_union_group": 1,
           },
           {
@@ -14837,7 +14837,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -14862,7 +14862,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -14879,7 +14879,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
                 "m_object_type_index": 221,
               },
             },
-            "m_type": "is_of_type",
+            "m_type": "object_is_type",
             "m_union_group": 1,
           },
           {
@@ -14896,7 +14896,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
                 "m_object_type_index": 220,
               },
             },
-            "m_type": "is_of_type",
+            "m_type": "object_is_type",
             "m_union_group": 2,
           },
           {
@@ -14921,7 +14921,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": true,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -14944,7 +14944,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -14967,7 +14967,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -14992,7 +14992,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -15017,7 +15017,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -15040,7 +15040,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -15063,7 +15063,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 1,
           },
           {
@@ -15086,7 +15086,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -15109,7 +15109,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -15134,7 +15134,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -15157,7 +15157,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -15180,7 +15180,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 1,
           },
           {
@@ -15203,7 +15203,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -15226,7 +15226,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -15249,7 +15249,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -15272,7 +15272,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 1,
           },
           {
@@ -15295,7 +15295,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -15318,7 +15318,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -15341,7 +15341,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -15364,7 +15364,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -15389,7 +15389,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -15415,7 +15415,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -15441,7 +15441,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -15469,7 +15469,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 1,
           },
           {
@@ -15495,7 +15495,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -15523,7 +15523,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 1,
           },
           {
@@ -15549,7 +15549,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -15574,7 +15574,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -15594,7 +15594,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
                 "m_type": "global_object",
               },
             },
-            "m_type": "shape_contains",
+            "m_type": "object_in_area",
             "m_union_group": 1,
           },
           {
@@ -15609,7 +15609,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
                 "m_variable_index": 2,
               },
             },
-            "m_type": "is_zero",
+            "m_type": "timer_expired",
             "m_union_group": 0,
           },
           {
@@ -15629,7 +15629,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
                 "m_type": "global_object",
               },
             },
-            "m_type": "shape_contains",
+            "m_type": "object_in_area",
             "m_union_group": 0,
           },
           {
@@ -15656,7 +15656,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 1,
           },
           {
@@ -15683,7 +15683,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 2,
           },
           {
@@ -15710,7 +15710,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -15736,7 +15736,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 1,
           },
           {
@@ -15762,7 +15762,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -15774,7 +15774,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
                 "m_variable_index": 2,
               },
             },
-            "m_type": "is_zero",
+            "m_type": "timer_expired",
             "m_union_group": 1,
           },
           {
@@ -15800,7 +15800,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -15812,7 +15812,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
                 "m_variable_index": 3,
               },
             },
-            "m_type": "is_zero",
+            "m_type": "timer_expired",
             "m_union_group": 1,
           },
           {
@@ -15837,7 +15837,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -15863,7 +15863,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 1,
           },
           {
@@ -15883,7 +15883,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
                 "m_type": "global_object",
               },
             },
-            "m_type": "shape_contains",
+            "m_type": "object_in_area",
             "m_union_group": 2,
           },
           {
@@ -15909,7 +15909,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -15935,7 +15935,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 1,
           },
           {
@@ -15961,7 +15961,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -15987,7 +15987,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 1,
           },
           {
@@ -16013,7 +16013,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 2,
           },
           {
@@ -16039,7 +16039,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -16068,7 +16068,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 1,
           },
           {
@@ -16093,7 +16093,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -16116,7 +16116,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 1,
           },
           {
@@ -16131,7 +16131,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
                 "m_variable_index": 0,
               },
             },
-            "m_type": "is_zero",
+            "m_type": "timer_expired",
             "m_union_group": 2,
           },
           {
@@ -16156,7 +16156,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -16183,7 +16183,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 1,
           },
           {
@@ -16208,7 +16208,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -16235,7 +16235,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 1,
           },
           {
@@ -16260,7 +16260,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -16287,7 +16287,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 1,
           },
           {
@@ -16312,7 +16312,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -16339,7 +16339,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 1,
           },
           {
@@ -16364,7 +16364,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -16391,7 +16391,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 1,
           },
           {
@@ -16416,7 +16416,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -16443,7 +16443,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 1,
           },
           {
@@ -16454,7 +16454,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
                 "m_type": "round",
               },
             },
-            "m_type": "is_zero",
+            "m_type": "timer_expired",
             "m_union_group": 0,
           },
           {
@@ -16477,7 +16477,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 1,
           },
           {
@@ -16500,7 +16500,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -16527,7 +16527,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 1,
           },
           {
@@ -16547,7 +16547,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
                 "m_type": "global_object",
               },
             },
-            "m_type": "shape_contains",
+            "m_type": "object_in_area",
             "m_union_group": 0,
           },
           {
@@ -16570,7 +16570,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -16597,7 +16597,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": true,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 1,
           },
           {
@@ -16624,7 +16624,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 2,
           },
           {
@@ -16647,7 +16647,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -16670,7 +16670,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": true,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 1,
           },
           {
@@ -16693,7 +16693,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": true,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 2,
           },
           {
@@ -16716,7 +16716,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -16739,7 +16739,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": true,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 1,
           },
           {
@@ -16762,7 +16762,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": true,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 2,
           },
           {
@@ -16787,7 +16787,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -16810,7 +16810,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 1,
           },
           {
@@ -16837,7 +16837,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 2,
           },
           {
@@ -16852,7 +16852,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
                 "m_variable_index": 2,
               },
             },
-            "m_type": "is_zero",
+            "m_type": "timer_expired",
             "m_union_group": 0,
           },
           {
@@ -16879,7 +16879,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": true,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -16904,7 +16904,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -16924,7 +16924,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
                 "m_type": "global_object",
               },
             },
-            "m_type": "shape_contains",
+            "m_type": "object_in_area",
             "m_union_group": 1,
           },
           {
@@ -16951,7 +16951,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": true,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -16974,7 +16974,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -17001,7 +17001,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -17027,7 +17027,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 1,
           },
           {
@@ -17050,7 +17050,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -17073,7 +17073,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -17100,7 +17100,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -17120,7 +17120,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
                 "m_type": "global_object",
               },
             },
-            "m_type": "shape_contains",
+            "m_type": "object_in_area",
             "m_union_group": 1,
           },
           {
@@ -17147,7 +17147,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -17167,7 +17167,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
                 "m_type": "global_object",
               },
             },
-            "m_type": "shape_contains",
+            "m_type": "object_in_area",
             "m_union_group": 1,
           },
           {
@@ -17190,7 +17190,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 2,
           },
           {
@@ -17204,7 +17204,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
                 "m_type": "global_team",
               },
             },
-            "m_type": "has_any_players",
+            "m_type": "team_is_active",
             "m_union_group": 0,
           },
           {
@@ -17227,7 +17227,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 1,
           },
           {
@@ -17254,7 +17254,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": true,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 2,
           },
           {
@@ -17280,7 +17280,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 3,
           },
           {
@@ -17294,7 +17294,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
                 "m_type": "global_object",
               },
             },
-            "m_type": "is_out_of_bounds",
+            "m_type": "object_out_of_bounds",
             "m_union_group": 4,
           },
           {
@@ -17309,7 +17309,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
                 "m_variable_index": 3,
               },
             },
-            "m_type": "is_zero",
+            "m_type": "timer_expired",
             "m_union_group": 4,
           },
           {
@@ -17332,7 +17332,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -17346,7 +17346,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
                 "m_type": "global_team",
               },
             },
-            "m_type": "has_any_players",
+            "m_type": "team_is_active",
             "m_union_group": 1,
           },
           {
@@ -17373,7 +17373,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": true,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 2,
           },
           {
@@ -17399,7 +17399,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 3,
           },
           {
@@ -17425,7 +17425,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 4,
           },
           {
@@ -17452,7 +17452,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": true,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 5,
           },
           {
@@ -17475,7 +17475,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -17489,7 +17489,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
                 "m_type": "global_team",
               },
             },
-            "m_type": "has_any_players",
+            "m_type": "team_is_active",
             "m_union_group": 1,
           },
           {
@@ -17516,7 +17516,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": true,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 2,
           },
           {
@@ -17542,7 +17542,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 3,
           },
           {
@@ -17568,7 +17568,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 4,
           },
           {
@@ -17595,7 +17595,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 5,
           },
           {
@@ -17618,7 +17618,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -17645,7 +17645,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": true,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 1,
           },
           {
@@ -17671,7 +17671,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 2,
           },
           {
@@ -17686,7 +17686,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
                 "m_variable_index": 0,
               },
             },
-            "m_type": "is_zero",
+            "m_type": "timer_expired",
             "m_union_group": 3,
           },
           {
@@ -17709,7 +17709,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -17724,7 +17724,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
                 "m_type": "global_player",
               },
             },
-            "m_type": "killer_type_is",
+            "m_type": "player_died",
             "m_union_group": 1,
           },
           {
@@ -17747,7 +17747,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -17774,7 +17774,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 1,
           },
           {
@@ -17797,7 +17797,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -17820,7 +17820,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -17843,7 +17843,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -17866,7 +17866,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -17892,7 +17892,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 1,
           },
           {
@@ -17921,7 +17921,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 2,
           },
           {
@@ -17946,7 +17946,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -17969,7 +17969,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 1,
           },
           {
@@ -17996,7 +17996,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 2,
           },
           {
@@ -18023,7 +18023,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": true,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -18050,7 +18050,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -18076,7 +18076,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 1,
           },
           {
@@ -18099,7 +18099,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -18125,7 +18125,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -18151,7 +18151,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -18177,7 +18177,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -18205,7 +18205,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 1,
           },
           {
@@ -18231,7 +18231,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -18259,7 +18259,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 1,
           },
           {
@@ -18284,7 +18284,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -18307,7 +18307,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -18334,7 +18334,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": true,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 1,
           },
           {
@@ -18357,7 +18357,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -18386,7 +18386,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 1,
           },
           {
@@ -18413,7 +18413,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -18439,7 +18439,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 1,
           },
           {
@@ -18465,7 +18465,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -18491,7 +18491,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 1,
           },
           {
@@ -18503,7 +18503,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
                 "m_variable_index": 2,
               },
             },
-            "m_type": "is_zero",
+            "m_type": "timer_expired",
             "m_union_group": 2,
           },
           {
@@ -18529,7 +18529,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -18555,7 +18555,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 1,
           },
           {
@@ -18567,7 +18567,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
                 "m_variable_index": 3,
               },
             },
-            "m_type": "is_zero",
+            "m_type": "timer_expired",
             "m_union_group": 2,
           },
           {
@@ -18592,7 +18592,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -18615,7 +18615,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 1,
           },
           {
@@ -18635,7 +18635,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
                 "m_type": "global_object",
               },
             },
-            "m_type": "shape_contains",
+            "m_type": "object_in_area",
             "m_union_group": 2,
           },
           {
@@ -18650,7 +18650,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
                 "m_variable_index": 0,
               },
             },
-            "m_type": "is_zero",
+            "m_type": "timer_expired",
             "m_union_group": 3,
           },
           {
@@ -18673,7 +18673,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -18700,7 +18700,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": true,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 1,
           },
           {
@@ -18726,7 +18726,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 2,
           },
           {
@@ -18753,7 +18753,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -18776,7 +18776,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -18803,7 +18803,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": true,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 1,
           },
           {
@@ -18829,7 +18829,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 2,
           },
           {
@@ -18844,7 +18844,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
                 "m_variable_index": 0,
               },
             },
-            "m_type": "is_zero",
+            "m_type": "timer_expired",
             "m_union_group": 3,
           },
           {
@@ -18870,7 +18870,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -18899,7 +18899,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 1,
           },
           {
@@ -18926,7 +18926,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -18946,7 +18946,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
                 "m_type": "global_object",
               },
             },
-            "m_type": "shape_contains",
+            "m_type": "object_in_area",
             "m_union_group": 1,
           },
           {
@@ -18973,7 +18973,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -18993,7 +18993,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
                 "m_type": "global_object",
               },
             },
-            "m_type": "shape_contains",
+            "m_type": "object_in_area",
             "m_union_group": 1,
           },
           {
@@ -19016,7 +19016,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 2,
           },
           {
@@ -19030,7 +19030,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
                 "m_type": "global_team",
               },
             },
-            "m_type": "has_any_players",
+            "m_type": "team_is_active",
             "m_union_group": 0,
           },
           {
@@ -19053,7 +19053,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 1,
           },
           {
@@ -19080,7 +19080,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": true,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 2,
           },
           {
@@ -19106,7 +19106,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 3,
           },
           {
@@ -19120,7 +19120,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
                 "m_type": "global_object",
               },
             },
-            "m_type": "is_out_of_bounds",
+            "m_type": "object_out_of_bounds",
             "m_union_group": 4,
           },
           {
@@ -19135,7 +19135,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
                 "m_variable_index": 3,
               },
             },
-            "m_type": "is_zero",
+            "m_type": "timer_expired",
             "m_union_group": 4,
           },
           {
@@ -19150,7 +19150,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
                 "m_variable_index": 1,
               },
             },
-            "m_type": "is_zero",
+            "m_type": "timer_expired",
             "m_union_group": 4,
           },
           {
@@ -19176,7 +19176,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -19196,7 +19196,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
                 "m_type": "global_object",
               },
             },
-            "m_type": "shape_contains",
+            "m_type": "object_in_area",
             "m_union_group": 0,
           },
           {
@@ -19210,7 +19210,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
                 "m_type": "global_object",
               },
             },
-            "m_type": "is_out_of_bounds",
+            "m_type": "object_out_of_bounds",
             "m_union_group": 0,
           },
           {
@@ -19233,7 +19233,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -19260,7 +19260,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 1,
           },
           {
@@ -19286,7 +19286,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 2,
           },
           {
@@ -19301,7 +19301,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
                 "m_variable_index": 3,
               },
             },
-            "m_type": "is_zero",
+            "m_type": "timer_expired",
             "m_union_group": 3,
           },
           {
@@ -19324,7 +19324,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -19338,7 +19338,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
                 "m_type": "global_team",
               },
             },
-            "m_type": "has_any_players",
+            "m_type": "team_is_active",
             "m_union_group": 1,
           },
           {
@@ -19365,7 +19365,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": true,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 2,
           },
           {
@@ -19391,7 +19391,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 3,
           },
           {
@@ -19417,7 +19417,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 4,
           },
           {
@@ -19444,7 +19444,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": true,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 5,
           },
           {
@@ -19467,7 +19467,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -19481,7 +19481,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
                 "m_type": "global_team",
               },
             },
-            "m_type": "has_any_players",
+            "m_type": "team_is_active",
             "m_union_group": 1,
           },
           {
@@ -19508,7 +19508,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": true,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 2,
           },
           {
@@ -19534,7 +19534,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 3,
           },
           {
@@ -19560,7 +19560,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 4,
           },
           {
@@ -19587,7 +19587,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 5,
           },
           {
@@ -19610,7 +19610,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -19637,7 +19637,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": true,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 1,
           },
           {
@@ -19663,7 +19663,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 2,
           },
           {
@@ -19678,7 +19678,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
                 "m_variable_index": 0,
               },
             },
-            "m_type": "is_zero",
+            "m_type": "timer_expired",
             "m_union_group": 3,
           },
           {
@@ -19701,7 +19701,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -19716,7 +19716,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
                 "m_type": "global_player",
               },
             },
-            "m_type": "killer_type_is",
+            "m_type": "player_died",
             "m_union_group": 1,
           },
           {
@@ -19739,7 +19739,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -19751,7 +19751,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
                 "m_variable_index": 5,
               },
             },
-            "m_type": "is_zero",
+            "m_type": "timer_expired",
             "m_union_group": 0,
           },
           {
@@ -19774,7 +19774,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -19786,7 +19786,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
                 "m_variable_index": 1,
               },
             },
-            "m_type": "is_zero",
+            "m_type": "timer_expired",
             "m_union_group": 0,
           },
           {
@@ -19797,7 +19797,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
                 "m_type": "round",
               },
             },
-            "m_type": "is_zero",
+            "m_type": "timer_expired",
             "m_union_group": 0,
           },
           {
@@ -19819,7 +19819,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -19840,7 +19840,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 1,
           },
           {
@@ -19863,7 +19863,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -19875,7 +19875,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
                 "m_variable_index": 0,
               },
             },
-            "m_type": "is_zero",
+            "m_type": "timer_expired",
             "m_union_group": 1,
           },
           {
@@ -19898,7 +19898,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -19909,7 +19909,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
                 "m_type": "grace_period",
               },
             },
-            "m_type": "is_zero",
+            "m_type": "timer_expired",
             "m_union_group": 1,
           },
           {
@@ -19932,7 +19932,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": true,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 2,
           },
           {
@@ -19943,7 +19943,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
                 "m_type": "round",
               },
             },
-            "m_type": "is_zero",
+            "m_type": "timer_expired",
             "m_union_group": 0,
           },
           {
@@ -19966,7 +19966,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": true,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 1,
           },
           {
@@ -19977,7 +19977,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
                 "m_type": "sudden_death",
               },
             },
-            "m_type": "is_zero",
+            "m_type": "timer_expired",
             "m_union_group": 2,
           },
           {
@@ -20000,7 +20000,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": true,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 3,
           },
           {
@@ -20025,7 +20025,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -20051,7 +20051,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 1,
           },
           {
@@ -20077,7 +20077,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 2,
           },
           {
@@ -20102,7 +20102,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -20128,7 +20128,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 1,
           },
           {
@@ -20154,7 +20154,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 2,
           },
           {
@@ -20177,7 +20177,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -20200,7 +20200,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -20223,7 +20223,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 1,
           },
           {
@@ -20246,7 +20246,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -20269,7 +20269,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 1,
           },
           {
@@ -20292,7 +20292,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -20315,7 +20315,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -20338,7 +20338,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 1,
           },
           {
@@ -20361,7 +20361,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -20384,7 +20384,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 1,
           },
           {
@@ -20407,7 +20407,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -20419,7 +20419,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
                 "m_variable_index": 6,
               },
             },
-            "m_type": "is_zero",
+            "m_type": "timer_expired",
             "m_union_group": 0,
           },
           {
@@ -20444,7 +20444,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -20467,7 +20467,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
           {
@@ -20490,7 +20490,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_negated": false,
-            "m_type": "compare",
+            "m_type": "if",
             "m_union_group": 0,
           },
         ],
@@ -25038,7 +25038,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               "m_infinite_ammo_setting": 0,
               "m_infinite_equipment_setting": 0,
               "m_initial_equipment_absolute_index": -3,
-              "m_initial_grenade_count_setting": 0,
+              "m_initial_grenade_count_setting": "none",
               "m_initial_primary_weapon_absolute_index": -3,
               "m_initial_secondary_weapon_absolute_index": -3,
               "m_melee_damage_modifier_percentage_setting": 0,
@@ -25089,7 +25089,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               "m_infinite_ammo_setting": 0,
               "m_infinite_equipment_setting": 0,
               "m_initial_equipment_absolute_index": -3,
-              "m_initial_grenade_count_setting": 0,
+              "m_initial_grenade_count_setting": "none",
               "m_initial_primary_weapon_absolute_index": -3,
               "m_initial_secondary_weapon_absolute_index": -3,
               "m_melee_damage_modifier_percentage_setting": 0,

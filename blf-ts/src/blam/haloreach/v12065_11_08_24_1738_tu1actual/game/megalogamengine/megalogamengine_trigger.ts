@@ -10,8 +10,6 @@ export enum e_trigger_execution_mode {
   for_each_team = 3,
   for_each_object = 4,
   for_each_object_with_label = 5,
-  unknown6 = 6,
-  unknown7 = 7,
 }
 export enum e_trigger_type {
   normal = 0,
@@ -24,6 +22,7 @@ export enum e_trigger_type {
   pregame = 7,
   incident = 8,
 }
+
 export class c_trigger {
   @AutoMap(() => e_trigger_execution_mode)
   m_execution_mode: e_trigger_execution_mode = e_trigger_execution_mode.normal;

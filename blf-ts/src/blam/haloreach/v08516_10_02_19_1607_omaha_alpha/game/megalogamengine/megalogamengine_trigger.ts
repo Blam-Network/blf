@@ -11,8 +11,6 @@ export enum e_trigger_execution_mode {
   for_each_player_randomly = 2,
   for_each_team = 3,
   for_each_object_with_label = 4,
-  unknown5 = 5,
-  unknown6 = 6,
 }
 
 export enum e_trigger_type {

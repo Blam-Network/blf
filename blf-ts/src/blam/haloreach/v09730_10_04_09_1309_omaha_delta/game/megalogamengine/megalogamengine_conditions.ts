@@ -127,103 +127,103 @@ export class c_condition {
       10
     );
     switch (this.m_type) {
-      case e_condition_type.compare: {
+      case e_condition_type.if: {
         const params = new s_condition_if_parameters();
         params.decode(bitstream);
         this.m_if_parameters = params;
         break;
       }
-      case e_condition_type.shape_contains: {
+      case e_condition_type.object_in_area: {
         const params = new s_condition_object_in_area_parameters();
         params.decode(bitstream);
         this.m_object_in_area_parameters = params;
         break;
       }
-      case e_condition_type.killer_type_is: {
+      case e_condition_type.player_died: {
         const params = new s_condition_player_died_parameters();
         params.decode(bitstream);
         this.m_player_died_parameters = params;
         break;
       }
-      case e_condition_type.has_alliance_status: {
+      case e_condition_type.team_disposition: {
         const params = new s_condition_team_disposition_parameters();
         params.decode(bitstream);
         this.m_team_disposition_parameters = params;
         break;
       }
-      case e_condition_type.is_zero: {
+      case e_condition_type.timer_expired: {
         const params = new s_condition_timer_expired_parameters();
         params.decode(bitstream);
         this.m_timer_expired_parameters = params;
         break;
       }
-      case e_condition_type.is_of_type: {
+      case e_condition_type.object_is_type: {
         const params = new s_condition_object_is_type_parameters();
         params.decode(bitstream);
         this.m_object_is_type_parameters = params;
         break;
       }
-      case e_condition_type.has_any_players: {
+      case e_condition_type.team_is_active: {
         const params = new s_condition_team_is_active_parameters();
         params.decode(bitstream);
         this.m_team_is_active_parameters = params;
         break;
       }
-      case e_condition_type.is_out_of_bounds: {
+      case e_condition_type.object_out_of_bounds: {
         const params = new s_condition_object_out_of_bounds_parameters();
         params.decode(bitstream);
         this.m_object_out_of_bounds_parameters = params;
         break;
       }
-      case e_condition_type.is_fireteam_leader: {
+      case e_condition_type.player_is_fire_team_leader: {
         const params = new s_condition_player_is_fire_team_leader_parameters();
         params.decode(bitstream);
         this.m_player_is_fire_team_leader_parameters = params;
         break;
       }
-      case e_condition_type.assisted_kill_of: {
+      case e_condition_type.player_assisted_with_kill: {
         const params = new s_condition_player_assisted_with_kill_parameters();
         params.decode(bitstream);
         this.m_player_assisted_with_kill_parameters = params;
         break;
       }
-      case e_condition_type.has_forge_label: {
+      case e_condition_type.object_matches_filter: {
         const params = new s_condition_object_matches_filter_parameters();
         params.decode(bitstream);
         this.m_object_matches_filter_parameters = params;
         break;
       }
-      case e_condition_type.is_not_respawning: {
+      case e_condition_type.player_is_active: {
         const params = new s_condition_player_is_active_parameters();
         params.decode(bitstream);
         this.m_player_is_active_parameters = params;
         break;
       }
-      case e_condition_type.is_in_use: {
+      case e_condition_type.equipment_is_active: {
         const params = new s_condition_equipment_is_active_parameters();
         params.decode(bitstream);
         this.m_equipment_is_active_parameters = params;
         break;
       }
-      case e_condition_type.is_spartan: {
+      case e_condition_type.player_is_spartan: {
         const params = new s_condition_player_is_spartan_parameters();
         params.decode(bitstream);
         this.m_player_is_spartan_parameters = params;
         break;
       }
-      case e_condition_type.is_elite: {
+      case e_condition_type.player_is_elite: {
         const params = new s_condition_player_is_elite_parameters();
         params.decode(bitstream);
         this.m_player_is_elite_parameters = params;
         break;
       }
-      case e_condition_type.is_monitor: {
+      case e_condition_type.player_is_editor: {
         const params = new s_condition_player_is_editor_parameters();
         params.decode(bitstream);
         this.m_player_is_editor_parameters = params;
         break;
       }
-      case e_condition_type.is_in_forge: {
+      case e_condition_type.game_is_forge: {
         const params = new s_condition_game_is_forge_parameters();
         params.decode(bitstream);
         this.m_game_is_forge_parameters = params;
@@ -243,55 +243,55 @@ export class c_condition {
     bitstream.write_integer(this.m_union_group, 9);
     bitstream.write_integer(this.m_execute_before_action, 10);
     switch (this.m_type) {
-      case e_condition_type.compare:
+      case e_condition_type.if:
         this.m_if_parameters?.encode(bitstream);
         break;
-      case e_condition_type.shape_contains:
+      case e_condition_type.object_in_area:
         this.m_object_in_area_parameters?.encode(bitstream);
         break;
-      case e_condition_type.killer_type_is:
+      case e_condition_type.player_died:
         this.m_player_died_parameters?.encode(bitstream);
         break;
-      case e_condition_type.has_alliance_status:
+      case e_condition_type.team_disposition:
         this.m_team_disposition_parameters?.encode(bitstream);
         break;
-      case e_condition_type.is_zero:
+      case e_condition_type.timer_expired:
         this.m_timer_expired_parameters?.encode(bitstream);
         break;
-      case e_condition_type.is_of_type:
+      case e_condition_type.object_is_type:
         this.m_object_is_type_parameters?.encode(bitstream);
         break;
-      case e_condition_type.has_any_players:
+      case e_condition_type.team_is_active:
         this.m_team_is_active_parameters?.encode(bitstream);
         break;
-      case e_condition_type.is_out_of_bounds:
+      case e_condition_type.object_out_of_bounds:
         this.m_object_out_of_bounds_parameters?.encode(bitstream);
         break;
-      case e_condition_type.is_fireteam_leader:
+      case e_condition_type.player_is_fire_team_leader:
         this.m_player_is_fire_team_leader_parameters?.encode(bitstream);
         break;
-      case e_condition_type.assisted_kill_of:
+      case e_condition_type.player_assisted_with_kill:
         this.m_player_assisted_with_kill_parameters?.encode(bitstream);
         break;
-      case e_condition_type.has_forge_label:
+      case e_condition_type.object_matches_filter:
         this.m_object_matches_filter_parameters?.encode(bitstream);
         break;
-      case e_condition_type.is_not_respawning:
+      case e_condition_type.player_is_active:
         this.m_player_is_active_parameters?.encode(bitstream);
         break;
-      case e_condition_type.is_in_use:
+      case e_condition_type.equipment_is_active:
         this.m_equipment_is_active_parameters?.encode(bitstream);
         break;
-      case e_condition_type.is_spartan:
+      case e_condition_type.player_is_spartan:
         this.m_player_is_spartan_parameters?.encode(bitstream);
         break;
-      case e_condition_type.is_elite:
+      case e_condition_type.player_is_elite:
         this.m_player_is_elite_parameters?.encode(bitstream);
         break;
-      case e_condition_type.is_monitor:
+      case e_condition_type.player_is_editor:
         this.m_player_is_editor_parameters?.encode(bitstream);
         break;
-      case e_condition_type.is_in_forge:
+      case e_condition_type.game_is_forge:
         this.m_game_is_forge_parameters?.encode(bitstream);
         break;
       default:

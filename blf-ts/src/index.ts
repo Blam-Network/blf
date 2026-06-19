@@ -9,6 +9,7 @@ export {
   blf,
   CStructBLFChunk,
   find_chunk,
+  getBlfChunkMeta,
   type IBLFChunk,
   search_for_chunk,
 } from "./blf_chunk";

@@ -10,8 +10,6 @@ export enum e_trigger_execution_mode {
   for_each_team = 3,
   for_each_object = 4,
   for_each_object_with_label = 5,
-  unknown6 = 6,
-  unknown7 = 7,
 }
 export enum e_trigger_type {
   normal = 0,
