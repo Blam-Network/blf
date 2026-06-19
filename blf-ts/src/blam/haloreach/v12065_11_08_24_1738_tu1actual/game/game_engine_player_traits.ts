@@ -3,6 +3,24 @@ import type {
   c_bitstream_writer,
 } from "../../../../bitstream";
 import { AutoMap } from "../../../../helpers/automap";
+/** Initial grenade loadout preset (`m_initial_grenade_count_setting`, 4 bits). */
+export enum e_grenade_count_setting {
+  none = 0,
+  map_default = 1,
+  zero = 2,
+  frag_1 = 3,
+  frag_2 = 4,
+  frag_3 = 5,
+  frag_4 = 6,
+  plasma_1 = 7,
+  plasma_2 = 8,
+  plasma_3 = 9,
+  plasma_4 = 10,
+  each_1 = 11,
+  each_2 = 12,
+  each_3 = 13,
+  each_4 = 14,
+}
 export class c_player_trait_shield_vitality {
   @AutoMap(() => Number)
   m_damage_resistance_percentage_setting = 0;
@@ -34,8 +52,9 @@ export class c_player_trait_weapons {
   m_initial_primary_weapon_absolute_index = 0;
   @AutoMap(() => Number)
   m_initial_secondary_weapon_absolute_index = 0;
-  @AutoMap(() => Number)
-  m_initial_grenade_count_setting = 0;
+  @AutoMap(() => e_grenade_count_setting)
+  m_initial_grenade_count_setting: e_grenade_count_setting =
+    e_grenade_count_setting.map_default;
   @AutoMap(() => Number)
   m_infinite_ammo_setting = 0;
   @AutoMap(() => Number)
@@ -141,9 +160,10 @@ export class c_player_traits {
       "player-trait-initial-secondary-weapon",
       8
     );
-    w.m_initial_grenade_count_setting = bitstream.read_integer(
+    w.m_initial_grenade_count_setting = bitstream.read_enum(
       "player-trait-initial-grenade-count",
-      4
+      4,
+      e_grenade_count_setting
     );
     w.m_infinite_ammo_setting = bitstream.read_integer(
       "player-traits-infinite-ammo-setting",
@@ -281,9 +301,10 @@ export class c_player_traits {
       this.m_weapon_traits.m_initial_secondary_weapon_absolute_index,
       8
     );
-    bitstream.write_integer(
+    bitstream.write_enum(
       this.m_weapon_traits.m_initial_grenade_count_setting,
-      4
+      4,
+      e_grenade_count_setting
     );
     bitstream.write_integer(this.m_weapon_traits.m_infinite_ammo_setting, 2);
     bitstream.write_integer(

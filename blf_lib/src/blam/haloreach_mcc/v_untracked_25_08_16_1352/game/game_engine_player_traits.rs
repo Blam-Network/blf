@@ -1,6 +1,30 @@
 use serde::{Deserialize, Serialize};
+use num_derive::{FromPrimitive, ToPrimitive};
 use blf_lib::io::bitstream::{c_bitstream_reader, c_bitstream_writer};
 use blf_lib_derivable::result::BLFLibResult;
+
+/// Initial grenade loadout preset (`m_initial_grenade_count_setting`, 4 bits).
+#[repr(u8)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, Default, ToPrimitive, FromPrimitive, crate::derive::c_enum)]
+#[bits(4)]
+pub enum e_grenade_count_setting {
+    none = 0,
+    #[default]
+    map_default = 1,
+    zero = 2,
+    frag_1 = 3,
+    frag_2 = 4,
+    frag_3 = 5,
+    frag_4 = 6,
+    plasma_1 = 7,
+    plasma_2 = 8,
+    plasma_3 = 9,
+    plasma_4 = 10,
+    each_1 = 11,
+    each_2 = 12,
+    each_3 = 13,
+    each_4 = 14,
+}
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct c_player_trait_weapons {
@@ -8,7 +32,7 @@ pub struct c_player_trait_weapons {
     pub m_melee_damage_modifier_percentage_setting: u8,
     pub m_initial_primary_weapon_absolute_index: i8,
     pub m_initial_secondary_weapon_absolute_index: i8,
-    pub m_initial_grenade_count_setting: u16,
+    pub m_initial_grenade_count_setting: e_grenade_count_setting,
     pub m_infinite_ammo_setting: u8,
     pub m_recharging_grenades_setting: u8,
     pub m_weapon_pickup_setting: u8,
@@ -82,7 +106,7 @@ impl c_player_traits {
         bitstream.write_integer(self.m_weapon_traits.m_melee_damage_modifier_percentage_setting, 4)?;
         bitstream.write_signed_integer(self.m_weapon_traits.m_initial_primary_weapon_absolute_index, 8)?;
         bitstream.write_signed_integer(self.m_weapon_traits.m_initial_secondary_weapon_absolute_index, 8)?;
-        bitstream.write_integer(self.m_weapon_traits.m_initial_grenade_count_setting, 4)?;
+        bitstream.write_enum(self.m_weapon_traits.m_initial_grenade_count_setting)?;
         bitstream.write_integer(self.m_weapon_traits.m_infinite_ammo_setting, 2)?;
         bitstream.write_integer(self.m_weapon_traits.m_recharging_grenades_setting, 2)?;
         bitstream.write_integer(self.m_weapon_traits.m_weapon_pickup_setting, 2)?;
@@ -127,7 +151,7 @@ impl c_player_traits {
         self.m_weapon_traits.m_melee_damage_modifier_percentage_setting = bitstream.read_integer("melee-damage-modifier", 4)?;
         self.m_weapon_traits.m_initial_primary_weapon_absolute_index = bitstream.read_signed_integer("player-trait-initial-primary-weapon", 8)?;
         self.m_weapon_traits.m_initial_secondary_weapon_absolute_index = bitstream.read_signed_integer("player-trait-initial-secondary-weapon", 8)?;
-        self.m_weapon_traits.m_initial_grenade_count_setting = bitstream.read_integer("player-trait-initial-grenade-count", 4)?;
+        self.m_weapon_traits.m_initial_grenade_count_setting = bitstream.read_enum("player-trait-initial-grenade-count")?;
         self.m_weapon_traits.m_infinite_ammo_setting = bitstream.read_integer("player-traits-infinite-ammo-setting", 2)?;
         self.m_weapon_traits.m_recharging_grenades_setting = bitstream.read_integer("player-traits-recharging-grenades", 2)?;
         self.m_weapon_traits.m_weapon_pickup_setting = bitstream.read_integer("player-traits-weapon-pickup-allowed", 2)?;
