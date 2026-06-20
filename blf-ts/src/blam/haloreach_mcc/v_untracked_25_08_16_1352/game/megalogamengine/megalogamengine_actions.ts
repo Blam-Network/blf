@@ -39,6 +39,26 @@ export enum e_biped_give_weapon_mode {
   secondary = 1,
   force = 2,
 }
+export enum e_scriptable_game_buttons {
+  jump = 0,
+  grenade = 1,
+  switch_weapon = 2,
+  context_primary = 3,
+  melee_attack = 4,
+  equipment = 5,
+  throw_grenade = 6,
+  fire_primary = 7,
+  crouch = 8,
+  scope_zoom = 9,
+  night_vision = 10,
+  fire_secondary = 11,
+  fire_tertiary = 12,
+  vehicle_trick = 13,
+  // These are not supported by MegaloEdit.exe
+  unknown = 14,
+  unknown_1 = 15,
+  unknown_2 = 16,
+}
 export enum e_player_filter_type {
   no_one = 0,
   everyone = 1,
@@ -1224,18 +1244,18 @@ export class s_action_hs_function_call_parameters {
 export class s_action_get_button_time_parameters {
   @AutoMap(() => c_player_reference)
   m_player = new c_player_reference();
-  @AutoMap(() => Number)
-  m_buttons = 0;
+  @AutoMap(() => e_scriptable_game_buttons)
+  m_buttons: e_scriptable_game_buttons = e_scriptable_game_buttons.jump;
   @AutoMap(() => c_custom_variable_reference)
   m_variable = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_player.decode(bitstream);
-    this.m_buttons = bitstream.read_integer("buttons", 5);
+    this.m_buttons = bitstream.read_enum("buttons", 5, e_scriptable_game_buttons);
     this.m_variable.decode(bitstream);
   }
   encode(bitstream: c_bitstream_writer): void {
     this.m_player.encode(bitstream);
-    bitstream.write_integer(this.m_buttons, 5);
+    bitstream.write_enum(this.m_buttons, 5, e_scriptable_game_buttons);
     this.m_variable.encode(bitstream);
   }
 }

@@ -42,7 +42,7 @@ Reach MCC adds eight action types at the end of the megalo action table. They ar
 |-----------------|---------|
 | `begin` | *(none)* |
 | `hs_function_call` | `function-name-index` (8 bits) |
-| `get_button_time` | player reference, `buttons` (5 bits), custom variable reference |
+| `get_button_time` | player reference, `e_scriptable_game_buttons` (5 bits), custom variable reference |
 | `team_set_vehicle_spawning` | team reference, `enabled` bool |
 | `player_set_vehicle_spawning` | player reference, `enabled` bool |
 | `set_player_respawn_vehicle` | object type reference, player reference |

@@ -384,6 +384,30 @@ pub enum e_biped_give_weapon_mode {
     force = 2,
 }
 
+#[repr(u8)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, ToPrimitive, FromPrimitive, Default, Serialize, Deserialize)]
+pub enum e_scriptable_game_buttons {
+    #[default]
+    jump = 0,
+    grenade = 1,
+    switch_weapon = 2,
+    context_primary = 3,
+    melee_attack = 4,
+    equipment = 5,
+    throw_grenade = 6,
+    fire_primary = 7,
+    crouch = 8,
+    scope_zoom = 9,
+    night_vision = 10,
+    fire_secondary = 11,
+    fire_tertiary = 12,
+    vehicle_trick = 13,
+    // These are not supported by MegaloEdit.exe
+    unknown = 14,
+    unknown_1 = 15,
+    unknown_2 = 16,
+}
+
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct s_action_set_parameters {
     pub m_variable_1: s_variant_variable,
@@ -2709,14 +2733,14 @@ impl s_action_hs_function_call_parameters {
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct s_action_get_button_time_parameters {
     pub m_player: c_player_reference,
-    pub m_buttons: u8, // 5 bits
+    pub m_buttons: e_scriptable_game_buttons, // 5 bits
     pub m_variable: c_custom_variable_reference,
 }
 
 impl s_action_get_button_time_parameters {
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
         self.m_player.encode(bitstream)?;
-        bitstream.write_integer(self.m_buttons as u32, 5)?;
+        bitstream.write_enum_raw(self.m_buttons, 5)?;
         self.m_variable.encode(bitstream)?;
 
         Ok(())
@@ -2724,7 +2748,7 @@ impl s_action_get_button_time_parameters {
 
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
         self.m_player.decode(bitstream)?;
-        self.m_buttons = bitstream.read_integer::<u32>("buttons", 5)? as u8;
+        self.m_buttons = bitstream.read_enum_raw("buttons", 5)?;
         self.m_variable.decode(bitstream)?;
 
         Ok(())
