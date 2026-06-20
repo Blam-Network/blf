@@ -49,8 +49,7 @@ pub struct c_game_engine_custom_variant {
     pub m_user_defined_options_locked: StaticArray<bool, 32>,
     pub m_user_defined_options_hidden: StaticArray<bool, 32>,
     pub m_game_engine: s_custom_game_engine_definition,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub m_au1_settings: Option<c_game_engine_custom_variant_au1_settings>,
+    pub m_au1_settings: c_game_engine_custom_variant_au1_settings,
 
 }
 
@@ -93,11 +92,7 @@ impl c_game_engine_custom_variant {
         }
         self.m_game_engine.encode(bitstream)?;
         if self.m_encoding_version > 106 {
-            if let Some(au1_settings) = &self.m_au1_settings {
-                au1_settings.encode(bitstream)?;
-            } else {
-                return Err("Writing v107 gametypes (and higher) requires AU1 Options to be set.".into());
-            }
+            self.m_au1_settings.encode(bitstream)?;
         }
 
         Ok(())
@@ -145,9 +140,7 @@ impl c_game_engine_custom_variant {
         }
         self.m_game_engine.decode(bitstream)?;
         if self.m_encoding_version > 106 {
-            let mut au1_settings = c_game_engine_custom_variant_au1_settings::default();
-            au1_settings.decode(bitstream)?;
-            self.m_au1_settings = Some(au1_settings);
+            self.m_au1_settings.decode(bitstream)?;
         }
 
         Ok(())

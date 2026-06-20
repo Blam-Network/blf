@@ -354,7 +354,7 @@ export class c_game_engine_custom_variant {
   @AutoMap(() => s_custom_game_engine_definition)
   m_game_engine = new s_custom_game_engine_definition();
   @AutoMap(() => c_game_engine_custom_variant_au1_settings)
-  m_au1_settings?: c_game_engine_custom_variant_au1_settings;
+  m_au1_settings = new c_game_engine_custom_variant_au1_settings();
   decode(bitstream: c_bitstream_reader): void {
     this.m_encoding_version = bitstream.read_signed_integer(
       "encoding-version",
@@ -417,9 +417,7 @@ export class c_game_engine_custom_variant {
     }
     this.m_game_engine.decode(bitstream);
     if (this.m_encoding_version > 106) {
-      const au1 = new c_game_engine_custom_variant_au1_settings();
-      au1.decode(bitstream);
-      this.m_au1_settings = au1;
+      this.m_au1_settings.decode(bitstream);
     }
   }
   encode(bitstream: c_bitstream_writer): void {
@@ -460,11 +458,6 @@ export class c_game_engine_custom_variant {
     }
     this.m_game_engine.encode(bitstream);
     if (this.m_encoding_version > 106) {
-      if (!this.m_au1_settings) {
-        throw new BlfError(
-          "Writing v107 gametypes (and higher) requires AU1 Options to be set."
-        );
-      }
       this.m_au1_settings.encode(bitstream);
     }
   }
