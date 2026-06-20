@@ -12731,7 +12731,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 7,
             "m_condition_count": 4,
-            "m_execution_mode": "for_each_player",
+            "m_execution_mode": "player",
             "m_first_action": 0,
             "m_first_condition": 0,
             "m_object_filter_index": -1,
@@ -12740,7 +12740,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 5,
             "m_condition_count": 3,
-            "m_execution_mode": "for_each_player",
+            "m_execution_mode": "player",
             "m_first_action": 7,
             "m_first_condition": 4,
             "m_object_filter_index": -1,
@@ -12749,7 +12749,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 8,
             "m_condition_count": 3,
-            "m_execution_mode": "for_each_player",
+            "m_execution_mode": "player",
             "m_first_action": 14,
             "m_first_condition": 9,
             "m_object_filter_index": -1,
@@ -12758,7 +12758,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 12,
             "m_first_condition": 7,
             "m_object_filter_index": -1,
@@ -12767,7 +12767,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 13,
             "m_first_condition": 8,
             "m_object_filter_index": -1,
@@ -12776,7 +12776,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 6,
             "m_condition_count": 2,
-            "m_execution_mode": "for_each_player",
+            "m_execution_mode": "player",
             "m_first_action": 23,
             "m_first_condition": 13,
             "m_object_filter_index": -1,
@@ -12785,7 +12785,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 22,
             "m_first_condition": 12,
             "m_object_filter_index": -1,
@@ -12794,7 +12794,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 4,
             "m_condition_count": 2,
-            "m_execution_mode": "for_each_player",
+            "m_execution_mode": "player",
             "m_first_action": 29,
             "m_first_condition": 15,
             "m_object_filter_index": -1,
@@ -12803,7 +12803,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 5,
             "m_condition_count": 3,
-            "m_execution_mode": "for_each_player",
+            "m_execution_mode": "player",
             "m_first_action": 33,
             "m_first_condition": 17,
             "m_object_filter_index": -1,
@@ -12812,7 +12812,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 39,
             "m_first_condition": 20,
             "m_object_filter_index": -1,
@@ -12821,7 +12821,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 0,
-            "m_execution_mode": "for_each_object_with_label",
+            "m_execution_mode": "object_with_label",
             "m_first_action": 38,
             "m_first_condition": 20,
             "m_object_filter_index": 8,
@@ -12830,7 +12830,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 41,
             "m_first_condition": 21,
             "m_object_filter_index": -1,
@@ -12839,7 +12839,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 0,
-            "m_execution_mode": "for_each_object_with_label",
+            "m_execution_mode": "object_with_label",
             "m_first_action": 40,
             "m_first_condition": 21,
             "m_object_filter_index": 7,
@@ -12848,16 +12848,16 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 5,
             "m_condition_count": 0,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 69,
             "m_first_condition": 34,
             "m_object_filter_index": -1,
-            "m_trigger_type": "on_init",
+            "m_trigger_type": "initialization",
           },
           {
             "m_action_count": 1,
             "m_condition_count": 2,
-            "m_execution_mode": "for_each_object_with_label",
+            "m_execution_mode": "object_with_label",
             "m_first_action": 42,
             "m_first_condition": 22,
             "m_object_filter_index": 3,
@@ -12866,7 +12866,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 15,
             "m_condition_count": 4,
-            "m_execution_mode": "for_each_object_with_label",
+            "m_execution_mode": "object_with_label",
             "m_first_action": 52,
             "m_first_condition": 30,
             "m_object_filter_index": 3,
@@ -12875,7 +12875,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 2,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 44,
             "m_first_condition": 26,
             "m_object_filter_index": -1,
@@ -12884,7 +12884,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 2,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 43,
             "m_first_condition": 24,
             "m_object_filter_index": -1,
@@ -12893,7 +12893,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 5,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 47,
             "m_first_condition": 29,
             "m_object_filter_index": -1,
@@ -12902,7 +12902,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 2,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 46,
             "m_first_condition": 27,
             "m_object_filter_index": -1,
@@ -12911,7 +12911,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 2,
             "m_condition_count": 0,
-            "m_execution_mode": "for_each_player",
+            "m_execution_mode": "player",
             "m_first_action": 67,
             "m_first_condition": 34,
             "m_object_filter_index": -1,
@@ -12920,7 +12920,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 2,
             "m_condition_count": 0,
-            "m_execution_mode": "for_each_player",
+            "m_execution_mode": "player",
             "m_first_action": 76,
             "m_first_condition": 36,
             "m_object_filter_index": -1,
@@ -12929,7 +12929,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 74,
             "m_first_condition": 34,
             "m_object_filter_index": -1,
@@ -12938,7 +12938,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 75,
             "m_first_condition": 35,
             "m_object_filter_index": -1,
@@ -12947,7 +12947,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 0,
-            "m_execution_mode": "for_each_player",
+            "m_execution_mode": "player",
             "m_first_action": 78,
             "m_first_condition": 36,
             "m_object_filter_index": -1,
@@ -12956,7 +12956,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 6,
             "m_condition_count": 2,
-            "m_execution_mode": "for_each_player",
+            "m_execution_mode": "player",
             "m_first_action": 83,
             "m_first_condition": 44,
             "m_object_filter_index": -1,
@@ -12965,7 +12965,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 2,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 79,
             "m_first_condition": 36,
             "m_object_filter_index": -1,
@@ -12974,7 +12974,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 2,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 80,
             "m_first_condition": 38,
             "m_object_filter_index": -1,
@@ -12983,7 +12983,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 2,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 81,
             "m_first_condition": 40,
             "m_object_filter_index": -1,
@@ -12992,7 +12992,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 2,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 82,
             "m_first_condition": 42,
             "m_object_filter_index": -1,
@@ -13001,7 +13001,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 2,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 89,
             "m_first_condition": 46,
             "m_object_filter_index": -1,
@@ -13010,16 +13010,16 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 0,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 93,
             "m_first_condition": 47,
             "m_object_filter_index": -1,
-            "m_trigger_type": "on_host_migration",
+            "m_trigger_type": "host_migration",
           },
           {
             "m_action_count": 2,
             "m_condition_count": 0,
-            "m_execution_mode": "for_each_player",
+            "m_execution_mode": "player",
             "m_first_action": 91,
             "m_first_condition": 47,
             "m_object_filter_index": -1,
@@ -13028,7 +13028,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 3,
             "m_condition_count": 0,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 96,
             "m_first_condition": 47,
             "m_object_filter_index": -1,
@@ -13037,7 +13037,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 0,
-            "m_execution_mode": "for_each_object_with_label",
+            "m_execution_mode": "object_with_label",
             "m_first_action": 94,
             "m_first_condition": 47,
             "m_object_filter_index": 4,
@@ -13046,7 +13046,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 0,
-            "m_execution_mode": "for_each_object_with_label",
+            "m_execution_mode": "object_with_label",
             "m_first_action": 95,
             "m_first_condition": 47,
             "m_object_filter_index": 5,
@@ -13055,7 +13055,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 4,
             "m_condition_count": 1,
-            "m_execution_mode": "for_each_player",
+            "m_execution_mode": "player",
             "m_first_action": 99,
             "m_first_condition": 47,
             "m_object_filter_index": -1,
@@ -13064,7 +13064,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 2,
             "m_condition_count": 0,
-            "m_execution_mode": "for_each_object_with_label",
+            "m_execution_mode": "object_with_label",
             "m_first_action": 103,
             "m_first_condition": 48,
             "m_object_filter_index": 3,
@@ -13073,7 +13073,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 21,
             "m_condition_count": 2,
-            "m_execution_mode": "for_each_object_with_label",
+            "m_execution_mode": "object_with_label",
             "m_first_action": 109,
             "m_first_condition": 51,
             "m_object_filter_index": 4,
@@ -13082,7 +13082,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 105,
             "m_first_condition": 48,
             "m_object_filter_index": -1,
@@ -13091,7 +13091,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 106,
             "m_first_condition": 49,
             "m_object_filter_index": -1,
@@ -13100,7 +13100,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 2,
             "m_condition_count": 1,
-            "m_execution_mode": "for_each_object_with_label",
+            "m_execution_mode": "object_with_label",
             "m_first_action": 107,
             "m_first_condition": 50,
             "m_object_filter_index": 3,
@@ -13109,7 +13109,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 20,
             "m_condition_count": 5,
-            "m_execution_mode": "for_each_object_with_label",
+            "m_execution_mode": "object_with_label",
             "m_first_action": 134,
             "m_first_condition": 56,
             "m_object_filter_index": 5,
@@ -13118,7 +13118,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 130,
             "m_first_condition": 53,
             "m_object_filter_index": -1,
@@ -13127,7 +13127,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 131,
             "m_first_condition": 54,
             "m_object_filter_index": -1,
@@ -13136,7 +13136,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 2,
             "m_condition_count": 1,
-            "m_execution_mode": "for_each_object_with_label",
+            "m_execution_mode": "object_with_label",
             "m_first_action": 132,
             "m_first_condition": 55,
             "m_object_filter_index": 3,
@@ -13145,7 +13145,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 5,
             "m_condition_count": 2,
-            "m_execution_mode": "for_each_object_with_label",
+            "m_execution_mode": "object_with_label",
             "m_first_action": 154,
             "m_first_condition": 61,
             "m_object_filter_index": 5,
@@ -13154,7 +13154,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 2,
             "m_condition_count": 1,
-            "m_execution_mode": "for_each_object_with_label",
+            "m_execution_mode": "object_with_label",
             "m_first_action": 160,
             "m_first_condition": 64,
             "m_object_filter_index": 4,
@@ -13163,7 +13163,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 159,
             "m_first_condition": 63,
             "m_object_filter_index": -1,
@@ -13172,7 +13172,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 19,
             "m_condition_count": 3,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 171,
             "m_first_condition": 71,
             "m_object_filter_index": -1,
@@ -13181,7 +13181,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 2,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 163,
             "m_first_condition": 67,
             "m_object_filter_index": -1,
@@ -13190,7 +13190,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 2,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 162,
             "m_first_condition": 65,
             "m_object_filter_index": -1,
@@ -13199,7 +13199,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 5,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 166,
             "m_first_condition": 70,
             "m_object_filter_index": -1,
@@ -13208,7 +13208,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 2,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 165,
             "m_first_condition": 68,
             "m_object_filter_index": -1,
@@ -13217,7 +13217,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 2,
             "m_condition_count": 0,
-            "m_execution_mode": "for_each_player",
+            "m_execution_mode": "player",
             "m_first_action": 193,
             "m_first_condition": 75,
             "m_object_filter_index": -1,
@@ -13226,7 +13226,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 3,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 190,
             "m_first_condition": 74,
             "m_object_filter_index": -1,
@@ -13235,7 +13235,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 3,
             "m_condition_count": 2,
-            "m_execution_mode": "for_each_object_with_label",
+            "m_execution_mode": "object_with_label",
             "m_first_action": 195,
             "m_first_condition": 75,
             "m_object_filter_index": 4,
@@ -13244,7 +13244,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 5,
             "m_condition_count": 1,
-            "m_execution_mode": "for_each_object_with_label",
+            "m_execution_mode": "object_with_label",
             "m_first_action": 208,
             "m_first_condition": 83,
             "m_object_filter_index": 4,
@@ -13253,7 +13253,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 4,
             "m_condition_count": 2,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 201,
             "m_first_condition": 79,
             "m_object_filter_index": -1,
@@ -13262,7 +13262,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 198,
             "m_first_condition": 77,
             "m_object_filter_index": -1,
@@ -13271,7 +13271,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 2,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 199,
             "m_first_condition": 78,
             "m_object_filter_index": -1,
@@ -13280,7 +13280,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 3,
             "m_condition_count": 2,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 205,
             "m_first_condition": 81,
             "m_object_filter_index": -1,
@@ -13289,7 +13289,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 7,
             "m_condition_count": 2,
-            "m_execution_mode": "for_each_object_with_label",
+            "m_execution_mode": "object_with_label",
             "m_first_action": 214,
             "m_first_condition": 86,
             "m_object_filter_index": 4,
@@ -13298,7 +13298,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 0,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 213,
             "m_first_condition": 84,
             "m_object_filter_index": -1,
@@ -13307,7 +13307,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 213,
             "m_first_condition": 85,
             "m_object_filter_index": -1,
@@ -13316,7 +13316,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 2,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 223,
             "m_first_condition": 88,
             "m_object_filter_index": -1,
@@ -13325,7 +13325,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 0,
-            "m_execution_mode": "for_each_object_with_label",
+            "m_execution_mode": "object_with_label",
             "m_first_action": 221,
             "m_first_condition": 88,
             "m_object_filter_index": 4,
@@ -13334,7 +13334,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 0,
-            "m_execution_mode": "for_each_object_with_label",
+            "m_execution_mode": "object_with_label",
             "m_first_action": 222,
             "m_first_condition": 88,
             "m_object_filter_index": 5,
@@ -13343,7 +13343,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 2,
             "m_condition_count": 0,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 227,
             "m_first_condition": 91,
             "m_object_filter_index": -1,
@@ -13352,7 +13352,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 1,
-            "m_execution_mode": "for_each_object_with_label",
+            "m_execution_mode": "object_with_label",
             "m_first_action": 225,
             "m_first_condition": 89,
             "m_object_filter_index": 4,
@@ -13361,7 +13361,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 1,
-            "m_execution_mode": "for_each_object_with_label",
+            "m_execution_mode": "object_with_label",
             "m_first_action": 226,
             "m_first_condition": 90,
             "m_object_filter_index": 5,
@@ -13370,7 +13370,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 2,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 229,
             "m_first_condition": 91,
             "m_object_filter_index": -1,
@@ -13379,7 +13379,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 2,
             "m_condition_count": 0,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 250,
             "m_first_condition": 108,
             "m_object_filter_index": -1,
@@ -13388,7 +13388,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 6,
             "m_condition_count": 1,
-            "m_execution_mode": "for_each_player",
+            "m_execution_mode": "player",
             "m_first_action": 234,
             "m_first_condition": 99,
             "m_object_filter_index": -1,
@@ -13397,7 +13397,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 2,
             "m_condition_count": 3,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 230,
             "m_first_condition": 93,
             "m_object_filter_index": -1,
@@ -13406,7 +13406,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 2,
             "m_condition_count": 3,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 232,
             "m_first_condition": 96,
             "m_object_filter_index": -1,
@@ -13415,7 +13415,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 6,
             "m_condition_count": 2,
-            "m_execution_mode": "for_each_team",
+            "m_execution_mode": "team",
             "m_first_action": 244,
             "m_first_condition": 106,
             "m_object_filter_index": -1,
@@ -13424,7 +13424,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 2,
             "m_condition_count": 3,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 240,
             "m_first_condition": 100,
             "m_object_filter_index": -1,
@@ -13433,7 +13433,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 2,
             "m_condition_count": 3,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 242,
             "m_first_condition": 103,
             "m_object_filter_index": -1,
@@ -13442,7 +13442,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 3,
             "m_condition_count": 3,
-            "m_execution_mode": "for_each_player",
+            "m_execution_mode": "player",
             "m_first_action": 252,
             "m_first_condition": 108,
             "m_object_filter_index": -1,
@@ -13451,7 +13451,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 6,
             "m_condition_count": 5,
-            "m_execution_mode": "for_each_player",
+            "m_execution_mode": "player",
             "m_first_action": 255,
             "m_first_condition": 111,
             "m_object_filter_index": -1,
@@ -13460,7 +13460,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 5,
             "m_condition_count": 3,
-            "m_execution_mode": "for_each_player",
+            "m_execution_mode": "player",
             "m_first_action": 261,
             "m_first_condition": 116,
             "m_object_filter_index": -1,
@@ -13469,7 +13469,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 2,
             "m_condition_count": 1,
-            "m_execution_mode": "for_each_object_with_label",
+            "m_execution_mode": "object_with_label",
             "m_first_action": 266,
             "m_first_condition": 119,
             "m_object_filter_index": 6,

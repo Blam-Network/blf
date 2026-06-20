@@ -3531,7 +3531,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           },
           {
             "m_set_parameters": {
-              "m_operation": "multiply_by",
+              "m_operation": "multiply",
               "m_variable_1": {
                 "m_custom_variable": {
                   "m_type": "global_number",
@@ -6070,7 +6070,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           },
           {
             "m_set_parameters": {
-              "m_operation": "multiply_by",
+              "m_operation": "multiply",
               "m_variable_1": {
                 "m_custom_variable": {
                   "m_type": "global_number",
@@ -6302,7 +6302,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           },
           {
             "m_set_parameters": {
-              "m_operation": "multiply_by",
+              "m_operation": "multiply",
               "m_variable_1": {
                 "m_custom_variable": {
                   "m_type": "global_number",
@@ -6791,7 +6791,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           },
           {
             "m_set_parameters": {
-              "m_operation": "divide_by",
+              "m_operation": "divide",
               "m_variable_1": {
                 "m_custom_variable": {
                   "m_type": "global_number",
@@ -6874,7 +6874,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           },
           {
             "m_set_parameters": {
-              "m_operation": "multiply_by",
+              "m_operation": "multiply",
               "m_variable_1": {
                 "m_custom_variable": {
                   "m_type": "global_number",
@@ -9727,7 +9727,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           },
           {
             "m_set_parameters": {
-              "m_operation": "divide_by",
+              "m_operation": "divide",
               "m_variable_1": {
                 "m_custom_variable": {
                   "m_type": "global_number",
@@ -10766,7 +10766,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           },
           {
             "m_set_parameters": {
-              "m_operation": "multiply_by",
+              "m_operation": "multiply",
               "m_variable_1": {
                 "m_custom_variable": {
                   "m_type": "global_number",
@@ -23019,7 +23019,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 0,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 0,
             "m_first_condition": 0,
             "m_object_filter_index": -1,
@@ -23028,7 +23028,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 0,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 1,
             "m_first_condition": 0,
             "m_object_filter_index": -1,
@@ -23037,16 +23037,16 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 4,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 2,
             "m_first_condition": 0,
             "m_object_filter_index": -1,
-            "m_trigger_type": "on_init",
+            "m_trigger_type": "initialization",
           },
           {
             "m_action_count": 9,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 6,
             "m_first_condition": 1,
             "m_object_filter_index": -1,
@@ -23055,7 +23055,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 0,
-            "m_execution_mode": "for_each_object_with_label",
+            "m_execution_mode": "object_with_label",
             "m_first_action": 15,
             "m_first_condition": 2,
             "m_object_filter_index": 11,
@@ -23064,7 +23064,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 5,
             "m_condition_count": 1,
-            "m_execution_mode": "for_each_object_with_label",
+            "m_execution_mode": "object_with_label",
             "m_first_action": 16,
             "m_first_condition": 2,
             "m_object_filter_index": 9,
@@ -23073,7 +23073,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 9,
             "m_condition_count": 1,
-            "m_execution_mode": "for_each_object_with_label",
+            "m_execution_mode": "object_with_label",
             "m_first_action": 28,
             "m_first_condition": 9,
             "m_object_filter_index": 6,
@@ -23082,7 +23082,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 1,
-            "m_execution_mode": "for_each_object_with_label",
+            "m_execution_mode": "object_with_label",
             "m_first_action": 21,
             "m_first_condition": 3,
             "m_object_filter_index": 6,
@@ -23091,7 +23091,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 1,
-            "m_execution_mode": "for_each_object_with_label",
+            "m_execution_mode": "object_with_label",
             "m_first_action": 22,
             "m_first_condition": 4,
             "m_object_filter_index": 6,
@@ -23100,7 +23100,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 1,
-            "m_execution_mode": "for_each_object_with_label",
+            "m_execution_mode": "object_with_label",
             "m_first_action": 23,
             "m_first_condition": 5,
             "m_object_filter_index": 6,
@@ -23109,7 +23109,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 1,
-            "m_execution_mode": "for_each_object_with_label",
+            "m_execution_mode": "object_with_label",
             "m_first_action": 24,
             "m_first_condition": 6,
             "m_object_filter_index": 6,
@@ -23118,7 +23118,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 3,
             "m_condition_count": 2,
-            "m_execution_mode": "for_each_player",
+            "m_execution_mode": "player",
             "m_first_action": 25,
             "m_first_condition": 7,
             "m_object_filter_index": -1,
@@ -23127,7 +23127,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 9,
             "m_condition_count": 1,
-            "m_execution_mode": "for_each_object_with_label",
+            "m_execution_mode": "object_with_label",
             "m_first_action": 44,
             "m_first_condition": 16,
             "m_object_filter_index": 7,
@@ -23136,7 +23136,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 1,
-            "m_execution_mode": "for_each_object_with_label",
+            "m_execution_mode": "object_with_label",
             "m_first_action": 37,
             "m_first_condition": 10,
             "m_object_filter_index": 7,
@@ -23145,7 +23145,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 1,
-            "m_execution_mode": "for_each_object_with_label",
+            "m_execution_mode": "object_with_label",
             "m_first_action": 38,
             "m_first_condition": 11,
             "m_object_filter_index": 7,
@@ -23154,7 +23154,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 1,
-            "m_execution_mode": "for_each_object_with_label",
+            "m_execution_mode": "object_with_label",
             "m_first_action": 39,
             "m_first_condition": 12,
             "m_object_filter_index": 7,
@@ -23163,7 +23163,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 1,
-            "m_execution_mode": "for_each_object_with_label",
+            "m_execution_mode": "object_with_label",
             "m_first_action": 40,
             "m_first_condition": 13,
             "m_object_filter_index": 7,
@@ -23172,7 +23172,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 3,
             "m_condition_count": 2,
-            "m_execution_mode": "for_each_player",
+            "m_execution_mode": "player",
             "m_first_action": 41,
             "m_first_condition": 14,
             "m_object_filter_index": -1,
@@ -23181,7 +23181,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 9,
             "m_condition_count": 1,
-            "m_execution_mode": "for_each_object_with_label",
+            "m_execution_mode": "object_with_label",
             "m_first_action": 60,
             "m_first_condition": 23,
             "m_object_filter_index": 8,
@@ -23190,7 +23190,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 1,
-            "m_execution_mode": "for_each_object_with_label",
+            "m_execution_mode": "object_with_label",
             "m_first_action": 53,
             "m_first_condition": 17,
             "m_object_filter_index": 8,
@@ -23199,7 +23199,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 1,
-            "m_execution_mode": "for_each_object_with_label",
+            "m_execution_mode": "object_with_label",
             "m_first_action": 54,
             "m_first_condition": 18,
             "m_object_filter_index": 8,
@@ -23208,7 +23208,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 1,
-            "m_execution_mode": "for_each_object_with_label",
+            "m_execution_mode": "object_with_label",
             "m_first_action": 55,
             "m_first_condition": 19,
             "m_object_filter_index": 8,
@@ -23217,7 +23217,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 1,
-            "m_execution_mode": "for_each_object_with_label",
+            "m_execution_mode": "object_with_label",
             "m_first_action": 56,
             "m_first_condition": 20,
             "m_object_filter_index": 8,
@@ -23226,7 +23226,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 3,
             "m_condition_count": 2,
-            "m_execution_mode": "for_each_player",
+            "m_execution_mode": "player",
             "m_first_action": 57,
             "m_first_condition": 21,
             "m_object_filter_index": -1,
@@ -23235,7 +23235,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 8,
             "m_condition_count": 4,
-            "m_execution_mode": "for_each_player",
+            "m_execution_mode": "player",
             "m_first_action": 73,
             "m_first_condition": 30,
             "m_object_filter_index": -1,
@@ -23244,7 +23244,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 2,
             "m_condition_count": 3,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 69,
             "m_first_condition": 24,
             "m_object_filter_index": -1,
@@ -23253,7 +23253,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 2,
             "m_condition_count": 3,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 71,
             "m_first_condition": 27,
             "m_object_filter_index": -1,
@@ -23262,7 +23262,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 1,
-            "m_execution_mode": "for_each_team",
+            "m_execution_mode": "team",
             "m_first_action": 81,
             "m_first_condition": 34,
             "m_object_filter_index": -1,
@@ -23271,7 +23271,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 4,
             "m_condition_count": 0,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 97,
             "m_first_condition": 45,
             "m_object_filter_index": -1,
@@ -23280,7 +23280,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 4,
             "m_condition_count": 1,
-            "m_execution_mode": "for_each_player",
+            "m_execution_mode": "player",
             "m_first_action": 84,
             "m_first_condition": 37,
             "m_object_filter_index": -1,
@@ -23289,7 +23289,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 82,
             "m_first_condition": 35,
             "m_object_filter_index": -1,
@@ -23298,7 +23298,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 83,
             "m_first_condition": 36,
             "m_object_filter_index": -1,
@@ -23307,7 +23307,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 2,
             "m_condition_count": 1,
-            "m_execution_mode": "for_each_player",
+            "m_execution_mode": "player",
             "m_first_action": 90,
             "m_first_condition": 40,
             "m_object_filter_index": -1,
@@ -23316,7 +23316,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 88,
             "m_first_condition": 38,
             "m_object_filter_index": -1,
@@ -23325,7 +23325,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 89,
             "m_first_condition": 39,
             "m_object_filter_index": -1,
@@ -23334,7 +23334,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 2,
             "m_condition_count": 1,
-            "m_execution_mode": "for_each_player",
+            "m_execution_mode": "player",
             "m_first_action": 94,
             "m_first_condition": 43,
             "m_object_filter_index": -1,
@@ -23343,7 +23343,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 92,
             "m_first_condition": 41,
             "m_object_filter_index": -1,
@@ -23352,7 +23352,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 93,
             "m_first_condition": 42,
             "m_object_filter_index": -1,
@@ -23361,7 +23361,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 1,
-            "m_execution_mode": "for_each_player",
+            "m_execution_mode": "player",
             "m_first_action": 96,
             "m_first_condition": 44,
             "m_object_filter_index": -1,
@@ -23370,7 +23370,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 4,
             "m_condition_count": 0,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 104,
             "m_first_condition": 48,
             "m_object_filter_index": -1,
@@ -23379,7 +23379,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 101,
             "m_first_condition": 45,
             "m_object_filter_index": -1,
@@ -23388,7 +23388,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 102,
             "m_first_condition": 46,
             "m_object_filter_index": -1,
@@ -23397,7 +23397,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 103,
             "m_first_condition": 47,
             "m_object_filter_index": -1,
@@ -23406,7 +23406,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 2,
             "m_condition_count": 0,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 112,
             "m_first_condition": 50,
             "m_object_filter_index": -1,
@@ -23415,7 +23415,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 2,
             "m_condition_count": 1,
-            "m_execution_mode": "for_each_player",
+            "m_execution_mode": "player",
             "m_first_action": 108,
             "m_first_condition": 48,
             "m_object_filter_index": -1,
@@ -23424,7 +23424,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 2,
             "m_condition_count": 1,
-            "m_execution_mode": "for_each_player",
+            "m_execution_mode": "player",
             "m_first_action": 110,
             "m_first_condition": 49,
             "m_object_filter_index": -1,
@@ -23433,7 +23433,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 3,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 126,
             "m_first_condition": 59,
             "m_object_filter_index": -1,
@@ -23442,7 +23442,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 2,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 116,
             "m_first_condition": 52,
             "m_object_filter_index": -1,
@@ -23451,7 +23451,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 1,
-            "m_execution_mode": "for_each_player",
+            "m_execution_mode": "player",
             "m_first_action": 114,
             "m_first_condition": 50,
             "m_object_filter_index": -1,
@@ -23460,7 +23460,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 1,
-            "m_execution_mode": "for_each_player",
+            "m_execution_mode": "player",
             "m_first_action": 115,
             "m_first_condition": 51,
             "m_object_filter_index": -1,
@@ -23469,7 +23469,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 2,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 120,
             "m_first_condition": 55,
             "m_object_filter_index": -1,
@@ -23478,7 +23478,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 1,
-            "m_execution_mode": "for_each_player",
+            "m_execution_mode": "player",
             "m_first_action": 118,
             "m_first_condition": 53,
             "m_object_filter_index": -1,
@@ -23487,7 +23487,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 1,
-            "m_execution_mode": "for_each_player",
+            "m_execution_mode": "player",
             "m_first_action": 119,
             "m_first_condition": 54,
             "m_object_filter_index": -1,
@@ -23496,7 +23496,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 2,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 124,
             "m_first_condition": 58,
             "m_object_filter_index": -1,
@@ -23505,7 +23505,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 1,
-            "m_execution_mode": "for_each_player",
+            "m_execution_mode": "player",
             "m_first_action": 122,
             "m_first_condition": 56,
             "m_object_filter_index": -1,
@@ -23514,7 +23514,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 1,
-            "m_execution_mode": "for_each_player",
+            "m_execution_mode": "player",
             "m_first_action": 123,
             "m_first_condition": 57,
             "m_object_filter_index": -1,
@@ -23523,7 +23523,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 18,
             "m_condition_count": 1,
-            "m_execution_mode": "for_each_object_with_label",
+            "m_execution_mode": "object_with_label",
             "m_first_action": 142,
             "m_first_condition": 71,
             "m_object_filter_index": 4,
@@ -23532,7 +23532,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 129,
             "m_first_condition": 60,
             "m_object_filter_index": -1,
@@ -23541,7 +23541,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 3,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 130,
             "m_first_condition": 61,
             "m_object_filter_index": -1,
@@ -23550,7 +23550,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 3,
             "m_condition_count": 3,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 133,
             "m_first_condition": 62,
             "m_object_filter_index": -1,
@@ -23559,7 +23559,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 3,
             "m_condition_count": 3,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 136,
             "m_first_condition": 65,
             "m_object_filter_index": -1,
@@ -23568,7 +23568,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 3,
             "m_condition_count": 3,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 139,
             "m_first_condition": 68,
             "m_object_filter_index": -1,
@@ -23577,7 +23577,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 5,
             "m_condition_count": 0,
-            "m_execution_mode": "for_each_object_with_label",
+            "m_execution_mode": "object_with_label",
             "m_first_action": 160,
             "m_first_condition": 72,
             "m_object_filter_index": 5,
@@ -23586,7 +23586,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 0,
-            "m_execution_mode": "for_each_object_with_label",
+            "m_execution_mode": "object_with_label",
             "m_first_action": 165,
             "m_first_condition": 72,
             "m_object_filter_index": 4,
@@ -23595,7 +23595,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 2,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 168,
             "m_first_condition": 74,
             "m_object_filter_index": -1,
@@ -23604,7 +23604,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 1,
-            "m_execution_mode": "for_each_object_with_label",
+            "m_execution_mode": "object_with_label",
             "m_first_action": 166,
             "m_first_condition": 72,
             "m_object_filter_index": 2,
@@ -23613,7 +23613,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 1,
-            "m_execution_mode": "for_each_object_with_label",
+            "m_execution_mode": "object_with_label",
             "m_first_action": 167,
             "m_first_condition": 73,
             "m_object_filter_index": 1,
@@ -23622,7 +23622,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 8,
             "m_condition_count": 2,
-            "m_execution_mode": "for_each_object_with_label",
+            "m_execution_mode": "object_with_label",
             "m_first_action": 174,
             "m_first_condition": 76,
             "m_object_filter_index": 2,
@@ -23631,7 +23631,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 2,
             "m_condition_count": 0,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 172,
             "m_first_condition": 76,
             "m_object_filter_index": -1,
@@ -23640,7 +23640,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 2,
             "m_condition_count": 1,
-            "m_execution_mode": "for_each_player",
+            "m_execution_mode": "player",
             "m_first_action": 170,
             "m_first_condition": 75,
             "m_object_filter_index": -1,
@@ -23649,7 +23649,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 4,
             "m_condition_count": 3,
-            "m_execution_mode": "for_each_object_with_label",
+            "m_execution_mode": "object_with_label",
             "m_first_action": 183,
             "m_first_condition": 79,
             "m_object_filter_index": 3,
@@ -23658,7 +23658,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 182,
             "m_first_condition": 78,
             "m_object_filter_index": -1,
@@ -23667,7 +23667,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 2,
             "m_condition_count": 1,
-            "m_execution_mode": "for_each_object_with_label",
+            "m_execution_mode": "object_with_label",
             "m_first_action": 187,
             "m_first_condition": 82,
             "m_object_filter_index": 10,
@@ -23676,7 +23676,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 12,
             "m_condition_count": 2,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 195,
             "m_first_condition": 87,
             "m_object_filter_index": -1,
@@ -23685,7 +23685,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 189,
             "m_first_condition": 83,
             "m_object_filter_index": -1,
@@ -23694,7 +23694,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 190,
             "m_first_condition": 84,
             "m_object_filter_index": -1,
@@ -23703,7 +23703,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 2,
             "m_condition_count": 1,
-            "m_execution_mode": "for_each_object_with_label",
+            "m_execution_mode": "object_with_label",
             "m_first_action": 191,
             "m_first_condition": 85,
             "m_object_filter_index": 4,
@@ -23712,7 +23712,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 0,
-            "m_execution_mode": "for_each_player",
+            "m_execution_mode": "player",
             "m_first_action": 193,
             "m_first_condition": 86,
             "m_object_filter_index": -1,
@@ -23721,7 +23721,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 1,
-            "m_execution_mode": "for_each_object_with_label",
+            "m_execution_mode": "object_with_label",
             "m_first_action": 194,
             "m_first_condition": 86,
             "m_object_filter_index": 4,
@@ -23730,7 +23730,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 11,
             "m_condition_count": 2,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 212,
             "m_first_condition": 92,
             "m_object_filter_index": -1,
@@ -23739,7 +23739,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 207,
             "m_first_condition": 89,
             "m_object_filter_index": -1,
@@ -23748,7 +23748,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 208,
             "m_first_condition": 90,
             "m_object_filter_index": -1,
@@ -23757,7 +23757,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 2,
             "m_condition_count": 1,
-            "m_execution_mode": "for_each_object_with_label",
+            "m_execution_mode": "object_with_label",
             "m_first_action": 209,
             "m_first_condition": 91,
             "m_object_filter_index": 4,
@@ -23766,7 +23766,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 0,
-            "m_execution_mode": "for_each_player",
+            "m_execution_mode": "player",
             "m_first_action": 211,
             "m_first_condition": 92,
             "m_object_filter_index": -1,
@@ -23775,7 +23775,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 6,
             "m_condition_count": 2,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 225,
             "m_first_condition": 96,
             "m_object_filter_index": -1,
@@ -23784,7 +23784,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 223,
             "m_first_condition": 94,
             "m_object_filter_index": -1,
@@ -23793,7 +23793,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 224,
             "m_first_condition": 95,
             "m_object_filter_index": -1,
@@ -23802,7 +23802,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 3,
             "m_condition_count": 0,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 234,
             "m_first_condition": 101,
             "m_object_filter_index": -1,
@@ -23811,7 +23811,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 231,
             "m_first_condition": 98,
             "m_object_filter_index": -1,
@@ -23820,7 +23820,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 232,
             "m_first_condition": 99,
             "m_object_filter_index": -1,
@@ -23829,7 +23829,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 233,
             "m_first_condition": 100,
             "m_object_filter_index": -1,
@@ -23838,7 +23838,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 2,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 237,
             "m_first_condition": 101,
             "m_object_filter_index": -1,
@@ -23847,7 +23847,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 2,
             "m_condition_count": 0,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 310,
             "m_first_condition": 134,
             "m_object_filter_index": -1,
@@ -23856,7 +23856,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 21,
             "m_condition_count": 3,
-            "m_execution_mode": "for_each_object_with_label",
+            "m_execution_mode": "object_with_label",
             "m_first_action": 289,
             "m_first_condition": 131,
             "m_object_filter_index": 4,
@@ -23865,7 +23865,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 239,
             "m_first_condition": 102,
             "m_object_filter_index": -1,
@@ -23874,7 +23874,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 2,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 240,
             "m_first_condition": 103,
             "m_object_filter_index": -1,
@@ -23883,7 +23883,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 2,
             "m_condition_count": 2,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 242,
             "m_first_condition": 104,
             "m_object_filter_index": -1,
@@ -23892,7 +23892,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 2,
             "m_condition_count": 2,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 244,
             "m_first_condition": 106,
             "m_object_filter_index": -1,
@@ -23901,7 +23901,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 11,
             "m_condition_count": 2,
-            "m_execution_mode": "for_each_object_with_label",
+            "m_execution_mode": "object_with_label",
             "m_first_action": 247,
             "m_first_condition": 109,
             "m_object_filter_index": 11,
@@ -23910,7 +23910,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 246,
             "m_first_condition": 108,
             "m_object_filter_index": -1,
@@ -23919,7 +23919,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 8,
             "m_condition_count": 3,
-            "m_execution_mode": "for_each_player",
+            "m_execution_mode": "player",
             "m_first_action": 261,
             "m_first_condition": 112,
             "m_object_filter_index": -1,
@@ -23928,7 +23928,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 3,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 258,
             "m_first_condition": 111,
             "m_object_filter_index": -1,
@@ -23937,7 +23937,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 10,
             "m_condition_count": 3,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 278,
             "m_first_condition": 126,
             "m_object_filter_index": -1,
@@ -23946,7 +23946,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 2,
-            "m_execution_mode": "for_each_player",
+            "m_execution_mode": "player",
             "m_first_action": 269,
             "m_first_condition": 115,
             "m_object_filter_index": -1,
@@ -23955,7 +23955,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 2,
             "m_condition_count": 2,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 270,
             "m_first_condition": 117,
             "m_object_filter_index": -1,
@@ -23964,7 +23964,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 2,
             "m_condition_count": 2,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 272,
             "m_first_condition": 119,
             "m_object_filter_index": -1,
@@ -23973,7 +23973,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 3,
-            "m_execution_mode": "for_each_object_with_label",
+            "m_execution_mode": "object_with_label",
             "m_first_action": 274,
             "m_first_condition": 121,
             "m_object_filter_index": 11,
@@ -23982,7 +23982,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 3,
             "m_condition_count": 2,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 275,
             "m_first_condition": 124,
             "m_object_filter_index": -1,
@@ -23991,7 +23991,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 2,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 288,
             "m_first_condition": 129,
             "m_object_filter_index": -1,
@@ -24000,7 +24000,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 7,
             "m_condition_count": 2,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 321,
             "m_first_condition": 146,
             "m_object_filter_index": -1,
@@ -24009,7 +24009,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 2,
-            "m_execution_mode": "for_each_player",
+            "m_execution_mode": "player",
             "m_first_action": 312,
             "m_first_condition": 134,
             "m_object_filter_index": -1,
@@ -24018,7 +24018,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 2,
             "m_condition_count": 2,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 313,
             "m_first_condition": 136,
             "m_object_filter_index": -1,
@@ -24027,7 +24027,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 2,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 315,
             "m_first_condition": 138,
             "m_object_filter_index": -1,
@@ -24036,7 +24036,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 2,
             "m_condition_count": 2,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 316,
             "m_first_condition": 140,
             "m_object_filter_index": -1,
@@ -24045,7 +24045,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 2,
             "m_condition_count": 2,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 318,
             "m_first_condition": 142,
             "m_object_filter_index": -1,
@@ -24054,7 +24054,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 2,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 320,
             "m_first_condition": 144,
             "m_object_filter_index": -1,
@@ -24063,7 +24063,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 2,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 335,
             "m_first_condition": 148,
             "m_object_filter_index": -1,
@@ -24072,7 +24072,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 7,
             "m_condition_count": 0,
-            "m_execution_mode": "for_each_object_with_label",
+            "m_execution_mode": "object_with_label",
             "m_first_action": 328,
             "m_first_condition": 148,
             "m_object_filter_index": 13,
@@ -24081,7 +24081,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 4,
             "m_condition_count": 3,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 342,
             "m_first_condition": 151,
             "m_object_filter_index": -1,
@@ -24090,7 +24090,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 3,
             "m_condition_count": 0,
-            "m_execution_mode": "for_each_object_with_label",
+            "m_execution_mode": "object_with_label",
             "m_first_action": 336,
             "m_first_condition": 150,
             "m_object_filter_index": 13,
@@ -24099,7 +24099,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 3,
             "m_condition_count": 1,
-            "m_execution_mode": "for_each_object_with_label",
+            "m_execution_mode": "object_with_label",
             "m_first_action": 339,
             "m_first_condition": 150,
             "m_object_filter_index": 15,
@@ -24108,7 +24108,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 12,
             "m_condition_count": 3,
-            "m_execution_mode": "for_each_object_with_label",
+            "m_execution_mode": "object_with_label",
             "m_first_action": 348,
             "m_first_condition": 160,
             "m_object_filter_index": 5,
@@ -24117,7 +24117,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 3,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 346,
             "m_first_condition": 154,
             "m_object_filter_index": -1,
@@ -24126,7 +24126,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 3,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 347,
             "m_first_condition": 157,
             "m_object_filter_index": -1,
@@ -24135,7 +24135,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 5,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 387,
             "m_first_condition": 171,
             "m_object_filter_index": -1,
@@ -24144,7 +24144,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 3,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 363,
             "m_first_condition": 164,
             "m_object_filter_index": -1,
@@ -24153,7 +24153,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 3,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 360,
             "m_first_condition": 163,
             "m_object_filter_index": -1,
@@ -24162,7 +24162,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 7,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 373,
             "m_first_condition": 167,
             "m_object_filter_index": -1,
@@ -24171,7 +24171,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 6,
             "m_condition_count": 2,
-            "m_execution_mode": "for_each_object_with_label",
+            "m_execution_mode": "object_with_label",
             "m_first_action": 367,
             "m_first_condition": 165,
             "m_object_filter_index": 4,
@@ -24180,7 +24180,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 0,
-            "m_execution_mode": "for_each_player",
+            "m_execution_mode": "player",
             "m_first_action": 366,
             "m_first_condition": 165,
             "m_object_filter_index": -1,
@@ -24189,7 +24189,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 6,
             "m_condition_count": 2,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 381,
             "m_first_condition": 169,
             "m_object_filter_index": -1,
@@ -24198,7 +24198,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 380,
             "m_first_condition": 168,
             "m_object_filter_index": -1,
@@ -24207,7 +24207,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 8,
             "m_condition_count": 6,
-            "m_execution_mode": "for_each_team",
+            "m_execution_mode": "team",
             "m_first_action": 399,
             "m_first_condition": 178,
             "m_object_filter_index": -1,
@@ -24216,7 +24216,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 4,
             "m_condition_count": 2,
-            "m_execution_mode": "for_each_player",
+            "m_execution_mode": "player",
             "m_first_action": 393,
             "m_first_condition": 173,
             "m_object_filter_index": -1,
@@ -24225,7 +24225,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 392,
             "m_first_condition": 172,
             "m_object_filter_index": -1,
@@ -24234,7 +24234,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 2,
             "m_condition_count": 3,
-            "m_execution_mode": "for_each_player",
+            "m_execution_mode": "player",
             "m_first_action": 397,
             "m_first_condition": 175,
             "m_object_filter_index": -1,
@@ -24243,7 +24243,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 8,
             "m_condition_count": 6,
-            "m_execution_mode": "for_each_team",
+            "m_execution_mode": "team",
             "m_first_action": 407,
             "m_first_condition": 184,
             "m_object_filter_index": -1,
@@ -24252,7 +24252,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 5,
             "m_condition_count": 6,
-            "m_execution_mode": "for_each_team",
+            "m_execution_mode": "team",
             "m_first_action": 415,
             "m_first_condition": 190,
             "m_object_filter_index": -1,
@@ -24261,7 +24261,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 4,
             "m_condition_count": 4,
-            "m_execution_mode": "for_each_player",
+            "m_execution_mode": "player",
             "m_first_action": 420,
             "m_first_condition": 196,
             "m_object_filter_index": -1,
@@ -24270,7 +24270,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 3,
             "m_condition_count": 2,
-            "m_execution_mode": "for_each_player",
+            "m_execution_mode": "player",
             "m_first_action": 424,
             "m_first_condition": 200,
             "m_object_filter_index": -1,
@@ -24279,7 +24279,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 2,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 434,
             "m_first_condition": 202,
             "m_object_filter_index": -1,
@@ -24288,7 +24288,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 7,
             "m_condition_count": 0,
-            "m_execution_mode": "for_each_object_with_label",
+            "m_execution_mode": "object_with_label",
             "m_first_action": 427,
             "m_first_condition": 202,
             "m_object_filter_index": 14,
@@ -24297,7 +24297,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 9,
             "m_condition_count": 3,
-            "m_execution_mode": "for_each_team",
+            "m_execution_mode": "team",
             "m_first_action": 441,
             "m_first_condition": 207,
             "m_object_filter_index": -1,
@@ -24306,7 +24306,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 2,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 435,
             "m_first_condition": 204,
             "m_object_filter_index": -1,
@@ -24315,7 +24315,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 2,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 437,
             "m_first_condition": 205,
             "m_object_filter_index": -1,
@@ -24324,7 +24324,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 2,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 439,
             "m_first_condition": 206,
             "m_object_filter_index": -1,
@@ -24333,7 +24333,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 12,
             "m_condition_count": 3,
-            "m_execution_mode": "for_each_object_with_label",
+            "m_execution_mode": "object_with_label",
             "m_first_action": 450,
             "m_first_condition": 210,
             "m_object_filter_index": 5,
@@ -24342,7 +24342,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 4,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 476,
             "m_first_condition": 216,
             "m_object_filter_index": -1,
@@ -24351,7 +24351,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 8,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 462,
             "m_first_condition": 213,
             "m_object_filter_index": -1,
@@ -24360,7 +24360,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 6,
             "m_condition_count": 2,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 470,
             "m_first_condition": 214,
             "m_object_filter_index": -1,
@@ -24369,7 +24369,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 2,
             "m_condition_count": 2,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 489,
             "m_first_condition": 224,
             "m_object_filter_index": -1,
@@ -24378,7 +24378,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 4,
             "m_condition_count": 1,
-            "m_execution_mode": "for_each_object_with_label",
+            "m_execution_mode": "object_with_label",
             "m_first_action": 485,
             "m_first_condition": 223,
             "m_object_filter_index": 4,
@@ -24387,7 +24387,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 480,
             "m_first_condition": 217,
             "m_object_filter_index": -1,
@@ -24396,7 +24396,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 2,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 481,
             "m_first_condition": 218,
             "m_object_filter_index": -1,
@@ -24405,7 +24405,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 2,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 483,
             "m_first_condition": 219,
             "m_object_filter_index": -1,
@@ -24414,7 +24414,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 2,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 484,
             "m_first_condition": 221,
             "m_object_filter_index": -1,
@@ -24423,7 +24423,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 4,
             "m_condition_count": 3,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 525,
             "m_first_condition": 240,
             "m_object_filter_index": -1,
@@ -24432,7 +24432,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 26,
             "m_condition_count": 4,
-            "m_execution_mode": "for_each_object_with_label",
+            "m_execution_mode": "object_with_label",
             "m_first_action": 499,
             "m_first_condition": 236,
             "m_object_filter_index": 4,
@@ -24441,7 +24441,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 3,
             "m_condition_count": 2,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 491,
             "m_first_condition": 226,
             "m_object_filter_index": -1,
@@ -24450,7 +24450,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 2,
-            "m_execution_mode": "for_each_player",
+            "m_execution_mode": "player",
             "m_first_action": 494,
             "m_first_condition": 228,
             "m_object_filter_index": -1,
@@ -24459,7 +24459,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 2,
             "m_condition_count": 3,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 495,
             "m_first_condition": 230,
             "m_object_filter_index": -1,
@@ -24468,7 +24468,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 2,
             "m_condition_count": 3,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 497,
             "m_first_condition": 233,
             "m_object_filter_index": -1,
@@ -24477,7 +24477,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 11,
             "m_condition_count": 4,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 532,
             "m_first_condition": 244,
             "m_object_filter_index": -1,
@@ -24486,7 +24486,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 1,
-            "m_execution_mode": "for_each_player",
+            "m_execution_mode": "player",
             "m_first_action": 529,
             "m_first_condition": 243,
             "m_object_filter_index": -1,
@@ -24495,7 +24495,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 2,
             "m_condition_count": 0,
-            "m_execution_mode": "for_each_object_with_label",
+            "m_execution_mode": "object_with_label",
             "m_first_action": 530,
             "m_first_condition": 244,
             "m_object_filter_index": 4,
@@ -24504,7 +24504,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 9,
             "m_condition_count": 7,
-            "m_execution_mode": "for_each_team",
+            "m_execution_mode": "team",
             "m_first_action": 551,
             "m_first_condition": 255,
             "m_object_filter_index": -1,
@@ -24513,7 +24513,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 2,
             "m_condition_count": 2,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 543,
             "m_first_condition": 248,
             "m_object_filter_index": -1,
@@ -24522,7 +24522,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 4,
             "m_condition_count": 2,
-            "m_execution_mode": "for_each_player",
+            "m_execution_mode": "player",
             "m_first_action": 545,
             "m_first_condition": 250,
             "m_object_filter_index": -1,
@@ -24531,7 +24531,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 2,
             "m_condition_count": 3,
-            "m_execution_mode": "for_each_player",
+            "m_execution_mode": "player",
             "m_first_action": 549,
             "m_first_condition": 252,
             "m_object_filter_index": -1,
@@ -24540,7 +24540,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 8,
             "m_condition_count": 4,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 563,
             "m_first_condition": 265,
             "m_object_filter_index": -1,
@@ -24549,7 +24549,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 560,
             "m_first_condition": 262,
             "m_object_filter_index": -1,
@@ -24558,7 +24558,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 1,
-            "m_execution_mode": "for_each_object_with_label",
+            "m_execution_mode": "object_with_label",
             "m_first_action": 561,
             "m_first_condition": 263,
             "m_object_filter_index": 15,
@@ -24567,7 +24567,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 562,
             "m_first_condition": 264,
             "m_object_filter_index": -1,
@@ -24576,7 +24576,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 10,
             "m_condition_count": 6,
-            "m_execution_mode": "for_each_team",
+            "m_execution_mode": "team",
             "m_first_action": 571,
             "m_first_condition": 269,
             "m_object_filter_index": -1,
@@ -24585,7 +24585,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 5,
             "m_condition_count": 6,
-            "m_execution_mode": "for_each_team",
+            "m_execution_mode": "team",
             "m_first_action": 581,
             "m_first_condition": 275,
             "m_object_filter_index": -1,
@@ -24594,7 +24594,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 4,
             "m_condition_count": 4,
-            "m_execution_mode": "for_each_player",
+            "m_execution_mode": "player",
             "m_first_action": 586,
             "m_first_condition": 281,
             "m_object_filter_index": -1,
@@ -24603,7 +24603,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 3,
             "m_condition_count": 2,
-            "m_execution_mode": "for_each_player",
+            "m_execution_mode": "player",
             "m_first_action": 590,
             "m_first_condition": 285,
             "m_object_filter_index": -1,
@@ -24612,7 +24612,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 0,
-            "m_execution_mode": "for_each_object_with_label",
+            "m_execution_mode": "object_with_label",
             "m_first_action": 593,
             "m_first_condition": 287,
             "m_object_filter_index": 12,
@@ -24621,7 +24621,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 595,
             "m_first_condition": 287,
             "m_object_filter_index": -1,
@@ -24630,7 +24630,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 0,
-            "m_execution_mode": "for_each_object_with_label",
+            "m_execution_mode": "object_with_label",
             "m_first_action": 594,
             "m_first_condition": 287,
             "m_object_filter_index": 11,
@@ -24639,7 +24639,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 3,
             "m_condition_count": 0,
-            "m_execution_mode": "for_each_object_with_label",
+            "m_execution_mode": "object_with_label",
             "m_first_action": 598,
             "m_first_condition": 289,
             "m_object_filter_index": 4,
@@ -24648,7 +24648,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 2,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 596,
             "m_first_condition": 288,
             "m_object_filter_index": -1,
@@ -24657,7 +24657,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 3,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 604,
             "m_first_condition": 289,
             "m_object_filter_index": -1,
@@ -24666,7 +24666,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 3,
             "m_condition_count": 0,
-            "m_execution_mode": "for_each_object_with_label",
+            "m_execution_mode": "object_with_label",
             "m_first_action": 601,
             "m_first_condition": 289,
             "m_object_filter_index": 4,
@@ -24675,7 +24675,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 607,
             "m_first_condition": 290,
             "m_object_filter_index": -1,
@@ -24684,7 +24684,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 2,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 608,
             "m_first_condition": 291,
             "m_object_filter_index": -1,
@@ -24693,7 +24693,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 3,
             "m_condition_count": 4,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 619,
             "m_first_condition": 299,
             "m_object_filter_index": -1,
@@ -24702,7 +24702,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 6,
             "m_condition_count": 2,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 611,
             "m_first_condition": 294,
             "m_object_filter_index": -1,
@@ -24711,7 +24711,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 2,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 610,
             "m_first_condition": 292,
             "m_object_filter_index": -1,
@@ -24720,7 +24720,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 2,
             "m_condition_count": 3,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 617,
             "m_first_condition": 296,
             "m_object_filter_index": -1,
@@ -24729,7 +24729,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 6,
             "m_condition_count": 0,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 625,
             "m_first_condition": 310,
             "m_object_filter_index": -1,
@@ -24738,7 +24738,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 3,
-            "m_execution_mode": "for_each_object_with_label",
+            "m_execution_mode": "object_with_label",
             "m_first_action": 622,
             "m_first_condition": 303,
             "m_object_filter_index": 4,
@@ -24747,7 +24747,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 3,
-            "m_execution_mode": "for_each_object_with_label",
+            "m_execution_mode": "object_with_label",
             "m_first_action": 623,
             "m_first_condition": 306,
             "m_object_filter_index": 4,
@@ -24756,7 +24756,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 624,
             "m_first_condition": 309,
             "m_object_filter_index": -1,
@@ -24765,7 +24765,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 3,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 651,
             "m_first_condition": 320,
             "m_object_filter_index": -1,
@@ -24774,7 +24774,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 2,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 639,
             "m_first_condition": 314,
             "m_object_filter_index": -1,
@@ -24783,7 +24783,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 5,
             "m_condition_count": 2,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 631,
             "m_first_condition": 310,
             "m_object_filter_index": -1,
@@ -24792,7 +24792,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 3,
             "m_condition_count": 2,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 636,
             "m_first_condition": 312,
             "m_object_filter_index": -1,
@@ -24801,7 +24801,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 2,
             "m_condition_count": 1,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 649,
             "m_first_condition": 319,
             "m_object_filter_index": -1,
@@ -24810,7 +24810,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 5,
             "m_condition_count": 2,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 641,
             "m_first_condition": 315,
             "m_object_filter_index": -1,
@@ -24819,7 +24819,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 3,
             "m_condition_count": 2,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 646,
             "m_first_condition": 317,
             "m_object_filter_index": -1,
@@ -24828,16 +24828,16 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 0,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 655,
             "m_first_condition": 322,
             "m_object_filter_index": -1,
-            "m_trigger_type": "on_host_migration",
+            "m_trigger_type": "host_migration",
           },
           {
             "m_action_count": 1,
             "m_condition_count": 1,
-            "m_execution_mode": "for_each_object_with_label",
+            "m_execution_mode": "object_with_label",
             "m_first_action": 654,
             "m_first_condition": 321,
             "m_object_filter_index": 11,
@@ -24846,7 +24846,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 2,
             "m_condition_count": 0,
-            "m_execution_mode": "normal",
+            "m_execution_mode": "general",
             "m_first_action": 658,
             "m_first_condition": 324,
             "m_object_filter_index": -1,
@@ -24855,7 +24855,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 1,
-            "m_execution_mode": "for_each_object_with_label",
+            "m_execution_mode": "object_with_label",
             "m_first_action": 656,
             "m_first_condition": 322,
             "m_object_filter_index": 13,
@@ -24864,7 +24864,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_action_count": 1,
             "m_condition_count": 1,
-            "m_execution_mode": "for_each_object_with_label",
+            "m_execution_mode": "object_with_label",
             "m_first_action": 657,
             "m_first_condition": 323,
             "m_object_filter_index": 14,

@@ -186,11 +186,11 @@ describe("convert_reach_gametype", () => {
     );
   });
 
-  it("remaps set_to_absolute by enum name MCC → TU1", () => {
+  it("remaps abs by enum name MCC → TU1", () => {
     const action = new c_action();
     action.m_type = 1;
     action.m_set_score_parameters = {
-      m_operation: e_math_operation_mcc.set_to_absolute,
+      m_operation: e_math_operation_mcc.abs,
     } as never;
 
     const from = mcc_custom_variant_with_action(action);
@@ -202,14 +202,14 @@ describe("convert_reach_gametype", () => {
     expect(
       to.m_custom_variant?.m_game_engine?.m_actions[0]?.m_set_score_parameters
         ?.m_operation
-    ).toBe(e_math_operation_tu1.set_to_absolute);
+    ).toBe(e_math_operation_tu1.abs);
   });
 
   it("returns mcc_exclusive_math_operator when <<= is used", () => {
     const action = new c_action();
     action.m_type = 1;
     action.m_set_score_parameters = {
-      m_operation: e_math_operation_mcc.shift_left_with,
+      m_operation: e_math_operation_mcc.lshift,
     } as never;
 
     const from = mcc_custom_variant_with_action(action);

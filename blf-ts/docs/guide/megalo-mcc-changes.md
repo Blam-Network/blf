@@ -19,10 +19,10 @@ These exist in the MCC build but not in Xbox 360:
 
 MCC adds bit-shift assignment operators on megalo variables:
 
-- `shift_left_with` (`<<=`)
-- `shift_right_with` (`>>=`)
+- `lshift` (`<<=`)
+- `rshift` (`>>=`)
 
-`set_to_absolute` exists in both builds but its enum value moved (TU1 = `10`, MCC = `12`).
+`abs` exists in both builds but its enum value moved (TU1 = `10`, MCC = `12`).
 
 ### Temporary explicit references
 

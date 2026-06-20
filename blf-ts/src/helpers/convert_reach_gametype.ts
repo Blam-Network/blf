@@ -52,8 +52,8 @@ import { e_reach_gametype_conversion_error } from "./reach_gametype_conversion_e
 export { e_reach_gametype_conversion_error } from "./reach_gametype_conversion_error";
 
 const MCC_ONLY_MATH_OPS: readonly number[] = [
-  e_math_operation_mcc.shift_left_with,
-  e_math_operation_mcc.shift_right_with,
+  e_math_operation_mcc.lshift,
+  e_math_operation_mcc.rshift,
 ];
 
 const MCC_ONLY_ACTION_TYPES: readonly number[] = [

@@ -354,17 +354,17 @@ pub enum e_math_operation {
     #[default]
     add = 0, // +=
     subtract = 1, // -=
-    multiply_by = 2, // *=
-    divide_by = 3, // /=
+    multiply = 2, // *=
+    divide = 3, // /=
     set_to = 4, // =
-    modulo_by = 5, // %=
-    bitwise_and_with = 6, // &=
-    bitwise_or_with = 7, // |=
-    bitwise_xor_with = 8, // ^=
-    bitwise_not_with = 9, // ~= (a ~= b) == (a &= ~b)
-    shift_left_with = 10, // <<=
-    shift_right_with = 11, // >>=
-    set_to_absolute = 12, // abs=
+    modulo = 5, // %=
+    and = 6, // &=
+    or = 7, // |=
+    xor = 8, // ^=
+    not = 9, // ~= (a not b) == (a &= ~b)
+    lshift = 10, // <<=
+    rshift = 11, // >>=
+    abs = 12, // abs=
 }
 
 #[repr(u8)]
