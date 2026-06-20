@@ -377,9 +377,9 @@ pub enum e_grenade_type {
 #[derive(Debug, Clone, Copy, PartialEq, Eq, ToPrimitive, FromPrimitive, Default, Serialize, Deserialize)]
 pub enum e_biped_give_weapon_mode {
     #[default]
-    as_primary_weapon = 0,
-    normally = 1,
-    silently = 2,
+    primary = 0,
+    secondary = 1,
+    force = 2,
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]

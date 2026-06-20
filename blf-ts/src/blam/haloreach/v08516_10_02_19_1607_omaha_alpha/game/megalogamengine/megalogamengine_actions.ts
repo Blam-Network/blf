@@ -33,9 +33,9 @@ export enum e_grenade_type {
   plasma_grenade = 1,
 }
 export enum e_biped_give_weapon_mode {
-  as_primary_weapon = 0,
-  normally = 1,
-  silently = 2,
+  primary = 0,
+  secondary = 1,
+  force = 2,
 }
 export enum e_player_filter_type {
   no_one = 0,

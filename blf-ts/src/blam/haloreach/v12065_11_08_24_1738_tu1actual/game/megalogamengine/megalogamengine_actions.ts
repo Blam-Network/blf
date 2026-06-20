@@ -33,9 +33,9 @@ export enum e_grenade_type {
   plasma_grenade = 1,
 }
 export enum e_biped_give_weapon_mode {
-  as_primary_weapon = 0,
-  normally = 1,
-  silently = 2,
+  primary = 0,
+  secondary = 1,
+  force = 2,
 }
 export enum e_player_filter_type {
   no_one = 0,
@@ -1138,7 +1138,7 @@ export class s_action_biped_give_weapon_parameters {
   @AutoMap(() => c_object_type_reference)
   m_object_type = new c_object_type_reference();
   @AutoMap(() => e_biped_give_weapon_mode)
-  m_mode: e_biped_give_weapon_mode = e_biped_give_weapon_mode.as_primary_weapon;
+  m_mode: e_biped_give_weapon_mode = e_biped_give_weapon_mode.primary;
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
     this.m_object_type.decode(bitstream);
