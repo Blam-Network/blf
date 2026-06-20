@@ -1348,7 +1348,11 @@ export class s_action_get_button_time_parameters {
   m_variable = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_player.decode(bitstream);
-    this.m_buttons = bitstream.read_enum("buttons", 5, e_scriptable_game_buttons);
+    this.m_buttons = bitstream.read_enum(
+      "buttons",
+      5,
+      e_scriptable_game_buttons
+    );
     this.m_variable.decode(bitstream);
   }
   encode(bitstream: c_bitstream_writer): void {

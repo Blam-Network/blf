@@ -101,7 +101,9 @@ describe("c_string_table", () => {
   it("uses compressed wire format for large string buffers", () => {
     const table = new c_string_table(1, 0x4c00, 15, 15, 7);
     const longString = "x".repeat(200);
-    table.strings = Array.from({ length: k_language_count }, () => [longString]);
+    table.strings = Array.from({ length: k_language_count }, () => [
+      longString,
+    ]);
 
     const encoded = encodeTable(table);
 

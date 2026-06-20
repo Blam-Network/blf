@@ -4,19 +4,19 @@ import type {
 } from "../../../../bitstream";
 import { BlfError } from "../../../../error";
 import { AutoMap } from "../../../../helpers/automap";
-import type { s_content_item_metadata } from "../../v12065_11_08_24_1738_tu1actual/saved_games/saved_game_files";
 import { c_game_engine_base_variant } from "../../v12065_11_08_24_1738_tu1actual/game/game_engine_default";
 import { c_game_engine_sandbox_variant } from "../../v12065_11_08_24_1738_tu1actual/game/game_engine_sandbox";
 import { c_game_engine_survival_variant } from "../../v12065_11_08_24_1738_tu1actual/game/game_engine_survival";
 import { s_player_trait_option } from "../../v12065_11_08_24_1738_tu1actual/game/game_engine_traits";
-import { s_game_engine_player_rating_parameters } from "../../v12065_11_08_24_1738_tu1actual/game/megalogamengine/game_engine_player_rating_parameters";
-import { c_megalogamengine_map_permissions } from "../../v12065_11_08_24_1738_tu1actual/game/megalogamengine/megalogamengine_map_permissions";
-import { s_user_defined_option } from "../../v12065_11_08_24_1738_tu1actual/game/megalogamengine/megalogamengine_user_defined_options";
-import { c_string_table } from "../../v12065_11_08_24_1738_tu1actual/game/string_table";
 import {
   e_game_mode,
   s_custom_game_engine_definition,
 } from "../../v12065_11_08_24_1738_tu1actual/game/game_variant";
+import { s_game_engine_player_rating_parameters } from "../../v12065_11_08_24_1738_tu1actual/game/megalogamengine/game_engine_player_rating_parameters";
+import { c_megalogamengine_map_permissions } from "../../v12065_11_08_24_1738_tu1actual/game/megalogamengine/megalogamengine_map_permissions";
+import { s_user_defined_option } from "../../v12065_11_08_24_1738_tu1actual/game/megalogamengine/megalogamengine_user_defined_options";
+import { c_string_table } from "../../v12065_11_08_24_1738_tu1actual/game/string_table";
+import type { s_content_item_metadata } from "../../v12065_11_08_24_1738_tu1actual/saved_games/saved_game_files";
 
 export { e_game_mode, s_custom_game_engine_definition };
 
@@ -264,7 +264,8 @@ export class c_game_variant {
         if (!this.m_sandbox_variant) {
           throw new BlfError("m_sandbox_variant does not exist");
         }
-        return this.m_sandbox_variant.m_custom_variant.m_base_variant.m_metadata;
+        return this.m_sandbox_variant.m_custom_variant.m_base_variant
+          .m_metadata;
       case e_game_mode.megalogamengine:
         if (!this.m_custom_variant) {
           throw new BlfError("m_custom_variant does not exist");

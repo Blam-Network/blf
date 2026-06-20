@@ -51,10 +51,7 @@ export class c_trigger {
       3,
       e_trigger_type
     );
-    if (
-      this.m_execution_mode ===
-      e_trigger_execution_mode.object_with_label
-    ) {
+    if (this.m_execution_mode === e_trigger_execution_mode.object_with_label) {
       this.m_object_filter_index = bitstream.read_index(
         "object-filter-index",
         16,
@@ -72,10 +69,7 @@ export class c_trigger {
   encode(bitstream: c_bitstream_writer): void {
     bitstream.write_enum(this.m_execution_mode, 3, e_trigger_execution_mode);
     bitstream.write_enum(this.m_trigger_type, 3, e_trigger_type);
-    if (
-      this.m_execution_mode ===
-      e_trigger_execution_mode.object_with_label
-    ) {
+    if (this.m_execution_mode === e_trigger_execution_mode.object_with_label) {
       bitstream.write_index(this.m_object_filter_index, 16, 4);
     }
     bitstream.write_integer(this.m_first_condition, 9);
