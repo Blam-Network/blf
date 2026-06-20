@@ -4,28 +4,27 @@ import type {
 } from "../../../../../bitstream";
 import { AutoMap } from "../../../../../helpers/automap";
 export enum e_trigger_execution_mode {
-  normal = 0,
-  for_each_player = 1,
-  for_each_player_randomly = 2,
-  for_each_team = 3,
-  for_each_object = 4,
-  for_each_object_with_label = 5,
+  general = 0,
+  player = 1,
+  random_player = 2,
+  team = 3,
+  object = 4,
+  object_with_label = 5,
 }
 export enum e_trigger_type {
   normal = 0,
   subroutine = 1,
-  on_init = 2,
-  on_local_init = 3,
-  on_host_migration = 4,
-  on_object_death = 5,
+  initialization = 2,
+  local_initialization = 3,
+  host_migration = 4,
+  object_death = 5,
   local = 6,
   pregame = 7,
-  incident = 8,
 }
 
 export class c_trigger {
   @AutoMap(() => e_trigger_execution_mode)
-  m_execution_mode: e_trigger_execution_mode = e_trigger_execution_mode.normal;
+  m_execution_mode: e_trigger_execution_mode = e_trigger_execution_mode.general;
   @AutoMap(() => e_trigger_type)
   m_trigger_type: e_trigger_type = e_trigger_type.normal;
   @AutoMap(() => Number)
@@ -51,7 +50,7 @@ export class c_trigger {
     );
     if (
       this.m_execution_mode ===
-      e_trigger_execution_mode.for_each_object_with_label
+      e_trigger_execution_mode.object_with_label
     ) {
       this.m_object_filter_index = bitstream.read_index(
         "object-filter-index",
@@ -71,7 +70,7 @@ export class c_trigger {
     bitstream.write_enum(this.m_trigger_type, 3, e_trigger_type);
     if (
       this.m_execution_mode ===
-      e_trigger_execution_mode.for_each_object_with_label
+      e_trigger_execution_mode.object_with_label
     ) {
       bitstream.write_index(this.m_object_filter_index, 16, 4);
     }
