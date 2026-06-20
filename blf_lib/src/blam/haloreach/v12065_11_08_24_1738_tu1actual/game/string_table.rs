@@ -9,6 +9,30 @@ use crate::blam::common::memory::data_compress::{runtime_data_compress, runtime_
 use crate::io::bitstream::{c_bitstream_reader, c_bitstream_writer};
 use crate::io::bitstream::e_bitstream_byte_order::_bitstream_byte_order_big_endian;
 
+/// Reach `c_string_buffer::encode` only attempts compression at this size or above.
+const k_string_buffer_compression_threshold: usize = 128;
+
+fn write_string_buffer_blob(
+    bitstream: &mut c_bitstream_writer,
+    buffer: &[u8],
+    buffer_size_bit_length: usize,
+) -> BLFLibResult {
+    bitstream.write_integer(buffer.len() as u32, buffer_size_bit_length)?;
+
+    if buffer.len() >= k_string_buffer_compression_threshold {
+        let mut compressed_buffer = Vec::with_capacity(buffer.len());
+        runtime_data_compress(&buffer.to_vec(), &mut compressed_buffer, bitstream.get_byte_order())?;
+        bitstream.write_bool(true)?;
+        bitstream.write_integer(compressed_buffer.len() as u32, buffer_size_bit_length)?;
+        bitstream.write_raw_data(compressed_buffer.as_slice(), compressed_buffer.len() * 8)?;
+    } else {
+        bitstream.write_bool(false)?;
+        bitstream.write_raw_data(buffer, buffer.len() * 8)?;
+    }
+
+    Ok(())
+}
+
 fn read_null_terminated_utf8(data: &[u8], offset: u64) -> BLFLibResult<String> {
     let start = offset as usize;
     if start >= data.len() {
@@ -105,19 +129,13 @@ c_single_language_string_table<
         }
 
         let mut buffer = Vec::<u8>::new();
-        let mut compressed_buffer = Vec::with_capacity(buffer.len());
         let mut string_writer = Cursor::new(&mut buffer);
         self.strings
             .iter()
             .map(|string| NullString::from(string.to_string()))
             .collect::<Vec<_>>()
             .write_options(&mut string_writer, bitstream.get_byte_order().into(), ())?;
-        runtime_data_compress(&buffer, &mut compressed_buffer, bitstream.get_byte_order())?;
-
-        bitstream.write_integer(buffer.len() as u32, buffer_size_bit_length)?;
-        bitstream.write_bool(true)?; // is compressed? always.
-        bitstream.write_integer(compressed_buffer.len() as u32, buffer_size_bit_length)?;
-        bitstream.write_raw_data(compressed_buffer.as_slice(), compressed_buffer.len() * 8)?;
+        write_string_buffer_blob(bitstream, &buffer, buffer_size_bit_length)?;
 
         Ok(())
     }
@@ -261,13 +279,7 @@ c_string_table<
 
         string_writer.finish_writing();
         let buffer = string_writer.get_data()?;
-        let mut compressed_buffer = Vec::with_capacity(buffer.len());
-        runtime_data_compress(&buffer, &mut compressed_buffer, bitstream.get_byte_order())?;
-
-        bitstream.write_integer(buffer.len() as u32, buffer_size_bit_length)?;
-        bitstream.write_bool(true)?; // is compressed? always.
-        bitstream.write_integer(compressed_buffer.len() as u32, buffer_size_bit_length)?;
-        bitstream.write_raw_data(compressed_buffer.as_slice(), compressed_buffer.len() * 8)?;
+        write_string_buffer_blob(bitstream, &buffer, buffer_size_bit_length)?;
 
         Ok(())
     }

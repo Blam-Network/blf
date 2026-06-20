@@ -27,12 +27,14 @@ function decompressStringBlob(encoded: Uint8Array): Uint8Array {
   }
   const size = reader.read_integer("size", 9);
   const compressed = reader.read_bool("compressed");
+  if (!compressed) {
+    const raw = reader.read_raw_data(size * 8);
+    reader.finish_reading();
+    return raw;
+  }
   const compressedSize = reader.read_integer("compressed-size", 9);
   const raw = reader.read_raw_data(compressedSize * 8);
   reader.finish_reading();
-  if (!compressed) {
-    return raw.subarray(0, size);
-  }
   return runtime_data_decompress(raw);
 }
 
@@ -78,5 +80,38 @@ describe("c_string_table", () => {
     expect(stringData[0]).toBe(0xc2);
     expect(stringData[1]).toBe(0xa6);
     expect(stringData[2]).toBe(0);
+  });
+
+  it("uses uncompressed wire format for small string buffers", () => {
+    const table = new c_string_table(1, 0x180, 9, 9, 1);
+    table.strings = Array.from({ length: k_language_count }, () => ["Slayer"]);
+
+    const encoded = encodeTable(table);
+
+    const reader = c_bitstream_reader.new(encoded, BE);
+    reader.begin_reading();
+    const roundtrip = new c_string_table(1, 0x180, 9, 9, 1);
+    roundtrip.decode(reader);
+    reader.finish_reading();
+
+    expect(roundtrip.m_buffer_is_compressed).toBe(false);
+    expect(roundtrip.strings[0]![0]).toBe("Slayer");
+  });
+
+  it("uses compressed wire format for large string buffers", () => {
+    const table = new c_string_table(1, 0x4c00, 15, 15, 7);
+    const longString = "x".repeat(200);
+    table.strings = Array.from({ length: k_language_count }, () => [longString]);
+
+    const encoded = encodeTable(table);
+
+    const reader = c_bitstream_reader.new(encoded, BE);
+    reader.begin_reading();
+    const roundtrip = new c_string_table(1, 0x4c00, 15, 15, 7);
+    roundtrip.decode(reader);
+    reader.finish_reading();
+
+    expect(roundtrip.m_buffer_is_compressed).toBe(true);
+    expect(roundtrip.strings[0]![0]).toBe(longString);
   });
 });

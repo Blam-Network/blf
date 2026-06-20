@@ -28,14 +28,16 @@ function write_null_terminated_string(
 function string_byte_length(value: string): number {
   return new TextEncoder().encode(value).length;
 }
+/** Reach `c_string_buffer::encode` only attempts compression at this size or above. */
+const k_string_buffer_compression_threshold = 128;
+
 function write_buffer_blob(
   bitstream: c_bitstream_writer,
   buffer: Uint8Array,
-  buffer_size_bit_length: number,
-  is_compressed: boolean
+  buffer_size_bit_length: number
 ): void {
   bitstream.write_integer(buffer.length, buffer_size_bit_length);
-  if (is_compressed) {
+  if (buffer.length >= k_string_buffer_compression_threshold) {
     const compressed = runtime_data_compress(buffer, true);
     bitstream.write_bool(true);
     bitstream.write_integer(compressed.length, buffer_size_bit_length);
@@ -116,12 +118,7 @@ export class c_single_language_string_table {
     }
     string_writer.finish_writing();
     const buffer = string_writer.get_data();
-    write_buffer_blob(
-      bitstream,
-      buffer,
-      this.buffer_size_bit_length,
-      this.m_buffer_is_compressed
-    );
+    write_buffer_blob(bitstream, buffer, this.buffer_size_bit_length);
   }
 }
 export class c_string_table {
@@ -242,11 +239,6 @@ export class c_string_table {
     }
     string_writer.finish_writing();
     const buffer = string_writer.get_data();
-    write_buffer_blob(
-      bitstream,
-      buffer,
-      this.buffer_size_bit_length,
-      this.m_buffer_is_compressed
-    );
+    write_buffer_blob(bitstream, buffer, this.buffer_size_bit_length);
   }
 }
