@@ -470,11 +470,11 @@ export class c_game_engine_custom_variant {
   }
 }
 
-/** Matches `e_game_mode` in blf_lib. Wire index 0 is unused. */
+/** Matches `e_game_mode` in blf_lib. */
 export enum e_game_mode {
-  unused = 0,
+  none = 0,
   sandbox = 1,
-  custom = 2,
+  megalogamengine = 2,
   campaign = 3,
   survival = 4,
 }
@@ -484,7 +484,7 @@ export enum e_game_mode {
  */
 export class c_game_variant {
   @AutoMap(() => e_game_mode)
-  m_game_engine: e_game_mode = e_game_mode.custom;
+  m_game_engine: e_game_mode = e_game_mode.megalogamengine;
   @AutoMap(() => c_game_engine_base_variant)
   m_campaign_variant?: c_game_engine_base_variant;
   @AutoMap(() => c_game_engine_custom_variant)
@@ -502,7 +502,7 @@ export class c_game_variant {
         this.m_sandbox_variant = sandbox;
         break;
       }
-      case e_game_mode.custom: {
+      case e_game_mode.megalogamengine: {
         const custom = new c_game_engine_custom_variant();
         custom.decode(bitstream);
         this.m_custom_variant = custom;
@@ -533,7 +533,7 @@ export class c_game_variant {
         }
         this.m_sandbox_variant.encode(bitstream);
         break;
-      case e_game_mode.custom:
+      case e_game_mode.megalogamengine:
         if (!this.m_custom_variant) {
           throw new BlfError("m_custom_variant does not exist");
         }
@@ -564,7 +564,7 @@ export class c_game_variant {
         }
         return this.m_sandbox_variant.m_custom_variant.m_base_variant
           .m_metadata;
-      case e_game_mode.custom:
+      case e_game_mode.megalogamengine:
         if (!this.m_custom_variant) {
           throw new BlfError("m_custom_variant does not exist");
         }

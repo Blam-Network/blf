@@ -94,9 +94,10 @@ impl c_game_engine_custom_variant {
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, Default, ToPrimitive, FromPrimitive)]
 pub enum e_game_mode {
+    none = 0,
     sandbox = 1,
     #[default]
-    custom = 2,
+    megalogamengine = 2,
     campaign = 3,
     survival = 4,
 }
@@ -126,7 +127,7 @@ impl c_game_variant {
             (e_game_mode::sandbox, None, None, None, Some(sandbox_variant)) => {
                 sandbox_variant.encode(bitstream)?;
             }
-            (e_game_mode::custom, Some(custom_variant), None, None, None) => {
+            (e_game_mode::megalogamengine, Some(custom_variant), None, None, None) => {
                 custom_variant.encode(bitstream)?;
             }
             (e_game_mode::campaign, None, Some(campaign_variant), None, None) => {
@@ -153,7 +154,7 @@ impl c_game_variant {
                 sandbox_variant.decode(bitstream)?;
                 self.m_sandbox_variant = Some(sandbox_variant);
             }
-            e_game_mode::custom => {
+            e_game_mode::megalogamengine => {
                 // customs
                 let mut custom_variant = c_game_engine_custom_variant::default();
                 custom_variant.decode(bitstream)?;

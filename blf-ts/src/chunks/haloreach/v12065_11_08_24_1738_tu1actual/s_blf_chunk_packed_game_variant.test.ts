@@ -33,7 +33,7 @@ describe("s_blf_chunk_matchmaking_game_variant", () => {
     const gvar = new s_blf_chunk_packed_game_variant();
     gvar.read_body(gametype_payload, "big");
 
-    expect(gvar.game_variant.m_game_engine).toBe(e_game_mode.custom);
+    expect(gvar.game_variant.m_game_engine).toBe(e_game_mode.megalogamengine);
     expect(gvar.game_variant.m_custom_variant).toBeDefined();
     expect(gvar.game_variant.m_custom_variant!.m_encoding_version).toBe(107);
     expect(gvar.game_variant.m_custom_variant!.m_build_number).toBe(12065);
@@ -80,7 +80,7 @@ describe("s_blf_chunk_matchmaking_game_variant", () => {
 
     const found = new s_blf_chunk_packed_game_variant();
     expect(search_for_chunk(blf, found, "big")).toBe(true);
-    expect(found.game_variant.m_game_engine).toBe(e_game_mode.custom);
+    expect(found.game_variant.m_game_engine).toBe(e_game_mode.megalogamengine);
     expect(
       found.game_variant.m_custom_variant!.m_base_variant.m_metadata.name
     ).toBe("Oddball");

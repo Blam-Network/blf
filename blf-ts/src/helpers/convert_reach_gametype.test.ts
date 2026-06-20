@@ -42,7 +42,7 @@ import {
 
 function mcc_custom_variant_with_action(action: c_action): c_game_variant_mcc {
   const from = new c_game_variant_mcc();
-  from.m_game_engine = e_game_mode_mcc.custom;
+  from.m_game_engine = e_game_mode_mcc.megalogamengine;
   const custom = new c_game_engine_custom_variant_mcc();
   const engine = new s_custom_game_engine_definition();
   engine.m_actions.push(action);
@@ -54,7 +54,7 @@ function mcc_custom_variant_with_action(action: c_action): c_game_variant_mcc {
 describe("convert_reach_gametype", () => {
   it("throws when source and target are the same build", () => {
     const variant = new c_game_variant_tu1();
-    variant.m_game_engine = e_game_mode_tu1.custom;
+    variant.m_game_engine = e_game_mode_tu1.megalogamengine;
 
     expect(() =>
       convert_reach_gametype(variant, new c_game_variant_tu1())
@@ -81,7 +81,7 @@ describe("convert_reach_gametype", () => {
 
   it("copies MCC custom variant to TU1 when compatible", () => {
     const from = new c_game_variant_mcc();
-    from.m_game_engine = e_game_mode_mcc.custom;
+    from.m_game_engine = e_game_mode_mcc.megalogamengine;
     from.m_custom_variant = new c_game_engine_custom_variant_mcc();
     from.m_custom_variant.m_build_number = 99;
 
@@ -89,7 +89,7 @@ describe("convert_reach_gametype", () => {
     expect(convert_reach_gametype(from, to)).toBe(
       e_reach_gametype_conversion_error.ok
     );
-    expect(to.m_game_engine).toBe(e_game_mode_tu1.custom);
+    expect(to.m_game_engine).toBe(e_game_mode_tu1.megalogamengine);
     expect(to.m_custom_variant?.m_build_number).toBe(99);
   });
 
@@ -157,7 +157,7 @@ describe("convert_reach_gametype", () => {
 
   it("returns insufficient_global_slots when player globals are exhausted", () => {
     const from = new c_game_variant_mcc();
-    from.m_game_engine = e_game_mode_mcc.custom;
+    from.m_game_engine = e_game_mode_mcc.megalogamengine;
     const custom = new c_game_engine_custom_variant_mcc();
     const engine = new s_custom_game_engine_definition();
     engine.m_global_variable_metadata.m_player_variables = Array.from(
@@ -283,7 +283,7 @@ describe("convert_reach_gametype", () => {
 
   it("always allows TU1 → MCC for custom variants", () => {
     const from = new c_game_variant_tu1();
-    from.m_game_engine = e_game_mode_tu1.custom;
+    from.m_game_engine = e_game_mode_tu1.megalogamengine;
     from.m_custom_variant = new c_game_engine_custom_variant_tu1();
 
     expect(convert_reach_gametype(from, new c_game_variant_mcc())).toBe(
@@ -293,7 +293,7 @@ describe("convert_reach_gametype", () => {
 
   it("resolves $hr_gvar_ metadata from localized strings MCC → TU1", () => {
     const from = new c_game_variant_mcc();
-    from.m_game_engine = e_game_mode_mcc.custom;
+    from.m_game_engine = e_game_mode_mcc.megalogamengine;
     const custom = new c_game_engine_custom_variant_mcc();
     custom.m_base_variant.m_metadata.name = "$hr_gvar_TU_Headhunter";
     custom.m_base_variant.m_metadata.description =
@@ -318,7 +318,7 @@ describe("convert_reach_gametype", () => {
 
   it("falls back when $hr_gvar_ localized strings are missing MCC → TU1", () => {
     const from = new c_game_variant_mcc();
-    from.m_game_engine = e_game_mode_mcc.custom;
+    from.m_game_engine = e_game_mode_mcc.megalogamengine;
     const custom = new c_game_engine_custom_variant_mcc();
     custom.m_base_variant.m_metadata.name = "$hr_gvar_TU_Headhunter";
     custom.m_base_variant.m_metadata.description =
@@ -346,7 +346,7 @@ describe("convert_reach_gametype", () => {
       e_reach_gametype_conversion_error.ok
     );
 
-    expect(to.m_game_engine).toBe(e_game_mode_tu1.custom);
+    expect(to.m_game_engine).toBe(e_game_mode_tu1.megalogamengine);
     expect(to.m_custom_variant?.m_base_variant.m_metadata.name).toBe(
       "INVASION: BREAKPOINT"
     );

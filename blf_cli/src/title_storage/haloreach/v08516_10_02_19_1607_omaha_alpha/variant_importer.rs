@@ -21,7 +21,7 @@ fn game_variant_metadata_name(game_variant: &c_game_variant) -> BLFLibResult<Str
                 .m_base_variant
                 .m_metadata
         }
-        e_game_mode::custom => {
+        e_game_mode::megalogamengine => {
             &game_variant
                 .m_custom_variant
                 .as_ref()
