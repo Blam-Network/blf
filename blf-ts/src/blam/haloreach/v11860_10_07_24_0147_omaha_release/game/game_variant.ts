@@ -20,7 +20,7 @@ import type { s_content_item_metadata } from "../../v12065_11_08_24_1738_tu1actu
 
 export { e_game_mode, s_custom_game_engine_definition };
 
-/** Release (pre-TU1) custom variant layout — TU1 v107 fields without AU1 settings. */
+/** Release (pre-TU1) custom variant layout — TU1 v107 fields without TU1 settings. */
 export class c_game_engine_custom_variant {
   @AutoMap(() => Number)
   m_encoding_version = 0;

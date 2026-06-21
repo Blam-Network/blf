@@ -17,6 +17,7 @@ use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::megalogameng
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::string_table::c_string_table;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::memory::bitstream_reader::c_bitstream_reader_extensions;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::memory::bitstream_writer::c_bitstream_writer_extensions;
+use blf_lib::bitfield;
 use blf_lib::io::bitstream::{c_bitstream_reader, c_bitstream_writer};
 use blf_lib::OPTION_TO_RESULT;
 use blf_lib::types::numbers::Float32;
@@ -50,7 +51,7 @@ pub struct c_game_engine_custom_variant {
     pub m_user_defined_options_locked: StaticArray<bool, 32>,
     pub m_user_defined_options_hidden: StaticArray<bool, 32>,
     pub m_game_engine: s_custom_game_engine_definition,
-    pub m_au1_settings: c_game_engine_custom_variant_au1_settings,
+    pub m_tu1_settings: c_game_engine_custom_variant_tu1_settings,
 
 }
 
@@ -93,7 +94,7 @@ impl c_game_engine_custom_variant {
         }
         self.m_game_engine.encode(bitstream)?;
         if self.m_encoding_version > 106 {
-            self.m_au1_settings.encode(bitstream)?;
+            self.m_tu1_settings.encode(bitstream)?;
         }
 
         Ok(())
@@ -141,7 +142,7 @@ impl c_game_engine_custom_variant {
         }
         self.m_game_engine.decode(bitstream)?;
         if self.m_encoding_version > 106 {
-            self.m_au1_settings.decode(bitstream)?;
+            self.m_tu1_settings.decode(bitstream)?;
         }
 
         Ok(())
@@ -206,6 +207,7 @@ impl c_game_variant {
                         .m_base_variant.m_metadata
                 )
             }
+            e_game_mode::none => Err(BLFLibError::from("m_game_engine is none.")),
         }
     }
 
@@ -404,10 +406,22 @@ impl s_custom_game_engine_definition {
     }
 }
 
-#[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
-// no idea what this is called
-pub struct c_game_engine_custom_variant_au1_settings {
-    pub m_flags: u32,
+bitfield! {
+    #[derive(Serialize, Deserialize)]
+    pub struct e_game_variant_tu1_flags: u32 {
+        always_spillover_damage,
+        armor_lock_stickies_remain,
+        attached_damage_bypass_shields,
+        active_camo_override_energy_curve,
+        sword_gun_clang_kills,
+        magnum_is_automatic,
+        unknown,
+    }
+}
+
+#[derive(PartialEq, Debug, Clone, Serialize, Deserialize)]
+pub struct c_game_engine_custom_variant_tu1_settings {
+    pub m_flags: e_game_variant_tu1_flags,
     pub m_precision_bloom: Float32,
     pub m_active_camo_energy_curve_min: Float32,
     pub m_active_camo_energy_curve_max: Float32,
@@ -417,9 +431,24 @@ pub struct c_game_engine_custom_variant_au1_settings {
     pub m_magnum_fire_delay: Float32,
 }
 
-impl c_game_engine_custom_variant_au1_settings {
+impl Default for c_game_engine_custom_variant_tu1_settings {
+    fn default() -> Self {
+        Self {
+            m_flags: e_game_variant_tu1_flags::default(),
+            m_precision_bloom: Float32(1.0),
+            m_active_camo_energy_curve_min: Float32(0.2),
+            m_active_camo_energy_curve_max: Float32(0.7),
+            m_armor_lock_damage_drain: Float32(0.0),
+            m_armor_lock_damage_drain_limit: Float32(0.0),
+            m_magnum_damage: Float32(1.0),
+            m_magnum_fire_delay: Float32(1.0),
+        }
+    }
+}
+
+impl c_game_engine_custom_variant_tu1_settings {
     pub fn encode(&self, mut bitstream: &mut c_bitstream_writer) -> BLFLibResult {
-        bitstream.write_integer(self.m_flags, 32)?;
+        bitstream.write_integer(self.m_flags.to_raw(), 32)?;
         bitstream.write_quantized_real(self.m_precision_bloom, 0f32, 2f32, 8, false, true)?;
         bitstream.write_quantized_real(self.m_active_camo_energy_curve_min, 0f32, 2f32, 8, false, true)?;
         bitstream.write_quantized_real(self.m_active_camo_energy_curve_max, 0f32, 2f32, 8, false, true)?;
@@ -432,7 +461,7 @@ impl c_game_engine_custom_variant_au1_settings {
     }
 
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
-        self.m_flags = bitstream.read_integer("flags", 32)?;
+        self.m_flags = e_game_variant_tu1_flags::from_raw(bitstream.read_integer("flags", 32)?);
         self.m_precision_bloom = bitstream.read_quantized_real(0f32, 2f32, 8, false, true)?;
         self.m_active_camo_energy_curve_min = bitstream.read_quantized_real(0f32, 2f32, 8, false, true)?;
         self.m_active_camo_energy_curve_max = bitstream.read_quantized_real(0f32, 2f32, 8, false, true)?;

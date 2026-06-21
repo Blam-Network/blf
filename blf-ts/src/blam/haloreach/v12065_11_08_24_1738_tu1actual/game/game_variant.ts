@@ -1,7 +1,9 @@
 import type {
+  BitfieldOf,
   c_bitstream_reader,
   c_bitstream_writer,
 } from "../../../../bitstream";
+import { bitfieldFromRaw, bitfieldToRaw } from "../../../../bitstream";
 import { BlfError } from "../../../../error";
 import { AutoMap } from "../../../../helpers/automap";
 import type { s_content_item_metadata } from "../saved_games/saved_game_files";
@@ -179,25 +181,48 @@ export class s_custom_game_engine_definition {
   }
 }
 
-export class c_game_engine_custom_variant_au1_settings {
+const k_game_variant_tu1_flags = [
+  "always_spillover_damage",
+  "armor_lock_stickies_remain",
+  "attached_damage_bypass_shields",
+  "active_camo_override_energy_curve",
+  "sword_gun_clang_kills",
+  "magnum_is_automatic",
+  "unknown",
+] as const;
+
+export type e_game_variant_tu1_flags = BitfieldOf<typeof k_game_variant_tu1_flags>;
+
+export class c_game_engine_custom_variant_tu1_settings {
+  @AutoMap(() => Object)
+  m_flags: e_game_variant_tu1_flags = {
+    always_spillover_damage: false,
+    armor_lock_stickies_remain: false,
+    attached_damage_bypass_shields: false,
+    active_camo_override_energy_curve: false,
+    sword_gun_clang_kills: false,
+    magnum_is_automatic: false,
+    unknown: false,
+  };
   @AutoMap(() => Number)
-  m_flags = 0;
+  m_precision_bloom = 1;
   @AutoMap(() => Number)
-  m_precision_bloom = 0;
+  m_active_camo_energy_curve_min = 0.2;
   @AutoMap(() => Number)
-  m_active_camo_energy_curve_min = 0;
-  @AutoMap(() => Number)
-  m_active_camo_energy_curve_max = 0;
+  m_active_camo_energy_curve_max = 0.7;
   @AutoMap(() => Number)
   m_armor_lock_damage_drain = 0;
   @AutoMap(() => Number)
   m_armor_lock_damage_drain_limit = 0;
   @AutoMap(() => Number)
-  m_magnum_damage = 0;
+  m_magnum_damage = 1;
   @AutoMap(() => Number)
-  m_magnum_fire_delay = 0;
+  m_magnum_fire_delay = 1;
   decode(bitstream: c_bitstream_reader): void {
-    this.m_flags = bitstream.read_integer("flags", 32);
+    this.m_flags = bitfieldFromRaw(
+      bitstream.read_integer("flags", 32),
+      k_game_variant_tu1_flags
+    );
     this.m_precision_bloom = bitstream.read_quantized_real(
       0,
       2,
@@ -243,7 +268,10 @@ export class c_game_engine_custom_variant_au1_settings {
     );
   }
   encode(bitstream: c_bitstream_writer): void {
-    bitstream.write_integer(this.m_flags, 32);
+    bitstream.write_integer(
+      bitfieldToRaw(this.m_flags, k_game_variant_tu1_flags),
+      32
+    );
     bitstream.write_quantized_real(
       this.m_precision_bloom,
       0,
@@ -353,8 +381,8 @@ export class c_game_engine_custom_variant {
   );
   @AutoMap(() => s_custom_game_engine_definition)
   m_game_engine = new s_custom_game_engine_definition();
-  @AutoMap(() => c_game_engine_custom_variant_au1_settings)
-  m_au1_settings = new c_game_engine_custom_variant_au1_settings();
+  @AutoMap(() => c_game_engine_custom_variant_tu1_settings)
+  m_tu1_settings = new c_game_engine_custom_variant_tu1_settings();
   decode(bitstream: c_bitstream_reader): void {
     this.m_encoding_version = bitstream.read_signed_integer(
       "encoding-version",
@@ -417,7 +445,7 @@ export class c_game_engine_custom_variant {
     }
     this.m_game_engine.decode(bitstream);
     if (this.m_encoding_version > 106) {
-      this.m_au1_settings.decode(bitstream);
+      this.m_tu1_settings.decode(bitstream);
     }
   }
   encode(bitstream: c_bitstream_writer): void {
@@ -458,7 +486,7 @@ export class c_game_engine_custom_variant {
     }
     this.m_game_engine.encode(bitstream);
     if (this.m_encoding_version > 106) {
-      this.m_au1_settings.encode(bitstream);
+      this.m_tu1_settings.encode(bitstream);
     }
   }
 }

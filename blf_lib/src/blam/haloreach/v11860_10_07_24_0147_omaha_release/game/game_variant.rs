@@ -199,6 +199,7 @@ impl c_game_variant {
                     .m_base_variant
                     .m_metadata,
             ),
+            e_game_mode::none => Err(BLFLibError::from("m_game_engine is none.")),
         }
     }
 
