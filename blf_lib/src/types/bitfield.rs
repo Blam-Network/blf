@@ -31,7 +31,11 @@ macro_rules! bitfield {
                 let mut i = 0;
                 Self {
                     $(
-                        $field: ((value >> i) & 1) != 0,
+                        $field: {
+                            let bit = ((value >> i) & 1) != 0;
+                            i += 1;
+                            bit
+                        },
                     )+
                 }
             }
