@@ -9,6 +9,7 @@ export * from "./megalogamengine_map_objects";
 export * from "./megalogamengine_map_permissions";
 export * from "./megalogamengine_references";
 export * from "./megalogamengine_statistics";
+export * from "./megalogamengine_sounds";
 export * from "./megalogamengine_text";
 export * from "./megalogamengine_trigger";
 export * from "./megalogamengine_user_defined_options";

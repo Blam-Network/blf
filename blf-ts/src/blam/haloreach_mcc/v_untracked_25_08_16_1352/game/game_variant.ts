@@ -191,7 +191,9 @@ const k_game_variant_tu1_flags = [
   "unknown",
 ] as const;
 
-export type e_game_variant_tu1_flags = BitfieldOf<typeof k_game_variant_tu1_flags>;
+export type e_game_variant_tu1_flags = BitfieldOf<
+  typeof k_game_variant_tu1_flags
+>;
 
 export class c_game_engine_custom_variant_tu1_settings {
   @AutoMap(() => Object)

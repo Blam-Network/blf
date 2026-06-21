@@ -8,11 +8,12 @@ import {
   e_weapon_pickup_priority,
 } from "../../../v12065_11_08_24_1738_tu1actual/game/game_engine_enums";
 import { e_megalogamengine_hud_meter_input_type } from "../../../v12065_11_08_24_1738_tu1actual/game/megalogamengine/megalogamengine_hud_widgets";
+import { e_megalo_sound } from "./megalogamengine_sounds";
 /** Matches `e_action_team_or_player_target` in blf_lib `megalogamengine_actions.rs`. */
 export enum e_action_team_or_player_target {
   team = 0,
   player = 1,
-  all_players = 2,
+  everyone = 2,
 }
 /** Matches `e_math_operation` in blf_lib `megalogamengine_actions.rs`. */
 export enum e_math_operation {
@@ -251,7 +252,7 @@ export class s_team_or_player_target {
         this.m_player = player;
         break;
       }
-      case e_action_team_or_player_target.all_players:
+      case e_action_team_or_player_target.everyone:
         break;
     }
   }
@@ -264,7 +265,7 @@ export class s_team_or_player_target {
       case e_action_team_or_player_target.player:
         this.m_player?.encode(bitstream);
         break;
-      case e_action_team_or_player_target.all_players:
+      case e_action_team_or_player_target.everyone:
         break;
     }
   }
@@ -540,18 +541,18 @@ export class s_action_set_progress_bar_parameters {
 export class s_action_hud_post_message_parameters {
   @AutoMap(() => s_team_or_player_target)
   m_target = new s_team_or_player_target();
-  @AutoMap(() => Number)
-  m_sound_index = 0;
+  @AutoMap(() => e_megalo_sound)
+  m_sound_index: e_megalo_sound = e_megalo_sound.slayer;
   @AutoMap(() => c_dynamic_string)
   m_string = new c_dynamic_string();
   decode(bitstream: c_bitstream_reader): void {
     this.m_target.decode(bitstream);
-    this.m_sound_index = bitstream.read_integer("sound-index", 7);
+    this.m_sound_index = bitstream.read_enum("sound-index", 7, e_megalo_sound);
     this.m_string.decode(bitstream);
   }
   encode(bitstream: c_bitstream_writer): void {
     this.m_target.encode(bitstream);
-    bitstream.write_integer(this.m_sound_index, 7);
+    bitstream.write_enum(this.m_sound_index, 7, e_megalo_sound);
     this.m_string.encode(bitstream);
   }
 }
@@ -803,19 +804,19 @@ export class s_action_hud_widget_set_visibility_parameters {
   }
 }
 export class s_action_play_sound_parameters {
-  @AutoMap(() => Number)
-  m_sound_index = 0;
+  @AutoMap(() => e_megalo_sound)
+  m_sound_index: e_megalo_sound = e_megalo_sound.slayer;
   @AutoMap(() => Boolean)
   m_immediate = false;
   @AutoMap(() => s_team_or_player_target)
   m_target = new s_team_or_player_target();
   decode(bitstream: c_bitstream_reader): void {
-    this.m_sound_index = bitstream.read_integer("sound-index", 7);
+    this.m_sound_index = bitstream.read_enum("sound-index", 7, e_megalo_sound);
     this.m_immediate = bitstream.read_bool("immediate");
     this.m_target.decode(bitstream);
   }
   encode(bitstream: c_bitstream_writer): void {
-    bitstream.write_integer(this.m_sound_index, 7);
+    bitstream.write_enum(this.m_sound_index, 7, e_megalo_sound);
     bitstream.write_bool(this.m_immediate);
     this.m_target.encode(bitstream);
   }

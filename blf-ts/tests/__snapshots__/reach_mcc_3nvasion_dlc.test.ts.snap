@@ -5868,9 +5868,9 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_play_sound_parameters": {
               "m_immediate": true,
-              "m_sound_index": 88,
+              "m_sound_index": "unsc_win2",
               "m_target": {
-                "m_target": "all_players",
+                "m_target": "everyone",
               },
             },
             "m_type": "play_sound",
@@ -5878,9 +5878,9 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_play_sound_parameters": {
               "m_immediate": true,
-              "m_sound_index": 84,
+              "m_sound_index": "covy_win2",
               "m_target": {
-                "m_target": "all_players",
+                "m_target": "everyone",
               },
             },
             "m_type": "play_sound",
@@ -6118,9 +6118,9 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_play_sound_parameters": {
               "m_immediate": true,
-              "m_sound_index": 89,
+              "m_sound_index": "power_down",
               "m_target": {
-                "m_target": "all_players",
+                "m_target": "everyone",
               },
             },
             "m_type": "play_sound",
@@ -6128,9 +6128,9 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_play_sound_parameters": {
               "m_immediate": true,
-              "m_sound_index": 85,
+              "m_sound_index": "invasion_beginning",
               "m_target": {
-                "m_target": "all_players",
+                "m_target": "everyone",
               },
             },
             "m_type": "play_sound",
@@ -6350,9 +6350,9 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_play_sound_parameters": {
               "m_immediate": true,
-              "m_sound_index": 87,
+              "m_sound_index": "unsc_win1",
               "m_target": {
-                "m_target": "all_players",
+                "m_target": "everyone",
               },
             },
             "m_type": "play_sound",
@@ -6360,9 +6360,9 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_play_sound_parameters": {
               "m_immediate": true,
-              "m_sound_index": 83,
+              "m_sound_index": "covy_win1",
               "m_target": {
-                "m_target": "all_players",
+                "m_target": "everyone",
               },
             },
             "m_type": "play_sound",
@@ -7159,7 +7159,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_play_sound_parameters": {
               "m_immediate": true,
-              "m_sound_index": 93,
+              "m_sound_index": "bravo_under_attack",
               "m_target": {
                 "m_target": "team",
                 "m_team": {
@@ -7184,7 +7184,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_play_sound_parameters": {
               "m_immediate": true,
-              "m_sound_index": 94,
+              "m_sound_index": "charlie_under_attack",
               "m_target": {
                 "m_target": "team",
                 "m_team": {
@@ -7507,7 +7507,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               "m_variable_2": {
                 "m_team": {
                   "m_team": {
-                    "m_explicit_team_type": "no_team",
+                    "m_explicit_team_type": "none",
                   },
                   "m_type": "global_team",
                 },
@@ -7713,7 +7713,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
             "m_submit_incident_parameters": {
               "m_incident_id": 237,
               "m_target_1": {
-                "m_target": "all_players",
+                "m_target": "everyone",
               },
               "m_target_2": {
                 "m_player": {
@@ -7730,9 +7730,9 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_play_sound_parameters": {
               "m_immediate": true,
-              "m_sound_index": 88,
+              "m_sound_index": "unsc_win2",
               "m_target": {
-                "m_target": "all_players",
+                "m_target": "everyone",
               },
             },
             "m_type": "play_sound",
@@ -7741,7 +7741,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
             "m_submit_incident_parameters": {
               "m_incident_id": 240,
               "m_target_1": {
-                "m_target": "all_players",
+                "m_target": "everyone",
               },
               "m_target_2": {
                 "m_player": {
@@ -7759,7 +7759,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
             "m_submit_incident_parameters": {
               "m_incident_id": 238,
               "m_target_1": {
-                "m_target": "all_players",
+                "m_target": "everyone",
               },
               "m_target_2": {
                 "m_player": {
@@ -7776,9 +7776,9 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_play_sound_parameters": {
               "m_immediate": true,
-              "m_sound_index": 89,
+              "m_sound_index": "power_down",
               "m_target": {
-                "m_target": "all_players",
+                "m_target": "everyone",
               },
             },
             "m_type": "play_sound",
@@ -7787,7 +7787,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
             "m_submit_incident_parameters": {
               "m_incident_id": 236,
               "m_target_1": {
-                "m_target": "all_players",
+                "m_target": "everyone",
               },
               "m_target_2": {
                 "m_player": {
@@ -7804,9 +7804,9 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_play_sound_parameters": {
               "m_immediate": true,
-              "m_sound_index": 87,
+              "m_sound_index": "unsc_win1",
               "m_target": {
-                "m_target": "all_players",
+                "m_target": "everyone",
               },
             },
             "m_type": "play_sound",
@@ -7815,7 +7815,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
             "m_submit_incident_parameters": {
               "m_incident_id": 239,
               "m_target_1": {
-                "m_target": "all_players",
+                "m_target": "everyone",
               },
               "m_target_2": {
                 "m_player": {
@@ -8089,10 +8089,10 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
             "m_submit_incident_parameters": {
               "m_incident_id": 246,
               "m_target_1": {
-                "m_target": "all_players",
+                "m_target": "everyone",
               },
               "m_target_2": {
-                "m_target": "all_players",
+                "m_target": "everyone",
               },
             },
             "m_type": "submit_incident",
@@ -8502,7 +8502,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
                 "m_target": "player",
               },
               "m_target_2": {
-                "m_target": "all_players",
+                "m_target": "everyone",
               },
             },
             "m_type": "submit_incident",
@@ -9005,10 +9005,10 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
             "m_submit_incident_parameters": {
               "m_incident_id": 246,
               "m_target_1": {
-                "m_target": "all_players",
+                "m_target": "everyone",
               },
               "m_target_2": {
-                "m_target": "all_players",
+                "m_target": "everyone",
               },
             },
             "m_type": "submit_incident",
@@ -10538,7 +10538,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_play_sound_parameters": {
               "m_immediate": true,
-              "m_sound_index": 93,
+              "m_sound_index": "bravo_under_attack",
               "m_target": {
                 "m_target": "team",
                 "m_team": {
@@ -10563,7 +10563,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_play_sound_parameters": {
               "m_immediate": true,
-              "m_sound_index": 94,
+              "m_sound_index": "charlie_under_attack",
               "m_target": {
                 "m_target": "team",
                 "m_team": {
@@ -11513,10 +11513,10 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
             "m_submit_incident_parameters": {
               "m_incident_id": 91,
               "m_target_1": {
-                "m_target": "all_players",
+                "m_target": "everyone",
               },
               "m_target_2": {
-                "m_target": "all_players",
+                "m_target": "everyone",
               },
             },
             "m_type": "submit_incident",
@@ -11661,10 +11661,10 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
             "m_submit_incident_parameters": {
               "m_incident_id": 94,
               "m_target_1": {
-                "m_target": "all_players",
+                "m_target": "everyone",
               },
               "m_target_2": {
-                "m_target": "all_players",
+                "m_target": "everyone",
               },
             },
             "m_type": "submit_incident",
@@ -12350,10 +12350,10 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
             "m_submit_incident_parameters": {
               "m_incident_id": 295,
               "m_target_1": {
-                "m_target": "all_players",
+                "m_target": "everyone",
               },
               "m_target_2": {
-                "m_target": "all_players",
+                "m_target": "everyone",
               },
             },
             "m_type": "submit_incident",
@@ -12588,7 +12588,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
                 "m_target": "player",
               },
               "m_target_2": {
-                "m_target": "all_players",
+                "m_target": "everyone",
               },
             },
             "m_type": "submit_incident",
@@ -12635,7 +12635,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
                 "m_target": "player",
               },
               "m_target_2": {
-                "m_target": "all_players",
+                "m_target": "everyone",
               },
             },
             "m_type": "submit_incident",
@@ -12735,7 +12735,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
                 "m_target": "player",
               },
               "m_target_2": {
-                "m_target": "all_players",
+                "m_target": "everyone",
               },
             },
             "m_type": "submit_incident",
@@ -12782,7 +12782,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
                 "m_target": "player",
               },
               "m_target_2": {
-                "m_target": "all_players",
+                "m_target": "everyone",
               },
             },
             "m_type": "submit_incident",
@@ -26102,6 +26102,24 @@ furar a defesa dos Spartans!",
         ],
       },
       "m_symmetric_gametype": true,
+      "m_tu1_settings": {
+        "m_active_camo_energy_curve_max": 0.7,
+        "m_active_camo_energy_curve_min": 0.2,
+        "m_armor_lock_damage_drain": 0,
+        "m_armor_lock_damage_drain_limit": 0,
+        "m_flags": {
+          "active_camo_override_energy_curve": false,
+          "always_spillover_damage": false,
+          "armor_lock_stickies_remain": false,
+          "attached_damage_bypass_shields": false,
+          "magnum_is_automatic": false,
+          "sword_gun_clang_kills": false,
+          "unknown": false,
+        },
+        "m_magnum_damage": 1,
+        "m_magnum_fire_delay": 1,
+        "m_precision_bloom": 1,
+      },
       "m_user_defined_options": [
         {
           "m_current_value_index": 1,
@@ -26723,7 +26741,7 @@ furar a defesa dos Spartans!",
         true,
       ],
     },
-    "m_game_engine": "custom",
+    "m_game_engine": "megalogamengine",
   },
   "hash": {
     "$bytes": "c6bcc554b0e9b4e91b7bdd795a8174b753739049",

@@ -7,7 +7,7 @@ use blf_lib_derivable::result::BLFLibResult;
 #[derive(Debug, Clone, Copy, PartialEq, Eq, ToPrimitive, FromPrimitive, Default, Serialize, Deserialize)]
 pub enum e_explicit_team_type {
     #[default]
-    no_team = 0,
+    none = 0,
     team_0 = 1,
     team_1 = 2,
     team_2 = 3,
@@ -16,7 +16,7 @@ pub enum e_explicit_team_type {
     team_5 = 6,
     team_6 = 7,
     team_7 = 8,
-    neutral_team = 9,
+    neutral = 9,
     global_0 = 10,
     global_1 = 11,
     global_2 = 12,

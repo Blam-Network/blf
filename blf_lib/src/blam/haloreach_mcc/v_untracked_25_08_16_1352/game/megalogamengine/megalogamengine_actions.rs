@@ -12,6 +12,7 @@ use blf_lib::blam::haloreach_mcc::v_untracked_25_08_16_1352::game::megalogamengi
 use blf_lib::blam::haloreach_mcc::v_untracked_25_08_16_1352::game::game_engine_megalo::e_weapon_pickup_priority;
 use blf_lib::blam::haloreach_mcc::v_untracked_25_08_16_1352::game::game_engine_timer::e_game_engine_timer_rate;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::saved_games::scenario_map_variant::e_boundary_shape;
+use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::megalogamengine::megalogamengine_sounds::e_megalo_sound;
 use blf_lib::bitfield;
 use blf_lib::io::bitstream::{c_bitstream_reader, c_bitstream_writer};
 use blf_lib::OPTION_TO_RESULT;
@@ -25,7 +26,7 @@ pub enum e_action_team_or_player_target {
     #[default]
     team = 0,
     player = 1,
-    all_players = 2,
+    everyone = 2,
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
@@ -47,7 +48,7 @@ impl s_team_or_player_target {
             (e_action_team_or_player_target::player, None, Some(player)) => {
                 player.encode(bitstream)?;
             }
-            (e_action_team_or_player_target::all_players, None, None) => {}
+            (e_action_team_or_player_target::everyone, None, None) => {}
             _ => {}
         }
 
@@ -67,7 +68,7 @@ impl s_team_or_player_target {
                 player.decode(bitstream)?;
                 self.m_player = Some(player);
             }
-            e_action_team_or_player_target::all_players => {}
+            e_action_team_or_player_target::everyone => {}
         }
 
         Ok(())
@@ -406,107 +407,6 @@ pub enum e_scriptable_game_buttons {
     unknown = 14,
     unknown_1 = 15,
     unknown_2 = 16,
-}
-
-#[repr(u8)]
-#[derive(Debug, Clone, Copy, PartialEq, Eq, ToPrimitive, FromPrimitive, Default, Serialize, Deserialize)]
-pub enum e_megalo_sound {
-    #[default]
-    slayer = 0,
-    ctf = 1,
-    flag_captured = 2,
-    flag_dropped = 3,
-    flag_recovered = 4,
-    flag_reset = 5,
-    flag_stolen = 6,
-    flag_taken = 7,
-    vip = 8,
-    new_vip = 9,
-    vip_killed = 10,
-    juggernaut = 11,
-    new_juggernaut = 12,
-    territories = 13,
-    territory_captured = 14,
-    territory_lost = 15,
-    assault = 16,
-    bomb_armed = 17,
-    bomb_detonated = 18,
-    bomb_disarmed = 19,
-    bomb_dropped = 20,
-    bomb_reset = 21,
-    bomb_returned = 22,
-    bomb_taken = 23,
-    infection = 24,
-    infected = 25,
-    last_man_standing = 26,
-    new_zombie = 27,
-    oddball = 28,
-    ball_spawned = 29,
-    ball_taken = 30,
-    ball_dropped = 31,
-    ball_reset = 32,
-    king = 33,
-    hill_controlled = 34,
-    hill_contested = 35,
-    hill_moved = 36,
-    headhunter = 37,
-    stockpile = 38,
-    race = 39,
-    defense = 40,
-    offense = 41,
-    destination_moved = 42,
-    generator_armed = 43,
-    core_armed = 44,
-    generator_disarmed = 45,
-    core_disarmed = 46,
-    sudden_death = 47,
-    game_over = 48,
-    bone_cv_defeat = 49,
-    bone_cv_ph1_defeat = 50,
-    bone_cv_ph1_intro = 51,
-    bone_cv_ph1_victory = 52,
-    bone_cv_ph2_defeat = 53,
-    bone_cv_ph2_victory = 54,
-    bone_cv_ph3_victory = 55,
-    bone_cv_victory = 56,
-    bone_sp_defeat = 57,
-    bone_sp_ph1_intro = 58,
-    bone_sp_ph1_victory = 59,
-    bone_sp_ph2_intro = 60,
-    bone_sp_ph2_victory = 61,
-    bone_sp_ph3_intro = 62,
-    bone_sp_ph3_victory = 63,
-    isle_cv_defeat = 64,
-    isle_cv_ph1_defeat = 65,
-    isle_cv_ph1_intro = 66,
-    isle_cv_ph2_intro = 67,
-    isle_cv_ph2_victory = 68,
-    isle_cv_ph3_intro = 69,
-    isle_cv_ph3_victory = 70,
-    isle_sp_defeat = 71,
-    isle_sp_ph1_defeat = 72,
-    isle_sp_ph1_extra = 73,
-    isle_sp_ph1_intro = 74,
-    isle_sp_ph1_victory = 75,
-    isle_sp_ph2_defeat = 76,
-    isle_sp_ph2_victory = 77,
-    isle_sp_ph3_victory = 78,
-    isle_sp_victory = 79,
-    bone_sp_ph3_defeat = 80,
-    isle_cv_ph3_defeat = 81,
-    covy_big_win = 82,
-    covy_win1 = 83,
-    covy_win2 = 84,
-    invasion_beginning = 85,
-    unsc_big_win = 86,
-    unsc_win1 = 87,
-    unsc_win2 = 88,
-    power_down = 89,
-    reinforcements = 90,
-    respawn_tick = 91,
-    alpha_under_attack = 92,
-    bravo_under_attack = 93,
-    charlie_under_attack = 94,
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]

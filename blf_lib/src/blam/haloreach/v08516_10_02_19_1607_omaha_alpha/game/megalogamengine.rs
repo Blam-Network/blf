@@ -9,3 +9,4 @@ pub mod megalogamengine_trigger;
 pub mod megalogamengine_object_reference;
 pub mod megalogamengine_custom_timer_reference;
 pub mod megalogamengine_team_reference;
+pub mod megalogamengine_sounds;

@@ -18,3 +18,4 @@ pub mod megalogamengine_statistics;
 pub mod megalogamengine_variable_metadata;
 pub mod megalogamengine_map_objects;
 pub mod megalogamengine_hud_widgets;
+pub mod megalogamengine_sounds;

@@ -12,6 +12,7 @@ use blf_lib::blam::haloreach::v08516_10_02_19_1607_omaha_alpha::game::megalogame
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::saved_games::scenario_map_variant::e_boundary_shape;
 use blf_lib::blam::haloreach::v08516_10_02_19_1607_omaha_alpha::game::megalogamengine::megalogamengine_custom_variable_reference::c_custom_variable_reference;
 use blf_lib::blam::haloreach::v08516_10_02_19_1607_omaha_alpha::game::megalogamengine::megalogamengine_object_reference::c_object_reference;
+use crate::blam::haloreach::v08516_10_02_19_1607_omaha_alpha::game::megalogamengine::megalogamengine_sounds::e_megalo_sound;
 use blf_lib::io::bitstream::{c_bitstream_reader, c_bitstream_writer};
 use blf_lib_derivable::result::{BLFLibError, BLFLibResult};
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::game_engine_megalo::e_weapon_pickup_priority;
@@ -41,7 +42,7 @@ impl s_team_or_player_target {
             (e_action_team_or_player_target::player, None, Some(player)) => {
                 player.encode(bitstream)?;
             }
-            (e_action_team_or_player_target::all_players, None, None) => {}
+            (e_action_team_or_player_target::everyone, None, None) => {}
             _ => {}
         }
 
@@ -61,7 +62,7 @@ impl s_team_or_player_target {
                 player.decode(bitstream)?;
                 self.m_player = Some(player);
             }
-            e_action_team_or_player_target::all_players => {}
+            e_action_team_or_player_target::everyone => {}
         }
 
         Ok(())
@@ -428,14 +429,14 @@ impl s_action_set_progress_bar_parameters {
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct s_action_hud_post_message_parameters {
     pub m_target: s_team_or_player_target,
-    pub m_sound_index: u8, // 7 bits
+    pub m_sound_index: e_megalo_sound, // 7 bits
     pub m_string: c_dynamic_string,
 }
 
 impl s_action_hud_post_message_parameters {
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
         self.m_target.encode(bitstream)?;
-        bitstream.write_integer(self.m_sound_index, 7)?;
+        bitstream.write_enum_raw(self.m_sound_index, 7)?;
         self.m_string.encode(bitstream)?;
 
         Ok(())
@@ -443,7 +444,7 @@ impl s_action_hud_post_message_parameters {
 
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
         self.m_target.decode(bitstream)?;
-        self.m_sound_index = bitstream.read_integer("sound-index", 7)?;
+        self.m_sound_index = bitstream.read_enum_raw("sound-index", 7)?;
         self.m_string.decode(bitstream)?;
 
         Ok(())
@@ -692,20 +693,20 @@ impl s_action_hud_widget_set_visibility_parameters {
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct s_action_play_sound_parameters {
-    pub m_sound_index: u8, // 7 bits
+    pub m_sound_index: e_megalo_sound, // 7 bits
     pub m_target: s_team_or_player_target,
 }
 
 impl s_action_play_sound_parameters {
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
-        bitstream.write_integer(self.m_sound_index, 7)?;
+        bitstream.write_enum_raw(self.m_sound_index, 7)?;
         self.m_target.encode(bitstream)?;
 
         Ok(())
     }
 
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
-        self.m_sound_index = bitstream.read_integer("sound-index", 7)?;
+        self.m_sound_index = bitstream.read_enum_raw("sound-index", 7)?;
         self.m_target.decode(bitstream)?;
 
         Ok(())

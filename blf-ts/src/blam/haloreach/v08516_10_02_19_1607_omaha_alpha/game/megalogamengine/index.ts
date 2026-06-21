@@ -4,6 +4,7 @@ export * from "./megalogamengine_custom_timer_reference";
 export * from "./megalogamengine_custom_variable_reference";
 export * from "./megalogamengine_object_reference";
 export * from "./megalogamengine_player_reference";
+export * from "./megalogamengine_sounds";
 export * from "./megalogamengine_team_reference";
 export * from "./megalogamengine_text";
 export * from "./megalogamengine_trigger";

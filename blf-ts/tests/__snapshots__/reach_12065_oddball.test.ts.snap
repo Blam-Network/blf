@@ -64,16 +64,6 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
 {
   "game_variant": {
     "m_custom_variant": {
-      "m_au1_settings": {
-        "m_active_camo_energy_curve_max": 0.5,
-        "m_active_camo_energy_curve_min": 0.09842519685039369,
-        "m_armor_lock_damage_drain": 0.03543307086614173,
-        "m_armor_lock_damage_drain_limit": 0.06692913385826771,
-        "m_flags": 31,
-        "m_magnum_damage": 1.0039370078740157,
-        "m_magnum_fire_delay": 1.0039370078740157,
-        "m_precision_bloom": 0.8464566929133858,
-      },
       "m_base_name_string_index": 1,
       "m_base_variant": {
         "m_built_in": true,
@@ -4549,7 +4539,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
               "m_variable_2": {
                 "m_team": {
                   "m_team": {
-                    "m_explicit_team_type": "neutral_team",
+                    "m_explicit_team_type": "neutral",
                   },
                   "m_type": "global_team",
                 },
@@ -4984,10 +4974,10 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
             "m_submit_incident_parameters": {
               "m_incident_id": 81,
               "m_target_1": {
-                "m_target": "all_players",
+                "m_target": "everyone",
               },
               "m_target_2": {
-                "m_target": "all_players",
+                "m_target": "everyone",
               },
             },
             "m_type": "submit_incident",
@@ -5338,7 +5328,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
               "m_variable_2": {
                 "m_team": {
                   "m_team": {
-                    "m_explicit_team_type": "neutral_team",
+                    "m_explicit_team_type": "neutral",
                   },
                   "m_type": "global_team",
                 },
@@ -6369,7 +6359,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
               "m_variable_2": {
                 "m_team": {
                   "m_team": {
-                    "m_explicit_team_type": "neutral_team",
+                    "m_explicit_team_type": "neutral",
                   },
                   "m_type": "global_team",
                 },
@@ -6484,10 +6474,10 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
             "m_submit_incident_parameters": {
               "m_incident_id": 82,
               "m_target_1": {
-                "m_target": "all_players",
+                "m_target": "everyone",
               },
               "m_target_2": {
-                "m_target": "all_players",
+                "m_target": "everyone",
               },
             },
             "m_type": "submit_incident",
@@ -6814,7 +6804,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
                 "m_target": "player",
               },
               "m_target_2": {
-                "m_target": "all_players",
+                "m_target": "everyone",
               },
             },
             "m_type": "submit_incident",
@@ -7168,7 +7158,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
                 "m_target": "player",
               },
               "m_target_2": {
-                "m_target": "all_players",
+                "m_target": "everyone",
               },
             },
             "m_type": "submit_incident",
@@ -7209,7 +7199,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
                 "m_target": "player",
               },
               "m_target_2": {
-                "m_target": "all_players",
+                "m_target": "everyone",
               },
             },
             "m_type": "submit_incident",
@@ -7340,7 +7330,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
                 },
               },
               "m_target_2": {
-                "m_target": "all_players",
+                "m_target": "everyone",
               },
             },
             "m_type": "submit_incident",
@@ -7381,7 +7371,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
                 },
               },
               "m_target_2": {
-                "m_target": "all_players",
+                "m_target": "everyone",
               },
             },
             "m_type": "submit_incident",
@@ -14206,6 +14196,24 @@ zu verdienen.%n Punkte zum Sieg.",
         ],
       },
       "m_symmetric_gametype": true,
+      "m_tu1_settings": {
+        "m_active_camo_energy_curve_max": 0.5,
+        "m_active_camo_energy_curve_min": 0.09842519685039369,
+        "m_armor_lock_damage_drain": 0.03543307086614173,
+        "m_armor_lock_damage_drain_limit": 0.06692913385826771,
+        "m_flags": {
+          "active_camo_override_energy_curve": true,
+          "always_spillover_damage": true,
+          "armor_lock_stickies_remain": true,
+          "attached_damage_bypass_shields": true,
+          "magnum_is_automatic": false,
+          "sword_gun_clang_kills": true,
+          "unknown": false,
+        },
+        "m_magnum_damage": 1.0039370078740157,
+        "m_magnum_fire_delay": 1.0039370078740157,
+        "m_precision_bloom": 0.8464566929133858,
+      },
       "m_user_defined_options": [
         {
           "m_current_value_index": 0,
@@ -14488,7 +14496,7 @@ zu verdienen.%n Punkte zum Sieg.",
         false,
       ],
     },
-    "m_game_engine": "custom",
+    "m_game_engine": "megalogamengine",
   },
   "hash": {
     "$bytes": "0176b13204f9f10b2b560d87e2d167304b3446da",

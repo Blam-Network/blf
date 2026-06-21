@@ -67,7 +67,7 @@ export class c_explicit_object {
 }
 export class c_explicit_team {
   @AutoMap(() => e_explicit_team_type)
-  m_explicit_team_type: e_explicit_team_type = e_explicit_team_type.no_team;
+  m_explicit_team_type: e_explicit_team_type = e_explicit_team_type.none;
   decode(bitstream: c_bitstream_reader): void {
     this.m_explicit_team_type = bitstream.read_enum(
       "explicit-team-type",
