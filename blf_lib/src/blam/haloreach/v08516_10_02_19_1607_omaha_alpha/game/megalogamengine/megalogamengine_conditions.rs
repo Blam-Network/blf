@@ -547,8 +547,3 @@ impl c_condition {
         Ok(())
     }
 }
-
-    }
-}
-    }
-}
