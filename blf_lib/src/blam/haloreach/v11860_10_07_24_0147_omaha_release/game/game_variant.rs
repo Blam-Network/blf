@@ -21,6 +21,7 @@ use blf_lib_derivable::result::{BLFLibError, BLFLibResult};
 use crate::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::megalogamengine::megalogamengine_map_permissions::c_megalogamengine_map_permissions;
 use crate::blam::haloreach::v12065_11_08_24_1738_tu1actual::saved_games::saved_game_files::c_content_item_metadata;
 use crate::types::array::StaticArray;
+use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::game_variant::s_game_variant_parameter_flags;
 
 /// Release (pre-TU1) custom variant layout — same as TU1 v107 fields without AU1 settings.
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
@@ -42,8 +43,8 @@ pub struct c_game_engine_custom_variant {
     pub m_score_to_win_round: u16,
     pub m_fire_teams_enabled: bool,
     pub m_symmetric_gametype: bool,
-    pub m_base_variant_parameters_locked: StaticArray<bool, 1280>,
-    pub m_base_variant_parameters_hidden: StaticArray<bool, 1280>,
+    pub m_base_variant_parameters_locked: s_game_variant_parameter_flags,
+    pub m_base_variant_parameters_hidden: s_game_variant_parameter_flags,
     pub m_user_defined_options_locked: StaticArray<bool, 32>,
     pub m_user_defined_options_hidden: StaticArray<bool, 32>,
     pub m_game_engine: s_custom_game_engine_definition,
@@ -74,12 +75,8 @@ impl c_game_engine_custom_variant {
         bitstream.write_signed_integer(self.m_score_to_win_round, 16)?;
         bitstream.write_bool(self.m_fire_teams_enabled)?;
         bitstream.write_bool(self.m_symmetric_gametype)?;
-        for parameter in &self.m_base_variant_parameters_locked {
-            bitstream.write_bool(*parameter)?;
-        }
-        for parameter in &self.m_base_variant_parameters_hidden {
-            bitstream.write_bool(*parameter)?;
-        }
+        self.m_base_variant_parameters_locked.encode(bitstream, "base-variant-parameters-locked")?;
+        self.m_base_variant_parameters_hidden.encode(bitstream, "base-variant-parameters-hidden")?;
         for parameter in &self.m_user_defined_options_locked {
             bitstream.write_bool(*parameter)?;
         }
@@ -119,14 +116,8 @@ impl c_game_engine_custom_variant {
         self.m_score_to_win_round = bitstream.read_signed_integer("score-to-win-round", 16)?;
         self.m_fire_teams_enabled = bitstream.read_bool("fire-teams-enabled")?;
         self.m_symmetric_gametype = bitstream.read_bool("symmetric-gametype")?;
-        for i in 0..1280 {
-            self.m_base_variant_parameters_locked[i] =
-                bitstream.read_bool("base-variant-parameters-locked")?;
-        }
-        for i in 0..1280 {
-            self.m_base_variant_parameters_hidden[i] =
-                bitstream.read_bool("base-variant-parameters-hidden")?;
-        }
+        self.m_base_variant_parameters_locked.decode(bitstream, "base-variant-parameters-locked")?;
+        self.m_base_variant_parameters_hidden.decode(bitstream, "base-variant-parameters-hidden")?;
         for i in 0..32 {
             self.m_user_defined_options_locked[i] =
                 bitstream.read_bool("user-defined-options-locked")?;

@@ -2,6 +2,11 @@ import type {
   c_bitstream_reader,
   c_bitstream_writer,
 } from "../../../../bitstream";
+import {
+  decodeBigBitfield,
+  defaultBigBitfield,
+  encodeBigBitfield,
+} from "../../../../bitstream";
 import { BlfError } from "../../../../error";
 import { AutoMap } from "../../../../helpers/automap";
 import { c_game_engine_base_variant } from "../../v12065_11_08_24_1738_tu1actual/game/game_engine_default";
@@ -10,7 +15,10 @@ import { c_game_engine_survival_variant } from "../../v12065_11_08_24_1738_tu1ac
 import { s_player_trait_option } from "../../v12065_11_08_24_1738_tu1actual/game/game_engine_traits";
 import {
   e_game_mode,
+  e_game_variant_parameter,
+  k_game_variant_parameter_flags,
   s_custom_game_engine_definition,
+  type s_game_variant_parameter_flags,
 } from "../../v12065_11_08_24_1738_tu1actual/game/game_variant";
 import { s_game_engine_player_rating_parameters } from "../../v12065_11_08_24_1738_tu1actual/game/megalogamengine/game_engine_player_rating_parameters";
 import { c_megalogamengine_map_permissions } from "../../v12065_11_08_24_1738_tu1actual/game/megalogamengine/megalogamengine_map_permissions";
@@ -18,7 +26,13 @@ import { s_user_defined_option } from "../../v12065_11_08_24_1738_tu1actual/game
 import { c_string_table } from "../../v12065_11_08_24_1738_tu1actual/game/string_table";
 import type { s_content_item_metadata } from "../../v12065_11_08_24_1738_tu1actual/saved_games/saved_game_files";
 
-export { e_game_mode, s_custom_game_engine_definition };
+export {
+  type s_game_variant_parameter_flags,
+  e_game_mode,
+  e_game_variant_parameter,
+  k_game_variant_parameter_flags,
+  s_custom_game_engine_definition,
+};
 
 /** Release (pre-TU1) custom variant layout — TU1 v107 fields without TU1 settings. */
 export class c_game_engine_custom_variant {
@@ -56,16 +70,12 @@ export class c_game_engine_custom_variant {
   m_fire_teams_enabled = false;
   @AutoMap(() => Boolean)
   m_symmetric_gametype = false;
-  @AutoMap(() => [Boolean])
-  m_base_variant_parameters_locked: boolean[] = Array.from(
-    { length: 1280 },
-    () => false
-  );
-  @AutoMap(() => [Boolean])
-  m_base_variant_parameters_hidden: boolean[] = Array.from(
-    { length: 1280 },
-    () => false
-  );
+  @AutoMap(() => Object)
+  m_base_variant_parameters_locked: s_game_variant_parameter_flags =
+    defaultBigBitfield(k_game_variant_parameter_flags);
+  @AutoMap(() => Object)
+  m_base_variant_parameters_hidden: s_game_variant_parameter_flags =
+    defaultBigBitfield(k_game_variant_parameter_flags);
   @AutoMap(() => [Boolean])
   m_user_defined_options_locked: boolean[] = Array.from(
     { length: 32 },
@@ -119,16 +129,16 @@ export class c_game_engine_custom_variant {
     );
     this.m_fire_teams_enabled = bitstream.read_bool("fire-teams-enabled");
     this.m_symmetric_gametype = bitstream.read_bool("symmetric-gametype");
-    for (let i = 0; i < 1280; i++) {
-      this.m_base_variant_parameters_locked[i] = bitstream.read_bool(
-        "base-variant-parameters-locked"
-      );
-    }
-    for (let i = 0; i < 1280; i++) {
-      this.m_base_variant_parameters_hidden[i] = bitstream.read_bool(
-        "base-variant-parameters-hidden"
-      );
-    }
+    this.m_base_variant_parameters_locked = decodeBigBitfield(
+      bitstream,
+      "base-variant-parameters-locked",
+      k_game_variant_parameter_flags
+    );
+    this.m_base_variant_parameters_hidden = decodeBigBitfield(
+      bitstream,
+      "base-variant-parameters-hidden",
+      k_game_variant_parameter_flags
+    );
     for (let i = 0; i < 32; i++) {
       this.m_user_defined_options_locked[i] = bitstream.read_bool(
         "user-defined-options-locked"
@@ -166,12 +176,18 @@ export class c_game_engine_custom_variant {
     bitstream.write_signed_integer(this.m_score_to_win_round, 16);
     bitstream.write_bool(this.m_fire_teams_enabled);
     bitstream.write_bool(this.m_symmetric_gametype);
-    for (const parameter of this.m_base_variant_parameters_locked) {
-      bitstream.write_bool(parameter);
-    }
-    for (const parameter of this.m_base_variant_parameters_hidden) {
-      bitstream.write_bool(parameter);
-    }
+    encodeBigBitfield(
+      bitstream,
+      this.m_base_variant_parameters_locked,
+      k_game_variant_parameter_flags,
+      "base-variant-parameters-locked"
+    );
+    encodeBigBitfield(
+      bitstream,
+      this.m_base_variant_parameters_hidden,
+      k_game_variant_parameter_flags,
+      "base-variant-parameters-hidden"
+    );
     for (const parameter of this.m_user_defined_options_locked) {
       bitstream.write_bool(parameter);
     }
