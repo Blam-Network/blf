@@ -36,6 +36,36 @@ export class s_game_engine_player_rating_parameters {
   m_expansion_1 = 0;
   @AutoMap(() => Boolean)
   m_show_in_scoreboard = false;
+  clear(): void {
+    this.m_rating_scale = 0;
+    this.m_kill_weight = 0;
+    this.m_assist_weight = 0;
+    this.m_betrayal_weight = 0;
+    this.m_death_weight = 0;
+    this.m_normalize_by_max_kills = 0;
+    this.m_base = 0;
+    this.m_range = 0;
+    this.m_loss_scalar = 0;
+    this.m_custom_stat_0 = 0;
+    this.m_custom_stat_1 = 0;
+    this.m_custom_stat_2 = 0;
+    this.m_custom_stat_3 = 0;
+    this.m_expansion_0 = 0;
+    this.m_expansion_1 = 0;
+    this.m_show_in_scoreboard = false;
+  }
+  initialize_to_default(): void {
+    this.clear();
+    this.m_rating_scale = 1.0;
+    this.m_kill_weight = 1.0;
+    this.m_assist_weight = 1.0;
+    this.m_betrayal_weight = 1.0;
+    this.m_death_weight = 0.33;
+    this.m_normalize_by_max_kills = 1.0;
+    this.m_base = 1000.0;
+    this.m_range = 1000.0;
+    this.m_loss_scalar = 0.96;
+  }
   decode(bitstream: c_bitstream_reader): void {
     this.m_rating_scale = bitstream.read_float("player-rating-parameter", 32);
     this.m_kill_weight = bitstream.read_float("player-rating-parameter", 32);

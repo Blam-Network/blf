@@ -23,6 +23,23 @@ pub struct s_game_engine_player_rating_parameters {
 }
 
 impl s_game_engine_player_rating_parameters {
+    pub fn clear(&mut self) {
+        *self = Self::default();
+    }
+
+    pub fn initialize_to_default(&mut self) {
+        self.clear();
+        self.m_rating_scale = 1.0;
+        self.m_kill_weight = 1.0;
+        self.m_assist_weight = 1.0;
+        self.m_betrayal_weight = 1.0;
+        self.m_death_weight = 0.33;
+        self.m_normalize_by_max_kills = 1.0;
+        self.m_base = 1000.0;
+        self.m_range = 1000.0;
+        self.m_loss_scalar = 0.96;
+    }
+
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
         bitstream.write_float(self.m_rating_scale, 32)?;
         bitstream.write_float(self.m_kill_weight, 32)?;
