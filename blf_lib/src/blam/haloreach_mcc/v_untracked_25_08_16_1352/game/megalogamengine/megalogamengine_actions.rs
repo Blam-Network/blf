@@ -2712,6 +2712,34 @@ impl s_action_game_grief_record_custom_penalty_parameters {
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
+pub struct s_action_begin_parameters {
+    pub m_first_condition_index: u16, // 9 bits
+    pub m_condition_count: u16, // 10 bits
+    pub m_first_action_index: u16, // 10 bits
+    pub m_action_count: u16, // 11 bits
+}
+
+impl s_action_begin_parameters {
+    pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
+        bitstream.write_integer(self.m_first_condition_index, 9)?;
+        bitstream.write_integer(self.m_condition_count, 10)?;
+        bitstream.write_integer(self.m_first_action_index, 10)?;
+        bitstream.write_integer(self.m_action_count, 11)?;
+
+        Ok(())
+    }
+
+    pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
+        self.m_first_condition_index = bitstream.read_integer("first-condition-index", 9)?;
+        self.m_condition_count = bitstream.read_integer("condition-count", 10)?;
+        self.m_first_action_index = bitstream.read_integer("first-action-index", 10)?;
+        self.m_action_count = bitstream.read_integer("action-count", 11)?;
+
+        Ok(())
+    }
+}
+
+#[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct s_action_hs_function_call_parameters {
     pub m_function_name_index: u8,
 }
@@ -3178,6 +3206,8 @@ pub struct c_action {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub m_boundary_set_player_color_parameters: Option<s_action_boundary_set_player_color_parameters>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    pub m_begin_parameters: Option<s_action_begin_parameters>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub m_hs_function_call_parameters: Option<s_action_hs_function_call_parameters>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub m_get_button_time_parameters: Option<s_action_get_button_time_parameters>,
@@ -3488,7 +3518,9 @@ impl c_action {
             e_action_type::boundary_set_player_color => self.m_boundary_set_player_color_parameters.as_ref()
                 .ok_or_else(|| BLFLibError::from("m_boundary_set_player_color_parameters does not exist."))?
                 .encode(bitstream)?,
-            e_action_type::begin => {}
+            e_action_type::begin => self.m_begin_parameters.as_ref()
+                .ok_or_else(|| BLFLibError::from("m_begin_parameters does not exist."))?
+                .encode(bitstream)?,
             e_action_type::hs_function_call => self.m_hs_function_call_parameters.as_ref()
                 .ok_or_else(|| BLFLibError::from("m_hs_function_call_parameters does not exist."))?
                 .encode(bitstream)?,
@@ -4008,6 +4040,11 @@ impl c_action {
                 let mut boundary_set_player_color_parameters = s_action_boundary_set_player_color_parameters::default();
                 boundary_set_player_color_parameters.decode(bitstream)?;
                 self.m_boundary_set_player_color_parameters = Some(boundary_set_player_color_parameters);
+            }
+            e_action_type::begin => {
+                let mut begin_parameters = s_action_begin_parameters::default();
+                begin_parameters.decode(bitstream)?;
+                self.m_begin_parameters = Some(begin_parameters);
             }
             _ => {}
         }

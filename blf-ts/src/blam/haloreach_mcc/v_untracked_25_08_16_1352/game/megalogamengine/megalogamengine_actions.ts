@@ -1232,6 +1232,34 @@ export class s_action_boundary_set_player_color_parameters {
     bitstream.write_index(this.m_player_index, 4, 2);
   }
 }
+export class s_action_begin_parameters {
+  @AutoMap(() => Number)
+  m_first_condition_index = 0;
+  @AutoMap(() => Number)
+  m_condition_count = 0;
+  @AutoMap(() => Number)
+  m_first_action_index = 0;
+  @AutoMap(() => Number)
+  m_action_count = 0;
+  decode(bitstream: c_bitstream_reader): void {
+    this.m_first_condition_index = bitstream.read_integer(
+      "first-condition-index",
+      9
+    );
+    this.m_condition_count = bitstream.read_integer("condition-count", 10);
+    this.m_first_action_index = bitstream.read_integer(
+      "first-action-index",
+      10
+    );
+    this.m_action_count = bitstream.read_integer("action-count", 11);
+  }
+  encode(bitstream: c_bitstream_writer): void {
+    bitstream.write_integer(this.m_first_condition_index, 9);
+    bitstream.write_integer(this.m_condition_count, 10);
+    bitstream.write_integer(this.m_first_action_index, 10);
+    bitstream.write_integer(this.m_action_count, 11);
+  }
+}
 export class s_action_hs_function_call_parameters {
   @AutoMap(() => Number)
   m_function_name_index = 0;
@@ -2298,6 +2326,8 @@ export class c_action {
   m_game_grief_record_custom_penalty_parameters?: s_action_game_grief_record_custom_penalty_parameters;
   @AutoMap(() => s_action_boundary_set_player_color_parameters)
   m_boundary_set_player_color_parameters?: s_action_boundary_set_player_color_parameters;
+  @AutoMap(() => s_action_begin_parameters)
+  m_begin_parameters?: s_action_begin_parameters;
   @AutoMap(() => s_action_hs_function_call_parameters)
   m_hs_function_call_parameters?: s_action_hs_function_call_parameters;
   @AutoMap(() => s_action_get_button_time_parameters)
@@ -3030,6 +3060,12 @@ export class c_action {
           boundary_set_player_color_parameters;
         break;
       }
+      case e_action_type.begin: {
+        const begin_parameters = new s_action_begin_parameters();
+        begin_parameters.decode(bitstream);
+        this.m_begin_parameters = begin_parameters;
+        break;
+      }
     }
   }
   encode(bitstream: c_bitstream_writer): void {
@@ -3330,6 +3366,7 @@ export class c_action {
         this.m_boundary_set_player_color_parameters?.encode(bitstream);
         break;
       case e_action_type.begin:
+        this.m_begin_parameters?.encode(bitstream);
         break;
       case e_action_type.hs_function_call:
         this.m_hs_function_call_parameters?.encode(bitstream);
