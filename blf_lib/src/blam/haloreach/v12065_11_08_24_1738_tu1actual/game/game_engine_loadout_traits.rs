@@ -1,10 +1,18 @@
 use serde::{Deserialize, Serialize};
-use blf_lib::io::bitstream::{c_bitstream_reader, c_bitstream_writer};
-use blf_lib::TEST_BIT;
+use blf_lib::bitfield;
+use blf_lib::io::bitstream::{c_bitstream_reader, c_bitstream_writer};use blf_lib::TEST_BIT;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::string_table::c_single_language_string_table;
 use blf_lib_derivable::result::BLFLibResult;
 use crate::types::array::StaticArray;
 use serde_hex::{SerHex,StrictCap};
+
+bitfield! {
+    #[derive(Serialize, Deserialize)]
+    pub struct e_game_engine_loadout_definition_flags: u8 {
+        spartan_loadouts_enabled,
+        elite_loadouts_enabled,
+    }
+}
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct c_loadout_traits {
@@ -17,6 +25,14 @@ pub struct c_loadout_traits {
 }
 
 impl c_loadout_traits {
+    pub fn initialize(&mut self) {
+        *self = Self::default();
+        self.m_name = -1;
+        self.m_initial_primary_weapon_absolute_index = -3;
+        self.m_initial_secondary_weapon_absolute_index = -3;
+        self.m_initial_equipment_absolute_index = -3;
+    }
+
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
         bitstream.write_bool(self.m_visible)?;
         bitstream.write_index::<128>(self.m_name, 7)?;
@@ -46,6 +62,13 @@ pub struct c_loadout_palette_traits {
 }
 
 impl c_loadout_palette_traits {
+    pub fn initialize(&mut self) {
+        *self = Self::default();
+        for loadout in self.m_loadouts.get_mut().iter_mut() {
+            loadout.initialize();
+        }
+    }
+
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
         for i in 0..5 {
             self.m_loadouts.get()[i].encode(bitstream)?;
@@ -66,13 +89,20 @@ impl c_loadout_palette_traits {
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct c_game_engine_loadout_traits {
-    pub m_flags: u8,
+    pub m_flags: e_game_engine_loadout_definition_flags,
     pub m_loadout_palettes: StaticArray<c_loadout_palette_traits, 6>,
 }
 
 impl c_game_engine_loadout_traits {
+    pub fn initialize(&mut self) {
+        *self = Self::default();
+        for palette in self.m_loadout_palettes.get_mut().iter_mut() {
+            palette.initialize();
+        }
+    }
+
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
-        bitstream.write_integer(self.m_flags, 2)?;
+        bitstream.write_integer(self.m_flags.to_raw(), 2)?;
         for i in 0..6 {
             self.m_loadout_palettes.get()[i].encode(bitstream)?;
         }
@@ -81,7 +111,7 @@ impl c_game_engine_loadout_traits {
     }
 
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
-        self.m_flags = bitstream.read_integer("flags", 2)?;
+        self.m_flags = e_game_engine_loadout_definition_flags::from_raw(bitstream.read_integer("flags", 2)?);
         for i in 0..6 {
             self.m_loadout_palettes.get_mut()[i].decode(bitstream)?;
         }

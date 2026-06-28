@@ -65,6 +65,16 @@ export class s_custom_game_engine_definition {
   m_objects_used: boolean[] = Array.from({ length: 2048 }, () => false);
   @AutoMap(() => [c_object_filter])
   m_object_filters: c_object_filter[] = [];
+  initialize(): void {
+    Object.assign(this, new s_custom_game_engine_definition());
+    this.m_initialization_trigger_index = -1;
+    this.m_local_initialization_trigger_index = -1;
+    this.m_host_migration_trigger_index = -1;
+    this.m_double_migration_trigger_index = -1;
+    this.m_object_death_event_trigger_index = -1;
+    this.m_local_trigger_index = -1;
+    this.m_pregame_trigger_index = -1;
+  }
   decode(bitstream: c_bitstream_reader): void {
     const condition_count = bitstream.read_integer("condition-count", 10);
     for (let i = 0; i < condition_count; i++) {
@@ -1503,6 +1513,9 @@ export class c_game_engine_custom_variant_tu1_settings {
   m_magnum_damage = 1;
   @AutoMap(() => Number)
   m_magnum_fire_delay = 1;
+  initialize_to_default(): void {
+    Object.assign(this, new c_game_engine_custom_variant_tu1_settings());
+  }
   decode(bitstream: c_bitstream_reader): void {
     this.m_flags = bitfieldFromRaw(
       bitstream.read_integer("flags", 32),
@@ -1609,6 +1622,8 @@ export class c_game_engine_custom_variant_tu1_settings {
   }
 }
 
+export const k_game_engine_custom_variant_encoding_version = 107;
+
 export class c_game_engine_custom_variant {
   @AutoMap(() => Number)
   m_encoding_version = 0;
@@ -1664,6 +1679,17 @@ export class c_game_engine_custom_variant {
   m_game_engine = new s_custom_game_engine_definition();
   @AutoMap(() => c_game_engine_custom_variant_tu1_settings)
   m_tu1_settings = new c_game_engine_custom_variant_tu1_settings();
+  initialize(): void {
+    Object.assign(this, new c_game_engine_custom_variant());
+    this.m_encoding_version = k_game_engine_custom_variant_encoding_version;
+    this.m_base_variant.initialize();
+    this.m_base_variant.m_miscellaneous_options.m_round_reset_map = true;
+    this.m_base_variant.m_miscellaneous_options.m_round_reset_players = true;
+    this.m_player_ratings.initialize_to_default();
+    this.m_map_permissions.initialize();
+    this.m_game_engine.initialize();
+    this.m_tu1_settings.initialize_to_default();
+  }
   decode(bitstream: c_bitstream_reader): void {
     this.m_encoding_version = bitstream.read_signed_integer(
       "encoding-version",

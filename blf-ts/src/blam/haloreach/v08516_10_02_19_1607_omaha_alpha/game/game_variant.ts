@@ -217,6 +217,8 @@ export class s_custom_game_engine_definition {
   }
 }
 
+export const k_game_engine_custom_variant_encoding_version = 49;
+
 export class c_game_engine_custom_variant {
   @AutoMap(() => Number)
   m_encoding_version = 0;
@@ -244,6 +246,14 @@ export class c_game_engine_custom_variant {
   m_symmetric_gametype = false;
   @AutoMap(() => s_custom_game_engine_definition)
   m_game_engine = new s_custom_game_engine_definition();
+
+  initialize(): void {
+    Object.assign(this, new c_game_engine_custom_variant());
+    this.m_encoding_version = k_game_engine_custom_variant_encoding_version;
+    this.m_base_variant.initialize();
+    this.m_base_variant.m_miscellaneous_options.m_round_reset_map = true;
+    this.m_base_variant.m_miscellaneous_options.m_round_reset_players = true;
+  }
 
   decode(bitstream: c_bitstream_reader): void {
     this.m_encoding_version = bitstream.read_signed_integer(

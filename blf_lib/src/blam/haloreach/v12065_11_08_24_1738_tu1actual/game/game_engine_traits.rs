@@ -17,6 +17,15 @@ pub struct c_game_engine_miscellaneous_options {
 }
 
 impl c_game_engine_miscellaneous_options {
+    pub fn initialize(&mut self) {
+        *self = Self::default();
+        self.m_round_reset_map = true;
+        self.m_round_time_limit_minutes = 8;
+        self.m_round_limit = 1;
+        self.m_early_victory_win_count = 2;
+        self.m_sudden_death_time = 1;
+    }
+
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
         bitstream.write_bool(self.m_teams_enabled)?;
         bitstream.write_bool(self.m_round_reset_players)?;
@@ -65,6 +74,15 @@ pub struct c_game_engine_respawn_options {
 }
 
 impl c_game_engine_respawn_options {
+    pub fn initialize(&mut self) {
+        *self = Self::default();
+        self.m_respawn_time_seconds = 5;
+        self.m_suicide_penalty_seconds = 5;
+        self.m_betrayal_penalty_seconds = 5;
+        self.m_loadout_cam_time = 10;
+        self.m_respawn_player_traits_duration_seconds = 5;
+    }
+
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
         bitstream.write_bool(self.m_inherit_respawn_time)?;
         bitstream.write_bool(self.m_respawn_with_teammate)?;

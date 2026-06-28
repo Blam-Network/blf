@@ -26,6 +26,16 @@ pub struct c_game_engine_team_options_team {
 }
 
 impl c_game_engine_team_options_team {
+    pub fn initialize(&mut self, team_index: usize) {
+        *self = Self::default();
+        self.m_team_enabled = true;
+        self.m_team_color_override = 0xFFFF_FFFF;
+        self.m_team_ui_text_tint_color_override = 0xFFFF_FFFF;
+        self.m_team_ui_bitmap_tint_color_override = 0xFFFF_FFFF;
+        self.m_team_initial_designator = (team_index + 1).min(8) as u8;
+        self.m_fireteam_count = 1;
+    }
+
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
         bitstream.write_bool(self.m_override_color_ui_bitmap)?;
         bitstream.write_bool(self.m_override_color_ui_text)?;
@@ -68,6 +78,14 @@ pub struct c_game_engine_team_options {
 }
 
 impl c_game_engine_team_options {
+    pub fn initialize(&mut self) {
+        *self = Self::default();
+        self.m_designator_switch_type = 2;
+        for i in 0..k_game_variant_team_count {
+            self.m_teams[i].initialize(i);
+        }
+    }
+
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
         bitstream.write_integer(self.m_model_override, 3)?;
         bitstream.write_integer(self.m_designator_switch_type, 2)?;

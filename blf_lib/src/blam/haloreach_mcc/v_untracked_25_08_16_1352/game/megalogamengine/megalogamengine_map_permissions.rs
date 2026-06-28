@@ -9,6 +9,11 @@ pub struct c_megalogamengine_map_permissions {
 }
 
 impl c_megalogamengine_map_permissions {
+    pub fn initialize(&mut self) {
+        *self = Self::default();
+        self.m_allow_by_default = true;
+    }
+
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
         bitstream.write_integer(self.m_except_map_ids.len() as u32, 6)?;
         for map_id in &self.m_except_map_ids {

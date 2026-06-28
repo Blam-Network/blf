@@ -21,6 +21,8 @@ use crate::blam::haloreach::v09730_10_04_09_1309_omaha_delta::game::megalogameng
 use crate::blam::haloreach::v12065_11_08_24_1738_tu1actual::memory::bitstream_writer::c_bitstream_writer_extensions;
 use crate::types::array::StaticArray;
 
+pub const k_game_engine_custom_variant_encoding_version: i32 = 49;
+
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct c_game_engine_custom_variant {
     pub m_encoding_version: i32,
@@ -39,6 +41,14 @@ pub struct c_game_engine_custom_variant {
 }
 
 impl c_game_engine_custom_variant {
+    pub fn initialize(&mut self) {
+        *self = Self::default();
+        self.m_encoding_version = k_game_engine_custom_variant_encoding_version;
+        self.m_base_variant.initialize();
+        self.m_base_variant.m_miscellaneous_options.m_round_reset_map = true;
+        self.m_base_variant.m_miscellaneous_options.m_round_reset_players = true;
+    }
+
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
         bitstream.write_signed_integer(self.m_encoding_version, 32)?;
         bitstream.write_signed_integer(self.m_build_number, 32)?;

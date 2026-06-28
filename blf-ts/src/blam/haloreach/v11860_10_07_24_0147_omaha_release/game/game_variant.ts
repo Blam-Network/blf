@@ -34,6 +34,8 @@ export {
   s_custom_game_engine_definition,
 };
 
+export const k_game_engine_custom_variant_encoding_version = 106;
+
 /** Release (pre-TU1) custom variant layout — TU1 v107 fields without TU1 settings. */
 export class c_game_engine_custom_variant {
   @AutoMap(() => Number)
@@ -88,6 +90,16 @@ export class c_game_engine_custom_variant {
   );
   @AutoMap(() => s_custom_game_engine_definition)
   m_game_engine = new s_custom_game_engine_definition();
+
+  initialize(): void {
+    Object.assign(this, new c_game_engine_custom_variant());
+    this.m_encoding_version = k_game_engine_custom_variant_encoding_version;
+    this.m_base_variant.initialize();
+    this.m_base_variant.m_miscellaneous_options.m_round_reset_map = true;
+    this.m_base_variant.m_miscellaneous_options.m_round_reset_players = true;
+    this.m_player_ratings.initialize_to_default();
+    this.m_map_permissions.initialize();
+  }
 
   decode(bitstream: c_bitstream_reader): void {
     this.m_encoding_version = bitstream.read_signed_integer(

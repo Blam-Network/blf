@@ -23,6 +23,8 @@ use crate::blam::haloreach::v12065_11_08_24_1738_tu1actual::saved_games::saved_g
 use crate::types::array::StaticArray;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::game_variant::s_game_variant_parameter_flags;
 
+pub const k_game_engine_custom_variant_encoding_version: i32 = 106;
+
 /// Release (pre-TU1) custom variant layout — same as TU1 v107 fields without AU1 settings.
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct c_game_engine_custom_variant {
@@ -51,6 +53,16 @@ pub struct c_game_engine_custom_variant {
 }
 
 impl c_game_engine_custom_variant {
+    pub fn initialize(&mut self) {
+        *self = Self::default();
+        self.m_encoding_version = k_game_engine_custom_variant_encoding_version;
+        self.m_base_variant.initialize();
+        self.m_base_variant.m_miscellaneous_options.m_round_reset_map = true;
+        self.m_base_variant.m_miscellaneous_options.m_round_reset_players = true;
+        self.m_player_ratings.initialize_to_default();
+        self.m_map_permissions.initialize();
+    }
+
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
         bitstream.write_signed_integer(self.m_encoding_version, 32)?;
         bitstream.write_signed_integer(self.m_build_number, 32)?;

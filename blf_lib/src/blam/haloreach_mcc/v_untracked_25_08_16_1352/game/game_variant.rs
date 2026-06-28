@@ -1308,6 +1308,8 @@ big_bitfield! {
     }
 }
 
+pub const k_game_engine_custom_variant_encoding_version: i32 = 107;
+
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct c_game_engine_custom_variant {
     pub m_encoding_version: i32,
@@ -1337,6 +1339,18 @@ pub struct c_game_engine_custom_variant {
 }
 
 impl c_game_engine_custom_variant {
+    pub fn initialize(&mut self) {
+        *self = Self::default();
+        self.m_encoding_version = k_game_engine_custom_variant_encoding_version;
+        self.m_base_variant.initialize();
+        self.m_base_variant.m_miscellaneous_options.m_round_reset_map = true;
+        self.m_base_variant.m_miscellaneous_options.m_round_reset_players = true;
+        self.m_player_ratings.initialize_to_default();
+        self.m_map_permissions.initialize();
+        self.m_game_engine.initialize();
+        self.m_tu1_settings.initialize_to_default();
+    }
+
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
         bitstream.write_signed_integer(self.m_encoding_version, 32)?;
         bitstream.write_signed_integer(self.m_build_number, 32)?;
@@ -1566,6 +1580,17 @@ pub struct s_custom_game_engine_definition {
 }
 
 impl s_custom_game_engine_definition {
+    pub fn initialize(&mut self) {
+        *self = Self::default();
+        self.m_initialization_trigger_index = (-1i16) as u16;
+        self.m_local_initialization_trigger_index = (-1i16) as u16;
+        self.m_host_migration_trigger_index = (-1i16) as u16;
+        self.m_double_migration_trigger_index = (-1i16) as u16;
+        self.m_object_death_event_trigger_index = (-1i16) as u16;
+        self.m_local_trigger_index = (-1i16) as u16;
+        self.m_pregame_trigger_index = (-1i16) as u16;
+    }
+
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
         bitstream.write_integer(self.m_conditions.len() as u32, 10)?;
         for condition in &self.m_conditions {
@@ -1720,6 +1745,10 @@ impl Default for c_game_engine_custom_variant_tu1_settings {
 }
 
 impl c_game_engine_custom_variant_tu1_settings {
+    pub fn initialize_to_default(&mut self) {
+        *self = Self::default();
+    }
+
     pub fn encode(&self, mut bitstream: &mut c_bitstream_writer) -> BLFLibResult {
         bitstream.write_integer(self.m_flags.to_raw(), 32)?;
         bitstream.write_quantized_real(self.m_precision_bloom, 0f32, 2f32, 8, false, true)?;

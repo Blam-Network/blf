@@ -297,4 +297,14 @@ impl c_content_item_metadata {
         Ok(())
 
     }
+
+    pub fn content_item_metadata_set_defaults(&mut self) {
+        *self = Self::default();
+        self.general.file_type = -1;
+        self.general.activity = -1;
+        self.general.game_mode = 0;
+        self.general.game_engine_type = 0;
+        self.general.map_id = -1;
+        self.display.megalo_category_index = -1;
+    }
 }

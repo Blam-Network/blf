@@ -182,6 +182,28 @@ export class s_content_item_metadata {
     | null = null;
 }
 
+export function content_item_metadata_set_defaults(
+  metadata: s_content_item_metadata
+): void {
+  metadata.general = Object.assign(new s_content_item_general_metadata(), {
+    file_type: -1 as e_file_type,
+    activity: -1,
+    game_mode: 0,
+    game_engine_type: 0,
+    map_id: -1,
+  });
+  metadata.display = Object.assign(new s_content_item_display_metadata(), {
+    megalo_category_index: -1,
+  });
+  metadata.creation_history = new s_content_item_history();
+  metadata.modification_history = new s_content_item_history();
+  metadata.name = "";
+  metadata.description = "";
+  metadata.file_type_data = null;
+  metadata.activity_data = null;
+  metadata.game_mode_data = null;
+}
+
 export function content_item_metadata_decode(
   bitstream: c_bitstream_reader,
   metadata: s_content_item_metadata
