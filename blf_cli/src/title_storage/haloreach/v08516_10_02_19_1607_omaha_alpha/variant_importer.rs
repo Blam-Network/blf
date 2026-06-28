@@ -44,6 +44,9 @@ fn game_variant_metadata_name(game_variant: &c_game_variant) -> BLFLibResult<Str
                 .m_base_variant
                 .m_metadata
         }
+        e_game_mode::none => {
+            Err("Invalid gametype.")?
+        }
     };
     Ok(metadata.name.get_string())
 }

@@ -3,7 +3,7 @@ use blf_lib::blam::haloreach::v09730_10_04_09_1309_omaha_delta::game::game_varia
 use blf_lib::blam::haloreach::v09730_10_04_09_1309_omaha_delta::saved_games::scenario_map_variant::c_map_variant;
 use blf_lib::blf::chunks::search_for_chunk_in_file;
 use blf_lib::blf::versions::haloreach::v09730_10_04_09_1309_omaha_delta::{s_blf_chunk_map_variant, s_blf_chunk_matchmaking_game_variant};
-use blf_lib::result::BLFLibResult;
+use blf_lib::result::{BLFLibError, BLFLibResult};
 use crate::build_path;
 use crate::console::console_task;
 use crate::title_storage::haloreach::variant_io::variant_json_output_name;
@@ -42,6 +42,9 @@ fn game_variant_metadata_name(game_variant: &c_game_variant) -> BLFLibResult<Str
                 .ok_or("m_survival_variant does not exist.")?
                 .m_base_variant
                 .m_metadata
+        }
+        e_game_mode::none => {
+            Err("Invalid gametype.")?
         }
     };
     Ok(metadata.name.get_string())

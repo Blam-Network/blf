@@ -21,7 +21,7 @@ use tokio::runtime;
 use tokio::sync::Mutex;
 use tokio::task::JoinHandle;
 use blf_lib::blam::common::memory::secure_signature::s_network_http_request_hash;
-use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::game_variant::c_game_variant;
+use blf_lib::blam::haloreach::v11860_10_07_24_0147_omaha_release::game::game_variant::c_game_variant;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::saved_games::scenario_map_variant::c_map_variant;
 use blf_lib::blf::versions::haloreach::v11860_10_07_24_0147_omaha_release::{s_blf_chunk_author, s_blf_chunk_banhammer_messages, s_blf_chunk_end_of_file, s_blf_chunk_game_set, s_blf_chunk_hopper_configuration_table, s_blf_chunk_hopper_description_table, s_blf_chunk_map_manifest, s_blf_chunk_map_variant, s_blf_chunk_matchmaking_game_variant, s_blf_chunk_matchmaking_tips, s_blf_chunk_megalo_categories, s_blf_chunk_nag_message, s_blf_chunk_network_configuration, s_blf_chunk_online_file_manifest, s_blf_chunk_predefined_queries, s_blf_chunk_start_of_file};
 use blf_lib::blf::versions::haloreach::v11860_10_07_24_0147_omaha_release::s_blf_chunk_dlc_map_manifest;
@@ -1817,7 +1817,7 @@ impl v11860_10_07_24_0147_omaha_release {
                             BlfFileBuilder::new()
                                 .add_chunk(s_blf_chunk_start_of_file::new("game var"))
                                 .add_chunk(s_blf_chunk_author::for_build::<v11860_10_07_24_0147_omaha_release>())
-                                .add_chunk(s_blf_chunk_matchmaking_game_variant { game_variant})
+                                .add_chunk(s_blf_chunk_matchmaking_game_variant { game_variant })
                                 .add_chunk(s_blf_chunk_end_of_file::default())
                                 .write_file(&game_variant_blf_path)
                                 .unwrap();
