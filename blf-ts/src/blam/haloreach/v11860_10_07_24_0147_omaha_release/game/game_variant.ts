@@ -27,11 +27,11 @@ import { c_string_table } from "../../v12065_11_08_24_1738_tu1actual/game/string
 import type { s_content_item_metadata } from "../../v12065_11_08_24_1738_tu1actual/saved_games/saved_game_files";
 
 export {
-  type s_game_variant_parameter_flags,
   e_game_mode,
   e_game_variant_parameter,
   k_game_variant_parameter_flags,
   s_custom_game_engine_definition,
+  type s_game_variant_parameter_flags,
 };
 
 export const k_game_engine_custom_variant_encoding_version = 106;

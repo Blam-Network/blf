@@ -3,7 +3,13 @@ import type {
   c_bitstream_reader,
   c_bitstream_writer,
 } from "../../../../bitstream";
-import { bitfieldFromRaw, bitfieldToRaw, decodeBigBitfield, defaultBigBitfield, encodeBigBitfield } from "../../../../bitstream";
+import {
+  bitfieldFromRaw,
+  bitfieldToRaw,
+  decodeBigBitfield,
+  defaultBigBitfield,
+  encodeBigBitfield,
+} from "../../../../bitstream";
 import { BlfError } from "../../../../error";
 import { AutoMap } from "../../../../helpers/automap";
 import type { s_content_item_metadata } from "../saved_games/saved_game_files";
@@ -204,7 +210,6 @@ const k_game_variant_tu1_flags = [
 export type e_game_variant_tu1_flags = BitfieldOf<
   typeof k_game_variant_tu1_flags
 >;
-
 
 export const k_game_variant_parameter_flags = [
   "game_misc_score_to_win_round",

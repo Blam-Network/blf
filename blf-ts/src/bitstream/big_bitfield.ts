@@ -19,7 +19,7 @@ export function bigBitfieldFromWords<const F extends BitfieldFields>(
     const key = fields[index] as F[number];
     const word = Math.floor(index / 32);
     const bit = index % 32;
-    result[key] = ((words[word] ?? 0) >> bit) & 1 ? true : false;
+    result[key] = !!(((words[word] ?? 0) >> bit) & 1);
   }
   return result;
 }

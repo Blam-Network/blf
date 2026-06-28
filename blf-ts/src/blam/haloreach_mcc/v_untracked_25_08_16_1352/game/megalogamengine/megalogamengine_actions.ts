@@ -3,12 +3,13 @@ import type {
   c_bitstream_writer,
 } from "../../../../../bitstream";
 import { AutoMap } from "../../../../../helpers/automap";
+import { e_megalo_sound } from "../../../../haloreach/v12065_11_08_24_1738_tu1actual/game/megalogamengine/megalogamengine_sounds";
 import {
   e_game_engine_timer_rate,
   e_weapon_pickup_priority,
 } from "../game_engine_enums";
 import { e_megalogamengine_hud_meter_input_type } from "./megalogamengine_hud_widgets";
-import { e_megalo_sound } from "../../../../haloreach/v12065_11_08_24_1738_tu1actual/game/megalogamengine/megalogamengine_sounds";
+
 export { e_megalo_sound };
 /** Matches `e_action_team_or_player_target` in blf_lib `megalogamengine_actions.rs`. */
 export enum e_action_team_or_player_target {
