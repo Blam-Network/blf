@@ -25,9 +25,9 @@ pub enum e_explicit_team_type {
     global_5 = 15,
     global_6 = 16,
     global_7 = 17,
-    current = 18,
-    hud_player_owner_team = 19, // local_team
-    hud_target_player_owner_team = 20, // target_team: the team designator for `current_target_player` if it exists or `current_target_object` otherwise, per 343i
+    current_team = 18,
+    local_team = 19,
+    target_team = 20, // the team designator for `current_target_player` if it exists or `current_target_object` otherwise, per 343i
     temporary_0 = 21,
     temporary_1 = 22,
     temporary_2 = 23,

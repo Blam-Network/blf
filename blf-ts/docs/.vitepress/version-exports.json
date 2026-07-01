@@ -154,6 +154,18 @@
           "version": "1.1"
         },
         {
+          "name": "s_blf_chunk_matchmaking_game_variant",
+          "source": "src/chunks/haloreach/v11860_10_07_24_0147_omaha_release/s_blf_chunk_matchmaking_game_variant.ts",
+          "signature": "gvar",
+          "version": "54.1"
+        },
+        {
+          "name": "s_blf_chunk_game_variant",
+          "source": "src/chunks/haloreach/v11860_10_07_24_0147_omaha_release/s_blf_chunk_game_variant.ts",
+          "signature": "mpvr",
+          "version": "54.1"
+        },
+        {
           "name": "s_blf_chunk_player_heartbeat_response",
           "source": "src/chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_player_heartbeat_response.ts",
           "signature": "phbr",

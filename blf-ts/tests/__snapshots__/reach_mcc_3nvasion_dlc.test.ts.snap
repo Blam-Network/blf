@@ -4591,7 +4591,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               "m_enabled": true,
               "m_team": {
                 "m_team": {
-                  "m_explicit_team_type": "current",
+                  "m_explicit_team_type": "current_team",
                 },
                 "m_type": "global_team",
               },
@@ -9759,7 +9759,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               "m_variable_1": {
                 "m_custom_variable": {
                   "m_team": {
-                    "m_explicit_team_type": "current",
+                    "m_explicit_team_type": "current_team",
                   },
                   "m_type": "team_number",
                   "m_variable_index": 0,
@@ -9782,7 +9782,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               "m_variable_1": {
                 "m_custom_variable": {
                   "m_team": {
-                    "m_explicit_team_type": "current",
+                    "m_explicit_team_type": "current_team",
                   },
                   "m_type": "team_number",
                   "m_variable_index": 1,
@@ -9815,7 +9815,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               "m_variable_2": {
                 "m_custom_variable": {
                   "m_team": {
-                    "m_explicit_team_type": "current",
+                    "m_explicit_team_type": "current_team",
                   },
                   "m_type": "team_number",
                   "m_variable_index": 0,
@@ -13756,7 +13756,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
             "m_team_is_active_parameters": {
               "m_team": {
                 "m_team": {
-                  "m_explicit_team_type": "current",
+                  "m_explicit_team_type": "current_team",
                 },
                 "m_type": "global_team",
               },
@@ -17207,7 +17207,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
             "m_team_is_active_parameters": {
               "m_team": {
                 "m_team": {
-                  "m_explicit_team_type": "current",
+                  "m_explicit_team_type": "current_team",
                 },
                 "m_type": "global_team",
               },
@@ -17349,7 +17349,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
             "m_team_is_active_parameters": {
               "m_team": {
                 "m_team": {
-                  "m_explicit_team_type": "current",
+                  "m_explicit_team_type": "current_team",
                 },
                 "m_type": "global_team",
               },
@@ -17492,7 +17492,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
             "m_team_is_active_parameters": {
               "m_team": {
                 "m_team": {
-                  "m_explicit_team_type": "current",
+                  "m_explicit_team_type": "current_team",
                 },
                 "m_type": "global_team",
               },
@@ -17920,7 +17920,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               "m_right": {
                 "m_custom_variable": {
                   "m_team": {
-                    "m_explicit_team_type": "current",
+                    "m_explicit_team_type": "current_team",
                   },
                   "m_type": "team_number",
                   "m_variable_index": 0,
@@ -19033,7 +19033,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
             "m_team_is_active_parameters": {
               "m_team": {
                 "m_team": {
-                  "m_explicit_team_type": "current",
+                  "m_explicit_team_type": "current_team",
                 },
                 "m_type": "global_team",
               },
@@ -19341,7 +19341,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
             "m_team_is_active_parameters": {
               "m_team": {
                 "m_team": {
-                  "m_explicit_team_type": "current",
+                  "m_explicit_team_type": "current_team",
                 },
                 "m_type": "global_team",
               },
@@ -19484,7 +19484,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
             "m_team_is_active_parameters": {
               "m_team": {
                 "m_team": {
-                  "m_explicit_team_type": "current",
+                  "m_explicit_team_type": "current_team",
                 },
                 "m_type": "global_team",
               },

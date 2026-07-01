@@ -7330,7 +7330,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
                 "m_target": "team",
                 "m_team": {
                   "m_team": {
-                    "m_explicit_team_type": "current",
+                    "m_explicit_team_type": "current_team",
                   },
                   "m_type": "global_team",
                 },
@@ -7347,7 +7347,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
               "m_variable_1": {
                 "m_custom_variable": {
                   "m_team": {
-                    "m_explicit_team_type": "current",
+                    "m_explicit_team_type": "current_team",
                   },
                   "m_type": "team_number",
                   "m_variable_index": 1,
@@ -7371,7 +7371,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
                 "m_target": "team",
                 "m_team": {
                   "m_team": {
-                    "m_explicit_team_type": "current",
+                    "m_explicit_team_type": "current_team",
                   },
                   "m_type": "global_team",
                 },
@@ -7388,7 +7388,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
               "m_variable_1": {
                 "m_custom_variable": {
                   "m_team": {
-                    "m_explicit_team_type": "current",
+                    "m_explicit_team_type": "current_team",
                   },
                   "m_type": "team_number",
                   "m_variable_index": 0,
@@ -9948,7 +9948,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
               "m_left": {
                 "m_custom_variable": {
                   "m_team": {
-                    "m_explicit_team_type": "current",
+                    "m_explicit_team_type": "current_team",
                   },
                   "m_type": "team_score",
                 },
@@ -9973,7 +9973,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
               "m_left": {
                 "m_custom_variable": {
                   "m_team": {
-                    "m_explicit_team_type": "current",
+                    "m_explicit_team_type": "current_team",
                   },
                   "m_type": "team_number",
                   "m_variable_index": 1,
@@ -10021,7 +10021,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
               "m_left": {
                 "m_custom_variable": {
                   "m_team": {
-                    "m_explicit_team_type": "current",
+                    "m_explicit_team_type": "current_team",
                   },
                   "m_type": "team_score",
                 },
@@ -10046,7 +10046,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
               "m_left": {
                 "m_custom_variable": {
                   "m_team": {
-                    "m_explicit_team_type": "current",
+                    "m_explicit_team_type": "current_team",
                   },
                   "m_type": "team_number",
                   "m_variable_index": 0,
@@ -10093,7 +10093,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
             "m_team_is_active_parameters": {
               "m_team": {
                 "m_team": {
-                  "m_explicit_team_type": "current",
+                  "m_explicit_team_type": "current_team",
                 },
                 "m_type": "global_team",
               },

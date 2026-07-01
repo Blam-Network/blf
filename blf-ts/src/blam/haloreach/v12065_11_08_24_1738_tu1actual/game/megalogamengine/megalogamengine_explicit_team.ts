@@ -18,7 +18,7 @@ export enum e_explicit_team_type {
   global_5 = 15,
   global_6 = 16,
   global_7 = 17,
-  current = 18,
-  hud_player_owner_team = 19,
-  hud_target_player_owner_team = 20,
+  current_team = 18,
+  local_team = 19,
+  target_team = 20,
 }
