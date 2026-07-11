@@ -28,6 +28,25 @@ export enum e_infinite_ammo_setting {
   enabled = 2,
   bottomless_clip = 3,
 }
+
+export enum e_vehicle_usage_setting {
+  unchanged = 0,
+  none = 1,
+  full = 2,
+  passenger = 3,
+  not_passenger = 4,
+  driver = 5,
+  gunner = 6,
+  not_driver = 7,
+  not_gunner = 8,
+}
+
+export enum e_waypoint_setting {
+  unchanged = 0,
+  off = 1,
+  allies = 2,
+  all = 3,
+}
 export class c_player_trait_shield_vitality {
   @AutoMap(() => Number)
   m_damage_resistance_percentage_setting = 0;
@@ -83,8 +102,9 @@ export class c_player_trait_movement {
   m_speed_setting = 0;
   @AutoMap(() => Number)
   m_gravity_setting = 0;
-  @AutoMap(() => Number)
-  m_vehicle_usage_setting = 0;
+  @AutoMap(() => e_vehicle_usage_setting)
+  m_vehicle_usage_setting: e_vehicle_usage_setting =
+    e_vehicle_usage_setting.unchanged;
   @AutoMap(() => Number)
   m_double_jump_setting = 0;
   @AutoMap(() => Number)
@@ -93,10 +113,10 @@ export class c_player_trait_movement {
 export class c_player_trait_appearance {
   @AutoMap(() => Number)
   m_active_camo_setting = 0;
-  @AutoMap(() => Number)
-  m_waypoint_setting = 0;
-  @AutoMap(() => Number)
-  m_gamertag_setting = 0;
+  @AutoMap(() => e_waypoint_setting)
+  m_waypoint_setting: e_waypoint_setting = e_waypoint_setting.unchanged;
+  @AutoMap(() => e_waypoint_setting)
+  m_gamertag_setting: e_waypoint_setting = e_waypoint_setting.unchanged;
   @AutoMap(() => Number)
   m_aura_setting = 0;
   @AutoMap(() => Number)
@@ -205,9 +225,10 @@ export class c_player_traits {
     const m = this.m_movement_traits;
     m.m_speed_setting = bitstream.read_integer("player-speed", 5);
     m.m_gravity_setting = bitstream.read_integer("player-gravity", 4);
-    m.m_vehicle_usage_setting = bitstream.read_integer(
+    m.m_vehicle_usage_setting = bitstream.read_enum(
       "player-traits-movement-vehicle-usage",
-      4
+      4,
+      e_vehicle_usage_setting
     );
     m.m_double_jump_setting = bitstream.read_integer(
       "player-traits-movement-double-jump",
@@ -226,13 +247,15 @@ export class c_player_traits {
       "player-traits-appearance-active-camo",
       3
     );
-    a.m_waypoint_setting = bitstream.read_integer(
+    a.m_waypoint_setting = bitstream.read_enum(
       "player-traits-appearance-waypoint",
-      2
+      2,
+      e_waypoint_setting
     );
-    a.m_gamertag_setting = bitstream.read_integer(
+    a.m_gamertag_setting = bitstream.read_enum(
       "player-traits-appearance-gamertag",
-      2
+      2,
+      e_waypoint_setting
     );
     a.m_aura_setting = bitstream.read_integer(
       "player-traits-appearance-aura",
@@ -340,7 +363,11 @@ export class c_player_traits {
     );
     bitstream.write_integer(this.m_movement_traits.m_speed_setting, 5);
     bitstream.write_integer(this.m_movement_traits.m_gravity_setting, 4);
-    bitstream.write_integer(this.m_movement_traits.m_vehicle_usage_setting, 4);
+    bitstream.write_enum(
+      this.m_movement_traits.m_vehicle_usage_setting,
+      4,
+      e_vehicle_usage_setting
+    );
     bitstream.write_integer(this.m_movement_traits.m_double_jump_setting, 2);
     if (this.m_movement_traits.m_jump_modifier === -1) {
       bitstream.write_bool(false);
@@ -349,8 +376,16 @@ export class c_player_traits {
       bitstream.write_integer(this.m_movement_traits.m_jump_modifier, 9);
     }
     bitstream.write_integer(this.m_appearance_traits.m_active_camo_setting, 3);
-    bitstream.write_integer(this.m_appearance_traits.m_waypoint_setting, 2);
-    bitstream.write_integer(this.m_appearance_traits.m_gamertag_setting, 2);
+    bitstream.write_enum(
+      this.m_appearance_traits.m_waypoint_setting,
+      2,
+      e_waypoint_setting
+    );
+    bitstream.write_enum(
+      this.m_appearance_traits.m_gamertag_setting,
+      2,
+      e_waypoint_setting
+    );
     bitstream.write_integer(this.m_appearance_traits.m_aura_setting, 3);
     bitstream.write_integer(
       this.m_appearance_traits.m_forced_change_color_setting,

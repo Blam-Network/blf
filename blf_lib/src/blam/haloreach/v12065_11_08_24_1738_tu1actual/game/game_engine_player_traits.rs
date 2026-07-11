@@ -38,6 +38,33 @@ pub enum e_infinite_ammo_setting {
     bottomless_clip = 3,
 }
 
+#[repr(u8)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, Default, ToPrimitive, FromPrimitive, crate::derive::c_enum)]
+#[bits(4)]
+pub enum e_vehicle_usage_setting {
+    #[default]
+    unchanged = 0,
+    none = 1,
+    full = 2,
+    passenger = 3,
+    not_passenger = 4,
+    driver = 5,
+    gunner = 6,
+    not_driver = 7,
+    not_gunner = 8,
+}
+
+#[repr(u8)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, Default, ToPrimitive, FromPrimitive, crate::derive::c_enum)]
+#[bits(2)]
+pub enum e_waypoint_setting {
+    #[default]
+    unchanged = 0,
+    off = 1,
+    allies = 2,
+    all = 3,
+}
+
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct c_player_trait_weapons {
     pub m_damage_modifier_percentage_setting: u8,
@@ -72,7 +99,7 @@ pub struct c_player_trait_shield_vitality {
 pub struct c_player_trait_movement {
     pub m_speed_setting: u8,
     pub m_gravity_setting: u8,
-    pub m_vehicle_usage_setting: u8,
+    pub m_vehicle_usage_setting: e_vehicle_usage_setting,
     pub m_double_jump_setting: u8,
     pub m_jump_modifier: i16,
 }
@@ -80,8 +107,8 @@ pub struct c_player_trait_movement {
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct c_player_trait_appearance {
     pub m_active_camo_setting: u8,
-    pub m_waypoint_setting: u8,
-    pub m_gamertag_setting: u8,
+    pub m_waypoint_setting: e_waypoint_setting,
+    pub m_gamertag_setting: e_waypoint_setting,
     pub m_aura_setting: u8,
     pub m_forced_change_color_setting: u8,
 }
@@ -128,7 +155,7 @@ impl c_player_traits {
         bitstream.write_signed_integer(self.m_weapon_traits.m_initial_equipment_absolute_index, 8)?;
         bitstream.write_integer(self.m_movement_traits.m_speed_setting, 5)?;
         bitstream.write_integer(self.m_movement_traits.m_gravity_setting, 4)?;
-        bitstream.write_integer(self.m_movement_traits.m_vehicle_usage_setting, 4)?;
+        bitstream.write_enum(self.m_movement_traits.m_vehicle_usage_setting)?;
         bitstream.write_integer(self.m_movement_traits.m_double_jump_setting, 2)?;
         if self.m_movement_traits.m_jump_modifier != -1 {
             bitstream.write_bool(true)?;
@@ -137,8 +164,8 @@ impl c_player_traits {
             bitstream.write_bool(false)?;
         }
         bitstream.write_integer(self.m_appearance_traits.m_active_camo_setting, 3)?;
-        bitstream.write_integer(self.m_appearance_traits.m_waypoint_setting, 2)?;
-        bitstream.write_integer(self.m_appearance_traits.m_gamertag_setting, 2)?;
+        bitstream.write_enum(self.m_appearance_traits.m_waypoint_setting)?;
+        bitstream.write_enum(self.m_appearance_traits.m_gamertag_setting)?;
         bitstream.write_integer(self.m_appearance_traits.m_aura_setting, 3)?;
         bitstream.write_integer(self.m_appearance_traits.m_forced_change_color_setting, 4)?;
         bitstream.write_integer(self.m_sensor_traits.m_motion_tracker_setting, 3)?;
@@ -173,7 +200,7 @@ impl c_player_traits {
         self.m_weapon_traits.m_initial_equipment_absolute_index = bitstream.read_signed_integer("player-trait-initial-equipment", 8)?;
         self.m_movement_traits.m_speed_setting = bitstream.read_integer("player-speed", 5)?;
         self.m_movement_traits.m_gravity_setting = bitstream.read_integer("player-gravity", 4)?;
-        self.m_movement_traits.m_vehicle_usage_setting = bitstream.read_integer("player-traits-movement-vehicle-usage", 4)?;
+        self.m_movement_traits.m_vehicle_usage_setting = bitstream.read_enum("player-traits-movement-vehicle-usage")?;
         self.m_movement_traits.m_double_jump_setting = bitstream.read_integer("player-traits-movement-double-jump", 2)?;
         if bitstream.read_bool("player-traits-movement-jump-modifier-changed")? {
             self.m_movement_traits.m_jump_modifier = bitstream.read_integer("player-traits-movement-jump-modifier", 9)?;
@@ -181,8 +208,8 @@ impl c_player_traits {
             self.m_movement_traits.m_jump_modifier = -1;
         }
         self.m_appearance_traits.m_active_camo_setting = bitstream.read_integer("player-traits-appearance-active-camo", 3)?;
-        self.m_appearance_traits.m_waypoint_setting = bitstream.read_integer("player-traits-appearance-waypoint", 2)?;
-        self.m_appearance_traits.m_gamertag_setting = bitstream.read_integer("player-traits-appearance-gamertag", 2)?;
+        self.m_appearance_traits.m_waypoint_setting = bitstream.read_enum("player-traits-appearance-waypoint")?;
+        self.m_appearance_traits.m_gamertag_setting = bitstream.read_enum("player-traits-appearance-gamertag")?;
         self.m_appearance_traits.m_aura_setting = bitstream.read_integer("player-traits-appearance-aura", 3)?;
         self.m_appearance_traits.m_forced_change_color_setting = bitstream.read_integer("player-traits-appearance-forced-change-color", 4)?;
         self.m_sensor_traits.m_motion_tracker_setting = bitstream.read_integer("player-traits-sensors-motion-tracker", 3)?;
