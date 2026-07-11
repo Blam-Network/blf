@@ -47,6 +47,21 @@ export enum e_waypoint_setting {
   allies = 2,
   all = 3,
 }
+/** Double jump preset (`m_double_jump_setting`, 2 bits). */
+export enum e_double_jump_setting {
+  unchanged = 0,
+  off = 1,
+  on = 2,
+  on_lunge = 3,
+}
+/** Player aura color preset (`m_aura_setting`, 3 bits). */
+export enum e_aura_setting {
+  unchanged = 0,
+  off = 1,
+  team_color = 2,
+  black = 3,
+  white = 4,
+}
 export class c_player_trait_shield_vitality {
   @AutoMap(() => Number)
   m_damage_resistance_percentage_setting = 0;
@@ -105,8 +120,9 @@ export class c_player_trait_movement {
   @AutoMap(() => e_vehicle_usage_setting)
   m_vehicle_usage_setting: e_vehicle_usage_setting =
     e_vehicle_usage_setting.unchanged;
-  @AutoMap(() => Number)
-  m_double_jump_setting = 0;
+  @AutoMap(() => e_double_jump_setting)
+  m_double_jump_setting: e_double_jump_setting =
+    e_double_jump_setting.unchanged;
   @AutoMap(() => Number)
   m_jump_modifier = -1;
 }
@@ -117,8 +133,8 @@ export class c_player_trait_appearance {
   m_waypoint_setting: e_waypoint_setting = e_waypoint_setting.unchanged;
   @AutoMap(() => e_waypoint_setting)
   m_gamertag_setting: e_waypoint_setting = e_waypoint_setting.unchanged;
-  @AutoMap(() => Number)
-  m_aura_setting = 0;
+  @AutoMap(() => e_aura_setting)
+  m_aura_setting: e_aura_setting = e_aura_setting.unchanged;
   @AutoMap(() => Number)
   m_forced_change_color_setting = 0;
 }
@@ -230,9 +246,10 @@ export class c_player_traits {
       4,
       e_vehicle_usage_setting
     );
-    m.m_double_jump_setting = bitstream.read_integer(
+    m.m_double_jump_setting = bitstream.read_enum(
       "player-traits-movement-double-jump",
-      2
+      2,
+      e_double_jump_setting
     );
     if (bitstream.read_bool("player-traits-movement-jump-modifier-changed")) {
       m.m_jump_modifier = bitstream.read_integer(
@@ -257,9 +274,10 @@ export class c_player_traits {
       2,
       e_waypoint_setting
     );
-    a.m_aura_setting = bitstream.read_integer(
+    a.m_aura_setting = bitstream.read_enum(
       "player-traits-appearance-aura",
-      3
+      3,
+      e_aura_setting
     );
     a.m_forced_change_color_setting = bitstream.read_integer(
       "player-traits-appearance-forced-change-color",
@@ -368,7 +386,11 @@ export class c_player_traits {
       4,
       e_vehicle_usage_setting
     );
-    bitstream.write_integer(this.m_movement_traits.m_double_jump_setting, 2);
+    bitstream.write_enum(
+      this.m_movement_traits.m_double_jump_setting,
+      2,
+      e_double_jump_setting
+    );
     if (this.m_movement_traits.m_jump_modifier === -1) {
       bitstream.write_bool(false);
     } else {
@@ -386,7 +408,11 @@ export class c_player_traits {
       2,
       e_waypoint_setting
     );
-    bitstream.write_integer(this.m_appearance_traits.m_aura_setting, 3);
+    bitstream.write_enum(
+      this.m_appearance_traits.m_aura_setting,
+      3,
+      e_aura_setting
+    );
     bitstream.write_integer(
       this.m_appearance_traits.m_forced_change_color_setting,
       4

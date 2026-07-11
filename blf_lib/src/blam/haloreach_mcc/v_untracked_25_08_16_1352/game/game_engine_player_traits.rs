@@ -65,6 +65,31 @@ pub enum e_waypoint_setting {
     all = 3,
 }
 
+/// Double jump preset (`m_double_jump_setting`, 2 bits).
+#[repr(u8)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, Default, ToPrimitive, FromPrimitive, crate::derive::c_enum)]
+#[bits(2)]
+pub enum e_double_jump_setting {
+    #[default]
+    unchanged = 0,
+    off = 1,
+    on = 2,
+    on_lunge = 3,
+}
+
+/// Player aura color preset (`m_aura_setting`, 3 bits).
+#[repr(u8)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, Default, ToPrimitive, FromPrimitive, crate::derive::c_enum)]
+#[bits(3)]
+pub enum e_aura_setting {
+    #[default]
+    unchanged = 0,
+    off = 1,
+    team_color = 2,
+    black = 3,
+    white = 4,
+}
+
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct c_player_trait_weapons {
     pub m_damage_modifier_percentage_setting: u8,
@@ -100,7 +125,7 @@ pub struct c_player_trait_movement {
     pub m_speed_setting: u8,
     pub m_gravity_setting: u8,
     pub m_vehicle_usage_setting: e_vehicle_usage_setting,
-    pub m_double_jump_setting: u8,
+    pub m_double_jump_setting: e_double_jump_setting,
     pub m_jump_modifier: i16,
 }
 
@@ -109,7 +134,7 @@ pub struct c_player_trait_appearance {
     pub m_active_camo_setting: u8,
     pub m_waypoint_setting: e_waypoint_setting,
     pub m_gamertag_setting: e_waypoint_setting,
-    pub m_aura_setting: u8,
+    pub m_aura_setting: e_aura_setting,
     pub m_forced_change_color_setting: u8,
 }
 
@@ -156,7 +181,7 @@ impl c_player_traits {
         bitstream.write_integer(self.m_movement_traits.m_speed_setting, 5)?;
         bitstream.write_integer(self.m_movement_traits.m_gravity_setting, 4)?;
         bitstream.write_enum(self.m_movement_traits.m_vehicle_usage_setting)?;
-        bitstream.write_integer(self.m_movement_traits.m_double_jump_setting, 2)?;
+        bitstream.write_enum(self.m_movement_traits.m_double_jump_setting)?;
         if self.m_movement_traits.m_jump_modifier != -1 {
             bitstream.write_bool(true)?;
             bitstream.write_integer(self.m_movement_traits.m_jump_modifier as u32, 9)?;
@@ -166,7 +191,7 @@ impl c_player_traits {
         bitstream.write_integer(self.m_appearance_traits.m_active_camo_setting, 3)?;
         bitstream.write_enum(self.m_appearance_traits.m_waypoint_setting)?;
         bitstream.write_enum(self.m_appearance_traits.m_gamertag_setting)?;
-        bitstream.write_integer(self.m_appearance_traits.m_aura_setting, 3)?;
+        bitstream.write_enum(self.m_appearance_traits.m_aura_setting)?;
         bitstream.write_integer(self.m_appearance_traits.m_forced_change_color_setting, 4)?;
         bitstream.write_integer(self.m_sensor_traits.m_motion_tracker_setting, 3)?;
         bitstream.write_integer(self.m_sensor_traits.m_motion_tracker_range_setting, 3)?;
@@ -201,7 +226,7 @@ impl c_player_traits {
         self.m_movement_traits.m_speed_setting = bitstream.read_integer("player-speed", 5)?;
         self.m_movement_traits.m_gravity_setting = bitstream.read_integer("player-gravity", 4)?;
         self.m_movement_traits.m_vehicle_usage_setting = bitstream.read_enum("player-traits-movement-vehicle-usage")?;
-        self.m_movement_traits.m_double_jump_setting = bitstream.read_integer("player-traits-movement-double-jump", 2)?;
+        self.m_movement_traits.m_double_jump_setting = bitstream.read_enum("player-traits-movement-double-jump")?;
         if bitstream.read_bool("player-traits-movement-jump-modifier-changed")? {
             self.m_movement_traits.m_jump_modifier = bitstream.read_integer("player-traits-movement-jump-modifier", 9)?;
         } else {
@@ -210,7 +235,7 @@ impl c_player_traits {
         self.m_appearance_traits.m_active_camo_setting = bitstream.read_integer("player-traits-appearance-active-camo", 3)?;
         self.m_appearance_traits.m_waypoint_setting = bitstream.read_enum("player-traits-appearance-waypoint")?;
         self.m_appearance_traits.m_gamertag_setting = bitstream.read_enum("player-traits-appearance-gamertag")?;
-        self.m_appearance_traits.m_aura_setting = bitstream.read_integer("player-traits-appearance-aura", 3)?;
+        self.m_appearance_traits.m_aura_setting = bitstream.read_enum("player-traits-appearance-aura")?;
         self.m_appearance_traits.m_forced_change_color_setting = bitstream.read_integer("player-traits-appearance-forced-change-color", 4)?;
         self.m_sensor_traits.m_motion_tracker_setting = bitstream.read_integer("player-traits-sensors-motion-tracker", 3)?;
         self.m_sensor_traits.m_motion_tracker_range_setting = bitstream.read_integer("motion-tracker-range", 3)?;
