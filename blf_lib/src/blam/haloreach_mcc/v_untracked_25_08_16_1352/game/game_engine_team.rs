@@ -19,6 +19,23 @@ pub enum e_game_engine_team_options_designator_switch_type {
     rotate = 2,
 }
 
+#[repr(i8)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, Default, ToPrimitive, FromPrimitive, crate::derive::c_enum)]
+#[bits(4)]
+pub enum e_multiplayer_team_designator {
+    #[default]
+    none = -1,
+    defenders = 0,
+    attackers = 1,
+    third_party = 2,
+    fourth_party = 3,
+    fifth_party = 4,
+    sixth_party = 5,
+    seventh_party = 6,
+    eighth_party = 7,
+    neutral = 8,
+}
+
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct c_game_engine_team_options_team {
     pub m_team_enabled: bool,

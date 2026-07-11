@@ -19,6 +19,7 @@ pub enum e_object_team_filter {
     team_7 = 6,
     team_8 = 7,
     neutral = 8,
+    each = 9,
 }
 
 bitfield! {

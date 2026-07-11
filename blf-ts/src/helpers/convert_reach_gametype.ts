@@ -18,11 +18,15 @@ import {
 import { e_explicit_object_type as e_explicit_object_type_tu1 } from "../blam/haloreach/v12065_11_08_24_1738_tu1actual/game/megalogamengine/megalogamengine_explicit_object";
 import { e_explicit_player_type as e_explicit_player_type_tu1 } from "../blam/haloreach/v12065_11_08_24_1738_tu1actual/game/megalogamengine/megalogamengine_explicit_player";
 import { e_explicit_team_type as e_explicit_team_type_tu1 } from "../blam/haloreach/v12065_11_08_24_1738_tu1actual/game/megalogamengine/megalogamengine_explicit_team";
+import { e_multiplayer_team_designator as e_multiplayer_team_designator_tu1 } from "../blam/haloreach/v12065_11_08_24_1738_tu1actual/game/game_engine_default";
 import {
   c_custom_variable_reference as c_custom_variable_reference_tu1,
   e_custom_variable_type as e_custom_variable_type_tu1,
 } from "../blam/haloreach/v12065_11_08_24_1738_tu1actual/game/megalogamengine/megalogamengine_references";
-import type { s_variable_metadata as s_variable_metadata_tu1 } from "../blam/haloreach/v12065_11_08_24_1738_tu1actual/game/megalogamengine/megalogamengine_variable_metadata";
+import {
+  e_megalo_variable_network_state as e_megalo_variable_network_state_tu1,
+  type s_variable_metadata as s_variable_metadata_tu1,
+} from "../blam/haloreach/v12065_11_08_24_1738_tu1actual/game/megalogamengine/megalogamengine_variable_metadata";
 import type { s_custom_game_engine_definition as s_custom_game_engine_definition_mcc } from "../blam/haloreach_mcc/v_untracked_25_08_16_1352/game/game_variant";
 import {
   c_game_variant as c_game_variant_mcc,
@@ -198,10 +202,16 @@ function remap_temporary_explicit_refs(
 }
 
 interface GlobalVariableMetadataSlots {
-  m_numeric_variables: [c_custom_variable_reference_tu1, number][];
-  m_object_variables: number[];
-  m_player_variables: number[];
-  m_team_variables: [number, number][];
+  m_numeric_variables: [
+    c_custom_variable_reference_tu1,
+    e_megalo_variable_network_state_tu1,
+  ][];
+  m_object_variables: e_megalo_variable_network_state_tu1[];
+  m_player_variables: e_megalo_variable_network_state_tu1[];
+  m_team_variables: [
+    e_multiplayer_team_designator_tu1,
+    e_megalo_variable_network_state_tu1,
+  ][];
 }
 
 function extend_global_metadata(
@@ -210,24 +220,27 @@ function extend_global_metadata(
 ): void {
   const maxObjectGlobal = Math.max(0, ...maps.object.values());
   while (metadata.m_object_variables.length <= maxObjectGlobal) {
-    metadata.m_object_variables.push(0);
+    metadata.m_object_variables.push(e_megalo_variable_network_state_tu1.local);
   }
 
   const maxPlayerGlobal = Math.max(0, ...maps.player.values());
   while (metadata.m_player_variables.length <= maxPlayerGlobal) {
-    metadata.m_player_variables.push(0);
+    metadata.m_player_variables.push(e_megalo_variable_network_state_tu1.local);
   }
 
   const maxTeamGlobal = Math.max(0, ...maps.team.values());
   while (metadata.m_team_variables.length <= maxTeamGlobal) {
-    metadata.m_team_variables.push([0, 0]);
+    metadata.m_team_variables.push([
+      e_multiplayer_team_designator_tu1.none,
+      e_megalo_variable_network_state_tu1.local,
+    ]);
   }
 
   const maxNumericGlobal = Math.max(0, ...maps.numeric.values());
   while (metadata.m_numeric_variables.length <= maxNumericGlobal) {
     metadata.m_numeric_variables.push([
       new c_custom_variable_reference_tu1(),
-      0,
+      e_megalo_variable_network_state_tu1.local,
     ]);
   }
 }

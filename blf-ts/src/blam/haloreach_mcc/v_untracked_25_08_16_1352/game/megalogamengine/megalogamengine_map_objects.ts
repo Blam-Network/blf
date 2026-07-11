@@ -16,6 +16,21 @@ export type e_object_filter_valid_parameters = BitfieldOf<
   typeof k_object_filter_valid_parameters
 >;
 
+/** Matches `e_object_team_filter` in blf_lib `megalogamengine_map_objects.rs`. */
+export enum e_object_team_filter {
+  none = -1,
+  team_1 = 0,
+  team_2 = 1,
+  team_3 = 2,
+  team_4 = 3,
+  team_5 = 4,
+  team_6 = 5,
+  team_7 = 6,
+  team_8 = 7,
+  neutral = 8,
+  each = 9,
+}
+
 export class c_object_filter {
   @AutoMap(() => Number)
   m_label_string_index = 0;
@@ -28,7 +43,7 @@ export class c_object_filter {
   @AutoMap(() => c_object_type_reference)
   m_object_type?: c_object_type_reference;
   @AutoMap(() => Number)
-  m_team?: number;
+  m_team?: e_object_team_filter;
   @AutoMap(() => Number)
   m_user_data?: number;
   @AutoMap(() => Number)
@@ -46,7 +61,7 @@ export class c_object_filter {
       this.m_object_type = object_type;
     }
     if (this.m_valid_parameters.team) {
-      this.m_team = bitstream.read_integer("team", 4);
+      this.m_team = bitstream.read_enum("team", 4, e_object_team_filter);
     }
     if (this.m_valid_parameters.user_data) {
       this.m_user_data = bitstream.read_signed_integer("user-data", 16);
@@ -64,7 +79,7 @@ export class c_object_filter {
       this.m_object_type!.encode(bitstream);
     }
     if (this.m_valid_parameters.team) {
-      bitstream.write_integer(this.m_team!, 4);
+      bitstream.write_enum(this.m_team!, 4, e_object_team_filter);
     }
     if (this.m_valid_parameters.user_data) {
       bitstream.write_signed_integer(this.m_user_data!, 16);

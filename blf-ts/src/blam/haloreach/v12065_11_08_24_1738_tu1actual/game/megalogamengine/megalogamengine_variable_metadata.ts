@@ -3,18 +3,33 @@ import type {
   c_bitstream_writer,
 } from "../../../../../bitstream";
 import { AutoMap } from "../../../../../helpers/automap";
+import { e_multiplayer_team_designator } from "../game_engine_default";
 import { c_custom_variable_reference } from "./megalogamengine_references";
+
+/** Variable replication mode (`network-state`, 2 bits). */
+export enum e_megalo_variable_network_state {
+  local = 0,
+  networked = 1,
+  networked_high = 2,
+}
+
 export class s_variable_metadata {
   @AutoMap(() => [c_custom_variable_reference])
-  m_numeric_variables: [c_custom_variable_reference, number][] = [];
+  m_numeric_variables: [
+    c_custom_variable_reference,
+    e_megalo_variable_network_state,
+  ][] = [];
   @AutoMap(() => [c_custom_variable_reference])
   m_timer_variables: c_custom_variable_reference[] = [];
   @AutoMap(() => [Number])
-  m_team_variables: [number, number][] = [];
+  m_team_variables: [
+    e_multiplayer_team_designator,
+    e_megalo_variable_network_state,
+  ][] = [];
   @AutoMap(() => [Number])
-  m_player_variables: number[] = [];
+  m_player_variables: e_megalo_variable_network_state[] = [];
   @AutoMap(() => [Number])
-  m_object_variables: number[] = [];
+  m_object_variables: e_megalo_variable_network_state[] = [];
   constructor(
     private readonly numeric_variable_count_bits: number,
     private readonly timer_variable_count_bits: number,
@@ -30,7 +45,11 @@ export class s_variable_metadata {
     for (let i = 0; i < numeric_variable_count; i++) {
       const numeric_variable = new c_custom_variable_reference();
       numeric_variable.decode(bitstream);
-      const network_state = bitstream.read_integer("network-state", 2);
+      const network_state = bitstream.read_enum(
+        "network-state",
+        2,
+        e_megalo_variable_network_state
+      );
       this.m_numeric_variables.push([numeric_variable, network_state]);
     }
     const timer_variable_count = bitstream.read_integer(
@@ -47,11 +66,16 @@ export class s_variable_metadata {
       this.team_variable_count_bits
     );
     for (let i = 0; i < team_variable_count; i++) {
-      const team_variable_value = bitstream.read_integer(
+      const team_variable_value = bitstream.read_enum(
         "team-variable-value",
-        4
+        4,
+        e_multiplayer_team_designator
       );
-      const network_state = bitstream.read_integer("network-state", 2);
+      const network_state = bitstream.read_enum(
+        "network-state",
+        2,
+        e_megalo_variable_network_state
+      );
       this.m_team_variables.push([team_variable_value, network_state]);
     }
     const player_variable_count = bitstream.read_integer(
@@ -59,14 +83,26 @@ export class s_variable_metadata {
       this.player_variable_count_bits
     );
     for (let i = 0; i < player_variable_count; i++) {
-      this.m_player_variables.push(bitstream.read_integer("network-state", 2));
+      this.m_player_variables.push(
+        bitstream.read_enum(
+          "network-state",
+          2,
+          e_megalo_variable_network_state
+        )
+      );
     }
     const object_variable_count = bitstream.read_integer(
       "object-variable-count",
       this.object_variable_count_bits
     );
     for (let i = 0; i < object_variable_count; i++) {
-      this.m_object_variables.push(bitstream.read_integer("network-state", 2));
+      this.m_object_variables.push(
+        bitstream.read_enum(
+          "network-state",
+          2,
+          e_megalo_variable_network_state
+        )
+      );
     }
   }
   encode(bitstream: c_bitstream_writer): void {
@@ -76,7 +112,7 @@ export class s_variable_metadata {
     );
     for (const [numeric_variable, network_state] of this.m_numeric_variables) {
       numeric_variable.encode(bitstream);
-      bitstream.write_integer(network_state, 2);
+      bitstream.write_enum(network_state, 2, e_megalo_variable_network_state);
     }
     bitstream.write_integer(
       this.m_timer_variables.length,
@@ -90,22 +126,22 @@ export class s_variable_metadata {
       this.team_variable_count_bits
     );
     for (const [team_variable, network_state] of this.m_team_variables) {
-      bitstream.write_integer(team_variable, 4);
-      bitstream.write_integer(network_state, 2);
+      bitstream.write_enum(team_variable, 4, e_multiplayer_team_designator);
+      bitstream.write_enum(network_state, 2, e_megalo_variable_network_state);
     }
     bitstream.write_integer(
       this.m_player_variables.length,
       this.player_variable_count_bits
     );
     for (const network_state of this.m_player_variables) {
-      bitstream.write_integer(network_state, 2);
+      bitstream.write_enum(network_state, 2, e_megalo_variable_network_state);
     }
     bitstream.write_integer(
       this.m_object_variables.length,
       this.object_variable_count_bits
     );
     for (const network_state of this.m_object_variables) {
-      bitstream.write_integer(network_state, 2);
+      bitstream.write_enum(network_state, 2, e_megalo_variable_network_state);
     }
   }
 }
