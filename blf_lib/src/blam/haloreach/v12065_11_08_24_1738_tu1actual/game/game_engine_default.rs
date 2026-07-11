@@ -29,7 +29,6 @@ pub enum e_team_scoring_method {
     sum = 0,
     minimum = 1,
     maximum = 2,
-    unknown = 3,
 }
 
 bitfield! {

@@ -90,6 +90,41 @@ pub enum e_aura_setting {
     white = 4,
 }
 
+/// Forced armor tint preset (`m_forced_change_color_setting`, 4 bits).
+#[repr(u8)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, Default, ToPrimitive, FromPrimitive, crate::derive::c_enum)]
+#[bits(4)]
+pub enum e_forced_change_color_setting {
+    #[default]
+    unchanged = 0,
+    off = 1,
+    red = 2,
+    blue = 3,
+    green = 4,
+    yellow = 5,
+    purple = 6,
+    orange = 7,
+    brown = 8,
+    pink = 9,
+    white = 10,
+    black = 11,
+    zombie = 12,
+    extra4 = 13,
+}
+
+/// Motion tracker mode (`m_motion_tracker_setting`, 3 bits).
+#[repr(u8)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, Default, ToPrimitive, FromPrimitive, crate::derive::c_enum)]
+#[bits(3)]
+pub enum e_motion_tracker_setting {
+    #[default]
+    unchanged = 0,
+    off = 1,
+    allies = 2,
+    normal = 3,
+    enhanced = 4,
+}
+
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct c_player_trait_weapons {
     pub m_damage_modifier_percentage_setting: u8,
@@ -135,12 +170,12 @@ pub struct c_player_trait_appearance {
     pub m_waypoint_setting: e_waypoint_setting,
     pub m_gamertag_setting: e_waypoint_setting,
     pub m_aura_setting: e_aura_setting,
-    pub m_forced_change_color_setting: u8,
+    pub m_forced_change_color_setting: e_forced_change_color_setting,
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct c_player_trait_sensors {
-    pub m_motion_tracker_setting: u16,
+    pub m_motion_tracker_setting: e_motion_tracker_setting,
     pub m_motion_tracker_range_setting: u16,
     pub m_directional_damage_setting: u16,
 }
@@ -192,8 +227,8 @@ impl c_player_traits {
         bitstream.write_enum(self.m_appearance_traits.m_waypoint_setting)?;
         bitstream.write_enum(self.m_appearance_traits.m_gamertag_setting)?;
         bitstream.write_enum(self.m_appearance_traits.m_aura_setting)?;
-        bitstream.write_integer(self.m_appearance_traits.m_forced_change_color_setting, 4)?;
-        bitstream.write_integer(self.m_sensor_traits.m_motion_tracker_setting, 3)?;
+        bitstream.write_enum(self.m_appearance_traits.m_forced_change_color_setting)?;
+        bitstream.write_enum(self.m_sensor_traits.m_motion_tracker_setting)?;
         bitstream.write_integer(self.m_sensor_traits.m_motion_tracker_range_setting, 3)?;
         bitstream.write_integer(self.m_sensor_traits.m_directional_damage_setting, 2)?;
 
@@ -236,8 +271,8 @@ impl c_player_traits {
         self.m_appearance_traits.m_waypoint_setting = bitstream.read_enum("player-traits-appearance-waypoint")?;
         self.m_appearance_traits.m_gamertag_setting = bitstream.read_enum("player-traits-appearance-gamertag")?;
         self.m_appearance_traits.m_aura_setting = bitstream.read_enum("player-traits-appearance-aura")?;
-        self.m_appearance_traits.m_forced_change_color_setting = bitstream.read_integer("player-traits-appearance-forced-change-color", 4)?;
-        self.m_sensor_traits.m_motion_tracker_setting = bitstream.read_integer("player-traits-sensors-motion-tracker", 3)?;
+        self.m_appearance_traits.m_forced_change_color_setting = bitstream.read_enum("player-traits-appearance-forced-change-color")?;
+        self.m_sensor_traits.m_motion_tracker_setting = bitstream.read_enum("player-traits-sensors-motion-tracker")?;
         self.m_sensor_traits.m_motion_tracker_range_setting = bitstream.read_integer("motion-tracker-range", 3)?;
         self.m_sensor_traits.m_directional_damage_setting = bitstream.read_integer("player-traits-sensors-directional-damage", 2)?;
 

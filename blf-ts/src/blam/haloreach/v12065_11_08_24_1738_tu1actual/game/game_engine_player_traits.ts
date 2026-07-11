@@ -62,6 +62,31 @@ export enum e_aura_setting {
   black = 3,
   white = 4,
 }
+
+export enum e_forced_change_color_setting {
+  unchanged = 0,
+  off = 1,
+  red = 2,
+  blue = 3,
+  green = 4,
+  yellow = 5,
+  purple = 6,
+  orange = 7,
+  brown = 8,
+  pink = 9,
+  white = 10,
+  black = 11,
+  zombie = 12,
+  extra4 = 13,
+}
+/** Motion tracker mode (`m_motion_tracker_setting`, 3 bits). */
+export enum e_motion_tracker_setting {
+  unchanged = 0,
+  off = 1,
+  allies = 2,
+  normal = 3,
+  enhanced = 4,
+}
 export class c_player_trait_shield_vitality {
   @AutoMap(() => Number)
   m_damage_resistance_percentage_setting = 0;
@@ -135,12 +160,14 @@ export class c_player_trait_appearance {
   m_gamertag_setting: e_waypoint_setting = e_waypoint_setting.unchanged;
   @AutoMap(() => e_aura_setting)
   m_aura_setting: e_aura_setting = e_aura_setting.unchanged;
-  @AutoMap(() => Number)
-  m_forced_change_color_setting = 0;
+  @AutoMap(() => e_forced_change_color_setting)
+  m_forced_change_color_setting: e_forced_change_color_setting =
+    e_forced_change_color_setting.unchanged;
 }
 export class c_player_trait_sensors {
-  @AutoMap(() => Number)
-  m_motion_tracker_setting = 0;
+  @AutoMap(() => e_motion_tracker_setting)
+  m_motion_tracker_setting: e_motion_tracker_setting =
+    e_motion_tracker_setting.unchanged;
   @AutoMap(() => Number)
   m_motion_tracker_range_setting = 0;
   @AutoMap(() => Number)
@@ -279,14 +306,16 @@ export class c_player_traits {
       3,
       e_aura_setting
     );
-    a.m_forced_change_color_setting = bitstream.read_integer(
+    a.m_forced_change_color_setting = bitstream.read_enum(
       "player-traits-appearance-forced-change-color",
-      4
+      4,
+      e_forced_change_color_setting
     );
     const s = this.m_sensor_traits;
-    s.m_motion_tracker_setting = bitstream.read_integer(
+    s.m_motion_tracker_setting = bitstream.read_enum(
       "player-traits-sensors-motion-tracker",
-      3
+      3,
+      e_motion_tracker_setting
     );
     s.m_motion_tracker_range_setting = bitstream.read_integer(
       "motion-tracker-range",
@@ -413,11 +442,16 @@ export class c_player_traits {
       3,
       e_aura_setting
     );
-    bitstream.write_integer(
+    bitstream.write_enum(
       this.m_appearance_traits.m_forced_change_color_setting,
-      4
+      4,
+      e_forced_change_color_setting
     );
-    bitstream.write_integer(this.m_sensor_traits.m_motion_tracker_setting, 3);
+    bitstream.write_enum(
+      this.m_sensor_traits.m_motion_tracker_setting,
+      3,
+      e_motion_tracker_setting
+    );
     bitstream.write_integer(
       this.m_sensor_traits.m_motion_tracker_range_setting,
       3

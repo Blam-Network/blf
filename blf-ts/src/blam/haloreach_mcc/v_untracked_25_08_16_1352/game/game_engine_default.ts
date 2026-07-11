@@ -15,17 +15,19 @@ import {
 } from "../saved_games/saved_game_files";
 import { c_player_traits } from "./game_engine_player_traits";
 import { c_string_table } from "./string_table";
+
 export enum e_team_changing_type {
   disabled = 0,
   enabled = 1,
   balancing_only = 2,
 }
+
 export enum e_team_scoring_method {
   sum = 0,
   minimum = 1,
   maximum = 2,
-  unknown = 3,
 }
+
 export class e_map_override_option_flags {
   @AutoMap(() => Boolean)
   grenades_on_map = false;
@@ -415,6 +417,12 @@ export enum e_player_model_choice {
   spartan = 0,
   elite = 1,
 }
+/** Team designator switch mode (`m_designator_switch_type`, 2 bits). */
+export enum e_game_engine_team_options_designator_switch_type {
+  none = 0,
+  random = 1,
+  rotate = 2,
+}
 
 export class c_game_engine_team_options_team {
   @AutoMap(() => Boolean)
@@ -510,8 +518,9 @@ export class c_game_engine_team_options_team {
 export class c_game_engine_team_options {
   @AutoMap(() => Number)
   m_model_override = 0;
-  @AutoMap(() => Number)
-  m_designator_switch_type = 0;
+  @AutoMap(() => e_game_engine_team_options_designator_switch_type)
+  m_designator_switch_type: e_game_engine_team_options_designator_switch_type =
+    e_game_engine_team_options_designator_switch_type.none;
   @AutoMap(() => [c_game_engine_team_options_team])
   m_teams: StaticArray<
     c_game_engine_team_options_team,
@@ -522,16 +531,18 @@ export class c_game_engine_team_options {
   );
   initialize(): void {
     this.m_model_override = 0;
-    this.m_designator_switch_type = 2;
+    this.m_designator_switch_type =
+      e_game_engine_team_options_designator_switch_type.rotate;
     for (let i = 0; i < this.m_teams.length; i++) {
       this.m_teams[i]!.initialize(i);
     }
   }
   decode(bitstream: c_bitstream_reader): void {
     this.m_model_override = bitstream.read_integer("model-override", 3);
-    this.m_designator_switch_type = bitstream.read_integer(
+    this.m_designator_switch_type = bitstream.read_enum(
       "designator-switch-type",
-      2
+      2,
+      e_game_engine_team_options_designator_switch_type
     );
     for (const team of this.m_teams) {
       team.decode(bitstream);
@@ -539,7 +550,11 @@ export class c_game_engine_team_options {
   }
   encode(bitstream: c_bitstream_writer): void {
     bitstream.write_integer(this.m_model_override, 3);
-    bitstream.write_integer(this.m_designator_switch_type, 2);
+    bitstream.write_enum(
+      this.m_designator_switch_type,
+      2,
+      e_game_engine_team_options_designator_switch_type
+    );
     for (const team of this.m_teams) {
       team.encode(bitstream);
     }

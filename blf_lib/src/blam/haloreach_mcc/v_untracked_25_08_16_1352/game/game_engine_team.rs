@@ -1,4 +1,5 @@
 use serde::{Deserialize, Serialize};
+use num_derive::{FromPrimitive, ToPrimitive};
 use blf_lib::io::bitstream::{c_bitstream_reader, c_bitstream_writer};
 use blf_lib::blam::haloreach_mcc::v_untracked_25_08_16_1352::game::string_table::{c_single_language_string_table, c_string_table};
 use blf_lib_derivable::result::BLFLibResult;
@@ -6,6 +7,17 @@ use crate::types::array::StaticArray;
 use serde_hex::{SerHex,StrictCap};
 
 pub const k_game_variant_team_count: usize = 8;
+
+/// Team designator switch mode (`m_designator_switch_type`, 2 bits).
+#[repr(u8)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, Default, ToPrimitive, FromPrimitive, crate::derive::c_enum)]
+#[bits(2)]
+pub enum e_game_engine_team_options_designator_switch_type {
+    #[default]
+    none = 0,
+    random = 1,
+    rotate = 2,
+}
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct c_game_engine_team_options_team {
@@ -73,14 +85,14 @@ impl c_game_engine_team_options_team {
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct c_game_engine_team_options {
     pub m_model_override: u16,
-    pub m_designator_switch_type: u16,
+    pub m_designator_switch_type: e_game_engine_team_options_designator_switch_type,
     pub m_teams: StaticArray<c_game_engine_team_options_team, k_game_variant_team_count>,
 }
 
 impl c_game_engine_team_options {
     pub fn initialize(&mut self) {
         *self = Self::default();
-        self.m_designator_switch_type = 2;
+        self.m_designator_switch_type = e_game_engine_team_options_designator_switch_type::rotate;
         for i in 0..k_game_variant_team_count {
             self.m_teams[i].initialize(i);
         }
@@ -88,7 +100,7 @@ impl c_game_engine_team_options {
 
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
         bitstream.write_integer(self.m_model_override, 3)?;
-        bitstream.write_integer(self.m_designator_switch_type, 2)?;
+        bitstream.write_enum(self.m_designator_switch_type)?;
         for i in 0..k_game_variant_team_count {
             self.m_teams[i].encode(bitstream)?
         }
@@ -98,7 +110,7 @@ impl c_game_engine_team_options {
 
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
         self.m_model_override = bitstream.read_integer("model-override", 3)?;
-        self.m_designator_switch_type = bitstream.read_integer("designator-switch-type", 2)?;
+        self.m_designator_switch_type = bitstream.read_enum("designator-switch-type")?;
         for team in self.m_teams.get_mut().iter_mut() {
             team.decode(bitstream)?
         }
