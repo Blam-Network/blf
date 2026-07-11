@@ -35,6 +35,13 @@ export enum e_condition_type {
   equipment_is_active = 13,
 }
 
+/** Matches `e_disposition` (`c_enum`, 2 bits, range 0..3). */
+export enum e_disposition {
+  neutral = 0,
+  friendly = 1,
+  enemy = 2,
+}
+
 export class s_condition_if_parameters {
   @AutoMap(() => s_variant_variable)
   m_left = new s_variant_variable();
@@ -100,18 +107,22 @@ export class s_condition_team_disposition_parameters {
   @AutoMap(() => c_team_reference)
   m_team_2 = new c_team_reference();
   @AutoMap(() => Number)
-  m_disposition = 0;
+  m_disposition: e_disposition = e_disposition.neutral;
 
   decode(bitstream: c_bitstream_reader): void {
     this.m_team_1.decode(bitstream);
     this.m_team_2.decode(bitstream);
-    this.m_disposition = bitstream.read_integer("disposition", 2);
+    this.m_disposition = bitstream.read_enum(
+      "disposition",
+      2,
+      e_disposition
+    );
   }
 
   encode(bitstream: c_bitstream_writer): void {
     this.m_team_1.encode(bitstream);
     this.m_team_2.encode(bitstream);
-    bitstream.write_integer(this.m_disposition, 2);
+    bitstream.write_enum(this.m_disposition, 2, e_disposition);
   }
 }
 

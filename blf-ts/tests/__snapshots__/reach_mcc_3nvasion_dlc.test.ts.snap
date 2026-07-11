@@ -17724,7 +17724,13 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
             "m_execute_before_action": 0,
             "m_negated": false,
             "m_player_died_parameters": {
-              "m_killer_type": 4,
+              "m_killer_type": {
+                "betrayal": false,
+                "enemy": true,
+                "environment": false,
+                "quit_game": false,
+                "suicide": false,
+              },
               "m_player": {
                 "m_player": {
                   "m_explicit_player_type": "global_0",
@@ -19716,7 +19722,13 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
             "m_execute_before_action": 0,
             "m_negated": false,
             "m_player_died_parameters": {
-              "m_killer_type": 4,
+              "m_killer_type": {
+                "betrayal": false,
+                "enemy": true,
+                "environment": false,
+                "quit_game": false,
+                "suicide": false,
+              },
               "m_player": {
                 "m_player": {
                   "m_explicit_player_type": "global_0",

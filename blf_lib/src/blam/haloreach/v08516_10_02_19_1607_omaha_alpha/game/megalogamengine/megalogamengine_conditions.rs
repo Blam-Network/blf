@@ -22,6 +22,17 @@ pub enum e_numeric_comparison {
     // I think 3 is unused.
 }
 
+/// Matches `e_disposition` (`c_enum`, 2 bits, range 0..3).
+#[repr(u8)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, Default, ToPrimitive, FromPrimitive, crate::derive::c_enum)]
+#[bits(2)]
+pub enum e_disposition {
+    #[default]
+    neutral = 0,
+    friendly = 1,
+    enemy = 2,
+}
+
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct s_condition_if_parameters {
     pub m_left: s_variant_variable,
@@ -95,14 +106,14 @@ impl s_condition_player_died_parameters {
 pub struct s_condition_team_disposition_parameters {
     pub m_team_1: c_team_reference,
     pub m_team_2: c_team_reference,
-    pub m_disposition: u8, // 2 bits
+    pub m_disposition: e_disposition,
 }
 
 impl s_condition_team_disposition_parameters {
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
         self.m_team_1.encode(bitstream)?;
         self.m_team_2.encode(bitstream)?;
-        bitstream.write_integer(self.m_disposition, 2)?;
+        bitstream.write_enum(self.m_disposition)?;
 
         Ok(())
     }
@@ -110,7 +121,7 @@ impl s_condition_team_disposition_parameters {
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
         self.m_team_1.decode(bitstream)?;
         self.m_team_2.decode(bitstream)?;
-        self.m_disposition = bitstream.read_integer("disposition", 2)?;
+        self.m_disposition = bitstream.read_enum("disposition")?;
 
         Ok(())
     }

@@ -9,7 +9,8 @@ use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::megalogameng
     s_condition_player_is_active_parameters, s_condition_player_is_editor_parameters,
     s_condition_player_is_elite_parameters, s_condition_player_is_fire_team_leader_parameters,
     s_condition_player_is_spartan_parameters, s_condition_team_disposition_parameters,
-    s_condition_team_is_active_parameters, s_condition_timer_expired_parameters, e_numeric_comparison,
+    s_condition_team_is_active_parameters, s_condition_timer_expired_parameters, e_disposition,
+    e_numeric_comparison,
 };
 use blf_lib::blam::haloreach::v09730_10_04_09_1309_omaha_delta::game::megalogamengine::megalogamengine_variant_variable::s_variant_variable;
 use blf_lib::io::bitstream::{c_bitstream_reader, c_bitstream_writer};

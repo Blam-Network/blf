@@ -10,6 +10,7 @@ use blf_lib::io::bitstream::{c_bitstream_reader, c_bitstream_writer};
 use blf_lib::OPTION_TO_RESULT;
 use blf_lib_derivable::result::BLFLibResult;
 use crate::blam::haloreach_mcc::v_untracked_25_08_16_1352::game::megalogamengine::megalogamengine_object_reference::c_object_reference;
+use blf_lib::bitfield;
 
 #[repr(u8)]
 #[derive(Debug, Clone, Copy, PartialEq, Eq, ToPrimitive, FromPrimitive, Default, Serialize, Deserialize)]
@@ -21,6 +22,40 @@ pub enum e_numeric_comparison {
     less_than_or_equal_to = 3, // <=
     greater_than_or_equal_to = 4, // >=
     not_equal_to = 5, // !=
+}
+
+/// Bit indices for `c_flags<e_player_death_killer_type, …, 5>`.
+#[repr(u8)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default, ToPrimitive, FromPrimitive, Serialize, Deserialize)]
+pub enum e_player_death_killer_type {
+    #[default]
+    environment = 0,
+    suicide = 1,
+    enemy = 2,
+    betrayal = 3,
+    quit_game = 4,
+}
+
+/// Wire type for `m_killer_type` (`c_flags<e_player_death_killer_type>`, 5 bits).
+bitfield! {
+    #[derive(Serialize, Deserialize)]
+    pub struct e_player_death_killer_type_flags: u8 {
+        environment,
+        suicide,
+        enemy,
+        betrayal,
+        quit_game,
+    }
+}
+
+/// Matches `e_disposition` (`c_enum`, 2 bits, range 0..3).
+#[repr(u8)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default, ToPrimitive, FromPrimitive, Serialize, Deserialize)]
+pub enum e_disposition {
+    #[default]
+    neutral = 0,
+    friendly = 1,
+    enemy = 2,
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
@@ -73,20 +108,22 @@ impl s_condition_object_in_area_parameters {
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct s_condition_player_died_parameters {
     pub m_player: c_player_reference,
-    pub m_killer_type: u8, // 5 bits
+    pub m_killer_type: e_player_death_killer_type_flags,
 }
 
 impl s_condition_player_died_parameters {
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
         self.m_player.encode(bitstream)?;
-        bitstream.write_integer(self.m_killer_type, 5)?;
+        bitstream.write_integer(self.m_killer_type.to_raw(), 5)?;
 
         Ok(())
     }
 
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
         self.m_player.decode(bitstream)?;
-        self.m_killer_type = bitstream.read_integer("killer-type", 5)?;
+        self.m_killer_type = e_player_death_killer_type_flags::from_raw(
+            bitstream.read_integer("killer-type", 5)?,
+        );
 
         Ok(())
     }
@@ -96,14 +133,14 @@ impl s_condition_player_died_parameters {
 pub struct s_condition_team_disposition_parameters {
     pub m_team_1: c_team_reference,
     pub m_team_2: c_team_reference,
-    pub m_disposition: u8, // 2 bits
+    pub m_disposition: e_disposition,
 }
 
 impl s_condition_team_disposition_parameters {
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
         self.m_team_1.encode(bitstream)?;
         self.m_team_2.encode(bitstream)?;
-        bitstream.write_integer(self.m_disposition, 2)?;
+        bitstream.write_enum_raw(self.m_disposition, 2)?;
 
         Ok(())
     }
@@ -111,7 +148,7 @@ impl s_condition_team_disposition_parameters {
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
         self.m_team_1.decode(bitstream)?;
         self.m_team_2.decode(bitstream)?;
-        self.m_disposition = bitstream.read_integer("disposition", 2)?;
+        self.m_disposition = bitstream.read_enum_raw("disposition", 2)?;
 
         Ok(())
     }

@@ -5,6 +5,7 @@ import type {
 import { AutoMap } from "../../../../../helpers/automap";
 import {
   e_condition_type,
+  e_disposition,
   e_numeric_comparison,
   s_condition_equipment_is_active_parameters,
   s_condition_game_is_forge_parameters,
@@ -27,6 +28,7 @@ import { s_variant_variable } from "./megalogamengine_variant_variable";
 
 export {
   e_condition_type,
+  e_disposition,
   e_numeric_comparison,
   s_condition_equipment_is_active_parameters,
   s_condition_game_is_forge_parameters,

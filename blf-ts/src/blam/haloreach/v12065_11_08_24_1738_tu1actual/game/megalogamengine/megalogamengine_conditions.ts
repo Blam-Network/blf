@@ -1,4 +1,5 @@
 import type {
+  BitfieldOf,
   c_bitstream_reader,
   c_bitstream_writer,
 } from "../../../../../bitstream";
@@ -33,6 +34,55 @@ export enum e_condition_type {
   player_is_elite = 15,
   player_is_editor = 16,
   game_is_forge = 17,
+}
+
+/** Bit indices for `c_flags<e_player_death_killer_type, …, 5>`. */
+export enum e_player_death_killer_type {
+  environment = 0,
+  suicide = 1,
+  enemy = 2,
+  betrayal = 3,
+  quit_game = 4,
+}
+
+/** Wire type for `m_killer_type` (`c_flags<e_player_death_killer_type>`, 5 bits). */
+export const k_player_death_killer_type_flags = [
+  "environment",
+  "suicide",
+  "enemy",
+  "betrayal",
+  "quit_game",
+] as const;
+
+export type e_player_death_killer_type_flags = BitfieldOf<
+  typeof k_player_death_killer_type_flags
+>;
+
+export function e_player_death_killer_type_flags_none(): e_player_death_killer_type_flags {
+  return {
+    environment: false,
+    suicide: false,
+    enemy: false,
+    betrayal: false,
+    quit_game: false,
+  };
+}
+
+export function e_player_death_killer_type_flags_any(): e_player_death_killer_type_flags {
+  return {
+    environment: true,
+    suicide: true,
+    enemy: true,
+    betrayal: true,
+    quit_game: true,
+  };
+}
+
+/** Matches `e_disposition` (`c_enum`, 2 bits, range 0..3). */
+export enum e_disposition {
+  neutral = 0,
+  friendly = 1,
+  enemy = 2,
 }
 
 import {
@@ -85,15 +135,24 @@ export class s_condition_object_in_area_parameters {
 export class s_condition_player_died_parameters {
   @AutoMap(() => c_player_reference)
   m_player = new c_player_reference();
-  @AutoMap(() => Number)
-  m_killer_type = 0;
+  @AutoMap(() => Object)
+  m_killer_type: e_player_death_killer_type_flags =
+    e_player_death_killer_type_flags_none();
   decode(bitstream: c_bitstream_reader): void {
     this.m_player.decode(bitstream);
-    this.m_killer_type = bitstream.read_integer("killer-type", 5);
+    this.m_killer_type = bitstream.read_bitfield(
+      "killer-type",
+      5,
+      k_player_death_killer_type_flags
+    );
   }
   encode(bitstream: c_bitstream_writer): void {
     this.m_player.encode(bitstream);
-    bitstream.write_integer(this.m_killer_type, 5);
+    bitstream.write_bitfield(
+      this.m_killer_type,
+      5,
+      k_player_death_killer_type_flags
+    );
   }
 }
 
@@ -103,16 +162,20 @@ export class s_condition_team_disposition_parameters {
   @AutoMap(() => c_team_reference)
   m_team_2 = new c_team_reference();
   @AutoMap(() => Number)
-  m_disposition = 0;
+  m_disposition: e_disposition = e_disposition.neutral;
   decode(bitstream: c_bitstream_reader): void {
     this.m_team_1.decode(bitstream);
     this.m_team_2.decode(bitstream);
-    this.m_disposition = bitstream.read_integer("disposition", 2);
+    this.m_disposition = bitstream.read_enum(
+      "disposition",
+      2,
+      e_disposition
+    );
   }
   encode(bitstream: c_bitstream_writer): void {
     this.m_team_1.encode(bitstream);
     this.m_team_2.encode(bitstream);
-    bitstream.write_integer(this.m_disposition, 2);
+    bitstream.write_enum(this.m_disposition, 2, e_disposition);
   }
 }
 
