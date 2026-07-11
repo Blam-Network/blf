@@ -21,6 +21,13 @@ export enum e_grenade_count_setting {
   each_3 = 13,
   each_4 = 14,
 }
+/** Infinite ammo preset (`m_infinite_ammo_setting`, 2 bits). */
+export enum e_infinite_ammo_setting {
+  unchanged = 0,
+  disabled = 1,
+  enabled = 2,
+  bottomless_clip = 3,
+}
 export class c_player_trait_shield_vitality {
   @AutoMap(() => Number)
   m_damage_resistance_percentage_setting = 0;
@@ -55,8 +62,9 @@ export class c_player_trait_weapons {
   @AutoMap(() => e_grenade_count_setting)
   m_initial_grenade_count_setting: e_grenade_count_setting =
     e_grenade_count_setting.map_default;
-  @AutoMap(() => Number)
-  m_infinite_ammo_setting = 0;
+  @AutoMap(() => e_infinite_ammo_setting)
+  m_infinite_ammo_setting: e_infinite_ammo_setting =
+    e_infinite_ammo_setting.unchanged;
   @AutoMap(() => Number)
   m_recharging_grenades_setting = 0;
   @AutoMap(() => Number)
@@ -165,9 +173,10 @@ export class c_player_traits {
       4,
       e_grenade_count_setting
     );
-    w.m_infinite_ammo_setting = bitstream.read_integer(
+    w.m_infinite_ammo_setting = bitstream.read_enum(
       "player-traits-infinite-ammo-setting",
-      2
+      2,
+      e_infinite_ammo_setting
     );
     w.m_recharging_grenades_setting = bitstream.read_integer(
       "player-traits-recharging-grenades",
@@ -306,7 +315,11 @@ export class c_player_traits {
       4,
       e_grenade_count_setting
     );
-    bitstream.write_integer(this.m_weapon_traits.m_infinite_ammo_setting, 2);
+    bitstream.write_enum(
+      this.m_weapon_traits.m_infinite_ammo_setting,
+      2,
+      e_infinite_ammo_setting
+    );
     bitstream.write_integer(
       this.m_weapon_traits.m_recharging_grenades_setting,
       2

@@ -26,6 +26,18 @@ pub enum e_grenade_count_setting {
     each_4 = 14,
 }
 
+/// Infinite ammo preset (`m_infinite_ammo_setting`, 2 bits).
+#[repr(u8)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, Default, ToPrimitive, FromPrimitive, crate::derive::c_enum)]
+#[bits(2)]
+pub enum e_infinite_ammo_setting {
+    #[default]
+    unchanged = 0,
+    disabled = 1,
+    enabled = 2,
+    bottomless_clip = 3,
+}
+
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct c_player_trait_weapons {
     pub m_damage_modifier_percentage_setting: u8,
@@ -33,7 +45,7 @@ pub struct c_player_trait_weapons {
     pub m_initial_primary_weapon_absolute_index: i8,
     pub m_initial_secondary_weapon_absolute_index: i8,
     pub m_initial_grenade_count_setting: e_grenade_count_setting,
-    pub m_infinite_ammo_setting: u8,
+    pub m_infinite_ammo_setting: e_infinite_ammo_setting,
     pub m_recharging_grenades_setting: u8,
     pub m_weapon_pickup_setting: u8,
     pub m_equipment_usage_setting: u8,
@@ -107,7 +119,7 @@ impl c_player_traits {
         bitstream.write_signed_integer(self.m_weapon_traits.m_initial_primary_weapon_absolute_index, 8)?;
         bitstream.write_signed_integer(self.m_weapon_traits.m_initial_secondary_weapon_absolute_index, 8)?;
         bitstream.write_enum(self.m_weapon_traits.m_initial_grenade_count_setting)?;
-        bitstream.write_integer(self.m_weapon_traits.m_infinite_ammo_setting, 2)?;
+        bitstream.write_enum(self.m_weapon_traits.m_infinite_ammo_setting)?;
         bitstream.write_integer(self.m_weapon_traits.m_recharging_grenades_setting, 2)?;
         bitstream.write_integer(self.m_weapon_traits.m_weapon_pickup_setting, 2)?;
         bitstream.write_integer(self.m_weapon_traits.m_equipment_usage_setting, 2)?;
@@ -152,7 +164,7 @@ impl c_player_traits {
         self.m_weapon_traits.m_initial_primary_weapon_absolute_index = bitstream.read_signed_integer("player-trait-initial-primary-weapon", 8)?;
         self.m_weapon_traits.m_initial_secondary_weapon_absolute_index = bitstream.read_signed_integer("player-trait-initial-secondary-weapon", 8)?;
         self.m_weapon_traits.m_initial_grenade_count_setting = bitstream.read_enum("player-trait-initial-grenade-count")?;
-        self.m_weapon_traits.m_infinite_ammo_setting = bitstream.read_integer("player-traits-infinite-ammo-setting", 2)?;
+        self.m_weapon_traits.m_infinite_ammo_setting = bitstream.read_enum("player-traits-infinite-ammo-setting")?;
         self.m_weapon_traits.m_recharging_grenades_setting = bitstream.read_integer("player-traits-recharging-grenades", 2)?;
         self.m_weapon_traits.m_weapon_pickup_setting = bitstream.read_integer("player-traits-weapon-pickup-allowed", 2)?;
         self.m_weapon_traits.m_equipment_usage_setting = bitstream.read_integer("player-traits-equipment-usage", 2)?;
