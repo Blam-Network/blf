@@ -130,6 +130,12 @@
           "source": "src/chunks/haloreach/v09730_10_04_09_1309_omaha_delta/s_blf_chunk_packed_game_variant.ts",
           "signature": "gvar",
           "version": "38.1"
+        },
+        {
+          "name": "s_blf_chunk_rewards_persistance",
+          "source": "src/chunks/haloreach/v09730_10_04_09_1309_omaha_delta/s_blf_chunk_rewards_persistance.ts",
+          "signature": "rpdl",
+          "version": "1.1"
         }
       ]
     },
@@ -224,6 +230,18 @@
           "version": "10.2"
         },
         {
+          "name": "s_blf_chunk_challenge_progress",
+          "source": "src/chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_challenge_progress.ts",
+          "signature": "chpr",
+          "version": "2.1"
+        },
+        {
+          "name": "s_blf_chunk_challenge_state",
+          "source": "src/chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_challenge_state.ts",
+          "signature": "dcha",
+          "version": "3.1"
+        },
+        {
           "name": "s_blf_chunk_online_file_summary",
           "source": "src/chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_online_file_summary.ts",
           "signature": "finf",
@@ -276,6 +294,18 @@
           "source": "src/chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_network_lsp_heartbeat_data.ts",
           "signature": "phbt",
           "version": "6.0"
+        },
+        {
+          "name": "s_blf_chunk_rewards_persistance",
+          "source": "src/chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_rewards_persistance.ts",
+          "signature": "rpdl",
+          "version": "2.1"
+        },
+        {
+          "name": "s_blf_chunk_reward_persistence_upload_to_lsp",
+          "source": "src/chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_reward_persistence_upload_to_lsp.ts",
+          "signature": "rpul",
+          "version": "3.1"
         }
       ]
     },

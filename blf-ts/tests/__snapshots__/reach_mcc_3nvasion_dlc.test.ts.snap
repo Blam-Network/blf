@@ -3503,7 +3503,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               "m_operation": "set_to",
               "m_variable_1": {
                 "m_custom_variable": {
-                  "m_type": "symmetric_gametype",
+                  "m_type": "symmetric_gametype_pregame",
                 },
                 "m_type": "custom_variable",
               },

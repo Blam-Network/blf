@@ -5,6 +5,8 @@ export * from "../../chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_en
 export * from "../../chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_start_of_file";
 export * from "../../chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_auth_upload_image";
 export * from "../../chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_author";
+export * from "../../chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_challenge_progress";
+export * from "../../chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_challenge_state";
 export * from "../../chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_content_header";
 export * from "../../chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_game_variant";
 export * from "../../chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_hopper_configuration_table";
@@ -15,3 +17,5 @@ export * from "../../chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk
 export * from "../../chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_online_file_summary";
 export * from "../../chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_packed_game_variant";
 export * from "../../chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_player_heartbeat_response";
+export * from "../../chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_reward_persistence_upload_to_lsp";
+export * from "../../chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_rewards_persistance";
