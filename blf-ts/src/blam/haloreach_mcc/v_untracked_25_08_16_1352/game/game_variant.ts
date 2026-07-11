@@ -20,6 +20,7 @@ import { s_player_trait_option } from "./game_engine_traits";
 import { s_game_engine_player_rating_parameters } from "./megalogamengine/game_engine_player_rating_parameters";
 import { c_action } from "./megalogamengine/megalogamengine_actions";
 import { c_condition } from "./megalogamengine/megalogamengine_conditions";
+import { e_megalo_widget_position } from "./megalogamengine/megalogamengine_hud_widgets";
 import { c_object_filter } from "./megalogamengine/megalogamengine_map_objects";
 import { c_megalogamengine_map_permissions } from "./megalogamengine/megalogamengine_map_permissions";
 import { c_megalo_game_statistic } from "./megalogamengine/megalogamengine_statistics";
@@ -51,8 +52,8 @@ export class s_custom_game_engine_definition {
   m_object_variable_metadata = s_variable_metadata_object();
   @AutoMap(() => s_variable_metadata)
   m_team_variable_metadata = s_variable_metadata_team();
-  @AutoMap(() => [Number])
-  m_hud_widgets: number[] = [];
+  @AutoMap(() => [e_megalo_widget_position])
+  m_hud_widgets: e_megalo_widget_position[] = [];
   @AutoMap(() => Number)
   m_initialization_trigger_index = 0;
   @AutoMap(() => Number)
@@ -112,7 +113,9 @@ export class s_custom_game_engine_definition {
     this.m_team_variable_metadata.decode(bitstream);
     const widget_count = bitstream.read_integer("hud-widget-count", 3);
     for (let i = 0; i < widget_count; i++) {
-      this.m_hud_widgets.push(bitstream.read_integer("position", 4));
+      this.m_hud_widgets.push(
+        bitstream.read_enum("position", 4, e_megalo_widget_position)
+      );
     }
     this.m_initialization_trigger_index = bitstream.read_integer(
       "initial-trigger-index",
@@ -178,7 +181,7 @@ export class s_custom_game_engine_definition {
     this.m_team_variable_metadata.encode(bitstream);
     bitstream.write_integer(this.m_hud_widgets.length, 3);
     for (const widget of this.m_hud_widgets) {
-      bitstream.write_integer(widget, 4);
+      bitstream.write_enum(widget, 4, e_megalo_widget_position);
     }
     bitstream.write_integer(this.m_initialization_trigger_index, 9);
     bitstream.write_integer(this.m_local_initialization_trigger_index, 9);

@@ -13,7 +13,7 @@ import {
   s_content_item_history,
   s_content_item_metadata,
 } from "../saved_games/saved_game_files";
-import { c_player_traits } from "./game_engine_player_traits";
+import { c_player_traits, e_grenade_count_setting } from "./game_engine_player_traits";
 import { c_string_table } from "./string_table";
 
 export enum e_team_changing_type {
@@ -589,15 +589,16 @@ export class c_loadout_traits {
   m_initial_secondary_weapon_absolute_index = 0;
   @AutoMap(() => Number)
   m_initial_equipment_absolute_index = 0;
-  @AutoMap(() => Number)
-  m_initial_grenade_count_setting = 0;
+  @AutoMap(() => e_grenade_count_setting)
+  m_initial_grenade_count_setting: e_grenade_count_setting =
+    e_grenade_count_setting.none;
   initialize(): void {
     this.m_visible = false;
     this.m_name = -1;
     this.m_initial_primary_weapon_absolute_index = -3;
     this.m_initial_secondary_weapon_absolute_index = -3;
     this.m_initial_equipment_absolute_index = -3;
-    this.m_initial_grenade_count_setting = 0;
+    this.m_initial_grenade_count_setting = e_grenade_count_setting.none;
   }
   decode(bitstream: c_bitstream_reader): void {
     this.m_visible = bitstream.read_bool("flags");
@@ -610,9 +611,10 @@ export class c_loadout_traits {
       "initial-equipment",
       8
     );
-    this.m_initial_grenade_count_setting = bitstream.read_integer(
+    this.m_initial_grenade_count_setting = bitstream.read_enum(
       "initial-grenade-count",
-      4
+      4,
+      e_grenade_count_setting
     );
   }
   encode(bitstream: c_bitstream_writer): void {
@@ -627,7 +629,11 @@ export class c_loadout_traits {
       8
     );
     bitstream.write_signed_integer(this.m_initial_equipment_absolute_index, 8);
-    bitstream.write_integer(this.m_initial_grenade_count_setting, 4);
+    bitstream.write_enum(
+      this.m_initial_grenade_count_setting,
+      4,
+      e_grenade_count_setting
+    );
   }
 }
 export class c_loadout_palette_traits {

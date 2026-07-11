@@ -10,6 +10,7 @@ use crate::blam::haloreach_mcc::v_untracked_25_08_16_1352::game::game_engine_san
 use blf_lib::blam::haloreach_mcc::v_untracked_25_08_16_1352::game::game_engine_traits::s_player_trait_option;
 use blf_lib::blam::haloreach_mcc::v_untracked_25_08_16_1352::game::megalogamengine::megalogamengine_actions::c_action;
 use blf_lib::blam::haloreach_mcc::v_untracked_25_08_16_1352::game::megalogamengine::megalogamengine_conditions::c_condition;
+use blf_lib::blam::haloreach_mcc::v_untracked_25_08_16_1352::game::megalogamengine::megalogamengine_hud_widgets::e_megalo_widget_position;
 use blf_lib::blam::haloreach_mcc::v_untracked_25_08_16_1352::game::megalogamengine::megalogamengine_map_objects::c_object_filter;
 use blf_lib::blam::haloreach_mcc::v_untracked_25_08_16_1352::game::megalogamengine::megalogamengine_statistics::c_megalo_game_statistic;
 use blf_lib::blam::haloreach_mcc::v_untracked_25_08_16_1352::game::megalogamengine::megalogamengine_trigger::c_trigger;
@@ -1567,7 +1568,7 @@ pub struct s_custom_game_engine_definition {
     pub m_player_variable_metadata: s_variable_metadata<4, 3, 3, 3, 3>,
     pub m_object_variable_metadata: s_variable_metadata<4, 3, 2, 3, 3>,
     pub m_team_variable_metadata: s_variable_metadata<4, 3, 3, 3, 3>,
-    pub m_hud_widgets: Vec<u8>,
+    pub m_hud_widgets: Vec<e_megalo_widget_position>,
     pub m_initialization_trigger_index: u16,
     pub m_local_initialization_trigger_index: u16,
     pub m_host_migration_trigger_index: u16,
@@ -1619,7 +1620,7 @@ impl s_custom_game_engine_definition {
 
         bitstream.write_integer(self.m_hud_widgets.len() as u32, 3)?;
         for widget in &self.m_hud_widgets {
-            bitstream.write_integer(*widget, 4)?;
+            bitstream.write_enum(*widget)?;
         }
 
         bitstream.write_integer(self.m_initialization_trigger_index as u32, 9)?;
@@ -1678,7 +1679,7 @@ impl s_custom_game_engine_definition {
 
         let widget_count: u8 = bitstream.read_integer("hud-widget-count", 3)?;
         for i in 0..widget_count {
-            self.m_hud_widgets.push(bitstream.read_integer("position", 4)?);
+            self.m_hud_widgets.push(bitstream.read_enum("position")?);
         }
 
         self.m_initialization_trigger_index = bitstream.read_integer("initial-trigger-index", 9)?;

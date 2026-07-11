@@ -1,6 +1,7 @@
 use serde::{Deserialize, Serialize};
 use blf_lib::bitfield;
 use blf_lib::io::bitstream::{c_bitstream_reader, c_bitstream_writer};use blf_lib::TEST_BIT;
+use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::game_engine_player_traits::e_grenade_count_setting;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::string_table::c_single_language_string_table;
 use blf_lib_derivable::result::BLFLibResult;
 use crate::types::array::StaticArray;
@@ -21,7 +22,7 @@ pub struct c_loadout_traits {
     pub m_initial_primary_weapon_absolute_index: i8,
     pub m_initial_secondary_weapon_absolute_index: i8,
     pub m_initial_equipment_absolute_index: i8,
-    pub m_initial_grenade_count_setting: u8,
+    pub m_initial_grenade_count_setting: e_grenade_count_setting,
 }
 
 impl c_loadout_traits {
@@ -31,6 +32,7 @@ impl c_loadout_traits {
         self.m_initial_primary_weapon_absolute_index = -3;
         self.m_initial_secondary_weapon_absolute_index = -3;
         self.m_initial_equipment_absolute_index = -3;
+        self.m_initial_grenade_count_setting = e_grenade_count_setting::none;
     }
 
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
@@ -39,7 +41,7 @@ impl c_loadout_traits {
         bitstream.write_signed_integer(self.m_initial_primary_weapon_absolute_index, 8)?;
         bitstream.write_signed_integer(self.m_initial_secondary_weapon_absolute_index, 8)?;
         bitstream.write_signed_integer(self.m_initial_equipment_absolute_index, 8)?;
-        bitstream.write_integer(self.m_initial_grenade_count_setting, 4)?;
+        bitstream.write_enum(self.m_initial_grenade_count_setting)?;
 
         Ok(())
     }
@@ -50,7 +52,7 @@ impl c_loadout_traits {
         self.m_initial_primary_weapon_absolute_index = bitstream.read_signed_integer("initial-primary-weapon", 8)?;
         self.m_initial_secondary_weapon_absolute_index = bitstream.read_signed_integer("initial-secondary-weapon", 8)?;
         self.m_initial_equipment_absolute_index = bitstream.read_signed_integer("initial-equipment", 8)?;
-        self.m_initial_grenade_count_setting = bitstream.read_integer("initial-grenade-count", 4)?;
+        self.m_initial_grenade_count_setting = bitstream.read_enum("initial-grenade-count")?;
 
         Ok(())
     }
