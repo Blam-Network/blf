@@ -242,6 +242,116 @@ export class e_create_object_flags {
   }
 }
 
+/**
+ * Matches `s_object_offset` in managedmegalo: three signed bytes (x, y, z).
+ * Engine scales each axis by 0.1. Wire is 24 bits via integer pack with z in the low byte.
+ */
+export class s_object_offset {
+  @AutoMap(() => Number)
+  x = 0;
+  @AutoMap(() => Number)
+  y = 0;
+  @AutoMap(() => Number)
+  z = 0;
+  to_raw(): number {
+    return (this.z & 0xff) | ((this.y & 0xff) << 8) | ((this.x & 0xff) << 16);
+  }
+  static from_raw(raw: number): s_object_offset {
+    const offset = new s_object_offset();
+    const asSigned = (n: number) => (n > 127 ? n - 256 : n);
+    offset.z = asSigned(raw & 0xff);
+    offset.y = asSigned((raw >> 8) & 0xff);
+    offset.x = asSigned((raw >> 16) & 0xff);
+    return offset;
+  }
+  decode(bitstream: c_bitstream_reader): void {
+    Object.assign(this, s_object_offset.from_raw(bitstream.read_integer("offset", 24)));
+  }
+  encode(bitstream: c_bitstream_writer): void {
+    bitstream.write_integer(this.to_raw(), 24);
+  }
+}
+
+/** Matches `e_fireteam_filter_flags` in blf_lib `megalogamengine_actions.rs`. */
+export class e_fireteam_filter_flags {
+  @AutoMap(() => Boolean)
+  fireteam1 = false;
+  @AutoMap(() => Boolean)
+  fireteam2 = false;
+  @AutoMap(() => Boolean)
+  fireteam3 = false;
+  @AutoMap(() => Boolean)
+  fireteam4 = false;
+  @AutoMap(() => Boolean)
+  fireteam5 = false;
+  @AutoMap(() => Boolean)
+  fireteam6 = false;
+  @AutoMap(() => Boolean)
+  fireteam7 = false;
+  @AutoMap(() => Boolean)
+  fireteam8 = false;
+  to_raw(): number {
+    return (
+      (this.fireteam1 ? 1 : 0) |
+      (this.fireteam2 ? 1 << 1 : 0) |
+      (this.fireteam3 ? 1 << 2 : 0) |
+      (this.fireteam4 ? 1 << 3 : 0) |
+      (this.fireteam5 ? 1 << 4 : 0) |
+      (this.fireteam6 ? 1 << 5 : 0) |
+      (this.fireteam7 ? 1 << 6 : 0) |
+      (this.fireteam8 ? 1 << 7 : 0)
+    );
+  }
+  static from_raw(raw: number): e_fireteam_filter_flags {
+    const flags = new e_fireteam_filter_flags();
+    flags.fireteam1 = (raw & 1) !== 0;
+    flags.fireteam2 = (raw & (1 << 1)) !== 0;
+    flags.fireteam3 = (raw & (1 << 2)) !== 0;
+    flags.fireteam4 = (raw & (1 << 3)) !== 0;
+    flags.fireteam5 = (raw & (1 << 4)) !== 0;
+    flags.fireteam6 = (raw & (1 << 5)) !== 0;
+    flags.fireteam7 = (raw & (1 << 6)) !== 0;
+    flags.fireteam8 = (raw & (1 << 7)) !== 0;
+    return flags;
+  }
+}
+
+/**
+ * Matches `c_flags<e_player_purchase_mode, …, 5>` in managedmegalo.
+ * Script form: `{alive|dead|both} {weapons|equipment|vehicles|all}`.
+ * There is no dead+vehicles combination (that AND clears the mask).
+ */
+export class e_player_purchase_mode_flags {
+  @AutoMap(() => Boolean)
+  alive_weapons = false;
+  @AutoMap(() => Boolean)
+  alive_equipment = false;
+  @AutoMap(() => Boolean)
+  alive_vehicles = false;
+  @AutoMap(() => Boolean)
+  dead_weapons = false;
+  @AutoMap(() => Boolean)
+  dead_equipment = false;
+  to_raw(): number {
+    return (
+      (this.alive_weapons ? 1 : 0) |
+      (this.alive_equipment ? 1 << 1 : 0) |
+      (this.alive_vehicles ? 1 << 2 : 0) |
+      (this.dead_weapons ? 1 << 3 : 0) |
+      (this.dead_equipment ? 1 << 4 : 0)
+    );
+  }
+  static from_raw(raw: number): e_player_purchase_mode_flags {
+    const flags = new e_player_purchase_mode_flags();
+    flags.alive_weapons = (raw & 1) !== 0;
+    flags.alive_equipment = (raw & (1 << 1)) !== 0;
+    flags.alive_vehicles = (raw & (1 << 2)) !== 0;
+    flags.dead_weapons = (raw & (1 << 3)) !== 0;
+    flags.dead_equipment = (raw & (1 << 4)) !== 0;
+    return flags;
+  }
+}
+
 import {
   c_custom_timer_reference,
   c_custom_variable_reference,
@@ -337,8 +447,8 @@ export class s_action_create_object_parameters {
   m_filter_index = 0;
   @AutoMap(() => e_create_object_flags)
   m_flags = new e_create_object_flags();
-  @AutoMap(() => Number)
-  m_offset = 0;
+  @AutoMap(() => s_object_offset)
+  m_offset = new s_object_offset();
   @AutoMap(() => Number)
   m_variant_name_index = 0;
   decode(bitstream: c_bitstream_reader): void {
@@ -349,7 +459,7 @@ export class s_action_create_object_parameters {
     this.m_flags = e_create_object_flags.from_raw(
       bitstream.read_integer("flags", 3)
     );
-    this.m_offset = bitstream.read_integer("offset", 24);
+    this.m_offset.decode(bitstream);
     this.m_variant_name_index = bitstream.read_integer("variant-name-index", 8);
   }
   encode(bitstream: c_bitstream_writer): void {
@@ -358,7 +468,7 @@ export class s_action_create_object_parameters {
     this.m_object_reference_2.encode(bitstream);
     bitstream.write_index(this.m_filter_index, 16, 4);
     bitstream.write_integer(this.m_flags.to_raw(), 3);
-    bitstream.write_integer(this.m_offset, 24);
+    this.m_offset.encode(bitstream);
     bitstream.write_integer(this.m_variant_name_index, 8);
   }
 }
@@ -547,15 +657,17 @@ export class s_action_apply_player_traits_parameters {
 export class s_action_set_fireteam_respawn_filter_parameters {
   @AutoMap(() => c_object_reference)
   m_object = new c_object_reference();
-  @AutoMap(() => Number)
-  m_fireteam_filter = 0;
+  @AutoMap(() => e_fireteam_filter_flags)
+  m_fireteam_filter = new e_fireteam_filter_flags();
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
-    this.m_fireteam_filter = bitstream.read_integer("fireteam-filter", 8);
+    this.m_fireteam_filter = e_fireteam_filter_flags.from_raw(
+      bitstream.read_integer("fireteam-filter", 8)
+    );
   }
   encode(bitstream: c_bitstream_writer): void {
     this.m_object.encode(bitstream);
-    bitstream.write_integer(this.m_fireteam_filter, 8);
+    bitstream.write_integer(this.m_fireteam_filter.to_raw(), 8);
   }
 }
 export class s_action_set_progress_bar_parameters {
@@ -641,20 +753,20 @@ export class s_action_object_attach_parameters {
   m_object_1 = new c_object_reference();
   @AutoMap(() => c_object_reference)
   m_object_2 = new c_object_reference();
-  @AutoMap(() => Number)
-  m_offset = 0;
+  @AutoMap(() => s_object_offset)
+  m_offset = new s_object_offset();
   @AutoMap(() => Boolean)
   m_absolute_orientation = false;
   decode(bitstream: c_bitstream_reader): void {
     this.m_object_1.decode(bitstream);
     this.m_object_2.decode(bitstream);
-    this.m_offset = bitstream.read_integer("offset", 24);
+    this.m_offset.decode(bitstream);
     this.m_absolute_orientation = bitstream.read_bool("absolute_orientation");
   }
   encode(bitstream: c_bitstream_writer): void {
     this.m_object_1.encode(bitstream);
     this.m_object_2.encode(bitstream);
-    bitstream.write_integer(this.m_offset, 24);
+    this.m_offset.encode(bitstream);
     bitstream.write_bool(this.m_absolute_orientation);
   }
 }
@@ -685,17 +797,19 @@ export class s_action_player_enable_purchases_parameters {
   m_player = new c_player_reference();
   @AutoMap(() => c_custom_variable_reference)
   m_variable = new c_custom_variable_reference();
-  @AutoMap(() => Number)
-  m_mode = 0;
+  @AutoMap(() => e_player_purchase_mode_flags)
+  m_mode = new e_player_purchase_mode_flags();
   decode(bitstream: c_bitstream_reader): void {
     this.m_player.decode(bitstream);
     this.m_variable.decode(bitstream);
-    this.m_mode = bitstream.read_integer("mode", 5);
+    this.m_mode = e_player_purchase_mode_flags.from_raw(
+      bitstream.read_integer("mode", 5)
+    );
   }
   encode(bitstream: c_bitstream_writer): void {
     this.m_player.encode(bitstream);
     this.m_variable.encode(bitstream);
-    bitstream.write_integer(this.m_mode, 5);
+    bitstream.write_integer(this.m_mode.to_raw(), 5);
   }
 }
 export class s_action_weapon_set_pickup_priority_parameters {
@@ -1152,17 +1266,17 @@ export class s_action_object_face_object_parameters {
   m_object_1 = new c_object_reference();
   @AutoMap(() => c_object_reference)
   m_object_2 = new c_object_reference();
-  @AutoMap(() => Number)
-  m_offset = 0;
+  @AutoMap(() => s_object_offset)
+  m_offset = new s_object_offset();
   decode(bitstream: c_bitstream_reader): void {
     this.m_object_1.decode(bitstream);
     this.m_object_2.decode(bitstream);
-    this.m_offset = bitstream.read_integer("offset", 24);
+    this.m_offset.decode(bitstream);
   }
   encode(bitstream: c_bitstream_writer): void {
     this.m_object_1.encode(bitstream);
     this.m_object_2.encode(bitstream);
-    bitstream.write_integer(this.m_offset, 24);
+    this.m_offset.encode(bitstream);
   }
 }
 export class s_action_biped_give_weapon_parameters {

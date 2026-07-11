@@ -109,6 +109,41 @@ bitfield! {
     }
 }
 
+/// Three signed bytes written as 24 raw bits (`write_raw_data` in managedmegalo).
+/// Engine scales each axis by 0.1 in `get_offset_relative_to_forward_and_up`.
+/// Wire packing via `write_integer` keeps z in the low byte (matches existing MCC decode).
+#[derive(Default, PartialEq, Debug, Clone, Copy, Serialize, Deserialize)]
+pub struct s_object_offset {
+    pub x: i8,
+    pub y: i8,
+    pub z: i8,
+}
+
+impl s_object_offset {
+    pub fn to_raw(self) -> u32 {
+        (self.z as u8 as u32)
+            | ((self.y as u8 as u32) << 8)
+            | ((self.x as u8 as u32) << 16)
+    }
+
+    pub fn from_raw(raw: u32) -> Self {
+        Self {
+            z: raw as u8 as i8,
+            y: (raw >> 8) as u8 as i8,
+            x: (raw >> 16) as u8 as i8,
+        }
+    }
+
+    pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
+        bitstream.write_integer(self.to_raw(), 24)
+    }
+
+    pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
+        *self = Self::from_raw(bitstream.read_integer("offset", 24)?);
+        Ok(())
+    }
+}
+
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct s_action_create_object_parameters {
     pub m_object_type: c_object_type_reference,
@@ -116,7 +151,7 @@ pub struct s_action_create_object_parameters {
     pub m_object_reference_2: c_object_reference,
     pub m_filter_index: i8, // 4 bits
     pub m_flags: e_create_object_flags, // 3 bits
-    pub m_offset: u32, // 24 bits
+    pub m_offset: s_object_offset, // 24 bits
     pub m_variant_name_index: u8, // 8 bits
 }
 
@@ -127,7 +162,7 @@ impl s_action_create_object_parameters {
         self.m_object_reference_2.encode(bitstream)?;
         bitstream.write_index::<16>(self.m_filter_index, 4)?;
         bitstream.write_integer(self.m_flags.to_raw(), 3)?;
-        bitstream.write_integer(self.m_offset, 24)?;
+        self.m_offset.encode(bitstream)?;
         bitstream.write_integer(self.m_variant_name_index, 8)?;
 
         Ok(())
@@ -139,7 +174,7 @@ impl s_action_create_object_parameters {
         self.m_object_reference_2.decode(bitstream)?;
         self.m_filter_index = bitstream.read_index::<16>("filter_index", 4)? as i8;
         self.m_flags = e_create_object_flags::from_raw(bitstream.read_integer("flags", 3)?);
-        self.m_offset = bitstream.read_integer("offset", 24)?;
+        self.m_offset.decode(bitstream)?;
         self.m_variant_name_index = bitstream.read_integer("variant-name-index", 8)?;
 
         Ok(())
@@ -511,23 +546,39 @@ impl s_action_apply_player_traits_parameters {
     }
 }
 
+bitfield! {
+    #[derive(Serialize, Deserialize)]
+    pub struct e_fireteam_filter_flags: u8 {
+        fireteam1,
+        fireteam2,
+        fireteam3,
+        fireteam4,
+        fireteam5,
+        fireteam6,
+        fireteam7,
+        fireteam8,
+    }
+}
+
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct s_action_set_fireteam_respawn_filter_parameters {
     pub m_object: c_object_reference,
-    pub m_fireteam_filter: u8, // 8 bits
+    pub m_fireteam_filter: e_fireteam_filter_flags, // 8 bits
 }
 
 impl s_action_set_fireteam_respawn_filter_parameters {
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
         self.m_object.encode(bitstream)?;
-        bitstream.write_integer(self.m_fireteam_filter, 8)?;
+        bitstream.write_integer(self.m_fireteam_filter.to_raw(), 8)?;
 
         Ok(())
     }
 
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
         self.m_object.decode(bitstream)?;
-        self.m_fireteam_filter = bitstream.read_integer("fireteam-filter", 8)?;
+        self.m_fireteam_filter = e_fireteam_filter_flags::from_raw(
+            bitstream.read_integer("fireteam-filter", 8)?,
+        );
 
         Ok(())
     }
@@ -650,7 +701,7 @@ impl s_action_object_destroy_parameters {
 pub struct s_action_object_attach_parameters {
     pub m_object_1: c_object_reference,
     pub m_object_2: c_object_reference,
-    pub m_offset: u32,
+    pub m_offset: s_object_offset, // 24 bits
     pub m_absolute_orientation: bool,
 }
 
@@ -658,7 +709,7 @@ impl s_action_object_attach_parameters {
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
         self.m_object_1.encode(bitstream)?;
         self.m_object_2.encode(bitstream)?;
-        bitstream.write_integer(self.m_offset, 24)?;
+        self.m_offset.encode(bitstream)?;
         bitstream.write_bool(self.m_absolute_orientation)?;
 
         Ok(())
@@ -667,7 +718,7 @@ impl s_action_object_attach_parameters {
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
         self.m_object_1.decode(bitstream)?;
         self.m_object_2.decode(bitstream)?;
-        self.m_offset = bitstream.read_integer("offset", 24)?;
+        self.m_offset.decode(bitstream)?;
         self.m_absolute_orientation = bitstream.read_bool("absolute_orientation")?;
 
         Ok(())
@@ -1257,14 +1308,14 @@ impl s_action_object_set_orientation_parameters {
 pub struct s_action_object_face_object_parameters {
     pub m_object_1: c_object_reference,
     pub m_object_2: c_object_reference,
-    pub m_offset: u32,
+    pub m_offset: s_object_offset, // 24 bits
 }
 
 impl s_action_object_face_object_parameters {
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
         self.m_object_1.encode(bitstream)?;
         self.m_object_2.encode(bitstream)?;
-        bitstream.write_integer(self.m_offset, 24)?;
+        self.m_offset.encode(bitstream)?;
 
         Ok(())
     }
@@ -1272,7 +1323,7 @@ impl s_action_object_face_object_parameters {
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
         self.m_object_1.decode(bitstream)?;
         self.m_object_2.decode(bitstream)?;
-        self.m_offset = bitstream.read_integer("offset", 24)?;
+        self.m_offset.decode(bitstream)?;
 
         Ok(())
     }

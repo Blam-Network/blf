@@ -35,7 +35,7 @@ export class c_megalo_game_statistic {
   m_sort_order: e_megalo_game_statistic_sort_order =
     e_megalo_game_statistic_sort_order.none;
   @AutoMap(() => e_megalo_game_statistic_grouping)
-  m_growuping: e_megalo_game_statistic_grouping =
+  m_grouping: e_megalo_game_statistic_grouping =
     e_megalo_game_statistic_grouping.player;
   decode(bitstream: c_bitstream_reader): void {
     this.m_name_string_index = bitstream.read_integer("name-string-index", 7);
@@ -49,7 +49,7 @@ export class c_megalo_game_statistic {
       2,
       e_megalo_game_statistic_sort_order
     );
-    this.m_growuping = bitstream.read_enum(
+    this.m_grouping = bitstream.read_enum(
       "grouping",
       1,
       e_megalo_game_statistic_grouping
@@ -63,6 +63,6 @@ export class c_megalo_game_statistic {
       2,
       e_megalo_game_statistic_sort_order
     );
-    bitstream.write_enum(this.m_growuping, 1, e_megalo_game_statistic_grouping);
+    bitstream.write_enum(this.m_grouping, 1, e_megalo_game_statistic_grouping);
   }
 }

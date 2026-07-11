@@ -38,7 +38,7 @@ pub struct c_megalo_game_statistic {
     pub m_name_string_index: u8, // 7 bits
     pub m_format: e_megalo_game_statistic_format,
     pub m_sort_order: e_megalo_game_statistic_sort_order,
-    pub m_growuping: e_megalo_game_statistic_grouping,
+    pub m_grouping: e_megalo_game_statistic_grouping,
 }
 
 impl c_megalo_game_statistic {
@@ -46,7 +46,7 @@ impl c_megalo_game_statistic {
         bitstream.write_integer(self.m_name_string_index, 7)?;
         bitstream.write_enum(self.m_format)?;
         bitstream.write_enum(self.m_sort_order)?;
-        bitstream.write_enum(self.m_growuping)?;
+        bitstream.write_enum(self.m_grouping)?;
 
         Ok(())
     }
@@ -55,7 +55,7 @@ impl c_megalo_game_statistic {
         self.m_name_string_index = bitstream.read_integer("name-string-index", 7)?;
         self.m_format = bitstream.read_enum("format")?;
         self.m_sort_order = bitstream.read_enum("sort-order")?;
-        self.m_growuping = bitstream.read_enum("grouping")?;
+        self.m_grouping = bitstream.read_enum("grouping")?;
 
         Ok(())
     }

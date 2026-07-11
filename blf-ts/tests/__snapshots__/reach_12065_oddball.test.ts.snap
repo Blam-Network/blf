@@ -4295,7 +4295,11 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
                 },
                 "m_type": "global_object",
               },
-              "m_offset": 2,
+              "m_offset": {
+                "x": 0,
+                "y": 0,
+                "z": 2,
+              },
             },
             "m_type": "object_attach",
           },
@@ -4322,7 +4326,11 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
               "m_object_type": {
                 "m_object_type_index": 5,
               },
-              "m_offset": 5,
+              "m_offset": {
+                "x": 0,
+                "y": 0,
+                "z": 5,
+              },
               "m_variant_name_index": 0,
             },
             "m_type": "create_object",
@@ -4348,7 +4356,11 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
                 },
                 "m_type": "global_object",
               },
-              "m_offset": 2,
+              "m_offset": {
+                "x": 0,
+                "y": 0,
+                "z": 2,
+              },
             },
             "m_type": "object_attach",
           },
@@ -4375,7 +4387,11 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
               "m_object_type": {
                 "m_object_type_index": 4,
               },
-              "m_offset": 5,
+              "m_offset": {
+                "x": 0,
+                "y": 0,
+                "z": 5,
+              },
               "m_variant_name_index": 0,
             },
             "m_type": "create_object",
@@ -4525,7 +4541,11 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
               "m_object_type": {
                 "m_object_type_index": 151,
               },
-              "m_offset": 0,
+              "m_offset": {
+                "x": 0,
+                "y": 0,
+                "z": 0,
+              },
               "m_variant_name_index": 0,
             },
             "m_type": "create_object",
@@ -4569,7 +4589,11 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
                 },
                 "m_type": "global_object",
               },
-              "m_offset": 0,
+              "m_offset": {
+                "x": 0,
+                "y": 0,
+                "z": 0,
+              },
             },
             "m_type": "object_attach",
           },
@@ -6053,7 +6077,11 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
                 },
                 "m_type": "global_object",
               },
-              "m_offset": 2,
+              "m_offset": {
+                "x": 0,
+                "y": 0,
+                "z": 2,
+              },
             },
             "m_type": "object_attach",
           },
@@ -6080,7 +6108,11 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
               "m_object_type": {
                 "m_object_type_index": 5,
               },
-              "m_offset": 5,
+              "m_offset": {
+                "x": 0,
+                "y": 0,
+                "z": 5,
+              },
               "m_variant_name_index": 0,
             },
             "m_type": "create_object",
@@ -6106,7 +6138,11 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
                 },
                 "m_type": "global_object",
               },
-              "m_offset": 2,
+              "m_offset": {
+                "x": 0,
+                "y": 0,
+                "z": 2,
+              },
             },
             "m_type": "object_attach",
           },
@@ -6133,7 +6169,11 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
               "m_object_type": {
                 "m_object_type_index": 4,
               },
-              "m_offset": 5,
+              "m_offset": {
+                "x": 0,
+                "y": 0,
+                "z": 5,
+              },
               "m_variant_name_index": 0,
             },
             "m_type": "create_object",
@@ -6325,7 +6365,11 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
               "m_object_type": {
                 "m_object_type_index": 151,
               },
-              "m_offset": 0,
+              "m_offset": {
+                "x": 0,
+                "y": 0,
+                "z": 0,
+              },
               "m_variant_name_index": 0,
             },
             "m_type": "create_object",
@@ -6389,7 +6433,11 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
                 },
                 "m_type": "global_object",
               },
-              "m_offset": 0,
+              "m_offset": {
+                "x": 0,
+                "y": 0,
+                "z": 0,
+              },
             },
             "m_type": "object_attach",
           },
@@ -7786,7 +7834,11 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
               "m_object_type": {
                 "m_object_type_index": 141,
               },
-              "m_offset": 0,
+              "m_offset": {
+                "x": 0,
+                "y": 0,
+                "z": 0,
+              },
               "m_variant_name_index": 0,
             },
             "m_type": "create_object",
@@ -12750,13 +12802,13 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
         "m_statistics": [
           {
             "m_format": "time",
-            "m_growuping": "player",
+            "m_grouping": "player",
             "m_name_string_index": 36,
             "m_sort_order": "ascending",
           },
           {
             "m_format": "number",
-            "m_growuping": "player",
+            "m_grouping": "player",
             "m_name_string_index": 37,
             "m_sort_order": "ascending",
           },

@@ -19,8 +19,8 @@ use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::game_engine_
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::megalogamengine::megalogamengine_hud_widgets::e_megalogamengine_hud_meter_input_type;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::megalogamengine::megalogamengine_actions::{
     e_action_team_or_player_target, e_biped_give_weapon_mode, e_chud_navpoint_icon_type,
-    e_create_object_flags, e_grenade_type, e_math_operation, e_navpoint_priority,
-    e_player_filter_type,
+    e_create_object_flags, e_fireteam_filter_flags, e_grenade_type, e_math_operation,
+    e_navpoint_priority, e_player_filter_type,
 };
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
@@ -381,20 +381,22 @@ impl s_action_apply_player_traits_parameters {
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct s_action_set_fireteam_respawn_filter_parameters {
     pub m_object: c_object_reference,
-    pub m_fireteam_filter: u8, // 8 bits
+    pub m_fireteam_filter: e_fireteam_filter_flags, // 8 bits
 }
 
 impl s_action_set_fireteam_respawn_filter_parameters {
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
         self.m_object.encode(bitstream)?;
-        bitstream.write_integer(self.m_fireteam_filter, 8)?;
+        bitstream.write_integer(self.m_fireteam_filter.to_raw(), 8)?;
 
         Ok(())
     }
 
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
         self.m_object.decode(bitstream)?;
-        self.m_fireteam_filter = bitstream.read_integer("fireteam-filter", 8)?;
+        self.m_fireteam_filter = e_fireteam_filter_flags::from_raw(
+            bitstream.read_integer("fireteam-filter", 8)?,
+        );
 
         Ok(())
     }

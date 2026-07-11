@@ -196,6 +196,50 @@ export class e_create_object_flags {
   }
 }
 
+/** Matches `e_fireteam_filter_flags` in blf_lib `megalogamengine_actions.rs`. */
+export class e_fireteam_filter_flags {
+  @AutoMap(() => Boolean)
+  fireteam1 = false;
+  @AutoMap(() => Boolean)
+  fireteam2 = false;
+  @AutoMap(() => Boolean)
+  fireteam3 = false;
+  @AutoMap(() => Boolean)
+  fireteam4 = false;
+  @AutoMap(() => Boolean)
+  fireteam5 = false;
+  @AutoMap(() => Boolean)
+  fireteam6 = false;
+  @AutoMap(() => Boolean)
+  fireteam7 = false;
+  @AutoMap(() => Boolean)
+  fireteam8 = false;
+  to_raw(): number {
+    return (
+      (this.fireteam1 ? 1 : 0) |
+      (this.fireteam2 ? 1 << 1 : 0) |
+      (this.fireteam3 ? 1 << 2 : 0) |
+      (this.fireteam4 ? 1 << 3 : 0) |
+      (this.fireteam5 ? 1 << 4 : 0) |
+      (this.fireteam6 ? 1 << 5 : 0) |
+      (this.fireteam7 ? 1 << 6 : 0) |
+      (this.fireteam8 ? 1 << 7 : 0)
+    );
+  }
+  static from_raw(raw: number): e_fireteam_filter_flags {
+    const flags = new e_fireteam_filter_flags();
+    flags.fireteam1 = (raw & 1) !== 0;
+    flags.fireteam2 = (raw & (1 << 1)) !== 0;
+    flags.fireteam3 = (raw & (1 << 2)) !== 0;
+    flags.fireteam4 = (raw & (1 << 3)) !== 0;
+    flags.fireteam5 = (raw & (1 << 4)) !== 0;
+    flags.fireteam6 = (raw & (1 << 5)) !== 0;
+    flags.fireteam7 = (raw & (1 << 6)) !== 0;
+    flags.fireteam8 = (raw & (1 << 7)) !== 0;
+    return flags;
+  }
+}
+
 import {
   c_custom_timer_reference,
   c_object_reference,
@@ -501,15 +545,17 @@ export class s_action_apply_player_traits_parameters {
 export class s_action_set_fireteam_respawn_filter_parameters {
   @AutoMap(() => c_object_reference)
   m_object = new c_object_reference();
-  @AutoMap(() => Number)
-  m_fireteam_filter = 0;
+  @AutoMap(() => e_fireteam_filter_flags)
+  m_fireteam_filter = new e_fireteam_filter_flags();
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
-    this.m_fireteam_filter = bitstream.read_integer("fireteam-filter", 8);
+    this.m_fireteam_filter = e_fireteam_filter_flags.from_raw(
+      bitstream.read_integer("fireteam-filter", 8)
+    );
   }
   encode(bitstream: c_bitstream_writer): void {
     this.m_object.encode(bitstream);
-    bitstream.write_integer(this.m_fireteam_filter, 8);
+    bitstream.write_integer(this.m_fireteam_filter.to_raw(), 8);
   }
 }
 export class s_action_set_progress_bar_parameters {

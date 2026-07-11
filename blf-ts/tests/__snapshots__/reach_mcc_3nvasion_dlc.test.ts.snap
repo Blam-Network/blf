@@ -3824,7 +3824,16 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           },
           {
             "m_set_fireteam_respawn_filter_parameters": {
-              "m_fireteam_filter": 255,
+              "m_fireteam_filter": {
+                "fireteam1": true,
+                "fireteam2": true,
+                "fireteam3": true,
+                "fireteam4": true,
+                "fireteam5": true,
+                "fireteam6": true,
+                "fireteam7": true,
+                "fireteam8": true
+              },
               "m_object": {
                 "m_object": {
                   "m_explicit_object_type": "current",
@@ -3836,7 +3845,16 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           },
           {
             "m_set_fireteam_respawn_filter_parameters": {
-              "m_fireteam_filter": 1,
+              "m_fireteam_filter": {
+                "fireteam1": true,
+                "fireteam2": false,
+                "fireteam3": false,
+                "fireteam4": false,
+                "fireteam5": false,
+                "fireteam6": false,
+                "fireteam7": false,
+                "fireteam8": false
+              },
               "m_object": {
                 "m_object": {
                   "m_explicit_object_type": "current",
@@ -3848,7 +3866,16 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           },
           {
             "m_set_fireteam_respawn_filter_parameters": {
-              "m_fireteam_filter": 2,
+              "m_fireteam_filter": {
+                "fireteam1": false,
+                "fireteam2": true,
+                "fireteam3": false,
+                "fireteam4": false,
+                "fireteam5": false,
+                "fireteam6": false,
+                "fireteam7": false,
+                "fireteam8": false
+              },
               "m_object": {
                 "m_object": {
                   "m_explicit_object_type": "current",
@@ -3860,7 +3887,16 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           },
           {
             "m_set_fireteam_respawn_filter_parameters": {
-              "m_fireteam_filter": 4,
+              "m_fireteam_filter": {
+                "fireteam1": false,
+                "fireteam2": false,
+                "fireteam3": true,
+                "fireteam4": false,
+                "fireteam5": false,
+                "fireteam6": false,
+                "fireteam7": false,
+                "fireteam8": false
+              },
               "m_object": {
                 "m_object": {
                   "m_explicit_object_type": "current",
@@ -3872,7 +3908,16 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           },
           {
             "m_set_fireteam_respawn_filter_parameters": {
-              "m_fireteam_filter": 255,
+              "m_fireteam_filter": {
+                "fireteam1": true,
+                "fireteam2": true,
+                "fireteam3": true,
+                "fireteam4": true,
+                "fireteam5": true,
+                "fireteam6": true,
+                "fireteam7": true,
+                "fireteam8": true
+              },
               "m_object": {
                 "m_object": {
                   "m_explicit_object_type": "current",
@@ -4023,7 +4068,16 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           },
           {
             "m_set_fireteam_respawn_filter_parameters": {
-              "m_fireteam_filter": 1,
+              "m_fireteam_filter": {
+                "fireteam1": true,
+                "fireteam2": false,
+                "fireteam3": false,
+                "fireteam4": false,
+                "fireteam5": false,
+                "fireteam6": false,
+                "fireteam7": false,
+                "fireteam8": false
+              },
               "m_object": {
                 "m_object": {
                   "m_explicit_object_type": "current",
@@ -4035,7 +4089,16 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           },
           {
             "m_set_fireteam_respawn_filter_parameters": {
-              "m_fireteam_filter": 2,
+              "m_fireteam_filter": {
+                "fireteam1": false,
+                "fireteam2": true,
+                "fireteam3": false,
+                "fireteam4": false,
+                "fireteam5": false,
+                "fireteam6": false,
+                "fireteam7": false,
+                "fireteam8": false
+              },
               "m_object": {
                 "m_object": {
                   "m_explicit_object_type": "current",
@@ -4047,7 +4110,16 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           },
           {
             "m_set_fireteam_respawn_filter_parameters": {
-              "m_fireteam_filter": 4,
+              "m_fireteam_filter": {
+                "fireteam1": false,
+                "fireteam2": false,
+                "fireteam3": true,
+                "fireteam4": false,
+                "fireteam5": false,
+                "fireteam6": false,
+                "fireteam7": false,
+                "fireteam8": false
+              },
               "m_object": {
                 "m_object": {
                   "m_explicit_object_type": "current",
@@ -4059,7 +4131,16 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           },
           {
             "m_set_fireteam_respawn_filter_parameters": {
-              "m_fireteam_filter": 255,
+              "m_fireteam_filter": {
+                "fireteam1": true,
+                "fireteam2": true,
+                "fireteam3": true,
+                "fireteam4": true,
+                "fireteam5": true,
+                "fireteam6": true,
+                "fireteam7": true,
+                "fireteam8": true
+              },
               "m_object": {
                 "m_object": {
                   "m_explicit_object_type": "current",
@@ -4210,7 +4291,16 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           },
           {
             "m_set_fireteam_respawn_filter_parameters": {
-              "m_fireteam_filter": 1,
+              "m_fireteam_filter": {
+                "fireteam1": true,
+                "fireteam2": false,
+                "fireteam3": false,
+                "fireteam4": false,
+                "fireteam5": false,
+                "fireteam6": false,
+                "fireteam7": false,
+                "fireteam8": false
+              },
               "m_object": {
                 "m_object": {
                   "m_explicit_object_type": "current",
@@ -4222,7 +4312,16 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           },
           {
             "m_set_fireteam_respawn_filter_parameters": {
-              "m_fireteam_filter": 2,
+              "m_fireteam_filter": {
+                "fireteam1": false,
+                "fireteam2": true,
+                "fireteam3": false,
+                "fireteam4": false,
+                "fireteam5": false,
+                "fireteam6": false,
+                "fireteam7": false,
+                "fireteam8": false
+              },
               "m_object": {
                 "m_object": {
                   "m_explicit_object_type": "current",
@@ -4234,7 +4333,16 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           },
           {
             "m_set_fireteam_respawn_filter_parameters": {
-              "m_fireteam_filter": 4,
+              "m_fireteam_filter": {
+                "fireteam1": false,
+                "fireteam2": false,
+                "fireteam3": true,
+                "fireteam4": false,
+                "fireteam5": false,
+                "fireteam6": false,
+                "fireteam7": false,
+                "fireteam8": false
+              },
               "m_object": {
                 "m_object": {
                   "m_explicit_object_type": "current",
@@ -4246,7 +4354,16 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           },
           {
             "m_set_fireteam_respawn_filter_parameters": {
-              "m_fireteam_filter": 255,
+              "m_fireteam_filter": {
+                "fireteam1": true,
+                "fireteam2": true,
+                "fireteam3": true,
+                "fireteam4": true,
+                "fireteam5": true,
+                "fireteam6": true,
+                "fireteam7": true,
+                "fireteam8": true
+              },
               "m_object": {
                 "m_object": {
                   "m_explicit_object_type": "current",
@@ -5133,7 +5250,11 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               "m_object_type": {
                 "m_object_type_index": 6,
               },
-              "m_offset": 0,
+              "m_offset": {
+                "x": 0,
+                "y": 0,
+                "z": 0,
+              },
               "m_variant_name_index": 0,
             },
             "m_type": "create_object",
@@ -6664,7 +6785,11 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               "m_object_type": {
                 "m_object_type_index": 211,
               },
-              "m_offset": 5,
+              "m_offset": {
+                "x": 0,
+                "y": 0,
+                "z": 5,
+              },
               "m_variant_name_index": 0,
             },
             "m_type": "create_object",
@@ -6706,7 +6831,11 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               "m_object_type": {
                 "m_object_type_index": 212,
               },
-              "m_offset": 5,
+              "m_offset": {
+                "x": 0,
+                "y": 0,
+                "z": 5,
+              },
               "m_variant_name_index": 0,
             },
             "m_type": "create_object",
@@ -8181,7 +8310,11 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               "m_object_type": {
                 "m_object_type_index": 160,
               },
-              "m_offset": 3,
+              "m_offset": {
+                "x": 0,
+                "y": 0,
+                "z": 3,
+              },
               "m_variant_name_index": 0,
             },
             "m_type": "create_object",
@@ -8209,7 +8342,11 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               "m_object_type": {
                 "m_object_type_index": 133,
               },
-              "m_offset": 3,
+              "m_offset": {
+                "x": 0,
+                "y": 0,
+                "z": 3,
+              },
               "m_variant_name_index": 0,
             },
             "m_type": "create_object",
@@ -9862,7 +9999,11 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               "m_object_type": {
                 "m_object_type_index": 219,
               },
-              "m_offset": 3,
+              "m_offset": {
+                "x": 0,
+                "y": 0,
+                "z": 3,
+              },
               "m_variant_name_index": 0,
             },
             "m_type": "create_object",
@@ -10405,7 +10546,11 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               "m_object_type": {
                 "m_object_type_index": 211,
               },
-              "m_offset": 5,
+              "m_offset": {
+                "x": 0,
+                "y": 0,
+                "z": 5,
+              },
               "m_variant_name_index": 0,
             },
             "m_type": "create_object",
@@ -10434,7 +10579,11 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               "m_object_type": {
                 "m_object_type_index": 212,
               },
-              "m_offset": 5,
+              "m_offset": {
+                "x": 0,
+                "y": 0,
+                "z": 5,
+              },
               "m_variant_name_index": 0,
             },
             "m_type": "create_object",
@@ -10888,7 +11037,11 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
                 },
                 "m_type": "global_object",
               },
-              "m_offset": 2,
+              "m_offset": {
+                "x": 0,
+                "y": 0,
+                "z": 2,
+              },
             },
             "m_type": "object_attach",
           },
@@ -22977,19 +23130,19 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
         "m_statistics": [
           {
             "m_format": "number",
-            "m_growuping": "player",
+            "m_grouping": "player",
             "m_name_string_index": 64,
             "m_sort_order": "descending",
           },
           {
             "m_format": "time",
-            "m_growuping": "player",
+            "m_grouping": "player",
             "m_name_string_index": 65,
             "m_sort_order": "ascending",
           },
           {
             "m_format": "time",
-            "m_growuping": "player",
+            "m_grouping": "player",
             "m_name_string_index": 66,
             "m_sort_order": "ascending",
           },
