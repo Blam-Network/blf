@@ -20,7 +20,7 @@ This crate contains BLF functions used by the client-side TypeScript code of [bl
 ### blf_lib-private <kbd>Private</kbd>
 A closed-source counterpart to blf_lib held in the blf_private workspace. This package currently is only used for handling game data relating to online services.
 
-### blf_lsp <kbd>Private</kbd>
+### blf_lsp <kbd>Private</kbd> <kbd>Deprecated</kbd>
 This crate contains BLF functions used by the server-side Typescript code of Blam Network's web-APIs. It is compiled via [napi-rs](https://github.com/napi-rs/napi-rs) and uses the Node.js [Node-API (napi)](https://nodejs.org/api/n-api.html)
 
 

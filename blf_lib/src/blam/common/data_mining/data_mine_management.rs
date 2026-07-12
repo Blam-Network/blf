@@ -10,11 +10,12 @@ use blf_lib::types::numbers::Float32;
 #[cfg(feature = "napi")]
 use napi_derive::napi;
 
+#[binrw]
 #[cfg_attr(feature = "napi", napi(object, namespace = "common"))]
-#[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default)]
-pub struct s_data_mine_header {
+#[derive(Clone, PartialEq, Debug, Serialize, Deserialize, Default)]
+pub struct s_data_mine_header_v1 {
     pub byte_order_marker_fffe: u16,
-    pub version_major: u16,
+    #[brw(magic(1u16))]
     pub version_minor: u16,
     pub sessionid: StaticString<128>,
     pub build_string: StaticString<32>,
@@ -22,6 +23,25 @@ pub struct s_data_mine_header {
     pub systemid: StaticString<160>,
     pub title: StaticString<32>,
     pub session_start_date: filetime,
+}
+
+#[binrw]
+#[cfg_attr(feature = "napi", napi(object, namespace = "common"))]
+#[derive(Clone, PartialEq, Debug, Serialize, Deserialize, Default)]
+pub struct s_data_mine_header_v2 {
+    pub byte_order_marker_fffe: u16,
+    #[brw(magic(2u16))]
+    pub version_minor: u16,
+    pub sessionid: StaticString<128>,
+    pub build_string: StaticString<32>,
+    pub build_number: i32,
+    pub systemid: StaticString<160>,
+    pub title: StaticString<32>,
+    pub session_start_date: filetime,
+    // Seemingly set by data_mine_set_header_flag
+    // "sets the source flags of the data mine header (used for backend bucketing)"
+    // Seems to be a 1 flag bitfield.
+    pub source_flag: u8,
 }
 
 #[cfg_attr(feature = "napi", napi(object, namespace = "common"))]
