@@ -24,6 +24,9 @@
       ],
       "halo3odst/*": [
         "./dist/versions/halo3odst/*"
+      ],
+      "destiny/*": [
+        "./dist/versions/destiny/*"
       ]
     }
   },
@@ -69,6 +72,12 @@
       "import": "./dist/versions/halo3odst/*.js",
       "require": "./dist-cjs/versions/halo3odst/*.js",
       "default": "./dist/versions/halo3odst/*.js"
+    },
+    "./destiny/*": {
+      "types": "./dist/versions/destiny/*.d.ts",
+      "import": "./dist/versions/destiny/*.js",
+      "require": "./dist-cjs/versions/destiny/*.js",
+      "default": "./dist/versions/destiny/*.js"
     }
   },
   "files": [
@@ -105,7 +114,8 @@
     "halo",
     "haloreach",
     "halo3",
-    "halo3odst"
+    "halo3odst",
+    "destiny"
   ],
   "license": "MIT",
   "publishConfig": {

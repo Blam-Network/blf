@@ -9,6 +9,7 @@ Each game build is a separate npm subpath export. Import chunks and blam types f
 | Halo: The Master Chief Collection | `@blamnetwork/blf/mcc/` | [MCC](/guide/versions/mcc/) |
 | Halo 3 | `@blamnetwork/blf/halo3/` | [Halo 3](/guide/versions/halo3/) |
 | Halo 3: ODST | `@blamnetwork/blf/halo3odst/` | [ODST](/guide/versions/halo3odst/) |
+| Destiny | `@blamnetwork/blf/destiny/` | [Destiny](/guide/versions/destiny/) |
 
 Open a **build** page under a game for the exact import path and chunk list. Lists are generated from `src/versions/<game>/<build_id>.ts` (run `npm run docs:gen` after changing a barrel).
 

@@ -2,6 +2,34 @@
   "sourceRepoBase": "https://github.com/Blam-Network/blf/blob/main/blf-ts",
   "bundles": [
     {
+      "game": "destiny",
+      "buildId": "v36735_13_12_02_1953_alpha",
+      "label": "Destiny",
+      "buildLabel": "Alpha",
+      "importPath": "@blamnetwork/blf/destiny/v36735_13_12_02_1953_alpha",
+      "docLink": "/guide/versions/destiny/v36735_13_12_02_1953_alpha",
+      "chunks": [
+        {
+          "name": "s_blf_chunk_start_of_file",
+          "source": "src/chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_start_of_file.ts",
+          "signature": "_blf",
+          "version": "1.2"
+        },
+        {
+          "name": "s_blf_chunk_end_of_file",
+          "source": "src/chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_end_of_file.ts",
+          "signature": "_eof",
+          "version": "1.1"
+        },
+        {
+          "name": "s_blf_chunk_content_header",
+          "source": "src/chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_content_header.ts",
+          "signature": "chdr",
+          "version": "10.2"
+        }
+      ]
+    },
+    {
       "game": "halo3",
       "buildId": "v12070_08_09_05_2031_halo3_ship",
       "label": "Halo 3",

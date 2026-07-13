@@ -4,6 +4,15 @@ All notable changes to [@blamnetwork/blf](https://www.npmjs.com/package/@blamnet
 
 ## [Unreleased]
 
+### Destiny
+
+- [Destiny Alpha](/guide/versions/destiny/v36735_13_12_02_1953_alpha) — `36735.13.12.02.1953.alpha`
+  - `s_blf_chunk_start_of_file` (`_blf` 1.2)
+  - `s_blf_chunk_content_header` (`chdr` 10.2)
+  - `s_blf_chunk_end_of_file` (`_eof` 1.1)
+
+Same chunk layouts as Halo: Reach TU1 / Halo 3 ship.
+
 ### Pre-release Halo: Reach (Omaha)
 
 Megalo blam types and matchmaking game variant (`gvar`) chunks for pre-release Xbox 360 builds:

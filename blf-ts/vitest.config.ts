@@ -28,7 +28,7 @@ export default defineConfig({
       },
       {
         // @blamnetwork/blf/haloreach/<build> → src/versions/haloreach/<build>.ts
-        find: /^@blamnetwork\/blf\/(haloreach|halo3|halo3odst|haloreach_mcc)\/(.+)$/,
+        find: /^@blamnetwork\/blf\/(haloreach|halo3|halo3odst|haloreach_mcc|destiny)\/(.+)$/,
         replacement: `${versionsRoot}/$1/$2.ts`,
       },
     ],

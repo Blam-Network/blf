@@ -24,6 +24,7 @@ const GAME_LABELS = {
   mcc: "Halo: MCC",
   halo3: "Halo 3",
   halo3odst: "Halo 3: ODST",
+  destiny: "Destiny",
 };
 
 /** @type {Record<string, string>} */
@@ -38,6 +39,7 @@ const BUILD_LABELS = {
   v2025_08_16_178512_1_release: "16th Aug 2025 (Latest)",
   v12070_08_09_05_2031_halo3_ship: "Title Update 2 (Latest)",
   v13895_09_04_27_2201_atlas_release: "Release (Latest)",
+  v36735_13_12_02_1953_alpha: "Pricate Alpha",
 };
 
 /** @type {Record<string, string>} */
@@ -60,6 +62,8 @@ const BUILD_DESCRIPTIONS = {
   v12070_08_09_05_2031_halo3_ship: "Halo 3's second and final Title Update.",
   v13895_09_04_27_2201_atlas_release:
     "The initial release version of Halo 3: ODST on the Xbox 360.",
+  v36735_13_12_02_1953_alpha:
+    "Leaked private alpha build of Destiny with a little Reach BLF code left in.",
 };
 
 const CHUNK_DECORATOR_RE =

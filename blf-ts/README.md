@@ -2,14 +2,14 @@
 
 [![npm](https://img.shields.io/npm/v/@blamnetwork/blf)](https://www.npmjs.com/package/@blamnetwork/blf)
 
-TypeScript library for reading and writing Halo **BLF** (binary layout file) chunks — Reach, Halo 3, and Halo 3: ODST builds.
+TypeScript library for reading and writing Halo **BLF** (binary layout file) chunks — Reach, Halo 3, Halo 3: ODST, and Destiny builds.
 
 Built on [@craftycodie/cstruct](https://www.npmjs.com/package/@craftycodie/cstruct) for packed struct layouts and a Halo-style **bitstream** for custom chunk bodies.
 
 ## Features
 
 - Chunk discovery with `find_chunk` and `search_for_chunk`
-- Per-game **version bundles** (`haloreach/*`, `haloreach_mcc/*`, `halo3/*`, `halo3odst/*`) with chunk classes and blam types for a specific exe build
+- Per-game **version bundles** (`haloreach/*`, `haloreach_mcc/*`, `halo3/*`, `halo3odst/*`, `destiny/*`) with chunk classes and blam types for a specific exe build
 - **`@blamnetwork/blf/helpers`** for cross-version Reach gametype conversion (TU1 ↔ MCC)
 - Struct-backed chunks via `CStructBLFChunk` and `@blf.chunk` decorators (compiled away in published `dist/`)
 - Bitstream reader/writer exported from the package root
@@ -68,6 +68,7 @@ Each implementation build is a single module:
 | `@blamnetwork/blf/haloreach_mcc/v_untracked_25_08_16_1352` | Halo: Reach MCC |
 | `@blamnetwork/blf/halo3/v12070_08_09_05_2031_halo3_ship` | Halo 3 TU2 |
 | `@blamnetwork/blf/halo3odst/v13895_09_04_27_2201_atlas_release` | ODST TU0 |
+| `@blamnetwork/blf/destiny/v36735_13_12_02_1953_alpha` | Destiny Alpha |
 
 Add a build by creating `src/versions/<game>/<build_id>.ts` and re-exporting its chunks — wildcard `exports` in `package.json` pick it up automatically.
 

@@ -2,6 +2,7 @@ pub mod halo3;
 pub mod halo3odst;
 pub mod haloreach;
 pub mod ares;
+pub mod destiny;
 pub mod haloonline;
 pub mod haloreach_mcc;
 pub mod mcc;
