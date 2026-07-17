@@ -190,10 +190,7 @@ export class s_custom_game_engine_definition {
     );
     bitstream.write_signed_integer(this.m_host_migration_trigger_index, 9);
     bitstream.write_signed_integer(this.m_double_migration_trigger_index, 9);
-    bitstream.write_signed_integer(
-      this.m_object_death_event_trigger_index,
-      9
-    );
+    bitstream.write_signed_integer(this.m_object_death_event_trigger_index, 9);
     bitstream.write_signed_integer(this.m_local_trigger_index, 9);
     bitstream.write_signed_integer(this.m_pregame_trigger_index, 9);
     for (const used of this.m_objects_used) {
