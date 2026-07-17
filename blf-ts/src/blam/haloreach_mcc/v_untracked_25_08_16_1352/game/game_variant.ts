@@ -117,31 +117,31 @@ export class s_custom_game_engine_definition {
         bitstream.read_enum("position", 4, e_megalo_widget_position)
       );
     }
-    this.m_initialization_trigger_index = bitstream.read_integer(
+    this.m_initialization_trigger_index = bitstream.read_signed_integer(
       "initial-trigger-index",
       9
     );
-    this.m_local_initialization_trigger_index = bitstream.read_integer(
+    this.m_local_initialization_trigger_index = bitstream.read_signed_integer(
       "local-initialization-trigger-index",
       9
     );
-    this.m_host_migration_trigger_index = bitstream.read_integer(
+    this.m_host_migration_trigger_index = bitstream.read_signed_integer(
       "host-migration-trigger-index",
       9
     );
-    this.m_double_migration_trigger_index = bitstream.read_integer(
+    this.m_double_migration_trigger_index = bitstream.read_signed_integer(
       "double-migration-trigger-index",
       9
     );
-    this.m_object_death_event_trigger_index = bitstream.read_integer(
+    this.m_object_death_event_trigger_index = bitstream.read_signed_integer(
       "death-event-trigger-index",
       9
     );
-    this.m_local_trigger_index = bitstream.read_integer(
+    this.m_local_trigger_index = bitstream.read_signed_integer(
       "local-trigger-index",
       9
     );
-    this.m_pregame_trigger_index = bitstream.read_integer(
+    this.m_pregame_trigger_index = bitstream.read_signed_integer(
       "pregame-trigger-index",
       9
     );
@@ -183,13 +183,19 @@ export class s_custom_game_engine_definition {
     for (const widget of this.m_hud_widgets) {
       bitstream.write_enum(widget, 4, e_megalo_widget_position);
     }
-    bitstream.write_integer(this.m_initialization_trigger_index, 9);
-    bitstream.write_integer(this.m_local_initialization_trigger_index, 9);
-    bitstream.write_integer(this.m_host_migration_trigger_index, 9);
-    bitstream.write_integer(this.m_double_migration_trigger_index, 9);
-    bitstream.write_integer(this.m_object_death_event_trigger_index, 9);
-    bitstream.write_integer(this.m_local_trigger_index, 9);
-    bitstream.write_integer(this.m_pregame_trigger_index, 9);
+    bitstream.write_signed_integer(this.m_initialization_trigger_index, 9);
+    bitstream.write_signed_integer(
+      this.m_local_initialization_trigger_index,
+      9
+    );
+    bitstream.write_signed_integer(this.m_host_migration_trigger_index, 9);
+    bitstream.write_signed_integer(this.m_double_migration_trigger_index, 9);
+    bitstream.write_signed_integer(
+      this.m_object_death_event_trigger_index,
+      9
+    );
+    bitstream.write_signed_integer(this.m_local_trigger_index, 9);
+    bitstream.write_signed_integer(this.m_pregame_trigger_index, 9);
     for (const used of this.m_objects_used) {
       bitstream.write_bool(used);
     }
@@ -1511,13 +1517,13 @@ export class c_game_engine_custom_variant_tu1_settings {
   @AutoMap(() => Number)
   m_precision_bloom = 1;
   @AutoMap(() => Number)
-  m_active_camo_energy_curve_min = 0.2;
+  m_active_camo_energy_curve_min = 0;
   @AutoMap(() => Number)
-  m_active_camo_energy_curve_max = 0.7;
+  m_active_camo_energy_curve_max = 0;
   @AutoMap(() => Number)
-  m_armor_lock_damage_drain = 0;
+  m_armor_lock_damage_drain = 0.2;
   @AutoMap(() => Number)
-  m_armor_lock_damage_drain_limit = 0;
+  m_armor_lock_damage_drain_limit = 0.7;
   @AutoMap(() => Number)
   m_magnum_damage = 1;
   @AutoMap(() => Number)
