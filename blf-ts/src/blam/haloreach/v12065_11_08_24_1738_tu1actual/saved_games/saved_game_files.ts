@@ -15,128 +15,128 @@ export enum e_file_type {
 @c.struct()
 export class s_content_item_history {
   @c.field(c.Time64())
-  timestamp!: Date;
+  timestamp = new Date(0);
 
   @c.field("u64")
-  xuid!: bigint;
+  xuid = 0n;
 
   @c.field(c.String(16))
-  name!: string;
+  name = "";
 
   @c.field(c.Bool(), { pad_after: 3 })
-  is_online!: boolean;
+  is_online = false;
 }
 
 @c.struct()
 export class s_content_item_general_metadata {
   @c.field(c.enum("i8", e_file_type), { pad_after: 3 })
-  file_type!: e_file_type;
+  file_type: e_file_type = 0 as e_file_type;
 
   @c.field("u32")
-  size_in_bytes!: number;
+  size_in_bytes = 0;
 
   @c.field("u64")
-  unique_id!: bigint;
+  unique_id = 0n;
 
   @c.field("u64")
-  parent_unique_id!: bigint;
+  parent_unique_id = 0n;
 
   @c.field("u64")
-  root_unique_id!: bigint;
+  root_unique_id = 0n;
 
   @c.field("u64")
-  game_id!: bigint;
+  game_id = 0n;
 
   @c.field("i8")
-  activity!: number;
+  activity = 0;
 
   @c.field("u8")
-  game_mode!: number;
+  game_mode = 0;
 
   @c.field("u8", { pad_after: 1 })
-  game_engine_type!: number;
+  game_engine_type = 0;
 
   @c.field("i32")
-  map_id!: number;
+  map_id = 0;
 }
 
 @c.struct()
 export class s_content_item_display_metadata {
   @c.field("i8", { pad_after: 7 })
-  megalo_category_index!: number;
+  megalo_category_index = 0;
 }
 
 @c.struct()
 export class s_content_item_film_metadata {
   @c.field("i32")
-  seconds!: number;
+  seconds = 0;
 }
 
 @c.struct()
 export class s_content_item_game_variant_metadata {
   @c.field("i8")
-  icon_index!: number;
+  icon_index = 0;
 }
 
 @c.struct()
 export class s_content_item_matchmaking_metadata {
   @c.field("u16")
-  hopper_identifier!: number;
+  hopper_identifier = 0;
 }
 
 @c.struct()
 export class s_content_item_campaign_metadata {
   @c.field("i32")
-  campaign_id!: number;
+  campaign_id = 0;
 
   @c.field("i16")
-  campaign_difficulty!: number;
+  campaign_difficulty = 0;
 
   @c.field("i16")
-  campaign_metagame_scoring!: number;
+  campaign_metagame_scoring = 0;
 
   @c.field("i32")
-  campaign_insertion_point!: number;
+  campaign_insertion_point = 0;
 
   @c.field("i16")
-  campaign_primary_skulls!: number;
+  campaign_primary_skulls = 0;
 
   @c.field("i16")
-  campaign_secondary_skulls!: number;
+  campaign_secondary_skulls = 0;
 }
 
 @c.struct()
 export class s_content_item_firefight_metadata {
   @c.field("i16")
-  firefight_difficulty!: number;
+  firefight_difficulty = 0;
 
   @c.field("i16")
-  firefight_primary_skulls!: number;
+  firefight_primary_skulls = 0;
 
   @c.field("i16")
-  firefight_secondary_skulls!: number;
+  firefight_secondary_skulls = 0;
 }
 
 /** Full `c_content_item_metadata` binrw layout (fixed prefix + conditional union tails). */
 @c.struct()
 export class s_content_item_metadata {
   @c.field(s_content_item_general_metadata)
-  general!: s_content_item_general_metadata;
+  general = new s_content_item_general_metadata();
 
   @c.field(s_content_item_display_metadata)
-  display!: s_content_item_display_metadata;
+  display = new s_content_item_display_metadata();
 
   @c.field(s_content_item_history)
-  creation_history!: s_content_item_history;
+  creation_history = new s_content_item_history();
 
   @c.field(s_content_item_history)
-  modification_history!: s_content_item_history;
+  modification_history = new s_content_item_history();
 
   @c.field(c.WString(0x80))
-  name!: string;
+  name = "";
 
   @c.field(c.WString(0x80))
-  description!: string;
+  description = "";
 
   @c.union(
     { size: 16 },
