@@ -711,6 +711,23 @@ export class c_custom_variable_reference {
         break;
     }
   }
+  is_writeable(): boolean {
+    switch (this.m_type) {
+      case e_custom_variable_type.player_number:
+      case e_custom_variable_type.object_number:
+      case e_custom_variable_type.team_number:
+      case e_custom_variable_type.global_number:
+      case e_custom_variable_type.team_score:
+      case e_custom_variable_type.player_score:
+      case e_custom_variable_type.player_money:
+      case e_custom_variable_type.player_stat:
+      case e_custom_variable_type.team_stat:
+      case e_custom_variable_type.symmetric_gametype_pregame:
+        return true;
+      default:
+        return false;
+    }
+  }
 }
 export class c_custom_timer_reference {
   @AutoMap(() => e_custom_timer_type)

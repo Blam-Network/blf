@@ -78,6 +78,22 @@ pub struct c_custom_variable_reference {
 }
 
 impl c_custom_variable_reference {
+    pub fn is_writeable(&self) -> bool {
+        matches!(
+            self.m_type,
+            e_custom_variable_type::player_number
+                | e_custom_variable_type::object_number
+                | e_custom_variable_type::team_number
+                | e_custom_variable_type::global_number
+                | e_custom_variable_type::team_score
+                | e_custom_variable_type::player_score
+                | e_custom_variable_type::player_money
+                | e_custom_variable_type::player_stat
+                | e_custom_variable_type::team_stat
+                | e_custom_variable_type::symmetric_gametype_pregame
+        )
+    }
+
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
         bitstream.write_enum(self.m_type)?;
 
