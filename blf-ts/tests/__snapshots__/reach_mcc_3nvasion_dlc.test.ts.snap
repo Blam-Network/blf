@@ -3832,7 +3832,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
                 "fireteam5": true,
                 "fireteam6": true,
                 "fireteam7": true,
-                "fireteam8": true
+                "fireteam8": true,
               },
               "m_object": {
                 "m_object": {
@@ -3916,7 +3916,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
                 "fireteam5": true,
                 "fireteam6": true,
                 "fireteam7": true,
-                "fireteam8": true
+                "fireteam8": true,
               },
               "m_object": {
                 "m_object": {
@@ -4139,7 +4139,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
                 "fireteam5": true,
                 "fireteam6": true,
                 "fireteam7": true,
-                "fireteam8": true
+                "fireteam8": true,
               },
               "m_object": {
                 "m_object": {
@@ -4362,7 +4362,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
                 "fireteam5": true,
                 "fireteam6": true,
                 "fireteam7": true,
-                "fireteam8": true
+                "fireteam8": true,
               },
               "m_object": {
                 "m_object": {
