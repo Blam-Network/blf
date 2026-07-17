@@ -112,11 +112,7 @@ export class s_condition_team_disposition_parameters {
   decode(bitstream: c_bitstream_reader): void {
     this.m_team_1.decode(bitstream);
     this.m_team_2.decode(bitstream);
-    this.m_disposition = bitstream.read_enum(
-      "disposition",
-      2,
-      e_disposition
-    );
+    this.m_disposition = bitstream.read_enum("disposition", 2, e_disposition);
   }
 
   encode(bitstream: c_bitstream_writer): void {

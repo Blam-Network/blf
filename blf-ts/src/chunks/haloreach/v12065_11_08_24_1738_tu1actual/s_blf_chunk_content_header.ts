@@ -6,11 +6,11 @@ import { blf, CStructBLFChunk } from "../../../blf_chunk";
 @c.struct()
 export class s_blf_chunk_content_header extends CStructBLFChunk {
   @c.field("u16")
-  build_number!: number;
+  build_number = 0;
 
   @c.field("u16")
-  build_sequence_number!: number;
+  build_sequence_number = 0;
 
   @c.field(s_content_item_metadata)
-  metadata!: s_content_item_metadata;
+  metadata = new s_content_item_metadata();
 }

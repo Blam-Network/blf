@@ -265,7 +265,10 @@ export class s_object_offset {
     return offset;
   }
   decode(bitstream: c_bitstream_reader): void {
-    Object.assign(this, s_object_offset.from_raw(bitstream.read_integer("offset", 24)));
+    Object.assign(
+      this,
+      s_object_offset.from_raw(bitstream.read_integer("offset", 24))
+    );
   }
   encode(bitstream: c_bitstream_writer): void {
     bitstream.write_integer(this.to_raw(), 24);

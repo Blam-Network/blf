@@ -10,6 +10,7 @@
  * player, or team references cannot be mapped onto free global slots.
  */
 
+import { e_multiplayer_team_designator as e_multiplayer_team_designator_tu1 } from "../blam/haloreach/v12065_11_08_24_1738_tu1actual/game/game_engine_default";
 import type { s_custom_game_engine_definition as s_custom_game_engine_definition_tu1 } from "../blam/haloreach/v12065_11_08_24_1738_tu1actual/game/game_variant";
 import {
   type c_game_variant as c_game_variant_tu1,
@@ -18,7 +19,6 @@ import {
 import { e_explicit_object_type as e_explicit_object_type_tu1 } from "../blam/haloreach/v12065_11_08_24_1738_tu1actual/game/megalogamengine/megalogamengine_explicit_object";
 import { e_explicit_player_type as e_explicit_player_type_tu1 } from "../blam/haloreach/v12065_11_08_24_1738_tu1actual/game/megalogamengine/megalogamengine_explicit_player";
 import { e_explicit_team_type as e_explicit_team_type_tu1 } from "../blam/haloreach/v12065_11_08_24_1738_tu1actual/game/megalogamengine/megalogamengine_explicit_team";
-import { e_multiplayer_team_designator as e_multiplayer_team_designator_tu1 } from "../blam/haloreach/v12065_11_08_24_1738_tu1actual/game/game_engine_default";
 import {
   c_custom_variable_reference as c_custom_variable_reference_tu1,
   e_custom_variable_type as e_custom_variable_type_tu1,

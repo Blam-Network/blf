@@ -84,11 +84,7 @@ export class s_variable_metadata {
     );
     for (let i = 0; i < player_variable_count; i++) {
       this.m_player_variables.push(
-        bitstream.read_enum(
-          "network-state",
-          2,
-          e_megalo_variable_network_state
-        )
+        bitstream.read_enum("network-state", 2, e_megalo_variable_network_state)
       );
     }
     const object_variable_count = bitstream.read_integer(
@@ -97,11 +93,7 @@ export class s_variable_metadata {
     );
     for (let i = 0; i < object_variable_count; i++) {
       this.m_object_variables.push(
-        bitstream.read_enum(
-          "network-state",
-          2,
-          e_megalo_variable_network_state
-        )
+        bitstream.read_enum("network-state", 2, e_megalo_variable_network_state)
       );
     }
   }

@@ -13,7 +13,10 @@ import {
   s_content_item_history,
   s_content_item_metadata,
 } from "../saved_games/saved_game_files";
-import { c_player_traits, e_grenade_count_setting } from "./game_engine_player_traits";
+import {
+  c_player_traits,
+  e_grenade_count_setting,
+} from "./game_engine_player_traits";
 import { c_string_table } from "./string_table";
 
 export enum e_team_changing_type {
