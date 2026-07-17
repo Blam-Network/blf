@@ -44,6 +44,27 @@ pub struct s_data_mine_header_v2 {
     pub source_flag: u8,
 }
 
+// Destiny alpha (36735) writes major=3.
+#[binrw]
+#[cfg_attr(feature = "napi", napi(object, namespace = "common"))]
+#[derive(Clone, PartialEq, Debug, Serialize, Deserialize, Default)]
+pub struct s_data_mine_header_v3 {
+    pub byte_order_marker_fffe: u16,
+    #[brw(magic(3u16))]
+    pub version_minor: u16,
+    pub sessionid: StaticString<128>,
+    pub build_string: StaticString<32>,
+    pub build_number: i32,
+    pub systemid: StaticString<160>,
+    pub title: StaticString<32>,
+    pub session_start_date: filetime,
+    pub source_flag: u8,
+    pub source_flag_pad: u8,
+    pub unknown0: StaticString<64>,
+    pub application_name: StaticString<32>,
+    pub unknown1: u32,
+}
+
 #[cfg_attr(feature = "napi", napi(object, namespace = "common"))]
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default)]
 pub struct c_datamine_game_info {
