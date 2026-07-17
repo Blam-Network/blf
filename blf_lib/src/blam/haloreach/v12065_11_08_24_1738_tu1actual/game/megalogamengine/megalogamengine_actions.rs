@@ -2995,6 +2995,13 @@ pub struct c_action {
 }
 
 impl c_action {
+    pub fn executable_pregame(&self) -> bool {
+        matches!(
+            self.m_type,
+            e_action_type::none | e_action_type::set | e_action_type::for_each
+        )
+    }
+
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
         bitstream.write_enum_raw(self.m_type.clone(), 7)?;
 

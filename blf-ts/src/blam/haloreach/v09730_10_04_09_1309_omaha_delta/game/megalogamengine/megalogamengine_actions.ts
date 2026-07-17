@@ -3044,4 +3044,12 @@ export class c_action {
         break;
     }
   }
+
+  executable_pregame(): boolean {
+    return (
+      this.m_type === e_action_type.none ||
+      this.m_type === e_action_type.set ||
+      this.m_type === e_action_type.for_each
+    );
+  }
 }
