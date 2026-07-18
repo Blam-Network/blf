@@ -3471,8 +3471,8 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
       },
       "m_build_number": 12065,
       "m_encoding_version": 107,
-      "m_engine_category": 3,
-      "m_engine_icon": 3,
+      "m_engine_category": 2,
+      "m_engine_icon": 2,
       "m_fire_teams_enabled": false,
       "m_game_engine": {
         "m_actions": [
@@ -10479,7 +10479,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
             "m_union_group": 0,
           },
         ],
-        "m_double_migration_trigger_index": 0,
+        "m_double_migration_trigger_index": -1,
         "m_global_variable_metadata": {
           "m_numeric_variables": [
             [
@@ -10535,12 +10535,12 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
             },
           ],
         },
-        "m_host_migration_trigger_index": 32,
+        "m_host_migration_trigger_index": 31,
         "m_hud_widgets": [],
-        "m_initialization_trigger_index": 14,
-        "m_local_initialization_trigger_index": 0,
-        "m_local_trigger_index": 0,
-        "m_object_death_event_trigger_index": 0,
+        "m_initialization_trigger_index": 13,
+        "m_local_initialization_trigger_index": -1,
+        "m_local_trigger_index": -1,
+        "m_object_death_event_trigger_index": -1,
         "m_object_filters": [
           {
             "m_label_string_index": 0,
@@ -12798,7 +12798,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
             },
           ],
         },
-        "m_pregame_trigger_index": 0,
+        "m_pregame_trigger_index": -1,
         "m_statistics": [
           {
             "m_format": "time",

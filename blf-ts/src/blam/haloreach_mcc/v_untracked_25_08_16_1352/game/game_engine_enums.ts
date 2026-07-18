@@ -1,4 +1,5 @@
 import { AutoMap } from "../../../../helpers/automap";
+
 export enum e_game_engine_timer_rate {
   zero = 0,
   minus_10x = 1,

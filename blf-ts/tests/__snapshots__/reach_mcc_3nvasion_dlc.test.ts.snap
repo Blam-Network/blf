@@ -3473,8 +3473,8 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
       },
       "m_build_number": -1,
       "m_encoding_version": 106,
-      "m_engine_category": 10,
-      "m_engine_icon": 10,
+      "m_engine_category": 9,
+      "m_engine_icon": 9,
       "m_fire_teams_enabled": true,
       "m_game_engine": {
         "m_actions": [
@@ -20667,7 +20667,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
             "m_union_group": 0,
           },
         ],
-        "m_double_migration_trigger_index": 0,
+        "m_double_migration_trigger_index": -1,
         "m_global_variable_metadata": {
           "m_numeric_variables": [
             [
@@ -20803,15 +20803,15 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
             },
           ],
         },
-        "m_host_migration_trigger_index": 202,
+        "m_host_migration_trigger_index": 201,
         "m_hud_widgets": [
           4,
           7,
         ],
-        "m_initialization_trigger_index": 3,
-        "m_local_initialization_trigger_index": 0,
-        "m_local_trigger_index": 191,
-        "m_object_death_event_trigger_index": 0,
+        "m_initialization_trigger_index": 2,
+        "m_local_initialization_trigger_index": -1,
+        "m_local_trigger_index": 190,
+        "m_object_death_event_trigger_index": -1,
         "m_object_filters": [
           {
             "m_label_string_index": 2,
@@ -23126,7 +23126,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
             },
           ],
         },
-        "m_pregame_trigger_index": 2,
+        "m_pregame_trigger_index": 1,
         "m_statistics": [
           {
             "m_format": "number",

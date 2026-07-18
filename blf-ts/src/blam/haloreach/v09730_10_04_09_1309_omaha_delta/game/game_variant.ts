@@ -134,25 +134,30 @@ export class s_custom_game_engine_definition {
     for (let i = 0; i < widget_count; i++) {
       this.m_hud_widgets.push(bitstream.read_integer("position", 4));
     }
-    this.m_initialization_trigger_index = bitstream.read_signed_integer(
+    this.m_initialization_trigger_index = bitstream.read_index(
       "initial-trigger-index",
-      9
+      320,
+      8
     );
-    this.m_local_initialization_trigger_index = bitstream.read_signed_integer(
+    this.m_local_initialization_trigger_index = bitstream.read_index(
       "local-initialization-trigger-index",
-      9
+      320,
+      8
     );
-    this.m_host_migration_trigger_index = bitstream.read_signed_integer(
+    this.m_host_migration_trigger_index = bitstream.read_index(
       "host-migration-trigger-index",
-      9
+      320,
+      8
     );
-    this.m_object_death_event_trigger_index = bitstream.read_signed_integer(
+    this.m_object_death_event_trigger_index = bitstream.read_index(
       "death-event-trigger-index",
-      9
+      320,
+      8
     );
-    this.m_local_trigger_index = bitstream.read_signed_integer(
+    this.m_local_trigger_index = bitstream.read_index(
       "local-trigger-index",
-      9
+      320,
+      8
     );
     for (let i = 0; i < 2048; i++) {
       this.m_objects_used[i] = bitstream.read_bool("object-types-used");
@@ -205,14 +210,11 @@ export class s_custom_game_engine_definition {
     for (const widget of this.m_hud_widgets) {
       bitstream.write_integer(widget, 4);
     }
-    bitstream.write_signed_integer(this.m_initialization_trigger_index, 9);
-    bitstream.write_signed_integer(
-      this.m_local_initialization_trigger_index,
-      9
-    );
-    bitstream.write_signed_integer(this.m_host_migration_trigger_index, 9);
-    bitstream.write_signed_integer(this.m_object_death_event_trigger_index, 9);
-    bitstream.write_signed_integer(this.m_local_trigger_index, 9);
+    bitstream.write_index(this.m_initialization_trigger_index, 320, 8);
+    bitstream.write_index(this.m_local_initialization_trigger_index, 320, 8);
+    bitstream.write_index(this.m_host_migration_trigger_index, 320, 8);
+    bitstream.write_index(this.m_object_death_event_trigger_index, 320, 8);
+    bitstream.write_index(this.m_local_trigger_index, 320, 8);
     for (const used of this.m_objects_used) {
       bitstream.write_bool(used);
     }

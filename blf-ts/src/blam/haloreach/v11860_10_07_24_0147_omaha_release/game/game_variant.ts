@@ -131,8 +131,8 @@ export class c_game_engine_custom_variant {
     this.m_localized_name.decode(bitstream);
     this.m_localized_description.decode(bitstream);
     this.m_localized_category.decode(bitstream);
-    this.m_engine_icon = bitstream.read_integer("engine-icon-index", 5);
-    this.m_engine_category = bitstream.read_integer("engine-category", 5);
+    this.m_engine_icon = bitstream.read_integer("engine-icon-index", 5) - 1;
+    this.m_engine_category = bitstream.read_integer("engine-category", 5) - 1;
     this.m_map_permissions.decode(bitstream);
     this.m_player_ratings.decode(bitstream);
     this.m_score_to_win_round = bitstream.read_signed_integer(
@@ -181,8 +181,8 @@ export class c_game_engine_custom_variant {
     this.m_localized_name.encode(bitstream);
     this.m_localized_description.encode(bitstream);
     this.m_localized_category.encode(bitstream);
-    bitstream.write_integer(this.m_engine_icon, 5);
-    bitstream.write_integer(this.m_engine_category, 5);
+    bitstream.write_integer(this.m_engine_icon + 1, 5);
+    bitstream.write_integer(this.m_engine_category + 1, 5);
     this.m_map_permissions.encode(bitstream);
     this.m_player_ratings.encode(bitstream);
     bitstream.write_signed_integer(this.m_score_to_win_round, 16);

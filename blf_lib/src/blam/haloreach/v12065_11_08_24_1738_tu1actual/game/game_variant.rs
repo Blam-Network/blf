@@ -1323,8 +1323,8 @@ pub struct c_game_engine_custom_variant {
     pub m_localized_name: c_string_table<1, 0x180, 9, 9, 1>,
     pub m_localized_description: c_string_table<1, 0xC00, 12, 12, 1>,
     pub m_localized_category: c_string_table<1, 0x180, 9, 9, 1>,
-    pub m_engine_icon: u8,
-    pub m_engine_category: u8,
+    pub m_engine_icon: i8,
+    pub m_engine_category: i8,
     pub m_map_permissions: c_megalogamengine_map_permissions,
     pub m_player_ratings: s_game_engine_player_rating_parameters,
     pub m_score_to_win_round: u16,
@@ -1370,8 +1370,8 @@ impl c_game_engine_custom_variant {
         self.m_localized_name.encode(bitstream)?;
         self.m_localized_description.encode(bitstream)?;
         self.m_localized_category.encode(bitstream)?;
-        bitstream.write_integer(self.m_engine_icon, 5)?;
-        bitstream.write_integer(self.m_engine_category, 5)?;
+        bitstream.write_integer((self.m_engine_icon + 1) as u32, 5)?;
+        bitstream.write_integer((self.m_engine_category + 1) as u32, 5)?;
         self.m_map_permissions.encode(bitstream)?;
         self.m_player_ratings.encode(bitstream)?;
         bitstream.write_signed_integer(self.m_score_to_win_round, 16)?;
@@ -1414,8 +1414,8 @@ impl c_game_engine_custom_variant {
         self.m_localized_name.decode(bitstream)?;
         self.m_localized_description.decode(bitstream)?;
         self.m_localized_category.decode(bitstream)?;
-        self.m_engine_icon = bitstream.read_integer("engine-icon-index", 5)?;
-        self.m_engine_category = bitstream.read_integer("engine-category", 5)?;
+        self.m_engine_icon = bitstream.read_integer::<i32>("engine-icon-index", 5)? as i8 - 1;
+        self.m_engine_category = bitstream.read_integer::<i32>("engine-category", 5)? as i8 - 1;
         self.m_map_permissions.decode(bitstream)?;
         self.m_player_ratings.decode(bitstream)?;
         self.m_score_to_win_round = bitstream.read_signed_integer("score-to-win-round", 16)?;
@@ -2849,13 +2849,13 @@ pub struct s_custom_game_engine_definition {
     pub m_object_variable_metadata: s_variable_metadata<4, 3, 2, 3, 3>,
     pub m_team_variable_metadata: s_variable_metadata<4, 3, 3, 3, 3>,
     pub m_hud_widgets: Vec<e_megalo_widget_position>,
-    pub m_initialization_trigger_index: u16,
-    pub m_local_initialization_trigger_index: u16,
-    pub m_host_migration_trigger_index: u16,
-    pub m_double_migration_trigger_index: u16,
-    pub m_object_death_event_trigger_index: u16,
-    pub m_local_trigger_index: u16,
-    pub m_pregame_trigger_index: u16,
+    pub m_initialization_trigger_index: i16,
+    pub m_local_initialization_trigger_index: i16,
+    pub m_host_migration_trigger_index: i16,
+    pub m_double_migration_trigger_index: i16,
+    pub m_object_death_event_trigger_index: i16,
+    pub m_local_trigger_index: i16,
+    pub m_pregame_trigger_index: i16,
     pub m_objects_used: StaticArray<bool, 2048>,
     pub m_object_filters: Vec<c_object_filter>,
 }
@@ -2863,13 +2863,13 @@ pub struct s_custom_game_engine_definition {
 impl s_custom_game_engine_definition {
     pub fn initialize(&mut self) {
         *self = Self::default();
-        self.m_initialization_trigger_index = (-1i16) as u16;
-        self.m_local_initialization_trigger_index = (-1i16) as u16;
-        self.m_host_migration_trigger_index = (-1i16) as u16;
-        self.m_double_migration_trigger_index = (-1i16) as u16;
-        self.m_object_death_event_trigger_index = (-1i16) as u16;
-        self.m_local_trigger_index = (-1i16) as u16;
-        self.m_pregame_trigger_index = (-1i16) as u16;
+        self.m_initialization_trigger_index = -1;
+        self.m_local_initialization_trigger_index = -1;
+        self.m_host_migration_trigger_index = -1;
+        self.m_double_migration_trigger_index = -1;
+        self.m_object_death_event_trigger_index = -1;
+        self.m_local_trigger_index = -1;
+        self.m_pregame_trigger_index = -1;
     }
 
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
@@ -2903,13 +2903,13 @@ impl s_custom_game_engine_definition {
             bitstream.write_enum(*widget)?;
         }
 
-        bitstream.write_integer(self.m_initialization_trigger_index as u32, 9)?;
-        bitstream.write_integer(self.m_local_initialization_trigger_index as u32, 9)?;
-        bitstream.write_integer(self.m_host_migration_trigger_index as u32, 9)?;
-        bitstream.write_integer(self.m_double_migration_trigger_index as u32, 9)?;
-        bitstream.write_integer(self.m_object_death_event_trigger_index as u32, 9)?;
-        bitstream.write_integer(self.m_local_trigger_index as u32, 9)?;
-        bitstream.write_integer(self.m_pregame_trigger_index as u32, 9)?;
+        bitstream.write_integer((self.m_initialization_trigger_index + 1) as u32, 9)?;
+        bitstream.write_integer((self.m_local_initialization_trigger_index + 1) as u32, 9)?;
+        bitstream.write_integer((self.m_host_migration_trigger_index + 1) as u32, 9)?;
+        bitstream.write_integer((self.m_double_migration_trigger_index + 1) as u32, 9)?;
+        bitstream.write_integer((self.m_object_death_event_trigger_index + 1) as u32, 9)?;
+        bitstream.write_integer((self.m_local_trigger_index + 1) as u32, 9)?;
+        bitstream.write_integer((self.m_pregame_trigger_index + 1) as u32, 9)?;
 
         for object_type in self.m_objects_used.get() {
             bitstream.write_bool(*object_type)?
@@ -2962,13 +2962,13 @@ impl s_custom_game_engine_definition {
             self.m_hud_widgets.push(bitstream.read_enum("position")?);
         }
 
-        self.m_initialization_trigger_index = bitstream.read_integer("initial-trigger-index", 9)?;
-        self.m_local_initialization_trigger_index = bitstream.read_integer("local-initialization-trigger-index", 9)?;
-        self.m_host_migration_trigger_index = bitstream.read_integer("host-migration-trigger-index", 9)?;
-        self.m_double_migration_trigger_index = bitstream.read_integer("double-migration-trigger-index", 9)?;
-        self.m_object_death_event_trigger_index = bitstream.read_integer("death-event-trigger-index", 9)?;
-        self.m_local_trigger_index = bitstream.read_integer("local-trigger-index", 9)?;
-        self.m_pregame_trigger_index = bitstream.read_integer("pregame-trigger-index", 9)?;
+        self.m_initialization_trigger_index = bitstream.read_integer::<i32>("initial-trigger-index", 9)? as i16 - 1;
+        self.m_local_initialization_trigger_index = bitstream.read_integer::<i32>("local-initialization-trigger-index", 9)? as i16 - 1;
+        self.m_host_migration_trigger_index = bitstream.read_integer::<i32>("host-migration-trigger-index", 9)? as i16 - 1;
+        self.m_double_migration_trigger_index = bitstream.read_integer::<i32>("double-migration-trigger-index", 9)? as i16 - 1;
+        self.m_object_death_event_trigger_index = bitstream.read_integer::<i32>("death-event-trigger-index", 9)? as i16 - 1;
+        self.m_local_trigger_index = bitstream.read_integer::<i32>("local-trigger-index", 9)? as i16 - 1;
+        self.m_pregame_trigger_index = bitstream.read_integer::<i32>("pregame-trigger-index", 9)? as i16 - 1;
 
         for i in 0..2048 {
             self.m_objects_used[i] = bitstream.read_bool("object-types-used")?;

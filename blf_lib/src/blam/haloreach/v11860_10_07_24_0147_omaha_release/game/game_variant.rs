@@ -38,8 +38,8 @@ pub struct c_game_engine_custom_variant {
     pub m_localized_name: c_string_table<1, 0x180, 9, 9, 1>,
     pub m_localized_description: c_string_table<1, 0xC00, 12, 12, 1>,
     pub m_localized_category: c_string_table<1, 0x180, 9, 9, 1>,
-    pub m_engine_icon: u8,
-    pub m_engine_category: u8,
+    pub m_engine_icon: i8,
+    pub m_engine_category: i8,
     pub m_map_permissions: c_megalogamengine_map_permissions,
     pub m_player_ratings: s_game_engine_player_rating_parameters,
     pub m_score_to_win_round: u16,
@@ -80,8 +80,8 @@ impl c_game_engine_custom_variant {
         self.m_localized_name.encode(bitstream)?;
         self.m_localized_description.encode(bitstream)?;
         self.m_localized_category.encode(bitstream)?;
-        bitstream.write_integer(self.m_engine_icon, 5)?;
-        bitstream.write_integer(self.m_engine_category, 5)?;
+        bitstream.write_integer((self.m_engine_icon + 1) as u32, 5)?;
+        bitstream.write_integer((self.m_engine_category + 1) as u32, 5)?;
         self.m_map_permissions.encode(bitstream)?;
         self.m_player_ratings.encode(bitstream)?;
         bitstream.write_signed_integer(self.m_score_to_win_round, 16)?;
@@ -121,8 +121,8 @@ impl c_game_engine_custom_variant {
         self.m_localized_name.decode(bitstream)?;
         self.m_localized_description.decode(bitstream)?;
         self.m_localized_category.decode(bitstream)?;
-        self.m_engine_icon = bitstream.read_integer("engine-icon-index", 5)?;
-        self.m_engine_category = bitstream.read_integer("engine-category", 5)?;
+        self.m_engine_icon = bitstream.read_integer::<i32>("engine-icon-index", 5)? as i8 - 1;
+        self.m_engine_category = bitstream.read_integer::<i32>("engine-category", 5)? as i8 - 1;
         self.m_map_permissions.decode(bitstream)?;
         self.m_player_ratings.decode(bitstream)?;
         self.m_score_to_win_round = bitstream.read_signed_integer("score-to-win-round", 16)?;

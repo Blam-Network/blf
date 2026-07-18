@@ -117,34 +117,20 @@ export class s_custom_game_engine_definition {
         bitstream.read_enum("position", 4, e_megalo_widget_position)
       );
     }
-    this.m_initialization_trigger_index = bitstream.read_signed_integer(
-      "initial-trigger-index",
-      9
-    );
-    this.m_local_initialization_trigger_index = bitstream.read_signed_integer(
-      "local-initialization-trigger-index",
-      9
-    );
-    this.m_host_migration_trigger_index = bitstream.read_signed_integer(
-      "host-migration-trigger-index",
-      9
-    );
-    this.m_double_migration_trigger_index = bitstream.read_signed_integer(
-      "double-migration-trigger-index",
-      9
-    );
-    this.m_object_death_event_trigger_index = bitstream.read_signed_integer(
-      "death-event-trigger-index",
-      9
-    );
-    this.m_local_trigger_index = bitstream.read_signed_integer(
-      "local-trigger-index",
-      9
-    );
-    this.m_pregame_trigger_index = bitstream.read_signed_integer(
-      "pregame-trigger-index",
-      9
-    );
+    this.m_initialization_trigger_index =
+      bitstream.read_integer("initial-trigger-index", 9) - 1;
+    this.m_local_initialization_trigger_index =
+      bitstream.read_integer("local-initialization-trigger-index", 9) - 1;
+    this.m_host_migration_trigger_index =
+      bitstream.read_integer("host-migration-trigger-index", 9) - 1;
+    this.m_double_migration_trigger_index =
+      bitstream.read_integer("double-migration-trigger-index", 9) - 1;
+    this.m_object_death_event_trigger_index =
+      bitstream.read_integer("death-event-trigger-index", 9) - 1;
+    this.m_local_trigger_index =
+      bitstream.read_integer("local-trigger-index", 9) - 1;
+    this.m_pregame_trigger_index =
+      bitstream.read_integer("pregame-trigger-index", 9) - 1;
     for (let i = 0; i < 2048; i++) {
       this.m_objects_used[i] = bitstream.read_bool("object-types-used");
     }
@@ -183,16 +169,13 @@ export class s_custom_game_engine_definition {
     for (const widget of this.m_hud_widgets) {
       bitstream.write_enum(widget, 4, e_megalo_widget_position);
     }
-    bitstream.write_signed_integer(this.m_initialization_trigger_index, 9);
-    bitstream.write_signed_integer(
-      this.m_local_initialization_trigger_index,
-      9
-    );
-    bitstream.write_signed_integer(this.m_host_migration_trigger_index, 9);
-    bitstream.write_signed_integer(this.m_double_migration_trigger_index, 9);
-    bitstream.write_signed_integer(this.m_object_death_event_trigger_index, 9);
-    bitstream.write_signed_integer(this.m_local_trigger_index, 9);
-    bitstream.write_signed_integer(this.m_pregame_trigger_index, 9);
+    bitstream.write_integer(this.m_initialization_trigger_index + 1, 9);
+    bitstream.write_integer(this.m_local_initialization_trigger_index + 1, 9);
+    bitstream.write_integer(this.m_host_migration_trigger_index + 1, 9);
+    bitstream.write_integer(this.m_double_migration_trigger_index + 1, 9);
+    bitstream.write_integer(this.m_object_death_event_trigger_index + 1, 9);
+    bitstream.write_integer(this.m_local_trigger_index + 1, 9);
+    bitstream.write_integer(this.m_pregame_trigger_index + 1, 9);
     for (const used of this.m_objects_used) {
       bitstream.write_bool(used);
     }
@@ -1732,8 +1715,8 @@ export class c_game_engine_custom_variant {
     this.m_localized_name.decode(bitstream);
     this.m_localized_description.decode(bitstream);
     this.m_localized_category.decode(bitstream);
-    this.m_engine_icon = bitstream.read_integer("engine-icon-index", 5);
-    this.m_engine_category = bitstream.read_integer("engine-category", 5);
+    this.m_engine_icon = bitstream.read_integer("engine-icon-index", 5) - 1;
+    this.m_engine_category = bitstream.read_integer("engine-category", 5) - 1;
     this.m_map_permissions.decode(bitstream);
     this.m_player_ratings.decode(bitstream);
     this.m_score_to_win_round = bitstream.read_signed_integer(
@@ -1784,8 +1767,8 @@ export class c_game_engine_custom_variant {
     this.m_localized_name.encode(bitstream);
     this.m_localized_description.encode(bitstream);
     this.m_localized_category.encode(bitstream);
-    bitstream.write_integer(this.m_engine_icon, 5);
-    bitstream.write_integer(this.m_engine_category, 5);
+    bitstream.write_integer(this.m_engine_icon + 1, 5);
+    bitstream.write_integer(this.m_engine_category + 1, 5);
     this.m_map_permissions.encode(bitstream);
     this.m_player_ratings.encode(bitstream);
     bitstream.write_signed_integer(this.m_score_to_win_round, 16);
