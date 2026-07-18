@@ -600,7 +600,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           "m_round_reset_map": true,
           "m_round_reset_players": true,
           "m_round_time_limit_minutes": 4,
-          "m_sudden_death_time": 31,
+          "m_sudden_death_time": 30,
           "m_teams_enabled": true,
         },
         "m_respawn_options": {

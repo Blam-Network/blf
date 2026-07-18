@@ -11,7 +11,7 @@ pub struct c_game_engine_miscellaneous_options {
     pub m_round_time_limit_minutes: u8,
     pub m_round_limit: u8,
     pub m_early_victory_win_count: u8,
-    pub m_sudden_death_time: u8,
+    pub m_sudden_death_time: i8,
     pub m_grace_period: u8,
 }
 
@@ -23,7 +23,7 @@ impl c_game_engine_miscellaneous_options {
         bitstream.write_integer(self.m_round_time_limit_minutes as u32, 8)?;
         bitstream.write_integer(self.m_round_limit as u32, 4)?;
         bitstream.write_integer(self.m_early_victory_win_count as u32, 4)?;
-        bitstream.write_integer(self.m_sudden_death_time, 7)?;
+        bitstream.write_integer((self.m_sudden_death_time + 1) as u32, 7)?;
         bitstream.write_integer(self.m_grace_period, 5)?;
 
         Ok(())
@@ -36,7 +36,7 @@ impl c_game_engine_miscellaneous_options {
         self.m_round_time_limit_minutes = bitstream.read_integer("miscellaneous-options-round-time-limit-minutes", 8)?;
         self.m_round_limit = bitstream.read_integer("miscellaneous-options-round-limit", 4)?;
         self.m_early_victory_win_count = bitstream.read_integer("miscellaneous-options-early-victory-win-count", 4)?;
-        self.m_sudden_death_time = bitstream.read_integer("sudden-death-time-limit", 7)?;
+        self.m_sudden_death_time = bitstream.read_integer::<i32>("sudden-death-time-limit", 7)? as i8 - 1;
         self.m_grace_period = bitstream.read_integer("grace-period", 5)?;
 
         Ok(())

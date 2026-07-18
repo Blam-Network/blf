@@ -600,7 +600,7 @@ exports[`haloreach_gea0_map.blf > reads mpvr (game variant) 1`] = `
           "m_round_reset_map": true,
           "m_round_reset_players": true,
           "m_round_time_limit_minutes": 10,
-          "m_sudden_death_time": 1,
+          "m_sudden_death_time": 0,
           "m_teams_enabled": true,
         },
         "m_respawn_options": {

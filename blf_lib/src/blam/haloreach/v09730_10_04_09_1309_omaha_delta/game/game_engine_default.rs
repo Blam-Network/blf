@@ -77,7 +77,7 @@ impl c_game_engine_base_variant {
         self.m_miscellaneous_options.m_round_time_limit_minutes = 8;
         self.m_miscellaneous_options.m_round_limit = 1;
         self.m_miscellaneous_options.m_early_victory_win_count = 2;
-        self.m_miscellaneous_options.m_sudden_death_time = 1;
+        self.m_miscellaneous_options.m_sudden_death_time = 0;
         self.m_respawn_options.m_respawn_time_seconds = 5;
         self.m_respawn_options.m_suicide_penalty_seconds = 5;
         self.m_respawn_options.m_betrayal_penalty_seconds = 5;

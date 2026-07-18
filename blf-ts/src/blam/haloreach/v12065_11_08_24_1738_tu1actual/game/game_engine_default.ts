@@ -113,7 +113,7 @@ export class c_game_engine_miscellaneous_options {
   @AutoMap(() => Number)
   m_early_victory_win_count = 0;
   @AutoMap(() => Number)
-  m_sudden_death_time = 1;
+  m_sudden_death_time = 0;
   @AutoMap(() => Number)
   m_grace_period = 0;
   initialize(): void {
@@ -124,7 +124,7 @@ export class c_game_engine_miscellaneous_options {
     this.m_round_time_limit_minutes = 8;
     this.m_round_limit = 1;
     this.m_early_victory_win_count = 2;
-    this.m_sudden_death_time = 1;
+    this.m_sudden_death_time = 0;
     this.m_grace_period = 0;
   }
   decode(bitstream: c_bitstream_reader): void {
@@ -150,10 +150,8 @@ export class c_game_engine_miscellaneous_options {
       "miscellaneous-options-early-victory-win-count",
       4
     );
-    this.m_sudden_death_time = bitstream.read_integer(
-      "sudden-death-time-limit",
-      7
-    );
+    this.m_sudden_death_time =
+      bitstream.read_integer("sudden-death-time-limit", 7) - 1;
     this.m_grace_period = bitstream.read_integer("grace-period", 5);
   }
   encode(bitstream: c_bitstream_writer): void {
@@ -164,7 +162,7 @@ export class c_game_engine_miscellaneous_options {
     bitstream.write_integer(this.m_round_time_limit_minutes, 8);
     bitstream.write_integer(this.m_round_limit, 5);
     bitstream.write_integer(this.m_early_victory_win_count, 4);
-    bitstream.write_integer(this.m_sudden_death_time, 7);
+    bitstream.write_integer(this.m_sudden_death_time + 1, 7);
     bitstream.write_integer(this.m_grace_period, 5);
   }
 }
