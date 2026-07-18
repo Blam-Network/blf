@@ -1514,13 +1514,13 @@ export class c_game_engine_custom_variant_tu1_settings {
   @AutoMap(() => Number)
   m_precision_bloom = 1;
   @AutoMap(() => Number)
-  m_active_camo_energy_curve_min = 0;
-  @AutoMap(() => Number)
-  m_active_camo_energy_curve_max = 0;
-  @AutoMap(() => Number)
   m_armor_lock_damage_drain = 0.2;
   @AutoMap(() => Number)
   m_armor_lock_damage_drain_limit = 0.7;
+  @AutoMap(() => Number)
+  m_active_camo_energy_curve_min = 0;
+  @AutoMap(() => Number)
+  m_active_camo_energy_curve_max = 0;
   @AutoMap(() => Number)
   m_magnum_damage = 1;
   @AutoMap(() => Number)
@@ -1540,20 +1540,6 @@ export class c_game_engine_custom_variant_tu1_settings {
       false,
       true
     );
-    this.m_active_camo_energy_curve_min = bitstream.read_quantized_real(
-      0,
-      2,
-      8,
-      false,
-      true
-    );
-    this.m_active_camo_energy_curve_max = bitstream.read_quantized_real(
-      0,
-      2,
-      8,
-      false,
-      true
-    );
     this.m_armor_lock_damage_drain = bitstream.read_quantized_real(
       0,
       2,
@@ -1562,6 +1548,20 @@ export class c_game_engine_custom_variant_tu1_settings {
       true
     );
     this.m_armor_lock_damage_drain_limit = bitstream.read_quantized_real(
+      0,
+      2,
+      8,
+      false,
+      true
+    );
+    this.m_active_camo_energy_curve_min = bitstream.read_quantized_real(
+      0,
+      2,
+      8,
+      false,
+      true
+    );
+    this.m_active_camo_energy_curve_max = bitstream.read_quantized_real(
       0,
       2,
       8,
@@ -1591,22 +1591,6 @@ export class c_game_engine_custom_variant_tu1_settings {
       true
     );
     bitstream.write_quantized_real(
-      this.m_active_camo_energy_curve_min,
-      0,
-      2,
-      8,
-      false,
-      true
-    );
-    bitstream.write_quantized_real(
-      this.m_active_camo_energy_curve_max,
-      0,
-      2,
-      8,
-      false,
-      true
-    );
-    bitstream.write_quantized_real(
       this.m_armor_lock_damage_drain,
       0,
       2,
@@ -1616,6 +1600,22 @@ export class c_game_engine_custom_variant_tu1_settings {
     );
     bitstream.write_quantized_real(
       this.m_armor_lock_damage_drain_limit,
+      0,
+      2,
+      8,
+      false,
+      true
+    );
+    bitstream.write_quantized_real(
+      this.m_active_camo_energy_curve_min,
+      0,
+      2,
+      8,
+      false,
+      true
+    );
+    bitstream.write_quantized_real(
+      this.m_active_camo_energy_curve_max,
       0,
       2,
       8,

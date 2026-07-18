@@ -3002,10 +3002,10 @@ bitfield! {
 pub struct c_game_engine_custom_variant_tu1_settings {
     pub m_flags: e_game_variant_tu1_flags,
     pub m_precision_bloom: Float32,
-    pub m_active_camo_energy_curve_min: Float32,
-    pub m_active_camo_energy_curve_max: Float32,
     pub m_armor_lock_damage_drain: Float32,
     pub m_armor_lock_damage_drain_limit: Float32,
+    pub m_active_camo_energy_curve_min: Float32,
+    pub m_active_camo_energy_curve_max: Float32,
     pub m_magnum_damage: Float32,
     pub m_magnum_fire_delay: Float32,
 }
@@ -3015,10 +3015,10 @@ impl Default for c_game_engine_custom_variant_tu1_settings {
         Self {
             m_flags: e_game_variant_tu1_flags::default(),
             m_precision_bloom: Float32(1.0),
-            m_active_camo_energy_curve_min: Float32(0.2),
-            m_active_camo_energy_curve_max: Float32(0.7),
-            m_armor_lock_damage_drain: Float32(0.0),
-            m_armor_lock_damage_drain_limit: Float32(0.0),
+            m_armor_lock_damage_drain: Float32(0.2),
+            m_armor_lock_damage_drain_limit: Float32(0.7),
+            m_active_camo_energy_curve_min: Float32(0.0),
+            m_active_camo_energy_curve_max: Float32(0.0),
             m_magnum_damage: Float32(1.0),
             m_magnum_fire_delay: Float32(1.0),
         }
@@ -3033,10 +3033,10 @@ impl c_game_engine_custom_variant_tu1_settings {
     pub fn encode(&self, mut bitstream: &mut c_bitstream_writer) -> BLFLibResult {
         bitstream.write_integer(self.m_flags.to_raw(), 32)?;
         bitstream.write_quantized_real(self.m_precision_bloom, 0f32, 2f32, 8, false, true)?;
-        bitstream.write_quantized_real(self.m_active_camo_energy_curve_min, 0f32, 2f32, 8, false, true)?;
-        bitstream.write_quantized_real(self.m_active_camo_energy_curve_max, 0f32, 2f32, 8, false, true)?;
         bitstream.write_quantized_real(self.m_armor_lock_damage_drain, 0f32, 2f32, 8, false, true)?;
         bitstream.write_quantized_real(self.m_armor_lock_damage_drain_limit, 0f32, 2f32, 8, false, true)?;
+        bitstream.write_quantized_real(self.m_active_camo_energy_curve_min, 0f32, 2f32, 8, false, true)?;
+        bitstream.write_quantized_real(self.m_active_camo_energy_curve_max, 0f32, 2f32, 8, false, true)?;
         bitstream.write_quantized_real(self.m_magnum_damage, 0f32, 10f32, 8, false, true)?;
         bitstream.write_quantized_real(self.m_magnum_fire_delay, 0f32, 10f32, 8, false, true)?;
 
@@ -3046,10 +3046,10 @@ impl c_game_engine_custom_variant_tu1_settings {
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
         self.m_flags = e_game_variant_tu1_flags::from_raw(bitstream.read_integer("flags", 32)?);
         self.m_precision_bloom = bitstream.read_quantized_real(0f32, 2f32, 8, false, true)?;
-        self.m_active_camo_energy_curve_min = bitstream.read_quantized_real(0f32, 2f32, 8, false, true)?;
-        self.m_active_camo_energy_curve_max = bitstream.read_quantized_real(0f32, 2f32, 8, false, true)?;
         self.m_armor_lock_damage_drain = bitstream.read_quantized_real(0f32, 2f32, 8, false, true)?;
         self.m_armor_lock_damage_drain_limit = bitstream.read_quantized_real(0f32, 2f32, 8, false, true)?;
+        self.m_active_camo_energy_curve_min = bitstream.read_quantized_real(0f32, 2f32, 8, false, true)?;
+        self.m_active_camo_energy_curve_max = bitstream.read_quantized_real(0f32, 2f32, 8, false, true)?;
         self.m_magnum_damage = bitstream.read_quantized_real(0f32, 10f32, 8, false, true)?;
         self.m_magnum_fire_delay = bitstream.read_quantized_real(0f32, 10f32, 8, false, true)?;
 
