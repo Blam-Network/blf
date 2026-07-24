@@ -1,4 +1,5 @@
 use serde::{Deserialize, Serialize};
+use num_traits::FromPrimitive;
 use blf_lib::blam::halo3::v12070_08_09_05_2031_halo3_ship::memory::bitstream_reader::c_bitstream_reader_extensions;
 use blf_lib::blam::haloreach::v09730_10_04_09_1309_omaha_delta::game::game_engine_player_traits::{c_player_trait_appearance, c_player_trait_movement, c_player_trait_sensors, c_player_trait_weapons};
 use blf_lib::io::bitstream::{c_bitstream_reader, c_bitstream_writer};
@@ -57,7 +58,7 @@ impl c_player_traits {
         } else {
             bitstream.write_bool(false)?;
         }
-        bitstream.write_integer(self.m_appearance_traits.m_active_camo_setting, 3)?;
+        bitstream.write_integer(self.m_appearance_traits.m_active_camo_setting as u8, 3)?;
         bitstream.write_integer(self.m_appearance_traits.m_waypoint_setting, 2)?;
         bitstream.write_integer(self.m_appearance_traits.m_gamertag_setting, 2)?;
         bitstream.write_integer(self.m_appearance_traits.m_aura_setting, 3)?;
@@ -99,7 +100,9 @@ impl c_player_traits {
         } else {
             self.m_movement_traits.m_jump_modifier = -1.0;
         }
-        self.m_appearance_traits.m_active_camo_setting = bitstream.read_integer("player-traits-appearance-active-camo", 3)?;
+        self.m_appearance_traits.m_active_camo_setting = FromPrimitive::from_u8(
+            bitstream.read_integer("player-traits-appearance-active-camo", 3)?
+        ).unwrap_or_default();
         self.m_appearance_traits.m_waypoint_setting = bitstream.read_integer("player-traits-appearance-waypoint", 2)?;
         self.m_appearance_traits.m_gamertag_setting = bitstream.read_integer("player-traits-appearance-gamertag", 2)?;
         self.m_appearance_traits.m_aura_setting = bitstream.read_integer("player-traits-appearance-aura", 3)?;

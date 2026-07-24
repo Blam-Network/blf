@@ -1,9 +1,24 @@
 use serde::{Deserialize, Serialize};
+use num_derive::{FromPrimitive, ToPrimitive};
+use num_traits::FromPrimitive;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::game_engine_player_traits::c_player_trait_shield_vitality;
 use blf_lib::blam::halo3::v12070_08_09_05_2031_halo3_ship::memory::bitstream_reader::c_bitstream_reader_extensions;
 use blf_lib::io::bitstream::{c_bitstream_reader, c_bitstream_writer};
 use blf_lib_derivable::result::BLFLibResult;
 use crate::blam::halo3::v12070_08_09_05_2031_halo3_ship::memory::bitstream_writer::c_bitstream_writer_extensions;
+
+/// Active camo preset (`m_active_camo_setting`, 3 bits).
+#[repr(u8)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, Default, ToPrimitive, FromPrimitive)]
+pub enum e_active_camo_setting {
+    #[default]
+    off = 0,
+    on = 1,
+    poor = 2,
+    good = 3,
+    excellent = 4,
+    invisible = 5,
+}
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct c_player_trait_weapons {
@@ -33,7 +48,7 @@ pub struct c_player_trait_movement {
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct c_player_trait_appearance {
-    pub m_active_camo_setting: u8,
+    pub m_active_camo_setting: e_active_camo_setting,
     pub m_waypoint_setting: u8,
     pub m_gamertag_setting: u8,
     pub m_aura_setting: u8,
@@ -91,7 +106,7 @@ impl c_player_traits {
         } else {
             bitstream.write_bool(false)?;
         }
-        bitstream.write_integer(self.m_appearance_traits.m_active_camo_setting, 3)?;
+        bitstream.write_integer(self.m_appearance_traits.m_active_camo_setting as u8, 3)?;
         bitstream.write_integer(self.m_appearance_traits.m_waypoint_setting, 2)?;
         bitstream.write_integer(self.m_appearance_traits.m_gamertag_setting, 2)?;
         bitstream.write_integer(self.m_appearance_traits.m_aura_setting, 3)?;
@@ -136,7 +151,9 @@ impl c_player_traits {
         } else {
             self.m_movement_traits.m_jump_modifier = -1.0;
         }
-        self.m_appearance_traits.m_active_camo_setting = bitstream.read_integer("player-traits-appearance-active-camo", 3)?;
+        self.m_appearance_traits.m_active_camo_setting = FromPrimitive::from_u8(
+            bitstream.read_integer("player-traits-appearance-active-camo", 3)?
+        ).unwrap_or_default();
         self.m_appearance_traits.m_waypoint_setting = bitstream.read_integer("player-traits-appearance-waypoint", 2)?;
         self.m_appearance_traits.m_gamertag_setting = bitstream.read_integer("player-traits-appearance-gamertag", 2)?;
         self.m_appearance_traits.m_aura_setting = bitstream.read_integer("player-traits-appearance-aura", 3)?;

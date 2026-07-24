@@ -47,12 +47,21 @@ export enum e_waypoint_setting {
   allies = 2,
   all = 3,
 }
+/** Active camo preset (`m_active_camo_setting`, 3 bits). */
+export enum e_active_camo_setting {
+  off = 0,
+  on = 1,
+  poor = 2,
+  good = 3,
+  excellent = 4,
+  invisible = 5,
+}
 /** Double jump preset (`m_double_jump_setting`, 2 bits). */
 export enum e_double_jump_setting {
   unchanged = 0,
   off = 1,
   on = 2,
-  on_lunge = 3,
+  triple = 3,
 }
 /** Player aura color preset (`m_aura_setting`, 3 bits). */
 export enum e_aura_setting {
@@ -152,8 +161,8 @@ export class c_player_trait_movement {
   m_jump_modifier = -1;
 }
 export class c_player_trait_appearance {
-  @AutoMap(() => Number)
-  m_active_camo_setting = 0;
+  @AutoMap(() => e_active_camo_setting)
+  m_active_camo_setting: e_active_camo_setting = e_active_camo_setting.off;
   @AutoMap(() => e_waypoint_setting)
   m_waypoint_setting: e_waypoint_setting = e_waypoint_setting.unchanged;
   @AutoMap(() => e_waypoint_setting)
@@ -287,9 +296,10 @@ export class c_player_traits {
       m.m_jump_modifier = -1;
     }
     const a = this.m_appearance_traits;
-    a.m_active_camo_setting = bitstream.read_integer(
+    a.m_active_camo_setting = bitstream.read_enum(
       "player-traits-appearance-active-camo",
-      3
+      3,
+      e_active_camo_setting
     );
     a.m_waypoint_setting = bitstream.read_enum(
       "player-traits-appearance-waypoint",
@@ -426,7 +436,11 @@ export class c_player_traits {
       bitstream.write_bool(true);
       bitstream.write_integer(this.m_movement_traits.m_jump_modifier, 9);
     }
-    bitstream.write_integer(this.m_appearance_traits.m_active_camo_setting, 3);
+    bitstream.write_enum(
+      this.m_appearance_traits.m_active_camo_setting,
+      3,
+      e_active_camo_setting
+    );
     bitstream.write_enum(
       this.m_appearance_traits.m_waypoint_setting,
       2,

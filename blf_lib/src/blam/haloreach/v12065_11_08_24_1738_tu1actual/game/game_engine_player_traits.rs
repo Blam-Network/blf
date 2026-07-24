@@ -65,6 +65,20 @@ pub enum e_waypoint_setting {
     all = 3,
 }
 
+/// Active camo preset (`m_active_camo_setting`, 3 bits).
+#[repr(u8)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, Default, ToPrimitive, FromPrimitive, crate::derive::c_enum)]
+#[bits(3)]
+pub enum e_active_camo_setting {
+    #[default]
+    off = 0,
+    on = 1,
+    poor = 2,
+    good = 3,
+    excellent = 4,
+    invisible = 5,
+}
+
 /// Double jump preset (`m_double_jump_setting`, 2 bits).
 #[repr(u8)]
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, Default, ToPrimitive, FromPrimitive, crate::derive::c_enum)]
@@ -74,7 +88,7 @@ pub enum e_double_jump_setting {
     unchanged = 0,
     off = 1,
     on = 2,
-    on_lunge = 3,
+    triple = 3,
 }
 
 /// Player aura color preset (`m_aura_setting`, 3 bits).
@@ -166,7 +180,7 @@ pub struct c_player_trait_movement {
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct c_player_trait_appearance {
-    pub m_active_camo_setting: u8,
+    pub m_active_camo_setting: e_active_camo_setting,
     pub m_waypoint_setting: e_waypoint_setting,
     pub m_gamertag_setting: e_waypoint_setting,
     pub m_aura_setting: e_aura_setting,
@@ -223,7 +237,7 @@ impl c_player_traits {
         } else {
             bitstream.write_bool(false)?;
         }
-        bitstream.write_integer(self.m_appearance_traits.m_active_camo_setting, 3)?;
+        bitstream.write_enum(self.m_appearance_traits.m_active_camo_setting)?;
         bitstream.write_enum(self.m_appearance_traits.m_waypoint_setting)?;
         bitstream.write_enum(self.m_appearance_traits.m_gamertag_setting)?;
         bitstream.write_enum(self.m_appearance_traits.m_aura_setting)?;
@@ -267,7 +281,7 @@ impl c_player_traits {
         } else {
             self.m_movement_traits.m_jump_modifier = -1;
         }
-        self.m_appearance_traits.m_active_camo_setting = bitstream.read_integer("player-traits-appearance-active-camo", 3)?;
+        self.m_appearance_traits.m_active_camo_setting = bitstream.read_enum("player-traits-appearance-active-camo")?;
         self.m_appearance_traits.m_waypoint_setting = bitstream.read_enum("player-traits-appearance-waypoint")?;
         self.m_appearance_traits.m_gamertag_setting = bitstream.read_enum("player-traits-appearance-gamertag")?;
         self.m_appearance_traits.m_aura_setting = bitstream.read_enum("player-traits-appearance-aura")?;

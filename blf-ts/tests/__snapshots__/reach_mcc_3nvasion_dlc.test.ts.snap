@@ -342,7 +342,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
         "m_map_override_options": {
           "m_base_player_traits": {
             "m_appearance_traits": {
-              "m_active_camo_setting": 0,
+              "m_active_camo_setting": "off",
               "m_aura_setting": "unchanged",
               "m_forced_change_color_setting": "unchanged",
               "m_gamertag_setting": "unchanged",
@@ -390,7 +390,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           "m_blue_powerup_duration_seconds": 15,
           "m_blue_powerup_traits": {
             "m_appearance_traits": {
-              "m_active_camo_setting": 3,
+              "m_active_camo_setting": "good",
               "m_aura_setting": "unchanged",
               "m_forced_change_color_setting": "unchanged",
               "m_gamertag_setting": "unchanged",
@@ -446,7 +446,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           "m_red_powerup_duration_seconds": 6,
           "m_red_powerup_traits": {
             "m_appearance_traits": {
-              "m_active_camo_setting": 0,
+              "m_active_camo_setting": "off",
               "m_aura_setting": "unchanged",
               "m_forced_change_color_setting": "unchanged",
               "m_gamertag_setting": "unchanged",
@@ -496,7 +496,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           "m_yellow_powerup_duration_seconds": 10,
           "m_yellow_powerup_traits": {
             "m_appearance_traits": {
-              "m_active_camo_setting": 0,
+              "m_active_camo_setting": "off",
               "m_aura_setting": "unchanged",
               "m_forced_change_color_setting": "unchanged",
               "m_gamertag_setting": "unchanged",
@@ -613,7 +613,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           "m_respawn_on_kills": false,
           "m_respawn_player_traits": {
             "m_appearance_traits": {
-              "m_active_camo_setting": 0,
+              "m_active_camo_setting": "off",
               "m_aura_setting": "unchanged",
               "m_forced_change_color_setting": "unchanged",
               "m_gamertag_setting": "unchanged",
@@ -25174,7 +25174,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           "m_name_string_index": 60,
           "m_player_traits": {
             "m_appearance_traits": {
-              "m_active_camo_setting": 0,
+              "m_active_camo_setting": "off",
               "m_aura_setting": "unchanged",
               "m_forced_change_color_setting": "unchanged",
               "m_gamertag_setting": "unchanged",
@@ -25225,7 +25225,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           "m_name_string_index": 62,
           "m_player_traits": {
             "m_appearance_traits": {
-              "m_active_camo_setting": 0,
+              "m_active_camo_setting": "off",
               "m_aura_setting": "unchanged",
               "m_forced_change_color_setting": "unchanged",
               "m_gamertag_setting": "unchanged",
