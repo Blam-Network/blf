@@ -207,6 +207,7 @@ export class c_game_engine_respawn_options {
     this.m_loadout_cam_time = 10;
     this.m_respawn_player_traits_duration_seconds = 5;
     this.m_respawn_player_traits = new c_player_traits();
+    this.m_respawn_player_traits.clear();
   }
   decode(bitstream: c_bitstream_reader): void {
     this.m_inherit_respawn_time = bitstream.read_bool(
@@ -343,11 +344,15 @@ export class c_game_engine_map_override_options {
   initialize(): void {
     this.m_flags = new e_map_override_option_flags();
     this.m_base_player_traits = new c_player_traits();
+    this.m_base_player_traits.clear();
     this.m_weapon_set_absolute_index = -2;
     this.m_vehicle_set_absolute_index = -2;
     this.m_red_powerup_traits = new c_player_traits();
+    this.m_red_powerup_traits.clear();
     this.m_blue_powerup_traits = new c_player_traits();
+    this.m_blue_powerup_traits.clear();
     this.m_yellow_powerup_traits = new c_player_traits();
+    this.m_yellow_powerup_traits.clear();
     this.m_red_powerup_duration_seconds = 5;
     this.m_blue_powerup_duration_seconds = 30;
     this.m_yellow_powerup_duration_seconds = 30;

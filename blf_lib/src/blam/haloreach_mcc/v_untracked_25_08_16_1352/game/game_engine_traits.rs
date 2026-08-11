@@ -81,6 +81,7 @@ impl c_game_engine_respawn_options {
         self.m_betrayal_penalty_seconds = 5;
         self.m_loadout_cam_time = 10;
         self.m_respawn_player_traits_duration_seconds = 5;
+        self.m_respawn_player_traits.clear();
     }
 
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {

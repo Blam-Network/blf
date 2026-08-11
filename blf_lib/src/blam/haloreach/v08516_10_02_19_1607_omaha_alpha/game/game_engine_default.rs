@@ -81,10 +81,15 @@ impl c_game_engine_base_variant {
         self.m_respawn_options.m_betrayal_penalty_seconds = 5;
         self.m_respawn_options.m_loadout_cam_time = 10;
         self.m_respawn_options.m_respawn_player_traits_duration_seconds = 5;
+        self.m_respawn_options.m_respawn_player_traits.clear();
         self.m_social_options.initialize();
         self.m_map_override_options.m_flags = 31;
+        self.m_map_override_options.m_base_player_traits.clear();
         self.m_map_override_options.m_weapon_set_absolute_index = -2;
         self.m_map_override_options.m_vehicle_set_absolute_index = -2;
+        self.m_map_override_options.m_red_powerup_traits.clear();
+        self.m_map_override_options.m_blue_powerup_traits.clear();
+        self.m_map_override_options.m_yellow_powerup_traits.clear();
         self.m_map_override_options.m_red_powerup_duration_seconds = 5;
         self.m_map_override_options.m_blue_powerup_duration_seconds = 30;
         self.m_map_override_options.m_yellow_powerup_duration_seconds = 30;

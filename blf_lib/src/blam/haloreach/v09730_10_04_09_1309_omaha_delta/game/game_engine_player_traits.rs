@@ -35,6 +35,22 @@ pub struct c_player_trait_weapons {
     pub m_initial_equipment_absolute_index: i8,
 }
 
+impl c_player_trait_weapons {
+    pub fn clear(&mut self) {
+        self.m_damage_modifier_percentage_setting = 0;
+        self.m_melee_damage_modifier_percentage_setting = 0;
+        self.m_initial_grenade_count_setting = 0;
+        self.m_infinite_ammo_setting = 0;
+        self.m_recharging_grenades_setting = 0;
+        self.m_weapon_pickup_setting = 0;
+        self.m_equipment_drop_on_death_setting = 0;
+        self.m_infinite_equipment_setting = 0;
+        self.m_initial_primary_weapon_absolute_index = -3;
+        self.m_initial_secondary_weapon_absolute_index = -3;
+        self.m_initial_equipment_absolute_index = -3;
+    }
+}
+
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct c_player_trait_movement {
     pub m_speed_setting: u8,
@@ -46,6 +62,18 @@ pub struct c_player_trait_movement {
     pub m_jump_modifier: f32,
 }
 
+impl c_player_trait_movement {
+    pub fn clear(&mut self) {
+        self.m_speed_setting = 0;
+        self.m_gravity_setting = 0;
+        self.m_vehicle_usage_setting = 0;
+        self.m_double_jump_setting = 0;
+        self.m_sprint_setting = 0;
+        self.m_equipment_usage_setting = 0;
+        self.m_jump_modifier = -1.0;
+    }
+}
+
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct c_player_trait_appearance {
     pub m_active_camo_setting: e_active_camo_setting,
@@ -55,11 +83,29 @@ pub struct c_player_trait_appearance {
     pub m_forced_change_color_setting: u8,
 }
 
+impl c_player_trait_appearance {
+    pub fn clear(&mut self) {
+        self.m_active_camo_setting = e_active_camo_setting::off;
+        self.m_waypoint_setting = 0;
+        self.m_gamertag_setting = 0;
+        self.m_aura_setting = 0;
+        self.m_forced_change_color_setting = 0;
+    }
+}
+
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct c_player_trait_sensors {
     pub m_motion_tracker_setting: u16,
     pub m_motion_tracker_range_setting: u16,
     pub m_directional_damage_setting: u16,
+}
+
+impl c_player_trait_sensors {
+    pub fn clear(&mut self) {
+        self.m_motion_tracker_setting = 0;
+        self.m_motion_tracker_range_setting = 0;
+        self.m_directional_damage_setting = 0;
+    }
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
@@ -72,17 +118,25 @@ pub struct c_player_traits {
 }
 
 impl c_player_traits {
+    pub fn clear(&mut self) {
+        self.m_shield_vitality_traits.clear();
+        self.m_weapon_traits.clear();
+        self.m_movement_traits.clear();
+        self.m_appearance_traits.clear();
+        self.m_sensor_traits.clear();
+    }
+
     pub fn encode(&self, mut bitstream: &mut c_bitstream_writer) -> BLFLibResult {
-        bitstream.write_integer(self.m_shield_vitality_traits.m_damage_resistance_percentage_setting, 4)?;
-        bitstream.write_integer(self.m_shield_vitality_traits.m_body_multiplier, 3)?;
-        bitstream.write_integer(self.m_shield_vitality_traits.m_body_recharge_rate, 4)?;
-        bitstream.write_integer(self.m_shield_vitality_traits.m_shield_multiplier, 3)?;
-        bitstream.write_integer(self.m_shield_vitality_traits.m_shield_recharge_rate, 4)?;
-        bitstream.write_integer(self.m_shield_vitality_traits.m_overshield_recharge_rate, 4)?;
-        bitstream.write_integer(self.m_shield_vitality_traits.m_headshot_immunity_setting, 2)?;
-        bitstream.write_integer(self.m_shield_vitality_traits.m_vampirism_percentage_setting, 3)?;
-        bitstream.write_integer(self.m_shield_vitality_traits.m_assasination_immunity, 2)?;
-        bitstream.write_integer(self.m_shield_vitality_traits.m_cannot_die_from_damage, 2)?;
+        bitstream.write_enum(self.m_shield_vitality_traits.m_damage_resistance_percentage_setting)?;
+        bitstream.write_enum(self.m_shield_vitality_traits.m_body_multiplier)?;
+        bitstream.write_enum(self.m_shield_vitality_traits.m_body_recharge_rate)?;
+        bitstream.write_enum(self.m_shield_vitality_traits.m_shield_multiplier)?;
+        bitstream.write_enum(self.m_shield_vitality_traits.m_shield_recharge_rate)?;
+        bitstream.write_enum(self.m_shield_vitality_traits.m_overshield_recharge_rate)?;
+        bitstream.write_enum(self.m_shield_vitality_traits.m_headshot_immunity_setting)?;
+        bitstream.write_enum(self.m_shield_vitality_traits.m_vampirism_percentage_setting)?;
+        bitstream.write_enum(self.m_shield_vitality_traits.m_assasination_immunity)?;
+        bitstream.write_enum(self.m_shield_vitality_traits.m_cannot_die_from_damage)?;
         bitstream.write_integer(self.m_weapon_traits.m_damage_modifier_percentage_setting, 4)?;
         bitstream.write_integer(self.m_weapon_traits.m_melee_damage_modifier_percentage_setting, 4)?;
         bitstream.write_signed_integer(self.m_weapon_traits.m_initial_primary_weapon_absolute_index, 8)?;
@@ -119,16 +173,16 @@ impl c_player_traits {
     }
 
     pub fn decode(&mut self, mut bitstream: &mut c_bitstream_reader) -> BLFLibResult {
-        self.m_shield_vitality_traits.m_damage_resistance_percentage_setting = bitstream.read_integer("damage-resistance", 4)?;
-        self.m_shield_vitality_traits.m_body_multiplier = bitstream.read_integer("body-multiplier", 3)?;
-        self.m_shield_vitality_traits.m_body_recharge_rate = bitstream.read_integer("body-recharge-rate", 4)?;
-        self.m_shield_vitality_traits.m_shield_multiplier = bitstream.read_integer("shield-multiplier", 3)?;
-        self.m_shield_vitality_traits.m_shield_recharge_rate = bitstream.read_integer("shield-recharge-rate", 4)?;
-        self.m_shield_vitality_traits.m_overshield_recharge_rate = bitstream.read_integer("overshield-recharge-rate", 4)?;
-        self.m_shield_vitality_traits.m_headshot_immunity_setting = bitstream.read_integer("headshot-immunity", 2)?;
-        self.m_shield_vitality_traits.m_vampirism_percentage_setting = bitstream.read_integer("vampirism", 3)?;
-        self.m_shield_vitality_traits.m_assasination_immunity = bitstream.read_integer("assasination-immunity", 2)?;
-        self.m_shield_vitality_traits.m_cannot_die_from_damage = bitstream.read_integer("cannot-die-from-damage", 2)?;
+        self.m_shield_vitality_traits.m_damage_resistance_percentage_setting = bitstream.read_enum("damage-resistance")?;
+        self.m_shield_vitality_traits.m_body_multiplier = bitstream.read_enum("body-multiplier")?;
+        self.m_shield_vitality_traits.m_body_recharge_rate = bitstream.read_enum("body-recharge-rate")?;
+        self.m_shield_vitality_traits.m_shield_multiplier = bitstream.read_enum("shield-multiplier")?;
+        self.m_shield_vitality_traits.m_shield_recharge_rate = bitstream.read_enum("shield-recharge-rate")?;
+        self.m_shield_vitality_traits.m_overshield_recharge_rate = bitstream.read_enum("overshield-recharge-rate")?;
+        self.m_shield_vitality_traits.m_headshot_immunity_setting = bitstream.read_enum("headshot-immunity")?;
+        self.m_shield_vitality_traits.m_vampirism_percentage_setting = bitstream.read_enum("vampirism")?;
+        self.m_shield_vitality_traits.m_assasination_immunity = bitstream.read_enum("assasination-immunity")?;
+        self.m_shield_vitality_traits.m_cannot_die_from_damage = bitstream.read_enum("cannot-die-from-damage")?;
         self.m_weapon_traits.m_damage_modifier_percentage_setting = bitstream.read_integer("damage-modifier", 4)?;
         self.m_weapon_traits.m_melee_damage_modifier_percentage_setting = bitstream.read_integer("melee-damage-modifier", 4)?;
         self.m_weapon_traits.m_initial_primary_weapon_absolute_index = bitstream.read_signed_integer("player-trait-initial-primary-weapon", 8)?;

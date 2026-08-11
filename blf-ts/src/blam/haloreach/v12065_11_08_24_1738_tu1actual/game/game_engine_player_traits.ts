@@ -3,7 +3,6 @@ import type {
   c_bitstream_writer,
 } from "../../../../bitstream";
 import { AutoMap } from "../../../../helpers/automap";
-/** Initial grenade loadout preset (`m_initial_grenade_count_setting`, 4 bits). */
 export enum e_grenade_count_setting {
   none = 0,
   map_default = 1,
@@ -21,7 +20,17 @@ export enum e_grenade_count_setting {
   each_3 = 13,
   each_4 = 14,
 }
-/** Infinite ammo preset (`m_infinite_ammo_setting`, 2 bits). */
+export enum e_boolean_trait {
+  unchanged = 0,
+  off = 1,
+  on = 2,
+}
+export enum e_equipment_usage_setting {
+  unchanged = 0,
+  off = 1,
+  not_with_objectives = 2,
+  on = 3,
+}
 export enum e_infinite_ammo_setting {
   unchanged = 0,
   disabled = 1,
@@ -47,7 +56,6 @@ export enum e_waypoint_setting {
   allies = 2,
   all = 3,
 }
-/** Active camo preset (`m_active_camo_setting`, 3 bits). */
 export enum e_active_camo_setting {
   off = 0,
   on = 1,
@@ -56,14 +64,12 @@ export enum e_active_camo_setting {
   excellent = 4,
   invisible = 5,
 }
-/** Double jump preset (`m_double_jump_setting`, 2 bits). */
 export enum e_double_jump_setting {
   unchanged = 0,
   off = 1,
   on = 2,
   triple = 3,
 }
-/** Player aura color preset (`m_aura_setting`, 3 bits). */
 export enum e_aura_setting {
   unchanged = 0,
   off = 1,
@@ -71,7 +77,6 @@ export enum e_aura_setting {
   black = 3,
   white = 4,
 }
-
 export enum e_forced_change_color_setting {
   unchanged = 0,
   off = 1,
@@ -88,7 +93,6 @@ export enum e_forced_change_color_setting {
   zombie = 12,
   extra4 = 13,
 }
-/** Motion tracker mode (`m_motion_tracker_setting`, 3 bits). */
 export enum e_motion_tracker_setting {
   unchanged = 0,
   off = 1,
@@ -96,61 +100,233 @@ export enum e_motion_tracker_setting {
   normal = 3,
   enhanced = 4,
 }
+
+export enum e_damage_resistance_percentage_setting {
+  unchanged = 0,
+  percent_10 = 1,
+  percent_50 = 2,
+  percent_90 = 3,
+  percent_100 = 4,
+  percent_110 = 5,
+  percent_150 = 6,
+  percent_200 = 7,
+  percent_300 = 8,
+  percent_500 = 9,
+  percent_1000 = 10,
+  percent_2000 = 11,
+  invulnerable = 12,
+}
+
+export enum e_damage_modifier_percentage_setting {
+  unchanged = 0,
+  percent_0 = 1,
+  percent_25 = 2,
+  percent_50 = 3,
+  percent_75 = 4,
+  percent_90 = 5,
+  percent_100 = 6,
+  percent_110 = 7,
+  percent_125 = 8,
+  percent_150 = 9,
+  percent_200 = 10,
+  percent_300 = 11,
+  fatality = 12,
+}
+
+export enum e_body_multiplier_setting {
+  unchanged = 0,
+  percent_0 = 1,
+  percent_100 = 2,
+  percent_150 = 3,
+  percent_200 = 4,
+  percent_300 = 5,
+  percent_400 = 6,
+}
+
+export enum e_shield_multiplier_setting {
+  unchanged = 0,
+  percent_0 = 1,
+  percent_100 = 2,
+  percent_150 = 3,
+  percent_200 = 4,
+  percent_300 = 5,
+  percent_400 = 6,
+}
+
+export enum e_recharge_rate_percentage_setting {
+  unchanged = 0,
+  percent_negative_25 = 1,
+  percent_negative_10 = 2,
+  percent_negative_5 = 3,
+  percent_0 = 4,
+  percent_10 = 5,
+  percent_25 = 6,
+  percent_50 = 7,
+  percent_75 = 8,
+  percent_90 = 9,
+  percent_100 = 10,
+  percent_110 = 11,
+  percent_125 = 12,
+  percent_150 = 13,
+  percent_200 = 14,
+}
+
+export enum e_vampirism_percentage_setting {
+  unchanged = 0,
+  percent_0 = 1,
+  percent_10 = 2,
+  percent_25 = 3,
+  percent_50 = 4,
+  percent_100 = 5,
+}
+
+export enum e_player_speed_setting {
+  unchanged = 0,
+  percent_0 = 1,
+  percent_25 = 2,
+  percent_50 = 3,
+  percent_75 = 4,
+  percent_90 = 5,
+  percent_100 = 6,
+  percent_110 = 7,
+  percent_120 = 8,
+  percent_130 = 9,
+  percent_140 = 10,
+  percent_150 = 11,
+  percent_160 = 12,
+  percent_170 = 13,
+  percent_180 = 14,
+  percent_190 = 15,
+  percent_200 = 16,
+  percent_300 = 17,
+}
+
+export enum e_player_gravity_setting {
+  unchanged = 0,
+  percent_50 = 1,
+  percent_75 = 2,
+  percent_100 = 3,
+  percent_110 = 4,
+  percent_120 = 5,
+  percent_130 = 6,
+  percent_140 = 7,
+  percent_150 = 8,
+  percent_160 = 9,
+  percent_170 = 10,
+  percent_180 = 11,
+  percent_190 = 12,
+  percent_200 = 13,
+}
+
+export enum e_motion_tracker_range_setting {
+  unchanged = 0,
+  meters_10 = 1,
+  meters_15 = 2,
+  meters_25 = 3,
+  meters_50 = 4,
+  meters_75 = 5,
+  meters_100 = 6,
+  meters_150 = 7,
+}
+
 export class c_player_trait_shield_vitality {
-  @AutoMap(() => Number)
-  m_damage_resistance_percentage_setting = 0;
-  @AutoMap(() => Number)
-  m_body_multiplier = 0;
-  @AutoMap(() => Number)
-  m_body_recharge_rate = 0;
-  @AutoMap(() => Number)
-  m_shield_multiplier = 0;
-  @AutoMap(() => Number)
-  m_shield_recharge_rate = 0;
-  @AutoMap(() => Number)
-  m_overshield_recharge_rate = 0;
-  @AutoMap(() => Number)
-  m_headshot_immunity_setting = 0;
-  @AutoMap(() => Number)
-  m_vampirism_percentage_setting = 0;
-  @AutoMap(() => Number)
-  m_assasination_immunity = 0;
-  @AutoMap(() => Number)
-  m_cannot_die_from_damage = 0;
+  @AutoMap(() => e_damage_resistance_percentage_setting)
+  m_damage_resistance_percentage_setting: e_damage_resistance_percentage_setting =
+    e_damage_resistance_percentage_setting.unchanged;
+  @AutoMap(() => e_body_multiplier_setting)
+  m_body_multiplier: e_body_multiplier_setting =
+    e_body_multiplier_setting.unchanged;
+  @AutoMap(() => e_recharge_rate_percentage_setting)
+  m_body_recharge_rate: e_recharge_rate_percentage_setting =
+    e_recharge_rate_percentage_setting.unchanged;
+  @AutoMap(() => e_shield_multiplier_setting)
+  m_shield_multiplier: e_shield_multiplier_setting =
+    e_shield_multiplier_setting.unchanged;
+  @AutoMap(() => e_recharge_rate_percentage_setting)
+  m_shield_recharge_rate: e_recharge_rate_percentage_setting =
+    e_recharge_rate_percentage_setting.unchanged;
+  @AutoMap(() => e_recharge_rate_percentage_setting)
+  m_overshield_recharge_rate: e_recharge_rate_percentage_setting =
+    e_recharge_rate_percentage_setting.unchanged;
+  @AutoMap(() => e_boolean_trait)
+  m_headshot_immunity_setting: e_boolean_trait = e_boolean_trait.unchanged;
+  @AutoMap(() => e_vampirism_percentage_setting)
+  m_vampirism_percentage_setting: e_vampirism_percentage_setting =
+    e_vampirism_percentage_setting.unchanged;
+  @AutoMap(() => e_boolean_trait)
+  m_assasination_immunity: e_boolean_trait = e_boolean_trait.unchanged;
+  @AutoMap(() => e_boolean_trait)
+  m_cannot_die_from_damage: e_boolean_trait = e_boolean_trait.unchanged;
+  clear(): void {
+    this.m_damage_resistance_percentage_setting =
+      e_damage_resistance_percentage_setting.unchanged;
+    this.m_body_multiplier = e_body_multiplier_setting.unchanged;
+    this.m_body_recharge_rate = e_recharge_rate_percentage_setting.unchanged;
+    this.m_shield_multiplier = e_shield_multiplier_setting.unchanged;
+    this.m_shield_recharge_rate = e_recharge_rate_percentage_setting.unchanged;
+    this.m_overshield_recharge_rate =
+      e_recharge_rate_percentage_setting.unchanged;
+    this.m_headshot_immunity_setting = e_boolean_trait.unchanged;
+    this.m_vampirism_percentage_setting =
+      e_vampirism_percentage_setting.unchanged;
+    this.m_assasination_immunity = e_boolean_trait.unchanged;
+    this.m_cannot_die_from_damage = e_boolean_trait.unchanged;
+  }
 }
 export class c_player_trait_weapons {
+  @AutoMap(() => e_damage_modifier_percentage_setting)
+  m_damage_modifier_percentage_setting: e_damage_modifier_percentage_setting =
+    e_damage_modifier_percentage_setting.unchanged;
+  @AutoMap(() => e_damage_modifier_percentage_setting)
+  m_melee_damage_modifier_percentage_setting: e_damage_modifier_percentage_setting =
+    e_damage_modifier_percentage_setting.unchanged;
   @AutoMap(() => Number)
-  m_damage_modifier_percentage_setting = 0;
+  m_initial_primary_weapon_absolute_index = -3;
   @AutoMap(() => Number)
-  m_melee_damage_modifier_percentage_setting = 0;
-  @AutoMap(() => Number)
-  m_initial_primary_weapon_absolute_index = 0;
-  @AutoMap(() => Number)
-  m_initial_secondary_weapon_absolute_index = 0;
+  m_initial_secondary_weapon_absolute_index = -3;
   @AutoMap(() => e_grenade_count_setting)
   m_initial_grenade_count_setting: e_grenade_count_setting =
-    e_grenade_count_setting.map_default;
+    e_grenade_count_setting.none;
   @AutoMap(() => e_infinite_ammo_setting)
   m_infinite_ammo_setting: e_infinite_ammo_setting =
     e_infinite_ammo_setting.unchanged;
+  @AutoMap(() => e_boolean_trait)
+  m_recharging_grenades_setting: e_boolean_trait = e_boolean_trait.unchanged;
+  @AutoMap(() => e_boolean_trait)
+  m_weapon_pickup_setting: e_boolean_trait = e_boolean_trait.unchanged;
+  @AutoMap(() => e_equipment_usage_setting)
+  m_equipment_usage_setting: e_equipment_usage_setting =
+    e_equipment_usage_setting.unchanged;
+  @AutoMap(() => e_boolean_trait)
+  m_equipment_drop_on_death_setting: e_boolean_trait =
+    e_boolean_trait.unchanged;
+  @AutoMap(() => e_boolean_trait)
+  m_infinite_equipment_setting: e_boolean_trait = e_boolean_trait.unchanged;
   @AutoMap(() => Number)
-  m_recharging_grenades_setting = 0;
-  @AutoMap(() => Number)
-  m_weapon_pickup_setting = 0;
-  @AutoMap(() => Number)
-  m_equipment_usage_setting = 0;
-  @AutoMap(() => Number)
-  m_equipment_drop_on_death_setting = 0;
-  @AutoMap(() => Number)
-  m_infinite_equipment_setting = 0;
-  @AutoMap(() => Number)
-  m_initial_equipment_absolute_index = 0;
+  m_initial_equipment_absolute_index = -3;
+  clear(): void {
+    this.m_damage_modifier_percentage_setting =
+      e_damage_modifier_percentage_setting.unchanged;
+    this.m_melee_damage_modifier_percentage_setting =
+      e_damage_modifier_percentage_setting.unchanged;
+    this.m_initial_grenade_count_setting = e_grenade_count_setting.none;
+    this.m_infinite_ammo_setting = e_infinite_ammo_setting.unchanged;
+    this.m_recharging_grenades_setting = e_boolean_trait.unchanged;
+    this.m_weapon_pickup_setting = e_boolean_trait.unchanged;
+    this.m_equipment_usage_setting = e_equipment_usage_setting.unchanged;
+    this.m_equipment_drop_on_death_setting = e_boolean_trait.unchanged;
+    this.m_infinite_equipment_setting = e_boolean_trait.unchanged;
+    this.m_initial_primary_weapon_absolute_index = -3;
+    this.m_initial_secondary_weapon_absolute_index = -3;
+    this.m_initial_equipment_absolute_index = -3;
+  }
 }
 export class c_player_trait_movement {
-  @AutoMap(() => Number)
-  m_speed_setting = 0;
-  @AutoMap(() => Number)
-  m_gravity_setting = 0;
+  @AutoMap(() => e_player_speed_setting)
+  m_speed_setting: e_player_speed_setting = e_player_speed_setting.unchanged;
+  @AutoMap(() => e_player_gravity_setting)
+  m_gravity_setting: e_player_gravity_setting =
+    e_player_gravity_setting.unchanged;
   @AutoMap(() => e_vehicle_usage_setting)
   m_vehicle_usage_setting: e_vehicle_usage_setting =
     e_vehicle_usage_setting.unchanged;
@@ -159,6 +335,13 @@ export class c_player_trait_movement {
     e_double_jump_setting.unchanged;
   @AutoMap(() => Number)
   m_jump_modifier = -1;
+  clear(): void {
+    this.m_speed_setting = e_player_speed_setting.unchanged;
+    this.m_gravity_setting = e_player_gravity_setting.unchanged;
+    this.m_vehicle_usage_setting = e_vehicle_usage_setting.unchanged;
+    this.m_double_jump_setting = e_double_jump_setting.unchanged;
+    this.m_jump_modifier = -1;
+  }
 }
 export class c_player_trait_appearance {
   @AutoMap(() => e_active_camo_setting)
@@ -172,15 +355,30 @@ export class c_player_trait_appearance {
   @AutoMap(() => e_forced_change_color_setting)
   m_forced_change_color_setting: e_forced_change_color_setting =
     e_forced_change_color_setting.unchanged;
+  clear(): void {
+    this.m_active_camo_setting = e_active_camo_setting.off;
+    this.m_waypoint_setting = e_waypoint_setting.unchanged;
+    this.m_gamertag_setting = e_waypoint_setting.unchanged;
+    this.m_aura_setting = e_aura_setting.unchanged;
+    this.m_forced_change_color_setting =
+      e_forced_change_color_setting.unchanged;
+  }
 }
 export class c_player_trait_sensors {
   @AutoMap(() => e_motion_tracker_setting)
   m_motion_tracker_setting: e_motion_tracker_setting =
     e_motion_tracker_setting.unchanged;
-  @AutoMap(() => Number)
-  m_motion_tracker_range_setting = 0;
-  @AutoMap(() => Number)
-  m_directional_damage_setting = 0;
+  @AutoMap(() => e_motion_tracker_range_setting)
+  m_motion_tracker_range_setting: e_motion_tracker_range_setting =
+    e_motion_tracker_range_setting.unchanged;
+  @AutoMap(() => e_boolean_trait)
+  m_directional_damage_setting: e_boolean_trait = e_boolean_trait.unchanged;
+  clear(): void {
+    this.m_motion_tracker_setting = e_motion_tracker_setting.unchanged;
+    this.m_motion_tracker_range_setting =
+      e_motion_tracker_range_setting.unchanged;
+    this.m_directional_damage_setting = e_boolean_trait.unchanged;
+  }
 }
 export class c_player_traits {
   @AutoMap(() => c_player_trait_shield_vitality)
@@ -193,194 +391,250 @@ export class c_player_traits {
   m_appearance_traits = new c_player_trait_appearance();
   @AutoMap(() => c_player_trait_sensors)
   m_sensor_traits = new c_player_trait_sensors();
+  clear(): void {
+    this.m_shield_vitality_traits.clear();
+    this.m_weapon_traits.clear();
+    this.m_movement_traits.clear();
+    this.m_appearance_traits.clear();
+    this.m_sensor_traits.clear();
+  }
   decode(bitstream: c_bitstream_reader): void {
-    const sv = this.m_shield_vitality_traits;
-    sv.m_damage_resistance_percentage_setting = bitstream.read_integer(
+    this.m_shield_vitality_traits.m_damage_resistance_percentage_setting = bitstream.read_enum(
       "damage-resistance",
-      4
+      4,
+      e_damage_resistance_percentage_setting
     );
-    sv.m_body_multiplier = bitstream.read_integer("body-multiplier", 3);
-    sv.m_body_recharge_rate = bitstream.read_integer("body-recharge-rate", 4);
-    sv.m_shield_multiplier = bitstream.read_integer("shield-multiplier", 3);
-    sv.m_shield_recharge_rate = bitstream.read_integer(
+    this.m_shield_vitality_traits.m_body_multiplier = bitstream.read_enum(
+      "body-multiplier",
+      3,
+      e_body_multiplier_setting
+    );
+    this.m_shield_vitality_traits.m_body_recharge_rate = bitstream.read_enum(
+      "body-recharge-rate",
+      4,
+      e_recharge_rate_percentage_setting
+    );
+    this.m_shield_vitality_traits.m_shield_multiplier = bitstream.read_enum(
+      "shield-multiplier",
+      3,
+      e_shield_multiplier_setting
+    );
+    this.m_shield_vitality_traits.m_shield_recharge_rate = bitstream.read_enum(
       "shield-recharge-rate",
-      4
+      4,
+      e_recharge_rate_percentage_setting
     );
-    sv.m_overshield_recharge_rate = bitstream.read_integer(
+    this.m_shield_vitality_traits.m_overshield_recharge_rate = bitstream.read_enum(
       "overshield-recharge-rate",
-      4
+      4,
+      e_recharge_rate_percentage_setting
     );
-    sv.m_headshot_immunity_setting = bitstream.read_integer(
+    this.m_shield_vitality_traits.m_headshot_immunity_setting = bitstream.read_enum(
       "headshot-immunity",
-      2
+      2,
+      e_boolean_trait
     );
-    sv.m_vampirism_percentage_setting = bitstream.read_integer("vampirism", 3);
-    sv.m_assasination_immunity = bitstream.read_integer(
+    this.m_shield_vitality_traits.m_vampirism_percentage_setting = bitstream.read_enum(
+      "vampirism",
+      3,
+      e_vampirism_percentage_setting
+    );
+    this.m_shield_vitality_traits.m_assasination_immunity = bitstream.read_enum(
       "assasination-immunity",
-      2
+      2,
+      e_boolean_trait
     );
-    sv.m_cannot_die_from_damage = bitstream.read_integer(
+    this.m_shield_vitality_traits.m_cannot_die_from_damage = bitstream.read_enum(
       "cannot-die-from-damage",
-      2
+      2,
+      e_boolean_trait
     );
-    const w = this.m_weapon_traits;
-    w.m_damage_modifier_percentage_setting = bitstream.read_integer(
+    this.m_weapon_traits.m_damage_modifier_percentage_setting = bitstream.read_enum(
       "damage-modifier",
-      4
+      4,
+      e_damage_modifier_percentage_setting
     );
-    w.m_melee_damage_modifier_percentage_setting = bitstream.read_integer(
+    this.m_weapon_traits.m_melee_damage_modifier_percentage_setting = bitstream.read_enum(
       "melee-damage-modifier",
-      4
+      4,
+      e_damage_modifier_percentage_setting
     );
-    w.m_initial_primary_weapon_absolute_index = bitstream.read_signed_integer(
+    this.m_weapon_traits.m_initial_primary_weapon_absolute_index = bitstream.read_signed_integer(
       "player-trait-initial-primary-weapon",
       8
     );
-    w.m_initial_secondary_weapon_absolute_index = bitstream.read_signed_integer(
+    this.m_weapon_traits.m_initial_secondary_weapon_absolute_index = bitstream.read_signed_integer(
       "player-trait-initial-secondary-weapon",
       8
     );
-    w.m_initial_grenade_count_setting = bitstream.read_enum(
+    this.m_weapon_traits.m_initial_grenade_count_setting = bitstream.read_enum(
       "player-trait-initial-grenade-count",
       4,
       e_grenade_count_setting
     );
-    w.m_infinite_ammo_setting = bitstream.read_enum(
+    this.m_weapon_traits.m_infinite_ammo_setting = bitstream.read_enum(
       "player-traits-infinite-ammo-setting",
       2,
       e_infinite_ammo_setting
     );
-    w.m_recharging_grenades_setting = bitstream.read_integer(
+    this.m_weapon_traits.m_recharging_grenades_setting = bitstream.read_enum(
       "player-traits-recharging-grenades",
-      2
+      2,
+      e_boolean_trait
     );
-    w.m_weapon_pickup_setting = bitstream.read_integer(
+    this.m_weapon_traits.m_weapon_pickup_setting = bitstream.read_enum(
       "player-traits-weapon-pickup-allowed",
-      2
+      2,
+      e_boolean_trait
     );
-    w.m_equipment_usage_setting = bitstream.read_integer(
+    this.m_weapon_traits.m_equipment_usage_setting = bitstream.read_enum(
       "player-traits-equipment-usage",
-      2
+      2,
+      e_equipment_usage_setting
     );
-    w.m_equipment_drop_on_death_setting = bitstream.read_integer(
+    this.m_weapon_traits.m_equipment_drop_on_death_setting = bitstream.read_enum(
       "player-traits-equipment-drop",
-      2
+      2,
+      e_boolean_trait
     );
-    w.m_infinite_equipment_setting = bitstream.read_integer(
+    this.m_weapon_traits.m_infinite_equipment_setting = bitstream.read_enum(
       "player-traits-infinite-equipment",
-      2
+      2,
+      e_boolean_trait
     );
-    w.m_initial_equipment_absolute_index = bitstream.read_signed_integer(
+    this.m_weapon_traits.m_initial_equipment_absolute_index = bitstream.read_signed_integer(
       "player-trait-initial-equipment",
       8
     );
-    const m = this.m_movement_traits;
-    m.m_speed_setting = bitstream.read_integer("player-speed", 5);
-    m.m_gravity_setting = bitstream.read_integer("player-gravity", 4);
-    m.m_vehicle_usage_setting = bitstream.read_enum(
+    this.m_movement_traits.m_speed_setting = bitstream.read_enum(
+      "player-speed",
+      5,
+      e_player_speed_setting
+    );
+    this.m_movement_traits.m_gravity_setting = bitstream.read_enum(
+      "player-gravity",
+      4,
+      e_player_gravity_setting
+    );
+    this.m_movement_traits.m_vehicle_usage_setting = bitstream.read_enum(
       "player-traits-movement-vehicle-usage",
       4,
       e_vehicle_usage_setting
     );
-    m.m_double_jump_setting = bitstream.read_enum(
+    this.m_movement_traits.m_double_jump_setting = bitstream.read_enum(
       "player-traits-movement-double-jump",
       2,
       e_double_jump_setting
     );
     if (bitstream.read_bool("player-traits-movement-jump-modifier-changed")) {
-      m.m_jump_modifier = bitstream.read_integer(
+      this.m_movement_traits.m_jump_modifier = bitstream.read_integer(
         "player-traits-movement-jump-modifier",
         9
       );
     } else {
-      m.m_jump_modifier = -1;
+      this.m_movement_traits.m_jump_modifier = -1;
     }
-    const a = this.m_appearance_traits;
-    a.m_active_camo_setting = bitstream.read_enum(
+    this.m_appearance_traits.m_active_camo_setting = bitstream.read_enum(
       "player-traits-appearance-active-camo",
       3,
       e_active_camo_setting
     );
-    a.m_waypoint_setting = bitstream.read_enum(
+    this.m_appearance_traits.m_waypoint_setting = bitstream.read_enum(
       "player-traits-appearance-waypoint",
       2,
       e_waypoint_setting
     );
-    a.m_gamertag_setting = bitstream.read_enum(
+    this.m_appearance_traits.m_gamertag_setting = bitstream.read_enum(
       "player-traits-appearance-gamertag",
       2,
       e_waypoint_setting
     );
-    a.m_aura_setting = bitstream.read_enum(
+    this.m_appearance_traits.m_aura_setting = bitstream.read_enum(
       "player-traits-appearance-aura",
       3,
       e_aura_setting
     );
-    a.m_forced_change_color_setting = bitstream.read_enum(
+    this.m_appearance_traits.m_forced_change_color_setting = bitstream.read_enum(
       "player-traits-appearance-forced-change-color",
       4,
       e_forced_change_color_setting
     );
-    const s = this.m_sensor_traits;
-    s.m_motion_tracker_setting = bitstream.read_enum(
+    this.m_sensor_traits.m_motion_tracker_setting = bitstream.read_enum(
       "player-traits-sensors-motion-tracker",
       3,
       e_motion_tracker_setting
     );
-    s.m_motion_tracker_range_setting = bitstream.read_integer(
+    this.m_sensor_traits.m_motion_tracker_range_setting = bitstream.read_enum(
       "motion-tracker-range",
-      3
+      3,
+      e_motion_tracker_range_setting
     );
-    s.m_directional_damage_setting = bitstream.read_integer(
+    this.m_sensor_traits.m_directional_damage_setting = bitstream.read_enum(
       "player-traits-sensors-directional-damage",
-      2
+      2,
+      e_boolean_trait
     );
   }
   encode(bitstream: c_bitstream_writer): void {
-    bitstream.write_integer(
+    bitstream.write_enum(
       this.m_shield_vitality_traits.m_damage_resistance_percentage_setting,
-      4
+      4,
+      e_damage_resistance_percentage_setting
     );
-    bitstream.write_integer(this.m_shield_vitality_traits.m_body_multiplier, 3);
-    bitstream.write_integer(
+    bitstream.write_enum(
+      this.m_shield_vitality_traits.m_body_multiplier,
+      3,
+      e_body_multiplier_setting
+    );
+    bitstream.write_enum(
       this.m_shield_vitality_traits.m_body_recharge_rate,
-      4
+      4,
+      e_recharge_rate_percentage_setting
     );
-    bitstream.write_integer(
+    bitstream.write_enum(
       this.m_shield_vitality_traits.m_shield_multiplier,
-      3
+      3,
+      e_shield_multiplier_setting
     );
-    bitstream.write_integer(
+    bitstream.write_enum(
       this.m_shield_vitality_traits.m_shield_recharge_rate,
-      4
+      4,
+      e_recharge_rate_percentage_setting
     );
-    bitstream.write_integer(
+    bitstream.write_enum(
       this.m_shield_vitality_traits.m_overshield_recharge_rate,
-      4
+      4,
+      e_recharge_rate_percentage_setting
     );
-    bitstream.write_integer(
+    bitstream.write_enum(
       this.m_shield_vitality_traits.m_headshot_immunity_setting,
-      2
+      2,
+      e_boolean_trait
     );
-    bitstream.write_integer(
+    bitstream.write_enum(
       this.m_shield_vitality_traits.m_vampirism_percentage_setting,
-      3
+      3,
+      e_vampirism_percentage_setting
     );
-    bitstream.write_integer(
+    bitstream.write_enum(
       this.m_shield_vitality_traits.m_assasination_immunity,
-      2
+      2,
+      e_boolean_trait
     );
-    bitstream.write_integer(
+    bitstream.write_enum(
       this.m_shield_vitality_traits.m_cannot_die_from_damage,
-      2
+      2,
+      e_boolean_trait
     );
-    bitstream.write_integer(
+    bitstream.write_enum(
       this.m_weapon_traits.m_damage_modifier_percentage_setting,
-      4
+      4,
+      e_damage_modifier_percentage_setting
     );
-    bitstream.write_integer(
+    bitstream.write_enum(
       this.m_weapon_traits.m_melee_damage_modifier_percentage_setting,
-      4
+      4,
+      e_damage_modifier_percentage_setting
     );
     bitstream.write_signed_integer(
       this.m_weapon_traits.m_initial_primary_weapon_absolute_index,
@@ -400,26 +654,45 @@ export class c_player_traits {
       2,
       e_infinite_ammo_setting
     );
-    bitstream.write_integer(
+    bitstream.write_enum(
       this.m_weapon_traits.m_recharging_grenades_setting,
-      2
+      2,
+      e_boolean_trait
     );
-    bitstream.write_integer(this.m_weapon_traits.m_weapon_pickup_setting, 2);
-    bitstream.write_integer(this.m_weapon_traits.m_equipment_usage_setting, 2);
-    bitstream.write_integer(
+    bitstream.write_enum(
+      this.m_weapon_traits.m_weapon_pickup_setting,
+      2,
+      e_boolean_trait
+    );
+    bitstream.write_enum(
+      this.m_weapon_traits.m_equipment_usage_setting,
+      2,
+      e_equipment_usage_setting
+    );
+    bitstream.write_enum(
       this.m_weapon_traits.m_equipment_drop_on_death_setting,
-      2
+      2,
+      e_boolean_trait
     );
-    bitstream.write_integer(
+    bitstream.write_enum(
       this.m_weapon_traits.m_infinite_equipment_setting,
-      2
+      2,
+      e_boolean_trait
     );
     bitstream.write_signed_integer(
       this.m_weapon_traits.m_initial_equipment_absolute_index,
       8
     );
-    bitstream.write_integer(this.m_movement_traits.m_speed_setting, 5);
-    bitstream.write_integer(this.m_movement_traits.m_gravity_setting, 4);
+    bitstream.write_enum(
+      this.m_movement_traits.m_speed_setting,
+      5,
+      e_player_speed_setting
+    );
+    bitstream.write_enum(
+      this.m_movement_traits.m_gravity_setting,
+      4,
+      e_player_gravity_setting
+    );
     bitstream.write_enum(
       this.m_movement_traits.m_vehicle_usage_setting,
       4,
@@ -466,13 +739,15 @@ export class c_player_traits {
       3,
       e_motion_tracker_setting
     );
-    bitstream.write_integer(
+    bitstream.write_enum(
       this.m_sensor_traits.m_motion_tracker_range_setting,
-      3
+      3,
+      e_motion_tracker_range_setting
     );
-    bitstream.write_integer(
+    bitstream.write_enum(
       this.m_sensor_traits.m_directional_damage_setting,
-      2
+      2,
+      e_boolean_trait
     );
   }
 }

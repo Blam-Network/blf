@@ -117,8 +117,12 @@ impl c_game_engine_map_override_options {
         self.m_flags.equipment_on_map = true;
         self.m_flags.powerups_on_map = true;
         self.m_flags.turrets_on_map = true;
+        self.m_base_player_traits.clear();
         self.m_weapon_set_absolute_index = -2;
         self.m_vehicle_set_absolute_index = -2;
+        self.m_red_powerup_traits.clear();
+        self.m_blue_powerup_traits.clear();
+        self.m_yellow_powerup_traits.clear();
         self.m_red_powerup_duration_seconds = 5;
         self.m_blue_powerup_duration_seconds = 30;
         self.m_yellow_powerup_duration_seconds = 30;

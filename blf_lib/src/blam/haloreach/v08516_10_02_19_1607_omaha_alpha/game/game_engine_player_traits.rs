@@ -8,13 +8,25 @@ use crate::blam::halo3::v12070_08_09_05_2031_halo3_ship::memory::bitstream_write
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct c_player_trait_shield_vitality {
-    pub m_damage_resistance_percentage_setting: u8, // 4 bits
-    pub m_shield_recharge_rate: u8, // 4 bits
-    pub m_overshield_recharge_rate: u8, // 4 bits
-    pub m_vampirism_percentage_setting: u8, // 3 bits
-    pub m_headshot_immunity_setting: u8, // 2 bits
-    pub m_shield_multiplier: u8, // 3 bits
-    pub m_assasination_immunity: u8, // 2 bits
+    pub m_damage_resistance_percentage_setting: u8,
+    pub m_shield_recharge_rate: u8,
+    pub m_overshield_recharge_rate: u8,
+    pub m_vampirism_percentage_setting: u8,
+    pub m_headshot_immunity_setting: u8,
+    pub m_shield_multiplier: u8,
+    pub m_assasination_immunity: u8,
+}
+
+impl c_player_trait_shield_vitality {
+    pub fn clear(&mut self) {
+        self.m_damage_resistance_percentage_setting = 0;
+        self.m_shield_recharge_rate = 0;
+        self.m_overshield_recharge_rate = 0;
+        self.m_vampirism_percentage_setting = 0;
+        self.m_headshot_immunity_setting = 0;
+        self.m_shield_multiplier = 0;
+        self.m_assasination_immunity = 0;
+    }
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
@@ -27,6 +39,14 @@ pub struct c_player_traits {
 }
 
 impl c_player_traits {
+    pub fn clear(&mut self) {
+        self.m_shield_vitality_traits.clear();
+        self.m_weapon_traits.clear();
+        self.m_movement_traits.clear();
+        self.m_appearance_traits.clear();
+        self.m_sensor_traits.clear();
+    }
+
     pub fn encode(&self, mut bitstream: &mut c_bitstream_writer) -> BLFLibResult {
         bitstream.write_integer(self.m_shield_vitality_traits.m_damage_resistance_percentage_setting, 4)?;
         bitstream.write_integer(self.m_shield_vitality_traits.m_shield_recharge_rate, 4)?;
