@@ -14,7 +14,7 @@ import { e_multiplayer_team_designator as e_multiplayer_team_designator_tu1 } fr
 import type { s_custom_game_engine_definition as s_custom_game_engine_definition_tu1 } from "../blam/haloreach/v12065_11_08_24_1738_tu1actual/game/game_variant";
 import {
   type c_game_variant as c_game_variant_tu1,
-  e_game_mode as e_game_mode_tu1,
+  e_game_engine_type as e_game_engine_type_tu1,
 } from "../blam/haloreach/v12065_11_08_24_1738_tu1actual/game/game_variant";
 import { e_explicit_object_type as e_explicit_object_type_tu1 } from "../blam/haloreach/v12065_11_08_24_1738_tu1actual/game/megalogamengine/megalogamengine_explicit_object";
 import { e_explicit_player_type as e_explicit_player_type_tu1 } from "../blam/haloreach/v12065_11_08_24_1738_tu1actual/game/megalogamengine/megalogamengine_explicit_player";
@@ -30,7 +30,7 @@ import {
 import type { s_custom_game_engine_definition as s_custom_game_engine_definition_mcc } from "../blam/haloreach_mcc/v_untracked_25_08_16_1352/game/game_variant";
 import {
   c_game_variant as c_game_variant_mcc,
-  e_game_mode as e_game_mode_mcc,
+  e_game_engine_type as e_game_engine_type_mcc,
 } from "../blam/haloreach_mcc/v_untracked_25_08_16_1352/game/game_variant";
 import {
   e_action_type as e_action_type_mcc,
@@ -759,15 +759,15 @@ function plan_temporary_relocation(
 function check_mcc_game_variant_to_tu1(
   from: c_game_variant_mcc
 ): e_reach_gametype_conversion_error {
-  if (from.m_game_engine === e_game_mode_mcc.sandbox) {
+  if (from.m_game_engine === e_game_engine_type_mcc.sandbox) {
     return e_reach_gametype_conversion_error.forge_variant;
   }
-  if (from.m_game_engine === e_game_mode_mcc.campaign) {
+  if (from.m_game_engine === e_game_engine_type_mcc.campaign) {
     return e_reach_gametype_conversion_error.campaign_variant;
   }
 
   if (
-    from.m_game_engine === e_game_mode_mcc.survival &&
+    from.m_game_engine === e_game_engine_type_mcc.survival &&
     from.m_survival_variant !== undefined &&
     from.m_survival_variant.m_additional_flags !== 0
   ) {
@@ -790,10 +790,10 @@ function check_mcc_game_variant_to_tu1(
 function check_tu1_game_variant_to_mcc(
   from: c_game_variant_tu1
 ): e_reach_gametype_conversion_error {
-  if (from.m_game_engine === e_game_mode_tu1.sandbox) {
+  if (from.m_game_engine === e_game_engine_type_tu1.sandbox) {
     return e_reach_gametype_conversion_error.forge_variant;
   }
-  if (from.m_game_engine === e_game_mode_tu1.campaign) {
+  if (from.m_game_engine === e_game_engine_type_tu1.campaign) {
     return e_reach_gametype_conversion_error.campaign_variant;
   }
   return e_reach_gametype_conversion_error.ok;

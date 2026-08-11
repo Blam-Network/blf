@@ -12,6 +12,24 @@ export enum e_file_type {
   GameVariant = 6,
 }
 
+export enum e_gui_game_mode {
+  none = -1,
+  activities = 0,
+  campaign = 1,
+  matchmaking = 2,
+  multiplayer = 3,
+  mapeditor = 4,
+  theater = 5,
+  survival = 6,
+}
+
+export enum e_game_mode {
+  none = 0,
+  campaign = 1,
+  survival = 2,
+  multiplayer = 3,
+}
+
 @c.struct()
 export class s_content_item_history {
   @c.field(c.Time64())
@@ -47,11 +65,11 @@ export class s_content_item_general_metadata {
   @c.field("u64")
   game_id = 0n;
 
-  @c.field("i8")
-  activity = 0;
+  @c.field(c.enum("i8", e_gui_game_mode))
+  activity: e_gui_game_mode = e_gui_game_mode.none;
 
-  @c.field("u8")
-  game_mode = 0;
+  @c.field(c.enum("u8", e_game_mode))
+  game_mode: e_game_mode = e_game_mode.none;
 
   @c.field("u8", { pad_after: 1 })
   game_engine_type = 0;
@@ -160,7 +178,8 @@ export class s_content_item_metadata {
     { size: 16 },
     c.arm(
       s_content_item_matchmaking_metadata,
-      (m: s_content_item_metadata) => m.general.activity === 3
+      (m: s_content_item_metadata) =>
+        m.general.activity === e_gui_game_mode.matchmaking
     )
   )
   activity_data: s_content_item_matchmaking_metadata | null = null;
@@ -169,11 +188,13 @@ export class s_content_item_metadata {
     { size: 16 },
     c.arm(
       s_content_item_campaign_metadata,
-      (m: s_content_item_metadata) => m.general.game_mode === 1
+      (m: s_content_item_metadata) =>
+        m.general.game_mode === e_game_mode.campaign
     ),
     c.arm(
       s_content_item_firefight_metadata,
-      (m: s_content_item_metadata) => m.general.game_mode === 2
+      (m: s_content_item_metadata) =>
+        m.general.game_mode === e_game_mode.survival
     )
   )
   game_mode_data:
@@ -187,8 +208,8 @@ export function content_item_metadata_set_defaults(
 ): void {
   metadata.general = Object.assign(new s_content_item_general_metadata(), {
     file_type: -1 as e_file_type,
-    activity: -1,
-    game_mode: 0,
+    activity: e_gui_game_mode.none,
+    game_mode: e_game_mode.none,
     game_engine_type: 0,
     map_id: -1,
   });
@@ -215,8 +236,12 @@ export function content_item_metadata_decode(
   metadata.general.parent_unique_id = bitstream.read_qword(64);
   metadata.general.root_unique_id = bitstream.read_qword(64);
   metadata.general.game_id = bitstream.read_qword(64);
-  metadata.general.activity = bitstream.read_integer("activity", 3) - 1;
-  metadata.general.game_mode = bitstream.read_integer("game-mode", 3);
+  metadata.general.activity = (bitstream.read_integer("activity", 3) -
+    1) as e_gui_game_mode;
+  metadata.general.game_mode = bitstream.read_integer(
+    "game-mode",
+    3
+  ) as e_game_mode;
   metadata.general.game_engine_type = bitstream.read_integer(
     "game-engine-type",
     3
@@ -260,7 +285,7 @@ export function content_item_metadata_decode(
       break;
   }
 
-  if (metadata.general.activity === 2) {
+  if (metadata.general.activity === e_gui_game_mode.matchmaking) {
     const mm = new s_content_item_matchmaking_metadata();
     mm.hopper_identifier = bitstream.read_integer("hopper-identifier", 16);
     metadata.activity_data = mm;
@@ -269,7 +294,7 @@ export function content_item_metadata_decode(
   }
 
   switch (metadata.general.game_mode) {
-    case 1: {
+    case e_game_mode.campaign: {
       const campaign = new s_content_item_campaign_metadata();
       campaign.campaign_id = bitstream.read_integer("campaign-id", 8);
       campaign.campaign_difficulty = bitstream.read_integer(
@@ -295,7 +320,7 @@ export function content_item_metadata_decode(
       metadata.game_mode_data = campaign;
       break;
     }
-    case 2: {
+    case e_game_mode.survival: {
       const ff = new s_content_item_firefight_metadata();
       ff.firefight_difficulty = bitstream.read_integer("difficulty-level", 2);
       ff.firefight_primary_skulls = bitstream.read_integer("skull-flags", 16);
@@ -360,13 +385,13 @@ export function content_item_metadata_encode(
       break;
   }
 
-  if (metadata.general.activity === 2) {
+  if (metadata.general.activity === e_gui_game_mode.matchmaking) {
     const mm = metadata.activity_data as s_content_item_matchmaking_metadata;
     bitstream.write_integer(mm.hopper_identifier, 16);
   }
 
   switch (metadata.general.game_mode) {
-    case 1: {
+    case e_game_mode.campaign: {
       const campaign =
         metadata.game_mode_data as s_content_item_campaign_metadata;
       bitstream.write_integer(campaign.campaign_id, 8);
@@ -377,7 +402,7 @@ export function content_item_metadata_encode(
       bitstream.write_integer(campaign.campaign_secondary_skulls, 16);
       break;
     }
-    case 2: {
+    case e_game_mode.survival: {
       const ff = metadata.game_mode_data as s_content_item_firefight_metadata;
       bitstream.write_integer(ff.firefight_difficulty, 2);
       bitstream.write_integer(ff.firefight_primary_skulls, 16);

@@ -1,4 +1,5 @@
 ﻿use binrw::{BinRead, BinWrite};
+use num_derive::{FromPrimitive, ToPrimitive};
 use serde::{Deserialize, Serialize};
 use blf_lib::io::bitstream::c_bitstream_reader;
 use crate::types::string::StaticString;
@@ -15,6 +16,37 @@ use crate::OPTION_TO_RESULT;
 
 #[cfg(feature = "napi")]
 use napi_derive::napi;
+
+/// Content-item `general.activity` (`c_enum_no_init<e_gui_game_mode, char, -1, 7>`).
+#[repr(i8)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, ToPrimitive, FromPrimitive, Default, Serialize, Deserialize, BinRead, BinWrite)]
+#[brw(repr = i8)]
+#[cfg_attr(feature = "napi", napi(namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]
+pub enum e_gui_game_mode {
+    #[default]
+    none = -1,
+    activities = 0,
+    campaign = 1,
+    matchmaking = 2,
+    multiplayer = 3,
+    mapeditor = 4,
+    theater = 5,
+    survival = 6,
+}
+
+/// Content-item `general.game_mode` (`c_enum_no_init<e_game_mode, char, 0, 6>`).
+#[repr(u8)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, ToPrimitive, FromPrimitive, Default, Serialize, Deserialize, BinRead, BinWrite)]
+#[brw(repr = u8)]
+#[cfg_attr(feature = "napi", napi(namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]
+pub enum e_game_mode {
+    #[default]
+    none = 0,
+    campaign = 1,
+    /// Firefight / survival.
+    survival = 2,
+    multiplayer = 3,
+}
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite)]
 #[cfg_attr(feature = "napi", napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]
@@ -78,8 +110,8 @@ pub struct s_content_item_general_metadata {
     pub parent_unique_id: Unsigned64,
     pub root_unique_id: Unsigned64,
     pub game_id: Unsigned64,
-    pub activity: i8,
-    pub game_mode: u8,
+    pub activity: e_gui_game_mode,
+    pub game_mode: e_game_mode,
     #[brw(pad_after = 1)]
     pub game_engine_type: u8,
     pub map_id: i32,
@@ -115,25 +147,25 @@ pub struct c_content_item_metadata {
     #[serde(skip_serializing,skip_deserializing)]
     pub pad1: StaticArray<u8, 16>,
 
-    #[br(if(general.activity == 3))]
-    #[bw(if(general.activity == 3))]
+    #[br(if(general.activity == e_gui_game_mode::matchmaking))]
+    #[bw(if(general.activity == e_gui_game_mode::matchmaking))]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub matchmaking_data: Option<s_content_item_matchmaking_metadata>,
-    #[br(if(general.activity != 3))]
-    #[bw(if(general.activity != 3))]
+    #[br(if(general.activity != e_gui_game_mode::matchmaking))]
+    #[bw(if(general.activity != e_gui_game_mode::matchmaking))]
     #[serde(skip_serializing,skip_deserializing)]
     pub pad2: StaticArray<u8, 16>,
 
-    #[br(if(general.game_mode == 1))]
-    #[bw(if(general.game_mode == 1))]
+    #[br(if(general.game_mode == e_game_mode::campaign))]
+    #[bw(if(general.game_mode == e_game_mode::campaign))]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub campaign_data: Option<s_content_item_campaign_metadata>,
-    #[br(if(general.game_mode == 2))]
-    #[bw(if(general.game_mode == 2))]
+    #[br(if(general.game_mode == e_game_mode::survival))]
+    #[bw(if(general.game_mode == e_game_mode::survival))]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub firefight_data: Option<s_content_item_firefight_metadata>,
-    #[br(if(general.game_mode != 1 && general.game_mode != 2))]
-    #[bw(if(general.game_mode != 1 && general.game_mode != 2))]
+    #[br(if(general.game_mode != e_game_mode::campaign && general.game_mode != e_game_mode::survival))]
+    #[bw(if(general.game_mode != e_game_mode::campaign && general.game_mode != e_game_mode::survival))]
     #[serde(skip_serializing,skip_deserializing)]
     pub pad3: StaticArray<u8, 16>,
 }
@@ -146,8 +178,18 @@ impl c_content_item_metadata {
         self.general.parent_unique_id = bitstream.read_qword(64)?;
         self.general.root_unique_id = bitstream.read_qword(64)?;
         self.general.game_id = bitstream.read_qword(64)?;
-        self.general.activity = bitstream.read_integer::<i8>("activity", 3)? - 1;
-        self.general.game_mode = bitstream.read_integer("game-mode", 3)?;
+        self.general.activity = OPTION_TO_RESULT!(
+            num_traits::FromPrimitive::from_i8(
+                bitstream.read_integer::<i8>("activity", 3)? - 1
+            ),
+            "invalid activity"
+        )?;
+        self.general.game_mode = OPTION_TO_RESULT!(
+            num_traits::FromPrimitive::from_u8(
+                bitstream.read_integer("game-mode", 3)?
+            ),
+            "invalid game-mode"
+        )?;
         self.general.game_engine_type = bitstream.read_integer("game-engine-type", 3)?;
         self.general.map_id = bitstream.read_signed_integer("map-id", 32)?;
         self.display.megalo_category_index = bitstream.read_signed_integer("megalo-category-index", 8)?;
@@ -177,7 +219,7 @@ impl c_content_item_metadata {
         }
 
         match self.general.activity {
-            2 => {
+            e_gui_game_mode::matchmaking => {
                 self.matchmaking_data = Some(s_content_item_matchmaking_metadata {
                     hopper_identifier: bitstream.read_unnamed_integer(16)?,
                 })
@@ -186,7 +228,7 @@ impl c_content_item_metadata {
         }
 
         match self.general.game_mode {
-            1 => {
+            e_game_mode::campaign => {
                 self.campaign_data = Some(s_content_item_campaign_metadata {
                     campaign_id: bitstream.read_integer("campaign-id", 8)?,
                     campaign_difficulty: bitstream.read_integer("difficulty-level", 2)?,
@@ -196,7 +238,7 @@ impl c_content_item_metadata {
                     campaign_secondary_skulls: bitstream.read_integer("skull-flags", 16)?,
                 })
             }
-            2 => {
+            e_game_mode::survival => {
                 self.firefight_data = Some(s_content_item_firefight_metadata {
                     firefight_difficulty: bitstream.read_integer("difficulty-level", 2)?,
                     firefight_primary_skulls: bitstream.read_integer("skull-flags", 16)?,
@@ -216,8 +258,8 @@ impl c_content_item_metadata {
         bitstream.write_qword(self.general.parent_unique_id, 64)?;
         bitstream.write_qword(self.general.root_unique_id, 64)?;
         bitstream.write_qword(self.general.game_id, 64)?;
-        bitstream.write_integer((self.general.activity + 1) as u32, 3)?;
-        bitstream.write_integer(self.general.game_mode, 3)?;
+        bitstream.write_integer((self.general.activity as i8 as i32 + 1) as u32, 3)?;
+        bitstream.write_integer(self.general.game_mode as u8 as u32, 3)?;
         bitstream.write_integer(self.general.game_engine_type, 3)?;
         bitstream.write_signed_integer(self.general.map_id, 32)?;
         bitstream.write_signed_integer(self.display.megalo_category_index, 8)?;
@@ -255,7 +297,7 @@ impl c_content_item_metadata {
         }
 
         match self.general.activity {
-            2 => {
+            e_gui_game_mode::matchmaking => {
                 bitstream.write_signed_integer(
                     OPTION_TO_RESULT!(
                         &self.matchmaking_data,
@@ -268,7 +310,7 @@ impl c_content_item_metadata {
         }
 
         match self.general.game_mode {
-            1 => {
+            e_game_mode::campaign => {
                 let campaign_data = OPTION_TO_RESULT!(
                     &self.campaign_data,
                     "Tried to serialize campaign file with no campaign data."
@@ -281,7 +323,7 @@ impl c_content_item_metadata {
                 bitstream.write_integer(campaign_data.campaign_primary_skulls as u32, 16)?;
                 bitstream.write_integer(campaign_data.campaign_secondary_skulls as u32, 16)?;
             }
-            2 => {
+            e_game_mode::survival => {
                 let firefight_data = OPTION_TO_RESULT!(
                     &self.firefight_data,
                     "Tried to serialize firefight file with no firefight data."
@@ -301,8 +343,8 @@ impl c_content_item_metadata {
     pub fn content_item_metadata_set_defaults(&mut self) {
         *self = Self::default();
         self.general.file_type = -1;
-        self.general.activity = -1;
-        self.general.game_mode = 0;
+        self.general.activity = e_gui_game_mode::none;
+        self.general.game_mode = e_game_mode::none;
         self.general.game_engine_type = 0;
         self.general.map_id = -1;
         self.display.megalo_category_index = -1;

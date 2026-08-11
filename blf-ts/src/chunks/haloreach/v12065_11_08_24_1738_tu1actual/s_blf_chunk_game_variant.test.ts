@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { reach_12065_oddball_fixture } from "../../../../tests/fixtures/paths";
 import { security_calculate_hash } from "../../../blam/common/cache/security_functions";
-import { e_game_mode } from "../../../blam/haloreach/v12065_11_08_24_1738_tu1actual/game/game_variant";
+import { e_game_engine_type } from "../../../blam/haloreach/v12065_11_08_24_1738_tu1actual/game/game_variant";
 import { search_for_chunk } from "../../../blf_chunk";
 import {
   MPVR_PAYLOAD_SIZE,
@@ -32,7 +32,7 @@ describe("s_blf_chunk_game_variant", () => {
     expect(chunk.unknown04).toBe(-1);
     expect(chunk.unknown06).toBe(0);
     expect(chunk.variant_length).toBe(1);
-    expect(chunk.game_variant.m_game_engine).toBe(e_game_mode.megalogamengine);
+    expect(chunk.game_variant.m_game_engine).toBe(e_game_engine_type.megalogamengine);
   });
 
   it("round-trips the Reach MPVR fixture (big-endian)", () => {
@@ -63,7 +63,7 @@ describe("s_blf_chunk_game_variant", () => {
     const mpvr = new s_blf_chunk_game_variant();
     expect(search_for_chunk(file, mpvr, "big")).toBe(true);
 
-    expect(mpvr.game_variant.m_game_engine).toBe(e_game_mode.megalogamengine);
+    expect(mpvr.game_variant.m_game_engine).toBe(e_game_engine_type.megalogamengine);
     expect(mpvr.game_variant.m_custom_variant).toBeDefined();
     expect(mpvr.game_variant.m_custom_variant!.m_encoding_version).toBe(107);
     expect(mpvr.game_variant.m_custom_variant!.m_build_number).toBe(12065);

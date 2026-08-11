@@ -15,7 +15,7 @@ import { c_game_engine_survival_variant } from "../../v12065_11_08_24_1738_tu1ac
 import { s_player_trait_option } from "../../v12065_11_08_24_1738_tu1actual/game/game_engine_traits";
 import {
   e_game_engine_category,
-  e_game_mode,
+  e_game_engine_type,
   e_game_variant_parameter,
   k_game_variant_parameter_flags,
   s_custom_game_engine_definition,
@@ -28,7 +28,7 @@ import { c_string_table } from "../../v12065_11_08_24_1738_tu1actual/game/string
 import type { s_content_item_metadata } from "../../v12065_11_08_24_1738_tu1actual/saved_games/saved_game_files";
 
 export {
-  e_game_mode,
+  e_game_engine_type,
   e_game_variant_parameter,
   k_game_variant_parameter_flags,
   s_custom_game_engine_definition,
@@ -213,8 +213,8 @@ export class c_game_engine_custom_variant {
 }
 
 export class c_game_variant {
-  @AutoMap(() => e_game_mode)
-  m_game_engine: e_game_mode = e_game_mode.megalogamengine;
+  @AutoMap(() => e_game_engine_type)
+  m_game_engine: e_game_engine_type = e_game_engine_type.megalogamengine;
   @AutoMap(() => c_game_engine_base_variant)
   m_campaign_variant?: c_game_engine_base_variant;
   @AutoMap(() => c_game_engine_custom_variant)
@@ -225,27 +225,27 @@ export class c_game_variant {
   m_sandbox_variant?: c_game_engine_sandbox_variant;
 
   decode(bitstream: c_bitstream_reader): void {
-    this.m_game_engine = bitstream.read_enum("game-engine", 4, e_game_mode);
+    this.m_game_engine = bitstream.read_enum("game-engine", 4, e_game_engine_type);
     switch (this.m_game_engine) {
-      case e_game_mode.sandbox: {
+      case e_game_engine_type.sandbox: {
         const sandbox = new c_game_engine_sandbox_variant();
         sandbox.decode(bitstream);
         this.m_sandbox_variant = sandbox;
         break;
       }
-      case e_game_mode.megalogamengine: {
+      case e_game_engine_type.megalogamengine: {
         const custom = new c_game_engine_custom_variant();
         custom.decode(bitstream);
         this.m_custom_variant = custom;
         break;
       }
-      case e_game_mode.campaign: {
+      case e_game_engine_type.campaign: {
         const campaign = new c_game_engine_base_variant();
         campaign.decode(bitstream);
         this.m_campaign_variant = campaign;
         break;
       }
-      case e_game_mode.survival: {
+      case e_game_engine_type.survival: {
         const survival = new c_game_engine_survival_variant();
         survival.decode(bitstream);
         this.m_survival_variant = survival;
@@ -257,27 +257,27 @@ export class c_game_variant {
   }
 
   encode(bitstream: c_bitstream_writer): void {
-    bitstream.write_enum(this.m_game_engine, 4, e_game_mode);
+    bitstream.write_enum(this.m_game_engine, 4, e_game_engine_type);
     switch (this.m_game_engine) {
-      case e_game_mode.sandbox:
+      case e_game_engine_type.sandbox:
         if (!this.m_sandbox_variant) {
           throw new BlfError("m_sandbox_variant does not exist");
         }
         this.m_sandbox_variant.encode(bitstream);
         break;
-      case e_game_mode.megalogamengine:
+      case e_game_engine_type.megalogamengine:
         if (!this.m_custom_variant) {
           throw new BlfError("m_custom_variant does not exist");
         }
         this.m_custom_variant.encode(bitstream);
         break;
-      case e_game_mode.campaign:
+      case e_game_engine_type.campaign:
         if (!this.m_campaign_variant) {
           throw new BlfError("m_campaign_variant does not exist");
         }
         this.m_campaign_variant.encode(bitstream);
         break;
-      case e_game_mode.survival:
+      case e_game_engine_type.survival:
         if (!this.m_survival_variant) {
           throw new BlfError("m_survival_variant does not exist");
         }
@@ -290,23 +290,23 @@ export class c_game_variant {
 
   get_metadata(): s_content_item_metadata {
     switch (this.m_game_engine) {
-      case e_game_mode.sandbox:
+      case e_game_engine_type.sandbox:
         if (!this.m_sandbox_variant) {
           throw new BlfError("m_sandbox_variant does not exist");
         }
         return this.m_sandbox_variant.m_custom_variant.m_base_variant
           .m_metadata;
-      case e_game_mode.megalogamengine:
+      case e_game_engine_type.megalogamengine:
         if (!this.m_custom_variant) {
           throw new BlfError("m_custom_variant does not exist");
         }
         return this.m_custom_variant.m_base_variant.m_metadata;
-      case e_game_mode.campaign:
+      case e_game_engine_type.campaign:
         if (!this.m_campaign_variant) {
           throw new BlfError("m_campaign_variant does not exist");
         }
         return this.m_campaign_variant.m_metadata;
-      case e_game_mode.survival:
+      case e_game_engine_type.survival:
         if (!this.m_survival_variant) {
           throw new BlfError("m_survival_variant does not exist");
         }

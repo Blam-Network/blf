@@ -1482,7 +1482,7 @@ impl c_game_engine_custom_variant {
 }
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, Default, ToPrimitive, FromPrimitive)]
-pub enum e_game_mode {
+pub enum e_game_engine_type {
     none = 0,
     sandbox = 1,
     #[default]
@@ -1494,7 +1494,7 @@ pub enum e_game_mode {
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct c_game_variant {
-    pub m_game_engine: e_game_mode,
+    pub m_game_engine: e_game_engine_type,
 
     // campaign only uses a base variant.
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1511,35 +1511,35 @@ pub struct c_game_variant {
 impl c_game_variant {
     pub fn get_metadata(&self) -> BLFLibResult<&c_content_item_metadata> {
         match self.m_game_engine {
-            e_game_mode::sandbox => {
+            e_game_engine_type::sandbox => {
                 Ok(
                     &self.m_sandbox_variant.as_ref()
                         .ok_or_else(|| BLFLibError::from("m_sandbox_variant does not exist."))?
                         .m_custom_variant.m_base_variant.m_metadata
                 )
             }
-            e_game_mode::megalogamengine => {
+            e_game_engine_type::megalogamengine => {
                 Ok(
                     &self.m_custom_variant.as_ref()
                         .ok_or_else(|| BLFLibError::from("m_custom_variant does not exist."))?
                         .m_base_variant.m_metadata
                 )
             }
-            e_game_mode::campaign => {
+            e_game_engine_type::campaign => {
                 Ok(
                     &self.m_campaign_variant.as_ref()
                         .ok_or_else(|| BLFLibError::from("m_campaign_variant does not exist."))?
                         .m_metadata
                 )
             }
-            e_game_mode::survival => {
+            e_game_engine_type::survival => {
                 Ok(
                     &self.m_survival_variant.as_ref()
                         .ok_or_else(|| BLFLibError::from("m_survival_variant does not exist."))?
                         .m_base_variant.m_metadata
                 )
             }
-            e_game_mode::none => Err(BLFLibError::from("m_game_engine is none.")),
+            e_game_engine_type::none => Err(BLFLibError::from("m_game_engine is none.")),
         }
     }
 
@@ -1547,16 +1547,16 @@ impl c_game_variant {
         bitstream.write_enum_raw(self.m_game_engine.clone(), 4)?;
 
         match (&self.m_game_engine, &self.m_custom_variant, &self.m_campaign_variant, &self.m_survival_variant, &self.m_sandbox_variant) {
-            (e_game_mode::sandbox, None, None, None, Some(sandbox_variant)) => {
+            (e_game_engine_type::sandbox, None, None, None, Some(sandbox_variant)) => {
                 sandbox_variant.encode(bitstream)?;
             }
-            (e_game_mode::megalogamengine, Some(custom_variant), None, None, None) => {
+            (e_game_engine_type::megalogamengine, Some(custom_variant), None, None, None) => {
                 custom_variant.encode(bitstream)?;
             }
-            (e_game_mode::campaign, None, Some(campaign_variant), None, None) => {
+            (e_game_engine_type::campaign, None, Some(campaign_variant), None, None) => {
                 campaign_variant.encode(bitstream)?;
             }
-            (e_game_mode::survival, None, None, Some(survival_variant), None) => {
+            (e_game_engine_type::survival, None, None, Some(survival_variant), None) => {
                 survival_variant.encode(bitstream)?;
             }
             _ => {
@@ -1572,23 +1572,23 @@ impl c_game_variant {
         self.m_game_engine = bitstream.read_unnamed_enum_raw(4)?;
 
         match self.m_game_engine {
-            e_game_mode::sandbox => {
+            e_game_engine_type::sandbox => {
                 let mut sandbox_variant = c_game_engine_sandbox_variant::default();
                 sandbox_variant.decode(bitstream)?;
                 self.m_sandbox_variant = Some(sandbox_variant);
             }
-            e_game_mode::megalogamengine => {
+            e_game_engine_type::megalogamengine => {
                 // customs
                 let mut custom_variant = c_game_engine_custom_variant::default();
                 custom_variant.decode(bitstream)?;
                 self.m_custom_variant = Some(custom_variant);
             }
-            e_game_mode::campaign => {
+            e_game_engine_type::campaign => {
                 let mut campaign_variant = c_game_engine_campaign_variant::default();
                 campaign_variant.decode(bitstream)?;
                 self.m_campaign_variant = Some(campaign_variant);
             }
-            e_game_mode::survival => {
+            e_game_engine_type::survival => {
                 let mut survival_variant = c_game_engine_survival_variant::default();
                 survival_variant.decode(bitstream)?;
                 self.m_survival_variant = Some(survival_variant);

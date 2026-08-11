@@ -47,12 +47,12 @@ pub struct s_online_file_metadata {
     #[serde(skip_serializing, skip_deserializing)]
     pub pad1: StaticArray<u8, 16>,
 
-    #[br(if(general.activity == 3))]
-    #[bw(if(general.activity == 3))]
+    #[br(if(general.activity == 2))]
+    #[bw(if(general.activity == 2))]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub matchmaking_data: Option<s_content_item_matchmaking_metadata>,
-    #[br(if(general.activity != 3))]
-    #[bw(if(general.activity != 3))]
+    #[br(if(general.activity != 2))]
+    #[bw(if(general.activity != 2))]
     #[serde(skip_serializing, skip_deserializing)]
     pub pad2: StaticArray<u8, 16>,
 

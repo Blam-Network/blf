@@ -2,7 +2,7 @@ export * from "../../blam/common";
 export {
   c_game_engine_custom_variant,
   c_game_variant,
-  e_game_mode,
+  e_game_engine_type,
   s_custom_game_engine_definition,
 } from "../../blam/haloreach/v11860_10_07_24_0147_omaha_release/game/game_variant";
 export * from "../../blam/haloreach/v12065_11_08_24_1738_tu1actual";

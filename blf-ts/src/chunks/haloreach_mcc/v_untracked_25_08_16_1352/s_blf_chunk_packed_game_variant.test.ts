@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { reach_12065_oddball_fixture } from "../../../../tests/fixtures/paths";
-import { e_game_mode } from "../../../blam/haloreach_mcc/v_untracked_25_08_16_1352/game/game_variant";
+import { e_game_engine_type } from "../../../blam/haloreach_mcc/v_untracked_25_08_16_1352/game/game_variant";
 import { search_for_chunk } from "../../../blf_chunk";
 import { BlfError } from "../../../error";
 import { write_blffile } from "../../../index";
@@ -33,7 +33,7 @@ describe("s_blf_chunk_matchmaking_game_variant", () => {
     const gvar = new s_blf_chunk_packed_game_variant();
     gvar.read_body(gametype_payload, "big");
 
-    expect(gvar.game_variant.m_game_engine).toBe(e_game_mode.megalogamengine);
+    expect(gvar.game_variant.m_game_engine).toBe(e_game_engine_type.megalogamengine);
     expect(gvar.game_variant.m_custom_variant).toBeDefined();
     expect(gvar.game_variant.m_custom_variant!.m_encoding_version).toBe(107);
     expect(gvar.game_variant.m_custom_variant!.m_build_number).toBe(12065);
@@ -80,7 +80,7 @@ describe("s_blf_chunk_matchmaking_game_variant", () => {
 
     const found = new s_blf_chunk_packed_game_variant();
     expect(search_for_chunk(blf, found, "big")).toBe(true);
-    expect(found.game_variant.m_game_engine).toBe(e_game_mode.megalogamengine);
+    expect(found.game_variant.m_game_engine).toBe(e_game_engine_type.megalogamengine);
     expect(
       found.game_variant.m_custom_variant!.m_base_variant.m_metadata.name
     ).toBe("Oddball");
