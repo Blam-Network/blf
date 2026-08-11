@@ -631,7 +631,7 @@ export class s_action_hud_post_message_parameters {
   @AutoMap(() => s_team_or_player_target)
   m_target = new s_team_or_player_target();
   @AutoMap(() => e_megalo_sound)
-  m_sound_index: e_megalo_sound = e_megalo_sound.slayer;
+  m_sound_index: e_megalo_sound = e_megalo_sound.none;
   @AutoMap(() => c_dynamic_string)
   m_string = new c_dynamic_string();
   decode(bitstream: c_bitstream_reader): void {
@@ -894,7 +894,7 @@ export class s_action_hud_widget_set_visibility_parameters {
 }
 export class s_action_play_sound_parameters {
   @AutoMap(() => e_megalo_sound)
-  m_sound_index: e_megalo_sound = e_megalo_sound.slayer;
+  m_sound_index: e_megalo_sound = e_megalo_sound.none;
   @AutoMap(() => Boolean)
   m_immediate = false;
   @AutoMap(() => s_team_or_player_target)

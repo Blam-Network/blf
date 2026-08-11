@@ -438,7 +438,7 @@ pub struct s_action_hud_post_message_parameters {
 impl s_action_hud_post_message_parameters {
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
         self.m_target.encode(bitstream)?;
-        bitstream.write_enum_raw(self.m_sound_index, 7)?;
+        bitstream.write_enum(self.m_sound_index)?;
         self.m_string.encode(bitstream)?;
 
         Ok(())
@@ -446,7 +446,7 @@ impl s_action_hud_post_message_parameters {
 
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
         self.m_target.decode(bitstream)?;
-        self.m_sound_index = bitstream.read_enum_raw("sound-index", 7)?;
+        self.m_sound_index = bitstream.read_enum("sound-index")?;
         self.m_string.decode(bitstream)?;
 
         Ok(())
@@ -701,14 +701,14 @@ pub struct s_action_play_sound_parameters {
 
 impl s_action_play_sound_parameters {
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
-        bitstream.write_enum_raw(self.m_sound_index, 7)?;
+        bitstream.write_enum(self.m_sound_index)?;
         self.m_target.encode(bitstream)?;
 
         Ok(())
     }
 
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
-        self.m_sound_index = bitstream.read_enum_raw("sound-index", 7)?;
+        self.m_sound_index = bitstream.read_enum("sound-index")?;
         self.m_target.decode(bitstream)?;
 
         Ok(())

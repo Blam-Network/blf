@@ -1,5 +1,6 @@
 /** Matches `e_megalo_sound` in blf_lib `megalogamengine_sounds.rs` (Omaha delta). */
 export enum e_megalo_sound {
+  none = -1,
   slayer = 0,
   ctf = 1,
   flag_captured = 2,

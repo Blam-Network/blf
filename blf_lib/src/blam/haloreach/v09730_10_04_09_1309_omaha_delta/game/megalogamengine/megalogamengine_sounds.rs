@@ -1,10 +1,12 @@
 use num_derive::{FromPrimitive, ToPrimitive};
 use serde::{Deserialize, Serialize};
 
-#[repr(u8)]
-#[derive(Debug, Clone, Copy, PartialEq, Eq, ToPrimitive, FromPrimitive, Default, Serialize, Deserialize)]
+#[repr(i8)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, ToPrimitive, FromPrimitive, Default, Serialize, Deserialize, crate::derive::c_enum)]
+#[bits(7)]
 pub enum e_megalo_sound {
     #[default]
+    none = -1,
     slayer = 0,
     ctf = 1,
     flag_captured = 2,
