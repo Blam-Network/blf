@@ -29,11 +29,6 @@ export enum e_game_engine_timer_rate {
   _500x = 25,
   _1000x = 26,
 }
-export enum e_weapon_pickup_priority {
-  normal = 0,
-  high = 1,
-  automatic = 2,
-}
 /** Matches `e_survival_variant_flags` in blf_lib `game_engine_survival.rs`. */
 export class e_survival_variant_flags {
   @AutoMap(() => Boolean)

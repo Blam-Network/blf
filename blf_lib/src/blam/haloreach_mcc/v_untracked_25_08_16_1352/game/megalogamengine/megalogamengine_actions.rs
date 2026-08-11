@@ -9,7 +9,6 @@ use blf_lib::blam::haloreach_mcc::v_untracked_25_08_16_1352::game::megalogamengi
 use blf_lib::blam::haloreach_mcc::v_untracked_25_08_16_1352::game::megalogamengine::megalogamengine_text::c_dynamic_string;
 use blf_lib::blam::haloreach_mcc::v_untracked_25_08_16_1352::game::megalogamengine::megalogamengine_variant_variable::s_variant_variable;
 use blf_lib::blam::haloreach_mcc::v_untracked_25_08_16_1352::game::megalogamengine::megalogamengine_hud_widgets::e_megalogamengine_hud_meter_input_type;
-use blf_lib::blam::haloreach_mcc::v_untracked_25_08_16_1352::game::game_engine_megalo::e_weapon_pickup_priority;
 use blf_lib::blam::haloreach_mcc::v_untracked_25_08_16_1352::game::game_engine_timer::e_game_engine_timer_rate;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::saved_games::scenario_map_variant::e_boundary_shape;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::megalogamengine::megalogamengine_sounds::e_megalo_sound;
@@ -19,6 +18,15 @@ use blf_lib::OPTION_TO_RESULT;
 use blf_lib_derivable::result::{BLFLibError, BLFLibResult};
 use crate::blam::haloreach_mcc::v_untracked_25_08_16_1352::game::megalogamengine::megalogamengine_custom_variable_reference::c_custom_variable_reference;
 use crate::blam::haloreach_mcc::v_untracked_25_08_16_1352::game::megalogamengine::megalogamengine_object_reference::c_object_reference;
+
+#[repr(u8)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, ToPrimitive, FromPrimitive, Default, Serialize, Deserialize)]
+pub enum e_weapon_pickup_priority {
+    #[default]
+    normal = 0,
+    high = 1,
+    automatic = 2,
+}
 
 #[repr(u8)]
 #[derive(Debug, Clone, Copy, PartialEq, Eq, ToPrimitive, FromPrimitive, Default, Serialize, Deserialize)]

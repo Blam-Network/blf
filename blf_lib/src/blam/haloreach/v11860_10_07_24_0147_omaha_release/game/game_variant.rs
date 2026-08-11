@@ -2,9 +2,12 @@ use num_derive::{FromPrimitive, ToPrimitive};
 use serde::{Deserialize, Serialize};
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::game_engine_campaign::c_game_engine_campaign_variant;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::game_engine_default::c_game_engine_base_variant;
+use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::game_variant::e_game_engine_category;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::game_engine_player_rating_parameters::s_game_engine_player_rating_parameters;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::game_engine_survival::c_game_engine_survival_variant;
 use crate::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::game_engine_sandbox::c_game_engine_sandbox_variant;
+use blf_lib::OPTION_TO_RESULT;
+use num_traits::FromPrimitive;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::game_engine_traits::s_player_trait_option;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::megalogamengine::megalogamengine_actions::c_action;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::megalogamengine::megalogamengine_conditions::c_condition;
@@ -39,7 +42,7 @@ pub struct c_game_engine_custom_variant {
     pub m_localized_description: c_string_table<1, 0xC00, 12, 12, 1>,
     pub m_localized_category: c_string_table<1, 0x180, 9, 9, 1>,
     pub m_engine_icon: i8,
-    pub m_engine_category: i8,
+    pub m_engine_category: e_game_engine_category,
     pub m_map_permissions: c_megalogamengine_map_permissions,
     pub m_player_ratings: s_game_engine_player_rating_parameters,
     pub m_score_to_win_round: u16,
@@ -81,7 +84,7 @@ impl c_game_engine_custom_variant {
         self.m_localized_description.encode(bitstream)?;
         self.m_localized_category.encode(bitstream)?;
         bitstream.write_integer((self.m_engine_icon + 1) as u32, 5)?;
-        bitstream.write_integer((self.m_engine_category + 1) as u32, 5)?;
+        bitstream.write_integer((self.m_engine_category as i8 as i32 + 1) as u32, 5)?;
         self.m_map_permissions.encode(bitstream)?;
         self.m_player_ratings.encode(bitstream)?;
         bitstream.write_signed_integer(self.m_score_to_win_round, 16)?;
@@ -122,7 +125,12 @@ impl c_game_engine_custom_variant {
         self.m_localized_description.decode(bitstream)?;
         self.m_localized_category.decode(bitstream)?;
         self.m_engine_icon = bitstream.read_integer::<i32>("engine-icon-index", 5)? as i8 - 1;
-        self.m_engine_category = bitstream.read_integer::<i32>("engine-category", 5)? as i8 - 1;
+        self.m_engine_category = OPTION_TO_RESULT!(
+            FromPrimitive::from_i8(
+                bitstream.read_integer::<i32>("engine-category", 5)? as i8 - 1
+            ),
+            "invalid engine-category"
+        )?;
         self.m_map_permissions.decode(bitstream)?;
         self.m_player_ratings.decode(bitstream)?;
         self.m_score_to_win_round = bitstream.read_signed_integer("score-to-win-round", 16)?;

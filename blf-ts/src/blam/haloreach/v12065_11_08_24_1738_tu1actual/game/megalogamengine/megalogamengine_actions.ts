@@ -3,12 +3,16 @@ import type {
   c_bitstream_writer,
 } from "../../../../../bitstream";
 import { AutoMap } from "../../../../../helpers/automap";
-import {
-  e_game_engine_timer_rate,
-  e_weapon_pickup_priority,
-} from "../game_engine_enums";
+import { e_game_engine_timer_rate } from "../game_engine_enums";
 import { e_megalogamengine_hud_meter_input_type } from "./megalogamengine_hud_widgets";
 import { e_megalo_sound } from "./megalogamengine_sounds";
+
+export enum e_weapon_pickup_priority {
+  normal = 0,
+  high = 1,
+  automatic = 2,
+}
+
 /** Matches `e_action_team_or_player_target` in blf_lib `megalogamengine_actions.rs`. */
 export enum e_action_team_or_player_target {
   team = 0,

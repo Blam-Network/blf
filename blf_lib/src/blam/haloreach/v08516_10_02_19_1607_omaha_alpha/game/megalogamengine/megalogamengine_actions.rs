@@ -15,12 +15,12 @@ use blf_lib::blam::haloreach::v08516_10_02_19_1607_omaha_alpha::game::megalogame
 use crate::blam::haloreach::v08516_10_02_19_1607_omaha_alpha::game::megalogamengine::megalogamengine_sounds::e_megalo_sound;
 use blf_lib::io::bitstream::{c_bitstream_reader, c_bitstream_writer};
 use blf_lib_derivable::result::{BLFLibError, BLFLibResult};
-use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::game_engine_megalo::e_weapon_pickup_priority;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::game_engine_timer::e_game_engine_timer_rate;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::megalogamengine::megalogamengine_hud_widgets::e_megalogamengine_hud_meter_input_type;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::megalogamengine::megalogamengine_actions::{
     e_action_team_or_player_target, e_biped_give_weapon_mode, e_chud_navpoint_icon_type,
     e_fireteam_filter_flags, e_grenade_type, e_navpoint_priority, e_player_filter_type,
+    e_weapon_pickup_priority,
 };
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]

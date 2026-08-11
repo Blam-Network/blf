@@ -1618,6 +1618,41 @@ export class c_game_engine_custom_variant_tu1_settings {
 
 export const k_game_engine_custom_variant_encoding_version = 107;
 
+/** MegaloEdit `EngineCategories` / engine_data `category` values. */
+export enum e_game_engine_category {
+  ctf = 0,
+  slayer = 1,
+  oddball = 2,
+  koth = 3,
+  juggernaut = 4,
+  territories = 5,
+  assault = 6,
+  infection = 7,
+  vip = 8,
+  invasion = 9,
+  stockpile = 10,
+  action_sack = 11,
+  race = 12,
+  headhunter = 13,
+  wip = 14,
+  dogfight = 15,
+  insane = 16,
+  bungie = 17,
+  ms343 = 18,
+  heroic = 19,
+  legendary = 20,
+  mythic = 21,
+  mantis = 22,
+  shishka = 23,
+  huevos = 24,
+  jonnyo = 25,
+  dangerboy = 26,
+  holiday = 27,
+  community = 28,
+  matchmaking = 29,
+  pre_game_warm_up = 30,
+}
+
 export class c_game_engine_custom_variant {
   @AutoMap(() => Number)
   m_encoding_version = 0;
@@ -1641,8 +1676,8 @@ export class c_game_engine_custom_variant {
   m_localized_category = new c_string_table(1, 0x180, 9, 9, 1);
   @AutoMap(() => Number)
   m_engine_icon = 0;
-  @AutoMap(() => Number)
-  m_engine_category = 0;
+  @AutoMap(() => e_game_engine_category)
+  m_engine_category: e_game_engine_category = e_game_engine_category.ctf;
   @AutoMap(() => c_megalogamengine_map_permissions)
   m_map_permissions = new c_megalogamengine_map_permissions();
   @AutoMap(() => s_game_engine_player_rating_parameters)
@@ -1715,7 +1750,8 @@ export class c_game_engine_custom_variant {
     this.m_localized_description.decode(bitstream);
     this.m_localized_category.decode(bitstream);
     this.m_engine_icon = bitstream.read_integer("engine-icon-index", 5) - 1;
-    this.m_engine_category = bitstream.read_integer("engine-category", 5) - 1;
+    this.m_engine_category = (bitstream.read_integer("engine-category", 5) -
+      1) as e_game_engine_category;
     this.m_map_permissions.decode(bitstream);
     this.m_player_ratings.decode(bitstream);
     this.m_score_to_win_round = bitstream.read_signed_integer(

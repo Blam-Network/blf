@@ -14,6 +14,7 @@ import { c_game_engine_sandbox_variant } from "../../v12065_11_08_24_1738_tu1act
 import { c_game_engine_survival_variant } from "../../v12065_11_08_24_1738_tu1actual/game/game_engine_survival";
 import { s_player_trait_option } from "../../v12065_11_08_24_1738_tu1actual/game/game_engine_traits";
 import {
+  e_game_engine_category,
   e_game_mode,
   e_game_variant_parameter,
   k_game_variant_parameter_flags,
@@ -60,8 +61,8 @@ export class c_game_engine_custom_variant {
   m_localized_category = new c_string_table(1, 0x180, 9, 9, 1);
   @AutoMap(() => Number)
   m_engine_icon = 0;
-  @AutoMap(() => Number)
-  m_engine_category = 0;
+  @AutoMap(() => e_game_engine_category)
+  m_engine_category: e_game_engine_category = e_game_engine_category.ctf;
   @AutoMap(() => c_megalogamengine_map_permissions)
   m_map_permissions = new c_megalogamengine_map_permissions();
   @AutoMap(() => s_game_engine_player_rating_parameters)
@@ -132,7 +133,8 @@ export class c_game_engine_custom_variant {
     this.m_localized_description.decode(bitstream);
     this.m_localized_category.decode(bitstream);
     this.m_engine_icon = bitstream.read_integer("engine-icon-index", 5) - 1;
-    this.m_engine_category = bitstream.read_integer("engine-category", 5) - 1;
+    this.m_engine_category = (bitstream.read_integer("engine-category", 5) -
+      1) as e_game_engine_category;
     this.m_map_permissions.decode(bitstream);
     this.m_player_ratings.decode(bitstream);
     this.m_score_to_win_round = bitstream.read_signed_integer(

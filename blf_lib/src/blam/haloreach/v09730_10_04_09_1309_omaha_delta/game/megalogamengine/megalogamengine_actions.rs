@@ -14,13 +14,12 @@ use blf_lib_derivable::result::{BLFLibError, BLFLibResult};
 use crate::blam::haloreach::v09730_10_04_09_1309_omaha_delta::game::megalogamengine::megalogamengine_custom_variable_reference::c_custom_variable_reference;
 use crate::blam::haloreach::v09730_10_04_09_1309_omaha_delta::game::megalogamengine::megalogamengine_sounds::e_megalo_sound;
 use crate::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::megalogamengine::megalogamengine_object_reference::c_object_reference;
-use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::game_engine_megalo::e_weapon_pickup_priority;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::game_engine_timer::e_game_engine_timer_rate;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::megalogamengine::megalogamengine_hud_widgets::e_megalogamengine_hud_meter_input_type;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::megalogamengine::megalogamengine_actions::{
     e_action_team_or_player_target, e_biped_give_weapon_mode, e_chud_navpoint_icon_type,
     e_create_object_flags, e_fireteam_filter_flags, e_grenade_type, e_math_operation,
-    e_navpoint_priority, e_player_filter_type,
+    e_navpoint_priority, e_player_filter_type, e_weapon_pickup_priority,
 };
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
