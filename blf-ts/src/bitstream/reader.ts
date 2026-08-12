@@ -3,6 +3,7 @@ import {
   type BitfieldOf,
   bitfieldFromRaw,
 } from "./bitfield";
+import { bigFlagsFromWords } from "./big_bitfield";
 import {
   type EnumNumber,
   enumMemberFromWireIndex,
@@ -146,6 +147,15 @@ export class c_bitstream_reader {
     fields: F
   ): BitfieldOf<F> {
     return bitfieldFromRaw(this.read_integer(name, size_in_bits), fields);
+  }
+
+  read_big_flags(name: string, bitCount: number): boolean[] {
+    const wordCount = Math.ceil(bitCount / 32);
+    const words: number[] = [];
+    for (let i = 0; i < wordCount; i++) {
+      words.push(this.read_integer(name, 32) >>> 0);
+    }
+    return bigFlagsFromWords(words, bitCount);
   }
 
   read_bits_internal(output: Uint8Array, size_in_bits: number): void {

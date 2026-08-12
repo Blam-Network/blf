@@ -2955,9 +2955,7 @@ impl s_custom_game_engine_definition {
         bitstream.write_integer((self.m_local_trigger_index + 1) as u32, 9)?;
         bitstream.write_integer((self.m_pregame_trigger_index + 1) as u32, 9)?;
 
-        for object_type in self.m_objects_used.get() {
-            bitstream.write_bool(*object_type)?
-        }
+        bitstream.write_big_flags(self.m_objects_used.get())?;
 
         bitstream.write_integer(self.m_object_filters.len() as u32, 5)?;
         for filter in &self.m_object_filters {
@@ -3014,9 +3012,7 @@ impl s_custom_game_engine_definition {
         self.m_local_trigger_index = bitstream.read_integer::<i32>("local-trigger-index", 9)? as i16 - 1;
         self.m_pregame_trigger_index = bitstream.read_integer::<i32>("pregame-trigger-index", 9)? as i16 - 1;
 
-        for i in 0..2048 {
-            self.m_objects_used[i] = bitstream.read_bool("object-types-used")?;
-        }
+        bitstream.read_big_flags("object-types-used", self.m_objects_used.get_mut())?;
 
         let object_filter_count: u8 = bitstream.read_integer("object-filter-count", 5)?;
         for i in 0..object_filter_count {

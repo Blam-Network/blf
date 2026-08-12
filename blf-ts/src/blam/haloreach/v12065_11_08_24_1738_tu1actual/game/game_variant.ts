@@ -131,9 +131,7 @@ export class s_custom_game_engine_definition {
       bitstream.read_integer("local-trigger-index", 9) - 1;
     this.m_pregame_trigger_index =
       bitstream.read_integer("pregame-trigger-index", 9) - 1;
-    for (let i = 0; i < 2048; i++) {
-      this.m_objects_used[i] = bitstream.read_bool("object-types-used");
-    }
+    this.m_objects_used = bitstream.read_big_flags("object-types-used", 2048);
     const object_filter_count = bitstream.read_integer(
       "object-filter-count",
       5
@@ -176,9 +174,7 @@ export class s_custom_game_engine_definition {
     bitstream.write_integer(this.m_object_death_event_trigger_index + 1, 9);
     bitstream.write_integer(this.m_local_trigger_index + 1, 9);
     bitstream.write_integer(this.m_pregame_trigger_index + 1, 9);
-    for (const used of this.m_objects_used) {
-      bitstream.write_bool(used);
-    }
+    bitstream.write_big_flags(this.m_objects_used, "object-types-used");
     bitstream.write_integer(this.m_object_filters.length, 5);
     for (const filter of this.m_object_filters) {
       filter.encode(bitstream);

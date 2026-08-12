@@ -1,6 +1,8 @@
 export {
   bigBitfieldFromWords,
   bigBitfieldToWords,
+  bigFlagsFromWords,
+  bigFlagsToWords,
   decodeBigBitfield,
   defaultBigBitfield,
   encodeBigBitfield,

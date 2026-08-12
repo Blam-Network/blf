@@ -3,6 +3,7 @@ import {
   type BitfieldOf,
   bitfieldToRaw,
 } from "./bitfield";
+import { bigFlagsToWords } from "./big_bitfield";
 import { enumWireIndexFromMember, type NumericEnum } from "./enum";
 import {
   e_bitstream_byte_fill_direction,
@@ -139,6 +140,12 @@ export class c_bitstream_writer {
     fields: F
   ): void {
     this.write_integer(bitfieldToRaw(value, fields), size_in_bits);
+  }
+
+  write_big_flags(flags: readonly boolean[], _name = ""): void {
+    for (const word of bigFlagsToWords(flags)) {
+      this.write_integer(word, 32);
+    }
   }
 
   seek_relative(bits: number): void {

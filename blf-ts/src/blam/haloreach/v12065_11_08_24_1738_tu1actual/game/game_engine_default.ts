@@ -462,7 +462,7 @@ export class c_game_engine_team_options_team {
     this.m_override_color_ui_text = false;
     this.m_override_color_ui_bitmap = false;
     this.m_name = new c_string_table(1, 32, 5, 6, 1);
-    this.m_team_initial_designator = team_index + 1;
+    this.m_team_initial_designator = team_index;
     this.m_model_override = e_player_model_choice.spartan;
     this.m_team_color_override = 0xffffffff;
     this.m_team_ui_text_tint_color_override = 0xffffffff;

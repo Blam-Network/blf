@@ -142,6 +142,23 @@ impl c_bitstream_writer {
         Ok(())
     }
 
+    pub fn write_big_flags(&mut self, flags: &[bool]) -> BLFLibResult {
+        let bit_count = flags.len();
+        let word_count = bit_count.div_ceil(32);
+        for word in 0..word_count {
+            let mut raw: u32 = 0;
+            let base = word * 32;
+            let bits_in_word = (bit_count - base).min(32);
+            for bit in 0..bits_in_word {
+                if flags[base + bit] {
+                    raw |= 1u32 << bit;
+                }
+            }
+            self.write_integer(raw, 32)?;
+        }
+        Ok(())
+    }
+
     pub fn seek_relative(&mut self, bits: usize) -> BLFLibResult {
         self.write_raw_data(&*vec![0u8; (bits as f32 / 8f32).ceil() as usize], bits)
     }

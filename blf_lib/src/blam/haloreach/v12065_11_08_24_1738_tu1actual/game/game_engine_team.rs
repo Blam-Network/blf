@@ -61,7 +61,7 @@ impl c_game_engine_team_options_team {
         self.m_team_color_override = 0xFFFF_FFFF;
         self.m_team_ui_text_tint_color_override = 0xFFFF_FFFF;
         self.m_team_ui_bitmap_tint_color_override = 0xFFFF_FFFF;
-        self.m_team_initial_designator = (team_index + 1).min(8) as u8;
+        self.m_team_initial_designator = team_index.min(8) as u8;
         self.m_fireteam_count = 1;
     }
 

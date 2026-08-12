@@ -10,6 +10,49 @@ function lastWordMask(bitCount: number): number {
   return (1 << remainder) - 1;
 }
 
+/** Pack bool flags into dword storage (`c_big_flags` / `get_bits_direct`). */
+export function bigFlagsToWords(flags: readonly boolean[]): number[] {
+  const bitCount = flags.length;
+  const wordCount = Math.ceil(bitCount / 32);
+  const words = Array.from({ length: wordCount }, () => 0);
+  for (let word = 0; word < wordCount; word++) {
+    let raw = 0;
+    const base = word * 32;
+    const bitsInWord = Math.min(32, bitCount - base);
+    for (let bit = 0; bit < bitsInWord; bit++) {
+      if (flags[base + bit]) {
+        raw |= 1 << bit;
+      }
+    }
+    if (word === wordCount - 1) {
+      raw &= lastWordMask(bitCount);
+    }
+    words[word] = raw >>> 0;
+  }
+  return words;
+}
+
+/** Unpack dword storage into bool flags (`c_big_flags`). */
+export function bigFlagsFromWords(
+  words: readonly number[],
+  bitCount: number
+): boolean[] {
+  const wordCount = Math.ceil(bitCount / 32);
+  const flags = Array.from({ length: bitCount }, () => false);
+  for (let word = 0; word < wordCount; word++) {
+    let raw = (words[word] ?? 0) >>> 0;
+    if (word === wordCount - 1) {
+      raw &= lastWordMask(bitCount);
+    }
+    const base = word * 32;
+    const bitsInWord = Math.min(32, bitCount - base);
+    for (let bit = 0; bit < bitsInWord; bit++) {
+      flags[base + bit] = ((raw >> bit) & 1) === 1;
+    }
+  }
+  return flags;
+}
+
 export function bigBitfieldFromWords<const F extends BitfieldFields>(
   words: number[],
   fields: F

@@ -41,13 +41,13 @@ export enum e_infinite_ammo_setting {
 export enum e_vehicle_usage_setting {
   unchanged = 0,
   none = 1,
-  full = 2,
-  passenger = 3,
-  not_passenger = 4,
-  driver = 5,
-  gunner = 6,
-  not_driver = 7,
-  not_gunner = 8,
+  passenger = 2,
+  driver = 3,
+  gunner = 4,
+  not_passenger = 5,
+  not_driver = 6,
+  not_gunner = 7,
+  full = 8,
 }
 
 export enum e_waypoint_setting {

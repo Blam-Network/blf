@@ -368,6 +368,24 @@ impl<'a> c_bitstream_reader<'a> {
         )))?)
     }
 
+    pub fn read_big_flags(&mut self, name: &str, flags: &mut [bool]) -> BLFLibResult {
+        let bit_count = flags.len();
+        let word_count = bit_count.div_ceil(32);
+        for word in 0..word_count {
+            let mut raw: u32 = self.read_integer(name, 32)?;
+            let base = word * 32;
+            let bits_in_word = (bit_count - base).min(32);
+            let remainder = bit_count % 32;
+            if word + 1 == word_count && remainder != 0 {
+                raw &= (1u32 << remainder) - 1;
+            }
+            for bit in 0..bits_in_word {
+                flags[base + bit] = ((raw >> bit) & 1) != 0;
+            }
+        }
+        Ok(())
+    }
+
     #[deprecated]
     pub fn read_unnamed_integer<T>(&mut self, size_in_bits: usize) -> BLFLibResult<T>
         where

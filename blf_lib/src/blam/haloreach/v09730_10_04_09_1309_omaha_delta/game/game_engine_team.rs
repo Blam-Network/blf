@@ -81,7 +81,7 @@ impl c_game_engine_team_options_team {
         self.m_team_color_override = 0xFFFF_FFFF;
         self.m_team_ui_text_tint_color_override = 0xFFFF_FFFF;
         self.m_team_ui_bitmap_tint_color_override = 0xFFFF_FFFF;
-        self.m_team_initial_designator = e_multiplayer_team_designator::from_i8(team_index as i8 + 1)
+        self.m_team_initial_designator = e_multiplayer_team_designator::from_i8(team_index as i8)
             .unwrap_or(e_multiplayer_team_designator::none);
     }
 
