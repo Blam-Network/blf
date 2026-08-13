@@ -399,11 +399,12 @@ export class c_player_traits {
     this.m_sensor_traits.clear();
   }
   decode(bitstream: c_bitstream_reader): void {
-    this.m_shield_vitality_traits.m_damage_resistance_percentage_setting = bitstream.read_enum(
-      "damage-resistance",
-      4,
-      e_damage_resistance_percentage_setting
-    );
+    this.m_shield_vitality_traits.m_damage_resistance_percentage_setting =
+      bitstream.read_enum(
+        "damage-resistance",
+        4,
+        e_damage_resistance_percentage_setting
+      );
     this.m_shield_vitality_traits.m_body_multiplier = bitstream.read_enum(
       "body-multiplier",
       3,
@@ -424,49 +425,39 @@ export class c_player_traits {
       4,
       e_recharge_rate_percentage_setting
     );
-    this.m_shield_vitality_traits.m_overshield_recharge_rate = bitstream.read_enum(
-      "overshield-recharge-rate",
-      4,
-      e_recharge_rate_percentage_setting
-    );
-    this.m_shield_vitality_traits.m_headshot_immunity_setting = bitstream.read_enum(
-      "headshot-immunity",
-      2,
-      e_boolean_trait
-    );
-    this.m_shield_vitality_traits.m_vampirism_percentage_setting = bitstream.read_enum(
-      "vampirism",
-      3,
-      e_vampirism_percentage_setting
-    );
+    this.m_shield_vitality_traits.m_overshield_recharge_rate =
+      bitstream.read_enum(
+        "overshield-recharge-rate",
+        4,
+        e_recharge_rate_percentage_setting
+      );
+    this.m_shield_vitality_traits.m_headshot_immunity_setting =
+      bitstream.read_enum("headshot-immunity", 2, e_boolean_trait);
+    this.m_shield_vitality_traits.m_vampirism_percentage_setting =
+      bitstream.read_enum("vampirism", 3, e_vampirism_percentage_setting);
     this.m_shield_vitality_traits.m_assasination_immunity = bitstream.read_enum(
       "assasination-immunity",
       2,
       e_boolean_trait
     );
-    this.m_shield_vitality_traits.m_cannot_die_from_damage = bitstream.read_enum(
-      "cannot-die-from-damage",
-      2,
-      e_boolean_trait
-    );
-    this.m_weapon_traits.m_damage_modifier_percentage_setting = bitstream.read_enum(
-      "damage-modifier",
-      4,
-      e_damage_modifier_percentage_setting
-    );
-    this.m_weapon_traits.m_melee_damage_modifier_percentage_setting = bitstream.read_enum(
-      "melee-damage-modifier",
-      4,
-      e_damage_modifier_percentage_setting
-    );
-    this.m_weapon_traits.m_initial_primary_weapon_absolute_index = bitstream.read_signed_integer(
-      "player-trait-initial-primary-weapon",
-      8
-    );
-    this.m_weapon_traits.m_initial_secondary_weapon_absolute_index = bitstream.read_signed_integer(
-      "player-trait-initial-secondary-weapon",
-      8
-    );
+    this.m_shield_vitality_traits.m_cannot_die_from_damage =
+      bitstream.read_enum("cannot-die-from-damage", 2, e_boolean_trait);
+    this.m_weapon_traits.m_damage_modifier_percentage_setting =
+      bitstream.read_enum(
+        "damage-modifier",
+        4,
+        e_damage_modifier_percentage_setting
+      );
+    this.m_weapon_traits.m_melee_damage_modifier_percentage_setting =
+      bitstream.read_enum(
+        "melee-damage-modifier",
+        4,
+        e_damage_modifier_percentage_setting
+      );
+    this.m_weapon_traits.m_initial_primary_weapon_absolute_index =
+      bitstream.read_signed_integer("player-trait-initial-primary-weapon", 8);
+    this.m_weapon_traits.m_initial_secondary_weapon_absolute_index =
+      bitstream.read_signed_integer("player-trait-initial-secondary-weapon", 8);
     this.m_weapon_traits.m_initial_grenade_count_setting = bitstream.read_enum(
       "player-trait-initial-grenade-count",
       4,
@@ -492,20 +483,15 @@ export class c_player_traits {
       2,
       e_equipment_usage_setting
     );
-    this.m_weapon_traits.m_equipment_drop_on_death_setting = bitstream.read_enum(
-      "player-traits-equipment-drop",
-      2,
-      e_boolean_trait
-    );
+    this.m_weapon_traits.m_equipment_drop_on_death_setting =
+      bitstream.read_enum("player-traits-equipment-drop", 2, e_boolean_trait);
     this.m_weapon_traits.m_infinite_equipment_setting = bitstream.read_enum(
       "player-traits-infinite-equipment",
       2,
       e_boolean_trait
     );
-    this.m_weapon_traits.m_initial_equipment_absolute_index = bitstream.read_signed_integer(
-      "player-trait-initial-equipment",
-      8
-    );
+    this.m_weapon_traits.m_initial_equipment_absolute_index =
+      bitstream.read_signed_integer("player-trait-initial-equipment", 8);
     this.m_movement_traits.m_speed_setting = bitstream.read_enum(
       "player-speed",
       5,
@@ -554,11 +540,12 @@ export class c_player_traits {
       3,
       e_aura_setting
     );
-    this.m_appearance_traits.m_forced_change_color_setting = bitstream.read_enum(
-      "player-traits-appearance-forced-change-color",
-      4,
-      e_forced_change_color_setting
-    );
+    this.m_appearance_traits.m_forced_change_color_setting =
+      bitstream.read_enum(
+        "player-traits-appearance-forced-change-color",
+        4,
+        e_forced_change_color_setting
+      );
     this.m_sensor_traits.m_motion_tracker_setting = bitstream.read_enum(
       "player-traits-sensors-motion-tracker",
       3,

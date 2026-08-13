@@ -4,9 +4,7 @@ import type {
 } from "../../../../../bitstream";
 import { AutoMap } from "../../../../../helpers/automap";
 import { e_game_engine_timer_rate } from "../../../v12065_11_08_24_1738_tu1actual/game/game_engine_enums";
-import {
-  e_weapon_pickup_priority,
-} from "../../../v12065_11_08_24_1738_tu1actual/game/megalogamengine/megalogamengine_actions";
+import { e_weapon_pickup_priority } from "../../../v12065_11_08_24_1738_tu1actual/game/megalogamengine/megalogamengine_actions";
 import { e_megalogamengine_hud_meter_input_type } from "../../../v12065_11_08_24_1738_tu1actual/game/megalogamengine/megalogamengine_hud_widgets";
 import { e_megalo_sound } from "./megalogamengine_sounds";
 /** Matches `e_action_team_or_player_target` in blf_lib `megalogamengine_actions.rs`. */

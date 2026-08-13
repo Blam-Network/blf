@@ -3136,7 +3136,11 @@ export class c_game_variant {
   @AutoMap(() => c_game_engine_sandbox_variant)
   m_sandbox_variant?: c_game_engine_sandbox_variant;
   decode(bitstream: c_bitstream_reader): void {
-    this.m_game_engine = bitstream.read_enum("game-engine", 4, e_game_engine_type);
+    this.m_game_engine = bitstream.read_enum(
+      "game-engine",
+      4,
+      e_game_engine_type
+    );
     switch (this.m_game_engine) {
       case e_game_engine_type.sandbox: {
         const sandbox = new c_game_engine_sandbox_variant();

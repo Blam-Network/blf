@@ -5,9 +5,6 @@ exports[`3nvasion_dlc_054.bin > reads content header 1`] = `
   "build_number": 65535,
   "build_sequence_number": 0,
   "metadata": {
-    "activity_data": {
-      "hopper_identifier": 0,
-    },
     "creation_history": {
       "is_online": true,
       "name": "¦",
@@ -350,41 +347,41 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
             },
             "m_movement_traits": {
               "m_double_jump_setting": "unchanged",
-              "m_gravity_setting": 0,
+              "m_gravity_setting": "unchanged",
               "m_jump_modifier": -1,
-              "m_speed_setting": 0,
+              "m_speed_setting": "unchanged",
               "m_vehicle_usage_setting": "unchanged",
             },
             "m_sensor_traits": {
-              "m_directional_damage_setting": 0,
-              "m_motion_tracker_range_setting": 0,
+              "m_directional_damage_setting": "unchanged",
+              "m_motion_tracker_range_setting": "unchanged",
               "m_motion_tracker_setting": "unchanged",
             },
             "m_shield_vitality_traits": {
-              "m_assasination_immunity": 0,
-              "m_body_multiplier": 0,
-              "m_body_recharge_rate": 0,
-              "m_cannot_die_from_damage": 0,
-              "m_damage_resistance_percentage_setting": 0,
-              "m_headshot_immunity_setting": 0,
-              "m_overshield_recharge_rate": 0,
-              "m_shield_multiplier": 0,
-              "m_shield_recharge_rate": 0,
-              "m_vampirism_percentage_setting": 0,
+              "m_assasination_immunity": "unchanged",
+              "m_body_multiplier": "unchanged",
+              "m_body_recharge_rate": "unchanged",
+              "m_cannot_die_from_damage": "unchanged",
+              "m_damage_resistance_percentage_setting": "unchanged",
+              "m_headshot_immunity_setting": "unchanged",
+              "m_overshield_recharge_rate": "unchanged",
+              "m_shield_multiplier": "unchanged",
+              "m_shield_recharge_rate": "unchanged",
+              "m_vampirism_percentage_setting": "unchanged",
             },
             "m_weapon_traits": {
-              "m_damage_modifier_percentage_setting": 0,
-              "m_equipment_drop_on_death_setting": 0,
-              "m_equipment_usage_setting": 0,
+              "m_damage_modifier_percentage_setting": "unchanged",
+              "m_equipment_drop_on_death_setting": "unchanged",
+              "m_equipment_usage_setting": "unchanged",
               "m_infinite_ammo_setting": "unchanged",
-              "m_infinite_equipment_setting": 0,
+              "m_infinite_equipment_setting": "unchanged",
               "m_initial_equipment_absolute_index": -3,
               "m_initial_grenade_count_setting": "none",
               "m_initial_primary_weapon_absolute_index": -3,
               "m_initial_secondary_weapon_absolute_index": -3,
-              "m_melee_damage_modifier_percentage_setting": 0,
-              "m_recharging_grenades_setting": 0,
-              "m_weapon_pickup_setting": 0,
+              "m_melee_damage_modifier_percentage_setting": "unchanged",
+              "m_recharging_grenades_setting": "unchanged",
+              "m_weapon_pickup_setting": "unchanged",
             },
           },
           "m_blue_powerup_duration_seconds": 15,
@@ -398,41 +395,41 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
             },
             "m_movement_traits": {
               "m_double_jump_setting": "unchanged",
-              "m_gravity_setting": 0,
+              "m_gravity_setting": "unchanged",
               "m_jump_modifier": -1,
-              "m_speed_setting": 0,
+              "m_speed_setting": "unchanged",
               "m_vehicle_usage_setting": "unchanged",
             },
             "m_sensor_traits": {
-              "m_directional_damage_setting": 0,
-              "m_motion_tracker_range_setting": 0,
+              "m_directional_damage_setting": "unchanged",
+              "m_motion_tracker_range_setting": "unchanged",
               "m_motion_tracker_setting": "unchanged",
             },
             "m_shield_vitality_traits": {
-              "m_assasination_immunity": 0,
-              "m_body_multiplier": 0,
-              "m_body_recharge_rate": 0,
-              "m_cannot_die_from_damage": 0,
-              "m_damage_resistance_percentage_setting": 0,
-              "m_headshot_immunity_setting": 0,
-              "m_overshield_recharge_rate": 0,
-              "m_shield_multiplier": 0,
-              "m_shield_recharge_rate": 0,
-              "m_vampirism_percentage_setting": 0,
+              "m_assasination_immunity": "unchanged",
+              "m_body_multiplier": "unchanged",
+              "m_body_recharge_rate": "unchanged",
+              "m_cannot_die_from_damage": "unchanged",
+              "m_damage_resistance_percentage_setting": "unchanged",
+              "m_headshot_immunity_setting": "unchanged",
+              "m_overshield_recharge_rate": "unchanged",
+              "m_shield_multiplier": "unchanged",
+              "m_shield_recharge_rate": "unchanged",
+              "m_vampirism_percentage_setting": "unchanged",
             },
             "m_weapon_traits": {
-              "m_damage_modifier_percentage_setting": 0,
-              "m_equipment_drop_on_death_setting": 0,
-              "m_equipment_usage_setting": 0,
+              "m_damage_modifier_percentage_setting": "unchanged",
+              "m_equipment_drop_on_death_setting": "unchanged",
+              "m_equipment_usage_setting": "unchanged",
               "m_infinite_ammo_setting": "unchanged",
-              "m_infinite_equipment_setting": 0,
+              "m_infinite_equipment_setting": "unchanged",
               "m_initial_equipment_absolute_index": -3,
               "m_initial_grenade_count_setting": "none",
               "m_initial_primary_weapon_absolute_index": -3,
               "m_initial_secondary_weapon_absolute_index": -3,
-              "m_melee_damage_modifier_percentage_setting": 0,
-              "m_recharging_grenades_setting": 0,
-              "m_weapon_pickup_setting": 0,
+              "m_melee_damage_modifier_percentage_setting": "unchanged",
+              "m_recharging_grenades_setting": "unchanged",
+              "m_weapon_pickup_setting": "unchanged",
             },
           },
           "m_flags": {
@@ -454,41 +451,41 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
             },
             "m_movement_traits": {
               "m_double_jump_setting": "unchanged",
-              "m_gravity_setting": 0,
+              "m_gravity_setting": "unchanged",
               "m_jump_modifier": -1,
-              "m_speed_setting": 0,
+              "m_speed_setting": "unchanged",
               "m_vehicle_usage_setting": "unchanged",
             },
             "m_sensor_traits": {
-              "m_directional_damage_setting": 0,
-              "m_motion_tracker_range_setting": 0,
+              "m_directional_damage_setting": "unchanged",
+              "m_motion_tracker_range_setting": "unchanged",
               "m_motion_tracker_setting": "unchanged",
             },
             "m_shield_vitality_traits": {
-              "m_assasination_immunity": 0,
-              "m_body_multiplier": 0,
-              "m_body_recharge_rate": 0,
-              "m_cannot_die_from_damage": 0,
-              "m_damage_resistance_percentage_setting": 12,
-              "m_headshot_immunity_setting": 0,
-              "m_overshield_recharge_rate": 0,
-              "m_shield_multiplier": 6,
-              "m_shield_recharge_rate": 0,
-              "m_vampirism_percentage_setting": 0,
+              "m_assasination_immunity": "unchanged",
+              "m_body_multiplier": "unchanged",
+              "m_body_recharge_rate": "unchanged",
+              "m_cannot_die_from_damage": "unchanged",
+              "m_damage_resistance_percentage_setting": "invulnerable",
+              "m_headshot_immunity_setting": "unchanged",
+              "m_overshield_recharge_rate": "unchanged",
+              "m_shield_multiplier": "percent_400",
+              "m_shield_recharge_rate": "unchanged",
+              "m_vampirism_percentage_setting": "unchanged",
             },
             "m_weapon_traits": {
-              "m_damage_modifier_percentage_setting": 0,
-              "m_equipment_drop_on_death_setting": 0,
-              "m_equipment_usage_setting": 0,
+              "m_damage_modifier_percentage_setting": "unchanged",
+              "m_equipment_drop_on_death_setting": "unchanged",
+              "m_equipment_usage_setting": "unchanged",
               "m_infinite_ammo_setting": "unchanged",
-              "m_infinite_equipment_setting": 0,
+              "m_infinite_equipment_setting": "unchanged",
               "m_initial_equipment_absolute_index": -3,
               "m_initial_grenade_count_setting": "none",
               "m_initial_primary_weapon_absolute_index": -3,
               "m_initial_secondary_weapon_absolute_index": -3,
-              "m_melee_damage_modifier_percentage_setting": 0,
-              "m_recharging_grenades_setting": 0,
-              "m_weapon_pickup_setting": 0,
+              "m_melee_damage_modifier_percentage_setting": "unchanged",
+              "m_recharging_grenades_setting": "unchanged",
+              "m_weapon_pickup_setting": "unchanged",
             },
           },
           "m_vehicle_set_absolute_index": -2,
@@ -504,41 +501,41 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
             },
             "m_movement_traits": {
               "m_double_jump_setting": "unchanged",
-              "m_gravity_setting": 0,
+              "m_gravity_setting": "unchanged",
               "m_jump_modifier": -1,
-              "m_speed_setting": 8,
+              "m_speed_setting": "percent_120",
               "m_vehicle_usage_setting": "unchanged",
             },
             "m_sensor_traits": {
-              "m_directional_damage_setting": 0,
-              "m_motion_tracker_range_setting": 0,
+              "m_directional_damage_setting": "unchanged",
+              "m_motion_tracker_range_setting": "unchanged",
               "m_motion_tracker_setting": "unchanged",
             },
             "m_shield_vitality_traits": {
-              "m_assasination_immunity": 0,
-              "m_body_multiplier": 0,
-              "m_body_recharge_rate": 0,
-              "m_cannot_die_from_damage": 0,
-              "m_damage_resistance_percentage_setting": 0,
-              "m_headshot_immunity_setting": 0,
-              "m_overshield_recharge_rate": 0,
-              "m_shield_multiplier": 0,
-              "m_shield_recharge_rate": 0,
-              "m_vampirism_percentage_setting": 0,
+              "m_assasination_immunity": "unchanged",
+              "m_body_multiplier": "unchanged",
+              "m_body_recharge_rate": "unchanged",
+              "m_cannot_die_from_damage": "unchanged",
+              "m_damage_resistance_percentage_setting": "unchanged",
+              "m_headshot_immunity_setting": "unchanged",
+              "m_overshield_recharge_rate": "unchanged",
+              "m_shield_multiplier": "unchanged",
+              "m_shield_recharge_rate": "unchanged",
+              "m_vampirism_percentage_setting": "unchanged",
             },
             "m_weapon_traits": {
-              "m_damage_modifier_percentage_setting": 0,
-              "m_equipment_drop_on_death_setting": 0,
-              "m_equipment_usage_setting": 0,
+              "m_damage_modifier_percentage_setting": "unchanged",
+              "m_equipment_drop_on_death_setting": "unchanged",
+              "m_equipment_usage_setting": "unchanged",
               "m_infinite_ammo_setting": "unchanged",
-              "m_infinite_equipment_setting": 0,
+              "m_infinite_equipment_setting": "unchanged",
               "m_initial_equipment_absolute_index": -3,
               "m_initial_grenade_count_setting": "none",
               "m_initial_primary_weapon_absolute_index": -3,
               "m_initial_secondary_weapon_absolute_index": -3,
-              "m_melee_damage_modifier_percentage_setting": 0,
-              "m_recharging_grenades_setting": 0,
-              "m_weapon_pickup_setting": 0,
+              "m_melee_damage_modifier_percentage_setting": "unchanged",
+              "m_recharging_grenades_setting": "unchanged",
+              "m_weapon_pickup_setting": "unchanged",
             },
           },
         },
@@ -621,41 +618,41 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
             },
             "m_movement_traits": {
               "m_double_jump_setting": "unchanged",
-              "m_gravity_setting": 0,
+              "m_gravity_setting": "unchanged",
               "m_jump_modifier": -1,
-              "m_speed_setting": 0,
+              "m_speed_setting": "unchanged",
               "m_vehicle_usage_setting": "unchanged",
             },
             "m_sensor_traits": {
-              "m_directional_damage_setting": 0,
-              "m_motion_tracker_range_setting": 0,
+              "m_directional_damage_setting": "unchanged",
+              "m_motion_tracker_range_setting": "unchanged",
               "m_motion_tracker_setting": "unchanged",
             },
             "m_shield_vitality_traits": {
-              "m_assasination_immunity": 0,
-              "m_body_multiplier": 0,
-              "m_body_recharge_rate": 0,
-              "m_cannot_die_from_damage": 0,
-              "m_damage_resistance_percentage_setting": 0,
-              "m_headshot_immunity_setting": 0,
-              "m_overshield_recharge_rate": 0,
-              "m_shield_multiplier": 0,
-              "m_shield_recharge_rate": 0,
-              "m_vampirism_percentage_setting": 0,
+              "m_assasination_immunity": "unchanged",
+              "m_body_multiplier": "unchanged",
+              "m_body_recharge_rate": "unchanged",
+              "m_cannot_die_from_damage": "unchanged",
+              "m_damage_resistance_percentage_setting": "unchanged",
+              "m_headshot_immunity_setting": "unchanged",
+              "m_overshield_recharge_rate": "unchanged",
+              "m_shield_multiplier": "unchanged",
+              "m_shield_recharge_rate": "unchanged",
+              "m_vampirism_percentage_setting": "unchanged",
             },
             "m_weapon_traits": {
-              "m_damage_modifier_percentage_setting": 0,
-              "m_equipment_drop_on_death_setting": 0,
-              "m_equipment_usage_setting": 0,
+              "m_damage_modifier_percentage_setting": "unchanged",
+              "m_equipment_drop_on_death_setting": "unchanged",
+              "m_equipment_usage_setting": "unchanged",
               "m_infinite_ammo_setting": "unchanged",
-              "m_infinite_equipment_setting": 0,
+              "m_infinite_equipment_setting": "unchanged",
               "m_initial_equipment_absolute_index": -3,
               "m_initial_grenade_count_setting": "none",
               "m_initial_primary_weapon_absolute_index": -3,
               "m_initial_secondary_weapon_absolute_index": -3,
-              "m_melee_damage_modifier_percentage_setting": 0,
-              "m_recharging_grenades_setting": 0,
-              "m_weapon_pickup_setting": 0,
+              "m_melee_damage_modifier_percentage_setting": "unchanged",
+              "m_recharging_grenades_setting": "unchanged",
+              "m_weapon_pickup_setting": "unchanged",
             },
           },
           "m_respawn_player_traits_duration_seconds": 5,
@@ -3473,7 +3470,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
       },
       "m_build_number": -1,
       "m_encoding_version": 106,
-      "m_engine_category": 9,
+      "m_engine_category": "invasion",
       "m_engine_icon": 9,
       "m_fire_teams_enabled": true,
       "m_game_engine": {
@@ -4514,7 +4511,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           },
           {
             "m_submit_incident_parameters": {
-              "m_incident_id": 122,
+              "m_incident_id": 121,
               "m_target_1": {
                 "m_player": {
                   "m_player": {
@@ -4561,7 +4558,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           },
           {
             "m_submit_incident_parameters": {
-              "m_incident_id": 123,
+              "m_incident_id": 122,
               "m_target_1": {
                 "m_player": {
                   "m_player": {
@@ -4669,7 +4666,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           },
           {
             "m_submit_incident_parameters": {
-              "m_incident_id": 235,
+              "m_incident_id": 234,
               "m_target_1": {
                 "m_player": {
                   "m_player": {
@@ -5997,7 +5994,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_play_sound_parameters": {
               "m_immediate": true,
-              "m_sound_index": "unsc_win2",
+              "m_sound_index": "unsc_win1",
               "m_target": {
                 "m_target": "everyone",
               },
@@ -6007,7 +6004,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_play_sound_parameters": {
               "m_immediate": true,
-              "m_sound_index": "covy_win2",
+              "m_sound_index": "covy_win1",
               "m_target": {
                 "m_target": "everyone",
               },
@@ -6247,7 +6244,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_play_sound_parameters": {
               "m_immediate": true,
-              "m_sound_index": "power_down",
+              "m_sound_index": "unsc_win2",
               "m_target": {
                 "m_target": "everyone",
               },
@@ -6257,7 +6254,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_play_sound_parameters": {
               "m_immediate": true,
-              "m_sound_index": "invasion_beginning",
+              "m_sound_index": "covy_win2",
               "m_target": {
                 "m_target": "everyone",
               },
@@ -6479,7 +6476,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_play_sound_parameters": {
               "m_immediate": true,
-              "m_sound_index": "unsc_win1",
+              "m_sound_index": "unsc_big_win",
               "m_target": {
                 "m_target": "everyone",
               },
@@ -6489,7 +6486,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_play_sound_parameters": {
               "m_immediate": true,
-              "m_sound_index": "covy_win1",
+              "m_sound_index": "covy_big_win",
               "m_target": {
                 "m_target": "everyone",
               },
@@ -6550,7 +6547,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           },
           {
             "m_submit_incident_parameters": {
-              "m_incident_id": 239,
+              "m_incident_id": 238,
               "m_target_1": {
                 "m_target": "team",
                 "m_team": {
@@ -7296,7 +7293,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_play_sound_parameters": {
               "m_immediate": true,
-              "m_sound_index": "bravo_under_attack",
+              "m_sound_index": "alpha_under_attack",
               "m_target": {
                 "m_target": "team",
                 "m_team": {
@@ -7321,7 +7318,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_play_sound_parameters": {
               "m_immediate": true,
-              "m_sound_index": "charlie_under_attack",
+              "m_sound_index": "bravo_under_attack",
               "m_target": {
                 "m_target": "team",
                 "m_team": {
@@ -7824,7 +7821,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           },
           {
             "m_submit_incident_parameters": {
-              "m_incident_id": 352,
+              "m_incident_id": 351,
               "m_target_1": {
                 "m_player": {
                   "m_player": {
@@ -7833,6 +7830,52 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
                   "m_type": "global_player",
                 },
                 "m_target": "player",
+              },
+              "m_target_2": {
+                "m_player": {
+                  "m_player": {
+                    "m_explicit_player_type": "no_player",
+                  },
+                  "m_type": "global_player",
+                },
+                "m_target": "player",
+              },
+            },
+            "m_type": "submit_incident",
+          },
+          {
+            "m_submit_incident_parameters": {
+              "m_incident_id": 236,
+              "m_target_1": {
+                "m_target": "everyone",
+              },
+              "m_target_2": {
+                "m_player": {
+                  "m_player": {
+                    "m_explicit_player_type": "no_player",
+                  },
+                  "m_type": "global_player",
+                },
+                "m_target": "player",
+              },
+            },
+            "m_type": "submit_incident",
+          },
+          {
+            "m_play_sound_parameters": {
+              "m_immediate": true,
+              "m_sound_index": "unsc_win1",
+              "m_target": {
+                "m_target": "everyone",
+              },
+            },
+            "m_type": "play_sound",
+          },
+          {
+            "m_submit_incident_parameters": {
+              "m_incident_id": 239,
+              "m_target_1": {
+                "m_target": "everyone",
               },
               "m_target_2": {
                 "m_player": {
@@ -7876,7 +7919,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           },
           {
             "m_submit_incident_parameters": {
-              "m_incident_id": 240,
+              "m_incident_id": 235,
               "m_target_1": {
                 "m_target": "everyone",
               },
@@ -7891,66 +7934,20 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
               },
             },
             "m_type": "submit_incident",
+          },
+          {
+            "m_play_sound_parameters": {
+              "m_immediate": true,
+              "m_sound_index": "unsc_big_win",
+              "m_target": {
+                "m_target": "everyone",
+              },
+            },
+            "m_type": "play_sound",
           },
           {
             "m_submit_incident_parameters": {
               "m_incident_id": 238,
-              "m_target_1": {
-                "m_target": "everyone",
-              },
-              "m_target_2": {
-                "m_player": {
-                  "m_player": {
-                    "m_explicit_player_type": "no_player",
-                  },
-                  "m_type": "global_player",
-                },
-                "m_target": "player",
-              },
-            },
-            "m_type": "submit_incident",
-          },
-          {
-            "m_play_sound_parameters": {
-              "m_immediate": true,
-              "m_sound_index": "power_down",
-              "m_target": {
-                "m_target": "everyone",
-              },
-            },
-            "m_type": "play_sound",
-          },
-          {
-            "m_submit_incident_parameters": {
-              "m_incident_id": 236,
-              "m_target_1": {
-                "m_target": "everyone",
-              },
-              "m_target_2": {
-                "m_player": {
-                  "m_player": {
-                    "m_explicit_player_type": "no_player",
-                  },
-                  "m_type": "global_player",
-                },
-                "m_target": "player",
-              },
-            },
-            "m_type": "submit_incident",
-          },
-          {
-            "m_play_sound_parameters": {
-              "m_immediate": true,
-              "m_sound_index": "unsc_win1",
-              "m_target": {
-                "m_target": "everyone",
-              },
-            },
-            "m_type": "play_sound",
-          },
-          {
-            "m_submit_incident_parameters": {
-              "m_incident_id": 239,
               "m_target_1": {
                 "m_target": "everyone",
               },
@@ -8224,7 +8221,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           },
           {
             "m_submit_incident_parameters": {
-              "m_incident_id": 246,
+              "m_incident_id": 245,
               "m_target_1": {
                 "m_target": "everyone",
               },
@@ -8636,7 +8633,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           },
           {
             "m_submit_incident_parameters": {
-              "m_incident_id": 245,
+              "m_incident_id": 244,
               "m_target_1": {
                 "m_player": {
                   "m_player": {
@@ -9148,7 +9145,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           },
           {
             "m_submit_incident_parameters": {
-              "m_incident_id": 246,
+              "m_incident_id": 245,
               "m_target_1": {
                 "m_target": "everyone",
               },
@@ -9519,7 +9516,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           },
           {
             "m_submit_incident_parameters": {
-              "m_incident_id": 61,
+              "m_incident_id": 60,
               "m_target_1": {
                 "m_player": {
                   "m_player": {
@@ -10695,7 +10692,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_play_sound_parameters": {
               "m_immediate": true,
-              "m_sound_index": "bravo_under_attack",
+              "m_sound_index": "alpha_under_attack",
               "m_target": {
                 "m_target": "team",
                 "m_team": {
@@ -10720,7 +10717,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           {
             "m_play_sound_parameters": {
               "m_immediate": true,
-              "m_sound_index": "charlie_under_attack",
+              "m_sound_index": "bravo_under_attack",
               "m_target": {
                 "m_target": "team",
                 "m_team": {
@@ -10989,7 +10986,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           },
           {
             "m_submit_incident_parameters": {
-              "m_incident_id": 88,
+              "m_incident_id": 87,
               "m_target_1": {
                 "m_target": "team",
                 "m_team": {
@@ -11247,7 +11244,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           },
           {
             "m_submit_incident_parameters": {
-              "m_incident_id": 364,
+              "m_incident_id": 363,
               "m_target_1": {
                 "m_player": {
                   "m_player": {
@@ -11391,7 +11388,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           },
           {
             "m_submit_incident_parameters": {
-              "m_incident_id": 93,
+              "m_incident_id": 92,
               "m_target_1": {
                 "m_target": "team",
                 "m_team": {
@@ -11672,7 +11669,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           },
           {
             "m_submit_incident_parameters": {
-              "m_incident_id": 91,
+              "m_incident_id": 90,
               "m_target_1": {
                 "m_target": "everyone",
               },
@@ -11820,7 +11817,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           },
           {
             "m_submit_incident_parameters": {
-              "m_incident_id": 94,
+              "m_incident_id": 93,
               "m_target_1": {
                 "m_target": "everyone",
               },
@@ -12217,7 +12214,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           },
           {
             "m_submit_incident_parameters": {
-              "m_incident_id": 63,
+              "m_incident_id": 62,
               "m_target_1": {
                 "m_player": {
                   "m_player": {
@@ -12509,7 +12506,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           },
           {
             "m_submit_incident_parameters": {
-              "m_incident_id": 295,
+              "m_incident_id": 294,
               "m_target_1": {
                 "m_target": "everyone",
               },
@@ -12738,7 +12735,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           },
           {
             "m_submit_incident_parameters": {
-              "m_incident_id": 242,
+              "m_incident_id": 241,
               "m_target_1": {
                 "m_player": {
                   "m_player": {
@@ -12785,7 +12782,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           },
           {
             "m_submit_incident_parameters": {
-              "m_incident_id": 244,
+              "m_incident_id": 243,
               "m_target_1": {
                 "m_player": {
                   "m_player": {
@@ -12885,7 +12882,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           },
           {
             "m_submit_incident_parameters": {
-              "m_incident_id": 86,
+              "m_incident_id": 85,
               "m_target_1": {
                 "m_player": {
                   "m_player": {
@@ -12932,7 +12929,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           },
           {
             "m_submit_incident_parameters": {
-              "m_incident_id": 87,
+              "m_incident_id": 86,
               "m_target_1": {
                 "m_player": {
                   "m_player": {
@@ -21055,25 +21052,6 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           false,
           false,
           false,
-          false,
-          false,
-          false,
-          false,
-          false,
-          false,
-          false,
-          false,
-          false,
-          false,
-          false,
-          false,
-          false,
-          false,
-          false,
-          false,
-          false,
-          false,
-          false,
           true,
           false,
           false,
@@ -21201,6 +21179,31 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           false,
           false,
           false,
+          true,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
           false,
           false,
           true,
@@ -21240,37 +21243,31 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           false,
           false,
           false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          true,
           true,
           false,
           false,
-          true,
-          true,
-          true,
-          false,
-          false,
           false,
           false,
           false,
           false,
           true,
           true,
-          false,
-          false,
-          false,
-          false,
-          false,
-          false,
-          false,
-          false,
-          false,
-          false,
-          false,
-          false,
-          false,
-          false,
-          false,
-          false,
-          false,
+          true,
           false,
           false,
           false,
@@ -25182,41 +25179,41 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
             },
             "m_movement_traits": {
               "m_double_jump_setting": "unchanged",
-              "m_gravity_setting": 0,
+              "m_gravity_setting": "unchanged",
               "m_jump_modifier": -1,
-              "m_speed_setting": 4,
-              "m_vehicle_usage_setting": "full",
+              "m_speed_setting": "percent_75",
+              "m_vehicle_usage_setting": "passenger",
             },
             "m_sensor_traits": {
-              "m_directional_damage_setting": 0,
-              "m_motion_tracker_range_setting": 0,
+              "m_directional_damage_setting": "unchanged",
+              "m_motion_tracker_range_setting": "unchanged",
               "m_motion_tracker_setting": "unchanged",
             },
             "m_shield_vitality_traits": {
-              "m_assasination_immunity": 0,
-              "m_body_multiplier": 0,
-              "m_body_recharge_rate": 0,
-              "m_cannot_die_from_damage": 0,
-              "m_damage_resistance_percentage_setting": 0,
-              "m_headshot_immunity_setting": 0,
-              "m_overshield_recharge_rate": 0,
-              "m_shield_multiplier": 0,
-              "m_shield_recharge_rate": 0,
-              "m_vampirism_percentage_setting": 0,
+              "m_assasination_immunity": "unchanged",
+              "m_body_multiplier": "unchanged",
+              "m_body_recharge_rate": "unchanged",
+              "m_cannot_die_from_damage": "unchanged",
+              "m_damage_resistance_percentage_setting": "unchanged",
+              "m_headshot_immunity_setting": "unchanged",
+              "m_overshield_recharge_rate": "unchanged",
+              "m_shield_multiplier": "unchanged",
+              "m_shield_recharge_rate": "unchanged",
+              "m_vampirism_percentage_setting": "unchanged",
             },
             "m_weapon_traits": {
-              "m_damage_modifier_percentage_setting": 0,
-              "m_equipment_drop_on_death_setting": 0,
-              "m_equipment_usage_setting": 0,
+              "m_damage_modifier_percentage_setting": "unchanged",
+              "m_equipment_drop_on_death_setting": "unchanged",
+              "m_equipment_usage_setting": "unchanged",
               "m_infinite_ammo_setting": "unchanged",
-              "m_infinite_equipment_setting": 0,
+              "m_infinite_equipment_setting": "unchanged",
               "m_initial_equipment_absolute_index": -3,
               "m_initial_grenade_count_setting": "none",
               "m_initial_primary_weapon_absolute_index": -3,
               "m_initial_secondary_weapon_absolute_index": -3,
-              "m_melee_damage_modifier_percentage_setting": 0,
-              "m_recharging_grenades_setting": 0,
-              "m_weapon_pickup_setting": 0,
+              "m_melee_damage_modifier_percentage_setting": "unchanged",
+              "m_recharging_grenades_setting": "unchanged",
+              "m_weapon_pickup_setting": "unchanged",
             },
           },
         },
@@ -25233,41 +25230,41 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
             },
             "m_movement_traits": {
               "m_double_jump_setting": "unchanged",
-              "m_gravity_setting": 0,
+              "m_gravity_setting": "unchanged",
               "m_jump_modifier": -1,
-              "m_speed_setting": 4,
+              "m_speed_setting": "percent_75",
               "m_vehicle_usage_setting": "unchanged",
             },
             "m_sensor_traits": {
-              "m_directional_damage_setting": 0,
-              "m_motion_tracker_range_setting": 0,
+              "m_directional_damage_setting": "unchanged",
+              "m_motion_tracker_range_setting": "unchanged",
               "m_motion_tracker_setting": "unchanged",
             },
             "m_shield_vitality_traits": {
-              "m_assasination_immunity": 0,
-              "m_body_multiplier": 0,
-              "m_body_recharge_rate": 0,
-              "m_cannot_die_from_damage": 0,
-              "m_damage_resistance_percentage_setting": 0,
-              "m_headshot_immunity_setting": 0,
-              "m_overshield_recharge_rate": 0,
-              "m_shield_multiplier": 0,
-              "m_shield_recharge_rate": 0,
-              "m_vampirism_percentage_setting": 0,
+              "m_assasination_immunity": "unchanged",
+              "m_body_multiplier": "unchanged",
+              "m_body_recharge_rate": "unchanged",
+              "m_cannot_die_from_damage": "unchanged",
+              "m_damage_resistance_percentage_setting": "unchanged",
+              "m_headshot_immunity_setting": "unchanged",
+              "m_overshield_recharge_rate": "unchanged",
+              "m_shield_multiplier": "unchanged",
+              "m_shield_recharge_rate": "unchanged",
+              "m_vampirism_percentage_setting": "unchanged",
             },
             "m_weapon_traits": {
-              "m_damage_modifier_percentage_setting": 0,
-              "m_equipment_drop_on_death_setting": 0,
-              "m_equipment_usage_setting": 0,
+              "m_damage_modifier_percentage_setting": "unchanged",
+              "m_equipment_drop_on_death_setting": "unchanged",
+              "m_equipment_usage_setting": "unchanged",
               "m_infinite_ammo_setting": "unchanged",
-              "m_infinite_equipment_setting": 0,
+              "m_infinite_equipment_setting": "unchanged",
               "m_initial_equipment_absolute_index": -3,
               "m_initial_grenade_count_setting": "none",
               "m_initial_primary_weapon_absolute_index": -3,
               "m_initial_secondary_weapon_absolute_index": -3,
-              "m_melee_damage_modifier_percentage_setting": 0,
-              "m_recharging_grenades_setting": 0,
-              "m_weapon_pickup_setting": 1,
+              "m_melee_damage_modifier_percentage_setting": "unchanged",
+              "m_recharging_grenades_setting": "unchanged",
+              "m_weapon_pickup_setting": "off",
             },
           },
         },
@@ -26859,12 +26856,12 @@ furar a defesa dos Spartans!",
         false,
         false,
         false,
-        false,
-        false,
-        false,
-        false,
-        false,
         true,
+        false,
+        false,
+        false,
+        false,
+        false,
         false,
         false,
         false,
@@ -26880,25 +26877,8 @@ furar a defesa dos Spartans!",
         false,
       ],
       "m_user_defined_options_locked": [
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
+        true,
+        true,
         false,
         false,
         false,
@@ -26910,8 +26890,25 @@ furar a defesa dos Spartans!",
         false,
         false,
         false,
-        true,
-        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
       ],
     },
     "m_game_engine": "megalogamengine",

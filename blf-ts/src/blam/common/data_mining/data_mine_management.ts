@@ -9,16 +9,18 @@ export enum e_datamine_parameter_type {
   _datamine_parameter_type_string = 3,
 }
 
-export type s_datamine_value_string = { string: string };
+export interface s_datamine_value_string {
+  string: string;
+}
 
-export type s_datamine_parameter = {
+export interface s_datamine_parameter {
   name: string;
   parameter_type: e_datamine_parameter_type;
-  value_long?: number;
-  value_int64?: bigint;
   value_float?: number;
+  value_int64?: bigint;
+  value_long?: number;
   value_string?: s_datamine_value_string;
-};
+}
 
 @c.struct()
 export class c_datamine_game_info {
@@ -53,11 +55,11 @@ export class s_datamine_event_header {
   event_date = 0n;
 }
 
-export type s_datamine_event = {
-  header: s_datamine_event_header;
+export interface s_datamine_event {
   categories: string[];
+  header: s_datamine_event_header;
   parameters: s_datamine_parameter[];
-};
+}
 
 /** File header v1: BOM + major=1, then session fields. */
 @c.struct()
@@ -175,10 +177,10 @@ export type s_data_mine_header =
   | s_data_mine_header_v2
   | s_data_mine_header_v3;
 
-export type s_datamine_file = {
-  header: s_data_mine_header;
+export interface s_datamine_file {
   events: s_datamine_event[];
-};
+  header: s_data_mine_header;
+}
 
 @c.struct()
 class s_datamine_bom_major {
@@ -277,7 +279,7 @@ function parameterValue(
     case e_datamine_parameter_type._datamine_parameter_type_string:
       return param.value_string?.string;
     default:
-      return undefined;
+      return;
   }
 }
 
@@ -339,7 +341,7 @@ function readParameterWithValue(
 ): { param: s_datamine_parameter; size: number } | undefined {
   const schemaSize = c.sizeof(s_datamine_parameter_schema);
   if (offset + schemaSize > end) {
-    return undefined;
+    return;
   }
   const schema = c.read(
     s_datamine_parameter_schema,
@@ -354,34 +356,44 @@ function readParameterWithValue(
 
   switch (param.parameter_type) {
     case e_datamine_parameter_type._datamine_parameter_type_long: {
-      if (p + 4 > end) return undefined;
+      if (p + 4 > end) {
+        return;
+      }
       param.value_long = readU32(buf, p, endian);
       p += 4;
       break;
     }
     case e_datamine_parameter_type._datamine_parameter_type_int64: {
-      if (p + 8 > end) return undefined;
+      if (p + 8 > end) {
+        return;
+      }
       param.value_int64 = readU64(buf, p, endian);
       p += 8;
       break;
     }
     case e_datamine_parameter_type._datamine_parameter_type_float: {
-      if (p + 4 > end) return undefined;
+      if (p + 4 > end) {
+        return;
+      }
       param.value_float = readF32(buf, p, endian);
       p += 4;
       break;
     }
     case e_datamine_parameter_type._datamine_parameter_type_string: {
-      if (p + 4 > end) return undefined;
+      if (p + 4 > end) {
+        return;
+      }
       const len = readU32(buf, p, endian);
       p += 4;
-      if (p + len > end) return undefined;
+      if (p + len > end) {
+        return;
+      }
       param.value_string = { string: buf.toString("utf8", p, p + len) };
       p += len;
       break;
     }
     default:
-      return undefined;
+      return;
   }
 
   return { param, size: p - offset };
@@ -403,28 +415,38 @@ function readParameterValues(
     };
     switch (def.parameter_type) {
       case e_datamine_parameter_type._datamine_parameter_type_long: {
-        if (p + 4 > end) return out;
+        if (p + 4 > end) {
+          return out;
+        }
         param.value_long = readU32(buf, p, endian);
         p += 4;
         break;
       }
       case e_datamine_parameter_type._datamine_parameter_type_int64: {
-        if (p + 8 > end) return out;
+        if (p + 8 > end) {
+          return out;
+        }
         param.value_int64 = readU64(buf, p, endian);
         p += 8;
         break;
       }
       case e_datamine_parameter_type._datamine_parameter_type_float: {
-        if (p + 4 > end) return out;
+        if (p + 4 > end) {
+          return out;
+        }
         param.value_float = readF32(buf, p, endian);
         p += 4;
         break;
       }
       case e_datamine_parameter_type._datamine_parameter_type_string: {
-        if (p + 4 > end) return out;
+        if (p + 4 > end) {
+          return out;
+        }
         const len = readU32(buf, p, endian);
         p += 4;
-        if (p + len > end) return out;
+        if (p + len > end) {
+          return out;
+        }
         param.value_string = { string: buf.toString("utf8", p, p + len) };
         p += len;
         break;
@@ -445,12 +467,12 @@ function readCountedStrings(
   stringSize: number
 ): { strings: string[]; next: number } | undefined {
   if (offset + 4 > end) {
-    return undefined;
+    return;
   }
   const count = readU32(buf, offset, endian);
   let p = offset + 4;
   if (count > 64 || p + count * stringSize > end) {
-    return undefined;
+    return;
   }
   const strings: string[] = [];
   for (let i = 0; i < count; i++) {
@@ -466,7 +488,7 @@ function readHeader(
 ): { header: s_data_mine_header; offset: number } | undefined {
   const probeSize = c.sizeof(s_datamine_bom_major);
   if (buf.length < probeSize) {
-    return undefined;
+    return;
   }
 
   const probe = c.read(
@@ -478,36 +500,54 @@ function readHeader(
   try {
     if (probe.version_major === 1) {
       const size = c.sizeof(s_data_mine_header_v1);
-      if (buf.length < size) return undefined;
-      const header = c.read(s_data_mine_header_v1, buf.subarray(0, size), endian);
+      if (buf.length < size) {
+        return;
+      }
+      const header = c.read(
+        s_data_mine_header_v1,
+        buf.subarray(0, size),
+        endian
+      );
       return { header, offset: size };
     }
     if (probe.version_major === 2) {
       const size = c.sizeof(s_data_mine_header_v2);
-      if (buf.length < size) return undefined;
-      const header = c.read(s_data_mine_header_v2, buf.subarray(0, size), endian);
+      if (buf.length < size) {
+        return;
+      }
+      const header = c.read(
+        s_data_mine_header_v2,
+        buf.subarray(0, size),
+        endian
+      );
       return { header, offset: size };
     }
     if (probe.version_major === 3) {
       const size = c.sizeof(s_data_mine_header_v3);
-      if (buf.length < size) return undefined;
-      const header = c.read(s_data_mine_header_v3, buf.subarray(0, size), endian);
+      if (buf.length < size) {
+        return;
+      }
+      const header = c.read(
+        s_data_mine_header_v3,
+        buf.subarray(0, size),
+        endian
+      );
       return { header, offset: size };
     }
   } catch {
-    return undefined;
+    return;
   }
 
-  return undefined;
+  return;
 }
 
-type s_datamine_v3_definition = {
-  priority: number;
+interface s_datamine_v3_definition {
+  categories: string[];
   event_name: string;
   parameter_signature: string;
-  categories: string[];
   parameters: s_datamine_parameter[];
-};
+  priority: number;
+}
 
 function read_v3_definition(
   record: Buffer,
@@ -515,7 +555,7 @@ function read_v3_definition(
 ): s_datamine_v3_definition | undefined {
   const prefixSize = c.sizeof(s_datamine_v3_definition_prefix);
   if (record.length < prefixSize) {
-    return undefined;
+    return;
   }
 
   let prefix: s_datamine_v3_definition_prefix;
@@ -526,10 +566,10 @@ function read_v3_definition(
       endian
     );
   } catch {
-    return undefined;
+    return;
   }
   if (prefix.format_major !== 1) {
-    return undefined;
+    return;
   }
 
   const cats = readCountedStrings(
@@ -540,11 +580,11 @@ function read_v3_definition(
     32
   );
   if (!cats) {
-    return undefined;
+    return;
   }
 
   if (cats.next + 4 > record.length) {
-    return undefined;
+    return;
   }
   const parameter_count = readU32(record, cats.next, endian);
   let p = cats.next + 4;
@@ -582,7 +622,7 @@ function read_v3_occurrence(
 ): s_datamine_event | undefined {
   const prefixSize = c.sizeof(s_datamine_v3_occurrence_prefix);
   if (record.length < prefixSize) {
-    return undefined;
+    return;
   }
 
   let prefix: s_datamine_v3_occurrence_prefix;
@@ -593,10 +633,10 @@ function read_v3_occurrence(
       endian
     );
   } catch {
-    return undefined;
+    return;
   }
   if (prefix.record_type !== 2) {
-    return undefined;
+    return;
   }
 
   const def = definitions.get(prefix.priority);
@@ -631,7 +671,7 @@ function read_v1_event(
 ): s_datamine_event | undefined {
   const headerSize = c.sizeof(s_datamine_event_header);
   if (record.length < headerSize) {
-    return undefined;
+    return;
   }
 
   let header: s_datamine_event_header;
@@ -642,7 +682,7 @@ function read_v1_event(
       endian
     );
   } catch {
-    return undefined;
+    return;
   }
 
   const cats = readCountedStrings(
@@ -653,11 +693,11 @@ function read_v1_event(
     32
   );
   if (!cats) {
-    return undefined;
+    return;
   }
 
   if (cats.next + 4 > record.length) {
-    return undefined;
+    return;
   }
   const parameter_count = readU32(record, cats.next, endian);
   let p = cats.next + 4;
@@ -733,7 +773,7 @@ export function read_datamine_file(
 ): s_datamine_file | undefined {
   const buf = Buffer.isBuffer(buffer) ? buffer : Buffer.from(buffer);
   if (buf.length < c.sizeof(s_datamine_bom_major)) {
-    return undefined;
+    return;
   }
 
   let endian: Endian = "big";
@@ -741,12 +781,12 @@ export function read_datamine_file(
   if (bomBe === 0xfeff) {
     endian = "little";
   } else if (bomBe !== 0xfffe) {
-    return undefined;
+    return;
   }
 
   const parsed = readHeader(buf, endian);
   if (!parsed) {
-    return undefined;
+    return;
   }
 
   return {

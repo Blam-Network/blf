@@ -1,9 +1,9 @@
+import { bigFlagsFromWords } from "./big_bitfield";
 import {
   type BitfieldFields,
   type BitfieldOf,
   bitfieldFromRaw,
 } from "./bitfield";
-import { bigFlagsFromWords } from "./big_bitfield";
 import {
   type EnumNumber,
   enumMemberFromWireIndex,

@@ -17,13 +17,14 @@ describe("s_blf_chunk_content_header", () => {
     expect(chdr.metadata.general.file_type).toBe(6); // e_file_type.GameVariant
     expect(chdr.metadata.general.size_in_bytes).toBe(21289);
     expect(chdr.metadata.general.map_id).toBe(-1);
-    expect(chdr.metadata.general.activity).toBe(3);
+    expect(chdr.metadata.general.activity).toBe(3); // e_gui_game_mode.multiplayer
     expect(chdr.metadata.general.game_mode).toBe(3);
     expect(chdr.metadata.name).toBe("Oddball");
     expect(chdr.metadata.description).toBe(
       "Hold the skull to earn points. It's like Hamlet with guns."
     );
     expect(chdr.metadata.file_type_data).toEqual({ icon_index: 2 });
-    expect(chdr.metadata.activity_data).not.toBeNull();
+    // Matchmaking hopper metadata only when activity === matchmaking (2).
+    expect(chdr.metadata.activity_data).toBeNull();
   });
 });
