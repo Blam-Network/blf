@@ -39,7 +39,7 @@ const BUILD_LABELS = {
   v2025_08_16_178512_1_release: "16th Aug 2025 (Latest)",
   v12070_08_09_05_2031_halo3_ship: "Title Update 2 (Latest)",
   v13895_09_04_27_2201_atlas_release: "Release (Latest)",
-  v36735_13_12_02_1953_alpha: "Pricate Alpha",
+  v36735_13_12_02_1953_alpha: "Private Alpha",
 };
 
 /** @type {Record<string, string>} */

@@ -5515,7 +5515,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           },
           {
             "m_navpoint_set_icon_parameters": {
-              "m_navpoint_icon": "recover",
+              "m_navpoint_icon": "defend",
               "m_object": {
                 "m_object": {
                   "m_explicit_object_type": "current",
@@ -5572,7 +5572,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           },
           {
             "m_navpoint_set_icon_parameters": {
-              "m_navpoint_icon": "defend",
+              "m_navpoint_icon": "neutralize",
               "m_object": {
                 "m_object": {
                   "m_explicit_object_type": "current",
@@ -5822,7 +5822,7 @@ exports[`3nvasion_dlc_054.bin > reads mpvr (game variant) 1`] = `
           },
           {
             "m_navpoint_set_icon_parameters": {
-              "m_navpoint_icon": "num_9",
+              "m_navpoint_icon": "ordnance",
               "m_object": {
                 "m_object": {
                   "m_explicit_object_type": "current",
