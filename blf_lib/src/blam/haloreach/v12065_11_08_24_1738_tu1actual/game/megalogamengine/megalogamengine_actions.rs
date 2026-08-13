@@ -1074,14 +1074,14 @@ impl s_action_adjust_grenades_parameters {
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct s_action_submit_incident_parameters {
-    pub m_incident_id: u16, // 10 bits
+    pub m_incident_id: i16,
     pub m_target_1: s_team_or_player_target,
     pub m_target_2: s_team_or_player_target,
 }
 
 impl s_action_submit_incident_parameters {
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
-        bitstream.write_integer(self.m_incident_id, 10)?;
+        bitstream.write_integer((self.m_incident_id + 1) as u16, 10)?;
         self.m_target_1.encode(bitstream)?;
         self.m_target_2.encode(bitstream)?;
 
@@ -1089,7 +1089,7 @@ impl s_action_submit_incident_parameters {
     }
 
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
-        self.m_incident_id = bitstream.read_integer("incident-id", 10)?;
+        self.m_incident_id = bitstream.read_integer::<i32>("incident-id", 10)? as i16 - 1;
         self.m_target_1.decode(bitstream)?;
         self.m_target_2.decode(bitstream)?;
 
@@ -1100,7 +1100,7 @@ impl s_action_submit_incident_parameters {
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct s_action_submit_incident_with_custom_value_parameters {
-    pub m_incident_id: u16, // 10 bits
+    pub m_incident_id: i16,
     pub m_target_1: s_team_or_player_target,
     pub m_target_2: s_team_or_player_target,
     pub m_variable: c_custom_variable_reference,
@@ -1108,7 +1108,7 @@ pub struct s_action_submit_incident_with_custom_value_parameters {
 
 impl s_action_submit_incident_with_custom_value_parameters {
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
-        bitstream.write_integer(self.m_incident_id, 10)?;
+        bitstream.write_integer((self.m_incident_id + 1) as u16, 10)?;
         self.m_target_1.encode(bitstream)?;
         self.m_target_2.encode(bitstream)?;
         self.m_variable.encode(bitstream)?;
@@ -1117,7 +1117,7 @@ impl s_action_submit_incident_with_custom_value_parameters {
     }
 
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
-        self.m_incident_id = bitstream.read_integer("incident-id", 10)?;
+        self.m_incident_id = bitstream.read_integer::<i32>("incident-id", 10)? as i16 - 1;
         self.m_target_1.decode(bitstream)?;
         self.m_target_2.decode(bitstream)?;
         self.m_variable.decode(bitstream)?;

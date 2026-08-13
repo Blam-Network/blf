@@ -1026,12 +1026,12 @@ export class s_action_submit_incident_parameters {
   @AutoMap(() => s_team_or_player_target)
   m_target_2 = new s_team_or_player_target();
   decode(bitstream: c_bitstream_reader): void {
-    this.m_incident_id = bitstream.read_integer("incident-id", 10);
+    this.m_incident_id = bitstream.read_integer("incident-id", 10) - 1;
     this.m_target_1.decode(bitstream);
     this.m_target_2.decode(bitstream);
   }
   encode(bitstream: c_bitstream_writer): void {
-    bitstream.write_integer(this.m_incident_id, 10);
+    bitstream.write_integer(this.m_incident_id + 1, 10);
     this.m_target_1.encode(bitstream);
     this.m_target_2.encode(bitstream);
   }
@@ -1046,13 +1046,13 @@ export class s_action_submit_incident_with_custom_value_parameters {
   @AutoMap(() => c_custom_variable_reference)
   m_variable = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
-    this.m_incident_id = bitstream.read_integer("incident-id", 10);
+    this.m_incident_id = bitstream.read_integer("incident-id", 10) - 1;
     this.m_target_1.decode(bitstream);
     this.m_target_2.decode(bitstream);
     this.m_variable.decode(bitstream);
   }
   encode(bitstream: c_bitstream_writer): void {
-    bitstream.write_integer(this.m_incident_id, 10);
+    bitstream.write_integer(this.m_incident_id + 1, 10);
     this.m_target_1.encode(bitstream);
     this.m_target_2.encode(bitstream);
     this.m_variable.encode(bitstream);
