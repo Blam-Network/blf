@@ -91,7 +91,11 @@ jobs:
             (cd "${OSXCROSS_DIR}" && ./build.sh)
           fi
 
-          chmod +x "${OSXCROSS_DIR}/target/bin/"*
+          # Cached *dsymutil binaries are sometimes not chmod'able (EPERM);
+          # only the clang/ar wrappers are required for the cargo builds.
+          find "${OSXCROSS_DIR}/target/bin" -type f ! -name '*dsymutil' -exec chmod +x {} +
+          test -x "${OSXCROSS_DIR}/target/bin/o64-clang"
+          test -x "${OSXCROSS_DIR}/target/bin/oa64-clang"
           echo "${OSXCROSS_DIR}/target/bin" >> "${GITHUB_PATH}"
           echo "OSXCROSS_TARGET=${OSXCROSS_DIR}/target" >> "${GITHUB_ENV}"
 
