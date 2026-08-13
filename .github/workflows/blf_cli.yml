@@ -31,13 +31,57 @@ jobs:
             zlib1g-dev \
             libz-mingw-w64-dev
 
-      - name: Set up MacOS Cross Compiler
-        uses: Timmmm/setup-osxcross@v2
+      # Timmmm/setup-osxcross@v2 sets UNATTENDED=yes; osxcross 3.x only auto-selects
+      # flavor when UNATTENDED=1 and/or BUILD_FLAVOR is set, so the action hangs on the prompt.
+      - name: Cache osxcross toolchain
+        uses: actions/cache@v4
         with:
-          osx-version: "12.3"
+          path: ~/osxcross/target
+          key: ${{ runner.os }}-osxcross-12.3-stable-v1
 
-      - name: Add osxcross to PATH
-        run: echo "${HOME}/osxcross/target/bin" >> $GITHUB_PATH
+      - name: Set up MacOS Cross Compiler (osxcross)
+        env:
+          OSX_VERSION: "12.3"
+          UNATTENDED: "1"
+          BUILD_FLAVOR: stable
+          SDK_VERSION: "12.3"
+        run: |
+          set -euo pipefail
+          OSXCROSS_DIR="${HOME}/osxcross"
+          mkdir -p "${OSXCROSS_DIR}/tarballs"
+
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            clang gcc g++ zlib1g-dev libmpc-dev libmpfr-dev libgmp-dev \
+            cmake libxml2-dev libssl-dev xz-utils
+
+          if [ ! -x "${OSXCROSS_DIR}/target/bin/o64-clang" ]; then
+            if [ ! -d "${OSXCROSS_DIR}/.git" ]; then
+              git clone --depth 1 https://github.com/tpoechtrager/osxcross "${OSXCROSS_DIR}"
+            fi
+
+            SDK_ARCHIVE="MacOSX${OSX_VERSION}.sdk.tar.xz"
+            if [ ! -f "${OSXCROSS_DIR}/tarballs/${SDK_ARCHIVE}" ]; then
+              wget -q "https://github.com/joseluisq/macosx-sdks/releases/download/${OSX_VERSION}/${SDK_ARCHIVE}" \
+                -O "${OSXCROSS_DIR}/tarballs/${SDK_ARCHIVE}"
+            fi
+
+            (cd "${OSXCROSS_DIR}" && ./build.sh)
+          fi
+
+          chmod +x "${OSXCROSS_DIR}/target/bin/"*
+          echo "${OSXCROSS_DIR}/target/bin" >> "${GITHUB_PATH}"
+          echo "OSXCROSS_TARGET=${OSXCROSS_DIR}/target" >> "${GITHUB_ENV}"
+
+          LINKER_X86="$(basename "$(find "${OSXCROSS_DIR}/target/bin" -name 'x86_64-apple-darwin*-clang' | head -n1)")"
+          AR_X86="$(basename "$(find "${OSXCROSS_DIR}/target/bin" -name 'x86_64-apple-darwin*-ar' | head -n1)")"
+          LINKER_ARM="$(basename "$(find "${OSXCROSS_DIR}/target/bin" -name 'aarch64-apple-darwin*-clang' | head -n1)")"
+          AR_ARM="$(basename "$(find "${OSXCROSS_DIR}/target/bin" -name 'aarch64-apple-darwin*-ar' | head -n1)")"
+
+          echo "CARGO_TARGET_X86_64_APPLE_DARWIN_LINKER=${LINKER_X86}" >> "${GITHUB_ENV}"
+          echo "CARGO_TARGET_X86_64_APPLE_DARWIN_RUSTFLAGS=-Car=${AR_X86},-Clink-arg=-undefined,-Clink-arg=dynamic_lookup" >> "${GITHUB_ENV}"
+          echo "CARGO_TARGET_AARCH64_APPLE_DARWIN_LINKER=${LINKER_ARM}" >> "${GITHUB_ENV}"
+          echo "CARGO_TARGET_AARCH64_APPLE_DARWIN_RUSTFLAGS=-Car=${AR_ARM},-Clink-arg=-undefined,-Clink-arg=dynamic_lookup" >> "${GITHUB_ENV}"
 
       - name: Install Rustup targets
         run: rustup target add x86_64-unknown-linux-musl x86_64-pc-windows-gnu x86_64-apple-darwin aarch64-apple-darwin
