@@ -265,15 +265,14 @@ pub enum e_chud_navpoint_icon_type {
     num_6 = 17,
     num_7 = 18,
     num_8 = 19,
-    num_9 = 20,
-    ordnance = 21,
-    interface = 22,
-    recon = 23,
-    ammunition = 24,
-    recover = 25,
-    defend = 26,
-    neutralize = 27,
-    coop_spawning = 28,
+    ordnance = 20,
+    interface = 21,
+    recon = 22,
+    ammunition = 23,
+    recover = 24,
+    defend = 25,
+    neutralize = 26,
+    coop_spawning = 27,
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
