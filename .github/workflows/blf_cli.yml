@@ -56,12 +56,34 @@ jobs:
             cmake libxml2-dev libssl-dev xz-utils
 
           if [ ! -x "${OSXCROSS_DIR}/target/bin/o64-clang" ]; then
+            # Cache may restore ~/osxcross/target without the git source tree,
+            # leaving a non-empty directory that `git clone` refuses to use.
             if [ ! -d "${OSXCROSS_DIR}/.git" ]; then
+              TARGET_BAK=""
+              TARBALLS_BAK=""
+              if [ -d "${OSXCROSS_DIR}/target" ]; then
+                TARGET_BAK="$(mktemp -d)/target"
+                mv "${OSXCROSS_DIR}/target" "${TARGET_BAK}"
+              fi
+              if [ -d "${OSXCROSS_DIR}/tarballs" ]; then
+                TARBALLS_BAK="$(mktemp -d)/tarballs"
+                mv "${OSXCROSS_DIR}/tarballs" "${TARBALLS_BAK}"
+              fi
+              rm -rf "${OSXCROSS_DIR}"
               git clone --depth 1 https://github.com/tpoechtrager/osxcross "${OSXCROSS_DIR}"
+              if [ -n "${TARGET_BAK}" ]; then
+                rm -rf "${OSXCROSS_DIR}/target"
+                mv "${TARGET_BAK}" "${OSXCROSS_DIR}/target"
+              fi
+              if [ -n "${TARBALLS_BAK}" ]; then
+                mkdir -p "${OSXCROSS_DIR}/tarballs"
+                cp -a "${TARBALLS_BAK}/." "${OSXCROSS_DIR}/tarballs/"
+              fi
             fi
 
             SDK_ARCHIVE="MacOSX${OSX_VERSION}.sdk.tar.xz"
             if [ ! -f "${OSXCROSS_DIR}/tarballs/${SDK_ARCHIVE}" ]; then
+              mkdir -p "${OSXCROSS_DIR}/tarballs"
               wget -q "https://github.com/joseluisq/macosx-sdks/releases/download/${OSX_VERSION}/${SDK_ARCHIVE}" \
                 -O "${OSXCROSS_DIR}/tarballs/${SDK_ARCHIVE}"
             fi
