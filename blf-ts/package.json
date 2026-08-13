@@ -10,6 +10,9 @@
       "helpers": [
         "./dist/helpers/index.d.ts"
       ],
+      "bitstream": [
+        "./dist/bitstream/index.d.ts"
+      ],
       "haloreach/*": [
         "./dist/versions/haloreach/*"
       ],
