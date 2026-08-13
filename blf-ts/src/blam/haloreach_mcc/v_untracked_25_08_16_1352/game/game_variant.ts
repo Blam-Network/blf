@@ -1767,16 +1767,16 @@ export class c_game_engine_custom_variant {
       "base-variant-parameters-hidden",
       k_game_variant_parameter_flags
     );
-    for (let i = 0; i < 32; i++) {
-      this.m_user_defined_options_locked[i] = bitstream.read_bool(
-        "user-defined-options-locked"
-      );
-    }
-    for (let i = 0; i < 32; i++) {
-      this.m_user_defined_options_hidden[i] = bitstream.read_bool(
-        "user-defined-options-hidden"
-      );
-    }
+    // Engine: write_big_flags<c_big_flags<16>> (one dword). Keep a 32-bool
+    // array for storage; upper bits stay clear (max 16 user options).
+    this.m_user_defined_options_locked = bitstream.read_big_flags(
+      "user-defined-options-locked",
+      32
+    );
+    this.m_user_defined_options_hidden = bitstream.read_big_flags(
+      "user-defined-options-hidden",
+      32
+    );
     this.m_game_engine.decode(bitstream);
     if (this.m_encoding_version > 106) {
       this.m_tu1_settings.decode(bitstream);
@@ -1818,12 +1818,14 @@ export class c_game_engine_custom_variant {
       k_game_variant_parameter_flags,
       "base-variant-parameters-hidden"
     );
-    for (const parameter of this.m_user_defined_options_locked) {
-      bitstream.write_bool(parameter);
-    }
-    for (const parameter of this.m_user_defined_options_hidden) {
-      bitstream.write_bool(parameter);
-    }
+    bitstream.write_big_flags(
+      this.m_user_defined_options_locked,
+      "user-defined-options-locked"
+    );
+    bitstream.write_big_flags(
+      this.m_user_defined_options_hidden,
+      "user-defined-options-hidden"
+    );
     this.m_game_engine.encode(bitstream);
     if (this.m_encoding_version > 106) {
       this.m_tu1_settings.encode(bitstream);

@@ -1417,12 +1417,8 @@ impl c_game_engine_custom_variant {
         bitstream.write_bool(self.m_symmetric_gametype)?;
         self.m_base_variant_parameters_locked.encode(bitstream, "base-variant-parameters-locked")?;
         self.m_base_variant_parameters_hidden.encode(bitstream, "base-variant-parameters-hidden")?;
-        for parameter in &self.m_user_defined_options_locked {
-            bitstream.write_bool(*parameter)?
-        }
-        for parameter in &self.m_user_defined_options_hidden {
-            bitstream.write_bool(*parameter)?
-        }
+        bitstream.write_big_flags(self.m_user_defined_options_locked.get())?;
+        bitstream.write_big_flags(self.m_user_defined_options_hidden.get())?;
         self.m_game_engine.encode(bitstream)?;
         if self.m_encoding_version > 106 {
             self.m_tu1_settings.encode(bitstream)?;
@@ -1466,12 +1462,14 @@ impl c_game_engine_custom_variant {
         self.m_symmetric_gametype = bitstream.read_bool("symmetric-gametype")?;
         self.m_base_variant_parameters_locked.decode(bitstream, "base-variant-parameters-locked")?;
         self.m_base_variant_parameters_hidden.decode(bitstream, "base-variant-parameters-hidden")?;
-        for i in 0..32 {
-            self.m_user_defined_options_locked[i] = bitstream.read_bool("user-defined-options-locked")?;
-        }
-        for i in 0..32 {
-            self.m_user_defined_options_hidden[i] = bitstream.read_bool("user-defined-options-hidden")?;
-        }
+        bitstream.read_big_flags(
+            "user-defined-options-locked",
+            self.m_user_defined_options_locked.get_mut(),
+        )?;
+        bitstream.read_big_flags(
+            "user-defined-options-hidden",
+            self.m_user_defined_options_hidden.get_mut(),
+        )?;
         self.m_game_engine.decode(bitstream)?;
         if self.m_encoding_version > 106 {
             self.m_tu1_settings.decode(bitstream)?;
