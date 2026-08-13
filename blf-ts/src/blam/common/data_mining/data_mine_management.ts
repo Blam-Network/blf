@@ -124,7 +124,6 @@ export class s_data_mine_header_v2 {
   source_flag = 0;
 }
 
-/** File header v3: major=3 + minor + application_name extras. */
 @c.struct()
 export class s_data_mine_header_v3 {
   readonly version = 3 as const;
@@ -144,6 +143,21 @@ export class s_data_mine_header_v3 {
   @c.field(c.String(32))
   build_string = "";
 
+  @c.field(c.String(32))
+  unknown1 = "";
+
+  @c.field("u8")
+  unknown2 = 0;
+
+  @c.field("u8")
+  unknown3 = 0;
+
+  @c.field(c.String(64))
+  unknown4 = "";
+
+  @c.field("u64")
+  session_start_date = 0n;
+
   @c.field("i32")
   build_number = 0;
 
@@ -151,25 +165,10 @@ export class s_data_mine_header_v3 {
   systemid = "";
 
   @c.field(c.String(32))
-  title = "";
-
-  @c.field("u64")
-  session_start_date = 0n;
-
-  @c.field("u8")
-  source_flag = 0;
-
-  @c.field("u8")
-  source_flag_pad = 0;
-
-  @c.field(c.String(64))
-  unknown0 = "";
-
-  @c.field(c.String(32))
   application_name = "";
 
   @c.field("u32")
-  unknown1 = 0;
+  unknown5 = 0;
 }
 
 export type s_data_mine_header =

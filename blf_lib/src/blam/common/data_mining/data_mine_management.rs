@@ -42,7 +42,6 @@ pub struct s_data_mine_header_v2 {
     pub source_flag: u8,
 }
 
-// v3: major=3, minor=1 (extra u16 vs v1/v2).
 #[binrw]
 #[cfg_attr(feature = "napi", napi(object, namespace = "common"))]
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, Default)]
@@ -52,15 +51,15 @@ pub struct s_data_mine_header_v3 {
     pub version_minor: u16,
     pub sessionid: StaticString<128>,
     pub build_string: StaticString<32>,
+    pub unknown1: StaticString<32>,
+    pub unknown2: u8,
+    pub unknown3: u8,
+    pub unknown4: StaticString<64>,
+    pub session_start_date: filetime,
     pub build_number: i32,
     pub systemid: StaticString<160>,
-    pub title: StaticString<32>,
-    pub session_start_date: filetime,
-    pub source_flag: u8,
-    pub source_flag_pad: u8,
-    pub unknown0: StaticString<64>,
     pub application_name: StaticString<32>,
-    pub unknown1: u32,
+    pub unknown5: u32,
 }
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize)]
