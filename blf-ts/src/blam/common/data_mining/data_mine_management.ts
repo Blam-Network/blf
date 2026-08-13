@@ -191,7 +191,6 @@ class s_datamine_bom_major {
   version_major = 0;
 }
 
-/** v3 event definition: size + format(1.x) + name/sig + priority (cats/params follow). */
 @c.struct()
 class s_datamine_v3_definition_prefix {
   @c.field("u32")
@@ -201,7 +200,7 @@ class s_datamine_v3_definition_prefix {
   format_major = 1;
 
   @c.field("u8")
-  format_minor = 0;
+  priority = 0;
 
   @c.field(c.String(512))
   event_name = "";
@@ -210,10 +209,9 @@ class s_datamine_v3_definition_prefix {
   parameter_signature = "";
 
   @c.field("u32")
-  priority = 0;
+  definition_id = 0;
 }
 
-/** v3 event occurrence: size + type=2 + index + priority + filetime (values follow). */
 @c.struct()
 class s_datamine_v3_occurrence_prefix {
   @c.field("u32")
@@ -226,7 +224,7 @@ class s_datamine_v3_occurrence_prefix {
   event_index = 0;
 
   @c.field("u32")
-  priority = 0;
+  definition_id = 0;
 
   @c.field("u64")
   event_date = 0n;
@@ -543,6 +541,7 @@ function readHeader(
 
 interface s_datamine_v3_definition {
   categories: string[];
+  definition_id: number;
   event_name: string;
   parameter_signature: string;
   parameters: s_datamine_parameter[];
@@ -607,6 +606,7 @@ function read_v3_definition(
   }
 
   return {
+    definition_id: prefix.definition_id,
     priority: prefix.priority,
     event_name: prefix.event_name,
     parameter_signature: prefix.parameter_signature,
@@ -639,7 +639,7 @@ function read_v3_occurrence(
     return;
   }
 
-  const def = definitions.get(prefix.priority);
+  const def = definitions.get(prefix.definition_id);
   const parameters = def
     ? readParameterValues(
         record,
@@ -654,7 +654,7 @@ function read_v3_occurrence(
   header.total_size = prefix.total_size;
   header.event_name = def?.event_name ?? "";
   header.parameter_signature = def?.parameter_signature ?? "";
-  header.priority = prefix.priority;
+  header.priority = def?.priority ?? 0;
   header.event_index = prefix.event_index;
   header.event_date = prefix.event_date;
 
@@ -740,7 +740,7 @@ function readRecords(
       if (kind === 1) {
         const def = read_v3_definition(record, endian);
         if (def) {
-          definitions.set(def.priority, def);
+          definitions.set(def.definition_id, def);
         }
       } else if (kind === 2) {
         const event = read_v3_occurrence(record, endian, definitions);

@@ -100,26 +100,26 @@ pub struct s_datamine_event_header {
     pub event_date: filetime,
 }
 
-/// v3 definition prefix: size + format(1.x) + name/sig + priority.
 #[binrw]
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, Default)]
 pub struct s_datamine_v3_definition_prefix {
     pub total_size: u32,
     pub format_major: u8,
-    pub format_minor: u8,
+    pub priority: u8,
     pub event_name: StaticString<512>,
     pub parameter_signature: StaticString<512>,
-    pub priority: u32,
+    /// Registered-report id; occurrences join by this value.
+    pub definition_id: u32,
 }
 
-/// v3 occurrence prefix: size + type=2 + index + priority + filetime.
+/// v3 occurrence prefix: size + type=2 + index + definition_id + filetime.
 #[binrw]
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, Default)]
 pub struct s_datamine_v3_occurrence_prefix {
     pub total_size: u32,
     pub record_type: u8,
     pub event_index: u32,
-    pub priority: u32,
+    pub definition_id: u32,
     pub event_date: filetime,
 }
 
@@ -250,7 +250,8 @@ pub struct s_datamine_event {
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, Default)]
 pub struct s_datamine_v3_definition {
-    pub priority: u32,
+    pub definition_id: u32,
+    pub priority: u8,
     pub event_name: StaticString<512>,
     pub parameter_signature: StaticString<512>,
     pub categories: Vec<StaticString<32>>,
@@ -307,6 +308,7 @@ fn read_v3_definition<R: Read + Seek>(
         parameters.push(BinRead::read_options(reader, endian, ())?);
     }
     Ok(s_datamine_v3_definition {
+        definition_id: prefix.definition_id,
         priority: prefix.priority,
         event_name: prefix.event_name,
         parameter_signature: prefix.parameter_signature,
@@ -327,7 +329,7 @@ fn read_v3_occurrence<R: Read + Seek>(
             message: format!("unexpected occurrence record_type {}", prefix.record_type),
         });
     }
-    let def = definitions.get(&prefix.priority);
+    let def = definitions.get(&prefix.definition_id);
 
     let mut parameters = Vec::new();
     if let Some(def) = def {
@@ -342,11 +344,12 @@ fn read_v3_occurrence<R: Read + Seek>(
         }
     }
 
-    let (event_name, parameter_signature, categories) = match def {
+    let (event_name, parameter_signature, categories, priority) = match def {
         Some(d) => (
             d.event_name.clone(),
             d.parameter_signature.clone(),
             d.categories.clone(),
+            u32::from(d.priority),
         ),
         None => Default::default(),
     };
@@ -356,7 +359,7 @@ fn read_v3_occurrence<R: Read + Seek>(
             total_size: prefix.total_size,
             event_name,
             parameter_signature,
-            priority: prefix.priority,
+            priority,
             event_index: prefix.event_index,
             game_info: c_datamine_game_info::default(),
             event_date: prefix.event_date,
@@ -408,7 +411,7 @@ fn read_records<R: Read + Seek>(
             match kind {
                 1 => match read_v3_definition(reader, endian) {
                     Ok(def) => {
-                        definitions.insert(def.priority, def);
+                        definitions.insert(def.definition_id, def);
                     }
                     Err(_) => break,
                 },
