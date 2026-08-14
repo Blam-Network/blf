@@ -116,4 +116,35 @@ describe("c_string_table", () => {
     expect(roundtrip.m_buffer_is_compressed).toBe(true);
     expect(roundtrip.strings[0]![0]).toBe(longString);
   });
+
+  it("skips compression when the zlib blob would be larger", () => {
+    // Multilingual category-sized payload just over the 128-byte threshold
+    // where zlib+header expands (MegaloEdit / pre_game parity).
+    const table = new c_string_table(1, 0x180, 9, 9, 1);
+    table.strings = [
+      ["Pre-Game"],
+      ["プレゲーム"],
+      ["VOR DEM SPIEL"],
+      ["ÉCHAUFFEMENT"],
+      ["PREÁMBULO RECREATIVO"],
+      ["PREVIO AL JUEGO"],
+      ["PREPARTITA"],
+      ["프리게임"],
+      ["사전"],
+      [null],
+      ["Pré-Jogo"],
+      [null],
+    ];
+
+    const encoded = encodeTable(table);
+
+    const reader = c_bitstream_reader.new(encoded, BE);
+    reader.begin_reading();
+    const roundtrip = new c_string_table(1, 0x180, 9, 9, 1);
+    roundtrip.decode(reader);
+    reader.finish_reading();
+
+    expect(roundtrip.m_buffer_is_compressed).toBe(false);
+    expect(roundtrip.strings[0]![0]).toBe("Pre-Game");
+  });
 });

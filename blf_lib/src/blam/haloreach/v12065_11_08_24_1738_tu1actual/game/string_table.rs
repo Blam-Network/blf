@@ -22,14 +22,16 @@ fn write_string_buffer_blob(
     if buffer.len() >= k_string_buffer_compression_threshold {
         let mut compressed_buffer = Vec::with_capacity(buffer.len());
         runtime_data_compress(&buffer.to_vec(), &mut compressed_buffer, bitstream.get_byte_order())?;
-        bitstream.write_bool(true)?;
-        bitstream.write_integer(compressed_buffer.len() as u32, buffer_size_bit_length)?;
-        bitstream.write_raw_data(compressed_buffer.as_slice(), compressed_buffer.len() * 8)?;
-    } else {
-        bitstream.write_bool(false)?;
-        bitstream.write_raw_data(buffer, buffer.len() * 8)?;
+        if compressed_buffer.len() < buffer.len() {
+            bitstream.write_bool(true)?;
+            bitstream.write_integer(compressed_buffer.len() as u32, buffer_size_bit_length)?;
+            bitstream.write_raw_data(compressed_buffer.as_slice(), compressed_buffer.len() * 8)?;
+            return Ok(());
+        }
     }
 
+    bitstream.write_bool(false)?;
+    bitstream.write_raw_data(buffer, buffer.len() * 8)?;
     Ok(())
 }
 
