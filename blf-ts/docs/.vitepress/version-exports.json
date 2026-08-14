@@ -98,6 +98,40 @@
       ]
     },
     {
+      "game": "halo3odst_mcc",
+      "buildId": "v_untracked_25_08_16_1352",
+      "label": "Halo 3: ODST MCC",
+      "buildLabel": "16th Aug 2025 (Latest)",
+      "importPath": "@blamnetwork/blf/halo3odst_mcc/v_untracked_25_08_16_1352",
+      "docLink": "/guide/versions/halo3odst_mcc/v_untracked_25_08_16_1352",
+      "chunks": [
+        {
+          "name": "s_blf_chunk_start_of_file",
+          "source": "src/chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_start_of_file.ts",
+          "signature": "_blf",
+          "version": "1.2"
+        },
+        {
+          "name": "s_blf_chunk_end_of_file",
+          "source": "src/chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_end_of_file.ts",
+          "signature": "_eof",
+          "version": "1.1"
+        },
+        {
+          "name": "s_blf_chunk_packed_game_variant",
+          "source": "src/chunks/halo3odst_mcc/v_untracked_25_08_16_1352/s_blf_chunk_packed_game_variant.ts",
+          "signature": "gvar",
+          "version": "10.1"
+        },
+        {
+          "name": "s_blf_chunk_game_variant",
+          "source": "src/chunks/halo3odst_mcc/v_untracked_25_08_16_1352/s_blf_chunk_game_variant.ts",
+          "signature": "mpvr",
+          "version": "3.1"
+        }
+      ]
+    },
+    {
       "game": "haloreach",
       "buildId": "v08516_10_02_19_1607_omaha_alpha",
       "label": "Halo Reach",

@@ -29,3 +29,28 @@ export function bitfieldToRaw<const F extends BitfieldFields>(
   }
   return raw;
 }
+
+export function bitfieldFromRawQword<const F extends BitfieldFields>(
+  raw: bigint,
+  fields: F
+): BitfieldOf<F> {
+  const result = {} as BitfieldOf<F>;
+  for (let i = 0; i < fields.length; i++) {
+    const key = fields[i] as F[number];
+    result[key] = ((raw >> BigInt(i)) & 1n) !== 0n;
+  }
+  return result;
+}
+
+export function bitfieldToRawQword<const F extends BitfieldFields>(
+  value: BitfieldOf<F>,
+  fields: F
+): bigint {
+  let raw = 0n;
+  for (let i = 0; i < fields.length; i++) {
+    if (value[fields[i] as F[number]]) {
+      raw |= 1n << BigInt(i);
+    }
+  }
+  return raw;
+}

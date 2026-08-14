@@ -8,7 +8,12 @@ export {
   encodeBigBitfield,
 } from "./big_bitfield";
 export type { BitfieldFields, BitfieldOf } from "./bitfield";
-export { bitfieldFromRaw, bitfieldToRaw } from "./bitfield";
+export {
+  bitfieldFromRaw,
+  bitfieldFromRawQword,
+  bitfieldToRaw,
+  bitfieldToRawQword,
+} from "./bitfield";
 export type { EnumNumber, NumericEnum } from "./enum";
 export {
   e_bitstream_byte_fill_direction,
