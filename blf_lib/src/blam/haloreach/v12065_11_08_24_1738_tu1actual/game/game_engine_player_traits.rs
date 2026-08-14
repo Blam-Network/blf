@@ -7,10 +7,10 @@ use blf_lib_derivable::result::BLFLibResult;
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, Default, ToPrimitive, FromPrimitive, crate::derive::c_enum)]
 #[bits(4)]
 pub enum e_grenade_count_setting {
-    none = 0,
     #[default]
+    unchanged = 0,
     map_default = 1,
-    zero = 2,
+    none = 2,
     frag_1 = 3,
     frag_2 = 4,
     frag_3 = 5,
@@ -337,7 +337,7 @@ impl c_player_trait_weapons {
     pub fn clear(&mut self) {
         self.m_damage_modifier_percentage_setting = e_damage_modifier_percentage_setting::unchanged;
         self.m_melee_damage_modifier_percentage_setting = e_damage_modifier_percentage_setting::unchanged;
-        self.m_initial_grenade_count_setting = e_grenade_count_setting::none;
+        self.m_initial_grenade_count_setting = e_grenade_count_setting::unchanged;
         self.m_infinite_ammo_setting = e_infinite_ammo_setting::unchanged;
         self.m_recharging_grenades_setting = e_boolean_trait::unchanged;
         self.m_weapon_pickup_setting = e_boolean_trait::unchanged;

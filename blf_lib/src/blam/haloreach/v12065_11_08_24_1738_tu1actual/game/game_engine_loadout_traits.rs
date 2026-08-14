@@ -32,7 +32,7 @@ impl c_loadout_traits {
         self.m_initial_primary_weapon_absolute_index = -3;
         self.m_initial_secondary_weapon_absolute_index = -3;
         self.m_initial_equipment_absolute_index = -3;
-        self.m_initial_grenade_count_setting = e_grenade_count_setting::none;
+        self.m_initial_grenade_count_setting = e_grenade_count_setting::unchanged;
     }
 
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {

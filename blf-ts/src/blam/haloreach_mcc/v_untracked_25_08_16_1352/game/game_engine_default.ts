@@ -597,14 +597,14 @@ export class c_loadout_traits {
   m_initial_equipment_absolute_index = 0;
   @AutoMap(() => e_grenade_count_setting)
   m_initial_grenade_count_setting: e_grenade_count_setting =
-    e_grenade_count_setting.none;
+    e_grenade_count_setting.unchanged;
   initialize(): void {
     this.m_visible = false;
     this.m_name = -1;
     this.m_initial_primary_weapon_absolute_index = -3;
     this.m_initial_secondary_weapon_absolute_index = -3;
     this.m_initial_equipment_absolute_index = -3;
-    this.m_initial_grenade_count_setting = e_grenade_count_setting.none;
+    this.m_initial_grenade_count_setting = e_grenade_count_setting.unchanged;
   }
   decode(bitstream: c_bitstream_reader): void {
     this.m_visible = bitstream.read_bool("flags");

@@ -4,9 +4,9 @@ import type {
 } from "../../../../bitstream";
 import { AutoMap } from "../../../../helpers/automap";
 export enum e_grenade_count_setting {
-  none = 0,
+  unchanged = 0,
   map_default = 1,
-  zero = 2,
+  none = 2,
   frag_1 = 3,
   frag_2 = 4,
   frag_3 = 5,
@@ -286,7 +286,7 @@ export class c_player_trait_weapons {
   m_initial_secondary_weapon_absolute_index = -3;
   @AutoMap(() => e_grenade_count_setting)
   m_initial_grenade_count_setting: e_grenade_count_setting =
-    e_grenade_count_setting.none;
+    e_grenade_count_setting.unchanged;
   @AutoMap(() => e_infinite_ammo_setting)
   m_infinite_ammo_setting: e_infinite_ammo_setting =
     e_infinite_ammo_setting.unchanged;
@@ -309,7 +309,7 @@ export class c_player_trait_weapons {
       e_damage_modifier_percentage_setting.unchanged;
     this.m_melee_damage_modifier_percentage_setting =
       e_damage_modifier_percentage_setting.unchanged;
-    this.m_initial_grenade_count_setting = e_grenade_count_setting.none;
+    this.m_initial_grenade_count_setting = e_grenade_count_setting.unchanged;
     this.m_infinite_ammo_setting = e_infinite_ammo_setting.unchanged;
     this.m_recharging_grenades_setting = e_boolean_trait.unchanged;
     this.m_weapon_pickup_setting = e_boolean_trait.unchanged;
