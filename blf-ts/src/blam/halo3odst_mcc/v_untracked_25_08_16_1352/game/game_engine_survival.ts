@@ -3,9 +3,9 @@ import type {
   c_bitstream_writer,
 } from "../../../../bitstream";
 import {
+  type BitfieldOf,
   bitfieldFromRawQword,
   bitfieldToRawQword,
-  type BitfieldOf,
 } from "../../../../bitstream";
 import { AutoMap } from "../../../../helpers/automap";
 import { c_game_engine_base_variant } from "./game_engine_default";
