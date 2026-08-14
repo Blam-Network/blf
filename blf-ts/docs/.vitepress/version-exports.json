@@ -99,11 +99,11 @@
     },
     {
       "game": "halo3odst_mcc",
-      "buildId": "v_untracked_25_08_16_1352",
-      "label": "Halo 3: ODST MCC",
+      "buildId": "v_untracked_25_08_16_1402",
+      "label": "Halo: MCC - Halo 3: ODST",
       "buildLabel": "16th Aug 2025 (Latest)",
-      "importPath": "@blamnetwork/blf/halo3odst_mcc/v_untracked_25_08_16_1352",
-      "docLink": "/guide/versions/halo3odst_mcc/v_untracked_25_08_16_1352",
+      "importPath": "@blamnetwork/blf/halo3odst_mcc/v_untracked_25_08_16_1402",
+      "docLink": "/guide/versions/halo3odst_mcc/v_untracked_25_08_16_1402",
       "chunks": [
         {
           "name": "s_blf_chunk_start_of_file",
@@ -119,13 +119,13 @@
         },
         {
           "name": "s_blf_chunk_packed_game_variant",
-          "source": "src/chunks/halo3odst_mcc/v_untracked_25_08_16_1352/s_blf_chunk_packed_game_variant.ts",
+          "source": "src/chunks/halo3odst_mcc/v_untracked_25_08_16_1402/s_blf_chunk_packed_game_variant.ts",
           "signature": "gvar",
           "version": "10.1"
         },
         {
           "name": "s_blf_chunk_game_variant",
-          "source": "src/chunks/halo3odst_mcc/v_untracked_25_08_16_1352/s_blf_chunk_game_variant.ts",
+          "source": "src/chunks/halo3odst_mcc/v_untracked_25_08_16_1402/s_blf_chunk_game_variant.ts",
           "signature": "mpvr",
           "version": "3.1"
         }

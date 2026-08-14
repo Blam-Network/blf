@@ -24,6 +24,7 @@ const GAME_LABELS = {
   mcc: "Halo: MCC",
   halo3: "Halo 3",
   halo3odst: "Halo 3: ODST",
+  halo3odst_mcc: "Halo: MCC - Halo 3: ODST",
   destiny: "Destiny",
 };
 
@@ -36,6 +37,7 @@ const BUILD_LABELS = {
   v11860_10_07_24_0147_omaha_release: "Release",
   v12065_11_08_24_1738_tu1actual: "Title Update 1 (Latest)",
   v_untracked_25_08_16_1352: "16th Aug 2025 (Latest)",
+  v_untracked_25_08_16_1402: "16th Aug 2025 (Latest)",
   v2025_08_16_178512_1_release: "16th Aug 2025 (Latest)",
   v12070_08_09_05_2031_halo3_ship: "Title Update 2 (Latest)",
   v13895_09_04_27_2201_atlas_release: "Release (Latest)",
@@ -57,6 +59,7 @@ const BUILD_DESCRIPTIONS = {
   v12065_11_08_24_1738_tu1actual:
     "Halo: Reach's first and only Xbox 360 Title Update.",
   v_untracked_25_08_16_1352: "Halo: Reach MCC - 16th August 2025",
+  v_untracked_25_08_16_1402: "Halo 3: ODST MCC - 16th August 2025",
   v2025_08_16_178512_1_release:
     "Halo: The Master Chief Collection - 16th August 2025",
   v12070_08_09_05_2031_halo3_ship: "Halo 3's second and final Title Update.",

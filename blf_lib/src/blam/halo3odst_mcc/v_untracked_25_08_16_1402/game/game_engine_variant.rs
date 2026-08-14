@@ -15,8 +15,8 @@ use blf_lib::blam::halo3::v12070_08_09_05_2031_halo3_ship::game::game_engine_san
 use blf_lib::blam::halo3::v12070_08_09_05_2031_halo3_ship::game::game_engine_slayer::c_game_engine_slayer_variant;
 use blf_lib::blam::halo3::v12070_08_09_05_2031_halo3_ship::game::game_engine_territories::c_game_engine_territories_variant;
 use blf_lib::blam::halo3::v12070_08_09_05_2031_halo3_ship::game::game_engine_vip::c_game_engine_vip_variant;
-use crate::blam::halo3odst_mcc::v_untracked_25_08_16_1352::game::game_engine_default::c_game_engine_base_variant;
-use crate::blam::halo3odst_mcc::v_untracked_25_08_16_1352::game::game_engine_survival::c_game_engine_survival_variant;
+use crate::blam::halo3odst_mcc::v_untracked_25_08_16_1402::game::game_engine_default::c_game_engine_base_variant;
+use crate::blam::halo3odst_mcc::v_untracked_25_08_16_1402::game::game_engine_survival::c_game_engine_survival_variant;
 use blf_lib::io::bitstream::{c_bitstream_reader, c_bitstream_writer};
 use blf_lib::{BINRW_ERROR, OPTION_TO_RESULT};
 use blf_lib_derivable::result::BLFLibResult;
@@ -35,7 +35,7 @@ use blf_lib_derivable::result::BLFLibResult;
     ToPrimitive,
 )]
 #[brw(repr = u32)]
-#[cfg_attr(feature = "napi", napi(namespace = "halo3odst_mcc_v_untracked_25_08_16_1352"))]
+#[cfg_attr(feature = "napi", napi(namespace = "halo3odst_mcc_v_untracked_25_08_16_1402"))]
 #[repr(u32)]
 pub enum e_game_engine {
     #[default]
@@ -54,7 +54,7 @@ pub enum e_game_engine {
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "halo3odst_mcc_v_untracked_25_08_16_1352"))]
+#[cfg_attr(feature = "napi", napi(object, namespace = "halo3odst_mcc_v_untracked_25_08_16_1402"))]
 pub struct c_game_variant {
     pub m_game_engine: e_game_engine,
     pub m_base_variant: c_game_engine_base_variant,

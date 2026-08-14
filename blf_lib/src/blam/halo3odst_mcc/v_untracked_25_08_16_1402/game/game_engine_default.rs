@@ -8,14 +8,14 @@ use blf_lib::blam::halo3::v12070_08_09_05_2031_halo3_ship::game::game_engine_def
 use blf_lib::blam::halo3::v12070_08_09_05_2031_halo3_ship::game::game_engine_traits::{
     c_game_engine_miscellaneous_options, c_game_engine_respawn_options,
 };
-use crate::blam::halo3odst_mcc::v_untracked_25_08_16_1352::saved_games::saved_game_files::s_content_item_metadata;
+use crate::blam::halo3odst_mcc::v_untracked_25_08_16_1402::saved_games::saved_game_files::s_content_item_metadata;
 use blf_lib::io::bitstream::{c_bitstream_reader, c_bitstream_writer};
 use blf_lib_derivable::result::BLFLibResult;
 
 pub const k_game_engine_type_count: usize = 12;
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "halo3odst_mcc_v_untracked_25_08_16_1352"))]
+#[cfg_attr(feature = "napi", napi(object, namespace = "halo3odst_mcc_v_untracked_25_08_16_1402"))]
 pub struct c_game_engine_base_variant {
     #[serde(skip_serializing, skip_deserializing)]
     pub m_checksum: u32,

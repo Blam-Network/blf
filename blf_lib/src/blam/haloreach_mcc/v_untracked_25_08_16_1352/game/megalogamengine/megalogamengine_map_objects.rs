@@ -10,14 +10,14 @@ use crate::blam::haloreach_mcc::v_untracked_25_08_16_1352::game::megalogamengine
 #[bits(4)]
 pub enum e_object_team_filter {
     none = -1,
-    team_1 = 0,
-    team_2 = 1,
-    team_3 = 2,
-    team_4 = 3,
-    team_5 = 4,
-    team_6 = 5,
-    team_7 = 6,
-    team_8 = 7,
+    defenders = 0,
+    attackers = 1,
+    third_party = 2,
+    fourth_party = 3,
+    fifth_party = 4,
+    sixth_party = 5,
+    seventh_party = 6,
+    eighth_party = 7,
     neutral = 8,
     each = 9,
 }

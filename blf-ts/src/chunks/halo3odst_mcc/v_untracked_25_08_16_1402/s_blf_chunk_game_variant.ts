@@ -7,7 +7,7 @@ import {
 import {
   c_game_variant,
   k_game_variant_size,
-} from "../../../blam/halo3odst_mcc/v_untracked_25_08_16_1352/game/game_engine_variant";
+} from "../../../blam/halo3odst_mcc/v_untracked_25_08_16_1402/game/game_engine_variant";
 import { BLFChunkBase, blf } from "../../../blf_chunk";
 import { BlfError } from "../../../error";
 
