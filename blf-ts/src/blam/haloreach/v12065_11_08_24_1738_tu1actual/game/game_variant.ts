@@ -1616,6 +1616,7 @@ export const k_game_engine_custom_variant_encoding_version = 107;
 
 /** MegaloEdit `EngineCategories` / engine_data `category` values. */
 export enum e_game_engine_category {
+  none = -1,
   ctf = 0,
   slayer = 1,
   oddball = 2,

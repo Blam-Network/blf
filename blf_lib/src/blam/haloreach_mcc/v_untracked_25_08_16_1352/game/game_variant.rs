@@ -1317,6 +1317,7 @@ pub const k_game_engine_custom_variant_encoding_version: i32 = 107;
 #[derive(Debug, Clone, Copy, PartialEq, Eq, ToPrimitive, FromPrimitive, Default, Serialize, Deserialize)]
 pub enum e_game_engine_category {
     #[default]
+    none = -1,
     ctf = 0,
     slayer = 1,
     oddball = 2,
