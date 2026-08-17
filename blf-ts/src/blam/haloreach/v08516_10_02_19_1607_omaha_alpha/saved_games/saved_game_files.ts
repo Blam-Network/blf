@@ -152,7 +152,7 @@ export function content_item_metadata_encode(
   bitstream.write_integer(metadata.general.game_mode, 3);
   bitstream.write_integer(metadata.general.game_engine_type, 3);
   bitstream.write_signed_integer(metadata.general.map_id, 32);
-  bitstream.write_qword(metadata.display.padding, 64);
+  bitstream.write_qword(metadata.display.padding ?? 0n, 64);
   bitstream.write_qword(
     BigInt(Math.floor(metadata.creation_history.timestamp.getTime() / 1000)),
     64
