@@ -30,7 +30,7 @@ pub struct c_game_engine_custom_variant {
     pub m_base_variant: c_game_engine_base_variant,
     pub m_player_traits: Vec<s_player_trait_option>,
     pub m_user_defined_options: Vec<s_user_defined_option>,
-    pub m_script_strings: c_string_table<112, 128, 14, 14, 7>,
+    pub m_script_strings: c_string_table<112, 0x4C00, 14, 14, 7>,
     pub m_base_name_string_index: u8,
     pub m_localized_name: c_string_table<1, 0x180, 5, 6, 1>,
     pub m_localized_description: c_string_table<1, 0xC00, 8, 9, 1>,

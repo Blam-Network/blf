@@ -1,0 +1,35 @@
+/**
+ * Halo 4 `e_explicit_team_type` — ManagedMegalo range [-1..27], 5 bits.
+ * Wire index = value - (-1) = value + 1 (declaration order with `none` first).
+ */
+export enum e_explicit_team_type {
+  none = -1,
+  team_0 = 0,
+  team_1 = 1,
+  team_2 = 2,
+  team_3 = 3,
+  team_4 = 4,
+  team_5 = 5,
+  team_6 = 6,
+  team_7 = 7,
+  neutral = 8,
+  global_0 = 9,
+  global_1 = 10,
+  global_2 = 11,
+  global_3 = 12,
+  global_4 = 13,
+  global_5 = 14,
+  global_6 = 15,
+  global_7 = 16,
+  temporary_0 = 17,
+  temporary_1 = 18,
+  temporary_2 = 19,
+  temporary_3 = 20,
+  temporary_4 = 21,
+  temporary_5 = 22,
+  unknown_23 = 23,
+  unknown_24 = 24,
+  current_team = 25,
+  local_team = 26,
+  unknown_27 = 27,
+}

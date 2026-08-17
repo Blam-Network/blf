@@ -21,7 +21,7 @@ use crate::blam::haloreach::v09730_10_04_09_1309_omaha_delta::game::megalogameng
 use crate::blam::haloreach::v12065_11_08_24_1738_tu1actual::memory::bitstream_writer::c_bitstream_writer_extensions;
 use crate::types::array::StaticArray;
 
-pub const k_game_engine_custom_variant_encoding_version: i32 = 49;
+pub const k_game_engine_custom_variant_encoding_version: i32 = 73;
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct c_game_engine_custom_variant {

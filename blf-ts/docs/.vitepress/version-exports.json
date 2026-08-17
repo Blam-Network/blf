@@ -132,6 +132,74 @@
       ]
     },
     {
+      "game": "halo4",
+      "buildId": "v20810_12_09_22_1647_main",
+      "label": "Halo 4",
+      "buildLabel": "September 2012 (main)",
+      "importPath": "@blamnetwork/blf/halo4/v20810_12_09_22_1647_main",
+      "docLink": "/guide/versions/halo4/v20810_12_09_22_1647_main",
+      "chunks": [
+        {
+          "name": "s_blf_chunk_start_of_file",
+          "source": "src/chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_start_of_file.ts",
+          "signature": "_blf",
+          "version": "1.2"
+        },
+        {
+          "name": "s_blf_chunk_end_of_file",
+          "source": "src/chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_end_of_file.ts",
+          "signature": "_eof",
+          "version": "1.1"
+        },
+        {
+          "name": "s_blf_chunk_packed_game_variant",
+          "source": "src/chunks/halo4/v20810_12_09_22_1647_main/s_blf_chunk_packed_game_variant.ts",
+          "signature": "gvar",
+          "version": "54.1"
+        },
+        {
+          "name": "s_blf_chunk_game_variant",
+          "source": "src/chunks/halo4/v20810_12_09_22_1647_main/s_blf_chunk_game_variant.ts",
+          "signature": "mpvr",
+          "version": "54.1"
+        }
+      ]
+    },
+    {
+      "game": "halo4",
+      "buildId": "v21117_12_11_19_2343_main",
+      "label": "Halo 4",
+      "buildLabel": "November 2012 release (main)",
+      "importPath": "@blamnetwork/blf/halo4/v21117_12_11_19_2343_main",
+      "docLink": "/guide/versions/halo4/v21117_12_11_19_2343_main",
+      "chunks": [
+        {
+          "name": "s_blf_chunk_start_of_file",
+          "source": "src/chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_start_of_file.ts",
+          "signature": "_blf",
+          "version": "1.2"
+        },
+        {
+          "name": "s_blf_chunk_end_of_file",
+          "source": "src/chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_end_of_file.ts",
+          "signature": "_eof",
+          "version": "1.1"
+        },
+        {
+          "name": "s_blf_chunk_packed_game_variant",
+          "source": "src/chunks/halo4/v20810_12_09_22_1647_main/s_blf_chunk_packed_game_variant.ts",
+          "signature": "gvar",
+          "version": "54.1"
+        },
+        {
+          "name": "s_blf_chunk_game_variant",
+          "source": "src/chunks/halo4/v20810_12_09_22_1647_main/s_blf_chunk_game_variant.ts",
+          "signature": "mpvr",
+          "version": "54.1"
+        }
+      ]
+    },
+    {
       "game": "haloreach",
       "buildId": "v08516_10_02_19_1607_omaha_alpha",
       "label": "Halo Reach",

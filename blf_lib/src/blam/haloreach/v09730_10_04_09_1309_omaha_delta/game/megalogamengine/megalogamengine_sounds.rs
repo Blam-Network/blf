@@ -97,4 +97,9 @@ pub enum e_megalo_sound {
     unsc_win1 = 87,
     unsc_win2 = 88,
     power_down = 89,
+    reinforcements = 90,
+    respawn_tick = 91,
+    alpha_under_attack = 92,
+    bravo_under_attack = 93,
+    charlie_under_attack = 94,
 }

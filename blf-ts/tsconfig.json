@@ -8,7 +8,8 @@
       "@blamnetwork/blf/haloreach_mcc/*": ["./src/versions/haloreach_mcc/*"],
       "@blamnetwork/blf/halo3/*": ["./src/versions/halo3/*"],
       "@blamnetwork/blf/halo3odst/*": ["./src/versions/halo3odst/*"],
-      "@blamnetwork/blf/destiny/*": ["./src/versions/destiny/*"]
+      "@blamnetwork/blf/destiny/*": ["./src/versions/destiny/*"],
+      "@blamnetwork/blf/halo4/*": ["./src/versions/halo4/*"]
     },
     "target": "ES2022",
     "module": "ESNext",

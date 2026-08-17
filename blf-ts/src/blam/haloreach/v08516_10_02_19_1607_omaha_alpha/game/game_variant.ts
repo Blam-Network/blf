@@ -5,18 +5,18 @@ import type {
 import { BlfError } from "../../../../error";
 import { AutoMap } from "../../../../helpers/automap";
 import { s_requisition_palette } from "../../v09730_10_04_09_1309_omaha_delta/game/megalogamengine/megalogamengine_requisitions";
-import { c_game_engine_base_variant } from "../../v12065_11_08_24_1738_tu1actual/game/game_engine_default";
-import { c_game_engine_sandbox_variant } from "../../v12065_11_08_24_1738_tu1actual/game/game_engine_sandbox";
-import { c_game_engine_survival_variant } from "../../v12065_11_08_24_1738_tu1actual/game/game_engine_survival";
-import { s_player_trait_option } from "../../v12065_11_08_24_1738_tu1actual/game/game_engine_traits";
 import { c_object_filter } from "../../v12065_11_08_24_1738_tu1actual/game/megalogamengine/megalogamengine_map_objects";
 import { c_megalo_game_statistic } from "../../v12065_11_08_24_1738_tu1actual/game/megalogamengine/megalogamengine_statistics";
 import { s_user_defined_option } from "../../v12065_11_08_24_1738_tu1actual/game/megalogamengine/megalogamengine_user_defined_options";
 import { c_string_table } from "../../v12065_11_08_24_1738_tu1actual/game/string_table";
+import { c_game_engine_base_variant } from "./game_engine_default";
 import {
   s_loadout_palette_unknown_struct,
   s_loadout_unknown_struct,
 } from "./game_engine_loadout_traits";
+import { c_game_engine_sandbox_variant } from "./game_engine_sandbox";
+import { c_game_engine_survival_variant } from "./game_engine_survival";
+import { s_player_trait_option } from "./game_engine_traits";
 import { c_action } from "./megalogamengine/megalogamengine_actions";
 import { c_condition } from "./megalogamengine/megalogamengine_conditions";
 import { c_trigger } from "./megalogamengine/megalogamengine_trigger";
@@ -227,7 +227,7 @@ export class c_game_engine_custom_variant {
   @AutoMap(() => [s_user_defined_option])
   m_user_defined_options: s_user_defined_option[] = [];
   @AutoMap(() => c_string_table)
-  m_script_strings = new c_string_table(112, 128, 14, 14, 7);
+  m_script_strings = new c_string_table(112, 0x4c00, 14, 14, 7);
   @AutoMap(() => Number)
   m_base_name_string_index = 0;
   @AutoMap(() => c_string_table)

@@ -342,8 +342,6 @@ export class s_action_create_object_parameters {
   m_flags = new e_create_object_flags();
   @AutoMap(() => Number)
   m_offset = 0;
-  @AutoMap(() => Number)
-  m_variant_name_index = 0;
   decode(bitstream: c_bitstream_reader): void {
     this.m_object_type.decode(bitstream);
     this.m_object_reference_1.decode(bitstream);
@@ -353,7 +351,6 @@ export class s_action_create_object_parameters {
       bitstream.read_integer("flags", 3)
     );
     this.m_offset = bitstream.read_integer("offset", 24);
-    this.m_variant_name_index = bitstream.read_integer("variant-name-index", 8);
   }
   encode(bitstream: c_bitstream_writer): void {
     this.m_object_type.encode(bitstream);
@@ -362,7 +359,6 @@ export class s_action_create_object_parameters {
     bitstream.write_index(this.m_filter_index, 16, 4);
     bitstream.write_integer(this.m_flags.to_raw(), 3);
     bitstream.write_integer(this.m_offset, 24);
-    bitstream.write_integer(this.m_variant_name_index, 8);
   }
 }
 export class s_action_navpoint_set_icon_parameters {
@@ -621,24 +617,21 @@ export class s_action_for_each_parameters {
   @AutoMap(() => Number)
   m_trigger_index = 0;
   decode(bitstream: c_bitstream_reader): void {
-    this.m_trigger_index = bitstream.read_integer("trigger-index", 9);
+    // Delta uses 8 bits (retail uses 9).
+    this.m_trigger_index = bitstream.read_integer("trigger-index", 8);
   }
   encode(bitstream: c_bitstream_writer): void {
-    bitstream.write_integer(this.m_trigger_index, 9);
+    bitstream.write_integer(this.m_trigger_index, 8);
   }
 }
 export class s_action_object_destroy_parameters {
   @AutoMap(() => c_object_reference)
   m_object = new c_object_reference();
-  @AutoMap(() => Boolean)
-  m_no_statistics = false;
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
-    this.m_no_statistics = bitstream.read_bool("no-statistics");
   }
   encode(bitstream: c_bitstream_writer): void {
     this.m_object.encode(bitstream);
-    bitstream.write_bool(this.m_no_statistics);
   }
 }
 export class s_action_object_attach_parameters {
@@ -648,19 +641,15 @@ export class s_action_object_attach_parameters {
   m_object_2 = new c_object_reference();
   @AutoMap(() => Number)
   m_offset = 0;
-  @AutoMap(() => Boolean)
-  m_absolute_orientation = false;
   decode(bitstream: c_bitstream_reader): void {
     this.m_object_1.decode(bitstream);
     this.m_object_2.decode(bitstream);
     this.m_offset = bitstream.read_integer("offset", 24);
-    this.m_absolute_orientation = bitstream.read_bool("absolute_orientation");
   }
   encode(bitstream: c_bitstream_writer): void {
     this.m_object_1.encode(bitstream);
     this.m_object_2.encode(bitstream);
     bitstream.write_integer(this.m_offset, 24);
-    bitstream.write_bool(this.m_absolute_orientation);
   }
 }
 export class s_action_player_adjust_money_parameters {
@@ -1021,15 +1010,16 @@ export class s_action_device_set_position_track_parameters {
   m_variable = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
-    this.m_animation_name_index = bitstream.read_integer(
+    this.m_animation_name_index = bitstream.read_index(
       "animation-name-index",
+      255,
       8
     );
     this.m_variable.decode(bitstream);
   }
   encode(bitstream: c_bitstream_writer): void {
     this.m_object.encode(bitstream);
-    bitstream.write_integer(this.m_animation_name_index, 8);
+    bitstream.write_index(this.m_animation_name_index, 255, 8);
     this.m_variable.encode(bitstream);
   }
 }

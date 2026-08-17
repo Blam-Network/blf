@@ -33,6 +33,9 @@
       ],
       "destiny/*": [
         "./dist/versions/destiny/*"
+      ],
+      "halo4/*": [
+        "./dist/versions/halo4/*"
       ]
     }
   },
@@ -90,6 +93,12 @@
       "import": "./dist/versions/destiny/*.js",
       "require": "./dist-cjs/versions/destiny/*.js",
       "default": "./dist/versions/destiny/*.js"
+    },
+    "./halo4/*": {
+      "types": "./dist/versions/halo4/*.d.ts",
+      "import": "./dist/versions/halo4/*.js",
+      "require": "./dist-cjs/versions/halo4/*.js",
+      "default": "./dist/versions/halo4/*.js"
     }
   },
   "files": [

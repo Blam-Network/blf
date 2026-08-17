@@ -1,9 +1,12 @@
 use num_derive::{FromPrimitive, ToPrimitive};
 use serde::{Deserialize, Serialize};
-use blf_lib::blam::haloreach::v08516_10_02_19_1607_omaha_alpha::game::megalogamengine::megalogamengine_trigger::e_trigger_execution_mode::object_with_label;
+use blf_lib::blam::haloreach::v08516_10_02_19_1607_omaha_alpha::game::megalogamengine::megalogamengine_trigger::e_trigger_execution_mode::object;
 use blf_lib::io::bitstream::{c_bitstream_reader, c_bitstream_writer};
 use blf_lib_derivable::result::BLFLibResult;
 
+/// Alpha has a single object mode (4) that always carries `object-filter-index`
+/// (`-1` = all objects / bare `trigger object`). Retail later splits that into
+/// `object` (4, no filter field) and `object_with_label` (5).
 #[repr(u8)]
 #[derive(Debug, Clone, Copy, PartialEq, Eq, ToPrimitive, FromPrimitive, Default, Serialize, Deserialize)]
 pub enum e_trigger_execution_mode {
@@ -12,7 +15,7 @@ pub enum e_trigger_execution_mode {
     player = 1,
     random_player = 2,
     team = 3,
-    object_with_label = 4,
+    object = 4,
 }
 
 #[repr(u8)]
@@ -44,7 +47,7 @@ impl c_trigger {
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
         bitstream.write_enum_raw(self.m_execution_mode, 3)?;
         bitstream.write_enum_raw(self.m_trigger_type, 3)?;
-        if self.m_execution_mode == object_with_label {
+        if self.m_execution_mode == object {
             bitstream.write_index::<16>(self.m_object_filter_index, 4)?;
         }
         bitstream.write_integer(self.m_first_condition, 9)?;
@@ -58,7 +61,7 @@ impl c_trigger {
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
         self.m_execution_mode = bitstream.read_enum_raw("execution-mode", 3)?;
         self.m_trigger_type = bitstream.read_enum_raw("trigger-type", 3)?;
-        if self.m_execution_mode == object_with_label {
+        if self.m_execution_mode == object {
             self.m_object_filter_index = bitstream.read_index::<16>("object-filter-index", 4)? as i8;
         } else {
             self.m_object_filter_index = -1;

@@ -1,0 +1,141 @@
+use serde::{Deserialize, Serialize};
+use blf_lib::bitfield;
+use blf_lib::io::bitstream::{c_bitstream_reader, c_bitstream_writer};
+use blf_lib::TEST_BIT;
+use blf_lib::blam::halo4::v20810_12_09_22_1647_main::game::game_engine_player_traits::e_grenade_count_setting;
+use blf_lib_derivable::result::BLFLibResult;
+use crate::types::array::StaticArray;
+
+bitfield! {
+    #[derive(Serialize, Deserialize)]
+    pub struct e_game_engine_loadout_definition_flags: u8 {
+        spartan_loadouts_enabled,
+        elite_loadouts_enabled,
+        // Halo 4 may use more flag bits; keep 4-bit wire width via to_raw/from_raw callers.
+        reserved2,
+        reserved3,
+    }
+}
+
+#[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
+pub struct c_loadout_traits {
+    pub m_visible: bool,
+    pub m_name: i8,
+    pub m_initial_primary_weapon_absolute_index: i8,
+    pub m_initial_secondary_weapon_absolute_index: i8,
+    pub m_initial_equipment_absolute_index: i8,
+    pub m_initial_tactical_package_absolute_index: i8,
+    pub m_initial_support_upgrade_absolute_index: i8,
+    pub m_initial_grenade_count_setting: e_grenade_count_setting,
+    pub m_initial_primary_weapon_variant: u8,
+    pub m_initial_secondary_weapon_variant: u8,
+}
+
+impl c_loadout_traits {
+    pub fn initialize(&mut self) {
+        *self = Self::default();
+        self.m_name = -1;
+        self.m_initial_primary_weapon_absolute_index = -3;
+        self.m_initial_secondary_weapon_absolute_index = -3;
+        self.m_initial_equipment_absolute_index = -3;
+        self.m_initial_tactical_package_absolute_index = -3;
+        self.m_initial_support_upgrade_absolute_index = -3;
+        self.m_initial_grenade_count_setting = e_grenade_count_setting::unchanged;
+    }
+
+    pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
+        bitstream.write_bool(self.m_visible)?;
+        bitstream.write_index::<128>(self.m_name, 7)?;
+        bitstream.write_signed_integer(self.m_initial_primary_weapon_absolute_index, 8)?;
+        bitstream.write_signed_integer(self.m_initial_secondary_weapon_absolute_index, 8)?;
+        bitstream.write_signed_integer(self.m_initial_equipment_absolute_index, 8)?;
+        bitstream.write_signed_integer(self.m_initial_tactical_package_absolute_index, 8)?;
+        bitstream.write_signed_integer(self.m_initial_support_upgrade_absolute_index, 8)?;
+        bitstream.write_enum(self.m_initial_grenade_count_setting)?;
+        bitstream.write_integer(self.m_initial_primary_weapon_variant, 3)?;
+        bitstream.write_integer(self.m_initial_secondary_weapon_variant, 3)?;
+        Ok(())
+    }
+
+    pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
+        self.m_visible = bitstream.read_bool("flags")?;
+        self.m_name = bitstream.read_index::<128>("name", 7)? as i8;
+        self.m_initial_primary_weapon_absolute_index =
+            bitstream.read_signed_integer("initial-primary-weapon", 8)?;
+        self.m_initial_secondary_weapon_absolute_index =
+            bitstream.read_signed_integer("initial-secondary-weapon", 8)?;
+        self.m_initial_equipment_absolute_index =
+            bitstream.read_signed_integer("initial-equipment", 8)?;
+        self.m_initial_tactical_package_absolute_index =
+            bitstream.read_signed_integer("initial-tactical-package", 8)?;
+        self.m_initial_support_upgrade_absolute_index =
+            bitstream.read_signed_integer("initial-support-upgrade", 8)?;
+        self.m_initial_grenade_count_setting =
+            bitstream.read_enum("initial-grenade-count")?;
+        self.m_initial_primary_weapon_variant =
+            bitstream.read_integer("initial-primary-weapon-variant", 3)?;
+        self.m_initial_secondary_weapon_variant =
+            bitstream.read_integer("initial-secondary-weapon-variant", 3)?;
+        Ok(())
+    }
+}
+
+#[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
+pub struct c_loadout_palette_traits {
+    pub m_loadouts: StaticArray<c_loadout_traits, 5>,
+}
+
+impl c_loadout_palette_traits {
+    pub fn initialize(&mut self) {
+        *self = Self::default();
+        for loadout in self.m_loadouts.get_mut().iter_mut() {
+            loadout.initialize();
+        }
+    }
+
+    pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
+        for i in 0..5 {
+            self.m_loadouts.get()[i].encode(bitstream)?;
+        }
+        Ok(())
+    }
+
+    pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
+        for i in 0..5 {
+            self.m_loadouts.get_mut()[i].decode(bitstream)?;
+        }
+        Ok(())
+    }
+}
+
+#[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
+pub struct c_game_engine_loadout_traits {
+    pub m_flags: e_game_engine_loadout_definition_flags,
+    pub m_loadout_palettes: StaticArray<c_loadout_palette_traits, 6>,
+}
+
+impl c_game_engine_loadout_traits {
+    pub fn initialize(&mut self) {
+        *self = Self::default();
+        for palette in self.m_loadout_palettes.get_mut().iter_mut() {
+            palette.initialize();
+        }
+    }
+
+    pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
+        bitstream.write_integer(self.m_flags.to_raw() as u32, 4)?;
+        for palette in self.m_loadout_palettes.get().iter() {
+            palette.encode(bitstream)?;
+        }
+        Ok(())
+    }
+
+    pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
+        self.m_flags =
+            e_game_engine_loadout_definition_flags::from_raw(bitstream.read_integer("loadout-flags", 4)?);
+        for palette in self.m_loadout_palettes.get_mut().iter_mut() {
+            palette.decode(bitstream)?;
+        }
+        Ok(())
+    }
+}

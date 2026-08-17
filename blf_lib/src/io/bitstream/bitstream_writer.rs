@@ -374,16 +374,22 @@ impl c_bitstream_writer {
         Ok(())
     }
 
+    /// Blam `write_index`: power-of-two `max_value` uses a 1-bit NONE flag then
+    /// `bit_size`; otherwise always writes `index + 1` in `bit_size` (NONE = -1 → 0).
     pub fn write_index<const max_value: usize>(&mut self, value: impl Into<i32>, bit_size: usize) -> BLFLibResult {
         let value = value.into();
 
         assert_ok!(value <= max_value as i32);
 
-        if value == -1 {
-            self.write_bool(true)?;
+        if max_value.is_power_of_two() {
+            if value == -1 {
+                self.write_bool(true)?;
+            } else {
+                self.write_bool(false)?;
+                self.write_integer(value as u32, bit_size)?;
+            }
         } else {
-            self.write_bool(false)?;
-            self.write_integer(value as u32, bit_size)?;
+            self.write_integer((value + 1) as u32, bit_size)?;
         }
 
         Ok(())
@@ -415,7 +421,8 @@ impl c_bitstream_writer {
     pub fn write_string_extended_ascii(&mut self, char_string: &String, max_string_size: u32) -> BLFLibResult {
         assert_ok!(self.writing());
         assert_ok!(max_string_size > 0);
-        assert_ok!(char_string.len() <= max_string_size as usize);
+        // Compare Latin-1 char count (not UTF-8 byte length).
+        assert_ok!(char_string.chars().count() <= max_string_size as usize);
 
         for ch in char_string.chars() {
             let code = ch as u32;

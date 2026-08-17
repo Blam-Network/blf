@@ -364,12 +364,17 @@ export class c_bitstream_reader {
   }
 
   read_index(name: string, max: number, size_in_bits: number): number {
-    if (this.read_bool("index-exists")) {
-      return -1;
+    if ((max & (max - 1)) === 0) {
+      if (this.read_bool("index-exists")) {
+        return -1;
+      }
+      const value = this.read_integer(name, size_in_bits);
+      assert_ok(value < max);
+      return value;
     }
     const value = this.read_integer(name, size_in_bits);
-    assert_ok(value < max);
-    return value;
+    assert_ok(value <= max);
+    return value - 1;
   }
 
   read_quantized_real(

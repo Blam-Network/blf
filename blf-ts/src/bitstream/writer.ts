@@ -190,11 +190,15 @@ export class c_bitstream_writer {
 
   write_index(value: number, max_value: number, bit_size: number): void {
     assert_ok(value <= max_value);
-    if (value === -1) {
-      this.write_bool(true);
+    if ((max_value & (max_value - 1)) === 0) {
+      if (value === -1) {
+        this.write_bool(true);
+      } else {
+        this.write_bool(false);
+        this.write_integer(value, bit_size);
+      }
     } else {
-      this.write_bool(false);
-      this.write_integer(value, bit_size);
+      this.write_integer(value + 1, bit_size);
     }
   }
 

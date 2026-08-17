@@ -4,13 +4,19 @@ import type {
 } from "../../../../../bitstream";
 import { AutoMap } from "../../../../../helpers/automap";
 
-/** Matches `e_trigger_execution_mode` in blf_lib omaha_alpha `megalogamengine_trigger.rs`. */
+/**
+ * Matches `e_trigger_execution_mode` in blf_lib omaha_alpha `megalogamengine_trigger.rs`.
+ * Alpha has a single object mode (4); it always carries `object-filter-index`
+ * (-1 = all objects / bare `trigger object`, else a map_object filter).
+ * Retail later splits that into `object` (4, no filter field) and
+ * `object_with_label` (5).
+ */
 export enum e_trigger_execution_mode {
   general = 0,
   player = 1,
   random_player = 2,
   team = 3,
-  object_with_label = 4,
+  object = 4,
 }
 
 export enum e_trigger_type {
@@ -51,7 +57,7 @@ export class c_trigger {
       3,
       e_trigger_type
     );
-    if (this.m_execution_mode === e_trigger_execution_mode.object_with_label) {
+    if (this.m_execution_mode === e_trigger_execution_mode.object) {
       this.m_object_filter_index = bitstream.read_index(
         "object-filter-index",
         16,
@@ -69,7 +75,7 @@ export class c_trigger {
   encode(bitstream: c_bitstream_writer): void {
     bitstream.write_enum(this.m_execution_mode, 3, e_trigger_execution_mode);
     bitstream.write_enum(this.m_trigger_type, 3, e_trigger_type);
-    if (this.m_execution_mode === e_trigger_execution_mode.object_with_label) {
+    if (this.m_execution_mode === e_trigger_execution_mode.object) {
       bitstream.write_index(this.m_object_filter_index, 16, 4);
     }
     bitstream.write_integer(this.m_first_condition, 9);

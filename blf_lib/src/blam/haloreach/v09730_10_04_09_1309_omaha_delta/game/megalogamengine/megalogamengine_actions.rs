@@ -2608,23 +2608,24 @@ impl s_action_player_pick_up_weapon_parameters {
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct s_action_object_set_orientation_parameters {
-    pub m_player: c_player_reference,
-    pub m_enabled: bool,
+    pub m_object_1: c_object_reference,
+    pub m_object_2: c_object_reference,
+    pub m_absolute_orientation: bool,
 }
 
 impl s_action_object_set_orientation_parameters {
-    pub fn encode(&self, mut bitstream: &mut c_bitstream_writer) -> BLFLibResult {
-        self.m_player.encode(bitstream)?;
-        bitstream.write_bool(self.m_enabled)?;
+    pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
+        self.m_object_1.encode(bitstream)?;
+        self.m_object_2.encode(bitstream)?;
+        bitstream.write_bool(self.m_absolute_orientation)?;
 
         Ok(())
     }
 
-    pub fn decode(&mut self, mut bitstream: &mut c_bitstream_reader) -> BLFLibResult {
-        let mut player = c_player_reference::default();
-        player.decode(bitstream)?;
-        self.m_player = player;
-        self.m_enabled = bitstream.read_bool("enabled")?;
+    pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
+        self.m_object_1.decode(bitstream)?;
+        self.m_object_2.decode(bitstream)?;
+        self.m_absolute_orientation = bitstream.read_bool("absolute-orientation")?;
 
         Ok(())
     }

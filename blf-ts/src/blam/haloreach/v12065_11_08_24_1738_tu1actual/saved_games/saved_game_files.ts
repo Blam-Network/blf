@@ -82,6 +82,9 @@ export class s_content_item_general_metadata {
 export class s_content_item_display_metadata {
   @c.field("i8", { pad_after: 7 })
   megalo_category_index = 0;
+
+  /** Alpha/Delta bitstream: 64-bit pad after map_id (not on TU1 wire). */
+  padding = 0n;
 }
 
 @c.struct()

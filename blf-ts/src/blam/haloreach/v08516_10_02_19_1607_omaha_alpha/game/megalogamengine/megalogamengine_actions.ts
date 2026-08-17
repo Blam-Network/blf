@@ -169,7 +169,11 @@ export enum e_action_type {
   saved_film_insert_marker = 83,
   respawn_zone_enable = 84,
 }
-/** Matches `e_create_object_flags` in blf_lib `megalogamengine_actions.rs`. */
+/**
+ * Create-object flag helpers for compilers.
+ * Alpha wire only stores bit 0 (`never_garbage_collect`) as a 1-bit integer;
+ * other fields are ignored on encode.
+ */
 export class e_create_object_flags {
   @AutoMap(() => Boolean)
   never_garbage_collect = false;
@@ -178,17 +182,11 @@ export class e_create_object_flags {
   @AutoMap(() => Boolean)
   absolute_orientation = false;
   to_raw(): number {
-    return (
-      (this.never_garbage_collect ? 1 : 0) |
-      (this.suppress_effect ? 1 << 1 : 0) |
-      (this.absolute_orientation ? 1 << 2 : 0)
-    );
+    return this.never_garbage_collect ? 1 : 0;
   }
   static from_raw(raw: number): e_create_object_flags {
     const flags = new e_create_object_flags();
     flags.never_garbage_collect = (raw & 1) !== 0;
-    flags.suppress_effect = (raw & (1 << 1)) !== 0;
-    flags.absolute_orientation = (raw & (1 << 2)) !== 0;
     return flags;
   }
 }
@@ -237,18 +235,13 @@ export class e_fireteam_filter_flags {
   }
 }
 
-import {
-  c_custom_timer_reference,
-  c_object_reference,
-  c_object_type_reference,
-  c_player_reference,
-  c_team_reference,
-} from "../../../v12065_11_08_24_1738_tu1actual/game/megalogamengine/megalogamengine_references";
+import { c_object_type_reference } from "../../../v12065_11_08_24_1738_tu1actual/game/megalogamengine/megalogamengine_references";
+import { c_custom_timer_reference } from "./megalogamengine_custom_timer_reference";
 import { c_custom_variable_reference } from "./megalogamengine_custom_variable_reference";
-import {
-  c_dynamic_string,
-  c_player_filter_modifier,
-} from "./megalogamengine_text";
+import { c_object_reference } from "./megalogamengine_object_reference";
+import { c_player_reference } from "./megalogamengine_player_reference";
+import { c_team_reference } from "./megalogamengine_team_reference";
+import { c_dynamic_string } from "./megalogamengine_text";
 import { s_variant_variable } from "./megalogamengine_variant_variable";
 
 /** Matches `e_boundary_shape` in blf_lib `scenario_map_variant.rs`. */
@@ -312,12 +305,15 @@ export class s_action_set_score_parameters {
   m_variable = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_target.decode(bitstream);
-    this.m_operation = bitstream.read_enum("operation", 4, e_math_operation);
+    this.m_operation = bitstream.read_integer(
+      "operation",
+      3
+    ) as e_math_operation;
     this.m_variable.decode(bitstream);
   }
   encode(bitstream: c_bitstream_writer): void {
     this.m_target.encode(bitstream);
-    bitstream.write_enum(this.m_operation, 4, e_math_operation);
+    bitstream.write_integer(this.m_operation, 3);
     this.m_variable.encode(bitstream);
   }
 }
@@ -330,31 +326,22 @@ export class s_action_create_object_parameters {
   m_object_reference_2 = new c_object_reference();
   @AutoMap(() => Number)
   m_filter_index = 0;
-  @AutoMap(() => e_create_object_flags)
-  m_flags = new e_create_object_flags();
+  /** Alpha: 1 bit (Rust omaha_alpha). Later builds use a 3-bit flag set. */
   @AutoMap(() => Number)
-  m_offset = 0;
-  @AutoMap(() => Number)
-  m_variant_name_index = 0;
+  m_flags = 0;
   decode(bitstream: c_bitstream_reader): void {
     this.m_object_type.decode(bitstream);
     this.m_object_reference_1.decode(bitstream);
     this.m_object_reference_2.decode(bitstream);
     this.m_filter_index = bitstream.read_index("filter_index", 16, 4);
-    this.m_flags = e_create_object_flags.from_raw(
-      bitstream.read_integer("flags", 3)
-    );
-    this.m_offset = bitstream.read_integer("offset", 24);
-    this.m_variant_name_index = bitstream.read_integer("variant-name-index", 8);
+    this.m_flags = bitstream.read_integer("flags", 1);
   }
   encode(bitstream: c_bitstream_writer): void {
     this.m_object_type.encode(bitstream);
     this.m_object_reference_1.encode(bitstream);
     this.m_object_reference_2.encode(bitstream);
     bitstream.write_index(this.m_filter_index, 16, 4);
-    bitstream.write_integer(this.m_flags.to_raw(), 3);
-    bitstream.write_integer(this.m_offset, 24);
-    bitstream.write_integer(this.m_variant_name_index, 8);
+    bitstream.write_integer(this.m_flags, 1);
   }
 }
 export class s_action_navpoint_set_icon_parameters {
@@ -442,12 +429,15 @@ export class s_action_set_parameters {
   decode(bitstream: c_bitstream_reader): void {
     this.m_variable_1.decode(bitstream);
     this.m_variable_2.decode(bitstream);
-    this.m_operation = bitstream.read_enum("operation", 4, e_math_operation);
+    this.m_operation = bitstream.read_integer(
+      "operation",
+      3
+    ) as e_math_operation;
   }
   encode(bitstream: c_bitstream_writer): void {
     this.m_variable_1.encode(bitstream);
     this.m_variable_2.encode(bitstream);
-    bitstream.write_enum(this.m_operation, 4, e_math_operation);
+    bitstream.write_integer(this.m_operation, 3);
   }
 }
 export class s_action_set_boundary_parameters {
@@ -558,19 +548,23 @@ export class s_action_set_fireteam_respawn_filter_parameters {
 export class s_action_set_progress_bar_parameters {
   @AutoMap(() => c_object_reference)
   m_object = new c_object_reference();
-  @AutoMap(() => c_player_filter_modifier)
-  m_player_filter_modifier = new c_player_filter_modifier();
+  @AutoMap(() => Number)
+  m_team_filter = 0;
   @AutoMap(() => Number)
   m_timer_index = 0;
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
-    this.m_player_filter_modifier.decode(bitstream);
-    this.m_timer_index = bitstream.read_index("timer-index", 4, 2);
+    this.m_team_filter = bitstream.read_integer("team-filter", 2);
+    if (this.m_team_filter !== 0) {
+      this.m_timer_index = bitstream.read_index("timer-index", 4, 2);
+    }
   }
   encode(bitstream: c_bitstream_writer): void {
     this.m_object.encode(bitstream);
-    this.m_player_filter_modifier.encode(bitstream);
-    bitstream.write_index(this.m_timer_index, 4, 2);
+    bitstream.write_integer(this.m_team_filter, 2);
+    if (this.m_team_filter !== 0) {
+      bitstream.write_index(this.m_timer_index, 4, 2);
+    }
   }
 }
 export class s_action_hud_post_message_parameters {
@@ -613,24 +607,20 @@ export class s_action_for_each_parameters {
   @AutoMap(() => Number)
   m_trigger_index = 0;
   decode(bitstream: c_bitstream_reader): void {
-    this.m_trigger_index = bitstream.read_integer("trigger-index", 9);
+    this.m_trigger_index = bitstream.read_integer("trigger-index", 8);
   }
   encode(bitstream: c_bitstream_writer): void {
-    bitstream.write_integer(this.m_trigger_index, 9);
+    bitstream.write_integer(this.m_trigger_index, 8);
   }
 }
 export class s_action_object_destroy_parameters {
   @AutoMap(() => c_object_reference)
   m_object = new c_object_reference();
-  @AutoMap(() => Boolean)
-  m_no_statistics = false;
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
-    this.m_no_statistics = bitstream.read_bool("no-statistics");
   }
   encode(bitstream: c_bitstream_writer): void {
     this.m_object.encode(bitstream);
-    bitstream.write_bool(this.m_no_statistics);
   }
 }
 export class s_action_object_attach_parameters {
@@ -640,19 +630,15 @@ export class s_action_object_attach_parameters {
   m_object_2 = new c_object_reference();
   @AutoMap(() => Number)
   m_offset = 0;
-  @AutoMap(() => Boolean)
-  m_absolute_orientation = false;
   decode(bitstream: c_bitstream_reader): void {
     this.m_object_1.decode(bitstream);
     this.m_object_2.decode(bitstream);
     this.m_offset = bitstream.read_integer("offset", 24);
-    this.m_absolute_orientation = bitstream.read_bool("absolute_orientation");
   }
   encode(bitstream: c_bitstream_writer): void {
     this.m_object_1.encode(bitstream);
     this.m_object_2.encode(bitstream);
     bitstream.write_integer(this.m_offset, 24);
-    bitstream.write_bool(this.m_absolute_orientation);
   }
 }
 export class s_action_player_adjust_money_parameters {
@@ -664,16 +650,15 @@ export class s_action_player_adjust_money_parameters {
   m_variable = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_player.decode(bitstream);
-    this.m_math_operation = bitstream.read_enum(
+    this.m_math_operation = bitstream.read_integer(
       "math-operation",
-      4,
-      e_math_operation
-    );
+      3
+    ) as e_math_operation;
     this.m_variable.decode(bitstream);
   }
   encode(bitstream: c_bitstream_writer): void {
     this.m_player.encode(bitstream);
-    bitstream.write_enum(this.m_math_operation, 4, e_math_operation);
+    bitstream.write_integer(this.m_math_operation, 3);
     this.m_variable.encode(bitstream);
   }
 }
@@ -841,18 +826,14 @@ export class s_action_hud_widget_set_visibility_parameters {
 export class s_action_play_sound_parameters {
   @AutoMap(() => e_megalo_sound)
   m_sound_index: e_megalo_sound = e_megalo_sound.none;
-  @AutoMap(() => Boolean)
-  m_immediate = false;
   @AutoMap(() => s_team_or_player_target)
   m_target = new s_team_or_player_target();
   decode(bitstream: c_bitstream_reader): void {
     this.m_sound_index = bitstream.read_enum("sound-index", 7, e_megalo_sound);
-    this.m_immediate = bitstream.read_bool("immediate");
     this.m_target.decode(bitstream);
   }
   encode(bitstream: c_bitstream_writer): void {
     bitstream.write_enum(this.m_sound_index, 7, e_megalo_sound);
-    bitstream.write_bool(this.m_immediate);
     this.m_target.encode(bitstream);
   }
 }
@@ -930,12 +911,15 @@ export class s_action_vitality_adjustment_parameters {
   m_variable = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
-    this.m_operation = bitstream.read_enum("operation", 4, e_math_operation);
+    this.m_operation = bitstream.read_integer(
+      "operation",
+      3
+    ) as e_math_operation;
     this.m_variable.decode(bitstream);
   }
   encode(bitstream: c_bitstream_writer): void {
     this.m_object.encode(bitstream);
-    bitstream.write_enum(this.m_operation, 4, e_math_operation);
+    bitstream.write_integer(this.m_operation, 3);
     this.m_variable.encode(bitstream);
   }
 }
@@ -987,17 +971,16 @@ export class s_action_adjust_grenades_parameters {
       1,
       e_grenade_type
     );
-    this.m_math_operation = bitstream.read_enum(
+    this.m_math_operation = bitstream.read_integer(
       "math-operation",
-      4,
-      e_math_operation
-    );
+      3
+    ) as e_math_operation;
     this.m_variable.decode(bitstream);
   }
   encode(bitstream: c_bitstream_writer): void {
     this.m_player.encode(bitstream);
     bitstream.write_enum(this.m_grenade_type, 1, e_grenade_type);
-    bitstream.write_enum(this.m_math_operation, 4, e_math_operation);
+    bitstream.write_integer(this.m_math_operation, 3);
     this.m_variable.encode(bitstream);
   }
 }
@@ -1009,12 +992,12 @@ export class s_action_submit_incident_parameters {
   @AutoMap(() => s_team_or_player_target)
   m_target_2 = new s_team_or_player_target();
   decode(bitstream: c_bitstream_reader): void {
-    this.m_incident_id = bitstream.read_integer("incident-id", 10);
+    this.m_incident_id = bitstream.read_index("incident-id", 255, 8);
     this.m_target_1.decode(bitstream);
     this.m_target_2.decode(bitstream);
   }
   encode(bitstream: c_bitstream_writer): void {
-    bitstream.write_integer(this.m_incident_id, 10);
+    bitstream.write_index(this.m_incident_id, 255, 8);
     this.m_target_1.encode(bitstream);
     this.m_target_2.encode(bitstream);
   }
@@ -1029,13 +1012,13 @@ export class s_action_submit_incident_with_custom_value_parameters {
   @AutoMap(() => c_custom_variable_reference)
   m_variable = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
-    this.m_incident_id = bitstream.read_integer("incident-id", 10);
+    this.m_incident_id = bitstream.read_index("incident-id", 255, 8);
     this.m_target_1.decode(bitstream);
     this.m_target_2.decode(bitstream);
     this.m_variable.decode(bitstream);
   }
   encode(bitstream: c_bitstream_writer): void {
-    bitstream.write_integer(this.m_incident_id, 10);
+    bitstream.write_index(this.m_incident_id, 255, 8);
     this.m_target_1.encode(bitstream);
     this.m_target_2.encode(bitstream);
     this.m_variable.encode(bitstream);
@@ -1064,15 +1047,16 @@ export class s_action_device_set_position_track_parameters {
   m_variable = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
-    this.m_animation_name_index = bitstream.read_integer(
+    this.m_animation_name_index = bitstream.read_index(
       "animation-name-index",
+      255,
       8
     );
     this.m_variable.decode(bitstream);
   }
   encode(bitstream: c_bitstream_writer): void {
     this.m_object.encode(bitstream);
-    bitstream.write_integer(this.m_animation_name_index, 8);
+    bitstream.write_index(this.m_animation_name_index, 255, 8);
     this.m_variable.encode(bitstream);
   }
 }
@@ -1116,46 +1100,43 @@ export class s_action_delete_object_parameters {
 export class s_action_navpoint_set_visible_parameters {
   @AutoMap(() => c_object_reference)
   m_object: c_object_reference = new c_object_reference();
-  @AutoMap(() => c_player_filter_modifier)
-  m_player_filter_modifier: c_player_filter_modifier =
-    new c_player_filter_modifier();
+  @AutoMap(() => Number)
+  m_value = 0;
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
-    this.m_player_filter_modifier.decode(bitstream);
+    this.m_value = bitstream.read_integer("value", 2);
   }
   encode(bitstream: c_bitstream_writer): void {
     this.m_object.encode(bitstream);
-    this.m_player_filter_modifier.encode(bitstream);
+    bitstream.write_integer(this.m_value, 2);
   }
 }
 export class s_action_set_pickup_filter_parameters {
   @AutoMap(() => c_object_reference)
   m_object: c_object_reference = new c_object_reference();
-  @AutoMap(() => c_player_filter_modifier)
-  m_player_filter_modifier: c_player_filter_modifier =
-    new c_player_filter_modifier();
+  @AutoMap(() => Number)
+  m_value = 0;
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
-    this.m_player_filter_modifier.decode(bitstream);
+    this.m_value = bitstream.read_integer("value", 2);
   }
   encode(bitstream: c_bitstream_writer): void {
     this.m_object.encode(bitstream);
-    this.m_player_filter_modifier.encode(bitstream);
+    bitstream.write_integer(this.m_value, 2);
   }
 }
 export class s_action_set_respawn_filter_parameters {
   @AutoMap(() => c_object_reference)
   m_object: c_object_reference = new c_object_reference();
-  @AutoMap(() => c_player_filter_modifier)
-  m_player_filter_modifier: c_player_filter_modifier =
-    new c_player_filter_modifier();
+  @AutoMap(() => Number)
+  m_value = 0;
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
-    this.m_player_filter_modifier.decode(bitstream);
+    this.m_value = bitstream.read_integer("value", 2);
   }
   encode(bitstream: c_bitstream_writer): void {
     this.m_object.encode(bitstream);
-    this.m_player_filter_modifier.encode(bitstream);
+    bitstream.write_integer(this.m_value, 2);
   }
 }
 export class s_action_print_variable_parameters {
@@ -1193,16 +1174,15 @@ export class s_action_end_round_parameters {
 export class s_action_boundary_set_visible_parameters {
   @AutoMap(() => c_object_reference)
   m_object: c_object_reference = new c_object_reference();
-  @AutoMap(() => c_player_filter_modifier)
-  m_player_filter_modifier: c_player_filter_modifier =
-    new c_player_filter_modifier();
+  @AutoMap(() => c_custom_variable_reference)
+  m_variable: c_custom_variable_reference = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
-    this.m_player_filter_modifier.decode(bitstream);
+    this.m_variable.decode(bitstream);
   }
   encode(bitstream: c_bitstream_writer): void {
     this.m_object.encode(bitstream);
-    this.m_player_filter_modifier.encode(bitstream);
+    this.m_variable.encode(bitstream);
   }
 }
 export class s_action_object_set_invincibility_parameters {
@@ -1453,15 +1433,16 @@ export class s_action_hud_widget_set_value_parameters {
 export class s_action_object_set_scale_parameters {
   @AutoMap(() => c_object_reference)
   m_object: c_object_reference = new c_object_reference();
-  @AutoMap(() => c_custom_variable_reference)
-  m_variable: c_custom_variable_reference = new c_custom_variable_reference();
+  @AutoMap(() => Number)
+  m_scale = 0;
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
-    this.m_variable.decode(bitstream);
+    // Alpha uses Halo3 quantized-real (exact_midpoint); endpoints unused.
+    this.m_scale = bitstream.read_quantized_real(0, 5, 7, true, false);
   }
   encode(bitstream: c_bitstream_writer): void {
     this.m_object.encode(bitstream);
-    this.m_variable.encode(bitstream);
+    bitstream.write_quantized_real(this.m_scale, 0, 5, 7, true, false);
   }
 }
 export class s_action_navpoint_set_text_parameters {
@@ -1572,12 +1553,15 @@ export class s_action_object_adjust_shield_parameters {
   m_variable: c_custom_variable_reference = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
-    this.m_operation = bitstream.read_enum("operation", 4, e_math_operation);
+    this.m_operation = bitstream.read_integer(
+      "operation",
+      3
+    ) as e_math_operation;
     this.m_variable.decode(bitstream);
   }
   encode(bitstream: c_bitstream_writer): void {
     this.m_object.encode(bitstream);
-    bitstream.write_enum(this.m_operation, 4, e_math_operation);
+    bitstream.write_integer(this.m_operation, 3);
     this.m_variable.encode(bitstream);
   }
 }
@@ -1590,12 +1574,15 @@ export class s_action_object_adjust_health_parameters {
   m_variable: c_custom_variable_reference = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
-    this.m_operation = bitstream.read_enum("operation", 4, e_math_operation);
+    this.m_operation = bitstream.read_integer(
+      "operation",
+      3
+    ) as e_math_operation;
     this.m_variable.decode(bitstream);
   }
   encode(bitstream: c_bitstream_writer): void {
     this.m_object.encode(bitstream);
-    bitstream.write_enum(this.m_operation, 4, e_math_operation);
+    bitstream.write_integer(this.m_operation, 3);
     this.m_variable.encode(bitstream);
   }
 }
@@ -1608,12 +1595,15 @@ export class s_action_object_adjust_maximum_shield_parameters {
   m_variable: c_custom_variable_reference = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
-    this.m_operation = bitstream.read_enum("operation", 4, e_math_operation);
+    this.m_operation = bitstream.read_integer(
+      "operation",
+      3
+    ) as e_math_operation;
     this.m_variable.decode(bitstream);
   }
   encode(bitstream: c_bitstream_writer): void {
     this.m_object.encode(bitstream);
-    bitstream.write_enum(this.m_operation, 4, e_math_operation);
+    bitstream.write_integer(this.m_operation, 3);
     this.m_variable.encode(bitstream);
   }
 }
@@ -1626,12 +1616,15 @@ export class s_action_object_adjust_maximum_health_parameters {
   m_variable: c_custom_variable_reference = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
-    this.m_operation = bitstream.read_enum("operation", 4, e_math_operation);
+    this.m_operation = bitstream.read_integer(
+      "operation",
+      3
+    ) as e_math_operation;
     this.m_variable.decode(bitstream);
   }
   encode(bitstream: c_bitstream_writer): void {
     this.m_object.encode(bitstream);
-    bitstream.write_enum(this.m_operation, 4, e_math_operation);
+    bitstream.write_integer(this.m_operation, 3);
     this.m_variable.encode(bitstream);
   }
 }

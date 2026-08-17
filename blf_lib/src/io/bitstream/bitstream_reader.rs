@@ -362,7 +362,8 @@ impl<'a> c_bitstream_reader<'a> {
                 u32::from_be_bytes(byte_array)
             }
         }).map_err(|e|BLFLibError::from(format!("\
-            read_integer failed to convert u32 to type. size = {} data = {:?}",
+            read_integer failed to convert u32 to type. name = {} size = {} data = {:?}",
+            name,
             size_in_bits,
             byte_array,
         )))?)
@@ -396,22 +397,24 @@ impl<'a> c_bitstream_reader<'a> {
 
     #[deprecated]
     pub fn read_unnamed_index<const max: usize>(&mut self, size_in_bits: usize) -> BLFLibResult<i32> {
-        if self.read_unnamed_bool()? {
-            Ok(-1)
-        } else {
-            let value = self.read_unnamed_integer(size_in_bits)?;
-            assert_ok!(value < max as i32);
-            Ok(value)
-        }
+        self.read_index::<max>("???", size_in_bits)
     }
 
+    /// Blam `read_index`: power-of-two `max` uses a 1-bit NONE flag then
+    /// `size_in_bits`; otherwise always reads `size_in_bits` as `index + 1`.
     pub fn read_index<const max: usize>(&mut self, name: &str, size_in_bits: usize) -> BLFLibResult<i32> {
-        if self.read_bool("index-exists")? {
-            Ok(-1)
+        if max.is_power_of_two() {
+            if self.read_bool("index-exists")? {
+                Ok(-1)
+            } else {
+                let value = self.read_integer(name, size_in_bits)?;
+                assert_ok!(value < max as i32);
+                Ok(value)
+            }
         } else {
-            let value = self.read_integer(name, size_in_bits)?;
-            assert_ok!(value < max as i32);
-            Ok(value)
+            let value: i32 = self.read_integer(name, size_in_bits)?;
+            assert_ok!(value <= max as i32);
+            Ok(value - 1)
         }
     }
 
@@ -570,15 +573,14 @@ impl<'a> c_bitstream_reader<'a> {
         assert_ok!(self.reading());
         assert_ok!(max_string_size > 0);
 
-        let mut bytes = vec![0u8; max_string_size];
+        let mut bytes = Vec::with_capacity(max_string_size);
 
-        for i in 0..max_string_size {
+        for _ in 0..max_string_size {
             let byte = self.read_unnamed_integer(8)?;
-            bytes[i] = byte;
-
             if byte == 0 {
-                return Ok(String::from_utf8(bytes)?)
+                return Ok(String::from_utf8(bytes)?);
             }
+            bytes.push(byte);
         }
 
         Err("Exceeded max string size reading utf8 string.".into())
@@ -588,17 +590,15 @@ impl<'a> c_bitstream_reader<'a> {
         assert_ok!(self.reading());
         assert_ok!(max_string_size > 0);
 
-        let mut bytes = vec![0u8; max_string_size];
+        let mut chars = String::new();
 
-        for i in 0..max_string_size {
-            let byte = self.read_unnamed_integer(8)?;
-            bytes[i] = byte;
-
+        for _ in 0..max_string_size {
+            let byte: u8 = self.read_unnamed_integer(8)?;
             if byte == 0 {
-                // manually parse the string because halo sometimes uses extended char sets.
-                let s: String = bytes.iter().map(|&b| b as char).collect();
-                return Ok(s);
+                return Ok(chars);
             }
+            // Halo sometimes uses extended (Latin-1) char sets.
+            chars.push(byte as char);
         }
 
         Err("Exceeded max string size reading utf8 string.".into())

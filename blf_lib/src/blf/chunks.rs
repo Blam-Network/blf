@@ -2,6 +2,7 @@ pub(crate) mod halo3;
 pub(crate) mod halo3odst;
 pub(crate) mod halo3odst_mcc;
 pub(crate) mod haloreach;
+pub(crate) mod halo4;
 pub(crate) mod ares;
 pub(crate) mod haloonline;
 pub(crate) mod haloreach_mcc;

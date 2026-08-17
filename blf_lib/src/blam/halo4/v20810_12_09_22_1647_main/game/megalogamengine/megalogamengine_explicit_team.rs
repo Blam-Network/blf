@@ -1,0 +1,58 @@
+use num_derive::{FromPrimitive, ToPrimitive};
+use serde::{Deserialize, Serialize};
+use blf_lib::io::bitstream::{c_bitstream_reader, c_bitstream_writer};
+use blf_lib_derivable::result::BLFLibResult;
+
+/// Halo 4 `e_explicit_team_type` — wire indices 0..28 (5 bits).
+/// Semantic ManagedMegalo values are `none=-1` .. `27`; wire = semantic + 1.
+#[repr(u8)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, ToPrimitive, FromPrimitive, Default, Serialize, Deserialize)]
+pub enum e_explicit_team_type {
+    #[default]
+    none = 0,
+    team_0 = 1,
+    team_1 = 2,
+    team_2 = 3,
+    team_3 = 4,
+    team_4 = 5,
+    team_5 = 6,
+    team_6 = 7,
+    team_7 = 8,
+    neutral = 9,
+    global_0 = 10,
+    global_1 = 11,
+    global_2 = 12,
+    global_3 = 13,
+    global_4 = 14,
+    global_5 = 15,
+    global_6 = 16,
+    global_7 = 17,
+    temporary_0 = 18,
+    temporary_1 = 19,
+    temporary_2 = 20,
+    temporary_3 = 21,
+    temporary_4 = 22,
+    temporary_5 = 23,
+    unknown_24 = 24,
+    unknown_25 = 25,
+    current_team = 26,
+    local_team = 27,
+    unknown_28 = 28,
+}
+
+#[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
+pub struct c_explicit_team {
+    pub m_explicit_team_type: e_explicit_team_type, // 5 bits
+}
+
+impl c_explicit_team {
+    pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
+        bitstream.write_enum_raw(self.m_explicit_team_type, 5)?;
+        Ok(())
+    }
+
+    pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
+        self.m_explicit_team_type = bitstream.read_enum_raw("explicit-team-type", 5)?;
+        Ok(())
+    }
+}
