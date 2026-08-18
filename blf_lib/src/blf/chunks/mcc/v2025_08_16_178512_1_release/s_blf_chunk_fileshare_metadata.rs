@@ -2,6 +2,7 @@
 use serde::{Deserialize, Serialize};
 use blf_lib::types::array::StaticArray;
 use blf_lib::types::string::StaticString;
+use blf_lib::types::u64::Unsigned64;
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
 use blf_lib_derive::BlfChunk;
 #[cfg(feature = "napi")]
@@ -14,10 +15,10 @@ use napi_derive::napi;
 #[Header("_fsm", 1.1)]
 #[brw(big)]
 pub struct s_blf_chunk_fileshare_metadata {
-    pub unknown0: u64,
+    pub unknown0: Unsigned64,
     pub unknown8: StaticArray<u8, 32>,
     pub unknown28: StaticString<36>,
-    pub unknown4c: u64,
+    pub unknown4c: Unsigned64,
     pub unknown54: StaticArray<u8, 32>,
     pub unknown74: StaticString<36>,
     pub unknown98: StaticString<40>,
