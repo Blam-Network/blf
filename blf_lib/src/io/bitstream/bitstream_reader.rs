@@ -812,7 +812,7 @@ mod bitstream_reader_tests {
         // game entry 1 map id
         assert_eq!(sut.read_unnamed_integer::<u32>(32).unwrap(), 310);
         // game entry 1 game variant (truncated)
-        assert_eq!(sut.read_string_utf8(3).unwrap(), "ru\0");
+        assert_eq!(sut.read_string_utf8(3).unwrap(), "ru");
     }
 
     #[test]
@@ -838,6 +838,6 @@ mod bitstream_reader_tests {
         // game entry 1 map id
         assert_eq!(sut.read_unnamed_integer::<u32>(32).unwrap(), 520);
         // game entry 1 game variant (truncated)
-        assert_eq!(sut.read_string_utf8(3).unwrap(), "5_\0");
+        assert_eq!(sut.read_string_utf8(3).unwrap(), "5_");
     }
 }
