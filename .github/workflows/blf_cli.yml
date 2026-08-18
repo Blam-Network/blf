@@ -105,10 +105,8 @@ jobs:
           AR_ARM="$(basename "$(find "${OSXCROSS_DIR}/target/bin" -name 'aarch64-apple-darwin*-ar' | head -n1)")"
 
           echo "CARGO_TARGET_X86_64_APPLE_DARWIN_LINKER=${LINKER_X86}" >> "${GITHUB_ENV}"
-          echo "CARGO_TARGET_X86_64_APPLE_DARWIN_RUSTFLAGS=-Clink-arg=-undefined,-Clink-arg=dynamic_lookup" >> "${GITHUB_ENV}"
           echo "AR_x86_64_apple_darwin=${AR_X86}" >> "${GITHUB_ENV}"
           echo "CARGO_TARGET_AARCH64_APPLE_DARWIN_LINKER=${LINKER_ARM}" >> "${GITHUB_ENV}"
-          echo "CARGO_TARGET_AARCH64_APPLE_DARWIN_RUSTFLAGS=-Clink-arg=-undefined,-Clink-arg=dynamic_lookup" >> "${GITHUB_ENV}"
           echo "AR_aarch64_apple_darwin=${AR_ARM}" >> "${GITHUB_ENV}"
 
       - name: Install Rustup targets
@@ -123,13 +121,21 @@ jobs:
           echo "CXX_x86_64_apple_darwin=o64-clang++" >> $GITHUB_ENV
           echo "MACOSX_DEPLOYMENT_TARGET=12.3" >> $GITHUB_ENV
 
-      - name: Build
+      - name: Build Linux (musl)
         working-directory: ./blf_cli
-        run: |
-          cargo build --release --target x86_64-unknown-linux-musl
-          cargo build --release --target x86_64-pc-windows-gnu
-          cargo build --release --target x86_64-apple-darwin
-          cargo build --release --target aarch64-apple-darwin
+        run: cargo build --release --target x86_64-unknown-linux-musl
+
+      - name: Build Windows (gnu)
+        working-directory: ./blf_cli
+        run: cargo build --release --target x86_64-pc-windows-gnu
+
+      - name: Build macOS (x86_64)
+        working-directory: ./blf_cli
+        run: cargo build --release --target x86_64-apple-darwin
+
+      - name: Build macOS (aarch64)
+        working-directory: ./blf_cli
+        run: cargo build --release --target aarch64-apple-darwin
 
       - name: Run tests
         working-directory: ./blf_cli
