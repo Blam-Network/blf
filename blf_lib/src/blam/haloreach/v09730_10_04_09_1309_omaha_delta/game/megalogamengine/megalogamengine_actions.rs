@@ -892,14 +892,14 @@ impl s_action_submit_incident_with_custom_value_parameters {
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct s_action_device_set_position_track_parameters {
     pub m_object: c_object_reference,
-    pub m_animation_name_index: i16, // 8 bits
+    pub m_animation_name_index: i16,
     pub m_variable: c_custom_variable_reference,
 }
 
 impl s_action_device_set_position_track_parameters {
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
         self.m_object.encode(bitstream)?;
-        bitstream.write_index::<255>(self.m_animation_name_index, 8)?;
+        bitstream.write_index::<256>(self.m_animation_name_index, 8)?;
         self.m_variable.encode(bitstream)?;
 
         Ok(())
@@ -907,7 +907,7 @@ impl s_action_device_set_position_track_parameters {
 
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
         self.m_object.decode(bitstream)?;
-        self.m_animation_name_index = bitstream.read_index::<255>("animation-name-index", 8)? as i16;
+        self.m_animation_name_index = bitstream.read_index::<256>("animation-name-index", 8)? as i16;
         self.m_variable.decode(bitstream)?;
 
         Ok(())
@@ -2607,25 +2607,22 @@ impl s_action_player_pick_up_weapon_parameters {
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
-pub struct s_action_object_set_orientation_parameters {
-    pub m_object_1: c_object_reference,
-    pub m_object_2: c_object_reference,
-    pub m_absolute_orientation: bool,
+pub struct s_action_player_set_vehicle_spawning_parameters {
+    pub m_player: c_player_reference,
+    pub m_enabled: bool,
 }
 
-impl s_action_object_set_orientation_parameters {
+impl s_action_player_set_vehicle_spawning_parameters {
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
-        self.m_object_1.encode(bitstream)?;
-        self.m_object_2.encode(bitstream)?;
-        bitstream.write_bool(self.m_absolute_orientation)?;
+        self.m_player.encode(bitstream)?;
+        bitstream.write_bool(self.m_enabled)?;
 
         Ok(())
     }
 
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
-        self.m_object_1.decode(bitstream)?;
-        self.m_object_2.decode(bitstream)?;
-        self.m_absolute_orientation = bitstream.read_bool("absolute-orientation")?;
+        self.m_player.decode(bitstream)?;
+        self.m_enabled = bitstream.read_bool("enabled")?;
 
         Ok(())
     }
@@ -2728,15 +2725,7 @@ pub enum e_action_type {
     debug_force_player_view_count = 89,
     player_pick_up_weapon = 90,
     player_set_coop_spawning = 91,
-    object_set_orientation = 92,
-    // -- not in beta --
-    // object_face_object = 93,
-    // biped_give_weapon = 94,
-    // biped_drop_weapon = 95,
-    // set_scenario_interpolator_state = 96,
-    // get_random_object = 97,
-    // game_grief_record_custom_penalty = 98,
-    // boundary_set_player_color = 99,
+    player_set_vehicle_spawning = 92,
 }
 
 
@@ -2922,7 +2911,7 @@ pub struct c_action {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub m_player_set_coop_spawning_parameters: Option<s_action_player_set_coop_spawning_parameters>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub m_object_set_orientation_parameters: Option<s_action_object_set_orientation_parameters>,
+    pub m_player_set_vehicle_spawning_parameters: Option<s_action_player_set_vehicle_spawning_parameters>,
 }
 
 impl c_action {
@@ -3207,8 +3196,8 @@ impl c_action {
             e_action_type::player_set_coop_spawning => self.m_player_set_coop_spawning_parameters.as_ref()
                 .ok_or_else(|| BLFLibError::from("m_player_set_coop_spawning_parameters does not exist."))?
                 .encode(bitstream)?,
-            e_action_type::object_set_orientation => self.m_object_set_orientation_parameters.as_ref()
-                .ok_or_else(|| BLFLibError::from("m_object_set_orientation_parameters does not exist."))?
+            e_action_type::player_set_vehicle_spawning => self.m_player_set_vehicle_spawning_parameters.as_ref()
+                .ok_or_else(|| BLFLibError::from("m_player_set_vehicle_spawning_parameters does not exist."))?
                 .encode(bitstream)?,
         }
 
@@ -3221,7 +3210,7 @@ impl c_action {
             self.m_type = action_type;
         }
         else {
-            return Ok(())
+            return Err(format!("Unexpected action-type: {action_type}").into());
         }
 
 
@@ -3674,10 +3663,10 @@ impl c_action {
                 player_set_coop_spawning_parameters.decode(bitstream)?;
                 self.m_player_set_coop_spawning_parameters = Some(player_set_coop_spawning_parameters);
             }
-            e_action_type::object_set_orientation => {
-                let mut object_set_orientation_parameters = s_action_object_set_orientation_parameters::default();
-                object_set_orientation_parameters.decode(bitstream)?;
-                self.m_object_set_orientation_parameters = Some(object_set_orientation_parameters);
+            e_action_type::player_set_vehicle_spawning => {
+                let mut player_set_vehicle_spawning_parameters = s_action_player_set_vehicle_spawning_parameters::default();
+                player_set_vehicle_spawning_parameters.decode(bitstream)?;
+                self.m_player_set_vehicle_spawning_parameters = Some(player_set_vehicle_spawning_parameters);
             }
         }
 

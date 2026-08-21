@@ -258,10 +258,10 @@ impl s_custom_game_engine_definition {
             bitstream.write_integer(*widget, 4)?;
         }
 
-        bitstream.write_index::<320>(self.m_initialization_trigger_index, 8)?;
-        bitstream.write_index::<320>(self.m_host_migration_trigger_index, 8)?;
-        bitstream.write_index::<320>(self.m_object_death_event_trigger_index, 8)?;
-        bitstream.write_index::<320>(self.m_local_trigger_index, 8)?;
+        bitstream.write_index::<256>(self.m_initialization_trigger_index, 8)?;
+        bitstream.write_index::<256>(self.m_host_migration_trigger_index, 8)?;
+        bitstream.write_index::<256>(self.m_object_death_event_trigger_index, 8)?;
+        bitstream.write_index::<256>(self.m_local_trigger_index, 8)?;
 
         bitstream.write_big_flags(self.m_objects_used.get())?;
 
@@ -277,21 +277,33 @@ impl s_custom_game_engine_definition {
         let condition_count: u16 = bitstream.read_integer("condition-count", 10)?;
         for i in 0..condition_count {
             let mut condition = c_condition::default();
-            condition.decode(bitstream)?;
+            condition.decode(bitstream).map_err(|e| format!("condition[{i}/{condition_count}]: {e}"))?;
             self.m_conditions.push(condition);
         }
 
         let action_count: u16 = bitstream.read_integer("action-count", 11)?;
         for i in 0..action_count {
             let mut action = c_action::default();
-            action.decode(bitstream)?;
+            action.decode(bitstream).map_err(|e| {
+                let types: Vec<i32> = self.m_actions.iter()
+                    .filter_map(|a| num_traits::ToPrimitive::to_i32(&a.m_type))
+                    .collect();
+                let conds: Vec<i32> = self.m_conditions.iter()
+                    .filter_map(|c| num_traits::ToPrimitive::to_i32(&c.m_type))
+                    .collect();
+                format!(
+                    "action[{i}/{action_count}] type={:?} conds({}={conds:?}) acts={types:?}: {e}",
+                    action.m_type,
+                    conds.len()
+                )
+            })?;
             self.m_actions.push(action);
         }
 
         let trigger_count: u16 = bitstream.read_integer("trigger-count", 9)?;
         for i in 0..trigger_count {
             let mut trigger = c_trigger::default();
-            trigger.decode(bitstream)?;
+            trigger.decode(bitstream).map_err(|e| format!("trigger[{i}/{trigger_count}]: {e}"))?;
             self.m_triggers.push(trigger);
         }
 
@@ -333,10 +345,10 @@ impl s_custom_game_engine_definition {
             self.m_hud_widgets.push(bitstream.read_integer("position", 4)?);
         }
 
-        self.m_initialization_trigger_index = bitstream.read_index::<320>("initial-trigger-index", 8)? as i16;
-        self.m_host_migration_trigger_index = bitstream.read_index::<320>("host-migration-trigger-index", 8)? as i16;
-        self.m_object_death_event_trigger_index = bitstream.read_index::<320>("death-event-trigger-index", 8)? as i16;
-        self.m_local_trigger_index = bitstream.read_index::<320>("local-trigger-index", 8)? as i16;
+        self.m_initialization_trigger_index = bitstream.read_index::<256>("initial-trigger-index", 8)? as i16;
+        self.m_host_migration_trigger_index = bitstream.read_index::<256>("host-migration-trigger-index", 8)? as i16;
+        self.m_object_death_event_trigger_index = bitstream.read_index::<256>("death-event-trigger-index", 8)? as i16;
+        self.m_local_trigger_index = bitstream.read_index::<256>("local-trigger-index", 8)? as i16;
 
         bitstream.read_big_flags("object-types-used", self.m_objects_used.get_mut())?;
 

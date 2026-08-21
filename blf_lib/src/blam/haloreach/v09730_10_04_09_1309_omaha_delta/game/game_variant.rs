@@ -78,13 +78,13 @@ impl c_game_engine_custom_variant {
         self.m_build_number = bitstream.read_signed_integer("version", 32)?;
         self.m_base_variant.decode(bitstream)?;
         let player_trait_count = bitstream.read_integer("player-trait-count", 5)?;
-        for i in 0..player_trait_count {
+        for _ in 0..player_trait_count {
             let mut traits = s_player_trait_option::default();
             traits.decode(bitstream)?;
             self.m_player_traits.push(traits);
         }
         let user_defined_option_count = bitstream.read_integer("user-defined-option-count", 5)?;
-        for i in 0..user_defined_option_count {
+        for _ in 0..user_defined_option_count {
             let mut option = s_user_defined_option::default();
             option.decode(bitstream)?;
             self.m_user_defined_options.push(option);
@@ -259,11 +259,11 @@ impl s_custom_game_engine_definition {
             bitstream.write_integer(*widget, 4)?;
         }
 
-        bitstream.write_index::<320>(self.m_initialization_trigger_index, 8)?;
-        bitstream.write_index::<320>(self.m_local_initialization_trigger_index, 8)?;
-        bitstream.write_index::<320>(self.m_host_migration_trigger_index, 8)?;
-        bitstream.write_index::<320>(self.m_object_death_event_trigger_index, 8)?;
-        bitstream.write_index::<320>(self.m_local_trigger_index, 8)?;
+        bitstream.write_index::<256>(self.m_initialization_trigger_index, 8)?;
+        bitstream.write_index::<256>(self.m_local_initialization_trigger_index, 8)?;
+        bitstream.write_index::<256>(self.m_host_migration_trigger_index, 8)?;
+        bitstream.write_index::<256>(self.m_object_death_event_trigger_index, 8)?;
+        bitstream.write_index::<256>(self.m_local_trigger_index, 8)?;
 
         bitstream.write_big_flags(self.m_objects_used.get())?;
 
@@ -277,49 +277,49 @@ impl s_custom_game_engine_definition {
 
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
         let condition_count: u16 = bitstream.read_integer("condition-count", 10)?;
-        for i in 0..condition_count {
+        for _ in 0..condition_count {
             let mut condition = c_condition::default();
             condition.decode(bitstream)?;
             self.m_conditions.push(condition);
         }
 
         let action_count: u16 = bitstream.read_integer("action-count", 11)?;
-        for i in 0..action_count {
+        for _ in 0..action_count {
             let mut action = c_action::default();
             action.decode(bitstream)?;
             self.m_actions.push(action);
         }
 
         let trigger_count: u16 = bitstream.read_integer("trigger-count", 9)?;
-        for i in 0..trigger_count {
+        for _ in 0..trigger_count {
             let mut trigger = c_trigger::default();
             trigger.decode(bitstream)?;
             self.m_triggers.push(trigger);
         }
 
         let requisition_palette_count = bitstream.read_integer("requisition-palette-count", 4)?;
-        for i in 0..requisition_palette_count {
+        for _ in 0..requisition_palette_count {
             let mut requisition = s_requisition_palette::default();
             requisition.decode(bitstream)?;
             self.m_requisitions.push(requisition);
         }
 
         let loadout_count: u8 = bitstream.read_integer("loadout-count", 6)?;
-        for i in 0..loadout_count {
+        for _ in 0..loadout_count {
             let mut loadout = s_loadout_unknown_struct::default();
             loadout.decode(bitstream)?;
             self.m_loadouts.push(loadout);
         }
 
         let loadout_palette_count: u8 = bitstream.read_integer("loadout-palette-count", 5)?;
-        for i in 0..loadout_palette_count {
+        for _ in 0..loadout_palette_count {
             let mut loadout_palette = s_loadout_palette_unknown_struct::default();
             loadout_palette.decode(bitstream)?;
             self.m_loadout_palette.push(loadout_palette);
         }
 
         let statistic_count: u8 = bitstream.read_integer("game-statistic-count", 3)?;
-        for i in 0..statistic_count {
+        for _ in 0..statistic_count {
             let mut statistic = c_megalo_game_statistic::default();
             statistic.decode(bitstream)?;
             self.m_statistics.push(statistic);
@@ -331,20 +331,20 @@ impl s_custom_game_engine_definition {
         self.m_team_variable_metadata.decode(bitstream)?;
 
         let widget_count: u8 = bitstream.read_integer("hud-widget-count", 3)?;
-        for i in 0..widget_count {
+        for _ in 0..widget_count {
             self.m_hud_widgets.push(bitstream.read_integer("position", 4)?);
         }
 
-        self.m_initialization_trigger_index = bitstream.read_index::<320>("initial-trigger-index", 8)? as i16;
-        self.m_local_initialization_trigger_index = bitstream.read_index::<320>("local-initialization-trigger-index", 8)? as i16;
-        self.m_host_migration_trigger_index = bitstream.read_index::<320>("host-migration-trigger-index", 8)? as i16;
-        self.m_object_death_event_trigger_index = bitstream.read_index::<320>("death-event-trigger-index", 8)? as i16;
-        self.m_local_trigger_index = bitstream.read_index::<320>("local-trigger-index", 8)? as i16;
+        self.m_initialization_trigger_index = bitstream.read_index::<256>("initial-trigger-index", 8)? as i16;
+        self.m_local_initialization_trigger_index = bitstream.read_index::<256>("local-initialization-trigger-index", 8)? as i16;
+        self.m_host_migration_trigger_index = bitstream.read_index::<256>("host-migration-trigger-index", 8)? as i16;
+        self.m_object_death_event_trigger_index = bitstream.read_index::<256>("death-event-trigger-index", 8)? as i16;
+        self.m_local_trigger_index = bitstream.read_index::<256>("local-trigger-index", 8)? as i16;
 
         bitstream.read_big_flags("object-types-used", self.m_objects_used.get_mut())?;
 
         let object_filter_count: u8 = bitstream.read_integer("object-filter-count", 5)?;
-        for i in 0..object_filter_count {
+        for _ in 0..object_filter_count {
             let mut object_filter = c_object_filter::default();
             object_filter.decode(bitstream)?;
             self.m_object_filters.push(object_filter);

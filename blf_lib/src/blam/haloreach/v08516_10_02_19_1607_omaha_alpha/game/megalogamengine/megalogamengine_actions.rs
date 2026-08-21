@@ -836,14 +836,14 @@ impl s_action_adjust_grenades_parameters {
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct s_action_submit_incident_parameters {
-    pub m_incident_id: i8, // 8 bits
+    pub m_incident_id: i16, // 1-bit NONE + 8-bit raw index (max 256)
     pub m_target_1: s_team_or_player_target,
     pub m_target_2: s_team_or_player_target,
 }
 
 impl s_action_submit_incident_parameters {
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
-        bitstream.write_index::<255>(self.m_incident_id, 8)?;
+        bitstream.write_index::<256>(self.m_incident_id, 8)?;
         self.m_target_1.encode(bitstream)?;
         self.m_target_2.encode(bitstream)?;
 
@@ -851,7 +851,7 @@ impl s_action_submit_incident_parameters {
     }
 
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
-        self.m_incident_id = bitstream.read_index::<255>("incident-id", 8)? as i8;
+        self.m_incident_id = bitstream.read_index::<256>("incident-id", 8)? as i16;
         self.m_target_1.decode(bitstream)?;
         self.m_target_2.decode(bitstream)?;
 
@@ -862,7 +862,7 @@ impl s_action_submit_incident_parameters {
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct s_action_submit_incident_with_custom_value_parameters {
-    pub m_incident_id: i8, // 8 bits
+    pub m_incident_id: i16, // 1-bit NONE + 8-bit raw index (max 256)
     pub m_target_1: s_team_or_player_target,
     pub m_target_2: s_team_or_player_target,
     pub m_variable: c_custom_variable_reference,
@@ -870,7 +870,7 @@ pub struct s_action_submit_incident_with_custom_value_parameters {
 
 impl s_action_submit_incident_with_custom_value_parameters {
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
-        bitstream.write_index::<255>(self.m_incident_id, 8)?;
+        bitstream.write_index::<256>(self.m_incident_id, 8)?;
         self.m_target_1.encode(bitstream)?;
         self.m_target_2.encode(bitstream)?;
         self.m_variable.encode(bitstream)?;
@@ -879,7 +879,7 @@ impl s_action_submit_incident_with_custom_value_parameters {
     }
 
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
-        self.m_incident_id = bitstream.read_index::<255>("incident-id", 8)? as i8;
+        self.m_incident_id = bitstream.read_index::<256>("incident-id", 8)? as i16;
         self.m_target_1.decode(bitstream)?;
         self.m_target_2.decode(bitstream)?;
         self.m_variable.decode(bitstream)?;
@@ -891,14 +891,14 @@ impl s_action_submit_incident_with_custom_value_parameters {
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct s_action_device_set_position_track_parameters {
     pub m_object: c_object_reference,
-    pub m_animation_name_index: i16, // 8 bits
+    pub m_animation_name_index: i16, // 1-bit NONE + 8-bit raw index
     pub m_variable: c_custom_variable_reference,
 }
 
 impl s_action_device_set_position_track_parameters {
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
         self.m_object.encode(bitstream)?;
-        bitstream.write_index::<255>(self.m_animation_name_index, 8)?;
+        bitstream.write_index::<256>(self.m_animation_name_index, 8)?;
         self.m_variable.encode(bitstream)?;
 
         Ok(())
@@ -906,7 +906,7 @@ impl s_action_device_set_position_track_parameters {
 
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
         self.m_object.decode(bitstream)?;
-        self.m_animation_name_index = bitstream.read_index::<255>("animation-name-index", 8)? as i16;
+        self.m_animation_name_index = bitstream.read_index::<256>("animation-name-index", 8)? as i16;
         self.m_variable.decode(bitstream)?;
 
         Ok(())

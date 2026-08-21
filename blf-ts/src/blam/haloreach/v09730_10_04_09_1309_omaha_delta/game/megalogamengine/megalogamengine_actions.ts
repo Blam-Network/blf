@@ -175,7 +175,7 @@ export enum e_action_type {
   debug_force_player_view_count = 89,
   player_pick_up_weapon = 90,
   player_set_coop_spawning = 91,
-  object_set_orientation = 92,
+  player_set_vehicle_spawning = 92,
 }
 /** Matches `e_create_object_flags` in blf_lib `megalogamengine_actions.rs`. */
 export class e_create_object_flags {
@@ -1012,14 +1012,14 @@ export class s_action_device_set_position_track_parameters {
     this.m_object.decode(bitstream);
     this.m_animation_name_index = bitstream.read_index(
       "animation-name-index",
-      255,
+      256,
       8
     );
     this.m_variable.decode(bitstream);
   }
   encode(bitstream: c_bitstream_writer): void {
     this.m_object.encode(bitstream);
-    bitstream.write_index(this.m_animation_name_index, 255, 8);
+    bitstream.write_index(this.m_animation_name_index, 256, 8);
     this.m_variable.encode(bitstream);
   }
 }
@@ -1107,22 +1107,18 @@ export class s_action_player_set_coop_spawning_parameters {
     bitstream.write_bool(this.m_enabled);
   }
 }
-export class s_action_object_set_orientation_parameters {
-  @AutoMap(() => c_object_reference)
-  m_object_1 = new c_object_reference();
-  @AutoMap(() => c_object_reference)
-  m_object_2 = new c_object_reference();
+export class s_action_player_set_vehicle_spawning_parameters {
+  @AutoMap(() => c_player_reference)
+  m_player = new c_player_reference();
   @AutoMap(() => Boolean)
-  m_absolute_orientation = false;
+  m_enabled = false;
   decode(bitstream: c_bitstream_reader): void {
-    this.m_object_1.decode(bitstream);
-    this.m_object_2.decode(bitstream);
-    this.m_absolute_orientation = bitstream.read_bool("absolute-orientation");
+    this.m_player.decode(bitstream);
+    this.m_enabled = bitstream.read_bool("enabled");
   }
   encode(bitstream: c_bitstream_writer): void {
-    this.m_object_1.encode(bitstream);
-    this.m_object_2.encode(bitstream);
-    bitstream.write_bool(this.m_absolute_orientation);
+    this.m_player.encode(bitstream);
+    bitstream.write_bool(this.m_enabled);
   }
 }
 export class s_action_delete_object_parameters {
@@ -2078,8 +2074,8 @@ export class c_action {
   m_player_pick_up_weapon_parameters?: s_action_player_pick_up_weapon_parameters;
   @AutoMap(() => s_action_player_set_coop_spawning_parameters)
   m_player_set_coop_spawning_parameters?: s_action_player_set_coop_spawning_parameters;
-  @AutoMap(() => s_action_object_set_orientation_parameters)
-  m_object_set_orientation_parameters?: s_action_object_set_orientation_parameters;
+  @AutoMap(() => s_action_player_set_vehicle_spawning_parameters)
+  m_player_set_vehicle_spawning_parameters?: s_action_player_set_vehicle_spawning_parameters;
   decode(bitstream: c_bitstream_reader): void {
     this.m_type = bitstream.read_enum("action-type", 7, e_action_type);
     switch (this.m_type) {
@@ -2742,12 +2738,12 @@ export class c_action {
           player_set_coop_spawning_parameters;
         break;
       }
-      case e_action_type.object_set_orientation: {
-        const object_set_orientation_parameters =
-          new s_action_object_set_orientation_parameters();
-        object_set_orientation_parameters.decode(bitstream);
-        this.m_object_set_orientation_parameters =
-          object_set_orientation_parameters;
+      case e_action_type.player_set_vehicle_spawning: {
+        const player_set_vehicle_spawning_parameters =
+          new s_action_player_set_vehicle_spawning_parameters();
+        player_set_vehicle_spawning_parameters.decode(bitstream);
+        this.m_player_set_vehicle_spawning_parameters =
+          player_set_vehicle_spawning_parameters;
         break;
       }
     }
@@ -3026,8 +3022,8 @@ export class c_action {
       case e_action_type.player_set_coop_spawning:
         this.m_player_set_coop_spawning_parameters?.encode(bitstream);
         break;
-      case e_action_type.object_set_orientation:
-        this.m_object_set_orientation_parameters?.encode(bitstream);
+      case e_action_type.player_set_vehicle_spawning:
+        this.m_player_set_vehicle_spawning_parameters?.encode(bitstream);
         break;
     }
   }

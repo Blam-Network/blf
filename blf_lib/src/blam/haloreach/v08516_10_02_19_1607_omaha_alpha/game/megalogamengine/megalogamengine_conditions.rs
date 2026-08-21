@@ -307,6 +307,44 @@ impl s_condition_equipment_is_active_parameters {
     }
 }
 
+#[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
+pub struct s_condition_player_is_spartan_parameters {
+    pub m_player: c_player_reference,
+}
+
+impl s_condition_player_is_spartan_parameters {
+    pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
+        self.m_player.encode(bitstream)?;
+
+        Ok(())
+    }
+
+    pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
+        self.m_player.decode(bitstream)?;
+
+        Ok(())
+    }
+}
+
+#[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
+pub struct s_condition_player_is_elite_parameters {
+    pub m_player: c_player_reference,
+}
+
+impl s_condition_player_is_elite_parameters {
+    pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
+        self.m_player.encode(bitstream)?;
+
+        Ok(())
+    }
+
+    pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
+        self.m_player.decode(bitstream)?;
+
+        Ok(())
+    }
+}
+
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, Default, ToPrimitive, FromPrimitive)]
 pub enum e_condition_type {
     #[default]
@@ -324,6 +362,8 @@ pub enum e_condition_type {
     object_matches_filter = 11,
     player_is_active = 12,
     equipment_is_active = 13,
+    player_is_spartan = 14,
+    player_is_elite = 15,
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
@@ -359,6 +399,10 @@ pub struct c_condition {
     pub m_player_is_active_parameters: Option<s_condition_player_is_active_parameters>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub m_equipment_is_active_parameters: Option<s_condition_equipment_is_active_parameters>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub m_player_is_spartan_parameters: Option<s_condition_player_is_spartan_parameters>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub m_player_is_elite_parameters: Option<s_condition_player_is_elite_parameters>,
 }
 
 impl c_condition {
@@ -464,6 +508,20 @@ impl c_condition {
                 )?;
                 parameters.encode(bitstream)?;
             }
+            e_condition_type::player_is_spartan => {
+                let parameters = OPTION_TO_RESULT!(
+                    &self.m_player_is_spartan_parameters,
+                    format!("Can't encode condition type {:?} without m_player_is_spartan_parameters", self.m_type)
+                )?;
+                parameters.encode(bitstream)?;
+            }
+            e_condition_type::player_is_elite => {
+                let parameters = OPTION_TO_RESULT!(
+                    &self.m_player_is_elite_parameters,
+                    format!("Can't encode condition type {:?} without m_player_is_elite_parameters", self.m_type)
+                )?;
+                parameters.encode(bitstream)?;
+            }
             e_condition_type::none => unreachable!(),
         }
 
@@ -475,7 +533,7 @@ impl c_condition {
         if let Some(condition_type) = FromPrimitive::from_u32(condition_type) {
             self.m_type = condition_type;
         } else {
-            return Ok(())
+            return Err(format!("Unexpected condition-type: {condition_type}").into());
         }
 
         if self.m_type == e_condition_type::none {
@@ -551,6 +609,16 @@ impl c_condition {
                 let mut parameters = s_condition_equipment_is_active_parameters::default();
                 parameters.decode(bitstream)?;
                 self.m_equipment_is_active_parameters = Some(parameters);
+            }
+            e_condition_type::player_is_spartan => {
+                let mut parameters = s_condition_player_is_spartan_parameters::default();
+                parameters.decode(bitstream)?;
+                self.m_player_is_spartan_parameters = Some(parameters);
+            }
+            e_condition_type::player_is_elite => {
+                let mut parameters = s_condition_player_is_elite_parameters::default();
+                parameters.decode(bitstream)?;
+                self.m_player_is_elite_parameters = Some(parameters);
             }
             e_condition_type::none => {}
         }

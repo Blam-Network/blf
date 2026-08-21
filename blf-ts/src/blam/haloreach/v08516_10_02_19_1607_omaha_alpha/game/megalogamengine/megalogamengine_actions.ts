@@ -992,12 +992,12 @@ export class s_action_submit_incident_parameters {
   @AutoMap(() => s_team_or_player_target)
   m_target_2 = new s_team_or_player_target();
   decode(bitstream: c_bitstream_reader): void {
-    this.m_incident_id = bitstream.read_index("incident-id", 255, 8);
+    this.m_incident_id = bitstream.read_index("incident-id", 256, 8);
     this.m_target_1.decode(bitstream);
     this.m_target_2.decode(bitstream);
   }
   encode(bitstream: c_bitstream_writer): void {
-    bitstream.write_index(this.m_incident_id, 255, 8);
+    bitstream.write_index(this.m_incident_id, 256, 8);
     this.m_target_1.encode(bitstream);
     this.m_target_2.encode(bitstream);
   }
@@ -1012,13 +1012,13 @@ export class s_action_submit_incident_with_custom_value_parameters {
   @AutoMap(() => c_custom_variable_reference)
   m_variable = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
-    this.m_incident_id = bitstream.read_index("incident-id", 255, 8);
+    this.m_incident_id = bitstream.read_index("incident-id", 256, 8);
     this.m_target_1.decode(bitstream);
     this.m_target_2.decode(bitstream);
     this.m_variable.decode(bitstream);
   }
   encode(bitstream: c_bitstream_writer): void {
-    bitstream.write_index(this.m_incident_id, 255, 8);
+    bitstream.write_index(this.m_incident_id, 256, 8);
     this.m_target_1.encode(bitstream);
     this.m_target_2.encode(bitstream);
     this.m_variable.encode(bitstream);
@@ -1049,14 +1049,14 @@ export class s_action_device_set_position_track_parameters {
     this.m_object.decode(bitstream);
     this.m_animation_name_index = bitstream.read_index(
       "animation-name-index",
-      255,
+      256,
       8
     );
     this.m_variable.decode(bitstream);
   }
   encode(bitstream: c_bitstream_writer): void {
     this.m_object.encode(bitstream);
-    bitstream.write_index(this.m_animation_name_index, 255, 8);
+    bitstream.write_index(this.m_animation_name_index, 256, 8);
     this.m_variable.encode(bitstream);
   }
 }

@@ -15,7 +15,7 @@ use crate::title_storage::{check_file_exists, validate_jpeg, TitleConverter};
 use lazy_static::lazy_static;
 use blf_lib::blam::halo3::v12070_08_09_05_2031_halo3_ship::cseries::language::{get_language_string, k_language_suffix_chinese_traditional, k_language_suffix_english, k_language_suffix_french, k_language_suffix_german, k_language_suffix_italian, k_language_suffix_japanese, k_language_suffix_korean, k_language_suffix_mexican, k_language_suffix_portuguese, k_language_suffix_spanish};
 use blf_lib::blf::{get_blf_file_hash, BlfFile, BlfFileBuilder};
-use blf_lib::blf::chunks::{find_chunk_in_file, BlfChunk};
+use blf_lib::blf::chunks::{find_chunk_in_file, search_for_chunk_in_file, BlfChunk};
 use blf_lib::blf::versions::halo3::v10015_07_05_14_2217_delta::{s_blf_chunk_hopper_description_table, s_blf_chunk_matchmaking_tips, s_blf_chunk_message_of_the_day, s_blf_chunk_network_configuration, s_blf_chunk_packed_game_variant, s_blf_chunk_packed_map_variant, s_blf_chunk_game_set, s_blf_chunk_author};
 use crate::console::console_task;
 use regex::Regex;
@@ -711,6 +711,13 @@ impl v10015_07_05_14_2217_delta {
                     &map_variant_file_name,
                 );
 
+                // Packed maps and games share a major version, so skip gvar files in the hopper folder.
+                let Some(mvar) = search_for_chunk_in_file::<s_blf_chunk_packed_map_variant>(
+                    &map_variant_blf_file_path,
+                )? else {
+                    continue;
+                };
+
                 // If we've already converted this map from a different hopper folder, we skip it.
                 if converted_maps.contains(&map_variant_blf_file_name) {
                     continue;
@@ -723,10 +730,6 @@ impl v10015_07_05_14_2217_delta {
                 if exists(&map_variant_config_file_path)? {
                     remove_file(&map_variant_config_file_path)?
                 }
-
-                let mvar = find_chunk_in_file::<s_blf_chunk_packed_map_variant>(
-                    &map_variant_blf_file_path,
-                )?;
 
                 write_json_file(&mvar.map_variant, map_variant_config_file_path)?;
             }
@@ -787,6 +790,13 @@ impl v10015_07_05_14_2217_delta {
                     &game_variant_file_name
                 );
 
+                // Packed maps and games share a major version, so skip mvar files in the hopper folder.
+                let Some(gvar) = search_for_chunk_in_file::<s_blf_chunk_packed_game_variant>(
+                    game_variant_blf_file_path,
+                )? else {
+                    continue;
+                };
+
                 // If we've already converted this game from a different hopper folder, we skip it.
                 if converted_games.contains(&game_variant_blf_file_name) {
                     continue;
@@ -799,8 +809,6 @@ impl v10015_07_05_14_2217_delta {
                 if exists(&game_variant_config_file_path)? {
                     remove_file(&game_variant_config_file_path)?;
                 }
-
-                let gvar = find_chunk_in_file::<s_blf_chunk_packed_game_variant>(game_variant_blf_file_path)?;
 
                 write_json_file(&gvar.game_variant, game_variant_config_file_path)?;
             }
