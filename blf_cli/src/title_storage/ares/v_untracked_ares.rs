@@ -1946,7 +1946,7 @@ impl v_untracked_ares {
             if check_file_exists(&file_path) {
                 manifest_chunk.add_file_hash(
                     manifest_path,
-                    s_network_http_request_hash::default(),
+                    get_blf_file_hash(file_path).unwrap(),
                 )?;
             }
             Ok(())
