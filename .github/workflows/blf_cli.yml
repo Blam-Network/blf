@@ -39,87 +39,12 @@ jobs:
           path: ~/osxcross/target
           key: ${{ runner.os }}-osxcross-12.3-stable-v1
 
-      - name: Set up MacOS Cross Compiler (osxcross)
-        env:
-          OSX_VERSION: "12.3"
-          UNATTENDED: "1"
-          BUILD_FLAVOR: stable
-          SDK_VERSION: "12.3"
-        run: |
-          set -euo pipefail
-          OSXCROSS_DIR="${HOME}/osxcross"
-          mkdir -p "${OSXCROSS_DIR}/tarballs"
-
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends \
-            clang gcc g++ zlib1g-dev libmpc-dev libmpfr-dev libgmp-dev \
-            cmake libxml2-dev libssl-dev xz-utils
-
-          if [ ! -x "${OSXCROSS_DIR}/target/bin/o64-clang" ]; then
-            # Cache may restore ~/osxcross/target without the git source tree,
-            # leaving a non-empty directory that `git clone` refuses to use.
-            if [ ! -d "${OSXCROSS_DIR}/.git" ]; then
-              TARGET_BAK=""
-              TARBALLS_BAK=""
-              if [ -d "${OSXCROSS_DIR}/target" ]; then
-                TARGET_BAK="$(mktemp -d)/target"
-                mv "${OSXCROSS_DIR}/target" "${TARGET_BAK}"
-              fi
-              if [ -d "${OSXCROSS_DIR}/tarballs" ]; then
-                TARBALLS_BAK="$(mktemp -d)/tarballs"
-                mv "${OSXCROSS_DIR}/tarballs" "${TARBALLS_BAK}"
-              fi
-              rm -rf "${OSXCROSS_DIR}"
-              git clone --depth 1 https://github.com/tpoechtrager/osxcross "${OSXCROSS_DIR}"
-              if [ -n "${TARGET_BAK}" ]; then
-                rm -rf "${OSXCROSS_DIR}/target"
-                mv "${TARGET_BAK}" "${OSXCROSS_DIR}/target"
-              fi
-              if [ -n "${TARBALLS_BAK}" ]; then
-                mkdir -p "${OSXCROSS_DIR}/tarballs"
-                cp -a "${TARBALLS_BAK}/." "${OSXCROSS_DIR}/tarballs/"
-              fi
-            fi
-
-            SDK_ARCHIVE="MacOSX${OSX_VERSION}.sdk.tar.xz"
-            if [ ! -f "${OSXCROSS_DIR}/tarballs/${SDK_ARCHIVE}" ]; then
-              mkdir -p "${OSXCROSS_DIR}/tarballs"
-              wget -q "https://github.com/joseluisq/macosx-sdks/releases/download/${OSX_VERSION}/${SDK_ARCHIVE}" \
-                -O "${OSXCROSS_DIR}/tarballs/${SDK_ARCHIVE}"
-            fi
-
-            (cd "${OSXCROSS_DIR}" && ./build.sh)
-          fi
-
-          # Cached *dsymutil binaries are sometimes not chmod'able (EPERM);
-          # only the clang/ar wrappers are required for the cargo builds.
-          find "${OSXCROSS_DIR}/target/bin" -type f ! -name '*dsymutil' -exec chmod +x {} +
-          test -x "${OSXCROSS_DIR}/target/bin/o64-clang"
-          test -x "${OSXCROSS_DIR}/target/bin/oa64-clang"
-          echo "${OSXCROSS_DIR}/target/bin" >> "${GITHUB_PATH}"
-          echo "OSXCROSS_TARGET=${OSXCROSS_DIR}/target" >> "${GITHUB_ENV}"
-
-          LINKER_X86="$(basename "$(find "${OSXCROSS_DIR}/target/bin" -name 'x86_64-apple-darwin*-clang' | head -n1)")"
-          AR_X86="$(basename "$(find "${OSXCROSS_DIR}/target/bin" -name 'x86_64-apple-darwin*-ar' | head -n1)")"
-          LINKER_ARM="$(basename "$(find "${OSXCROSS_DIR}/target/bin" -name 'aarch64-apple-darwin*-clang' | head -n1)")"
-          AR_ARM="$(basename "$(find "${OSXCROSS_DIR}/target/bin" -name 'aarch64-apple-darwin*-ar' | head -n1)")"
-
-          echo "CARGO_TARGET_X86_64_APPLE_DARWIN_LINKER=${LINKER_X86}" >> "${GITHUB_ENV}"
-          echo "AR_x86_64_apple_darwin=${AR_X86}" >> "${GITHUB_ENV}"
-          echo "CARGO_TARGET_AARCH64_APPLE_DARWIN_LINKER=${LINKER_ARM}" >> "${GITHUB_ENV}"
-          echo "AR_aarch64_apple_darwin=${AR_ARM}" >> "${GITHUB_ENV}"
-
       - name: Install Rustup targets
         run: rustup target add x86_64-unknown-linux-musl x86_64-pc-windows-gnu x86_64-apple-darwin aarch64-apple-darwin
 
       - name: Configure cross-compilers
         run: |
           echo "LIBZ_SYS_STATIC=1" >> $GITHUB_ENV
-          echo "CC_aarch64_apple_darwin=oa64-clang" >> $GITHUB_ENV
-          echo "CXX_aarch64_apple_darwin=oa64-clang++" >> $GITHUB_ENV
-          echo "CC_x86_64_apple_darwin=o64-clang" >> $GITHUB_ENV
-          echo "CXX_x86_64_apple_darwin=o64-clang++" >> $GITHUB_ENV
-          echo "MACOSX_DEPLOYMENT_TARGET=12.3" >> $GITHUB_ENV
 
       - name: Build Linux (musl)
         working-directory: ./blf_cli
@@ -128,14 +53,6 @@ jobs:
       - name: Build Windows (gnu)
         working-directory: ./blf_cli
         run: cargo build --release --target x86_64-pc-windows-gnu
-
-      - name: Build macOS (x86_64)
-        working-directory: ./blf_cli
-        run: cargo build --release --target x86_64-apple-darwin
-
-      - name: Build macOS (aarch64)
-        working-directory: ./blf_cli
-        run: cargo build --release --target aarch64-apple-darwin
 
       - name: Run tests
         working-directory: ./blf_cli
@@ -153,24 +70,10 @@ jobs:
           name: blf_cli Linux (x86_64-unknown-linux-musl)
           path: ./target/x86_64-unknown-linux-musl/release/blf_cli
 
-      - name: Upload MacOS Binaries (Apple Silicon)
-        uses: actions/upload-artifact@v4.6.1
-        with:
-          name: blf_cli MacOS (aarch64-apple-darwin)
-          path: ./target/aarch64-apple-darwin/release/blf_cli
-
-      - name: Upload MacOS Binaries (x86)
-        uses: actions/upload-artifact@v4.6.1
-        with:
-          name: blf_cli MacOS (x86_64-apple-darwin)
-          path: ./target/x86_64-apple-darwin/release/blf_cli
-
       - name: Rename release binaries
         run: |
           mv ./target/x86_64-pc-windows-gnu/release/blf_cli.exe blf_cli-windows.exe
           mv ./target/x86_64-unknown-linux-musl/release/blf_cli blf_cli-linux
-          mv ./target/aarch64-apple-darwin/release/blf_cli blf_cli-mac-arm
-          mv ./target/x86_64-apple-darwin/release/blf_cli blf_cli-mac-intel
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
@@ -180,5 +83,3 @@ jobs:
           files: |
             blf_cli-windows.exe
             blf_cli-linux
-            blf_cli-mac-arm
-            blf_cli-mac-intel
