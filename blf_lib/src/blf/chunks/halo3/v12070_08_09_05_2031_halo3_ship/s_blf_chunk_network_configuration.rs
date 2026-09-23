@@ -24,14 +24,87 @@ pub struct s_blf_chunk_network_configuration
 
 impl BlfChunkHooks for s_blf_chunk_network_configuration {}
 
-#[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default)]
-#[brw(big, repr = u32)]
-pub enum e_dlc_pack {
-    #[default]
-    dlc_pack_none = 0,
-    dlc_pack_heroic = 1,
-    dlc_pack_legendary = 2,
-    dlc_pack_mythic = 3,
+#[derive(Clone, Copy, PartialEq, Eq, Debug, BinRead, BinWrite, Default)]
+#[brw(big)]
+pub struct e_dlc_pack(pub u32);
+
+impl e_dlc_pack {
+    pub const dlc_pack_none: Self = Self(0);
+    pub const dlc_pack_heroic: Self = Self(1);
+    pub const dlc_pack_legendary: Self = Self(2);
+    pub const dlc_pack_mythic: Self = Self(3);
+
+    const NAMES: [&'static str; 4] = [
+        "dlc_pack_none",
+        "dlc_pack_heroic",
+        "dlc_pack_legendary",
+        "dlc_pack_mythic",
+    ];
+
+    pub fn name(&self) -> Option<&'static str> {
+        Self::NAMES.get(self.0 as usize).copied()
+    }
+
+    pub fn from_name(name: &str) -> Option<Self> {
+        Self::NAMES.iter().position(|n| *n == name).map(|i| Self(i as u32))
+    }
+}
+
+impl From<u32> for e_dlc_pack {
+    fn from(value: u32) -> Self {
+        Self(value)
+    }
+}
+
+impl From<e_dlc_pack> for u32 {
+    fn from(value: e_dlc_pack) -> Self {
+        value.0
+    }
+}
+
+impl Serialize for e_dlc_pack {
+    fn serialize<S: serde::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+        match self.name() {
+            Some(name) => serializer.serialize_str(name),
+            None => serializer.serialize_u32(self.0),
+        }
+    }
+}
+
+impl<'de> Deserialize<'de> for e_dlc_pack {
+    fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        use serde::de::{Error, Unexpected, Visitor};
+
+        struct DlcPackVisitor;
+
+        impl<'de> Visitor<'de> for DlcPackVisitor {
+            type Value = e_dlc_pack;
+
+            fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
+                formatter.write_str("a dlc pack name or unsigned 32-bit integer")
+            }
+
+            fn visit_u64<E: Error>(self, value: u64) -> Result<Self::Value, E> {
+                u32::try_from(value)
+                    .map(e_dlc_pack)
+                    .map_err(|_| E::invalid_value(Unexpected::Unsigned(value), &self))
+            }
+
+            fn visit_i64<E: Error>(self, value: i64) -> Result<Self::Value, E> {
+                u32::try_from(value)
+                    .map(e_dlc_pack)
+                    .map_err(|_| E::invalid_value(Unexpected::Signed(value), &self))
+            }
+
+            fn visit_str<E: Error>(self, value: &str) -> Result<Self::Value, E> {
+                e_dlc_pack::from_name(value)
+                    .or_else(|| value.parse::<u32>().ok().map(e_dlc_pack))
+                    .ok_or_else(|| E::unknown_variant(value, &e_dlc_pack::NAMES))
+            }
+        }
+
+        deserializer.deserialize_any(DlcPackVisitor)
+    }
 }
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default)]
@@ -1073,3 +1146,33 @@ pub struct s_network_configuration {
 }
 
 
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn dlc_pack_deserializes_names_and_integers() {
+        assert_eq!(serde_json::from_str::<e_dlc_pack>("\"dlc_pack_mythic\"").unwrap(), e_dlc_pack::dlc_pack_mythic);
+        assert_eq!(serde_json::from_str::<e_dlc_pack>("2").unwrap(), e_dlc_pack::dlc_pack_legendary);
+        assert_eq!(serde_json::from_str::<e_dlc_pack>("4").unwrap(), e_dlc_pack(4));
+        assert_eq!(serde_json::from_str::<e_dlc_pack>("\"17\"").unwrap(), e_dlc_pack(17));
+        assert!(serde_json::from_str::<e_dlc_pack>("\"dlc_pack_1\"").is_err());
+        assert!(serde_json::from_str::<e_dlc_pack>("-1").is_err());
+        assert!(serde_json::from_str::<e_dlc_pack>("4294967296").is_err());
+    }
+
+    #[test]
+    fn dlc_pack_serializes_known_by_name_and_custom_as_integer() {
+        assert_eq!(serde_json::to_string(&e_dlc_pack::dlc_pack_heroic).unwrap(), "\"dlc_pack_heroic\"");
+        assert_eq!(serde_json::to_string(&e_dlc_pack(4)).unwrap(), "4");
+    }
+
+    #[test]
+    fn dlc_pack_binary_round_trip() {
+        let mut cursor = Cursor::new(Vec::new());
+        e_dlc_pack(0xDEADBEEF).write(&mut cursor).unwrap();
+        assert_eq!(cursor.get_ref(), &[0xDE, 0xAD, 0xBE, 0xEF]);
+        cursor.set_position(0);
+        assert_eq!(e_dlc_pack::read(&mut cursor).unwrap(), e_dlc_pack(0xDEADBEEF));
+    }
+}
