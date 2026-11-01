@@ -277,7 +277,7 @@ export class CStringTableField extends CFieldType<c_string_table> {
     for (let language = 0; language < k_language_count; language++) {
       for (let index = 0; index < string_count; index++) {
         const string_offset = view.getInt16(
-          offset + (index * k_language_count + language) * 2,
+          offset + (language * this.string_capacity + index) * 2,
           little
         );
         table.strings[language]!.push(
@@ -334,7 +334,7 @@ export class CStringTableField extends CFieldType<c_string_table> {
           }
         }
         view.setInt16(
-          offset + (index * k_language_count + language) * 2,
+          offset + (language * this.string_capacity + index) * 2,
           string_offset,
           little
         );
