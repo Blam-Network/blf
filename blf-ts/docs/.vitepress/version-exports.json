@@ -31,6 +31,40 @@
     },
     {
       "game": "halo3",
+      "buildId": "v11637_07_08_02_2348_release",
+      "label": "Halo 3",
+      "buildLabel": "v11637_07_08_02_2348_release",
+      "importPath": "@blamnetwork/blf/halo3/v11637_07_08_02_2348_release",
+      "docLink": "/guide/versions/halo3/v11637_07_08_02_2348_release",
+      "chunks": [
+        {
+          "name": "s_blf_chunk_start_of_file",
+          "source": "src/chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_start_of_file.ts",
+          "signature": "_blf",
+          "version": "1.2"
+        },
+        {
+          "name": "s_blf_chunk_end_of_file",
+          "source": "src/chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_end_of_file.ts",
+          "signature": "_eof",
+          "version": "1.1"
+        },
+        {
+          "name": "s_blf_chunk_content_header",
+          "source": "src/chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_content_header.ts",
+          "signature": "chdr",
+          "version": "9.2"
+        },
+        {
+          "name": "s_blf_chunk_screenshot_data",
+          "source": "src/chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_screenshot_data.ts",
+          "signature": "scnd",
+          "version": "1.1"
+        }
+      ]
+    },
+    {
+      "game": "halo3",
       "buildId": "v12070_08_09_05_2031_halo3_ship",
       "label": "Halo 3",
       "buildLabel": "Title Update 2 (Latest)",
@@ -56,10 +90,160 @@
           "version": "1.1"
         },
         {
+          "name": "s_blf_chunk_multiplayer_statistics",
+          "source": "src/chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_multiplayer_statistics.ts",
+          "signature": "_par",
+          "version": "1.1"
+        },
+        {
+          "name": "s_blf_chunk_author",
+          "source": "src/chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_author.ts",
+          "signature": "athr",
+          "version": "3.1"
+        },
+        {
+          "name": "s_blf_chunk_content_header",
+          "source": "src/chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_content_header.ts",
+          "signature": "chdr",
+          "version": "9.2"
+        },
+        {
+          "name": "s_blf_chunk_local_info",
+          "source": "src/chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_local_info.ts",
+          "signature": "clif",
+          "version": "1.1"
+        },
+        {
+          "name": "s_blf_chunk_campaign_metagame_results",
+          "source": "src/chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_campaign_metagame_results.ts",
+          "signature": "cmrp",
+          "version": "1.1"
+        },
+        {
+          "name": "s_blf_chunk_campaign_metagame_results_secondary",
+          "source": "src/chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_campaign_metagame_results_secondary.ts",
+          "signature": "cmrs",
+          "version": "1.1"
+        },
+        {
+          "name": "s_blf_chunk_file_transfers",
+          "source": "src/chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_file_transfers.ts",
+          "signature": "filq",
+          "version": "1.0"
+        },
+        {
+          "name": "s_blf_chunk_user_network_statistics",
+          "source": "src/chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_user_network_statistics.ts",
+          "signature": "funs",
+          "version": "1.1"
+        },
+        {
+          "name": "s_blf_chunk_player_data",
+          "source": "src/chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_player_data.ts",
+          "signature": "fupd",
+          "version": "3.1"
+        },
+        {
+          "name": "s_blf_chunk_user_recent_players",
+          "source": "src/chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_user_recent_players.ts",
+          "signature": "furp",
+          "version": "2.1"
+        },
+        {
+          "name": "s_blf_chunk_game_local_players",
+          "source": "src/chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_game_local_players.ts",
+          "signature": "glcp",
+          "version": "1.1"
+        },
+        {
+          "name": "s_blf_chunk_game_options",
+          "source": "src/chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_game_options.ts",
+          "signature": "gmop",
+          "version": "1.1"
+        },
+        {
+          "name": "s_blf_chunk_matchmaking_hopper_statistics",
+          "source": "src/chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_matchmaking_hopper_statistics.ts",
+          "signature": "mmhs",
+          "version": "3.1"
+        },
+        {
+          "name": "s_blf_chunk_multiplayer_events",
+          "source": "src/chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_multiplayer_events.ts",
+          "signature": "mpev",
+          "version": "2.1"
+        },
+        {
+          "name": "s_blf_chunk_multiplayer_game_description",
+          "source": "src/chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_multiplayer_game_description.ts",
+          "signature": "mpgd",
+          "version": "2.1"
+        },
+        {
+          "name": "s_blf_chunk_multiplayer_machines",
+          "source": "src/chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_multiplayer_machines.ts",
+          "signature": "mpma",
+          "version": "2.1"
+        },
+        {
+          "name": "s_blf_chunk_multiplayer_matchmaking_options",
+          "source": "src/chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_multiplayer_matchmaking_options.ts",
+          "signature": "mpmo",
+          "version": "2.1"
+        },
+        {
+          "name": "s_blf_chunk_multiplayer_players",
+          "source": "src/chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_multiplayer_players.ts",
+          "signature": "mppl",
+          "version": "2.1"
+        },
+        {
+          "name": "s_blf_chunk_multiplayer_player_statistics",
+          "source": "src/chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_multiplayer_player_statistics.ts",
+          "signature": "mps1",
+          "version": "2.1"
+        },
+        {
+          "name": "s_blf_chunk_multiplayer_player_vs_player_statistics",
+          "source": "src/chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_multiplayer_player_vs_player_statistics.ts",
+          "signature": "mps2",
+          "version": "2.1"
+        },
+        {
+          "name": "s_blf_chunk_multiplayer_team_statistics",
+          "source": "src/chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_multiplayer_team_statistics.ts",
+          "signature": "mps3",
+          "version": "2.1"
+        },
+        {
+          "name": "s_blf_chunk_multiplayer_teams",
+          "source": "src/chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_multiplayer_teams.ts",
+          "signature": "mptm",
+          "version": "1.1"
+        },
+        {
+          "name": "s_blf_chunk_game_variant",
+          "source": "src/chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_game_variant.ts",
+          "signature": "mpvr",
+          "version": "3.1"
+        },
+        {
+          "name": "s_blf_chunk_screenshot_camera",
+          "source": "src/chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_screenshot_camera.ts",
+          "signature": "scnc",
+          "version": "2.1"
+        },
+        {
           "name": "s_blf_chunk_screenshot_data",
           "source": "src/chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_screenshot_data.ts",
           "signature": "scnd",
           "version": "1.1"
+        },
+        {
+          "name": "s_blf_chunk_service_record",
+          "source": "src/chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_service_record.ts",
+          "signature": "srid",
+          "version": "2.1"
         }
       ]
     },
@@ -88,6 +272,24 @@
           "source": "src/chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_end_of_file.ts",
           "signature": "_eof",
           "version": "1.1"
+        },
+        {
+          "name": "s_blf_chunk_content_header",
+          "source": "src/chunks/halo3odst/v13895_09_04_27_2201_atlas_release/s_blf_chunk_content_header.ts",
+          "signature": "chdr",
+          "version": "9.3"
+        },
+        {
+          "name": "s_blf_chunk_odst_service_record",
+          "source": "src/chunks/halo3odst/v13895_09_04_27_2201_atlas_release/s_blf_chunk_odst_service_record.ts",
+          "signature": "osri",
+          "version": "2.0"
+        },
+        {
+          "name": "s_blf_chunk_screenshot_camera",
+          "source": "src/chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_screenshot_camera.ts",
+          "signature": "scnc",
+          "version": "2.1"
         },
         {
           "name": "s_blf_chunk_screenshot_data",
@@ -208,6 +410,12 @@
       "docLink": "/guide/versions/haloreach/v08516_10_02_19_1607_omaha_alpha",
       "chunks": [
         {
+          "name": "s_blf_chunk_player_data",
+          "source": "src/chunks/haloreach/v08516_10_02_19_1607_omaha_alpha/s_blf_chunk_player_data.ts",
+          "signature": "fupd",
+          "version": "6.0"
+        },
+        {
           "name": "s_blf_chunk_packed_game_variant",
           "source": "src/chunks/haloreach/v08516_10_02_19_1607_omaha_alpha/s_blf_chunk_packed_game_variant.ts",
           "signature": "gvar",
@@ -230,10 +438,40 @@
       "docLink": "/guide/versions/haloreach/v09449_10_03_25_1545_omaha_beta",
       "chunks": [
         {
+          "name": "s_blf_chunk_start_of_file",
+          "source": "src/chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_start_of_file.ts",
+          "signature": "_blf",
+          "version": "1.2"
+        },
+        {
+          "name": "s_blf_chunk_compressed_data",
+          "source": "src/chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_compressed_data.ts",
+          "signature": "_cmp",
+          "version": "1.1"
+        },
+        {
+          "name": "s_blf_chunk_end_of_file",
+          "source": "src/chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_end_of_file.ts",
+          "signature": "_eof",
+          "version": "1.1"
+        },
+        {
+          "name": "s_blf_chunk_content_header",
+          "source": "src/chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_content_header.ts",
+          "signature": "chdr",
+          "version": "10.2"
+        },
+        {
           "name": "s_blf_chunk_packed_game_variant",
           "source": "src/chunks/haloreach/v09730_10_04_09_1309_omaha_delta/s_blf_chunk_packed_game_variant.ts",
           "signature": "gvar",
           "version": "38.1"
+        },
+        {
+          "name": "s_blf_chunk_screenshot_data",
+          "source": "src/chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_screenshot_data.ts",
+          "signature": "scnd",
+          "version": "1.1"
         }
       ]
     },
@@ -262,6 +500,30 @@
       "docLink": "/guide/versions/haloreach/v09730_10_04_09_1309_omaha_delta",
       "chunks": [
         {
+          "name": "s_blf_chunk_start_of_file",
+          "source": "src/chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_start_of_file.ts",
+          "signature": "_blf",
+          "version": "1.2"
+        },
+        {
+          "name": "s_blf_chunk_compressed_data",
+          "source": "src/chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_compressed_data.ts",
+          "signature": "_cmp",
+          "version": "1.1"
+        },
+        {
+          "name": "s_blf_chunk_end_of_file",
+          "source": "src/chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_end_of_file.ts",
+          "signature": "_eof",
+          "version": "1.1"
+        },
+        {
+          "name": "s_blf_chunk_content_header",
+          "source": "src/chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_content_header.ts",
+          "signature": "chdr",
+          "version": "10.2"
+        },
+        {
           "name": "s_blf_chunk_packed_game_variant",
           "source": "src/chunks/haloreach/v09730_10_04_09_1309_omaha_delta/s_blf_chunk_packed_game_variant.ts",
           "signature": "gvar",
@@ -278,6 +540,12 @@
           "source": "src/chunks/haloreach/v09730_10_04_09_1309_omaha_delta/s_blf_chunk_rewards_persistance.ts",
           "signature": "rpdl",
           "version": "1.1"
+        },
+        {
+          "name": "s_blf_chunk_screenshot_data",
+          "source": "src/chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_screenshot_data.ts",
+          "signature": "scnd",
+          "version": "1.2"
         }
       ]
     },
@@ -354,6 +622,18 @@
           "version": "1.1"
         },
         {
+          "name": "s_blf_chunk_game_results_statistics",
+          "source": "src/chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_game_results_statistics.ts",
+          "signature": "_par",
+          "version": "2.1"
+        },
+        {
+          "name": "s_blf_chunk_arena_hopper_stats",
+          "source": "src/chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_arena_hopper_stats.ts",
+          "signature": "arhs",
+          "version": "3.1"
+        },
+        {
           "name": "s_blf_chunk_author",
           "source": "src/chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_author.ts",
           "signature": "athr",
@@ -378,10 +658,28 @@
           "version": "2.1"
         },
         {
+          "name": "s_blf_chunk_network_banhammer_cheating_report",
+          "source": "src/chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_network_banhammer_cheating_report.ts",
+          "signature": "chrt",
+          "version": "2.1"
+        },
+        {
+          "name": "s_blf_chunk_local_info",
+          "source": "src/chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_local_info.ts",
+          "signature": "clif",
+          "version": "2.1"
+        },
+        {
           "name": "s_blf_chunk_challenge_state",
           "source": "src/chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_challenge_state.ts",
           "signature": "dcha",
           "version": "3.1"
+        },
+        {
+          "name": "s_blf_chunk_file_transfers",
+          "source": "src/chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_file_transfers.ts",
+          "signature": "filq",
+          "version": "3.0"
         },
         {
           "name": "s_blf_chunk_online_file_summary",
@@ -390,10 +688,34 @@
           "version": "1.0"
         },
         {
+          "name": "s_blf_chunk_online_file_listing",
+          "source": "src/chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_online_file_listing.ts",
+          "signature": "fitm",
+          "version": "4.0"
+        },
+        {
+          "name": "s_blf_chunk_player_data",
+          "source": "src/chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_player_data.ts",
+          "signature": "fupd",
+          "version": "7.0"
+        },
+        {
+          "name": "s_blf_chunk_game_local_players",
+          "source": "src/chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_game_local_players.ts",
+          "signature": "glcp",
+          "version": "3.1"
+        },
+        {
           "name": "s_blf_chunk_packed_game_variant",
           "source": "src/chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_packed_game_variant.ts",
           "signature": "gvar",
           "version": "54.1"
+        },
+        {
+          "name": "s_blf_chunk_xuid_list",
+          "source": "src/chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_xuid_list.ts",
+          "signature": "idls",
+          "version": "1.1"
         },
         {
           "name": "s_blf_chunk_hopper_configuration_table",
@@ -408,10 +730,64 @@
           "version": "4.1"
         },
         {
+          "name": "s_blf_chunk_game_results_events",
+          "source": "src/chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_game_results_events.ts",
+          "signature": "mpev",
+          "version": "5.1"
+        },
+        {
+          "name": "s_blf_chunk_game_results_game_description",
+          "source": "src/chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_game_results_game_description.ts",
+          "signature": "mpgd",
+          "version": "8.2"
+        },
+        {
+          "name": "s_blf_chunk_game_results_machines",
+          "source": "src/chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_game_results_machines.ts",
+          "signature": "mpma",
+          "version": "6.1"
+        },
+        {
+          "name": "s_blf_chunk_game_results_matchmaking_options",
+          "source": "src/chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_game_results_matchmaking_options.ts",
+          "signature": "mpmo",
+          "version": "7.1"
+        },
+        {
           "name": "s_blf_chunk_multiplayer_players",
           "source": "src/chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_multiplayer_players.ts",
           "signature": "mppl",
           "version": "8.1"
+        },
+        {
+          "name": "s_blf_chunk_game_results_player_statistics",
+          "source": "src/chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_game_results_player_statistics.ts",
+          "signature": "mps1",
+          "version": "4.1"
+        },
+        {
+          "name": "s_blf_chunk_game_results_player_vs_player_statistics",
+          "source": "src/chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_game_results_player_vs_player_statistics.ts",
+          "signature": "mps2",
+          "version": "4.1"
+        },
+        {
+          "name": "s_blf_chunk_game_results_player_vs_ai_statistics",
+          "source": "src/chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_game_results_player_vs_ai_statistics.ts",
+          "signature": "mps3",
+          "version": "5.1"
+        },
+        {
+          "name": "s_blf_chunk_game_results_team_statistics",
+          "source": "src/chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_game_results_team_statistics.ts",
+          "signature": "mps4",
+          "version": "4.1"
+        },
+        {
+          "name": "s_blf_chunk_game_results_teams",
+          "source": "src/chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_game_results_teams.ts",
+          "signature": "mptm",
+          "version": "3.1"
         },
         {
           "name": "s_blf_chunk_game_variant",
@@ -448,6 +824,36 @@
           "source": "src/chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_reward_persistence_upload_to_lsp.ts",
           "signature": "rpul",
           "version": "3.1"
+        },
+        {
+          "name": "s_blf_chunk_screenshot_camera",
+          "source": "src/chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_screenshot_camera.ts",
+          "signature": "scnc",
+          "version": "4.1"
+        },
+        {
+          "name": "s_blf_chunk_screenshot_data",
+          "source": "src/chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_screenshot_data.ts",
+          "signature": "scnd",
+          "version": "1.2"
+        },
+        {
+          "name": "s_blf_chunk_service_record",
+          "source": "src/chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_service_record.ts",
+          "signature": "srid",
+          "version": "7.1"
+        },
+        {
+          "name": "s_blf_chunk_server_signature",
+          "source": "src/chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_server_signature.ts",
+          "signature": "ssig",
+          "version": "1.1"
+        },
+        {
+          "name": "s_blf_chunk_user_messaging_data",
+          "source": "src/chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_user_messaging_data.ts",
+          "signature": "umsg",
+          "version": "1.0"
         }
       ]
     },
