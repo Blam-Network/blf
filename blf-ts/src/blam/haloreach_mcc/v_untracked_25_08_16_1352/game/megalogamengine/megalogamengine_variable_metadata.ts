@@ -2,7 +2,6 @@ import type {
   c_bitstream_reader,
   c_bitstream_writer,
 } from "../../../../../bitstream";
-import { AutoMap } from "../../../../../helpers/automap";
 import { e_multiplayer_team_designator } from "../game_engine_default";
 import { c_custom_variable_reference } from "./megalogamengine_references";
 
@@ -14,21 +13,16 @@ export enum e_megalo_variable_network_state {
 }
 
 export class s_variable_metadata {
-  @AutoMap(() => [c_custom_variable_reference])
   m_numeric_variables: [
     c_custom_variable_reference,
     e_megalo_variable_network_state,
   ][] = [];
-  @AutoMap(() => [c_custom_variable_reference])
   m_timer_variables: c_custom_variable_reference[] = [];
-  @AutoMap(() => [Number])
   m_team_variables: [
     e_multiplayer_team_designator,
     e_megalo_variable_network_state,
   ][] = [];
-  @AutoMap(() => [Number])
   m_player_variables: e_megalo_variable_network_state[] = [];
-  @AutoMap(() => [Number])
   m_object_variables: e_megalo_variable_network_state[] = [];
   constructor(
     private readonly numeric_variable_count_bits: number,

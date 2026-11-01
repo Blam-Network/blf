@@ -1,9 +1,9 @@
+import { type c, CFieldType } from "@craftycodie/cstruct";
 import {
   type c_bitstream_reader,
   c_bitstream_writer,
   e_bitstream_byte_order,
 } from "../../../../bitstream";
-import { AutoMap } from "../../../../helpers/automap";
 import {
   runtime_data_compress,
   runtime_data_decompress,
@@ -50,9 +50,7 @@ function write_buffer_blob(
   bitstream.write_raw_data(buffer, buffer.length * 8);
 }
 export class c_single_language_string_table {
-  @AutoMap(() => [String])
   strings: string[] = [];
-  @AutoMap(() => Boolean)
   m_buffer_is_compressed = true;
   constructor(
     readonly max_string_count: number,
@@ -124,12 +122,10 @@ export class c_single_language_string_table {
   }
 }
 export class c_string_table {
-  @AutoMap(() => [String])
   strings: (string | null)[][] = Array.from(
     { length: k_language_count },
     () => []
   );
-  @AutoMap(() => Boolean)
   m_buffer_is_compressed = true;
   constructor(
     readonly max_string_count: number,
@@ -244,3 +240,117 @@ export class c_string_table {
     write_buffer_blob(bitstream, buffer, this.buffer_size_bit_length);
   }
 }
+
+export class CStringTableField extends CFieldType<c_string_table> {
+  constructor(
+    private readonly create: () => c_string_table,
+    private readonly string_capacity: number,
+    private readonly buffer_capacity: number
+  ) {
+    super();
+  }
+
+  getSize(): number {
+    return (
+      this.string_capacity * k_language_count * 2 + this.buffer_capacity + 8
+    );
+  }
+
+  read(bytes: Uint8Array, offset: number, endian: c.Endian): c_string_table {
+    const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+    const little = endian === "little";
+    const offsets_size = this.string_capacity * k_language_count * 2;
+    const buffer_offset = offset + offsets_size;
+    const buffer = bytes.subarray(
+      buffer_offset,
+      buffer_offset + this.buffer_capacity
+    );
+    const string_count = Math.min(
+      this.string_capacity,
+      Math.max(
+        0,
+        view.getInt32(buffer_offset + this.buffer_capacity + 4, little)
+      )
+    );
+    const table = this.create();
+    table.strings = Array.from({ length: k_language_count }, () => []);
+    for (let language = 0; language < k_language_count; language++) {
+      for (let index = 0; index < string_count; index++) {
+        const string_offset = view.getInt16(
+          offset + (index * k_language_count + language) * 2,
+          little
+        );
+        table.strings[language]!.push(
+          string_offset < 0
+            ? null
+            : read_null_terminated_string(buffer, string_offset)
+        );
+      }
+    }
+    return table;
+  }
+
+  write(
+    bytes: Uint8Array,
+    offset: number,
+    value: c_string_table,
+    endian: c.Endian
+  ): void {
+    const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+    const little = endian === "little";
+    const offsets_size = this.string_capacity * k_language_count * 2;
+    const buffer_offset = offset + offsets_size;
+    const string_count = Math.min(
+      this.string_capacity,
+      value.strings[0]?.length ?? 0
+    );
+    const encoder = new TextEncoder();
+    let used = 0;
+    for (let index = 0; index < this.string_capacity; index++) {
+      const reference = value.strings[0]?.[index] ?? null;
+      const shared =
+        index < string_count &&
+        reference !== null &&
+        value.strings.every((language) => language[index] === reference);
+      let shared_offset = -1;
+      for (let language = 0; language < k_language_count; language++) {
+        const string =
+          index < string_count
+            ? (value.strings[language]?.[index] ?? null)
+            : null;
+        let string_offset = -1;
+        if (string !== null) {
+          if (shared && shared_offset >= 0) {
+            string_offset = shared_offset;
+          } else {
+            const encoded = encoder.encode(string);
+            string_offset = used;
+            bytes.set(
+              encoded.subarray(0, this.buffer_capacity - used - 1),
+              buffer_offset + used
+            );
+            used = Math.min(this.buffer_capacity, used + encoded.length + 1);
+            shared_offset = string_offset;
+          }
+        }
+        view.setInt16(
+          offset + (index * k_language_count + language) * 2,
+          string_offset,
+          little
+        );
+      }
+    }
+    view.setUint32(buffer_offset + this.buffer_capacity, used, little);
+    view.setInt32(
+      buffer_offset + this.buffer_capacity + 4,
+      string_count,
+      little
+    );
+  }
+}
+
+export const string_table_field = (
+  create: () => c_string_table,
+  string_capacity: number,
+  buffer_capacity: number
+) => new CStringTableField(create, string_capacity, buffer_capacity);

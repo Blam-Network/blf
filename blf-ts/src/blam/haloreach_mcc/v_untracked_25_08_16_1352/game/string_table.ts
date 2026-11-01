@@ -3,7 +3,6 @@ import {
   c_bitstream_writer,
   e_bitstream_byte_order,
 } from "../../../../bitstream";
-import { AutoMap } from "../../../../helpers/automap";
 import {
   runtime_data_compress,
   runtime_data_decompress,
@@ -50,9 +49,7 @@ function write_buffer_blob(
   bitstream.write_raw_data(buffer, buffer.length * 8);
 }
 export class c_single_language_string_table {
-  @AutoMap(() => [String])
   strings: string[] = [];
-  @AutoMap(() => Boolean)
   m_buffer_is_compressed = true;
   constructor(
     readonly max_string_count: number,
@@ -124,12 +121,10 @@ export class c_single_language_string_table {
   }
 }
 export class c_string_table {
-  @AutoMap(() => [String])
   strings: (string | null)[][] = Array.from(
     { length: k_language_count },
     () => []
   );
-  @AutoMap(() => Boolean)
   m_buffer_is_compressed = true;
   constructor(
     readonly max_string_count: number,

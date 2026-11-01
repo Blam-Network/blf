@@ -70,7 +70,7 @@ export class s_blf_chunk_online_file_summary extends BLFChunkBase {
 
     for (const entry of this.entries) {
       bitstream.write_raw_data(
-        c.write(s_online_file_summary_listing_entry, entry, endian),
+        s_online_file_summary_listing_entry.write(entry, endian),
         entry_size * 8
       );
     }

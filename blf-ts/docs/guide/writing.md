@@ -48,4 +48,4 @@ When the last chunk before `_eof` is written, `write_blffile` sets `file_size` o
 
 Layout and chunk failures throw `BlfError`.
 
-See also: [Reading chunks](/guide/reading), [Converting Reach gametypes](/guide/converting-reach-gametypes) for a full MCC → TU1 read/convert/write walkthrough.
+See also: [Reading chunks](/guide/reading).

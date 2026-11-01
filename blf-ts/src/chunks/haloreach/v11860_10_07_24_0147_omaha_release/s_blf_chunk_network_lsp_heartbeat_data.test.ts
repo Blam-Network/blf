@@ -10,6 +10,7 @@ import {
   s_network_lsp_heartbeat_session_player_data,
 } from "../../../blam/haloreach/v12065_11_08_24_1738_tu1actual/networking/logic/network_lsp_presence";
 import { find_chunk, getBlfChunkMeta } from "../../../blf_chunk";
+
 import { s_blf_chunk_network_lsp_heartbeat_data } from "./s_blf_chunk_network_lsp_heartbeat_data";
 
 function bytesToHex(values: number[]): string {
@@ -23,7 +24,7 @@ describe("s_blf_chunk_network_lsp_heartbeat_data", () => {
     expect(meta.major).toBe(5);
     expect(meta.minor).toBe(1);
     expect(meta.version).toBe(5.1);
-    expect(c.sizeof(s_blf_chunk_network_lsp_heartbeat_data)).toBe(0x1bb);
+    expect(c.sizeof(s_blf_chunk_network_lsp_heartbeat_data.schema)).toBe(0x1bb);
     expect(c.sizeof(s_network_lsp_heartbeat_data)).toBe(0x1bb);
   });
 
@@ -39,13 +40,12 @@ describe("s_blf_chunk_network_lsp_heartbeat_data", () => {
     chunk.has_players = 1;
     chunk.local_player_count = 1;
     chunk.machine_id = 0xe20000000001n;
-    chunk.players = Array.from(
-      { length: 4 },
-      () => new s_network_lsp_heartbeat_player_data()
+    chunk.players = Array.from({ length: 4 }, () =>
+      s_network_lsp_heartbeat_player_data.zero()
     );
     chunk.players[0].player_xuid = 0x123456789abcdef0n;
     chunk.players[0].player_grade = 3;
-    chunk.session_data = new s_network_lsp_heartbeat_session_data();
+    chunk.session_data = s_network_lsp_heartbeat_session_data.zero();
     chunk.session_data.gui_game_mode = 2;
     chunk.session_data.hopper_id = 42;
 
@@ -76,13 +76,23 @@ describe("s_blf_chunk_network_lsp_heartbeat_data", () => {
     expect(chunk.has_players).toBe(1);
     expect(chunk.local_player_count).toBe(1);
     expect(chunk.machine_id).toBe(0xfa00002248e026ddn);
-    expect(bytesToHex(chunk.unknowneeA)).toBe("ae00ab3a5af4a3dc");
+    expect(chunk.squad_session_id).toBe(0xae00ab3a5af4a3dcn);
 
     const local = chunk.players[0];
     expect(local.player_xuid).toBe(0x000900002e3fe0b1n);
     expect(local.player_grade).toBe(0);
     expect(local.player_sub_grade).toBe(0);
-    expect(local.flags).toBe(0x3d);
+    expect(local.flags).toEqual({
+      live_account: true,
+      unknown_bit1: false,
+      unknown_bit2: true,
+      unknown_bit3: true,
+      live_enabled: true,
+      unknown_bit5: true,
+      griefer: false,
+      recent_grade_advancement: false,
+      recent_sub_grade_advancement: false,
+    });
     expect(local.bungienet_user_flags).toBe(0x1000);
     expect(local.player_appearance.service_tag).toBe("0000");
 
@@ -90,8 +100,8 @@ describe("s_blf_chunk_network_lsp_heartbeat_data", () => {
     expect(session.gui_game_mode).toBe(2);
     expect(session.session_game_mode).toBe(2);
     expect(session.hopper_id).toBe(122);
-    expect(session.session_piracy_mode.network_session_privacy).toBe(1);
-    expect(session.session_piracy_mode.network_session_closed_status).toBe(1);
+    expect(session.session_privacy_mode.privacy_mode).toBe(1);
+    expect(session.session_privacy_mode.closed_mode).toBe(1);
     expect(session.local_player_count).toBe(16);
     expect(session.player_count).toBe(1);
     expect(session.incoming_join_failed).toBe(0);
@@ -101,7 +111,7 @@ describe("s_blf_chunk_network_lsp_heartbeat_data", () => {
     );
 
     const sessionPlayer = session.session_players[0];
-    expect(bytesToHex(sessionPlayer.unknown0)).toBe("000900002e3fe0b1");
+    expect(sessionPlayer.player_xuid).toBe(0x000900002e3fe0b1n);
     expect(sessionPlayer.team).toBe(0);
   });
 });

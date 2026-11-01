@@ -11,7 +11,6 @@ import {
   encodeBigBitfield,
 } from "../../../../bitstream";
 import { BlfError } from "../../../../error";
-import { AutoMap } from "../../../../helpers/automap";
 import type { s_content_item_metadata } from "../saved_games/saved_game_files";
 import { c_game_engine_base_variant } from "./game_engine_default";
 import { c_game_engine_sandbox_variant } from "./game_engine_sandbox";
@@ -27,7 +26,6 @@ import { c_megalo_game_statistic } from "./megalogamengine/megalogamengine_stati
 import { c_trigger } from "./megalogamengine/megalogamengine_trigger";
 import { s_user_defined_option } from "./megalogamengine/megalogamengine_user_defined_options";
 import {
-  s_variable_metadata,
   s_variable_metadata_global,
   s_variable_metadata_object,
   s_variable_metadata_player,
@@ -36,41 +34,23 @@ import {
 import { c_string_table } from "./string_table";
 
 export class s_custom_game_engine_definition {
-  @AutoMap(() => [c_condition])
   m_conditions: c_condition[] = [];
-  @AutoMap(() => [c_action])
   m_actions: c_action[] = [];
-  @AutoMap(() => [c_trigger])
   m_triggers: c_trigger[] = [];
-  @AutoMap(() => [c_megalo_game_statistic])
   m_statistics: c_megalo_game_statistic[] = [];
-  @AutoMap(() => s_variable_metadata)
   m_global_variable_metadata = s_variable_metadata_global();
-  @AutoMap(() => s_variable_metadata)
   m_player_variable_metadata = s_variable_metadata_player();
-  @AutoMap(() => s_variable_metadata)
   m_object_variable_metadata = s_variable_metadata_object();
-  @AutoMap(() => s_variable_metadata)
   m_team_variable_metadata = s_variable_metadata_team();
-  @AutoMap(() => [e_megalo_widget_position])
   m_hud_widgets: e_megalo_widget_position[] = [];
-  @AutoMap(() => Number)
   m_initialization_trigger_index = 0;
-  @AutoMap(() => Number)
   m_local_initialization_trigger_index = 0;
-  @AutoMap(() => Number)
   m_host_migration_trigger_index = 0;
-  @AutoMap(() => Number)
   m_double_migration_trigger_index = 0;
-  @AutoMap(() => Number)
   m_object_death_event_trigger_index = 0;
-  @AutoMap(() => Number)
   m_local_trigger_index = 0;
-  @AutoMap(() => Number)
   m_pregame_trigger_index = 0;
-  @AutoMap(() => [Boolean])
   m_objects_used: boolean[] = Array.from({ length: 2048 }, () => false);
-  @AutoMap(() => [c_object_filter])
   m_object_filters: c_object_filter[] = [];
   initialize(): void {
     Object.assign(this, new s_custom_game_engine_definition());
@@ -1480,7 +1460,6 @@ export type s_game_variant_parameter_flags = BitfieldOf<
 >;
 
 export class c_game_engine_custom_variant_tu1_settings {
-  @AutoMap(() => Object)
   m_flags: e_game_variant_tu1_flags = {
     always_spillover_damage: false,
     armor_lock_stickies_remain: false,
@@ -1490,19 +1469,12 @@ export class c_game_engine_custom_variant_tu1_settings {
     magnum_is_automatic: false,
     unknown: false,
   };
-  @AutoMap(() => Number)
   m_precision_bloom = 1;
-  @AutoMap(() => Number)
-  m_armor_lock_damage_drain = 0.2;
-  @AutoMap(() => Number)
-  m_armor_lock_damage_drain_limit = 0.7;
-  @AutoMap(() => Number)
-  m_active_camo_energy_curve_min = 0;
-  @AutoMap(() => Number)
-  m_active_camo_energy_curve_max = 0;
-  @AutoMap(() => Number)
+  m_armor_lock_damage_drain = 0;
+  m_armor_lock_damage_drain_limit = 0;
+  m_active_camo_energy_curve_max = 0.02;
+  m_active_camo_energy_curve_min = 0.07;
   m_magnum_damage = 1;
-  @AutoMap(() => Number)
   m_magnum_fire_delay = 1;
   initialize_to_default(): void {
     Object.assign(this, new c_game_engine_custom_variant_tu1_settings());
@@ -1533,14 +1505,14 @@ export class c_game_engine_custom_variant_tu1_settings {
       false,
       true
     );
-    this.m_active_camo_energy_curve_min = bitstream.read_quantized_real(
+    this.m_active_camo_energy_curve_max = bitstream.read_quantized_real(
       0,
       2,
       8,
       false,
       true
     );
-    this.m_active_camo_energy_curve_max = bitstream.read_quantized_real(
+    this.m_active_camo_energy_curve_min = bitstream.read_quantized_real(
       0,
       2,
       8,
@@ -1586,7 +1558,7 @@ export class c_game_engine_custom_variant_tu1_settings {
       true
     );
     bitstream.write_quantized_real(
-      this.m_active_camo_energy_curve_min,
+      this.m_active_camo_energy_curve_max,
       0,
       2,
       8,
@@ -1594,7 +1566,7 @@ export class c_game_engine_custom_variant_tu1_settings {
       true
     );
     bitstream.write_quantized_real(
-      this.m_active_camo_energy_curve_max,
+      this.m_active_camo_energy_curve_min,
       0,
       2,
       8,
@@ -1652,66 +1624,43 @@ export enum e_game_engine_category {
 }
 
 export class c_game_engine_custom_variant {
-  @AutoMap(() => Number)
   m_encoding_version = 0;
-  @AutoMap(() => Number)
   m_build_number = 0;
-  @AutoMap(() => c_game_engine_base_variant)
   m_base_variant = new c_game_engine_base_variant();
-  @AutoMap(() => [s_player_trait_option])
   m_player_traits: s_player_trait_option[] = [];
-  @AutoMap(() => [s_user_defined_option])
   m_user_defined_options: s_user_defined_option[] = [];
-  @AutoMap(() => c_string_table)
   m_script_strings = new c_string_table(112, 0x4c00, 15, 15, 7);
-  @AutoMap(() => Number)
   m_base_name_string_index = 0;
-  @AutoMap(() => c_string_table)
   m_localized_name = new c_string_table(1, 0x180, 9, 9, 1);
-  @AutoMap(() => c_string_table)
   m_localized_description = new c_string_table(1, 0xc00, 12, 12, 1);
-  @AutoMap(() => c_string_table)
   m_localized_category = new c_string_table(1, 0x180, 9, 9, 1);
-  @AutoMap(() => Number)
   m_engine_icon = 0;
-  @AutoMap(() => e_game_engine_category)
   m_engine_category: e_game_engine_category = e_game_engine_category.ctf;
-  @AutoMap(() => c_megalogamengine_map_permissions)
   m_map_permissions = new c_megalogamengine_map_permissions();
-  @AutoMap(() => s_game_engine_player_rating_parameters)
   m_player_ratings = new s_game_engine_player_rating_parameters();
-  @AutoMap(() => Number)
   m_score_to_win_round = 0;
-  @AutoMap(() => Boolean)
   m_fire_teams_enabled = false;
-  @AutoMap(() => Boolean)
   m_symmetric_gametype = false;
-  @AutoMap(() => Object)
   m_base_variant_parameters_locked: s_game_variant_parameter_flags =
     defaultBigBitfield(k_game_variant_parameter_flags);
-  @AutoMap(() => Object)
   m_base_variant_parameters_hidden: s_game_variant_parameter_flags =
     defaultBigBitfield(k_game_variant_parameter_flags);
-  @AutoMap(() => [Boolean])
   m_user_defined_options_locked: boolean[] = Array.from(
     { length: 32 },
     () => false
   );
-  @AutoMap(() => [Boolean])
   m_user_defined_options_hidden: boolean[] = Array.from(
     { length: 32 },
     () => false
   );
-  @AutoMap(() => s_custom_game_engine_definition)
   m_game_engine = new s_custom_game_engine_definition();
-  @AutoMap(() => c_game_engine_custom_variant_tu1_settings)
   m_tu1_settings = new c_game_engine_custom_variant_tu1_settings();
   initialize(): void {
     Object.assign(this, new c_game_engine_custom_variant());
     this.m_encoding_version = k_game_engine_custom_variant_encoding_version;
     this.m_base_variant.initialize();
-    this.m_base_variant.m_miscellaneous_options.m_round_reset_map = true;
-    this.m_base_variant.m_miscellaneous_options.m_round_reset_players = true;
+    this.m_base_variant.m_miscellaneous_options.m_flags.round_reset_map = true;
+    this.m_base_variant.m_miscellaneous_options.m_flags.round_reset_players = true;
     this.m_player_ratings.initialize_to_default();
     this.m_map_permissions.initialize();
     this.m_game_engine.initialize();
@@ -3126,15 +3075,10 @@ export enum e_game_engine_type {
  * Mirrors `c_game_variant` in blf_lib — decode-only.
  */
 export class c_game_variant {
-  @AutoMap(() => e_game_engine_type)
   m_game_engine: e_game_engine_type = e_game_engine_type.megalogamengine;
-  @AutoMap(() => c_game_engine_base_variant)
   m_campaign_variant?: c_game_engine_base_variant;
-  @AutoMap(() => c_game_engine_custom_variant)
   m_custom_variant?: c_game_engine_custom_variant;
-  @AutoMap(() => c_game_engine_survival_variant)
   m_survival_variant?: c_game_engine_survival_variant;
-  @AutoMap(() => c_game_engine_sandbox_variant)
   m_sandbox_variant?: c_game_engine_sandbox_variant;
   decode(bitstream: c_bitstream_reader): void {
     this.m_game_engine = bitstream.read_enum(

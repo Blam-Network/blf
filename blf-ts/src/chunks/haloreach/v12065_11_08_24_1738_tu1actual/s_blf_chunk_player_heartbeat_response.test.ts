@@ -11,7 +11,7 @@ describe("s_blf_chunk_player_heartbeat_response", () => {
     expect(meta.major).toBe(2);
     expect(meta.minor).toBe(1);
     expect(meta.version).toBe(2.1);
-    expect(c.sizeof(s_blf_chunk_player_heartbeat_response)).toBe(0x93);
+    expect(c.sizeof(s_blf_chunk_player_heartbeat_response.schema)).toBe(0x93);
     expect(c.sizeof(s_network_lsp_heartbeat_response_data)).toBe(0x93);
   });
 

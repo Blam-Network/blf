@@ -2,26 +2,17 @@ import type {
   c_bitstream_reader,
   c_bitstream_writer,
 } from "../../../../bitstream";
-import { AutoMap } from "../../../../helpers/automap";
 import { c_player_traits } from "./game_engine_player_traits";
 
 /** Matches blf_lib omaha_delta `c_game_engine_miscellaneous_options`. */
 export class c_game_engine_miscellaneous_options {
-  @AutoMap(() => Boolean)
   m_teams_enabled = false;
-  @AutoMap(() => Boolean)
   m_round_reset_players = false;
-  @AutoMap(() => Boolean)
   m_round_reset_map = false;
-  @AutoMap(() => Number)
   m_round_time_limit_minutes = 0;
-  @AutoMap(() => Number)
   m_round_limit = 0;
-  @AutoMap(() => Number)
   m_early_victory_win_count = 0;
-  @AutoMap(() => Number)
   m_sudden_death_time = 0;
-  @AutoMap(() => Number)
   m_grace_period = 0;
   initialize(): void {
     this.m_teams_enabled = false;
@@ -71,31 +62,18 @@ export class c_game_engine_miscellaneous_options {
 
 /** Matches blf_lib omaha_delta `c_game_engine_respawn_options`. */
 export class c_game_engine_respawn_options {
-  @AutoMap(() => Boolean)
   m_inherit_respawn_time = false;
-  @AutoMap(() => Boolean)
   m_respawn_with_teammate = false;
-  @AutoMap(() => Boolean)
   m_respawn_at_location = false;
-  @AutoMap(() => Boolean)
   m_respawn_on_kills = false;
-  @AutoMap(() => Number)
   m_lives_per_round = 0;
-  @AutoMap(() => Number)
   m_team_lives_per_round = 0;
-  @AutoMap(() => Number)
   m_respawn_time_seconds = 0;
-  @AutoMap(() => Number)
   m_suicide_penalty_seconds = 0;
-  @AutoMap(() => Number)
   m_betrayal_penalty_seconds = 0;
-  @AutoMap(() => Number)
   m_respawn_growth_seconds = 0;
-  @AutoMap(() => Number)
   m_loadout_cam_time = 0;
-  @AutoMap(() => Number)
   m_respawn_player_traits_duration_seconds = 0;
-  @AutoMap(() => c_player_traits)
   m_respawn_player_traits = new c_player_traits();
   initialize(): void {
     this.m_inherit_respawn_time = false;
@@ -179,11 +157,8 @@ export class c_game_engine_respawn_options {
 
 /** Matches blf_lib omaha_delta `s_player_trait_option`. */
 export class s_player_trait_option {
-  @AutoMap(() => Number)
   m_name_string_index = 0;
-  @AutoMap(() => Number)
   m_description_string_index = 0;
-  @AutoMap(() => c_player_traits)
   m_player_traits = new c_player_traits();
   decode(bitstream: c_bitstream_reader): void {
     this.m_name_string_index = bitstream.read_integer("name-string-index", 7);

@@ -1,34 +1,35 @@
+import { c } from "@craftycodie/cstruct";
 import type {
   c_bitstream_reader,
   c_bitstream_writer,
 } from "../../../../bitstream";
-import { AutoMap } from "../../../../helpers/automap";
 import {
   c_game_engine_base_variant,
   c_game_engine_respawn_options,
 } from "./game_engine_default";
 import { e_survival_variant_flags } from "./game_engine_enums";
 import { c_player_traits } from "./game_engine_player_traits";
+@c.class()
 export class c_ai_traits {
-  @AutoMap(() => Number)
+  @c.field(c.u8())
   m_vision = 0;
-  @AutoMap(() => Number)
+  @c.field(c.u8())
   m_sound = 0;
-  @AutoMap(() => Number)
+  @c.field(c.u8())
   m_luck = 0;
-  @AutoMap(() => Number)
+  @c.field(c.u8())
   m_weapon = 0;
-  @AutoMap(() => Number)
+  @c.field(c.u8())
   m_grenade = 0;
-  @AutoMap(() => Number)
+  @c.field(c.u8())
   m_equipment_drop_setting = 0;
-  @AutoMap(() => Number)
+  @c.field(c.u8())
   m_assasination_immunity_setting = 0;
-  @AutoMap(() => Number)
+  @c.field(c.u8())
   m_headshot_immunity_setting = 0;
-  @AutoMap(() => Number)
+  @c.field(c.u8())
   m_damage_resistance = 0;
-  @AutoMap(() => Number)
+  @c.field(c.u8(), { padAfter: 2 })
   m_damage_modifier = 0;
   decode(bitstream: c_bitstream_reader): void {
     this.m_vision = bitstream.read_integer("vision", 3);
@@ -64,14 +65,15 @@ export class c_ai_traits {
     bitstream.write_integer(this.m_damage_modifier, 4);
   }
 }
+@c.class()
 export class s_survival_wave_properties {
-  @AutoMap(() => Number)
+  @c.field(c.u8())
   m_wave_flags = 0;
-  @AutoMap(() => Number)
+  @c.field(c.u8())
   m_wave_squad_advance_type = 0;
-  @AutoMap(() => Number)
+  @c.field(c.i8())
   m_wave_squad_count = 0;
-  @AutoMap(() => [Number])
+  @c.field(c.u8().array(12))
   m_squads: number[] = Array.from({ length: 12 }, () => 0);
   decode(bitstream: c_bitstream_reader): void {
     this.m_wave_flags = bitstream.read_integer("wave_flags", 1);
@@ -93,12 +95,13 @@ export class s_survival_wave_properties {
     }
   }
 }
+@c.class()
 export class s_custom_skull {
-  @AutoMap(() => c_player_traits)
+  @c.field(c_player_traits)
   m_spartan_traits = new c_player_traits();
-  @AutoMap(() => c_player_traits)
+  @c.field(c_player_traits)
   m_elite_traits = new c_player_traits();
-  @AutoMap(() => c_ai_traits)
+  @c.field(c_ai_traits)
   m_wave_traits = new c_ai_traits();
   decode(bitstream: c_bitstream_reader): void {
     this.m_spartan_traits.decode(bitstream);
@@ -111,14 +114,15 @@ export class s_custom_skull {
     this.m_wave_traits.encode(bitstream);
   }
 }
+@c.class()
 export class s_survival_round_properties {
-  @AutoMap(() => Number)
+  @c.field(c.u32())
   m_skull_flags = 0;
-  @AutoMap(() => s_survival_wave_properties)
+  @c.field(s_survival_wave_properties)
   m_initial_wave_options = new s_survival_wave_properties();
-  @AutoMap(() => s_survival_wave_properties)
+  @c.field(s_survival_wave_properties)
   m_main_wave_options = new s_survival_wave_properties();
-  @AutoMap(() => s_survival_wave_properties)
+  @c.field(s_survival_wave_properties, { padAfter: 3 })
   m_boss_wave_options = new s_survival_wave_properties();
   decode(bitstream: c_bitstream_reader): void {
     this.m_skull_flags = bitstream.read_integer("skull-flags", 18);
@@ -133,57 +137,64 @@ export class s_survival_round_properties {
     this.m_boss_wave_options.encode(bitstream);
   }
 }
+@c.class()
 export class c_game_engine_survival_variant {
-  @AutoMap(() => c_game_engine_base_variant)
+  @c.field(c_game_engine_base_variant)
   m_base_variant = new c_game_engine_base_variant();
-  @AutoMap(() => e_survival_variant_flags)
+  @c.field(
+    c.u8().transform(
+      (raw: number) => e_survival_variant_flags.from_raw(raw),
+      (flags: e_survival_variant_flags) => flags.to_raw()
+    ),
+    { padAfter: 3 }
+  )
   m_variant_flags = new e_survival_variant_flags();
-  @AutoMap(() => Number)
+  @c.field(c.u32())
   m_campaign_difficulty_level = 0;
-  @AutoMap(() => Number)
+  @c.field(c.u8())
   m_set_count = 0;
-  @AutoMap(() => Number)
+  @c.field(c.i8())
   m_bonus_lives_awarded = 0;
-  @AutoMap(() => Number)
+  @c.field(c.i16())
   m_bonus_target = 0;
-  @AutoMap(() => Number)
+  @c.field(c.i16(), { padAfter: 2 })
   m_bonus_lives_on_elite_player_death = 0;
-  @AutoMap(() => Number)
-  m_shared_team_life_count = 0;
-  @AutoMap(() => Number)
-  m_elite_life_count = 0;
-  @AutoMap(() => Number)
-  m_extra_life_score_target = 0;
-  @AutoMap(() => Number)
-  m_maximum_lives = 0;
-  @AutoMap(() => Number)
-  m_generator_count = 0;
-  @AutoMap(() => c_player_traits)
-  m_spartan_traits = new c_player_traits();
-  @AutoMap(() => c_player_traits)
-  m_elite_traits = new c_player_traits();
-  @AutoMap(() => c_ai_traits)
-  m_ai_traits = new c_ai_traits();
-  @AutoMap(() => s_custom_skull)
-  m_red_skull = new s_custom_skull();
-  @AutoMap(() => s_custom_skull)
-  m_blue_skull = new s_custom_skull();
-  @AutoMap(() => s_custom_skull)
-  m_yellow_skull = new s_custom_skull();
-  @AutoMap(() => c_game_engine_respawn_options)
-  m_elite_respawn_options = new c_game_engine_respawn_options();
-  @AutoMap(() => s_survival_round_properties)
+  @c.field(s_survival_round_properties)
   m_round_1_properties = new s_survival_round_properties();
-  @AutoMap(() => s_survival_round_properties)
+  @c.field(s_survival_round_properties)
   m_round_2_properties = new s_survival_round_properties();
-  @AutoMap(() => s_survival_round_properties)
+  @c.field(s_survival_round_properties)
   m_round_3_properties = new s_survival_round_properties();
-  @AutoMap(() => Number)
+  @c.field(c.i16(), { padAfter: 2 })
   m_bonus_round_duration = 0;
-  @AutoMap(() => Number)
+  @c.field(c.u32())
   m_bonus_round_skull_flags = 0;
-  @AutoMap(() => s_survival_wave_properties)
+  @c.field(s_survival_wave_properties, { padAfter: 1 })
   m_bonus_round_properties = new s_survival_wave_properties();
+  @c.field(c_player_traits)
+  m_spartan_traits = new c_player_traits();
+  @c.field(c_player_traits)
+  m_elite_traits = new c_player_traits();
+  @c.field(c_ai_traits)
+  m_ai_traits = new c_ai_traits();
+  @c.field(s_custom_skull)
+  m_red_skull = new s_custom_skull();
+  @c.field(s_custom_skull)
+  m_blue_skull = new s_custom_skull();
+  @c.field(s_custom_skull)
+  m_yellow_skull = new s_custom_skull();
+  @c.field(c_game_engine_respawn_options)
+  m_elite_respawn_options = new c_game_engine_respawn_options();
+  @c.field(c.i16())
+  m_shared_team_life_count = 0;
+  @c.field(c.i16())
+  m_elite_life_count = 0;
+  @c.field(c.i16())
+  m_extra_life_score_target = 0;
+  @c.field(c.i16())
+  m_maximum_lives = 0;
+  @c.field(c.i16(), { padAfter: 2 })
+  m_generator_count = 0;
   decode(bitstream: c_bitstream_reader): void {
     this.m_base_variant.decode(bitstream);
     this.m_variant_flags = e_survival_variant_flags.from_raw(

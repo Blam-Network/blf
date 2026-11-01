@@ -2,7 +2,6 @@ import type {
   c_bitstream_reader,
   c_bitstream_writer,
 } from "../../../../bitstream";
-import { AutoMap } from "../../../../helpers/automap";
 export enum e_grenade_count_setting {
   unchanged = 0,
   map_default = 1,
@@ -230,32 +229,22 @@ export enum e_motion_tracker_range_setting {
 }
 
 export class c_player_trait_shield_vitality {
-  @AutoMap(() => e_damage_resistance_percentage_setting)
   m_damage_resistance_percentage_setting: e_damage_resistance_percentage_setting =
     e_damage_resistance_percentage_setting.unchanged;
-  @AutoMap(() => e_body_multiplier_setting)
   m_body_multiplier: e_body_multiplier_setting =
     e_body_multiplier_setting.unchanged;
-  @AutoMap(() => e_recharge_rate_percentage_setting)
   m_body_recharge_rate: e_recharge_rate_percentage_setting =
     e_recharge_rate_percentage_setting.unchanged;
-  @AutoMap(() => e_shield_multiplier_setting)
   m_shield_multiplier: e_shield_multiplier_setting =
     e_shield_multiplier_setting.unchanged;
-  @AutoMap(() => e_recharge_rate_percentage_setting)
   m_shield_recharge_rate: e_recharge_rate_percentage_setting =
     e_recharge_rate_percentage_setting.unchanged;
-  @AutoMap(() => e_recharge_rate_percentage_setting)
   m_overshield_recharge_rate: e_recharge_rate_percentage_setting =
     e_recharge_rate_percentage_setting.unchanged;
-  @AutoMap(() => e_boolean_trait)
   m_headshot_immunity_setting: e_boolean_trait = e_boolean_trait.unchanged;
-  @AutoMap(() => e_vampirism_percentage_setting)
   m_vampirism_percentage_setting: e_vampirism_percentage_setting =
     e_vampirism_percentage_setting.unchanged;
-  @AutoMap(() => e_boolean_trait)
   m_assasination_immunity: e_boolean_trait = e_boolean_trait.unchanged;
-  @AutoMap(() => e_boolean_trait)
   m_cannot_die_from_damage: e_boolean_trait = e_boolean_trait.unchanged;
   clear(): void {
     this.m_damage_resistance_percentage_setting =
@@ -274,35 +263,23 @@ export class c_player_trait_shield_vitality {
   }
 }
 export class c_player_trait_weapons {
-  @AutoMap(() => e_damage_modifier_percentage_setting)
   m_damage_modifier_percentage_setting: e_damage_modifier_percentage_setting =
     e_damage_modifier_percentage_setting.unchanged;
-  @AutoMap(() => e_damage_modifier_percentage_setting)
   m_melee_damage_modifier_percentage_setting: e_damage_modifier_percentage_setting =
     e_damage_modifier_percentage_setting.unchanged;
-  @AutoMap(() => Number)
   m_initial_primary_weapon_absolute_index = -3;
-  @AutoMap(() => Number)
   m_initial_secondary_weapon_absolute_index = -3;
-  @AutoMap(() => e_grenade_count_setting)
   m_initial_grenade_count_setting: e_grenade_count_setting =
     e_grenade_count_setting.unchanged;
-  @AutoMap(() => e_infinite_ammo_setting)
   m_infinite_ammo_setting: e_infinite_ammo_setting =
     e_infinite_ammo_setting.unchanged;
-  @AutoMap(() => e_boolean_trait)
   m_recharging_grenades_setting: e_boolean_trait = e_boolean_trait.unchanged;
-  @AutoMap(() => e_boolean_trait)
   m_weapon_pickup_setting: e_boolean_trait = e_boolean_trait.unchanged;
-  @AutoMap(() => e_equipment_usage_setting)
   m_equipment_usage_setting: e_equipment_usage_setting =
     e_equipment_usage_setting.unchanged;
-  @AutoMap(() => e_boolean_trait)
   m_equipment_drop_on_death_setting: e_boolean_trait =
     e_boolean_trait.unchanged;
-  @AutoMap(() => e_boolean_trait)
   m_infinite_equipment_setting: e_boolean_trait = e_boolean_trait.unchanged;
-  @AutoMap(() => Number)
   m_initial_equipment_absolute_index = -3;
   clear(): void {
     this.m_damage_modifier_percentage_setting =
@@ -322,18 +299,13 @@ export class c_player_trait_weapons {
   }
 }
 export class c_player_trait_movement {
-  @AutoMap(() => e_player_speed_setting)
   m_speed_setting: e_player_speed_setting = e_player_speed_setting.unchanged;
-  @AutoMap(() => e_player_gravity_setting)
   m_gravity_setting: e_player_gravity_setting =
     e_player_gravity_setting.unchanged;
-  @AutoMap(() => e_vehicle_usage_setting)
   m_vehicle_usage_setting: e_vehicle_usage_setting =
     e_vehicle_usage_setting.unchanged;
-  @AutoMap(() => e_double_jump_setting)
   m_double_jump_setting: e_double_jump_setting =
     e_double_jump_setting.unchanged;
-  @AutoMap(() => Number)
   m_jump_modifier = -1;
   clear(): void {
     this.m_speed_setting = e_player_speed_setting.unchanged;
@@ -344,15 +316,10 @@ export class c_player_trait_movement {
   }
 }
 export class c_player_trait_appearance {
-  @AutoMap(() => e_active_camo_setting)
   m_active_camo_setting: e_active_camo_setting = e_active_camo_setting.off;
-  @AutoMap(() => e_waypoint_setting)
   m_waypoint_setting: e_waypoint_setting = e_waypoint_setting.unchanged;
-  @AutoMap(() => e_waypoint_setting)
   m_gamertag_setting: e_waypoint_setting = e_waypoint_setting.unchanged;
-  @AutoMap(() => e_aura_setting)
   m_aura_setting: e_aura_setting = e_aura_setting.unchanged;
-  @AutoMap(() => e_forced_change_color_setting)
   m_forced_change_color_setting: e_forced_change_color_setting =
     e_forced_change_color_setting.unchanged;
   clear(): void {
@@ -365,13 +332,10 @@ export class c_player_trait_appearance {
   }
 }
 export class c_player_trait_sensors {
-  @AutoMap(() => e_motion_tracker_setting)
   m_motion_tracker_setting: e_motion_tracker_setting =
     e_motion_tracker_setting.unchanged;
-  @AutoMap(() => e_motion_tracker_range_setting)
   m_motion_tracker_range_setting: e_motion_tracker_range_setting =
     e_motion_tracker_range_setting.unchanged;
-  @AutoMap(() => e_boolean_trait)
   m_directional_damage_setting: e_boolean_trait = e_boolean_trait.unchanged;
   clear(): void {
     this.m_motion_tracker_setting = e_motion_tracker_setting.unchanged;
@@ -381,15 +345,10 @@ export class c_player_trait_sensors {
   }
 }
 export class c_player_traits {
-  @AutoMap(() => c_player_trait_shield_vitality)
   m_shield_vitality_traits = new c_player_trait_shield_vitality();
-  @AutoMap(() => c_player_trait_weapons)
   m_weapon_traits = new c_player_trait_weapons();
-  @AutoMap(() => c_player_trait_movement)
   m_movement_traits = new c_player_trait_movement();
-  @AutoMap(() => c_player_trait_appearance)
   m_appearance_traits = new c_player_trait_appearance();
-  @AutoMap(() => c_player_trait_sensors)
   m_sensor_traits = new c_player_trait_sensors();
   clear(): void {
     this.m_shield_vitality_traits.clear();

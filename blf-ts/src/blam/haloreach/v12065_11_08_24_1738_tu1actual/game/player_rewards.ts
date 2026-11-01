@@ -8,7 +8,8 @@ export const e_purchase_state_flags = [
   "banned",
 ] as const;
 
-export type e_purchase_state = c.Bitfield<typeof e_purchase_state_flags>;
+const purchase_state_bitfield = c.Bitfield(e_purchase_state_flags, c.u8());
+export type e_purchase_state = c.infer<typeof purchase_state_bitfield>;
 
 export function default_purchase_state(
   overrides: Partial<e_purchase_state> = {}
@@ -23,8 +24,9 @@ export function default_purchase_state(
   };
 }
 
-@c.struct()
-export class s_persistent_per_commendation_state {
-  @c.field("i16")
-  progress = 0;
-}
+export const s_persistent_per_commendation_state = c.struct({
+  progress: c.i16(),
+});
+export type s_persistent_per_commendation_state = c.infer<
+  typeof s_persistent_per_commendation_state
+>;

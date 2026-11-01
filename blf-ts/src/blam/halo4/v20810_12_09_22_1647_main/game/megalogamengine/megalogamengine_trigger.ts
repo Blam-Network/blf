@@ -2,7 +2,6 @@ import type {
   c_bitstream_reader,
   c_bitstream_writer,
 } from "../../../../../bitstream";
-import { AutoMap } from "../../../../../helpers/automap";
 
 /** Halo 4 `e_trigger_execution_mode` (`c_enum<...,0,7>` → 0..6, 3 bits). */
 export enum e_trigger_execution_mode {
@@ -43,28 +42,17 @@ export enum e_megalo_game_object_type {
  * biased `write_index` (+1), not the bool+value optional form.
  */
 export class c_trigger {
-  @AutoMap(() => e_trigger_execution_mode)
   m_execution_mode: e_trigger_execution_mode = e_trigger_execution_mode.general;
-  @AutoMap(() => e_trigger_type)
   m_trigger_type: e_trigger_type = e_trigger_type.normal;
-  @AutoMap(() => Number)
   m_object_filter_index = -1;
-  @AutoMap(() => e_megalo_game_object_type)
   m_game_object_type: e_megalo_game_object_type =
     e_megalo_game_object_type.none;
-  @AutoMap(() => Number)
   m_game_object_filter_index = -1;
-  @AutoMap(() => Number)
   m_first_condition = 0;
-  @AutoMap(() => Number)
   m_condition_count = 0;
-  @AutoMap(() => Number)
   m_first_action = 0;
-  @AutoMap(() => Number)
   m_action_count = 0;
-  @AutoMap(() => Number)
   m_frame_update_frequency = -1;
-  @AutoMap(() => Number)
   m_frame_update_offset = -1;
 
   decode(bitstream: c_bitstream_reader): void {

@@ -8,7 +8,6 @@ import {
   encodeBigBitfield,
 } from "../../../../bitstream";
 import { BlfError } from "../../../../error";
-import { AutoMap } from "../../../../helpers/automap";
 import { c_game_engine_base_variant } from "../../v12065_11_08_24_1738_tu1actual/game/game_engine_default";
 import { c_game_engine_sandbox_variant } from "../../v12065_11_08_24_1738_tu1actual/game/game_engine_sandbox";
 import { c_game_engine_survival_variant } from "../../v12065_11_08_24_1738_tu1actual/game/game_engine_survival";
@@ -39,65 +38,43 @@ export const k_game_engine_custom_variant_encoding_version = 106;
 
 /** Release (pre-TU1) custom variant layout — TU1 v107 fields without TU1 settings. */
 export class c_game_engine_custom_variant {
-  @AutoMap(() => Number)
   m_encoding_version = 0;
-  @AutoMap(() => Number)
   m_build_number = 0;
-  @AutoMap(() => c_game_engine_base_variant)
   m_base_variant = new c_game_engine_base_variant();
-  @AutoMap(() => [s_player_trait_option])
   m_player_traits: s_player_trait_option[] = [];
-  @AutoMap(() => [s_user_defined_option])
   m_user_defined_options: s_user_defined_option[] = [];
-  @AutoMap(() => c_string_table)
   m_script_strings = new c_string_table(112, 0x4c00, 15, 15, 7);
-  @AutoMap(() => Number)
   m_base_name_string_index = 0;
-  @AutoMap(() => c_string_table)
   m_localized_name = new c_string_table(1, 0x180, 9, 9, 1);
-  @AutoMap(() => c_string_table)
   m_localized_description = new c_string_table(1, 0xc00, 12, 12, 1);
-  @AutoMap(() => c_string_table)
   m_localized_category = new c_string_table(1, 0x180, 9, 9, 1);
-  @AutoMap(() => Number)
   m_engine_icon = 0;
-  @AutoMap(() => e_game_engine_category)
   m_engine_category: e_game_engine_category = e_game_engine_category.ctf;
-  @AutoMap(() => c_megalogamengine_map_permissions)
   m_map_permissions = new c_megalogamengine_map_permissions();
-  @AutoMap(() => s_game_engine_player_rating_parameters)
   m_player_ratings = new s_game_engine_player_rating_parameters();
-  @AutoMap(() => Number)
   m_score_to_win_round = 0;
-  @AutoMap(() => Boolean)
   m_fire_teams_enabled = false;
-  @AutoMap(() => Boolean)
   m_symmetric_gametype = false;
-  @AutoMap(() => Object)
   m_base_variant_parameters_locked: s_game_variant_parameter_flags =
     defaultBigBitfield(k_game_variant_parameter_flags);
-  @AutoMap(() => Object)
   m_base_variant_parameters_hidden: s_game_variant_parameter_flags =
     defaultBigBitfield(k_game_variant_parameter_flags);
-  @AutoMap(() => [Boolean])
   m_user_defined_options_locked: boolean[] = Array.from(
     { length: 32 },
     () => false
   );
-  @AutoMap(() => [Boolean])
   m_user_defined_options_hidden: boolean[] = Array.from(
     { length: 32 },
     () => false
   );
-  @AutoMap(() => s_custom_game_engine_definition)
   m_game_engine = new s_custom_game_engine_definition();
 
   initialize(): void {
     Object.assign(this, new c_game_engine_custom_variant());
     this.m_encoding_version = k_game_engine_custom_variant_encoding_version;
     this.m_base_variant.initialize();
-    this.m_base_variant.m_miscellaneous_options.m_round_reset_map = true;
-    this.m_base_variant.m_miscellaneous_options.m_round_reset_players = true;
+    this.m_base_variant.m_miscellaneous_options.m_flags.round_reset_map = true;
+    this.m_base_variant.m_miscellaneous_options.m_flags.round_reset_players = true;
     this.m_player_ratings.initialize_to_default();
     this.m_map_permissions.initialize();
   }
@@ -213,15 +190,10 @@ export class c_game_engine_custom_variant {
 }
 
 export class c_game_variant {
-  @AutoMap(() => e_game_engine_type)
   m_game_engine: e_game_engine_type = e_game_engine_type.megalogamengine;
-  @AutoMap(() => c_game_engine_base_variant)
   m_campaign_variant?: c_game_engine_base_variant;
-  @AutoMap(() => c_game_engine_custom_variant)
   m_custom_variant?: c_game_engine_custom_variant;
-  @AutoMap(() => c_game_engine_survival_variant)
   m_survival_variant?: c_game_engine_survival_variant;
-  @AutoMap(() => c_game_engine_sandbox_variant)
   m_sandbox_variant?: c_game_engine_sandbox_variant;
 
   decode(bitstream: c_bitstream_reader): void {

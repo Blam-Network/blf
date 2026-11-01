@@ -2,7 +2,6 @@ import type {
   c_bitstream_reader,
   c_bitstream_writer,
 } from "../../../../../bitstream";
-import { AutoMap } from "../../../../../helpers/automap";
 
 export enum e_trigger_execution_mode {
   general = 0,
@@ -25,19 +24,12 @@ export enum e_trigger_type {
 }
 
 export class c_trigger {
-  @AutoMap(() => e_trigger_execution_mode)
   m_execution_mode: e_trigger_execution_mode = e_trigger_execution_mode.general;
-  @AutoMap(() => e_trigger_type)
   m_trigger_type: e_trigger_type = e_trigger_type.normal;
-  @AutoMap(() => Number)
   m_object_filter_index = -1;
-  @AutoMap(() => Number)
   m_first_condition = 0;
-  @AutoMap(() => Number)
   m_condition_count = 0;
-  @AutoMap(() => Number)
   m_first_action = 0;
-  @AutoMap(() => Number)
   m_action_count = 0;
 
   decode(bitstream: c_bitstream_reader): void {

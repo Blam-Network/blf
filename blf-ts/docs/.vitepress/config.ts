@@ -93,15 +93,6 @@ export default defineConfig({
         ],
       },
       {
-        text: "Helpers",
-        items: [
-          {
-            text: "Converting Reach Gametypes",
-            link: "/guide/converting-reach-gametypes",
-          },
-        ],
-      },
-      {
         text: "Version bundles",
         items: versionBundlesSidebar(),
       },

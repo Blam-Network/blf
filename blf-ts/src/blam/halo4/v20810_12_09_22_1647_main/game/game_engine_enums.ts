@@ -1,4 +1,3 @@
-import { AutoMap } from "../../../../helpers/automap";
 export enum e_game_engine_timer_rate {
   zero = 0,
   minus_10x = 1,
@@ -30,15 +29,10 @@ export enum e_game_engine_timer_rate {
 }
 /** Matches `e_survival_variant_flags` in blf_lib `game_engine_survival.rs`. */
 export class e_survival_variant_flags {
-  @AutoMap(() => Boolean)
   hazards_enabled = false;
-  @AutoMap(() => Boolean)
   all_generators_must_survive = false;
-  @AutoMap(() => Boolean)
   random_generator_spawns = false;
-  @AutoMap(() => Boolean)
   weapon_drops_enabled = false;
-  @AutoMap(() => Boolean)
   ammo_crates_enabled = false;
   to_raw(): number {
     return (
@@ -61,9 +55,7 @@ export class e_survival_variant_flags {
 }
 /** Matches `e_sandbox_variant_flags` in blf_lib `game_engine_sandbox.rs`. */
 export class e_sandbox_variant_flags {
-  @AutoMap(() => Boolean)
   open_channel_voice = false;
-  @AutoMap(() => Boolean)
   requires_all_objects = false;
   to_raw(): number {
     return (

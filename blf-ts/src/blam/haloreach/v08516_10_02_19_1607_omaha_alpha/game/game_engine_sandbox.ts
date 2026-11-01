@@ -2,15 +2,12 @@ import type {
   c_bitstream_reader,
   c_bitstream_writer,
 } from "../../../../bitstream";
-import { AutoMap } from "../../../../helpers/automap";
 import { c_player_traits } from "./game_engine_player_traits";
 import { c_game_engine_custom_variant } from "./game_variant";
 
 /** Matches `e_sandbox_variant_flags` in blf_lib omaha_alpha `game_engine_sandbox.rs`. */
 export class e_sandbox_variant_flags {
-  @AutoMap(() => Boolean)
   open_channel_voice = false;
-  @AutoMap(() => Boolean)
   requires_all_objects = false;
   to_raw(): number {
     return (
@@ -34,16 +31,11 @@ export enum e_sandbox_edit_mode_settings {
 
 /** Matches `c_game_engine_sandbox_variant` in blf_lib omaha_alpha `game_engine_sandbox.rs`. */
 export class c_game_engine_sandbox_variant {
-  @AutoMap(() => c_game_engine_custom_variant)
   m_custom_variant = new c_game_engine_custom_variant();
-  @AutoMap(() => e_sandbox_variant_flags)
   m_variant_flags = new e_sandbox_variant_flags();
-  @AutoMap(() => e_sandbox_edit_mode_settings)
   m_edit_mode: e_sandbox_edit_mode_settings =
     e_sandbox_edit_mode_settings.all_players;
-  @AutoMap(() => Number)
   m_respawn_time = 0;
-  @AutoMap(() => c_player_traits)
   m_editor_traits = new c_player_traits();
 
   decode(bitstream: c_bitstream_reader): void {

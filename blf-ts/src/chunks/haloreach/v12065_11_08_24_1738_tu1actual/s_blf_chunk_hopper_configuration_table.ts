@@ -8,6 +8,7 @@ import {
 import { zlib_compress } from "../../../blam/common/memory/data_compress";
 import { BLFChunkBase, blf } from "../../../blf_chunk";
 import { write_blffile } from "../../../blffile";
+
 import { BlfError } from "../../../error";
 import { s_blf_chunk_end_of_file } from "../../halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_end_of_file";
 import { s_blf_chunk_start_of_file } from "../../halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_start_of_file";
@@ -63,10 +64,10 @@ function encode_hopper_table_inner(
   for (const category of pad_fixed_array(
     hopper_categories,
     k_hopper_maximum_category_count,
-    () => new s_game_hopper_custom_category()
+    () => s_game_hopper_custom_category.zero()
   )) {
     encoded.set(
-      c.write(s_game_hopper_custom_category, category, MHCF_INNER_ENDIAN),
+      s_game_hopper_custom_category.write(category, MHCF_INNER_ENDIAN),
       offset
     );
     offset += category_size;
@@ -75,10 +76,10 @@ function encode_hopper_table_inner(
   for (const configuration of pad_fixed_array(
     hopper_configurations,
     k_hopper_maximum_hopper_count,
-    () => new c_hopper_configuration()
+    () => c_hopper_configuration.zero()
   )) {
     encoded.set(
-      c.write(c_hopper_configuration, configuration, MHCF_INNER_ENDIAN),
+      c_hopper_configuration.write(configuration, MHCF_INNER_ENDIAN),
       offset
     );
     offset += configuration_size;

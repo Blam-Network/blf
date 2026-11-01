@@ -6,8 +6,8 @@ import {
   type real_vector3d,
   real_vector3d_default,
 } from "../../../../bitstream/math";
+
 import { BlfError } from "../../../../error";
-import { AutoMap } from "../../../../helpers/automap";
 import type {
   real_point3d,
   real_rectangle3d,
@@ -44,11 +44,8 @@ export enum e_boundary_shape {
 }
 
 export class s_variant_quota {
-  @AutoMap(() => Number)
   minimum_count = 0;
-  @AutoMap(() => Number)
   maximum_count = 0;
-  @AutoMap(() => Number)
   placed_on_map = 0;
 
   decode(bitstream: c_bitstream_reader): void {
@@ -65,15 +62,10 @@ export class s_variant_quota {
 }
 
 export class s_multiplayer_object_boundary {
-  @AutoMap(() => e_boundary_shape)
   shape: e_boundary_shape = e_boundary_shape.unused;
-  @AutoMap(() => Number)
   size = 0;
-  @AutoMap(() => Number)
   box_length = 0;
-  @AutoMap(() => Number)
   positive_height = 0;
-  @AutoMap(() => Number)
   negative_height = 0;
 
   static decode(
@@ -194,50 +186,30 @@ export class s_multiplayer_object_boundary {
 }
 
 export class s_variant_multiplayer_object_properties_definition_location_data {
-  @AutoMap(() => Number)
   location_name_index = 0;
 }
 
 export class s_variant_multiplayer_object_properties_definition_teleporter_data {
-  @AutoMap(() => Number)
   channel = 0;
-  @AutoMap(() => Number)
   passability = 0;
 }
 
 export class s_variant_multiplayer_object_properties_definition_weapon_data {
-  @AutoMap(() => Number)
   spare_clips = 0;
 }
 
 export class s_variant_multiplayer_object_properties_definition {
-  @AutoMap(() => s_multiplayer_object_boundary)
   boundary?: s_multiplayer_object_boundary;
-  @AutoMap(() => Number)
   game_engine_flags = 0;
-  @AutoMap(() => Number)
   user_data = 0;
-  @AutoMap(() => Number)
   spawn_time = 0;
-  @AutoMap(() => Number)
   cached_type = 0;
-  @AutoMap(() => Number)
   label_index = 0;
-  @AutoMap(() => Number)
   placement_flags = 0;
-  @AutoMap(() => Number)
   team = 0;
-  @AutoMap(() => Number)
   primary_change_color_index = 0;
-  @AutoMap(
-    () => s_variant_multiplayer_object_properties_definition_location_data
-  )
   location_data?: s_variant_multiplayer_object_properties_definition_location_data;
-  @AutoMap(
-    () => s_variant_multiplayer_object_properties_definition_teleporter_data
-  )
   teleporter_data?: s_variant_multiplayer_object_properties_definition_teleporter_data;
-  @AutoMap(() => s_variant_multiplayer_object_properties_definition_weapon_data)
   weapon_data?: s_variant_multiplayer_object_properties_definition_weapon_data;
 
   decode(bitstream: c_bitstream_reader): void {
@@ -331,27 +303,16 @@ export class s_variant_multiplayer_object_properties_definition {
 }
 
 export class s_variant_object_datum {
-  @AutoMap(() => Number)
   flags = 0;
-  @AutoMap(() => Number)
   reuse_timeout = 0;
-  @AutoMap(() => Number)
   object_datum_index = 0;
-  @AutoMap(() => Number)
   editor_object_index = 0;
-  @AutoMap(() => Number)
   variant_quota_index = 0;
-  @AutoMap(() => Number)
   variant_index = 0;
-  @AutoMap(() => Object)
   position: real_point3d = real_point3d_default();
-  @AutoMap(() => Object)
   forward: real_vector3d = real_vector3d_default();
-  @AutoMap(() => Object)
   up: real_vector3d = real_vector3d_default();
-  @AutoMap(() => Number)
   spawn_relative_to = 0;
-  @AutoMap(() => s_variant_multiplayer_object_properties_definition)
   multiplayer_game_object_properties =
     new s_variant_multiplayer_object_properties_definition();
 
@@ -432,45 +393,30 @@ function write_real_rectangle3d(
  * Mirrors `c_map_variant` in blf_lib — not a direct memory layout.
  */
 export class c_map_variant {
-  @AutoMap(() => s_content_item_metadata)
   m_metadata = (() => {
-    const metadata = new s_content_item_metadata();
-    metadata.general = new s_content_item_general_metadata();
-    metadata.display = new s_content_item_display_metadata();
-    metadata.creation_history = new s_content_item_history();
-    metadata.modification_history = new s_content_item_history();
+    const metadata = s_content_item_metadata.zero();
+    metadata.general = s_content_item_general_metadata.zero();
+    metadata.display = s_content_item_display_metadata.zero();
+    metadata.creation_history = s_content_item_history.zero();
+    metadata.modification_history = s_content_item_history.zero();
     return metadata;
   })();
-  @AutoMap(() => Number)
   m_map_variant_version = 0;
-  @AutoMap(() => Number)
   m_number_of_placeable_object_quotas = 0;
-  @AutoMap(() => Number)
   m_map_id = 0;
-  @AutoMap(() => Object)
   m_world_bounds: real_rectangle3d = real_rectangle3d_default();
-  @AutoMap(() => Number)
   m_maximum_budget = 0;
-  @AutoMap(() => Number)
   m_spent_budget = 0;
-  @AutoMap(() => Boolean)
   m_helpers_enabled = false;
-  @AutoMap(() => Boolean)
   m_built_in = false;
-  @AutoMap(() => Boolean)
   m_built_from_xml = false;
-  @AutoMap(() => Number)
   m_original_map_rsa_signature_hash = 0;
-  @AutoMap(() => Number)
   m_scenario_palette_crc = 0;
-  @AutoMap(() => c_single_language_string_table)
   m_string_table = new c_single_language_string_table(256, 4096, 12, 13, 9);
-  @AutoMap(() => [s_variant_object_datum])
   m_variant_objects: s_variant_object_datum[] = Array.from(
     { length: k_maximum_variant_objects },
     () => new s_variant_object_datum()
   );
-  @AutoMap(() => [s_variant_quota])
   m_quotas: s_variant_quota[] = Array.from(
     { length: k_maximum_variant_quotas },
     () => new s_variant_quota()

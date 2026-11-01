@@ -3,7 +3,6 @@ import type {
   c_bitstream_writer,
 } from "../../../../bitstream";
 import { BlfError } from "../../../../error";
-import { AutoMap } from "../../../../helpers/automap";
 import { s_requisition_palette } from "../../v09730_10_04_09_1309_omaha_delta/game/megalogamengine/megalogamengine_requisitions";
 import { c_object_filter } from "../../v12065_11_08_24_1738_tu1actual/game/megalogamengine/megalogamengine_map_objects";
 import { c_megalo_game_statistic } from "../../v12065_11_08_24_1738_tu1actual/game/megalogamengine/megalogamengine_statistics";
@@ -21,7 +20,6 @@ import { c_action } from "./megalogamengine/megalogamengine_actions";
 import { c_condition } from "./megalogamengine/megalogamengine_conditions";
 import { c_trigger } from "./megalogamengine/megalogamengine_trigger";
 import {
-  s_variable_metadata,
   s_variable_metadata_global,
   s_variable_metadata_object,
   s_variable_metadata_player,
@@ -38,41 +36,23 @@ export enum e_game_mode {
 }
 
 export class s_custom_game_engine_definition {
-  @AutoMap(() => [c_condition])
   m_conditions: c_condition[] = [];
-  @AutoMap(() => [c_action])
   m_actions: c_action[] = [];
-  @AutoMap(() => [c_trigger])
   m_triggers: c_trigger[] = [];
-  @AutoMap(() => [s_requisition_palette])
   m_requisitions: s_requisition_palette[] = [];
-  @AutoMap(() => [s_loadout_unknown_struct])
   m_loadouts: s_loadout_unknown_struct[] = [];
-  @AutoMap(() => [s_loadout_palette_unknown_struct])
   m_loadout_palette: s_loadout_palette_unknown_struct[] = [];
-  @AutoMap(() => [c_megalo_game_statistic])
   m_statistics: c_megalo_game_statistic[] = [];
-  @AutoMap(() => s_variable_metadata)
   m_global_variable_metadata = s_variable_metadata_global();
-  @AutoMap(() => s_variable_metadata)
   m_player_variable_metadata = s_variable_metadata_player();
-  @AutoMap(() => s_variable_metadata)
   m_object_variable_metadata = s_variable_metadata_object();
-  @AutoMap(() => s_variable_metadata)
   m_team_variable_metadata = s_variable_metadata_team();
-  @AutoMap(() => [Number])
   m_hud_widgets: number[] = [];
-  @AutoMap(() => Number)
   m_initialization_trigger_index = 0;
-  @AutoMap(() => Number)
   m_host_migration_trigger_index = 0;
-  @AutoMap(() => Number)
   m_object_death_event_trigger_index = 0;
-  @AutoMap(() => Number)
   m_local_trigger_index = 0;
-  @AutoMap(() => [Boolean])
   m_objects_used: boolean[] = Array.from({ length: 2048 }, () => false);
-  @AutoMap(() => [c_object_filter])
   m_object_filters: c_object_filter[] = [];
 
   decode(bitstream: c_bitstream_reader): void {
@@ -216,31 +196,18 @@ export class s_custom_game_engine_definition {
 export const k_game_engine_custom_variant_encoding_version = 49;
 
 export class c_game_engine_custom_variant {
-  @AutoMap(() => Number)
   m_encoding_version = 0;
-  @AutoMap(() => Number)
   m_build_number = 0;
-  @AutoMap(() => c_game_engine_base_variant)
   m_base_variant = new c_game_engine_base_variant();
-  @AutoMap(() => [s_player_trait_option])
   m_player_traits: s_player_trait_option[] = [];
-  @AutoMap(() => [s_user_defined_option])
   m_user_defined_options: s_user_defined_option[] = [];
-  @AutoMap(() => c_string_table)
   m_script_strings = new c_string_table(112, 0x4c00, 14, 14, 7);
-  @AutoMap(() => Number)
   m_base_name_string_index = 0;
-  @AutoMap(() => c_string_table)
   m_localized_name = new c_string_table(1, 0x180, 5, 6, 1);
-  @AutoMap(() => c_string_table)
   m_localized_description = new c_string_table(1, 0xc00, 8, 9, 1);
-  @AutoMap(() => Number)
   m_engine_icon = 0;
-  @AutoMap(() => Number)
   m_score_to_win_round = 0;
-  @AutoMap(() => Boolean)
   m_symmetric_gametype = false;
-  @AutoMap(() => s_custom_game_engine_definition)
   m_game_engine = new s_custom_game_engine_definition();
 
   initialize(): void {
@@ -313,15 +280,10 @@ export class c_game_engine_custom_variant {
 }
 
 export class c_game_variant {
-  @AutoMap(() => e_game_mode)
   m_game_engine: e_game_mode = e_game_mode.megalogamengine;
-  @AutoMap(() => c_game_engine_base_variant)
   m_campaign_variant?: c_game_engine_base_variant;
-  @AutoMap(() => c_game_engine_custom_variant)
   m_custom_variant?: c_game_engine_custom_variant;
-  @AutoMap(() => c_game_engine_survival_variant)
   m_survival_variant?: c_game_engine_survival_variant;
-  @AutoMap(() => c_game_engine_sandbox_variant)
   m_sandbox_variant?: c_game_engine_sandbox_variant;
 
   decode(bitstream: c_bitstream_reader): void {

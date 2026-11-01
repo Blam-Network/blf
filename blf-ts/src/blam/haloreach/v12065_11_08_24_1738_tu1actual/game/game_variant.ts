@@ -1,9 +1,14 @@
+import { CFieldType, c } from "@craftycodie/cstruct";
 import type {
   BitfieldOf,
   c_bitstream_reader,
   c_bitstream_writer,
 } from "../../../../bitstream";
 import {
+  bigBitfieldFromWords,
+  bigBitfieldToWords,
+  bigFlagsFromWords,
+  bigFlagsToWords,
   bitfieldFromRaw,
   bitfieldToRaw,
   decodeBigBitfield,
@@ -11,67 +16,103 @@ import {
   encodeBigBitfield,
 } from "../../../../bitstream";
 import { BlfError } from "../../../../error";
-import { AutoMap } from "../../../../helpers/automap";
+import { counted_array } from "../memory/counted_array";
 import type { s_content_item_metadata } from "../saved_games/saved_game_files";
 import { c_game_engine_base_variant } from "./game_engine_default";
-import { c_game_engine_sandbox_variant } from "./game_engine_sandbox";
+import {
+  e_sandbox_edit_mode_settings,
+  e_sandbox_variant_flags,
+} from "./game_engine_enums";
+import { c_player_traits } from "./game_engine_player_traits";
 import { c_game_engine_survival_variant } from "./game_engine_survival";
 import { s_player_trait_option } from "./game_engine_traits";
 import { s_game_engine_player_rating_parameters } from "./megalogamengine/game_engine_player_rating_parameters";
-import { c_action } from "./megalogamengine/megalogamengine_actions";
-import { c_condition } from "./megalogamengine/megalogamengine_conditions";
+import {
+  action_field,
+  c_action,
+} from "./megalogamengine/megalogamengine_actions";
+import {
+  c_condition,
+  condition_field,
+} from "./megalogamengine/megalogamengine_conditions";
 import { e_megalo_widget_position } from "./megalogamengine/megalogamengine_hud_widgets";
 import { c_object_filter } from "./megalogamengine/megalogamengine_map_objects";
 import { c_megalogamengine_map_permissions } from "./megalogamengine/megalogamengine_map_permissions";
 import { c_megalo_game_statistic } from "./megalogamengine/megalogamengine_statistics";
 import { c_trigger } from "./megalogamengine/megalogamengine_trigger";
-import { s_user_defined_option } from "./megalogamengine/megalogamengine_user_defined_options";
 import {
-  s_variable_metadata,
+  s_user_defined_option,
+  user_defined_options_field,
+} from "./megalogamengine/megalogamengine_user_defined_options";
+import {
   s_variable_metadata_global,
   s_variable_metadata_object,
   s_variable_metadata_player,
   s_variable_metadata_team,
+  variable_metadata_global_field,
+  variable_metadata_object_field,
+  variable_metadata_player_field,
+  variable_metadata_team_field,
 } from "./megalogamengine/megalogamengine_variable_metadata";
-import { c_string_table } from "./string_table";
+import { c_string_table, string_table_field } from "./string_table";
 
+@c.class()
 export class s_custom_game_engine_definition {
-  @AutoMap(() => [c_condition])
-  m_conditions: c_condition[] = [];
-  @AutoMap(() => [c_action])
-  m_actions: c_action[] = [];
-  @AutoMap(() => [c_trigger])
+  @c.field(counted_array<c_trigger>(c_trigger, 320, "i32"), { padBefore: 4 })
   m_triggers: c_trigger[] = [];
-  @AutoMap(() => [c_megalo_game_statistic])
+  @c.field(counted_array<c_condition>(condition_field(), 512, "i32"), {
+    padBefore: 4,
+  })
+  m_conditions: c_condition[] = [];
+  @c.field(counted_array<c_action>(action_field(), 1024, "i32"), {
+    padBefore: 4,
+  })
+  m_actions: c_action[] = [];
+  @c.field(
+    counted_array<c_megalo_game_statistic>(c_megalo_game_statistic, 4, "i32"),
+    { padBefore: 4 }
+  )
   m_statistics: c_megalo_game_statistic[] = [];
-  @AutoMap(() => s_variable_metadata)
+  @c.field(variable_metadata_global_field())
   m_global_variable_metadata = s_variable_metadata_global();
-  @AutoMap(() => s_variable_metadata)
+  @c.field(variable_metadata_player_field())
   m_player_variable_metadata = s_variable_metadata_player();
-  @AutoMap(() => s_variable_metadata)
+  @c.field(variable_metadata_object_field())
   m_object_variable_metadata = s_variable_metadata_object();
-  @AutoMap(() => s_variable_metadata)
+  @c.field(variable_metadata_team_field())
   m_team_variable_metadata = s_variable_metadata_team();
-  @AutoMap(() => [e_megalo_widget_position])
+  @c.field(counted_array<e_megalo_widget_position>(c.u8(), 4, "i32"), {
+    padBefore: 4,
+  })
   m_hud_widgets: e_megalo_widget_position[] = [];
-  @AutoMap(() => Number)
-  m_initialization_trigger_index = 0;
-  @AutoMap(() => Number)
-  m_local_initialization_trigger_index = 0;
-  @AutoMap(() => Number)
-  m_host_migration_trigger_index = 0;
-  @AutoMap(() => Number)
-  m_double_migration_trigger_index = 0;
-  @AutoMap(() => Number)
-  m_object_death_event_trigger_index = 0;
-  @AutoMap(() => Number)
-  m_local_trigger_index = 0;
-  @AutoMap(() => Number)
-  m_pregame_trigger_index = 0;
-  @AutoMap(() => [Boolean])
-  m_objects_used: boolean[] = Array.from({ length: 2048 }, () => false);
-  @AutoMap(() => [c_object_filter])
+  @c.field(counted_array<c_object_filter>(c_object_filter, 16, "i32"), {
+    padBefore: 4,
+  })
   m_object_filters: c_object_filter[] = [];
+  @c.field(c.i32())
+  m_initialization_trigger_index = 0;
+  @c.field(c.i32())
+  m_local_initialization_trigger_index = 0;
+  @c.field(c.i32())
+  m_host_migration_trigger_index = 0;
+  @c.field(c.i32())
+  m_double_migration_trigger_index = 0;
+  @c.field(c.i32())
+  m_object_death_event_trigger_index = 0;
+  @c.field(c.i32())
+  m_local_trigger_index = 0;
+  @c.field(c.i32())
+  m_pregame_trigger_index = 0;
+  @c.field(
+    c
+      .u32()
+      .array(64)
+      .transform(
+        (words: number[]) => bigFlagsFromWords(words, 2048),
+        (flags: boolean[]) => bigFlagsToWords(flags) as never
+      )
+  )
+  m_objects_used: boolean[] = Array.from({ length: 2048 }, () => false);
   initialize(): void {
     Object.assign(this, new s_custom_game_engine_definition());
     this.m_initialization_trigger_index = -1;
@@ -1478,8 +1519,15 @@ export type s_game_variant_parameter_flags = BitfieldOf<
   typeof k_game_variant_parameter_flags
 >;
 
+@c.class()
 export class c_game_engine_custom_variant_tu1_settings {
-  @AutoMap(() => Object)
+  @c.field(
+    c.u32().transform(
+      (raw: number) => bitfieldFromRaw(raw, k_game_variant_tu1_flags),
+      (flags: e_game_variant_tu1_flags) =>
+        bitfieldToRaw(flags, k_game_variant_tu1_flags)
+    )
+  )
   m_flags: e_game_variant_tu1_flags = {
     always_spillover_damage: false,
     armor_lock_stickies_remain: false,
@@ -1489,19 +1537,19 @@ export class c_game_engine_custom_variant_tu1_settings {
     magnum_is_automatic: false,
     unknown: false,
   };
-  @AutoMap(() => Number)
+  @c.field(c.f32())
   m_precision_bloom = 1;
-  @AutoMap(() => Number)
-  m_armor_lock_damage_drain = 0.2;
-  @AutoMap(() => Number)
-  m_armor_lock_damage_drain_limit = 0.7;
-  @AutoMap(() => Number)
-  m_active_camo_energy_curve_min = 0;
-  @AutoMap(() => Number)
-  m_active_camo_energy_curve_max = 0;
-  @AutoMap(() => Number)
+  @c.field(c.f32())
+  m_armor_lock_damage_drain = 0;
+  @c.field(c.f32())
+  m_armor_lock_damage_drain_limit = 0;
+  @c.field(c.f32())
+  m_active_camo_energy_curve_max = 0.02;
+  @c.field(c.f32())
+  m_active_camo_energy_curve_min = 0.07;
+  @c.field(c.f32())
   m_magnum_damage = 1;
-  @AutoMap(() => Number)
+  @c.field(c.f32())
   m_magnum_fire_delay = 1;
   initialize_to_default(): void {
     Object.assign(this, new c_game_engine_custom_variant_tu1_settings());
@@ -1532,14 +1580,14 @@ export class c_game_engine_custom_variant_tu1_settings {
       false,
       true
     );
-    this.m_active_camo_energy_curve_min = bitstream.read_quantized_real(
+    this.m_active_camo_energy_curve_max = bitstream.read_quantized_real(
       0,
       2,
       8,
       false,
       true
     );
-    this.m_active_camo_energy_curve_max = bitstream.read_quantized_real(
+    this.m_active_camo_energy_curve_min = bitstream.read_quantized_real(
       0,
       2,
       8,
@@ -1585,7 +1633,7 @@ export class c_game_engine_custom_variant_tu1_settings {
       true
     );
     bitstream.write_quantized_real(
-      this.m_active_camo_energy_curve_min,
+      this.m_active_camo_energy_curve_max,
       0,
       2,
       8,
@@ -1593,7 +1641,7 @@ export class c_game_engine_custom_variant_tu1_settings {
       true
     );
     bitstream.write_quantized_real(
-      this.m_active_camo_energy_curve_max,
+      this.m_active_camo_energy_curve_min,
       0,
       2,
       8,
@@ -1650,67 +1698,112 @@ export enum e_game_engine_category {
   pre_game_warm_up = 30,
 }
 
+@c.class()
 export class c_game_engine_custom_variant {
-  @AutoMap(() => Number)
-  m_encoding_version = 0;
-  @AutoMap(() => Number)
-  m_build_number = 0;
-  @AutoMap(() => c_game_engine_base_variant)
+  @c.field(c_game_engine_base_variant)
   m_base_variant = new c_game_engine_base_variant();
-  @AutoMap(() => [s_player_trait_option])
-  m_player_traits: s_player_trait_option[] = [];
-  @AutoMap(() => [s_user_defined_option])
-  m_user_defined_options: s_user_defined_option[] = [];
-  @AutoMap(() => c_string_table)
+  @c.field(
+    string_table_field(
+      () => new c_string_table(112, 0x4c00, 15, 15, 7),
+      112,
+      19456
+    )
+  )
   m_script_strings = new c_string_table(112, 0x4c00, 15, 15, 7);
-  @AutoMap(() => Number)
+  @c.field(c.i32())
+  m_encoding_version = 0;
+  @c.field(
+    counted_array<s_player_trait_option>(s_player_trait_option, 16, "i32"),
+    { padBefore: 4 }
+  )
+  m_player_traits: s_player_trait_option[] = [];
+  @c.field(user_defined_options_field())
+  m_user_defined_options: s_user_defined_option[] = [];
+  @c.field(s_custom_game_engine_definition)
+  m_game_engine = new s_custom_game_engine_definition();
+  @c.field(c.i32())
   m_base_name_string_index = 0;
-  @AutoMap(() => c_string_table)
-  m_localized_name = new c_string_table(1, 0x180, 9, 9, 1);
-  @AutoMap(() => c_string_table)
-  m_localized_description = new c_string_table(1, 0xc00, 12, 12, 1);
-  @AutoMap(() => c_string_table)
-  m_localized_category = new c_string_table(1, 0x180, 9, 9, 1);
-  @AutoMap(() => Number)
-  m_engine_icon = 0;
-  @AutoMap(() => e_game_engine_category)
-  m_engine_category: e_game_engine_category = e_game_engine_category.ctf;
-  @AutoMap(() => c_megalogamengine_map_permissions)
-  m_map_permissions = new c_megalogamengine_map_permissions();
-  @AutoMap(() => s_game_engine_player_rating_parameters)
-  m_player_ratings = new s_game_engine_player_rating_parameters();
-  @AutoMap(() => Number)
-  m_score_to_win_round = 0;
-  @AutoMap(() => Boolean)
-  m_fire_teams_enabled = false;
-  @AutoMap(() => Boolean)
-  m_symmetric_gametype = false;
-  @AutoMap(() => Object)
+  @c.field(
+    c
+      .u32()
+      .array(40)
+      .transform(
+        (words: number[]) =>
+          bigBitfieldFromWords(words, k_game_variant_parameter_flags),
+        (flags: s_game_variant_parameter_flags) =>
+          bigBitfieldToWords(flags, k_game_variant_parameter_flags) as never
+      )
+  )
   m_base_variant_parameters_locked: s_game_variant_parameter_flags =
     defaultBigBitfield(k_game_variant_parameter_flags);
-  @AutoMap(() => Object)
+  @c.field(
+    c
+      .u32()
+      .array(40)
+      .transform(
+        (words: number[]) =>
+          bigBitfieldFromWords(words, k_game_variant_parameter_flags),
+        (flags: s_game_variant_parameter_flags) =>
+          bigBitfieldToWords(flags, k_game_variant_parameter_flags) as never
+      )
+  )
   m_base_variant_parameters_hidden: s_game_variant_parameter_flags =
     defaultBigBitfield(k_game_variant_parameter_flags);
-  @AutoMap(() => [Boolean])
+  @c.field(
+    c.u32().transform(
+      (raw: number) => bigFlagsFromWords([raw], 32),
+      (flags: boolean[]) => bigFlagsToWords(flags)[0]!
+    )
+  )
   m_user_defined_options_locked: boolean[] = Array.from(
     { length: 32 },
     () => false
   );
-  @AutoMap(() => [Boolean])
+  @c.field(
+    c.u32().transform(
+      (raw: number) => bigFlagsFromWords([raw], 32),
+      (flags: boolean[]) => bigFlagsToWords(flags)[0]!
+    )
+  )
   m_user_defined_options_hidden: boolean[] = Array.from(
     { length: 32 },
     () => false
   );
-  @AutoMap(() => s_custom_game_engine_definition)
-  m_game_engine = new s_custom_game_engine_definition();
-  @AutoMap(() => c_game_engine_custom_variant_tu1_settings)
+  @c.field(
+    string_table_field(() => new c_string_table(1, 0x180, 9, 9, 1), 1, 384)
+  )
+  m_localized_name = new c_string_table(1, 0x180, 9, 9, 1);
+  @c.field(
+    string_table_field(() => new c_string_table(1, 0xc00, 12, 12, 1), 1, 3072)
+  )
+  m_localized_description = new c_string_table(1, 0xc00, 12, 12, 1);
+  @c.field(
+    string_table_field(() => new c_string_table(1, 0x180, 9, 9, 1), 1, 384)
+  )
+  m_localized_category = new c_string_table(1, 0x180, 9, 9, 1);
+  @c.field(c.i32())
+  m_engine_category: e_game_engine_category = e_game_engine_category.ctf;
+  @c.field(c.i32())
+  m_engine_icon = 0;
+  @c.field(c_megalogamengine_map_permissions)
+  m_map_permissions = new c_megalogamengine_map_permissions();
+  @c.field(s_game_engine_player_rating_parameters)
+  m_player_ratings = new s_game_engine_player_rating_parameters();
+  @c.field(c.i16())
+  m_score_to_win_round = 0;
+  @c.field(c.bool())
+  m_fire_teams_enabled = false;
+  @c.field(c.bool())
+  m_symmetric_gametype = false;
+  @c.field(c_game_engine_custom_variant_tu1_settings)
   m_tu1_settings = new c_game_engine_custom_variant_tu1_settings();
+  m_build_number = 0;
   initialize(): void {
     Object.assign(this, new c_game_engine_custom_variant());
     this.m_encoding_version = k_game_engine_custom_variant_encoding_version;
     this.m_base_variant.initialize();
-    this.m_base_variant.m_miscellaneous_options.m_round_reset_map = true;
-    this.m_base_variant.m_miscellaneous_options.m_round_reset_players = true;
+    this.m_base_variant.m_miscellaneous_options.m_flags.round_reset_map = true;
+    this.m_base_variant.m_miscellaneous_options.m_flags.round_reset_players = true;
     this.m_player_ratings.initialize_to_default();
     this.m_map_permissions.initialize();
     this.m_game_engine.initialize();
@@ -3113,6 +3206,46 @@ export enum e_game_variant_parameter {
 export const k_number_of_rtx_editable_game_variant_parameters =
   e_game_variant_parameter.k_number_of_rtx_editable_game_variant_parameters;
 
+@c.class()
+export class c_game_engine_sandbox_variant {
+  @c.field(c_game_engine_custom_variant)
+  m_custom_variant = new c_game_engine_custom_variant();
+  @c.field(
+    c.u8().transform(
+      (raw: number) => e_sandbox_variant_flags.from_raw(raw),
+      (flags: e_sandbox_variant_flags) => flags.to_raw()
+    )
+  )
+  m_variant_flags = new e_sandbox_variant_flags();
+  @c.field(c.i8())
+  m_edit_mode: e_sandbox_edit_mode_settings =
+    e_sandbox_edit_mode_settings.all_players;
+  @c.field(c.i16())
+  m_respawn_time = 0;
+  @c.field(c_player_traits)
+  m_editor_traits = new c_player_traits();
+  decode(bitstream: c_bitstream_reader): void {
+    this.m_custom_variant.decode(bitstream);
+    this.m_variant_flags = e_sandbox_variant_flags.from_raw(
+      bitstream.read_integer("variant-flags", 2)
+    );
+    this.m_edit_mode = bitstream.read_enum(
+      "edit-mode",
+      2,
+      e_sandbox_edit_mode_settings
+    );
+    this.m_respawn_time = bitstream.read_integer("respawn-time", 6);
+    this.m_editor_traits.decode(bitstream);
+  }
+  encode(bitstream: c_bitstream_writer): void {
+    this.m_custom_variant.encode(bitstream);
+    bitstream.write_integer(this.m_variant_flags.to_raw(), 2);
+    bitstream.write_enum(this.m_edit_mode, 2, e_sandbox_edit_mode_settings);
+    bitstream.write_integer(this.m_respawn_time, 6);
+    this.m_editor_traits.encode(bitstream);
+  }
+}
+
 /** Matches engine `e_game_engine_type` (`k_game_engine_type_names`). */
 export enum e_game_engine_type {
   none = 0,
@@ -3127,15 +3260,10 @@ export enum e_game_engine_type {
  * Mirrors `c_game_variant` in blf_lib — decode-only.
  */
 export class c_game_variant {
-  @AutoMap(() => e_game_engine_type)
   m_game_engine: e_game_engine_type = e_game_engine_type.megalogamengine;
-  @AutoMap(() => c_game_engine_base_variant)
   m_campaign_variant?: c_game_engine_base_variant;
-  @AutoMap(() => c_game_engine_custom_variant)
   m_custom_variant?: c_game_engine_custom_variant;
-  @AutoMap(() => c_game_engine_survival_variant)
   m_survival_variant?: c_game_engine_survival_variant;
-  @AutoMap(() => c_game_engine_sandbox_variant)
   m_sandbox_variant?: c_game_engine_sandbox_variant;
   decode(bitstream: c_bitstream_reader): void {
     this.m_game_engine = bitstream.read_enum(
@@ -3231,3 +3359,79 @@ export class c_game_variant {
     }
   }
 }
+
+const k_game_variant_storage_size = 0xf800;
+
+export class CGameVariantField extends CFieldType<c_game_variant> {
+  getSize(): number {
+    return 4 + k_game_variant_storage_size;
+  }
+
+  read(bytes: Uint8Array, offset: number, endian: c.Endian): c_game_variant {
+    const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+    const variant = new c_game_variant();
+    variant.m_game_engine = view.getInt32(
+      offset,
+      endian === "little"
+    ) as e_game_engine_type;
+    const storage = bytes.subarray(
+      offset + 4,
+      offset + 4 + k_game_variant_storage_size
+    );
+    switch (variant.m_game_engine) {
+      case e_game_engine_type.sandbox:
+        variant.m_sandbox_variant = c.read(
+          c_game_engine_sandbox_variant,
+          storage,
+          endian
+        );
+        break;
+      case e_game_engine_type.megalogamengine:
+        variant.m_custom_variant = c.read(
+          c_game_engine_custom_variant,
+          storage,
+          endian
+        );
+        break;
+      case e_game_engine_type.campaign:
+        variant.m_campaign_variant = c.read(
+          c_game_engine_base_variant,
+          storage,
+          endian
+        );
+        break;
+      case e_game_engine_type.survival:
+        variant.m_survival_variant = c.read(
+          c_game_engine_survival_variant,
+          storage,
+          endian
+        );
+        break;
+      default:
+        break;
+    }
+    return variant;
+  }
+
+  write(
+    bytes: Uint8Array,
+    offset: number,
+    value: c_game_variant,
+    endian: c.Endian
+  ): void {
+    const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+    view.setInt32(offset, value.m_game_engine, endian === "little");
+    const engine_variant = {
+      [e_game_engine_type.none]: undefined,
+      [e_game_engine_type.sandbox]: value.m_sandbox_variant,
+      [e_game_engine_type.megalogamengine]: value.m_custom_variant,
+      [e_game_engine_type.campaign]: value.m_campaign_variant,
+      [e_game_engine_type.survival]: value.m_survival_variant,
+    }[value.m_game_engine];
+    if (engine_variant) {
+      bytes.set(c.write(engine_variant, endian), offset + 4);
+    }
+  }
+}
+
+export const game_variant_field = () => new CGameVariantField();

@@ -2,7 +2,6 @@ import type {
   c_bitstream_reader,
   c_bitstream_writer,
 } from "../../../../bitstream";
-import { AutoMap } from "../../../../helpers/automap";
 import { s_content_item_metadata } from "../saved_games/saved_game_files";
 import { c_player_traits } from "./game_engine_player_traits";
 import {
@@ -25,9 +24,8 @@ export const k_game_engine_type_count = 12;
 
 /** Port of Halo 3 12070 `c_game_engine_social_options`. */
 export class c_game_engine_social_options {
-  @AutoMap(() => Number)
   m_flags = 0;
-  @AutoMap(() => Number)
+
   m_team_changing = 0;
 
   encode(bitstream: c_bitstream_writer): void {
@@ -73,25 +71,24 @@ export class c_game_engine_social_options {
 
 /** Port of Halo 3 12070 `c_game_engine_map_override_options`. */
 export class c_game_engine_map_override_options {
-  @AutoMap(() => Number)
   m_flags = 0;
-  @AutoMap(() => c_player_traits)
+
   m_base_player_traits = new c_player_traits();
-  @AutoMap(() => Number)
+
   m_weapon_set_absolute_index = 0;
-  @AutoMap(() => Number)
+
   m_vehicle_set_absolute_index = 0;
-  @AutoMap(() => c_player_traits)
+
   m_red_powerup_traits = new c_player_traits();
-  @AutoMap(() => c_player_traits)
+
   m_blue_powerup_traits = new c_player_traits();
-  @AutoMap(() => c_player_traits)
+
   m_yellow_powerup_traits = new c_player_traits();
-  @AutoMap(() => Number)
+
   m_red_powerup_duration_seconds = 0;
-  @AutoMap(() => Number)
+
   m_blue_powerup_duration_seconds = 0;
-  @AutoMap(() => Number)
+
   m_yellow_powerup_duration_seconds = 0;
 
   encode(bitstream: c_bitstream_writer): void {
@@ -147,21 +144,20 @@ export class c_game_engine_map_override_options {
 }
 
 export class c_game_engine_base_variant {
-  @AutoMap(() => Number)
   m_checksum = 0;
-  @AutoMap(() => s_content_item_metadata)
+
   m_metadata = new s_content_item_metadata();
-  @AutoMap(() => c_game_engine_miscellaneous_options)
+
   m_miscellaneous_options = new c_game_engine_miscellaneous_options();
-  @AutoMap(() => c_game_engine_respawn_options)
+
   m_respawn_options = new c_game_engine_respawn_options();
-  @AutoMap(() => c_game_engine_social_options)
+
   m_social_options = new c_game_engine_social_options();
-  @AutoMap(() => c_game_engine_map_override_options)
+
   m_map_override_options = new c_game_engine_map_override_options();
-  @AutoMap(() => Number)
+
   m_flags = 0;
-  @AutoMap(() => Number)
+
   m_team_scoring_method = 0;
 
   encode(bitstream: c_bitstream_writer): void {

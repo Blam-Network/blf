@@ -1,40 +1,47 @@
+import { c } from "@craftycodie/cstruct";
 import type {
   c_bitstream_reader,
   c_bitstream_writer,
 } from "../../../../../bitstream";
-import { AutoMap } from "../../../../../helpers/automap";
+@c.class()
 export class s_game_engine_player_rating_parameters {
-  @AutoMap(() => Number)
+  @c.field(c.f32())
   m_rating_scale = 0;
-  @AutoMap(() => Number)
+  @c.field(c.f32())
   m_kill_weight = 0;
-  @AutoMap(() => Number)
+  @c.field(c.f32())
   m_assist_weight = 0;
-  @AutoMap(() => Number)
+  @c.field(c.f32())
   m_betrayal_weight = 0;
-  @AutoMap(() => Number)
+  @c.field(c.f32())
   m_death_weight = 0;
-  @AutoMap(() => Number)
+  @c.field(c.f32())
   m_normalize_by_max_kills = 0;
-  @AutoMap(() => Number)
+  @c.field(c.f32())
   m_base = 0;
-  @AutoMap(() => Number)
+  @c.field(c.f32())
   m_range = 0;
-  @AutoMap(() => Number)
+  @c.field(c.f32())
   m_loss_scalar = 0;
-  @AutoMap(() => Number)
+  @c.field(c.f32())
   m_custom_stat_0 = 0;
-  @AutoMap(() => Number)
+  @c.field(c.f32())
   m_custom_stat_1 = 0;
-  @AutoMap(() => Number)
+  @c.field(c.f32())
   m_custom_stat_2 = 0;
-  @AutoMap(() => Number)
+  @c.field(c.f32())
   m_custom_stat_3 = 0;
-  @AutoMap(() => Number)
+  @c.field(c.f32())
   m_expansion_0 = 0;
-  @AutoMap(() => Number)
+  @c.field(c.f32())
   m_expansion_1 = 0;
-  @AutoMap(() => Boolean)
+  @c.field(
+    c.u8().transform(
+      (raw: number) => (raw & 1) !== 0,
+      (value: boolean) => (value ? 1 : 0)
+    ),
+    { padAfter: 3 }
+  )
   m_show_in_scoreboard = false;
   clear(): void {
     this.m_rating_scale = 0;

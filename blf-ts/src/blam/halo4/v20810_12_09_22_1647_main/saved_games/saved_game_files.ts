@@ -53,190 +53,134 @@ export enum e_metadata_game_engine_type {
   firefight = 5,
 }
 
-@c.struct()
-export class s_content_item_history {
-  @c.field(c.Time64())
-  timestamp = new Date(0);
+export const s_content_item_history = c.struct({
+  timestamp: c.Time64(),
+  xuid: c.u64(),
+  name: c.string(16, "latin1"),
+  is_online: c.bool().padAfter(3),
+});
+export type s_content_item_history = c.infer<typeof s_content_item_history>;
 
-  @c.field("u64")
-  xuid = 0n;
+export const s_content_item_general_metadata = c.struct({
+  /** Starts as 0, which is not a file type: set it before writing. */
+  file_type: c
+    .enum(e_file_type, c.i8())
+    .default(0 as e_file_type)
+    .padAfter(3),
+  size_in_bytes: c.u32(),
+  unique_id: c.u64(),
+  parent_unique_id: c.u64(),
+  root_unique_id: c.u64(),
+  game_id: c.u64(),
+  activity: c
+    .enum(e_network_game_type, c.i8())
+    .default(e_network_game_type.none),
+  game_mode: c.enum(e_game_mode, c.u8()),
+  game_engine_type: c.u8().padAfter(1),
+  map_id: c.i32(),
+});
+export type s_content_item_general_metadata = c.infer<
+  typeof s_content_item_general_metadata
+>;
 
-  @c.field(c.String(16))
-  name = "";
+export const s_content_item_display_metadata = c.struct({
+  megalo_category_index: c.i8().padAfter(7),
+});
+export type s_content_item_display_metadata = c.infer<
+  typeof s_content_item_display_metadata
+>;
 
-  @c.field(c.Bool(), { pad_after: 3 })
-  is_online = false;
-}
+export const s_content_item_film_metadata = c.struct({
+  seconds: c.i32(),
+});
+export type s_content_item_film_metadata = c.infer<
+  typeof s_content_item_film_metadata
+>;
 
-@c.struct()
-export class s_content_item_general_metadata {
-  @c.field(c.enum("i8", e_file_type), { pad_after: 3 })
-  file_type: e_file_type = 0 as e_file_type;
+export const s_content_item_game_variant_metadata = c.struct({
+  icon_index: c.i8(),
+});
+export type s_content_item_game_variant_metadata = c.infer<
+  typeof s_content_item_game_variant_metadata
+>;
 
-  @c.field("u32")
-  size_in_bytes = 0;
+export const s_content_item_matchmaking_metadata = c.struct({
+  hopper_identifier: c.u16(),
+});
+export type s_content_item_matchmaking_metadata = c.infer<
+  typeof s_content_item_matchmaking_metadata
+>;
 
-  @c.field("u64")
-  unique_id = 0n;
-
-  @c.field("u64")
-  parent_unique_id = 0n;
-
-  @c.field("u64")
-  root_unique_id = 0n;
-
-  @c.field("u64")
-  game_id = 0n;
-
-  @c.field(c.enum("i8", e_network_game_type))
-  activity: e_network_game_type = e_network_game_type.none;
-
-  @c.field(c.enum("u8", e_game_mode))
-  game_mode: e_game_mode = e_game_mode.none;
-
-  @c.field("u8", { pad_after: 1 })
-  game_engine_type = 0;
-
-  @c.field("i32")
-  map_id = 0;
-}
-
-@c.struct()
-export class s_content_item_display_metadata {
-  @c.field("i8", { pad_after: 7 })
-  megalo_category_index = 0;
-}
-
-@c.struct()
-export class s_content_item_film_metadata {
-  @c.field("i32")
-  seconds = 0;
-}
-
-@c.struct()
-export class s_content_item_game_variant_metadata {
-  @c.field("i8")
-  icon_index = 0;
-}
-
-@c.struct()
-export class s_content_item_matchmaking_metadata {
-  @c.field("u16")
-  hopper_identifier = 0;
-}
-
-@c.struct()
-export class s_content_item_campaign_metadata {
-  @c.field("i32")
-  campaign_id = 0;
-
-  @c.field("i16")
-  campaign_difficulty = 0;
-
-  @c.field("i16")
-  campaign_metagame_scoring = 0;
-
-  @c.field("i32")
-  campaign_insertion_point = 0;
-
+export const s_content_item_campaign_metadata = c.struct({
+  campaign_id: c.i32(),
+  campaign_difficulty: c.i16(),
+  campaign_metagame_scoring: c.i16(),
+  campaign_insertion_point: c.i32(),
   /** Halo 4 encodes a single 32-bit skull flags field. */
-  @c.field("u32")
-  skull_flags = 0;
-}
+  skull_flags: c.u32(),
+});
+export type s_content_item_campaign_metadata = c.infer<
+  typeof s_content_item_campaign_metadata
+>;
 
-@c.struct()
-export class s_content_item_firefight_metadata {
-  @c.field("i16")
-  firefight_difficulty = 0;
-
+export const s_content_item_firefight_metadata = c.struct({
+  firefight_difficulty: c.i16(),
   /** Halo 4 encodes a single 32-bit skull flags field. */
-  @c.field("u32")
-  skull_flags = 0;
-}
+  skull_flags: c.u32(),
+});
+export type s_content_item_firefight_metadata = c.infer<
+  typeof s_content_item_firefight_metadata
+>;
 
 /** Full `c_content_item_metadata` binrw layout (fixed prefix + conditional union tails). */
-@c.struct()
-export class s_content_item_metadata {
-  @c.field(s_content_item_general_metadata)
-  general = new s_content_item_general_metadata();
-
-  @c.field(s_content_item_display_metadata)
-  display = new s_content_item_display_metadata();
-
-  @c.field(s_content_item_history)
-  creation_history = new s_content_item_history();
-
-  @c.field(s_content_item_history)
-  modification_history = new s_content_item_history();
-
-  @c.field(c.WString(0x80))
-  name = "";
-
-  @c.field(c.WString(0x80))
-  description = "";
-
-  @c.union(
-    { size: 16 },
-    c.when(
-      e_file_type.Film,
-      s_content_item_film_metadata,
-      (m: s_content_item_metadata) => m.general.file_type
-    ),
-    c.when(
-      e_file_type.GameVariant,
-      s_content_item_game_variant_metadata,
-      (m: s_content_item_metadata) => m.general.file_type
-    )
-  )
-  file_type_data:
-    | s_content_item_film_metadata
-    | s_content_item_game_variant_metadata
-    | null = null;
-
-  @c.union(
-    { size: 16 },
-    c.arm(
-      s_content_item_matchmaking_metadata,
-      (m: s_content_item_metadata) =>
-        m.general.activity === e_network_game_type.matchmaking
-    )
-  )
-  activity_data: s_content_item_matchmaking_metadata | null = null;
-
-  @c.union(
-    { size: 16 },
-    c.arm(
-      s_content_item_campaign_metadata,
-      (m: s_content_item_metadata) =>
-        m.general.game_engine_type === e_metadata_game_engine_type.campaign
-    ),
-    c.arm(
-      s_content_item_firefight_metadata,
-      (m: s_content_item_metadata) =>
-        m.general.game_engine_type === e_metadata_game_engine_type.survival
-    )
-  )
-  game_mode_data:
-    | s_content_item_campaign_metadata
-    | s_content_item_firefight_metadata
-    | null = null;
-}
+export const s_content_item_metadata = c.struct({
+  general: s_content_item_general_metadata,
+  display: s_content_item_display_metadata,
+  creation_history: s_content_item_history,
+  modification_history: s_content_item_history,
+  name: c.wstring(0x80),
+  description: c.wstring(0x80),
+  file_type_data: c.match(
+    "general.file_type",
+    {
+      [e_file_type.Film]: s_content_item_film_metadata,
+      [e_file_type.GameVariant]: s_content_item_game_variant_metadata,
+    },
+    { size: 16 }
+  ),
+  activity_data: c.match(
+    "general.activity",
+    {
+      [e_network_game_type.matchmaking]: s_content_item_matchmaking_metadata,
+    },
+    { size: 16 }
+  ),
+  game_mode_data: c.match(
+    "general.game_engine_type",
+    {
+      [e_metadata_game_engine_type.campaign]: s_content_item_campaign_metadata,
+      [e_metadata_game_engine_type.survival]: s_content_item_firefight_metadata,
+    },
+    { size: 16 }
+  ),
+});
+export type s_content_item_metadata = c.infer<typeof s_content_item_metadata>;
 
 export function content_item_metadata_set_defaults(
   metadata: s_content_item_metadata
 ): void {
-  metadata.general = Object.assign(new s_content_item_general_metadata(), {
+  metadata.general = Object.assign(s_content_item_general_metadata.zero(), {
     file_type: -1 as e_file_type,
     activity: e_network_game_type.none,
     game_mode: e_game_mode.none,
     game_engine_type: e_metadata_game_engine_type.none,
     map_id: -1,
   });
-  metadata.display = Object.assign(new s_content_item_display_metadata(), {
+  metadata.display = Object.assign(s_content_item_display_metadata.zero(), {
     megalo_category_index: -1,
   });
-  metadata.creation_history = new s_content_item_history();
-  metadata.modification_history = new s_content_item_history();
+  metadata.creation_history = s_content_item_history.zero();
+  metadata.modification_history = s_content_item_history.zero();
   metadata.name = "";
   metadata.description = "";
   metadata.file_type_data = null;
@@ -290,13 +234,13 @@ export function content_item_metadata_decode(
   switch (metadata.general.file_type) {
     case e_file_type.Film:
     case e_file_type.FilmClip: {
-      const film = new s_content_item_film_metadata();
+      const film = s_content_item_film_metadata.zero();
       film.seconds = bitstream.read_signed_integer("film-seconds", 32);
       metadata.file_type_data = film;
       break;
     }
     case e_file_type.GameVariant: {
-      const gv = new s_content_item_game_variant_metadata();
+      const gv = s_content_item_game_variant_metadata.zero();
       gv.icon_index = bitstream.read_signed_integer("icon-index", 8);
       metadata.file_type_data = gv;
       break;
@@ -307,7 +251,7 @@ export function content_item_metadata_decode(
   }
 
   if (metadata.general.activity === e_network_game_type.matchmaking) {
-    const mm = new s_content_item_matchmaking_metadata();
+    const mm = s_content_item_matchmaking_metadata.zero();
     mm.hopper_identifier = bitstream.read_integer("hopper-id", 16);
     metadata.activity_data = mm;
   } else {
@@ -316,7 +260,7 @@ export function content_item_metadata_decode(
 
   switch (metadata.general.game_engine_type) {
     case e_metadata_game_engine_type.campaign: {
-      const campaign = new s_content_item_campaign_metadata();
+      const campaign = s_content_item_campaign_metadata.zero();
       campaign.campaign_id = bitstream.read_integer("campaign-id", 8);
       campaign.campaign_difficulty = bitstream.read_integer(
         "difficulty-level",
@@ -335,7 +279,7 @@ export function content_item_metadata_decode(
       break;
     }
     case e_metadata_game_engine_type.survival: {
-      const ff = new s_content_item_firefight_metadata();
+      const ff = s_content_item_firefight_metadata.zero();
       ff.firefight_difficulty = bitstream.read_integer("difficulty-level", 2);
       ff.skull_flags = bitstream.read_integer("skull-flags", 32);
       metadata.game_mode_data = ff;

@@ -3,13 +3,18 @@ import type {
   c_bitstream_writer,
 } from "../../../../../bitstream";
 import { BlfError } from "../../../../../error";
-import { AutoMap } from "../../../../../helpers/automap";
+import { class_union } from "../../memory/class_union";
 import {
   c_custom_timer_reference,
   c_custom_variable_reference,
   c_object_reference,
   c_player_reference,
   c_team_reference,
+  custom_timer_reference_field,
+  custom_variable_reference_field,
+  object_reference_field,
+  player_reference_field,
+  team_reference_field,
 } from "./megalogamengine_references";
 
 function requireField<T>(value: T | undefined, message: string): T {
@@ -29,17 +34,11 @@ export enum e_variable_type {
 }
 
 export class s_variant_variable {
-  @AutoMap(() => e_variable_type)
   m_type: e_variable_type = e_variable_type.custom_variable;
-  @AutoMap(() => c_player_reference)
   m_player?: c_player_reference;
-  @AutoMap(() => c_object_reference)
   m_object?: c_object_reference;
-  @AutoMap(() => c_team_reference)
   m_team?: c_team_reference;
-  @AutoMap(() => c_custom_timer_reference)
   m_custom_timer?: c_custom_timer_reference;
-  @AutoMap(() => c_custom_variable_reference)
   m_custom_variable?: c_custom_variable_reference;
   decode(bitstream: c_bitstream_reader): void {
     this.m_type = bitstream.read_enum("type", 3, e_variable_type);
@@ -110,4 +109,37 @@ export class s_variant_variable {
         throw new BlfError(`Invalid s_variant_variable: type ${this.m_type}`);
     }
   }
+}
+
+export function variant_variable_field() {
+  return class_union(
+    () => new s_variant_variable(),
+    4,
+    { property: "m_type", offset: 3, type: "u8" },
+    () => ({
+      [e_variable_type.custom_variable]: [
+        {
+          property: "m_custom_variable",
+          field: custom_variable_reference_field(),
+          offset: 0,
+        },
+      ],
+      [e_variable_type.player]: [
+        { property: "m_player", field: player_reference_field(), offset: 0 },
+      ],
+      [e_variable_type.object]: [
+        { property: "m_object", field: object_reference_field(), offset: 0 },
+      ],
+      [e_variable_type.team]: [
+        { property: "m_team", field: team_reference_field(), offset: 0 },
+      ],
+      [e_variable_type.custom_timer]: [
+        {
+          property: "m_custom_timer",
+          field: custom_timer_reference_field(),
+          offset: 0,
+        },
+      ],
+    })
+  );
 }

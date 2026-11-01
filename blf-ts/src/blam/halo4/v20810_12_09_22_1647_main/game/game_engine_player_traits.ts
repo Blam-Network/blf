@@ -2,7 +2,6 @@ import type {
   c_bitstream_reader,
   c_bitstream_writer,
 } from "../../../../bitstream";
-import { AutoMap } from "../../../../helpers/automap";
 
 /** Quantized trait floats: bool presence + 16-bit real in [-200, 200], exact mid/endpoints. */
 const k_trait_float_bits = 16;
@@ -10,9 +9,7 @@ const k_trait_float_min = -200;
 const k_trait_float_max = 200;
 
 export class c_player_trait_float {
-  @AutoMap(() => Boolean)
   m_enabled = false;
-  @AutoMap(() => Number)
   m_value = 0;
   clear(): void {
     this.m_enabled = false;
@@ -165,13 +162,9 @@ export enum e_boolean_trait {
 }
 
 export class PlayerTraitChangeColor {
-  @AutoMap(() => Boolean)
   m_override = false;
-  @AutoMap(() => Number)
   m_red = 0;
-  @AutoMap(() => Number)
   m_green = 0;
-  @AutoMap(() => Number)
   m_blue = 0;
   clear(): void {
     this.m_override = false;
@@ -194,9 +187,7 @@ export class PlayerTraitChangeColor {
 }
 
 export class PlayerTraitModelVariant {
-  @AutoMap(() => Boolean)
   m_override = false;
-  @AutoMap(() => Number)
   m_model = 0;
   clear(): void {
     this.m_override = false;
@@ -213,41 +204,23 @@ export class PlayerTraitModelVariant {
 }
 
 export class c_player_trait_shield_vitality {
-  @AutoMap(() => c_player_trait_float)
   m_damage_resistance = new c_player_trait_float();
-  @AutoMap(() => c_player_trait_float)
   m_shield_multiplier = new c_player_trait_float();
-  @AutoMap(() => c_player_trait_float)
   m_body_multiplier = new c_player_trait_float();
-  @AutoMap(() => c_player_trait_float)
   m_shield_stun_duration = new c_player_trait_float();
-  @AutoMap(() => c_player_trait_float)
   m_shield_recharge_rate = new c_player_trait_float();
-  @AutoMap(() => c_player_trait_float)
   m_body_recharge_rate = new c_player_trait_float();
-  @AutoMap(() => c_player_trait_float)
   m_overshield_recharge_rate = new c_player_trait_float();
-  @AutoMap(() => c_player_trait_float)
   m_vampirism_percent = new c_player_trait_float();
-  @AutoMap(() => c_player_trait_float)
   m_explosive_damage_resistance = new c_player_trait_float();
-  @AutoMap(() => c_player_trait_float)
   m_wheelman_vehicle_stun_time = new c_player_trait_float();
-  @AutoMap(() => c_player_trait_float)
   m_wheelman_vehicle_recharge_time = new c_player_trait_float();
-  @AutoMap(() => c_player_trait_float)
   m_wheelman_vehicle_emp_disabled_time = new c_player_trait_float();
-  @AutoMap(() => c_player_trait_float)
   m_fall_damage_multiplier = new c_player_trait_float();
-  @AutoMap(() => Number)
   m_headshot_immunity: e_bool_player_trait = e_bool_player_trait.unchanged;
-  @AutoMap(() => Number)
   m_assassination_immunity: e_bool_player_trait = e_bool_player_trait.unchanged;
-  @AutoMap(() => Number)
   m_deathless: e_bool_player_trait = e_bool_player_trait.unchanged;
-  @AutoMap(() => Number)
   m_fast_track_armor: e_bool_player_trait = e_bool_player_trait.unchanged;
-  @AutoMap(() => Number)
   m_powerup_cancellation: e_player_trait_vitality_powerup_cancellation =
     e_player_trait_vitality_powerup_cancellation.unchanged;
   clear(): void {
@@ -274,96 +247,54 @@ export class c_player_trait_shield_vitality {
 }
 
 export class c_player_trait_weapons {
-  @AutoMap(() => c_player_trait_float)
   m_damage_multiplier = new c_player_trait_float();
-  @AutoMap(() => c_player_trait_float)
   m_melee_damage_multiplier = new c_player_trait_float();
-  @AutoMap(() => c_player_trait_float)
   m_grenade_recharge_frag = new c_player_trait_float();
-  @AutoMap(() => c_player_trait_float)
   m_grenade_recharge_plasma = new c_player_trait_float();
-  @AutoMap(() => c_player_trait_float)
   m_grenade_recharge_spike = new c_player_trait_float();
-  @AutoMap(() => c_player_trait_float)
   m_hero_equipment_energy_use_rate = new c_player_trait_float();
-  @AutoMap(() => c_player_trait_float)
   m_hero_equipment_energy_recharge_delay = new c_player_trait_float();
-  @AutoMap(() => c_player_trait_float)
   m_hero_equipment_energy_recharge_rate = new c_player_trait_float();
-  @AutoMap(() => c_player_trait_float)
   m_hero_equipment_initial_energy = new c_player_trait_float();
-  @AutoMap(() => c_player_trait_float)
   m_equipment_energy_use_rate = new c_player_trait_float();
-  @AutoMap(() => c_player_trait_float)
   m_equipment_energy_recharge_delay = new c_player_trait_float();
-  @AutoMap(() => c_player_trait_float)
   m_equipment_energy_recharge_rate = new c_player_trait_float();
-  @AutoMap(() => c_player_trait_float)
   m_equipment_energy_initial_energy = new c_player_trait_float();
-  @AutoMap(() => c_player_trait_float)
   m_switch_speed_modifier = new c_player_trait_float();
-  @AutoMap(() => c_player_trait_float)
   m_reload_speed_modifier = new c_player_trait_float();
-  @AutoMap(() => c_player_trait_float)
   m_ordnance_points_modifier = new c_player_trait_float();
-  @AutoMap(() => c_player_trait_float)
   m_explosive_aoe_radius_modifier = new c_player_trait_float();
-  @AutoMap(() => c_player_trait_float)
   m_gunner_armor_modifier = new c_player_trait_float();
-  @AutoMap(() => c_player_trait_float)
   m_stability_armor_modifier = new c_player_trait_float();
-  @AutoMap(() => c_player_trait_float)
   m_drop_recon_warning_seconds = new c_player_trait_float();
-  @AutoMap(() => c_player_trait_float)
   m_drop_recon_distance_modifier = new c_player_trait_float();
-  @AutoMap(() => c_player_trait_float)
   m_assassination_speed_modifier = new c_player_trait_float();
-  @AutoMap(() => Number)
   m_weapon_pickup_allowed: e_bool_player_trait = e_bool_player_trait.unchanged;
-  @AutoMap(() => Number)
   m_initial_grenade_count_setting: e_grenade_count_setting =
     e_grenade_count_setting.unchanged;
-  @AutoMap(() => Number)
   m_infinite_ammo_setting: e_infinite_ammo_setting =
     e_infinite_ammo_setting.unchanged;
-  @AutoMap(() => Number)
   m_equipment_usage_setting: e_equipment_usage_setting =
     e_equipment_usage_setting.unchanged;
-  @AutoMap(() => Number)
   m_equipment_usage_except_auto_turret: e_equipment_usage_setting =
     e_equipment_usage_setting.unchanged;
-  @AutoMap(() => Number)
   m_equipment_drop: e_bool_player_trait = e_bool_player_trait.unchanged;
-  @AutoMap(() => Number)
   m_infinite_equipment: e_bool_player_trait = e_bool_player_trait.unchanged;
-  @AutoMap(() => Number)
   m_ammopack: e_bool_player_trait = e_bool_player_trait.unchanged;
-  @AutoMap(() => Number)
   m_grenadier: e_bool_player_trait = e_bool_player_trait.unchanged;
-  @AutoMap(() => Number)
   m_explode_on_death_armormod: e_bool_player_trait =
     e_bool_player_trait.unchanged;
-  @AutoMap(() => Number)
   m_ordnance_markers_visible: e_bool_player_trait =
     e_bool_player_trait.unchanged;
-  @AutoMap(() => Number)
   m_ordnance_reroll_available: e_bool_player_trait =
     e_bool_player_trait.unchanged;
-  @AutoMap(() => Number)
   m_resourceful: e_bool_player_trait = e_bool_player_trait.unchanged;
-  @AutoMap(() => Number)
   m_well_equipped: e_bool_player_trait = e_bool_player_trait.unchanged;
-  @AutoMap(() => Number)
   m_ordnance_disabled: e_bool_player_trait = e_bool_player_trait.unchanged;
-  @AutoMap(() => Number)
   m_initial_primary_weapon_absolute_index = -3;
-  @AutoMap(() => Number)
   m_initial_secondary_weapon_absolute_index = -3;
-  @AutoMap(() => Number)
   m_initial_equipment_absolute_index = -3;
-  @AutoMap(() => Number)
   m_initial_tactical_package_absolute_index = -3;
-  @AutoMap(() => Number)
   m_initial_support_upgrade_absolute_index = -3;
   clear(): void {
     this.m_damage_multiplier.clear();
@@ -413,28 +344,18 @@ export class c_player_trait_weapons {
 }
 
 export class c_player_trait_movement {
-  @AutoMap(() => c_player_trait_float)
   m_speed = new c_player_trait_float();
-  @AutoMap(() => c_player_trait_float)
   m_gravity = new c_player_trait_float();
-  @AutoMap(() => c_player_trait_float)
   m_jump_multiplier = new c_player_trait_float();
-  @AutoMap(() => c_player_trait_float)
   m_turn_speed_multiplier = new c_player_trait_float();
-  @AutoMap(() => Number)
   m_vehicle_usage_setting: e_vehicle_usage_setting =
     e_vehicle_usage_setting.unchanged;
-  @AutoMap(() => Number)
   m_double_jump_setting: e_double_jump_setting =
     e_double_jump_setting.unchanged;
-  @AutoMap(() => Number)
   m_sprint_usage: e_bool_player_trait = e_bool_player_trait.unchanged;
-  @AutoMap(() => Number)
   m_automatic_momentum_usage: e_bool_player_trait =
     e_bool_player_trait.unchanged;
-  @AutoMap(() => Number)
   m_vaulting_enabled: e_bool_player_trait = e_bool_player_trait.unchanged;
-  @AutoMap(() => Number)
   m_stealthy: e_bool_player_trait = e_bool_player_trait.unchanged;
   clear(): void {
     this.m_speed.clear();
@@ -451,27 +372,16 @@ export class c_player_trait_movement {
 }
 
 export class c_player_trait_appearance {
-  @AutoMap(() => c_player_trait_float)
   m_player_scale = new c_player_trait_float();
-  @AutoMap(() => Number)
   m_active_camo_setting: e_active_camo_setting = e_active_camo_setting.off;
-  @AutoMap(() => Number)
   m_waypoint_setting: e_waypoint_setting = e_waypoint_setting.unchanged;
-  @AutoMap(() => Number)
   m_gamertag_setting: e_waypoint_setting = e_waypoint_setting.unchanged;
-  @AutoMap(() => Number)
   m_aura_setting: e_aura_setting = e_aura_setting.unchanged;
-  @AutoMap(() => PlayerTraitChangeColor)
   m_primary_color = new PlayerTraitChangeColor();
-  @AutoMap(() => PlayerTraitChangeColor)
   m_secondary_color = new PlayerTraitChangeColor();
-  @AutoMap(() => PlayerTraitModelVariant)
   m_model_variant = new PlayerTraitModelVariant();
-  @AutoMap(() => Number)
   m_death_effect = -1;
-  @AutoMap(() => Number)
   m_looping_effect = -1;
-  @AutoMap(() => Number)
   m_shield_hud: e_bool_player_trait = e_bool_player_trait.unchanged;
   clear(): void {
     this.m_player_scale.clear();
@@ -489,28 +399,18 @@ export class c_player_trait_appearance {
 }
 
 export class c_player_trait_sensors {
-  @AutoMap(() => c_player_trait_float)
   m_motion_tracker_range = new c_player_trait_float();
-  @AutoMap(() => c_player_trait_float)
   m_nemesis_duration = new c_player_trait_float();
-  @AutoMap(() => Number)
   m_motion_tracker_setting: e_motion_tracker_setting =
     e_motion_tracker_setting.unchanged;
-  @AutoMap(() => Number)
   m_motion_tracker_while_zoomed: e_bool_player_trait =
     e_bool_player_trait.unchanged;
-  @AutoMap(() => Number)
   m_directional_damage_indicator: e_bool_player_trait =
     e_bool_player_trait.unchanged;
-  @AutoMap(() => Number)
   m_vision_mode: e_bool_player_trait = e_bool_player_trait.unchanged;
-  @AutoMap(() => Number)
   m_battle_awareness: e_bool_player_trait = e_bool_player_trait.unchanged;
-  @AutoMap(() => Number)
   m_threat_view: e_bool_player_trait = e_bool_player_trait.unchanged;
-  @AutoMap(() => Number)
   m_aural_enhancement: e_bool_player_trait = e_bool_player_trait.unchanged;
-  @AutoMap(() => Number)
   m_nemesis: e_bool_player_trait = e_bool_player_trait.unchanged;
   clear(): void {
     this.m_motion_tracker_range.clear();
@@ -527,15 +427,10 @@ export class c_player_trait_sensors {
 }
 
 export class c_player_traits {
-  @AutoMap(() => c_player_trait_shield_vitality)
   m_shield_vitality_traits = new c_player_trait_shield_vitality();
-  @AutoMap(() => c_player_trait_weapons)
   m_weapon_traits = new c_player_trait_weapons();
-  @AutoMap(() => c_player_trait_movement)
   m_movement_traits = new c_player_trait_movement();
-  @AutoMap(() => c_player_trait_appearance)
   m_appearance_traits = new c_player_trait_appearance();
-  @AutoMap(() => c_player_trait_sensors)
   m_sensor_traits = new c_player_trait_sensors();
   clear(): void {
     this.m_shield_vitality_traits.clear();

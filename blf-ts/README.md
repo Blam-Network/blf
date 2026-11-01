@@ -10,8 +10,7 @@ Built on [@craftycodie/cstruct](https://www.npmjs.com/package/@craftycodie/cstru
 
 - Chunk discovery with `find_chunk` and `search_for_chunk`
 - Per-game **version bundles** (`haloreach/*`, `haloreach_mcc/*`, `halo3/*`, `halo3odst/*`, `destiny/*`) with chunk classes and blam types for a specific exe build
-- **`@blamnetwork/blf/helpers`** for cross-version Reach gametype conversion (TU1 ↔ MCC)
-- Struct-backed chunks via `CStructBLFChunk` and `@blf.chunk` decorators (compiled away in published `dist/`)
+- Struct-backed chunks via `CStructBLFChunk(c.struct({...}))` and the `@blf.chunk` decorator (compiled away in published `dist/`)
 - Bitstream reader/writer exported from the package root
 - Little- and big-endian BLF headers
 
@@ -72,7 +71,7 @@ Each implementation build is a single module:
 
 Add a build by creating `src/versions/<game>/<build_id>.ts` and re-exporting its chunks — wildcard `exports` in `package.json` pick it up automatically.
 
-Reach TU1 ↔ MCC gametype conversion: `@blamnetwork/blf/helpers` — see [Converting Reach Gametypes](https://blam-network.github.io/blf/guide/converting-reach-gametypes). Version import paths: [docs](https://blam-network.github.io/blf/guide/versions/).
+Version import paths: [docs](https://blam-network.github.io/blf/guide/versions/).
 
 ## Documentation
 
@@ -91,7 +90,7 @@ npm run build
 npm run release    # bump version, tag, push (CI publishes on tag)
 ```
 
-Chunk authoring (forking the library) uses Stage 3 decorators (`@blf.chunk`, `@c.struct`) with the same SWC/Vitest setup as the repo. Decorator order: `@blf.chunk` on the class, `@c.struct` below, `@c.field` on properties.
+Chunk authoring (forking the library) uses Stage 3 decorators with the same SWC/Vitest setup as the repo. A struct chunk is `@blf.chunk(...)` on a class extending `CStructBLFChunk(c.struct({...}))`. Nested blam types are `c.struct` schemas too.
 
 ## License
 

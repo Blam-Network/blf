@@ -3,7 +3,6 @@ import type {
   c_bitstream_writer,
 } from "../../../../../bitstream";
 import { BlfError } from "../../../../../error";
-import { AutoMap } from "../../../../../helpers/automap";
 import { e_explicit_object_type } from "./megalogamengine_explicit_object";
 import { e_explicit_player_type } from "./megalogamengine_explicit_player";
 import { e_explicit_team_type } from "./megalogamengine_explicit_team";
@@ -28,7 +27,6 @@ export enum e_custom_timer_type {
   grace_period = 6,
 }
 export class c_explicit_player {
-  @AutoMap(() => e_explicit_player_type)
   m_explicit_player_type: e_explicit_player_type =
     e_explicit_player_type.no_player;
   decode(bitstream: c_bitstream_reader): void {
@@ -47,7 +45,6 @@ export class c_explicit_player {
   }
 }
 export class c_explicit_object {
-  @AutoMap(() => e_explicit_object_type)
   m_explicit_object_type: e_explicit_object_type =
     e_explicit_object_type.no_object;
   decode(bitstream: c_bitstream_reader): void {
@@ -66,7 +63,6 @@ export class c_explicit_object {
   }
 }
 export class c_explicit_team {
-  @AutoMap(() => e_explicit_team_type)
   m_explicit_team_type: e_explicit_team_type = e_explicit_team_type.none;
   decode(bitstream: c_bitstream_reader): void {
     this.m_explicit_team_type = bitstream.read_enum(
@@ -91,15 +87,10 @@ export enum e_object_reference_type {
   team_player_biped = 7,
 }
 export class c_object_reference {
-  @AutoMap(() => e_object_reference_type)
   m_type: e_object_reference_type = e_object_reference_type.global_object;
-  @AutoMap(() => c_explicit_player)
   m_player?: c_explicit_player;
-  @AutoMap(() => c_explicit_object)
   m_object?: c_explicit_object;
-  @AutoMap(() => c_explicit_team)
   m_team?: c_explicit_team;
-  @AutoMap(() => Number)
   m_variable_index?: number;
   decode(bitstream: c_bitstream_reader): void {
     this.m_type = bitstream.read_enum("type", 3, e_object_reference_type);
@@ -257,15 +248,10 @@ export enum e_player_reference_type {
   team_player = 3,
 }
 export class c_player_reference {
-  @AutoMap(() => e_player_reference_type)
   m_type: e_player_reference_type = e_player_reference_type.global_player;
-  @AutoMap(() => c_explicit_player)
   m_player?: c_explicit_player;
-  @AutoMap(() => c_explicit_object)
   m_object?: c_explicit_object;
-  @AutoMap(() => c_explicit_team)
   m_team?: c_explicit_team;
-  @AutoMap(() => Number)
   m_variable_index?: number;
   decode(bitstream: c_bitstream_reader): void {
     this.m_type = bitstream.read_enum("type", 2, e_player_reference_type);
@@ -358,15 +344,10 @@ export enum e_team_reference_type {
   object_owner_team = 5,
 }
 export class c_team_reference {
-  @AutoMap(() => e_team_reference_type)
   m_type: e_team_reference_type = e_team_reference_type.global_team;
-  @AutoMap(() => c_explicit_player)
   m_player?: c_explicit_player;
-  @AutoMap(() => c_explicit_object)
   m_object?: c_explicit_object;
-  @AutoMap(() => c_explicit_team)
   m_team?: c_explicit_team;
-  @AutoMap(() => Number)
   m_variable_index?: number;
   decode(bitstream: c_bitstream_reader): void {
     this.m_type = bitstream.read_enum("type", 3, e_team_reference_type);
@@ -549,21 +530,13 @@ export enum e_custom_variable_type {
   unknown_72 = 72,
 }
 export class c_custom_variable_reference {
-  @AutoMap(() => e_custom_variable_type)
   m_type: e_custom_variable_type = e_custom_variable_type.constant;
-  @AutoMap(() => Number)
   m_immediate_value?: number;
-  @AutoMap(() => c_explicit_player)
   m_player?: c_explicit_player;
-  @AutoMap(() => c_explicit_object)
   m_object?: c_explicit_object;
-  @AutoMap(() => c_explicit_team)
   m_team?: c_explicit_team;
-  @AutoMap(() => Number)
   m_variable_index?: number;
-  @AutoMap(() => Number)
   m_option_index?: number;
-  @AutoMap(() => Number)
   m_statistic_index?: number;
   decode(bitstream: c_bitstream_reader): void {
     this.m_type = bitstream.read_enum("type", 7, e_custom_variable_type);
@@ -804,15 +777,10 @@ export class c_custom_variable_reference {
   }
 }
 export class c_custom_timer_reference {
-  @AutoMap(() => e_custom_timer_type)
   m_type: e_custom_timer_type = e_custom_timer_type.global;
-  @AutoMap(() => c_explicit_player)
   m_player?: c_explicit_player;
-  @AutoMap(() => c_explicit_object)
   m_object?: c_explicit_object;
-  @AutoMap(() => c_explicit_team)
   m_team?: c_explicit_team;
-  @AutoMap(() => Number)
   m_variable_index?: number;
   decode(bitstream: c_bitstream_reader): void {
     this.m_type = bitstream.read_enum("type", 3, e_custom_timer_type);
@@ -919,7 +887,6 @@ export class c_custom_timer_reference {
   }
 }
 export class c_object_type_reference {
-  @AutoMap(() => Number)
   m_object_type_index = 0;
   decode(bitstream: c_bitstream_reader): void {
     this.m_object_type_index = bitstream.read_index(

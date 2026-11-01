@@ -1,6 +1,7 @@
 import { readFileSync } from "node:fs";
 import { c } from "@craftycodie/cstruct";
 import { describe, expect, it } from "vitest";
+
 import {
   c_hopper_configuration,
   s_blf_chunk_hopper_configuration_table,
@@ -33,12 +34,12 @@ describe("s_blf_chunk_hopper_configuration_table", () => {
   it("round-trips categories and configurations", () => {
     const original = new s_blf_chunk_hopper_configuration_table();
 
-    const category = new s_game_hopper_custom_category();
+    const category = s_game_hopper_custom_category.zero();
     category.category_identifier = 7;
     category.category_name = "Competitive";
     original.hopper_categories = [category];
 
-    const hopper = new c_hopper_configuration();
+    const hopper = c_hopper_configuration.zero();
     hopper.hopper_name = "Arena Slayer";
     hopper.identifier = 101;
     hopper.category_identifier = 7;

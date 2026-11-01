@@ -8,7 +8,7 @@ use blf_lib_derive::BlfChunk;
 #[cfg(feature = "napi")]
 use napi_derive::napi;
 
-/// MCC fileshare metadata (`_fsm` 1.1): digests, item id, RSA-SHA512 attestation.
+/// MCC fileshare metadata (`_fsm` 1.1): digests, item id and a 256-byte file signature.
 #[binrw]
 #[cfg_attr(feature = "napi", napi(object, namespace = "mcc_v2025_08_16_178512_1_release"))]
 #[derive(BlfChunk, Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
@@ -23,7 +23,7 @@ pub struct s_blf_chunk_fileshare_metadata {
     pub unknown74: StaticString<36>,
     pub unknown98: StaticString<40>,
     #[brw(pad_after = 4)]
-    pub attestation_signature: StaticArray<u8, 256>,
+    pub file_signature: StaticArray<u8, 256>,
 }
 
 impl BlfChunkHooks for s_blf_chunk_fileshare_metadata {}

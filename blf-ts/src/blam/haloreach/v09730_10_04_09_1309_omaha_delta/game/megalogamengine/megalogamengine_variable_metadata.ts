@@ -2,19 +2,13 @@ import type {
   c_bitstream_reader,
   c_bitstream_writer,
 } from "../../../../../bitstream";
-import { AutoMap } from "../../../../../helpers/automap";
 import { c_custom_variable_reference } from "./megalogamengine_custom_variable_reference";
 
 export class s_variable_metadata {
-  @AutoMap(() => [c_custom_variable_reference])
   m_numeric_variables: [c_custom_variable_reference, number][] = [];
-  @AutoMap(() => [c_custom_variable_reference])
   m_timer_variables: c_custom_variable_reference[] = [];
-  @AutoMap(() => [Number])
   m_team_variables: [number, number][] = [];
-  @AutoMap(() => [Number])
   m_player_variables: number[] = [];
-  @AutoMap(() => [Number])
   m_object_variables: number[] = [];
 
   constructor(

@@ -2,7 +2,6 @@ import type {
   c_bitstream_reader,
   c_bitstream_writer,
 } from "../../../../bitstream";
-import { AutoMap } from "../../../../helpers/automap";
 import { c_player_traits } from "./game_engine_player_traits";
 
 /** `TraitSetTypes::Value` (0..1), 1 bit. */
@@ -13,15 +12,10 @@ export enum e_trait_set_type {
 
 /** Halo 4 MaxStrings=148 → 8-bit string indices; trailing hidden + traits-type. */
 export class s_player_trait_option {
-  @AutoMap(() => Number)
   m_name_string_index = 0;
-  @AutoMap(() => Number)
   m_description_string_index = 0;
-  @AutoMap(() => c_player_traits)
   m_player_traits = new c_player_traits();
-  @AutoMap(() => Boolean)
   m_hidden = false;
-  @AutoMap(() => Number)
   m_traits_type: e_trait_set_type = e_trait_set_type.player_traits;
   decode(bitstream: c_bitstream_reader): void {
     this.m_name_string_index = bitstream.read_integer("name-string-index", 8);

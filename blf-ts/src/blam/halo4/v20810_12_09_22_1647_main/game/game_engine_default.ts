@@ -2,7 +2,7 @@ import type {
   c_bitstream_reader,
   c_bitstream_writer,
 } from "../../../../bitstream";
-import { AutoMap } from "../../../../helpers/automap";
+
 import { type StaticArray, staticArray } from "../../../../types/static_array";
 import {
   content_item_metadata_decode,
@@ -32,17 +32,11 @@ export enum e_team_scoring_method {
 }
 
 export class e_map_override_option_flags {
-  @AutoMap(() => Boolean)
   grenades_on_map = false;
-  @AutoMap(() => Boolean)
   shortcuts_on_map = false;
-  @AutoMap(() => Boolean)
   equipment_on_map = false;
-  @AutoMap(() => Boolean)
   powerups_on_map = false;
-  @AutoMap(() => Boolean)
   turrets_on_map = false;
-  @AutoMap(() => Boolean)
   indestructible_vehicles = false;
   to_raw(): number {
     return (
@@ -67,15 +61,10 @@ export class e_map_override_option_flags {
 }
 
 export class e_game_engine_social_options_flags {
-  @AutoMap(() => Boolean)
   friendly_fire_enabled = false;
-  @AutoMap(() => Boolean)
   betrayal_booting_enabled = false;
-  @AutoMap(() => Boolean)
   enemy_voice_enabled = false;
-  @AutoMap(() => Boolean)
   open_channel_voice_enabled = false;
-  @AutoMap(() => Boolean)
   dead_player_voice_enabled = false;
   to_raw(): number {
     return (
@@ -98,33 +87,19 @@ export class e_game_engine_social_options_flags {
 }
 
 export class c_game_engine_miscellaneous_options {
-  @AutoMap(() => Boolean)
   m_teams_enabled = false;
-  @AutoMap(() => Boolean)
   m_round_reset_players = false;
-  @AutoMap(() => Boolean)
   m_round_reset_map = false;
-  @AutoMap(() => Boolean)
   m_perfection_enabled = false;
-  @AutoMap(() => Number)
   m_round_time_limit_minutes = 0;
-  @AutoMap(() => Number)
   m_round_limit = 0;
-  @AutoMap(() => Number)
   m_early_victory_win_count = 0;
-  @AutoMap(() => Boolean)
   m_killcam_enabled = false;
-  @AutoMap(() => Boolean)
   m_medal_scoring_enabled = false;
-  @AutoMap(() => Boolean)
   m_asymmetric_round_scoring = false;
-  @AutoMap(() => Number)
   m_overshield_deplete_time = 0;
-  @AutoMap(() => Boolean)
   m_mosh_enabled = false;
-  @AutoMap(() => Boolean)
   m_drop_weapons_on_death = false;
-  @AutoMap(() => Number)
   m_mosh_difficulty = 0;
   initialize(): void {
     this.m_teams_enabled = false;
@@ -205,35 +180,20 @@ export class c_game_engine_miscellaneous_options {
   }
 }
 export class c_game_engine_respawn_options {
-  @AutoMap(() => Boolean)
   m_inherit_respawn_time = false;
-  @AutoMap(() => Boolean)
   m_respawn_with_teammate = false;
-  @AutoMap(() => Boolean)
   m_respawn_at_location = false;
-  @AutoMap(() => Boolean)
   m_respawn_on_kills = false;
-  @AutoMap(() => Boolean)
   m_early_respawn_allowed = false;
-  @AutoMap(() => Number)
   m_lives_per_round = 0;
-  @AutoMap(() => Number)
   m_team_lives_per_round = 0;
-  @AutoMap(() => Number)
   m_min_respawn_time_seconds = 0;
-  @AutoMap(() => Number)
   m_respawn_time_seconds = 0;
-  @AutoMap(() => Number)
   m_suicide_penalty_seconds = 0;
-  @AutoMap(() => Number)
   m_betrayal_penalty_seconds = 0;
-  @AutoMap(() => Number)
   m_respawn_growth_seconds = 0;
-  @AutoMap(() => Number)
   m_loadout_cam_time = 0;
-  @AutoMap(() => Number)
   m_respawn_player_traits_duration_seconds = 0;
-  @AutoMap(() => c_player_traits)
   m_respawn_player_traits = new c_player_traits();
   initialize(): void {
     this.m_inherit_respawn_time = false;
@@ -326,11 +286,8 @@ export class c_game_engine_respawn_options {
   }
 }
 export class c_game_engine_social_options {
-  @AutoMap(() => e_game_engine_social_options_flags)
   m_flags = new e_game_engine_social_options_flags();
-  @AutoMap(() => e_team_changing_type)
   m_team_changing: e_team_changing_type = e_team_changing_type.disabled;
-  @AutoMap(() => Boolean)
   m_observers_enabled = false;
   initialize(): void {
     this.m_flags = new e_game_engine_social_options_flags();
@@ -374,9 +331,7 @@ export class c_game_engine_social_options {
   }
 }
 export class PowerupEffectData {
-  @AutoMap(() => c_player_traits)
   m_traits = new c_player_traits();
-  @AutoMap(() => Number)
   m_duration_seconds = 0;
   decode(bitstream: c_bitstream_reader): void {
     this.m_traits.decode(bitstream);
@@ -389,7 +344,6 @@ export class PowerupEffectData {
 }
 
 export class PowerupData {
-  @AutoMap(() => [PowerupEffectData])
   m_effects: [PowerupEffectData, PowerupEffectData] = [
     new PowerupEffectData(),
     new PowerupEffectData(),
@@ -407,17 +361,11 @@ export class PowerupData {
 }
 
 export class c_game_engine_map_override_options {
-  @AutoMap(() => e_map_override_option_flags)
   m_flags = new e_map_override_option_flags();
-  @AutoMap(() => c_player_traits)
   m_base_player_traits = new c_player_traits();
-  @AutoMap(() => Number)
   m_weapon_set_absolute_index = 0;
-  @AutoMap(() => Number)
   m_vehicle_set_absolute_index = 0;
-  @AutoMap(() => Number)
   m_equipment_set_absolute_index = 0;
-  @AutoMap(() => [PowerupData])
   m_powerups: [PowerupData, PowerupData, PowerupData, PowerupData] = [
     new PowerupData(),
     new PowerupData(),
@@ -545,17 +493,11 @@ export enum e_player_color_index {
 }
 
 export class s_emblem_info {
-  @AutoMap(() => Number)
   m_foreground_emblem_index = 0;
-  @AutoMap(() => Number)
   m_background_emblem_index = 0;
-  @AutoMap(() => Number)
   m_flags = 0;
-  @AutoMap(() => Number)
   m_primary_color: e_player_color_index = e_player_color_index.none;
-  @AutoMap(() => Number)
   m_secondary_color: e_player_color_index = e_player_color_index.none;
-  @AutoMap(() => Number)
   m_background_color: e_player_color_index = e_player_color_index.none;
   decode(bitstream: c_bitstream_reader): void {
     this.m_foreground_emblem_index = bitstream.read_integer(
@@ -594,17 +536,11 @@ export class s_emblem_info {
 }
 
 export class e_game_engine_team_options_team_flags {
-  @AutoMap(() => Boolean)
   enabled = false;
-  @AutoMap(() => Boolean)
   override_primary_color = false;
-  @AutoMap(() => Boolean)
   override_secondary_color = false;
-  @AutoMap(() => Boolean)
   override_ui_text_color = false;
-  @AutoMap(() => Boolean)
   override_ui_bitmap_color = false;
-  @AutoMap(() => Boolean)
   unknown_5 = false;
   to_raw(): number {
     return (
@@ -629,26 +565,16 @@ export class e_game_engine_team_options_team_flags {
 }
 
 export class c_game_engine_team_options_team {
-  @AutoMap(() => e_game_engine_team_options_team_flags)
   m_flags = new e_game_engine_team_options_team_flags();
-  @AutoMap(() => c_string_table)
   m_name = new c_string_table(1, 544, 10, 10, 1);
-  @AutoMap(() => Number)
   m_team_initial_designator: e_multiplayer_team_designator =
     e_multiplayer_team_designator.none;
-  @AutoMap(() => Number)
   m_model_override: e_player_model_choice = e_player_model_choice.spartan;
-  @AutoMap(() => Number)
   m_primary_color_override = 0;
-  @AutoMap(() => Number)
   m_secondary_color_override = 0;
-  @AutoMap(() => Number)
   m_team_ui_text_tint_color_override = 0;
-  @AutoMap(() => Number)
   m_team_ui_bitmap_tint_color_override = 0;
-  @AutoMap(() => Number)
   m_fireteam_count = 0;
-  @AutoMap(() => s_emblem_info)
   m_emblem = new s_emblem_info();
   initialize(team_index: number): void {
     this.m_flags = new e_game_engine_team_options_team_flags();
@@ -715,13 +641,10 @@ export class c_game_engine_team_options_team {
   }
 }
 export class c_game_engine_team_options {
-  @AutoMap(() => Number)
   m_model_override: e_game_engine_team_options_model_override_type =
     e_game_engine_team_options_model_override_type.player_preference;
-  @AutoMap(() => e_game_engine_team_options_designator_switch_type)
   m_designator_switch_type: e_game_engine_team_options_designator_switch_type =
     e_game_engine_team_options_designator_switch_type.none;
-  @AutoMap(() => [c_game_engine_team_options_team])
   m_teams: StaticArray<
     c_game_engine_team_options_team,
     typeof k_game_variant_team_count
@@ -770,13 +693,9 @@ export class c_game_engine_team_options {
   }
 }
 export class e_game_engine_loadout_definition_flags {
-  @AutoMap(() => Boolean)
   spartan_loadouts_enabled = false;
-  @AutoMap(() => Boolean)
   elite_loadouts_enabled = false;
-  @AutoMap(() => Boolean)
   flag2 = false;
-  @AutoMap(() => Boolean)
   flag3 = false;
   to_raw(): number {
     return (
@@ -796,26 +715,16 @@ export class e_game_engine_loadout_definition_flags {
   }
 }
 export class c_loadout_traits {
-  @AutoMap(() => Boolean)
   m_visible = false;
-  @AutoMap(() => Number)
   m_name = 0;
-  @AutoMap(() => Number)
   m_initial_primary_weapon_absolute_index = 0;
-  @AutoMap(() => Number)
   m_initial_secondary_weapon_absolute_index = 0;
-  @AutoMap(() => Number)
   m_initial_equipment_absolute_index = 0;
-  @AutoMap(() => Number)
   m_initial_tactical_package_absolute_index = 0;
-  @AutoMap(() => Number)
   m_initial_support_upgrade_absolute_index = 0;
-  @AutoMap(() => e_grenade_count_setting)
   m_initial_grenade_count_setting: e_grenade_count_setting =
     e_grenade_count_setting.unchanged;
-  @AutoMap(() => Number)
   m_initial_primary_weapon_variant = 0;
-  @AutoMap(() => Number)
   m_initial_secondary_weapon_variant = 0;
   initialize(): void {
     this.m_visible = false;
@@ -888,7 +797,6 @@ export class c_loadout_traits {
   }
 }
 export class c_loadout_palette_traits {
-  @AutoMap(() => [c_loadout_traits])
   m_loadouts: StaticArray<
     c_loadout_traits,
     typeof k_loadout_traits_per_palette
@@ -910,9 +818,7 @@ export class c_loadout_palette_traits {
   }
 }
 export class c_game_engine_loadout_traits {
-  @AutoMap(() => e_game_engine_loadout_definition_flags)
   m_flags = new e_game_engine_loadout_definition_flags();
-  @AutoMap(() => [c_loadout_palette_traits])
   m_loadout_palettes: StaticArray<
     c_loadout_palette_traits,
     typeof k_loadout_palette_count
@@ -951,9 +857,7 @@ export enum e_custom_game_map_size {
 
 /** Halo 4 `MapLoadoutInfo` (IDA @ 0x82d7b150). */
 export class MapLoadoutInfo {
-  @AutoMap(() => e_custom_game_map_size)
   m_size: e_custom_game_map_size = e_custom_game_map_size.small;
-  @AutoMap(() => c_loadout_traits)
   m_loadout = new c_loadout_traits();
   decode(bitstream: c_bitstream_reader): void {
     this.m_size = bitstream.read_enum("size", 2, e_custom_game_map_size);
@@ -966,17 +870,11 @@ export class MapLoadoutInfo {
 }
 
 export class c_game_engine_prototype_options {
-  @AutoMap(() => Number)
   m_mode = 0;
-  @AutoMap(() => Number)
   m_promethean_energy_kill = 0;
-  @AutoMap(() => Number)
   m_promethean_energy_time = 0;
-  @AutoMap(() => Number)
   m_promethean_energy_medal = 0;
-  @AutoMap(() => Number)
   m_promethean_duration = 0;
-  @AutoMap(() => Boolean)
   m_class_color_override = false;
   decode(bitstream: c_bitstream_reader): void {
     this.m_mode = bitstream.read_integer("prototype-options-mode", 2);
@@ -1016,33 +914,19 @@ export enum e_requisition_sub_menu {
 }
 
 export class c_game_engine_requisition_palette_item {
-  @AutoMap(() => Number)
   m_global_palette_index = 0;
-  @AutoMap(() => Boolean)
   m_locked = false;
-  @AutoMap(() => Number)
   m_designer_id = 0;
-  @AutoMap(() => e_requisition_sub_menu)
   m_sub_menu: e_requisition_sub_menu = e_requisition_sub_menu.unknown_0;
-  @AutoMap(() => Number)
   m_max_instances = 0;
-  @AutoMap(() => Number)
   m_price = 0;
-  @AutoMap(() => Number)
   m_model_variant_name = 0;
-  @AutoMap(() => Number)
   m_starting_ammo = 0;
-  @AutoMap(() => Number)
   m_warm_up = 0;
-  @AutoMap(() => Number)
   m_purchase_frequency_player = 0;
-  @AutoMap(() => Number)
   m_purchase_frequency_team = 0;
-  @AutoMap(() => Number)
   m_price_increase_factor = 0;
-  @AutoMap(() => Number)
   m_max_buy_player = 0;
-  @AutoMap(() => Number)
   m_max_buy_team = 0;
   decode(bitstream: c_bitstream_reader): void {
     this.m_global_palette_index = bitstream.read_integer(
@@ -1110,11 +994,8 @@ export class c_game_engine_requisition_palette_item {
 }
 
 export class c_game_engine_requisition_options {
-  @AutoMap(() => Number)
   m_player_frequency = 0;
-  @AutoMap(() => Number)
   m_initial_currency = 0;
-  @AutoMap(() => [c_game_engine_requisition_palette_item])
   m_items: c_game_engine_requisition_palette_item[] = [];
   decode(bitstream: c_bitstream_reader): void {
     this.m_player_frequency = bitstream.read_float(
@@ -1147,9 +1028,7 @@ const k_ordnance_quantized_bits = 30;
 const k_ordnance_quantized_max = 10000;
 
 export class GameEngineOrdnanceSlotItem {
-  @AutoMap(() => String)
   m_name = "";
-  @AutoMap(() => Number)
   m_weight = 0;
   decode(bitstream: c_bitstream_reader): void {
     // Halo `c_bitstream::write_string` is raw 8-bit (not UTF-8); 0xFE appears in retail .mglo.
@@ -1176,46 +1055,27 @@ export class GameEngineOrdnanceSlotItem {
 }
 
 export class GameEngineOrdnanceOptions {
-  @AutoMap(() => Boolean)
   m_initial_enabled = false;
-  @AutoMap(() => Boolean)
   m_random_enabled = false;
-  @AutoMap(() => Boolean)
   m_objective_enabled = false;
-  @AutoMap(() => Boolean)
   m_player_enabled = false;
-  @AutoMap(() => Boolean)
   m_custom_player_ordnance_enabled = false;
-  @AutoMap(() => Boolean)
   m_non_player_drop_enabled = false;
-  @AutoMap(() => Number)
   m_random_drop_count = 0;
-  @AutoMap(() => Number)
   m_random_drop_delay_min = 0;
-  @AutoMap(() => Number)
   m_random_drop_delay_max = 0;
-  @AutoMap(() => Number)
   m_random_drop_fanfare_duration = 0;
-  @AutoMap(() => String)
   m_initial_drop_name = "";
-  @AutoMap(() => Number)
   m_initial_drop_delay = 0;
-  @AutoMap(() => Number)
   m_initial_drop_fanfare_duration = 0;
-  @AutoMap(() => String)
   m_normal_drop_name = "";
-  @AutoMap(() => String)
   m_player_drop_name = "";
-  @AutoMap(() => String)
   m_remapping_table_name = "";
-  @AutoMap(() => [GameEngineOrdnanceSlotItem])
   m_custom_banks: GameEngineOrdnanceSlotItem[][] = Array.from(
     { length: 4 },
     () => Array.from({ length: 8 }, () => new GameEngineOrdnanceSlotItem())
   );
-  @AutoMap(() => Number)
   m_cost = 0;
-  @AutoMap(() => Number)
   m_cost_multiplier = 0;
   decode(bitstream: c_bitstream_reader): void {
     this.m_initial_enabled = bitstream.read_bool("ordnanceInitialEnabled");
@@ -1318,38 +1178,25 @@ export class GameEngineOrdnanceOptions {
 }
 
 export class c_game_engine_base_variant {
-  @AutoMap(() => s_content_item_metadata)
   m_metadata = (() => {
-    const metadata = new s_content_item_metadata();
-    metadata.general = new s_content_item_general_metadata();
-    metadata.display = new s_content_item_display_metadata();
-    metadata.creation_history = new s_content_item_history();
-    metadata.modification_history = new s_content_item_history();
+    const metadata = s_content_item_metadata.zero();
+    metadata.general = s_content_item_general_metadata.zero();
+    metadata.display = s_content_item_display_metadata.zero();
+    metadata.creation_history = s_content_item_history.zero();
+    metadata.modification_history = s_content_item_history.zero();
     return metadata;
   })();
-  @AutoMap(() => Boolean)
   m_built_in = false;
-  @AutoMap(() => Boolean)
   m_user_created = false;
-  @AutoMap(() => c_game_engine_miscellaneous_options)
   m_miscellaneous_options = new c_game_engine_miscellaneous_options();
-  @AutoMap(() => c_game_engine_prototype_options)
   m_prototype_options = new c_game_engine_prototype_options();
-  @AutoMap(() => c_game_engine_respawn_options)
   m_respawn_options = new c_game_engine_respawn_options();
-  @AutoMap(() => c_game_engine_social_options)
   m_social_options = new c_game_engine_social_options();
-  @AutoMap(() => c_game_engine_map_override_options)
   m_map_override_options = new c_game_engine_map_override_options();
-  @AutoMap(() => c_game_engine_requisition_options)
   m_requisition_options = new c_game_engine_requisition_options();
-  @AutoMap(() => Number)
   m_infinity_mission_id = 0;
-  @AutoMap(() => c_game_engine_team_options)
   m_team_options = new c_game_engine_team_options();
-  @AutoMap(() => c_game_engine_loadout_traits)
   m_loadouts = new c_game_engine_loadout_traits();
-  @AutoMap(() => GameEngineOrdnanceOptions)
   m_ordnance_options = new GameEngineOrdnanceOptions();
   initialize(): void {
     content_item_metadata_set_defaults(this.m_metadata);

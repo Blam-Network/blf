@@ -2,7 +2,6 @@ import type {
   c_bitstream_reader,
   c_bitstream_writer,
 } from "../../../../../bitstream";
-import { AutoMap } from "../../../../../helpers/automap";
 import { e_game_engine_timer_rate } from "../../../v12065_11_08_24_1738_tu1actual/game/game_engine_enums";
 import { e_weapon_pickup_priority } from "../../../v12065_11_08_24_1738_tu1actual/game/megalogamengine/megalogamengine_actions";
 import { e_megalogamengine_hud_meter_input_type } from "../../../v12065_11_08_24_1738_tu1actual/game/megalogamengine/megalogamengine_hud_widgets";
@@ -179,11 +178,8 @@ export enum e_action_type {
 }
 /** Matches `e_create_object_flags` in blf_lib `megalogamengine_actions.rs`. */
 export class e_create_object_flags {
-  @AutoMap(() => Boolean)
   never_garbage_collect = false;
-  @AutoMap(() => Boolean)
   suppress_effect = false;
-  @AutoMap(() => Boolean)
   absolute_orientation = false;
   to_raw(): number {
     return (
@@ -203,21 +199,13 @@ export class e_create_object_flags {
 
 /** Matches `e_fireteam_filter_flags` in blf_lib `megalogamengine_actions.rs`. */
 export class e_fireteam_filter_flags {
-  @AutoMap(() => Boolean)
   fireteam1 = false;
-  @AutoMap(() => Boolean)
   fireteam2 = false;
-  @AutoMap(() => Boolean)
   fireteam3 = false;
-  @AutoMap(() => Boolean)
   fireteam4 = false;
-  @AutoMap(() => Boolean)
   fireteam5 = false;
-  @AutoMap(() => Boolean)
   fireteam6 = false;
-  @AutoMap(() => Boolean)
   fireteam7 = false;
-  @AutoMap(() => Boolean)
   fireteam8 = false;
   to_raw(): number {
     return (
@@ -267,12 +255,9 @@ enum e_boundary_shape {
   box = 3,
 }
 export class s_team_or_player_target {
-  @AutoMap(() => e_action_team_or_player_target)
   m_target: e_action_team_or_player_target =
     e_action_team_or_player_target.team;
-  @AutoMap(() => c_team_reference)
   m_team?: c_team_reference;
-  @AutoMap(() => c_player_reference)
   m_player?: c_player_reference;
   decode(bitstream: c_bitstream_reader): void {
     this.m_target = bitstream.read_enum(
@@ -312,11 +297,8 @@ export class s_team_or_player_target {
   }
 }
 export class s_action_set_score_parameters {
-  @AutoMap(() => s_team_or_player_target)
   m_target = new s_team_or_player_target();
-  @AutoMap(() => e_math_operation)
   m_operation: e_math_operation = e_math_operation.add;
-  @AutoMap(() => c_custom_variable_reference)
   m_variable = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_target.decode(bitstream);
@@ -330,17 +312,11 @@ export class s_action_set_score_parameters {
   }
 }
 export class s_action_create_object_parameters {
-  @AutoMap(() => c_object_type_reference)
   m_object_type = new c_object_type_reference();
-  @AutoMap(() => c_object_reference)
   m_object_reference_1 = new c_object_reference();
-  @AutoMap(() => c_object_reference)
   m_object_reference_2 = new c_object_reference();
-  @AutoMap(() => Number)
   m_filter_index = 0;
-  @AutoMap(() => e_create_object_flags)
   m_flags = new e_create_object_flags();
-  @AutoMap(() => Number)
   m_offset = 0;
   decode(bitstream: c_bitstream_reader): void {
     this.m_object_type.decode(bitstream);
@@ -362,12 +338,9 @@ export class s_action_create_object_parameters {
   }
 }
 export class s_action_navpoint_set_icon_parameters {
-  @AutoMap(() => c_object_reference)
   m_object = new c_object_reference();
-  @AutoMap(() => e_chud_navpoint_icon_type)
   m_navpoint_icon: e_chud_navpoint_icon_type =
     e_chud_navpoint_icon_type.speaker;
-  @AutoMap(() => c_custom_variable_reference)
   m_navpoint_number?: c_custom_variable_reference;
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
@@ -391,9 +364,7 @@ export class s_action_navpoint_set_icon_parameters {
   }
 }
 export class s_action_navpoint_set_priority_parameters {
-  @AutoMap(() => c_object_reference)
   m_object = new c_object_reference();
-  @AutoMap(() => e_navpoint_priority)
   m_priority: e_navpoint_priority = e_navpoint_priority.low;
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
@@ -405,9 +376,7 @@ export class s_action_navpoint_set_priority_parameters {
   }
 }
 export class s_action_navpoint_set_timer_parameters {
-  @AutoMap(() => c_object_reference)
   m_object = new c_object_reference();
-  @AutoMap(() => Number)
   m_timer_index = 0;
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
@@ -419,11 +388,8 @@ export class s_action_navpoint_set_timer_parameters {
   }
 }
 export class s_action_navpoint_set_visible_range_parameters {
-  @AutoMap(() => c_object_reference)
   m_object = new c_object_reference();
-  @AutoMap(() => c_custom_variable_reference)
   m_variable_1 = new c_custom_variable_reference();
-  @AutoMap(() => c_custom_variable_reference)
   m_variable_2 = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
@@ -437,11 +403,8 @@ export class s_action_navpoint_set_visible_range_parameters {
   }
 }
 export class s_action_set_parameters {
-  @AutoMap(() => s_variant_variable)
   m_variable_1 = new s_variant_variable();
-  @AutoMap(() => s_variant_variable)
   m_variable_2 = new s_variant_variable();
-  @AutoMap(() => e_math_operation)
   m_operation: e_math_operation = e_math_operation.add;
   decode(bitstream: c_bitstream_reader): void {
     this.m_variable_1.decode(bitstream);
@@ -455,17 +418,11 @@ export class s_action_set_parameters {
   }
 }
 export class s_action_set_boundary_parameters {
-  @AutoMap(() => c_object_reference)
   m_object = new c_object_reference();
-  @AutoMap(() => e_boundary_shape)
   m_shape: e_boundary_shape = e_boundary_shape.unused;
-  @AutoMap(() => c_custom_variable_reference)
   m_variable_1?: c_custom_variable_reference;
-  @AutoMap(() => c_custom_variable_reference)
   m_variable_2?: c_custom_variable_reference;
-  @AutoMap(() => c_custom_variable_reference)
   m_variable_3?: c_custom_variable_reference;
-  @AutoMap(() => c_custom_variable_reference)
   m_variable_4?: c_custom_variable_reference;
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
@@ -485,8 +442,8 @@ export class s_action_set_boundary_parameters {
         variable2.decode(bitstream);
         variable3.decode(bitstream);
         this.m_variable_1 = variable1;
-        this.m_variable_2 = variable2;
-        this.m_variable_3 = variable3;
+        this.m_variable_3 = variable2;
+        this.m_variable_4 = variable3;
         break;
       }
       case e_boundary_shape.box: {
@@ -517,8 +474,8 @@ export class s_action_set_boundary_parameters {
         break;
       case e_boundary_shape.cylinder:
         this.m_variable_1!.encode(bitstream);
-        this.m_variable_2!.encode(bitstream);
         this.m_variable_3!.encode(bitstream);
+        this.m_variable_4!.encode(bitstream);
         break;
       case e_boundary_shape.box:
         this.m_variable_1!.encode(bitstream);
@@ -530,9 +487,7 @@ export class s_action_set_boundary_parameters {
   }
 }
 export class s_action_apply_player_traits_parameters {
-  @AutoMap(() => c_player_reference)
   m_player = new c_player_reference();
-  @AutoMap(() => Number)
   m_trait_index = 0;
   decode(bitstream: c_bitstream_reader): void {
     this.m_player.decode(bitstream);
@@ -544,9 +499,7 @@ export class s_action_apply_player_traits_parameters {
   }
 }
 export class s_action_set_fireteam_respawn_filter_parameters {
-  @AutoMap(() => c_object_reference)
   m_object = new c_object_reference();
-  @AutoMap(() => e_fireteam_filter_flags)
   m_fireteam_filter = new e_fireteam_filter_flags();
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
@@ -560,11 +513,8 @@ export class s_action_set_fireteam_respawn_filter_parameters {
   }
 }
 export class s_action_set_progress_bar_parameters {
-  @AutoMap(() => c_object_reference)
   m_object = new c_object_reference();
-  @AutoMap(() => c_player_filter_modifier)
   m_player_filter_modifier = new c_player_filter_modifier();
-  @AutoMap(() => Number)
   m_timer_index = 0;
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
@@ -578,11 +528,8 @@ export class s_action_set_progress_bar_parameters {
   }
 }
 export class s_action_hud_post_message_parameters {
-  @AutoMap(() => s_team_or_player_target)
   m_target = new s_team_or_player_target();
-  @AutoMap(() => e_megalo_sound)
   m_sound_index: e_megalo_sound = e_megalo_sound.none;
-  @AutoMap(() => c_dynamic_string)
   m_string = new c_dynamic_string();
   decode(bitstream: c_bitstream_reader): void {
     this.m_target.decode(bitstream);
@@ -596,9 +543,7 @@ export class s_action_hud_post_message_parameters {
   }
 }
 export class s_action_timer_set_rate_parameters {
-  @AutoMap(() => c_custom_timer_reference)
   m_timer = new c_custom_timer_reference();
-  @AutoMap(() => e_game_engine_timer_rate)
   m_rate: e_game_engine_timer_rate = e_game_engine_timer_rate.zero;
   decode(bitstream: c_bitstream_reader): void {
     this.m_timer.decode(bitstream);
@@ -614,7 +559,6 @@ export class s_action_timer_set_rate_parameters {
   }
 }
 export class s_action_for_each_parameters {
-  @AutoMap(() => Number)
   m_trigger_index = 0;
   decode(bitstream: c_bitstream_reader): void {
     // Delta uses 8 bits (retail uses 9).
@@ -625,7 +569,6 @@ export class s_action_for_each_parameters {
   }
 }
 export class s_action_object_destroy_parameters {
-  @AutoMap(() => c_object_reference)
   m_object = new c_object_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
@@ -635,11 +578,8 @@ export class s_action_object_destroy_parameters {
   }
 }
 export class s_action_object_attach_parameters {
-  @AutoMap(() => c_object_reference)
   m_object_1 = new c_object_reference();
-  @AutoMap(() => c_object_reference)
   m_object_2 = new c_object_reference();
-  @AutoMap(() => Number)
   m_offset = 0;
   decode(bitstream: c_bitstream_reader): void {
     this.m_object_1.decode(bitstream);
@@ -653,11 +593,8 @@ export class s_action_object_attach_parameters {
   }
 }
 export class s_action_player_adjust_money_parameters {
-  @AutoMap(() => c_player_reference)
   m_player = new c_player_reference();
-  @AutoMap(() => e_math_operation)
   m_math_operation: e_math_operation = e_math_operation.add;
-  @AutoMap(() => c_custom_variable_reference)
   m_variable = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_player.decode(bitstream);
@@ -675,11 +612,8 @@ export class s_action_player_adjust_money_parameters {
   }
 }
 export class s_action_player_enable_purchases_parameters {
-  @AutoMap(() => c_player_reference)
   m_player = new c_player_reference();
-  @AutoMap(() => c_custom_variable_reference)
   m_variable = new c_custom_variable_reference();
-  @AutoMap(() => Number)
   m_mode = 0;
   decode(bitstream: c_bitstream_reader): void {
     this.m_player.decode(bitstream);
@@ -693,9 +627,7 @@ export class s_action_player_enable_purchases_parameters {
   }
 }
 export class s_action_weapon_set_pickup_priority_parameters {
-  @AutoMap(() => c_object_reference)
   m_object = new c_object_reference();
-  @AutoMap(() => e_weapon_pickup_priority)
   m_weapon_pickup_priority: e_weapon_pickup_priority =
     e_weapon_pickup_priority.normal;
   decode(bitstream: c_bitstream_reader): void {
@@ -716,9 +648,7 @@ export class s_action_weapon_set_pickup_priority_parameters {
   }
 }
 export class s_action_hud_widget_text_base {
-  @AutoMap(() => Number)
   m_widget_index = 0;
-  @AutoMap(() => c_dynamic_string)
   m_string = new c_dynamic_string();
   decode(bitstream: c_bitstream_reader): void {
     this.m_widget_index = bitstream.read_index("widget-index", 4, 2);
@@ -730,14 +660,10 @@ export class s_action_hud_widget_text_base {
   }
 }
 export class c_megalogamengine_hud_meter_input {
-  @AutoMap(() => e_megalogamengine_hud_meter_input_type)
   m_type: e_megalogamengine_hud_meter_input_type =
     e_megalogamengine_hud_meter_input_type.none;
-  @AutoMap(() => c_custom_variable_reference)
   m_variable_1?: c_custom_variable_reference;
-  @AutoMap(() => c_custom_variable_reference)
   m_variable_2?: c_custom_variable_reference;
-  @AutoMap(() => c_custom_timer_reference)
   m_timer?: c_custom_timer_reference;
   decode(bitstream: c_bitstream_reader): void {
     this.m_type = bitstream.read_enum(
@@ -790,9 +716,7 @@ export class c_megalogamengine_hud_meter_input {
   }
 }
 export class s_action_hud_widget_set_meter_parameters {
-  @AutoMap(() => Number)
   m_widget_index = 0;
-  @AutoMap(() => c_megalogamengine_hud_meter_input)
   m_meter_input = new c_megalogamengine_hud_meter_input();
   decode(bitstream: c_bitstream_reader): void {
     this.m_widget_index = bitstream.read_index("widget-index", 4, 2);
@@ -804,9 +728,7 @@ export class s_action_hud_widget_set_meter_parameters {
   }
 }
 export class s_action_hud_widget_set_icon_parameters {
-  @AutoMap(() => Number)
   m_widget_index = 0;
-  @AutoMap(() => Number)
   m_icon_index = 0;
   decode(bitstream: c_bitstream_reader): void {
     this.m_widget_index = bitstream.read_index("widget-index", 4, 2);
@@ -818,11 +740,8 @@ export class s_action_hud_widget_set_icon_parameters {
   }
 }
 export class s_action_hud_widget_set_visibility_parameters {
-  @AutoMap(() => Number)
   m_widget_index = 0;
-  @AutoMap(() => c_player_reference)
   m_player = new c_player_reference();
-  @AutoMap(() => Boolean)
   m_visible = false;
   decode(bitstream: c_bitstream_reader): void {
     this.m_widget_index = bitstream.read_index("widget-index", 4, 2);
@@ -836,11 +755,8 @@ export class s_action_hud_widget_set_visibility_parameters {
   }
 }
 export class s_action_play_sound_parameters {
-  @AutoMap(() => e_megalo_sound)
   m_sound_index: e_megalo_sound = e_megalo_sound.none;
-  @AutoMap(() => Boolean)
   m_immediate = false;
-  @AutoMap(() => s_team_or_player_target)
   m_target = new s_team_or_player_target();
   decode(bitstream: c_bitstream_reader): void {
     this.m_sound_index = bitstream.read_enum("sound-index", 7, e_megalo_sound);
@@ -854,9 +770,7 @@ export class s_action_play_sound_parameters {
   }
 }
 export class s_action_team_set_coop_spawning_parameters {
-  @AutoMap(() => c_team_reference)
   m_team = new c_team_reference();
-  @AutoMap(() => Boolean)
   m_enabled = false;
   decode(bitstream: c_bitstream_reader): void {
     this.m_team.decode(bitstream);
@@ -868,11 +782,8 @@ export class s_action_team_set_coop_spawning_parameters {
   }
 }
 export class s_action_vitality_adjustment_parameters {
-  @AutoMap(() => c_object_reference)
   m_object = new c_object_reference();
-  @AutoMap(() => e_math_operation)
   m_operation: e_math_operation = e_math_operation.add;
-  @AutoMap(() => c_custom_variable_reference)
   m_variable = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
@@ -886,11 +797,8 @@ export class s_action_vitality_adjustment_parameters {
   }
 }
 export class s_action_object_get_distance_parameters {
-  @AutoMap(() => c_object_reference)
   m_object_1 = new c_object_reference();
-  @AutoMap(() => c_object_reference)
   m_object_2 = new c_object_reference();
-  @AutoMap(() => c_custom_variable_reference)
   m_variable = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_object_1.decode(bitstream);
@@ -904,9 +812,7 @@ export class s_action_object_get_distance_parameters {
   }
 }
 export class s_action_player_set_requisition_palette_parameters {
-  @AutoMap(() => c_player_reference)
   m_player = new c_player_reference();
-  @AutoMap(() => Number)
   m_new_palette = 0;
   decode(bitstream: c_bitstream_reader): void {
     this.m_player.decode(bitstream);
@@ -918,13 +824,9 @@ export class s_action_player_set_requisition_palette_parameters {
   }
 }
 export class s_action_adjust_grenades_parameters {
-  @AutoMap(() => c_player_reference)
   m_player = new c_player_reference();
-  @AutoMap(() => e_grenade_type)
   m_grenade_type: e_grenade_type = e_grenade_type.frag_grenade;
-  @AutoMap(() => e_math_operation)
   m_math_operation: e_math_operation = e_math_operation.add;
-  @AutoMap(() => c_custom_variable_reference)
   m_variable = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_player.decode(bitstream);
@@ -948,11 +850,8 @@ export class s_action_adjust_grenades_parameters {
   }
 }
 export class s_action_submit_incident_parameters {
-  @AutoMap(() => Number)
   m_incident_id = 0;
-  @AutoMap(() => s_team_or_player_target)
   m_target_1 = new s_team_or_player_target();
-  @AutoMap(() => s_team_or_player_target)
   m_target_2 = new s_team_or_player_target();
   decode(bitstream: c_bitstream_reader): void {
     this.m_incident_id = bitstream.read_integer("incident-id", 10) - 1;
@@ -966,13 +865,9 @@ export class s_action_submit_incident_parameters {
   }
 }
 export class s_action_submit_incident_with_custom_value_parameters {
-  @AutoMap(() => Number)
   m_incident_id = 0;
-  @AutoMap(() => s_team_or_player_target)
   m_target_1 = new s_team_or_player_target();
-  @AutoMap(() => s_team_or_player_target)
   m_target_2 = new s_team_or_player_target();
-  @AutoMap(() => c_custom_variable_reference)
   m_variable = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_incident_id = bitstream.read_integer("incident-id", 10) - 1;
@@ -988,9 +883,7 @@ export class s_action_submit_incident_with_custom_value_parameters {
   }
 }
 export class s_action_set_loadout_palette_parameters {
-  @AutoMap(() => s_team_or_player_target)
   m_target = new s_team_or_player_target();
-  @AutoMap(() => Number)
   m_palette_index = 0;
   decode(bitstream: c_bitstream_reader): void {
     this.m_target.decode(bitstream);
@@ -1002,11 +895,8 @@ export class s_action_set_loadout_palette_parameters {
   }
 }
 export class s_action_device_set_position_track_parameters {
-  @AutoMap(() => c_object_reference)
   m_object = new c_object_reference();
-  @AutoMap(() => Number)
   m_animation_name_index = 0;
-  @AutoMap(() => c_custom_variable_reference)
   m_variable = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
@@ -1024,15 +914,10 @@ export class s_action_device_set_position_track_parameters {
   }
 }
 export class s_action_device_animate_position_parameters {
-  @AutoMap(() => c_object_reference)
   m_object = new c_object_reference();
-  @AutoMap(() => c_custom_variable_reference)
   m_variable_1 = new c_custom_variable_reference();
-  @AutoMap(() => c_custom_variable_reference)
   m_variable_2 = new c_custom_variable_reference();
-  @AutoMap(() => c_custom_variable_reference)
   m_variable_3 = new c_custom_variable_reference();
-  @AutoMap(() => c_custom_variable_reference)
   m_variable_4 = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
@@ -1050,11 +935,8 @@ export class s_action_device_animate_position_parameters {
   }
 }
 export class s_action_player_get_weapon_parameters {
-  @AutoMap(() => c_player_reference)
   m_player = new c_player_reference();
-  @AutoMap(() => Boolean)
   m_primary = false;
-  @AutoMap(() => c_object_reference)
   m_object = new c_object_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_player.decode(bitstream);
@@ -1068,16 +950,11 @@ export class s_action_player_get_weapon_parameters {
   }
 }
 export class s_action_create_tunnel_parameters {
-  @AutoMap(() => c_player_reference)
-  m_object_1 = new c_player_reference();
-  @AutoMap(() => c_player_reference)
-  m_object_2 = new c_player_reference();
-  @AutoMap(() => c_object_reference)
-  m_object_type = new c_object_reference();
-  @AutoMap(() => c_custom_variable_reference)
+  m_object_1 = new c_object_reference();
+  m_object_2 = new c_object_reference();
+  m_object_type = new c_object_type_reference();
   m_variable = new c_custom_variable_reference();
-  @AutoMap(() => c_player_reference)
-  m_object_3 = new c_player_reference();
+  m_object_3 = new c_object_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_object_1.decode(bitstream);
     this.m_object_2.decode(bitstream);
@@ -1094,9 +971,7 @@ export class s_action_create_tunnel_parameters {
   }
 }
 export class s_action_player_set_coop_spawning_parameters {
-  @AutoMap(() => c_player_reference)
   m_player = new c_player_reference();
-  @AutoMap(() => Boolean)
   m_enabled = false;
   decode(bitstream: c_bitstream_reader): void {
     this.m_player.decode(bitstream);
@@ -1108,9 +983,7 @@ export class s_action_player_set_coop_spawning_parameters {
   }
 }
 export class s_action_player_set_vehicle_spawning_parameters {
-  @AutoMap(() => c_player_reference)
   m_player = new c_player_reference();
-  @AutoMap(() => Boolean)
   m_enabled = false;
   decode(bitstream: c_bitstream_reader): void {
     this.m_player.decode(bitstream);
@@ -1122,7 +995,6 @@ export class s_action_player_set_vehicle_spawning_parameters {
   }
 }
 export class s_action_delete_object_parameters {
-  @AutoMap(() => c_object_reference)
   m_object: c_object_reference = new c_object_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
@@ -1132,9 +1004,7 @@ export class s_action_delete_object_parameters {
   }
 }
 export class s_action_navpoint_set_visible_parameters {
-  @AutoMap(() => c_object_reference)
   m_object: c_object_reference = new c_object_reference();
-  @AutoMap(() => c_player_filter_modifier)
   m_player_filter_modifier: c_player_filter_modifier =
     new c_player_filter_modifier();
   decode(bitstream: c_bitstream_reader): void {
@@ -1147,9 +1017,7 @@ export class s_action_navpoint_set_visible_parameters {
   }
 }
 export class s_action_set_pickup_filter_parameters {
-  @AutoMap(() => c_object_reference)
   m_object: c_object_reference = new c_object_reference();
-  @AutoMap(() => c_player_filter_modifier)
   m_player_filter_modifier: c_player_filter_modifier =
     new c_player_filter_modifier();
   decode(bitstream: c_bitstream_reader): void {
@@ -1162,9 +1030,7 @@ export class s_action_set_pickup_filter_parameters {
   }
 }
 export class s_action_set_respawn_filter_parameters {
-  @AutoMap(() => c_object_reference)
   m_object: c_object_reference = new c_object_reference();
-  @AutoMap(() => c_player_filter_modifier)
   m_player_filter_modifier: c_player_filter_modifier =
     new c_player_filter_modifier();
   decode(bitstream: c_bitstream_reader): void {
@@ -1177,7 +1043,6 @@ export class s_action_set_respawn_filter_parameters {
   }
 }
 export class s_action_print_variable_parameters {
-  @AutoMap(() => c_dynamic_string)
   m_string: c_dynamic_string = new c_dynamic_string();
   decode(bitstream: c_bitstream_reader): void {
     this.m_string.decode(bitstream);
@@ -1187,9 +1052,7 @@ export class s_action_print_variable_parameters {
   }
 }
 export class s_action_get_player_holding_object_parameters {
-  @AutoMap(() => c_object_reference)
   m_object: c_object_reference = new c_object_reference();
-  @AutoMap(() => c_player_reference)
   m_player: c_player_reference = new c_player_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
@@ -1209,9 +1072,7 @@ export class s_action_end_round_parameters {
   }
 }
 export class s_action_boundary_set_visible_parameters {
-  @AutoMap(() => c_object_reference)
   m_object: c_object_reference = new c_object_reference();
-  @AutoMap(() => c_player_filter_modifier)
   m_player_filter_modifier: c_player_filter_modifier =
     new c_player_filter_modifier();
   decode(bitstream: c_bitstream_reader): void {
@@ -1224,9 +1085,7 @@ export class s_action_boundary_set_visible_parameters {
   }
 }
 export class s_action_object_set_invincibility_parameters {
-  @AutoMap(() => c_object_reference)
   m_object: c_object_reference = new c_object_reference();
-  @AutoMap(() => c_custom_variable_reference)
   m_variable: c_custom_variable_reference = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
@@ -1238,9 +1097,7 @@ export class s_action_object_set_invincibility_parameters {
   }
 }
 export class s_action_random_parameters {
-  @AutoMap(() => c_custom_variable_reference)
   m_variable_1: c_custom_variable_reference = new c_custom_variable_reference();
-  @AutoMap(() => c_custom_variable_reference)
   m_variable_2: c_custom_variable_reference = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_variable_1.decode(bitstream);
@@ -1260,9 +1117,7 @@ export class s_action_break_into_debugger_parameters {
   }
 }
 export class s_action_object_get_orientation_parameters {
-  @AutoMap(() => c_object_reference)
   m_object: c_object_reference = new c_object_reference();
-  @AutoMap(() => c_custom_variable_reference)
   m_variable: c_custom_variable_reference = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
@@ -1274,9 +1129,7 @@ export class s_action_object_get_orientation_parameters {
   }
 }
 export class s_action_object_get_velocity_parameters {
-  @AutoMap(() => c_object_reference)
   m_object: c_object_reference = new c_object_reference();
-  @AutoMap(() => c_custom_variable_reference)
   m_variable: c_custom_variable_reference = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
@@ -1288,9 +1141,7 @@ export class s_action_object_get_velocity_parameters {
   }
 }
 export class s_action_player_death_get_killing_player_parameters {
-  @AutoMap(() => c_player_reference)
   m_player_1: c_player_reference = new c_player_reference();
-  @AutoMap(() => c_player_reference)
   m_player_2: c_player_reference = new c_player_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_player_1.decode(bitstream);
@@ -1302,9 +1153,7 @@ export class s_action_player_death_get_killing_player_parameters {
   }
 }
 export class s_action_player_death_get_damage_type_parameters {
-  @AutoMap(() => c_player_reference)
   m_player: c_player_reference = new c_player_reference();
-  @AutoMap(() => c_custom_variable_reference)
   m_variable: c_custom_variable_reference = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_player.decode(bitstream);
@@ -1316,9 +1165,7 @@ export class s_action_player_death_get_damage_type_parameters {
   }
 }
 export class s_action_player_death_get_special_type_parameters {
-  @AutoMap(() => c_player_reference)
   m_player: c_player_reference = new c_player_reference();
-  @AutoMap(() => c_custom_variable_reference)
   m_variable: c_custom_variable_reference = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_player.decode(bitstream);
@@ -1330,7 +1177,6 @@ export class s_action_player_death_get_special_type_parameters {
   }
 }
 export class s_action_debugging_enable_tracing_parameters {
-  @AutoMap(() => Boolean)
   m_tracing_enabled = false;
   decode(bitstream: c_bitstream_reader): void {
     this.m_tracing_enabled = bitstream.read_bool("tracing-enabled");
@@ -1340,7 +1186,6 @@ export class s_action_debugging_enable_tracing_parameters {
   }
 }
 export class s_action_object_detach_parameters {
-  @AutoMap(() => c_object_reference)
   m_object: c_object_reference = new c_object_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
@@ -1350,9 +1195,7 @@ export class s_action_object_detach_parameters {
   }
 }
 export class s_action_player_get_place_parameters {
-  @AutoMap(() => c_player_reference)
   m_player: c_player_reference = new c_player_reference();
-  @AutoMap(() => c_custom_variable_reference)
   m_variable: c_custom_variable_reference = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_player.decode(bitstream);
@@ -1364,9 +1207,7 @@ export class s_action_player_get_place_parameters {
   }
 }
 export class s_action_team_get_place_parameters {
-  @AutoMap(() => c_team_reference)
   m_team: c_team_reference = new c_team_reference();
-  @AutoMap(() => c_custom_variable_reference)
   m_variable: c_custom_variable_reference = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_team.decode(bitstream);
@@ -1378,9 +1219,7 @@ export class s_action_team_get_place_parameters {
   }
 }
 export class s_action_player_get_killing_spree_count_parameters {
-  @AutoMap(() => c_player_reference)
   m_player: c_player_reference = new c_player_reference();
-  @AutoMap(() => c_custom_variable_reference)
   m_variable: c_custom_variable_reference = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_player.decode(bitstream);
@@ -1392,9 +1231,7 @@ export class s_action_player_get_killing_spree_count_parameters {
   }
 }
 export class s_action_player_get_vehicle_parameters {
-  @AutoMap(() => c_player_reference)
   m_player: c_player_reference = new c_player_reference();
-  @AutoMap(() => c_object_reference)
   m_object: c_object_reference = new c_object_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_player.decode(bitstream);
@@ -1406,9 +1243,7 @@ export class s_action_player_get_vehicle_parameters {
   }
 }
 export class s_action_player_set_vehicle_parameters {
-  @AutoMap(() => c_player_reference)
   m_player: c_player_reference = new c_player_reference();
-  @AutoMap(() => c_object_reference)
   m_object: c_object_reference = new c_object_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_player.decode(bitstream);
@@ -1420,9 +1255,7 @@ export class s_action_player_set_vehicle_parameters {
   }
 }
 export class s_action_player_set_unit_parameters {
-  @AutoMap(() => c_player_reference)
   m_player: c_player_reference = new c_player_reference();
-  @AutoMap(() => c_object_reference)
   m_object: c_object_reference = new c_object_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_player.decode(bitstream);
@@ -1434,7 +1267,6 @@ export class s_action_player_set_unit_parameters {
   }
 }
 export class s_action_timer_reset_parameters {
-  @AutoMap(() => c_custom_timer_reference)
   m_timer: c_custom_timer_reference = new c_custom_timer_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_timer.decode(bitstream);
@@ -1444,7 +1276,6 @@ export class s_action_timer_reset_parameters {
   }
 }
 export class s_action_object_bounce_parameters {
-  @AutoMap(() => c_object_reference)
   m_object: c_object_reference = new c_object_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
@@ -1454,9 +1285,7 @@ export class s_action_object_bounce_parameters {
   }
 }
 export class s_action_hud_widget_set_text_parameters {
-  @AutoMap(() => Number)
   m_widget_index = 0;
-  @AutoMap(() => c_dynamic_string)
   m_string: c_dynamic_string = new c_dynamic_string();
   decode(bitstream: c_bitstream_reader): void {
     this.m_widget_index = bitstream.read_index("widget-index", 4, 2);
@@ -1468,9 +1297,7 @@ export class s_action_hud_widget_set_text_parameters {
   }
 }
 export class s_action_hud_widget_set_value_parameters {
-  @AutoMap(() => Number)
   m_widget_index = 0;
-  @AutoMap(() => c_dynamic_string)
   m_string: c_dynamic_string = new c_dynamic_string();
   decode(bitstream: c_bitstream_reader): void {
     this.m_widget_index = bitstream.read_index("widget-index", 4, 2);
@@ -1482,9 +1309,7 @@ export class s_action_hud_widget_set_value_parameters {
   }
 }
 export class s_action_object_set_scale_parameters {
-  @AutoMap(() => c_object_reference)
   m_object: c_object_reference = new c_object_reference();
-  @AutoMap(() => c_custom_variable_reference)
   m_variable: c_custom_variable_reference = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
@@ -1496,9 +1321,7 @@ export class s_action_object_set_scale_parameters {
   }
 }
 export class s_action_navpoint_set_text_parameters {
-  @AutoMap(() => c_object_reference)
   m_object: c_object_reference = new c_object_reference();
-  @AutoMap(() => c_dynamic_string)
   m_string: c_dynamic_string = new c_dynamic_string();
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
@@ -1510,9 +1333,7 @@ export class s_action_navpoint_set_text_parameters {
   }
 }
 export class s_action_object_get_shield_parameters {
-  @AutoMap(() => c_object_reference)
   m_object: c_object_reference = new c_object_reference();
-  @AutoMap(() => c_custom_variable_reference)
   m_variable: c_custom_variable_reference = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
@@ -1524,9 +1345,7 @@ export class s_action_object_get_shield_parameters {
   }
 }
 export class s_action_object_get_health_parameters {
-  @AutoMap(() => c_object_reference)
   m_object: c_object_reference = new c_object_reference();
-  @AutoMap(() => c_custom_variable_reference)
   m_variable: c_custom_variable_reference = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
@@ -1538,9 +1357,7 @@ export class s_action_object_get_health_parameters {
   }
 }
 export class s_action_player_set_objective_parameters {
-  @AutoMap(() => c_player_reference)
   m_player: c_player_reference = new c_player_reference();
-  @AutoMap(() => c_dynamic_string)
   m_string: c_dynamic_string = new c_dynamic_string();
   decode(bitstream: c_bitstream_reader): void {
     this.m_player.decode(bitstream);
@@ -1552,9 +1369,7 @@ export class s_action_player_set_objective_parameters {
   }
 }
 export class s_action_team_set_primary_respawn_object_parameters {
-  @AutoMap(() => c_team_reference)
   m_team: c_team_reference = new c_team_reference();
-  @AutoMap(() => c_object_reference)
   m_object: c_object_reference = new c_object_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_team.decode(bitstream);
@@ -1566,9 +1381,7 @@ export class s_action_team_set_primary_respawn_object_parameters {
   }
 }
 export class s_action_player_set_primary_respawn_object_parameters {
-  @AutoMap(() => c_player_reference)
   m_player: c_player_reference = new c_player_reference();
-  @AutoMap(() => c_object_reference)
   m_object: c_object_reference = new c_object_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_player.decode(bitstream);
@@ -1580,9 +1393,7 @@ export class s_action_player_set_primary_respawn_object_parameters {
   }
 }
 export class s_action_player_get_fireteam_index_parameters {
-  @AutoMap(() => c_player_reference)
   m_player: c_player_reference = new c_player_reference();
-  @AutoMap(() => c_custom_variable_reference)
   m_variable: c_custom_variable_reference = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_player.decode(bitstream);
@@ -1594,9 +1405,7 @@ export class s_action_player_get_fireteam_index_parameters {
   }
 }
 export class s_action_player_set_fireteam_index_parameters {
-  @AutoMap(() => c_player_reference)
   m_player: c_player_reference = new c_player_reference();
-  @AutoMap(() => c_custom_variable_reference)
   m_variable: c_custom_variable_reference = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_player.decode(bitstream);
@@ -1608,11 +1417,8 @@ export class s_action_player_set_fireteam_index_parameters {
   }
 }
 export class s_action_object_adjust_shield_parameters {
-  @AutoMap(() => c_object_reference)
   m_object: c_object_reference = new c_object_reference();
-  @AutoMap(() => e_math_operation)
   m_operation: e_math_operation;
-  @AutoMap(() => c_custom_variable_reference)
   m_variable: c_custom_variable_reference = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
@@ -1626,11 +1432,8 @@ export class s_action_object_adjust_shield_parameters {
   }
 }
 export class s_action_object_adjust_health_parameters {
-  @AutoMap(() => c_object_reference)
   m_object: c_object_reference = new c_object_reference();
-  @AutoMap(() => e_math_operation)
   m_operation: e_math_operation;
-  @AutoMap(() => c_custom_variable_reference)
   m_variable: c_custom_variable_reference = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
@@ -1644,11 +1447,8 @@ export class s_action_object_adjust_health_parameters {
   }
 }
 export class s_action_object_adjust_maximum_shield_parameters {
-  @AutoMap(() => c_object_reference)
   m_object: c_object_reference = new c_object_reference();
-  @AutoMap(() => e_math_operation)
   m_operation: e_math_operation;
-  @AutoMap(() => c_custom_variable_reference)
   m_variable: c_custom_variable_reference = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
@@ -1662,11 +1462,8 @@ export class s_action_object_adjust_maximum_shield_parameters {
   }
 }
 export class s_action_object_adjust_maximum_health_parameters {
-  @AutoMap(() => c_object_reference)
   m_object: c_object_reference = new c_object_reference();
-  @AutoMap(() => e_math_operation)
   m_operation: e_math_operation;
-  @AutoMap(() => c_custom_variable_reference)
   m_variable: c_custom_variable_reference = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
@@ -1680,9 +1477,7 @@ export class s_action_object_adjust_maximum_health_parameters {
   }
 }
 export class s_action_device_set_power_parameters {
-  @AutoMap(() => c_object_reference)
   m_object: c_object_reference = new c_object_reference();
-  @AutoMap(() => c_custom_variable_reference)
   m_variable: c_custom_variable_reference = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
@@ -1694,9 +1489,7 @@ export class s_action_device_set_power_parameters {
   }
 }
 export class s_action_device_get_power_parameters {
-  @AutoMap(() => c_object_reference)
   m_object: c_object_reference = new c_object_reference();
-  @AutoMap(() => c_custom_variable_reference)
   m_variable: c_custom_variable_reference = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
@@ -1708,9 +1501,7 @@ export class s_action_device_get_power_parameters {
   }
 }
 export class s_action_device_set_position_parameters {
-  @AutoMap(() => c_object_reference)
   m_object: c_object_reference = new c_object_reference();
-  @AutoMap(() => c_custom_variable_reference)
   m_variable: c_custom_variable_reference = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
@@ -1722,9 +1513,7 @@ export class s_action_device_set_position_parameters {
   }
 }
 export class s_action_device_get_position_parameters {
-  @AutoMap(() => c_object_reference)
   m_object: c_object_reference = new c_object_reference();
-  @AutoMap(() => c_custom_variable_reference)
   m_variable: c_custom_variable_reference = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
@@ -1736,9 +1525,7 @@ export class s_action_device_get_position_parameters {
   }
 }
 export class s_action_device_set_position_immediate_parameters {
-  @AutoMap(() => c_object_reference)
   m_object: c_object_reference = new c_object_reference();
-  @AutoMap(() => c_custom_variable_reference)
   m_variable: c_custom_variable_reference = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
@@ -1750,9 +1537,7 @@ export class s_action_device_set_position_immediate_parameters {
   }
 }
 export class s_action_saved_film_insert_marker_parameters {
-  @AutoMap(() => c_custom_variable_reference)
   m_variable: c_custom_variable_reference = new c_custom_variable_reference();
-  @AutoMap(() => c_dynamic_string)
   m_string: c_dynamic_string = new c_dynamic_string();
   decode(bitstream: c_bitstream_reader): void {
     this.m_variable.decode(bitstream);
@@ -1764,9 +1549,7 @@ export class s_action_saved_film_insert_marker_parameters {
   }
 }
 export class s_action_respawn_zone_enable_parameters {
-  @AutoMap(() => c_object_reference)
   m_object: c_object_reference = new c_object_reference();
-  @AutoMap(() => c_custom_variable_reference)
   m_variable: c_custom_variable_reference = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
@@ -1778,9 +1561,7 @@ export class s_action_respawn_zone_enable_parameters {
   }
 }
 export class s_action_player_get_equipment_parameters {
-  @AutoMap(() => c_player_reference)
   m_player: c_player_reference = new c_player_reference();
-  @AutoMap(() => c_object_reference)
   m_object: c_object_reference = new c_object_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_player.decode(bitstream);
@@ -1792,9 +1573,7 @@ export class s_action_player_get_equipment_parameters {
   }
 }
 export class s_action_object_set_never_garbage_parameters {
-  @AutoMap(() => c_object_reference)
   m_object: c_object_reference = new c_object_reference();
-  @AutoMap(() => c_custom_variable_reference)
   m_variable: c_custom_variable_reference = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
@@ -1806,9 +1585,7 @@ export class s_action_object_set_never_garbage_parameters {
   }
 }
 export class s_action_player_get_target_object_parameters {
-  @AutoMap(() => c_player_reference)
   m_player: c_player_reference = new c_player_reference();
-  @AutoMap(() => c_object_reference)
   m_object: c_object_reference = new c_object_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_player.decode(bitstream);
@@ -1820,7 +1597,6 @@ export class s_action_player_get_target_object_parameters {
   }
 }
 export class s_action_debug_force_player_view_count_parameters {
-  @AutoMap(() => c_custom_variable_reference)
   m_variable: c_custom_variable_reference = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_variable.decode(bitstream);
@@ -1830,9 +1606,7 @@ export class s_action_debug_force_player_view_count_parameters {
   }
 }
 export class s_action_player_pick_up_weapon_parameters {
-  @AutoMap(() => c_player_reference)
   m_player: c_player_reference = new c_player_reference();
-  @AutoMap(() => c_object_reference)
   m_object: c_object_reference = new c_object_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_player.decode(bitstream);
@@ -1844,9 +1618,7 @@ export class s_action_player_pick_up_weapon_parameters {
   }
 }
 export class s_action_player_set_fireteam_tier_parameters {
-  @AutoMap(() => c_player_reference)
   m_player: c_player_reference = new c_player_reference();
-  @AutoMap(() => c_custom_variable_reference)
   m_variable: c_custom_variable_reference = new c_custom_variable_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_player.decode(bitstream);
@@ -1858,11 +1630,8 @@ export class s_action_player_set_fireteam_tier_parameters {
   }
 }
 export class s_action_give_weapon_parameters {
-  @AutoMap(() => c_object_type_reference)
   m_object_type: c_object_type_reference = new c_object_type_reference();
-  @AutoMap(() => c_player_reference)
   m_player: c_player_reference = new c_player_reference();
-  @AutoMap(() => Number)
   m_flag = 0;
   decode(bitstream: c_bitstream_reader): void {
     this.m_object_type.decode(bitstream);
@@ -1876,9 +1645,7 @@ export class s_action_give_weapon_parameters {
   }
 }
 export class s_action_set_loadout_parameters {
-  @AutoMap(() => s_team_or_player_target)
   m_target = new s_team_or_player_target();
-  @AutoMap(() => Number)
   m_loadout_index = 0;
   decode(bitstream: c_bitstream_reader): void {
     this.m_target.decode(bitstream);
@@ -1890,191 +1657,98 @@ export class s_action_set_loadout_parameters {
   }
 }
 export class c_action {
-  @AutoMap(() => e_action_type)
   m_type: e_action_type = e_action_type.none;
-  @AutoMap(() => s_action_set_score_parameters)
   m_set_score_parameters?: s_action_set_score_parameters;
-  @AutoMap(() => s_action_create_object_parameters)
   m_create_object_parameters?: s_action_create_object_parameters;
-  @AutoMap(() => s_action_delete_object_parameters)
   m_delete_object_parameters?: s_action_delete_object_parameters;
-  @AutoMap(() => s_action_navpoint_set_visible_parameters)
   m_navpoint_set_visible_parameters?: s_action_navpoint_set_visible_parameters;
-  @AutoMap(() => s_action_navpoint_set_icon_parameters)
   m_navpoint_set_icon_parameters?: s_action_navpoint_set_icon_parameters;
-  @AutoMap(() => s_action_navpoint_set_priority_parameters)
   m_navpoint_set_priority_parameters?: s_action_navpoint_set_priority_parameters;
-  @AutoMap(() => s_action_navpoint_set_timer_parameters)
   m_navpoint_set_timer_parameters?: s_action_navpoint_set_timer_parameters;
-  @AutoMap(() => s_action_navpoint_set_visible_range_parameters)
   m_navpoint_set_visible_range_parameters?: s_action_navpoint_set_visible_range_parameters;
-  @AutoMap(() => s_action_set_parameters)
   m_set_parameters?: s_action_set_parameters;
-  @AutoMap(() => s_action_set_boundary_parameters)
   m_set_boundary_parameters?: s_action_set_boundary_parameters;
-  @AutoMap(() => s_action_apply_player_traits_parameters)
   m_apply_player_traits_parameters?: s_action_apply_player_traits_parameters;
-  @AutoMap(() => s_action_set_pickup_filter_parameters)
   m_set_pickup_filter_parameters?: s_action_set_pickup_filter_parameters;
-  @AutoMap(() => s_action_set_respawn_filter_parameters)
   m_set_respawn_filter_parameters?: s_action_set_respawn_filter_parameters;
-  @AutoMap(() => s_action_set_fireteam_respawn_filter_parameters)
   m_set_fireteam_respawn_filter_parameters?: s_action_set_fireteam_respawn_filter_parameters;
-  @AutoMap(() => s_action_set_progress_bar_parameters)
   m_set_progress_bar_parameters?: s_action_set_progress_bar_parameters;
-  @AutoMap(() => s_action_hud_post_message_parameters)
   m_hud_post_message_parameters?: s_action_hud_post_message_parameters;
-  @AutoMap(() => s_action_timer_set_rate_parameters)
   m_timer_set_rate_parameters?: s_action_timer_set_rate_parameters;
-  @AutoMap(() => s_action_print_variable_parameters)
   m_print_variable_parameters?: s_action_print_variable_parameters;
-  @AutoMap(() => s_action_get_player_holding_object_parameters)
   m_get_player_holding_object_parameters?: s_action_get_player_holding_object_parameters;
-  @AutoMap(() => s_action_for_each_parameters)
   m_for_each_parameters?: s_action_for_each_parameters;
-  @AutoMap(() => s_action_end_round_parameters)
   m_end_round_parameters?: s_action_end_round_parameters;
-  @AutoMap(() => s_action_boundary_set_visible_parameters)
   m_boundary_set_visible_parameters?: s_action_boundary_set_visible_parameters;
-  @AutoMap(() => s_action_object_destroy_parameters)
   m_object_destroy_parameters?: s_action_object_destroy_parameters;
-  @AutoMap(() => s_action_object_set_invincibility_parameters)
   m_object_set_invincibility_parameters?: s_action_object_set_invincibility_parameters;
-  @AutoMap(() => s_action_random_parameters)
   m_random_parameters?: s_action_random_parameters;
-  @AutoMap(() => s_action_break_into_debugger_parameters)
   m_break_into_debugger_parameters?: s_action_break_into_debugger_parameters;
-  @AutoMap(() => s_action_object_get_orientation_parameters)
   m_object_get_orientation_parameters?: s_action_object_get_orientation_parameters;
-  @AutoMap(() => s_action_object_get_velocity_parameters)
   m_object_get_velocity_parameters?: s_action_object_get_velocity_parameters;
-  @AutoMap(() => s_action_player_death_get_killing_player_parameters)
   m_player_death_get_killing_player_parameters?: s_action_player_death_get_killing_player_parameters;
-  @AutoMap(() => s_action_player_death_get_damage_type_parameters)
   m_player_death_get_damage_type_parameters?: s_action_player_death_get_damage_type_parameters;
-  @AutoMap(() => s_action_player_death_get_special_type_parameters)
   m_player_death_get_special_type_parameters?: s_action_player_death_get_special_type_parameters;
-  @AutoMap(() => s_action_debugging_enable_tracing_parameters)
   m_debugging_enable_tracing_parameters?: s_action_debugging_enable_tracing_parameters;
-  @AutoMap(() => s_action_object_attach_parameters)
   m_object_attach_parameters?: s_action_object_attach_parameters;
-  @AutoMap(() => s_action_object_detach_parameters)
   m_object_detach_parameters?: s_action_object_detach_parameters;
-  @AutoMap(() => s_action_player_get_place_parameters)
   m_player_get_place_parameters?: s_action_player_get_place_parameters;
-  @AutoMap(() => s_action_team_get_place_parameters)
   m_team_get_place_parameters?: s_action_team_get_place_parameters;
-  @AutoMap(() => s_action_player_get_killing_spree_count_parameters)
   m_player_get_killing_spree_count_parameters?: s_action_player_get_killing_spree_count_parameters;
-  @AutoMap(() => s_action_player_adjust_money_parameters)
   m_player_adjust_money_parameters?: s_action_player_adjust_money_parameters;
-  @AutoMap(() => s_action_player_enable_purchases_parameters)
   m_player_enable_purchases_parameters?: s_action_player_enable_purchases_parameters;
-  @AutoMap(() => s_action_player_get_vehicle_parameters)
   m_player_get_vehicle_parameters?: s_action_player_get_vehicle_parameters;
-  @AutoMap(() => s_action_player_set_vehicle_parameters)
   m_player_set_vehicle_parameters?: s_action_player_set_vehicle_parameters;
-  @AutoMap(() => s_action_player_set_unit_parameters)
   m_player_set_unit_parameters?: s_action_player_set_unit_parameters;
-  @AutoMap(() => s_action_timer_reset_parameters)
   m_timer_reset_parameters?: s_action_timer_reset_parameters;
-  @AutoMap(() => s_action_weapon_set_pickup_priority_parameters)
   m_weapon_set_pickup_priority_parameters?: s_action_weapon_set_pickup_priority_parameters;
-  @AutoMap(() => s_action_object_bounce_parameters)
   m_object_bounce_parameters?: s_action_object_bounce_parameters;
-  @AutoMap(() => s_action_hud_widget_set_text_parameters)
   m_hud_widget_set_text_parameters?: s_action_hud_widget_set_text_parameters;
-  @AutoMap(() => s_action_hud_widget_set_value_parameters)
   m_hud_widget_set_value_parameters?: s_action_hud_widget_set_value_parameters;
-  @AutoMap(() => s_action_hud_widget_set_meter_parameters)
   m_hud_widget_set_meter_parameters?: s_action_hud_widget_set_meter_parameters;
-  @AutoMap(() => s_action_hud_widget_set_icon_parameters)
   m_hud_widget_set_icon_parameters?: s_action_hud_widget_set_icon_parameters;
-  @AutoMap(() => s_action_hud_widget_set_visibility_parameters)
   m_hud_widget_set_visibility_parameters?: s_action_hud_widget_set_visibility_parameters;
-  @AutoMap(() => s_action_play_sound_parameters)
   m_play_sound_parameters?: s_action_play_sound_parameters;
-  @AutoMap(() => s_action_object_set_scale_parameters)
   m_object_set_scale_parameters?: s_action_object_set_scale_parameters;
-  @AutoMap(() => s_action_navpoint_set_text_parameters)
   m_navpoint_set_text_parameters?: s_action_navpoint_set_text_parameters;
-  @AutoMap(() => s_action_object_get_shield_parameters)
   m_object_get_shield_parameters?: s_action_object_get_shield_parameters;
-  @AutoMap(() => s_action_object_get_health_parameters)
   m_object_get_health_parameters?: s_action_object_get_health_parameters;
-  @AutoMap(() => s_action_player_set_objective_parameters)
   m_player_set_objective_parameters?: s_action_player_set_objective_parameters;
-  @AutoMap(() => s_action_team_set_coop_spawning_parameters)
   m_team_set_coop_spawning_parameters?: s_action_team_set_coop_spawning_parameters;
-  @AutoMap(() => s_action_team_set_primary_respawn_object_parameters)
   m_team_set_primary_respawn_object_parameters?: s_action_team_set_primary_respawn_object_parameters;
-  @AutoMap(() => s_action_player_set_primary_respawn_object_parameters)
   m_player_set_primary_respawn_object_parameters?: s_action_player_set_primary_respawn_object_parameters;
-  @AutoMap(() => s_action_player_get_fireteam_index_parameters)
   m_player_get_fireteam_index_parameters?: s_action_player_get_fireteam_index_parameters;
-  @AutoMap(() => s_action_player_set_fireteam_index_parameters)
   m_player_set_fireteam_index_parameters?: s_action_player_set_fireteam_index_parameters;
-  @AutoMap(() => s_action_object_adjust_shield_parameters)
   m_object_adjust_shield_parameters?: s_action_object_adjust_shield_parameters;
-  @AutoMap(() => s_action_object_adjust_health_parameters)
   m_object_adjust_health_parameters?: s_action_object_adjust_health_parameters;
-  @AutoMap(() => s_action_object_get_distance_parameters)
   m_object_get_distance_parameters?: s_action_object_get_distance_parameters;
-  @AutoMap(() => s_action_object_adjust_maximum_shield_parameters)
   m_object_adjust_maximum_shield_parameters?: s_action_object_adjust_maximum_shield_parameters;
-  @AutoMap(() => s_action_object_adjust_maximum_health_parameters)
   m_object_adjust_maximum_health_parameters?: s_action_object_adjust_maximum_health_parameters;
-  @AutoMap(() => s_action_player_set_requisition_palette_parameters)
   m_player_set_requisition_palette_parameters?: s_action_player_set_requisition_palette_parameters;
-  @AutoMap(() => s_action_player_set_fireteam_tier_parameters)
   m_player_set_fireteam_tier_parameters?: s_action_player_set_fireteam_tier_parameters;
-  @AutoMap(() => s_action_device_set_power_parameters)
   m_device_set_power_parameters?: s_action_device_set_power_parameters;
-  @AutoMap(() => s_action_device_get_power_parameters)
   m_device_get_power_parameters?: s_action_device_get_power_parameters;
-  @AutoMap(() => s_action_device_set_position_parameters)
   m_device_set_position_parameters?: s_action_device_set_position_parameters;
-  @AutoMap(() => s_action_device_get_position_parameters)
   m_device_get_position_parameters?: s_action_device_get_position_parameters;
-  @AutoMap(() => s_action_give_weapon_parameters)
   m_give_weapon_parameters?: s_action_give_weapon_parameters;
-  @AutoMap(() => s_action_adjust_grenades_parameters)
   m_adjust_grenades_parameters?: s_action_adjust_grenades_parameters;
-  @AutoMap(() => s_action_submit_incident_parameters)
   m_submit_incident_parameters?: s_action_submit_incident_parameters;
-  @AutoMap(() => s_action_submit_incident_with_custom_value_parameters)
   m_submit_incident_with_custom_value_parameters?: s_action_submit_incident_with_custom_value_parameters;
-  @AutoMap(() => s_action_set_loadout_parameters)
   m_set_loadout_parameters?: s_action_set_loadout_parameters;
-  @AutoMap(() => s_action_set_loadout_palette_parameters)
   m_set_loadout_palette_parameters?: s_action_set_loadout_palette_parameters;
-  @AutoMap(() => s_action_device_set_position_track_parameters)
   m_device_set_position_track_parameters?: s_action_device_set_position_track_parameters;
-  @AutoMap(() => s_action_device_animate_position_parameters)
   m_device_animate_position_parameters?: s_action_device_animate_position_parameters;
-  @AutoMap(() => s_action_device_set_position_immediate_parameters)
   m_device_set_position_immediate_parameters?: s_action_device_set_position_immediate_parameters;
-  @AutoMap(() => s_action_saved_film_insert_marker_parameters)
   m_saved_film_insert_marker_parameters?: s_action_saved_film_insert_marker_parameters;
-  @AutoMap(() => s_action_respawn_zone_enable_parameters)
   m_respawn_zone_enable_parameters?: s_action_respawn_zone_enable_parameters;
-  @AutoMap(() => s_action_player_get_weapon_parameters)
   m_player_get_weapon_parameters?: s_action_player_get_weapon_parameters;
-  @AutoMap(() => s_action_player_get_equipment_parameters)
   m_player_get_equipment_parameters?: s_action_player_get_equipment_parameters;
-  @AutoMap(() => s_action_object_set_never_garbage_parameters)
   m_object_set_never_garbage_parameters?: s_action_object_set_never_garbage_parameters;
-  @AutoMap(() => s_action_player_get_target_object_parameters)
   m_player_get_target_object_parameters?: s_action_player_get_target_object_parameters;
-  @AutoMap(() => s_action_create_tunnel_parameters)
   m_create_tunnel_parameters?: s_action_create_tunnel_parameters;
-  @AutoMap(() => s_action_debug_force_player_view_count_parameters)
   m_debug_force_player_view_count_parameters?: s_action_debug_force_player_view_count_parameters;
-  @AutoMap(() => s_action_player_pick_up_weapon_parameters)
   m_player_pick_up_weapon_parameters?: s_action_player_pick_up_weapon_parameters;
-  @AutoMap(() => s_action_player_set_coop_spawning_parameters)
   m_player_set_coop_spawning_parameters?: s_action_player_set_coop_spawning_parameters;
-  @AutoMap(() => s_action_player_set_vehicle_spawning_parameters)
   m_player_set_vehicle_spawning_parameters?: s_action_player_set_vehicle_spawning_parameters;
   decode(bitstream: c_bitstream_reader): void {
     this.m_type = bitstream.read_enum("action-type", 7, e_action_type);

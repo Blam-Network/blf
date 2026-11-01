@@ -1,8 +1,8 @@
+import { c } from "@craftycodie/cstruct";
 import type {
   c_bitstream_reader,
   c_bitstream_writer,
 } from "../../../../../bitstream";
-import { AutoMap } from "../../../../../helpers/automap";
 
 /** Matches `e_megalo_game_statistic_format` in blf_lib `megalogamengine_statistics.rs`. */
 export enum e_megalo_game_statistic_format {
@@ -25,16 +25,17 @@ export enum e_megalo_game_statistic_grouping {
   team = 1,
 }
 
+@c.class()
 export class c_megalo_game_statistic {
-  @AutoMap(() => Number)
+  @c.field(c.u8())
   m_name_string_index = 0;
-  @AutoMap(() => e_megalo_game_statistic_format)
+  @c.field(c.u8())
   m_format: e_megalo_game_statistic_format =
     e_megalo_game_statistic_format.number;
-  @AutoMap(() => e_megalo_game_statistic_sort_order)
+  @c.field(c.i8())
   m_sort_order: e_megalo_game_statistic_sort_order =
     e_megalo_game_statistic_sort_order.none;
-  @AutoMap(() => e_megalo_game_statistic_grouping)
+  @c.field(c.i8())
   m_grouping: e_megalo_game_statistic_grouping =
     e_megalo_game_statistic_grouping.player;
   decode(bitstream: c_bitstream_reader): void {

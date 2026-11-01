@@ -8,6 +8,7 @@ import {
   s_network_lsp_heartbeat_session_player_data,
 } from "../../../blam/haloreach/v12065_11_08_24_1738_tu1actual/networking/logic/network_lsp_presence";
 import { getBlfChunkMeta } from "../../../blf_chunk";
+
 import { s_blf_chunk_network_lsp_heartbeat_data } from "./s_blf_chunk_network_lsp_heartbeat_data";
 
 describe("s_blf_chunk_network_lsp_heartbeat_data", () => {
@@ -17,7 +18,7 @@ describe("s_blf_chunk_network_lsp_heartbeat_data", () => {
     expect(meta.major).toBe(6);
     expect(meta.minor).toBe(0);
     expect(meta.version).toBe(6);
-    expect(c.sizeof(s_blf_chunk_network_lsp_heartbeat_data)).toBe(0x667);
+    expect(c.sizeof(s_blf_chunk_network_lsp_heartbeat_data.schema)).toBe(0x667);
     expect(c.sizeof(s_network_lsp_heartbeat_data)).toBe(0x1bb);
   });
 
@@ -33,13 +34,12 @@ describe("s_blf_chunk_network_lsp_heartbeat_data", () => {
     chunk.has_players = 1;
     chunk.local_player_count = 1;
     chunk.machine_id = 0xe20000000001n;
-    chunk.players = Array.from(
-      { length: 4 },
-      () => new s_network_lsp_heartbeat_player_data()
+    chunk.players = Array.from({ length: 4 }, () =>
+      s_network_lsp_heartbeat_player_data.zero()
     );
     chunk.players[0].player_xuid = 0x123456789abcdef0n;
     chunk.players[0].player_grade = 3;
-    chunk.session_data = new s_network_lsp_heartbeat_session_data();
+    chunk.session_data = s_network_lsp_heartbeat_session_data.zero();
     chunk.session_data.gui_game_mode = 2;
     chunk.session_data.hopper_id = 42;
     chunk.extra[0] = 0xab;

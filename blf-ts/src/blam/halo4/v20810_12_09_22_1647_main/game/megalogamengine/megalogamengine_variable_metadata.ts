@@ -2,7 +2,6 @@ import type {
   c_bitstream_reader,
   c_bitstream_writer,
 } from "../../../../../bitstream";
-import { AutoMap } from "../../../../../helpers/automap";
 import { e_multiplayer_team_designator } from "../game_engine_default";
 import { c_custom_variable_reference } from "./megalogamengine_references";
 
@@ -15,10 +14,8 @@ export enum e_megalo_variable_network_state {
 
 /** Halo 4 `VariableFlags`: network-state + is-persistent. */
 export class s_megalo_variable_flags {
-  @AutoMap(() => Number)
   m_network_state: e_megalo_variable_network_state =
     e_megalo_variable_network_state.local;
-  @AutoMap(() => Boolean)
   m_is_persistent = false;
   decode(bitstream: c_bitstream_reader): void {
     this.m_network_state = bitstream.read_enum(
@@ -39,19 +36,14 @@ export class s_megalo_variable_flags {
 }
 
 export class s_variable_metadata {
-  @AutoMap(() => [c_custom_variable_reference])
   m_numeric_variables: [
     c_custom_variable_reference,
     s_megalo_variable_flags,
   ][] = [];
-  @AutoMap(() => [c_custom_variable_reference])
   m_timer_variables: c_custom_variable_reference[] = [];
-  @AutoMap(() => [Number])
   m_team_variables: [e_multiplayer_team_designator, s_megalo_variable_flags][] =
     [];
-  @AutoMap(() => [s_megalo_variable_flags])
   m_player_variables: s_megalo_variable_flags[] = [];
-  @AutoMap(() => [s_megalo_variable_flags])
   m_object_variables: s_megalo_variable_flags[] = [];
   constructor(
     private readonly numeric_variable_count_bits: number,

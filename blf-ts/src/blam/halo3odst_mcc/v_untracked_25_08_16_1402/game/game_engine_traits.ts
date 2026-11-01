@@ -2,7 +2,6 @@ import type {
   c_bitstream_reader,
   c_bitstream_writer,
 } from "../../../../bitstream";
-import { AutoMap } from "../../../../helpers/automap";
 import { c_player_traits } from "./game_engine_player_traits";
 
 function testBit(flags: number, bit: number): boolean {
@@ -17,13 +16,9 @@ function setBit(flags: number, bit: number, value: boolean): number {
 }
 
 export class c_game_engine_miscellaneous_options {
-  @AutoMap(() => Number)
   m_flags = 0;
-  @AutoMap(() => Number)
   m_round_time_limit_minutes = 0;
-  @AutoMap(() => Number)
   m_round_limit = 0;
-  @AutoMap(() => Number)
   m_early_victory_win_count = 0;
 
   encode(bitstream: c_bitstream_writer): void {
@@ -64,23 +59,14 @@ export class c_game_engine_miscellaneous_options {
 }
 
 export class c_game_engine_respawn_options {
-  @AutoMap(() => Number)
   m_flags = 0;
-  @AutoMap(() => Number)
   m_lives_per_round = 0;
-  @AutoMap(() => Number)
   m_team_lives_per_round = 0;
-  @AutoMap(() => Number)
   m_respawn_time_seconds = 0;
-  @AutoMap(() => Number)
   m_suicide_penalty_seconds = 0;
-  @AutoMap(() => Number)
   m_betrayal_penalty_seconds = 0;
-  @AutoMap(() => Number)
   m_respawn_growth_seconds = 0;
-  @AutoMap(() => Number)
   m_respawn_player_traits_duration_seconds = 0;
-  @AutoMap(() => c_player_traits)
   m_respawn_player_traits = new c_player_traits();
 
   encode(bitstream: c_bitstream_writer): void {

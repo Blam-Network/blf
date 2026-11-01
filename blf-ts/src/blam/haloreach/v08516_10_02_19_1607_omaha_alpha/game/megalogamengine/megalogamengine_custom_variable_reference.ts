@@ -2,7 +2,6 @@ import type {
   c_bitstream_reader,
   c_bitstream_writer,
 } from "../../../../../bitstream";
-import { AutoMap } from "../../../../../helpers/automap";
 import {
   c_explicit_object,
   c_explicit_player,
@@ -58,21 +57,13 @@ export enum e_custom_variable_type {
 }
 
 export class c_custom_variable_reference {
-  @AutoMap(() => e_custom_variable_type)
   m_type: e_custom_variable_type = e_custom_variable_type.constant;
-  @AutoMap(() => Number)
   m_immediate_value?: number;
-  @AutoMap(() => c_explicit_player)
   m_player?: c_explicit_player;
-  @AutoMap(() => c_explicit_object)
   m_object?: c_explicit_object;
-  @AutoMap(() => c_explicit_team)
   m_team?: c_explicit_team;
-  @AutoMap(() => Number)
   m_variable_index?: number;
-  @AutoMap(() => Number)
   m_option_index?: number;
-  @AutoMap(() => Number)
   m_statistic_index?: number;
 
   decode(bitstream: c_bitstream_reader): void {

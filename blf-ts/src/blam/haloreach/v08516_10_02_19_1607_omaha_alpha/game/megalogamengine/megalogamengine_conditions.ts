@@ -2,7 +2,6 @@ import type {
   c_bitstream_reader,
   c_bitstream_writer,
 } from "../../../../../bitstream";
-import { AutoMap } from "../../../../../helpers/automap";
 import { c_object_type_reference } from "../../../v12065_11_08_24_1738_tu1actual/game/megalogamengine/megalogamengine_references";
 import { c_custom_timer_reference } from "./megalogamengine_custom_timer_reference";
 import { c_object_reference } from "./megalogamengine_object_reference";
@@ -43,11 +42,8 @@ export enum e_disposition {
 }
 
 export class s_condition_if_parameters {
-  @AutoMap(() => s_variant_variable)
   m_left = new s_variant_variable();
-  @AutoMap(() => s_variant_variable)
   m_right = new s_variant_variable();
-  @AutoMap(() => e_numeric_comparison)
   m_comparison: e_numeric_comparison = e_numeric_comparison.less_than;
 
   decode(bitstream: c_bitstream_reader): void {
@@ -68,9 +64,7 @@ export class s_condition_if_parameters {
 }
 
 export class s_condition_object_in_area_parameters {
-  @AutoMap(() => c_object_reference)
   m_object_reference_1 = new c_object_reference();
-  @AutoMap(() => c_object_reference)
   m_object_reference_2 = new c_object_reference();
 
   decode(bitstream: c_bitstream_reader): void {
@@ -85,9 +79,7 @@ export class s_condition_object_in_area_parameters {
 }
 
 export class s_condition_player_died_parameters {
-  @AutoMap(() => c_player_reference)
   m_player = new c_player_reference();
-  @AutoMap(() => Number)
   m_killer_type = 0;
 
   decode(bitstream: c_bitstream_reader): void {
@@ -102,11 +94,8 @@ export class s_condition_player_died_parameters {
 }
 
 export class s_condition_team_disposition_parameters {
-  @AutoMap(() => c_team_reference)
   m_team_1 = new c_team_reference();
-  @AutoMap(() => c_team_reference)
   m_team_2 = new c_team_reference();
-  @AutoMap(() => Number)
   m_disposition: e_disposition = e_disposition.neutral;
 
   decode(bitstream: c_bitstream_reader): void {
@@ -123,7 +112,6 @@ export class s_condition_team_disposition_parameters {
 }
 
 export class s_condition_timer_expired_parameters {
-  @AutoMap(() => c_custom_timer_reference)
   m_timer = new c_custom_timer_reference();
 
   decode(bitstream: c_bitstream_reader): void {
@@ -136,9 +124,7 @@ export class s_condition_timer_expired_parameters {
 }
 
 export class s_condition_object_is_type_parameters {
-  @AutoMap(() => c_object_reference)
   m_object = new c_object_reference();
-  @AutoMap(() => c_object_type_reference)
   m_object_type = new c_object_type_reference();
 
   decode(bitstream: c_bitstream_reader): void {
@@ -153,7 +139,6 @@ export class s_condition_object_is_type_parameters {
 }
 
 export class s_condition_team_is_active_parameters {
-  @AutoMap(() => c_team_reference)
   m_team = new c_team_reference();
 
   decode(bitstream: c_bitstream_reader): void {
@@ -166,7 +151,6 @@ export class s_condition_team_is_active_parameters {
 }
 
 export class s_condition_object_out_of_bounds_parameters {
-  @AutoMap(() => c_object_reference)
   m_object = new c_object_reference();
 
   decode(bitstream: c_bitstream_reader): void {
@@ -179,7 +163,6 @@ export class s_condition_object_out_of_bounds_parameters {
 }
 
 export class s_condition_player_is_fire_team_leader_parameters {
-  @AutoMap(() => c_player_reference)
   m_player = new c_player_reference();
 
   decode(bitstream: c_bitstream_reader): void {
@@ -192,9 +175,7 @@ export class s_condition_player_is_fire_team_leader_parameters {
 }
 
 export class s_condition_player_assisted_with_kill_parameters {
-  @AutoMap(() => c_player_reference)
   m_player_1 = new c_player_reference();
-  @AutoMap(() => c_player_reference)
   m_player_2 = new c_player_reference();
 
   decode(bitstream: c_bitstream_reader): void {
@@ -209,9 +190,7 @@ export class s_condition_player_assisted_with_kill_parameters {
 }
 
 export class s_condition_object_matches_filter_parameters {
-  @AutoMap(() => c_object_reference)
   m_object = new c_object_reference();
-  @AutoMap(() => Number)
   m_filter_index = 0;
 
   decode(bitstream: c_bitstream_reader): void {
@@ -226,7 +205,6 @@ export class s_condition_object_matches_filter_parameters {
 }
 
 export class s_condition_player_is_active_parameters {
-  @AutoMap(() => c_player_reference)
   m_player = new c_player_reference();
 
   decode(bitstream: c_bitstream_reader): void {
@@ -239,7 +217,6 @@ export class s_condition_player_is_active_parameters {
 }
 
 export class s_condition_equipment_is_active_parameters {
-  @AutoMap(() => c_object_reference)
   m_object = new c_object_reference();
 
   decode(bitstream: c_bitstream_reader): void {
@@ -252,39 +229,22 @@ export class s_condition_equipment_is_active_parameters {
 }
 
 export class c_condition {
-  @AutoMap(() => e_condition_type)
   m_type: e_condition_type = e_condition_type.none;
-  @AutoMap(() => Boolean)
   m_negated = false;
-  @AutoMap(() => Number)
   m_union_group = 0;
-  @AutoMap(() => Number)
   m_execute_before_action = 0;
-  @AutoMap(() => s_condition_if_parameters)
   m_if_parameters?: s_condition_if_parameters;
-  @AutoMap(() => s_condition_object_in_area_parameters)
   m_object_in_area_parameters?: s_condition_object_in_area_parameters;
-  @AutoMap(() => s_condition_player_died_parameters)
   m_player_died_parameters?: s_condition_player_died_parameters;
-  @AutoMap(() => s_condition_team_disposition_parameters)
   m_team_disposition_parameters?: s_condition_team_disposition_parameters;
-  @AutoMap(() => s_condition_timer_expired_parameters)
   m_timer_expired_parameters?: s_condition_timer_expired_parameters;
-  @AutoMap(() => s_condition_object_is_type_parameters)
   m_object_is_type_parameters?: s_condition_object_is_type_parameters;
-  @AutoMap(() => s_condition_team_is_active_parameters)
   m_team_is_active_parameters?: s_condition_team_is_active_parameters;
-  @AutoMap(() => s_condition_object_out_of_bounds_parameters)
   m_object_out_of_bounds_parameters?: s_condition_object_out_of_bounds_parameters;
-  @AutoMap(() => s_condition_player_is_fire_team_leader_parameters)
   m_player_is_fire_team_leader_parameters?: s_condition_player_is_fire_team_leader_parameters;
-  @AutoMap(() => s_condition_player_assisted_with_kill_parameters)
   m_player_assisted_with_kill_parameters?: s_condition_player_assisted_with_kill_parameters;
-  @AutoMap(() => s_condition_object_matches_filter_parameters)
   m_object_matches_filter_parameters?: s_condition_object_matches_filter_parameters;
-  @AutoMap(() => s_condition_player_is_active_parameters)
   m_player_is_active_parameters?: s_condition_player_is_active_parameters;
-  @AutoMap(() => s_condition_equipment_is_active_parameters)
   m_equipment_is_active_parameters?: s_condition_equipment_is_active_parameters;
 
   decode(bitstream: c_bitstream_reader): void {

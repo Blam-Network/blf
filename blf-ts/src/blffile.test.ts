@@ -42,6 +42,18 @@ describe("s_blf_chunk_start_of_file", () => {
     expect(parsed.byte_order_mark).toBe(e_byte_order_mark.little_endian);
     expect(parsed.name).toBe("reach-test");
   });
+
+  it("reads the name straight after the byte order mark", () => {
+    const bytes = new Uint8Array(0x30);
+    bytes.set([0x5f, 0x62, 0x6c, 0x66, 0, 0, 0, 0x30, 0, 1, 0, 2, 0xff, 0xfe]);
+    bytes.set(new TextEncoder().encode("halo3 net config"), 0x0e);
+
+    const parsed = new s_blf_chunk_start_of_file();
+    parsed.read(bytes, "big");
+    expect(parsed.byte_order_mark).toBe(e_byte_order_mark.little_endian);
+    expect(parsed.name).toBe("halo3 net config");
+    expect(parsed.write("big")).toEqual(bytes);
+  });
 });
 
 describe("write_blffile", () => {

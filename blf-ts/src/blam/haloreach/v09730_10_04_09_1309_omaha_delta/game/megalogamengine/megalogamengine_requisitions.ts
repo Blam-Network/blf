@@ -2,19 +2,13 @@ import type {
   c_bitstream_reader,
   c_bitstream_writer,
 } from "../../../../../bitstream";
-import { AutoMap } from "../../../../../helpers/automap";
 import { c_object_type_reference } from "../../../v12065_11_08_24_1738_tu1actual/game/megalogamengine/megalogamengine_references";
 
 export class s_requisition {
-  @AutoMap(() => c_object_type_reference)
   m_object_type = new c_object_type_reference();
-  @AutoMap(() => Number)
   m_unknown_1 = 0;
-  @AutoMap(() => Boolean)
   m_unknown_2 = false;
-  @AutoMap(() => Boolean)
   m_unknown_3 = false;
-  @AutoMap(() => Number)
   m_unknown_4 = 0;
 
   decode(bitstream: c_bitstream_reader): void {
@@ -43,9 +37,7 @@ export class s_requisition {
 }
 
 export class s_requisition_palette {
-  @AutoMap(() => Number)
   m_baseline = 0;
-  @AutoMap(() => [s_requisition])
   entries: s_requisition[] = [];
 
   decode(bitstream: c_bitstream_reader): void {

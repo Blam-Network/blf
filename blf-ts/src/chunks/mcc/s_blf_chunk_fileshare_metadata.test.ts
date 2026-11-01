@@ -24,7 +24,9 @@ function extract_fsm_bytes(file: Uint8Array): Uint8Array {
 
 describe("s_blf_chunk_fileshare_metadata", () => {
   it("has the expected struct size", () => {
-    expect(c.sizeof(s_blf_chunk_fileshare_metadata)).toBe(FSM_PAYLOAD_SIZE);
+    expect(c.sizeof(s_blf_chunk_fileshare_metadata.schema)).toBe(
+      FSM_PAYLOAD_SIZE
+    );
   });
 
   it("rejects payloads shorter than the struct", () => {
@@ -45,7 +47,7 @@ describe("s_blf_chunk_fileshare_metadata", () => {
     expect(chunk.unknown98.replace(/\0/g, "")).toBe(
       "85E3D5677B0D64FD91FACB25D696BF315CB062A1"
     );
-    expect(chunk.attestation_signature[255]).toBe(0x75);
+    expect(chunk.file_signature[255]).toBe(0x75);
     expect(chunk.signature).toBe("_fsm");
   });
 

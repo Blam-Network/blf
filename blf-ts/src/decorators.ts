@@ -95,7 +95,7 @@ function chunk_info<
 
 /**
  * Registers BLF signature/version on the class (runtime getters + constructor meta).
- * Implement {@link BLFChunk} `read_body` / `write_body`, or extend {@link CStructBLFChunk} with `@c.struct`.
+ * Implement {@link BLFChunk} `read_body` / `write_body`, or extend `CStructBLFChunk(schema)`.
  */
 export function chunk<
   TSignature extends BLFSignature<string>,

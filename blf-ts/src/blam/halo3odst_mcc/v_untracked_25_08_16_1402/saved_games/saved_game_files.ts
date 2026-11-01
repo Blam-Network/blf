@@ -2,42 +2,24 @@ import type {
   c_bitstream_reader,
   c_bitstream_writer,
 } from "../../../../bitstream";
-import { AutoMap } from "../../../../helpers/automap";
 
 export class s_content_item_metadata {
-  @AutoMap(() => BigInt)
   unique_id = 0n;
-  @AutoMap(() => String)
   name = "";
-  @AutoMap(() => String)
   description = "";
-  @AutoMap(() => String)
   author = "";
-  @AutoMap(() => Number)
   file_type = 0;
-  @AutoMap(() => Boolean)
   author_is_xuid_online = false;
-  @AutoMap(() => BigInt)
   author_id = 0n;
-  @AutoMap(() => BigInt)
   size_in_bytes = 0n;
-  @AutoMap(() => BigInt)
   date = 0n;
-  @AutoMap(() => Number)
   length_seconds = 0;
-  @AutoMap(() => Number)
   campaign_id = 0;
-  @AutoMap(() => Number)
   map_id = 0;
-  @AutoMap(() => Number)
   game_engine_type = 0;
-  @AutoMap(() => Number)
   campaign_difficulty = 0;
-  @AutoMap(() => Number)
   campaign_insertion_point = 0;
-  @AutoMap(() => Boolean)
   campaign_survival_enabled = false;
-  @AutoMap(() => BigInt)
   game_id = 0n;
 
   encode(bitstream: c_bitstream_writer): void {

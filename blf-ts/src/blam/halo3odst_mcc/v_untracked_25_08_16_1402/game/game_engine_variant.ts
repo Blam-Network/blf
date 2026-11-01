@@ -3,7 +3,6 @@ import type {
   c_bitstream_writer,
 } from "../../../../bitstream";
 import { BlfError } from "../../../../error";
-import { AutoMap } from "../../../../helpers/automap";
 import { c_game_engine_base_variant } from "./game_engine_default";
 import { c_game_engine_survival_variant } from "./game_engine_survival";
 
@@ -25,11 +24,8 @@ export enum e_game_engine {
 export const k_game_variant_size = 0x400;
 
 export class c_game_variant {
-  @AutoMap(() => Number)
   m_game_engine: e_game_engine = e_game_engine.none;
-  @AutoMap(() => c_game_engine_base_variant)
   m_base_variant = new c_game_engine_base_variant();
-  @AutoMap(() => c_game_engine_survival_variant)
   m_survival_variant: c_game_engine_survival_variant | null = null;
 
   encode(bitstream: c_bitstream_writer): void {

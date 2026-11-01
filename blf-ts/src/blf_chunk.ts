@@ -2,7 +2,7 @@ import { c } from "@craftycodie/cstruct";
 import type { ChunkMetadata } from "./decorators";
 import { chunkMatches, getBlfChunkMeta } from "./decorators";
 import { BlfError } from "./error";
-import { parse_blf_chunk_version, s_blf_header } from "./s_blf_header";
+import { create_blf_header, s_blf_header } from "./s_blf_header";
 
 export {
   BLF_CHUNK_META,
@@ -16,7 +16,12 @@ export {
   createBlfChunk,
   getBlfChunkMeta,
 } from "./decorators";
-export { parse_blf_chunk_version, s_blf_header };
+export {
+  blf_header_from_version_float,
+  create_blf_header,
+  parse_blf_chunk_version,
+  s_blf_header,
+} from "./s_blf_header";
 
 /** BLF chunk headers are always big-endian. */
 const BLF_HEADER_ENDIAN = "big" as const;
@@ -71,7 +76,7 @@ export abstract class BLFChunkBase implements BLFChunk {
     const { signature, major, minor } = getBlfChunkMeta(this);
     const header_bytes = c.write(
       s_blf_header,
-      s_blf_header.create(
+      create_blf_header(
         signature,
         body.length + c.sizeof(s_blf_header),
         major,
@@ -87,29 +92,48 @@ export abstract class BLFChunkBase implements BLFChunk {
   }
 }
 
-/**
- * Default {@link BLFChunk} read/write for classes decorated with `@c.struct`.
- * Apply `@blf.chunk` above `@c.struct` and extend this base class.
- */
-export abstract class CStructBLFChunk extends BLFChunkBase {
-  read_body(payload: Uint8Array, endian: c.Endian): void {
-    const ctor = this.constructor as new () => object;
-    const info = this as unknown as IBLFChunk;
-    const size = c.sizeof(ctor);
+/** Base class returned by {@link CStructBLFChunk}; instances carry the schema's fields. */
+export type CStructBLFChunkConstructor<S extends c.Struct> =
+  (abstract new () => BLFChunk & c.infer<S>) & {
+    /** Payload layout. */
+    readonly schema: S;
+  };
 
-    if (payload.length < size) {
-      throw new BlfError(
-        `Cannot read ${info.signature} chunk: need at least ${size} bytes, got ${payload.length}`
-      );
+/**
+ * Base class for a chunk whose payload is a `c.struct` schema.
+ * Apply `@blf.chunk` to a class extending `CStructBLFChunk(schema)`.
+ * A new chunk starts with `schema.zero()`.
+ */
+export function CStructBLFChunk<S extends c.Struct>(
+  schema: S
+): CStructBLFChunkConstructor<S> {
+  abstract class CStructChunk extends BLFChunkBase {
+    static readonly schema = schema;
+
+    constructor() {
+      super();
+      Object.assign(this, schema.zero());
     }
 
-    Object.assign(this, c.read(ctor, payload, endian));
+    read_body(payload: Uint8Array, endian: c.Endian): void {
+      const info = this as unknown as IBLFChunk;
+      const size = schema.getSize();
+
+      if (payload.length < size) {
+        throw new BlfError(
+          `Cannot read ${info.signature} chunk: need at least ${size} bytes, got ${payload.length}`
+        );
+      }
+
+      Object.assign(this, schema.read(payload, endian));
+    }
+
+    write_body(endian: c.Endian): Uint8Array {
+      return schema.write(this as c.input<S>, endian);
+    }
   }
 
-  write_body(endian: c.Endian): Uint8Array {
-    const ctor = this.constructor as new () => object;
-    return c.write(ctor, this, endian);
-  }
+  return CStructChunk as unknown as CStructBLFChunkConstructor<S>;
 }
 
 /** Full chunk instance (I/O + header metadata). */

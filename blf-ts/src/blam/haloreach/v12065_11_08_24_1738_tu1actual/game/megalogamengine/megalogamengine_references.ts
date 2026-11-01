@@ -1,9 +1,9 @@
+import { c, CFieldType } from "@craftycodie/cstruct";
 import type {
   c_bitstream_reader,
   c_bitstream_writer,
 } from "../../../../../bitstream";
 import { BlfError } from "../../../../../error";
-import { AutoMap } from "../../../../../helpers/automap";
 import { e_explicit_object_type } from "./megalogamengine_explicit_object";
 import { e_explicit_player_type } from "./megalogamengine_explicit_player";
 import { e_explicit_team_type } from "./megalogamengine_explicit_team";
@@ -28,7 +28,6 @@ export enum e_custom_timer_type {
   grace_period = 6,
 }
 export class c_explicit_player {
-  @AutoMap(() => e_explicit_player_type)
   m_explicit_player_type: e_explicit_player_type =
     e_explicit_player_type.no_player;
   decode(bitstream: c_bitstream_reader): void {
@@ -47,7 +46,6 @@ export class c_explicit_player {
   }
 }
 export class c_explicit_object {
-  @AutoMap(() => e_explicit_object_type)
   m_explicit_object_type: e_explicit_object_type =
     e_explicit_object_type.no_object;
   decode(bitstream: c_bitstream_reader): void {
@@ -66,7 +64,6 @@ export class c_explicit_object {
   }
 }
 export class c_explicit_team {
-  @AutoMap(() => e_explicit_team_type)
   m_explicit_team_type: e_explicit_team_type = e_explicit_team_type.none;
   decode(bitstream: c_bitstream_reader): void {
     this.m_explicit_team_type = bitstream.read_enum(
@@ -91,15 +88,10 @@ export enum e_object_reference_type {
   team_player_biped = 7,
 }
 export class c_object_reference {
-  @AutoMap(() => e_object_reference_type)
   m_type: e_object_reference_type = e_object_reference_type.global_object;
-  @AutoMap(() => c_explicit_player)
   m_player?: c_explicit_player;
-  @AutoMap(() => c_explicit_object)
   m_object?: c_explicit_object;
-  @AutoMap(() => c_explicit_team)
   m_team?: c_explicit_team;
-  @AutoMap(() => Number)
   m_variable_index?: number;
   decode(bitstream: c_bitstream_reader): void {
     this.m_type = bitstream.read_enum("type", 3, e_object_reference_type);
@@ -256,15 +248,10 @@ export enum e_player_reference_type {
   team_player = 3,
 }
 export class c_player_reference {
-  @AutoMap(() => e_player_reference_type)
   m_type: e_player_reference_type = e_player_reference_type.global_player;
-  @AutoMap(() => c_explicit_player)
   m_player?: c_explicit_player;
-  @AutoMap(() => c_explicit_object)
   m_object?: c_explicit_object;
-  @AutoMap(() => c_explicit_team)
   m_team?: c_explicit_team;
-  @AutoMap(() => Number)
   m_variable_index?: number;
   decode(bitstream: c_bitstream_reader): void {
     this.m_type = bitstream.read_enum("type", 2, e_player_reference_type);
@@ -357,15 +344,10 @@ export enum e_team_reference_type {
   object_owner_team = 5,
 }
 export class c_team_reference {
-  @AutoMap(() => e_team_reference_type)
   m_type: e_team_reference_type = e_team_reference_type.global_team;
-  @AutoMap(() => c_explicit_player)
   m_player?: c_explicit_player;
-  @AutoMap(() => c_explicit_object)
   m_object?: c_explicit_object;
-  @AutoMap(() => c_explicit_team)
   m_team?: c_explicit_team;
-  @AutoMap(() => Number)
   m_variable_index?: number;
   decode(bitstream: c_bitstream_reader): void {
     this.m_type = bitstream.read_enum("type", 3, e_team_reference_type);
@@ -516,21 +498,13 @@ export enum e_custom_variable_type {
   object_death_damage_type = 43,
 }
 export class c_custom_variable_reference {
-  @AutoMap(() => e_custom_variable_type)
   m_type: e_custom_variable_type = e_custom_variable_type.constant;
-  @AutoMap(() => Number)
   m_immediate_value?: number;
-  @AutoMap(() => c_explicit_player)
   m_player?: c_explicit_player;
-  @AutoMap(() => c_explicit_object)
   m_object?: c_explicit_object;
-  @AutoMap(() => c_explicit_team)
   m_team?: c_explicit_team;
-  @AutoMap(() => Number)
   m_variable_index?: number;
-  @AutoMap(() => Number)
   m_option_index?: number;
-  @AutoMap(() => Number)
   m_statistic_index?: number;
   decode(bitstream: c_bitstream_reader): void {
     this.m_type = bitstream.read_enum("type", 6, e_custom_variable_type);
@@ -727,15 +701,10 @@ export class c_custom_variable_reference {
   }
 }
 export class c_custom_timer_reference {
-  @AutoMap(() => e_custom_timer_type)
   m_type: e_custom_timer_type = e_custom_timer_type.global;
-  @AutoMap(() => c_explicit_player)
   m_player?: c_explicit_player;
-  @AutoMap(() => c_explicit_object)
   m_object?: c_explicit_object;
-  @AutoMap(() => c_explicit_team)
   m_team?: c_explicit_team;
-  @AutoMap(() => Number)
   m_variable_index?: number;
   decode(bitstream: c_bitstream_reader): void {
     this.m_type = bitstream.read_enum("type", 3, e_custom_timer_type);
@@ -841,8 +810,9 @@ export class c_custom_timer_reference {
     }
   }
 }
+@c.class()
 export class c_object_type_reference {
-  @AutoMap(() => Number)
+  @c.field(c.i32())
   m_object_type_index = 0;
   decode(bitstream: c_bitstream_reader): void {
     this.m_object_type_index = bitstream.read_index(
@@ -855,3 +825,188 @@ export class c_object_type_reference {
     bitstream.write_index(this.m_object_type_index, 2048, 11);
   }
 }
+
+type ExplicitKind = "player" | "object" | "team";
+
+interface ReferenceArm {
+  explicit?: ExplicitKind;
+  explicit_offset?: number;
+  variable?: number;
+  option?: number;
+  statistic?: number;
+  immediate?: number;
+}
+
+interface ReferenceValue {
+  m_type: number;
+  m_player?: c_explicit_player;
+  m_object?: c_explicit_object;
+  m_team?: c_explicit_team;
+  m_variable_index?: number;
+  m_option_index?: number;
+  m_statistic_index?: number;
+  m_immediate_value?: number;
+}
+
+export class CReferenceField<T extends ReferenceValue> extends CFieldType<T> {
+  constructor(
+    private readonly create: () => T,
+    private readonly size: number,
+    private readonly tag_offset: number,
+    private readonly arms: Record<number, ReferenceArm>
+  ) {
+    super();
+  }
+
+  getSize(): number {
+    return this.size;
+  }
+
+  read(bytes: Uint8Array, offset: number, endian: c.Endian): T {
+    const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+    const value = this.create();
+    value.m_type = view.getUint8(offset + this.tag_offset);
+    const arm = this.arms[value.m_type];
+    if (!arm) {
+      return value;
+    }
+    if (arm.explicit) {
+      const explicit = view.getInt8(offset + (arm.explicit_offset ?? 0));
+      if (arm.explicit === "player") {
+        value.m_player = new c_explicit_player();
+        value.m_player.m_explicit_player_type = explicit;
+      } else if (arm.explicit === "object") {
+        value.m_object = new c_explicit_object();
+        value.m_object.m_explicit_object_type = explicit;
+      } else {
+        value.m_team = new c_explicit_team();
+        value.m_team.m_explicit_team_type = explicit + 1;
+      }
+    }
+    if (arm.variable !== undefined) {
+      value.m_variable_index = view.getUint8(offset + arm.variable);
+    }
+    if (arm.option !== undefined) {
+      value.m_option_index = view.getUint8(offset + arm.option);
+    }
+    if (arm.statistic !== undefined) {
+      value.m_statistic_index = view.getUint8(offset + arm.statistic);
+    }
+    if (arm.immediate !== undefined) {
+      value.m_immediate_value = view.getInt16(
+        offset + arm.immediate,
+        endian === "little"
+      );
+    }
+    return value;
+  }
+
+  write(bytes: Uint8Array, offset: number, value: T, endian: c.Endian): void {
+    const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+    const arm = this.arms[value.m_type];
+    if (arm?.explicit) {
+      let explicit: number;
+      if (arm.explicit === "player") {
+        explicit = value.m_player?.m_explicit_player_type ?? 0;
+      } else if (arm.explicit === "object") {
+        explicit = value.m_object?.m_explicit_object_type ?? 0;
+      } else {
+        explicit = (value.m_team?.m_explicit_team_type ?? 0) - 1;
+      }
+      view.setInt8(offset + (arm.explicit_offset ?? 0), explicit);
+    }
+    if (arm?.variable !== undefined) {
+      view.setUint8(offset + arm.variable, value.m_variable_index ?? 0);
+    }
+    if (arm?.option !== undefined) {
+      view.setUint8(offset + arm.option, value.m_option_index ?? 0);
+    }
+    if (arm?.statistic !== undefined) {
+      view.setUint8(offset + arm.statistic, value.m_statistic_index ?? 0);
+    }
+    if (arm?.immediate !== undefined) {
+      view.setInt16(
+        offset + arm.immediate,
+        value.m_immediate_value ?? 0,
+        endian === "little"
+      );
+    }
+    view.setUint8(offset + this.tag_offset, value.m_type);
+  }
+}
+
+export const object_reference_field = () =>
+  new CReferenceField(() => new c_object_reference(), 3, 2, {
+    [e_object_reference_type.global_object]: { explicit: "object" },
+    [e_object_reference_type.player_object]: {
+      explicit: "player",
+      variable: 1,
+    },
+    [e_object_reference_type.object_object]: {
+      explicit: "object",
+      variable: 1,
+    },
+    [e_object_reference_type.team_object]: { explicit: "team", variable: 1 },
+    [e_object_reference_type.player_biped]: { explicit: "player" },
+    [e_object_reference_type.player_player_biped]: {
+      explicit: "player",
+      variable: 1,
+    },
+    [e_object_reference_type.object_player_biped]: {
+      explicit: "object",
+      variable: 1,
+    },
+    [e_object_reference_type.team_player_biped]: {
+      explicit: "team",
+      variable: 1,
+    },
+  });
+
+export const player_reference_field = () =>
+  new CReferenceField(() => new c_player_reference(), 3, 2, {
+    [e_player_reference_type.global_player]: { explicit: "player" },
+    [e_player_reference_type.player_player]: {
+      explicit: "player",
+      variable: 1,
+    },
+    [e_player_reference_type.object_player]: {
+      explicit: "object",
+      variable: 1,
+    },
+    [e_player_reference_type.team_player]: { explicit: "team", variable: 1 },
+  });
+
+export const team_reference_field = () =>
+  new CReferenceField(() => new c_team_reference(), 3, 2, {
+    [e_team_reference_type.global_team]: { explicit: "team" },
+    [e_team_reference_type.player_team]: { explicit: "player", variable: 1 },
+    [e_team_reference_type.object_team]: { explicit: "object", variable: 1 },
+    [e_team_reference_type.team_team]: { explicit: "team", variable: 1 },
+    [e_team_reference_type.player_owner_team]: { explicit: "player" },
+    [e_team_reference_type.object_owner_team]: { explicit: "object" },
+  });
+
+export const custom_variable_reference_field = () =>
+  new CReferenceField(() => new c_custom_variable_reference(), 3, 2, {
+    [e_custom_variable_type.constant]: { immediate: 0 },
+    [e_custom_variable_type.player_number]: { explicit: "player", variable: 1 },
+    [e_custom_variable_type.object_number]: { explicit: "object", variable: 1 },
+    [e_custom_variable_type.team_number]: { explicit: "team", variable: 1 },
+    [e_custom_variable_type.global_number]: { variable: 1 },
+    [e_custom_variable_type.option]: { option: 1 },
+    [e_custom_variable_type.spawn_object]: { explicit: "object" },
+    [e_custom_variable_type.team_score]: { explicit: "team" },
+    [e_custom_variable_type.player_score]: { explicit: "player" },
+    [e_custom_variable_type.player_money]: { explicit: "player" },
+    [e_custom_variable_type.player_rating]: { explicit: "player" },
+    [e_custom_variable_type.player_stat]: { explicit: "player", statistic: 1 },
+    [e_custom_variable_type.team_stat]: { explicit: "team", statistic: 1 },
+  });
+
+export const custom_timer_reference_field = () =>
+  new CReferenceField(() => new c_custom_timer_reference(), 3, 1, {
+    [e_custom_timer_type.global]: { variable: 2 },
+    [e_custom_timer_type.player]: { explicit: "player", variable: 2 },
+    [e_custom_timer_type.team]: { explicit: "team", variable: 2 },
+    [e_custom_timer_type.object]: { explicit: "object", variable: 2 },
+  });

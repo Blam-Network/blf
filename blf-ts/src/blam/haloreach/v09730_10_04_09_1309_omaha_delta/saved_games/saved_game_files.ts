@@ -2,6 +2,7 @@ import type {
   c_bitstream_reader,
   c_bitstream_writer,
 } from "../../../../bitstream";
+
 import {
   e_file_type,
   e_game_mode,
@@ -83,7 +84,7 @@ export function content_item_metadata_decode(
   switch (metadata.general.file_type) {
     case e_file_type.Film:
     case e_file_type.FilmClip: {
-      const film = new s_content_item_film_metadata();
+      const film = s_content_item_film_metadata.zero();
       film.seconds = bitstream.read_signed_integer("film-seconds", 32);
       metadata.file_type_data = film;
       break;
@@ -94,7 +95,7 @@ export function content_item_metadata_decode(
   }
 
   if (metadata.general.activity === e_gui_game_mode.matchmaking) {
-    const mm = new s_content_item_matchmaking_metadata();
+    const mm = s_content_item_matchmaking_metadata.zero();
     mm.hopper_identifier = bitstream.read_integer("hopper-identifier", 16);
     metadata.activity_data = mm;
   } else {
@@ -103,7 +104,7 @@ export function content_item_metadata_decode(
 
   switch (metadata.general.game_mode) {
     case e_game_mode.campaign: {
-      const campaign = new s_content_item_campaign_metadata();
+      const campaign = s_content_item_campaign_metadata.zero();
       campaign.campaign_id = bitstream.read_integer("campaign-id", 8);
       campaign.campaign_difficulty = bitstream.read_integer(
         "difficulty-level",
@@ -124,7 +125,7 @@ export function content_item_metadata_decode(
       break;
     }
     case e_game_mode.survival: {
-      const ff = new s_content_item_firefight_metadata();
+      const ff = s_content_item_firefight_metadata.zero();
       ff.firefight_difficulty = bitstream.read_integer("difficulty-level", 2);
       const skullFlags = bitstream.read_integer("skull-flags", 32);
       ff.firefight_primary_skulls = skullFlags & 0xffff;

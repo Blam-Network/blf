@@ -3,7 +3,6 @@ import type {
   c_bitstream_writer,
 } from "../../../../../bitstream";
 import { BlfError } from "../../../../../error";
-import { AutoMap } from "../../../../../helpers/automap";
 import { c_custom_timer_reference } from "./megalogamengine_custom_timer_reference";
 import { c_custom_variable_reference } from "./megalogamengine_custom_variable_reference";
 import { c_object_reference } from "./megalogamengine_object_reference";
@@ -27,17 +26,11 @@ export enum e_variable_type {
 }
 
 export class s_variant_variable {
-  @AutoMap(() => e_variable_type)
   m_type: e_variable_type = e_variable_type.custom_variable;
-  @AutoMap(() => c_player_reference)
   m_player?: c_player_reference;
-  @AutoMap(() => c_object_reference)
   m_object?: c_object_reference;
-  @AutoMap(() => c_team_reference)
   m_team?: c_team_reference;
-  @AutoMap(() => c_custom_timer_reference)
   m_custom_timer?: c_custom_timer_reference;
-  @AutoMap(() => c_custom_variable_reference)
   m_custom_variable?: c_custom_variable_reference;
 
   decode(bitstream: c_bitstream_reader): void {

@@ -2,7 +2,6 @@ import type {
   c_bitstream_reader,
   c_bitstream_writer,
 } from "../../../../bitstream";
-import { AutoMap } from "../../../../helpers/automap";
 import {
   e_sandbox_edit_mode_settings,
   e_sandbox_variant_flags,
@@ -11,16 +10,11 @@ import { c_player_traits } from "./game_engine_player_traits";
 import { c_game_engine_custom_variant } from "./game_variant";
 
 export class c_game_engine_sandbox_variant {
-  @AutoMap(() => c_game_engine_custom_variant)
   m_custom_variant = new c_game_engine_custom_variant();
-  @AutoMap(() => e_sandbox_variant_flags)
   m_variant_flags = new e_sandbox_variant_flags();
-  @AutoMap(() => e_sandbox_edit_mode_settings)
   m_edit_mode: e_sandbox_edit_mode_settings =
     e_sandbox_edit_mode_settings.all_players;
-  @AutoMap(() => Number)
   m_respawn_time = 0;
-  @AutoMap(() => c_player_traits)
   m_editor_traits = new c_player_traits();
   decode(bitstream: c_bitstream_reader): void {
     this.m_custom_variant.decode(bitstream);

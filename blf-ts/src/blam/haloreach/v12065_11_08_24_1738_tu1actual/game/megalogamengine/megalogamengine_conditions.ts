@@ -1,9 +1,11 @@
+import { c } from "@craftycodie/cstruct";
 import type {
   BitfieldOf,
   c_bitstream_reader,
   c_bitstream_writer,
 } from "../../../../../bitstream";
-import { AutoMap } from "../../../../../helpers/automap";
+import { bitfieldFromRaw, bitfieldToRaw } from "../../../../../bitstream";
+import { class_union } from "../../memory/class_union";
 /** Matches `e_numeric_comparison` in blf_lib `megalogamengine_conditions.rs`. */
 export enum e_numeric_comparison {
   less_than = 0,
@@ -91,15 +93,23 @@ import {
   c_object_type_reference,
   c_player_reference,
   c_team_reference,
+  custom_timer_reference_field,
+  object_reference_field,
+  player_reference_field,
+  team_reference_field,
 } from "./megalogamengine_references";
-import { s_variant_variable } from "./megalogamengine_variant_variable";
+import {
+  s_variant_variable,
+  variant_variable_field,
+} from "./megalogamengine_variant_variable";
 
+@c.class()
 export class s_condition_if_parameters {
-  @AutoMap(() => s_variant_variable)
+  @c.field(variant_variable_field())
   m_left = new s_variant_variable();
-  @AutoMap(() => s_variant_variable)
+  @c.field(variant_variable_field())
   m_right = new s_variant_variable();
-  @AutoMap(() => e_numeric_comparison)
+  @c.field(c.u8())
   m_comparison: e_numeric_comparison = e_numeric_comparison.less_than;
   decode(bitstream: c_bitstream_reader): void {
     this.m_left.decode(bitstream);
@@ -117,10 +127,11 @@ export class s_condition_if_parameters {
   }
 }
 
+@c.class()
 export class s_condition_object_in_area_parameters {
-  @AutoMap(() => c_object_reference)
+  @c.field(object_reference_field())
   m_object_reference_1 = new c_object_reference();
-  @AutoMap(() => c_object_reference)
+  @c.field(object_reference_field())
   m_object_reference_2 = new c_object_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_object_reference_1.decode(bitstream);
@@ -132,10 +143,17 @@ export class s_condition_object_in_area_parameters {
   }
 }
 
+@c.class()
 export class s_condition_player_died_parameters {
-  @AutoMap(() => c_player_reference)
+  @c.field(player_reference_field())
   m_player = new c_player_reference();
-  @AutoMap(() => Object)
+  @c.field(
+    c.u8().transform(
+      (raw: number) => bitfieldFromRaw(raw, k_player_death_killer_type_flags),
+      (flags: e_player_death_killer_type_flags) =>
+        bitfieldToRaw(flags, k_player_death_killer_type_flags)
+    )
+  )
   m_killer_type: e_player_death_killer_type_flags =
     e_player_death_killer_type_flags_none();
   decode(bitstream: c_bitstream_reader): void {
@@ -156,12 +174,13 @@ export class s_condition_player_died_parameters {
   }
 }
 
+@c.class()
 export class s_condition_team_disposition_parameters {
-  @AutoMap(() => c_team_reference)
+  @c.field(team_reference_field())
   m_team_1 = new c_team_reference();
-  @AutoMap(() => c_team_reference)
+  @c.field(team_reference_field())
   m_team_2 = new c_team_reference();
-  @AutoMap(() => Number)
+  @c.field(c.u8())
   m_disposition: e_disposition = e_disposition.neutral;
   decode(bitstream: c_bitstream_reader): void {
     this.m_team_1.decode(bitstream);
@@ -175,8 +194,9 @@ export class s_condition_team_disposition_parameters {
   }
 }
 
+@c.class()
 export class s_condition_timer_expired_parameters {
-  @AutoMap(() => c_custom_timer_reference)
+  @c.field(custom_timer_reference_field())
   m_timer = new c_custom_timer_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_timer.decode(bitstream);
@@ -186,10 +206,11 @@ export class s_condition_timer_expired_parameters {
   }
 }
 
+@c.class()
 export class s_condition_object_is_type_parameters {
-  @AutoMap(() => c_object_reference)
+  @c.field(object_reference_field())
   m_object = new c_object_reference();
-  @AutoMap(() => c_object_type_reference)
+  @c.field(c_object_type_reference, { padBefore: 1 })
   m_object_type = new c_object_type_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
@@ -201,8 +222,9 @@ export class s_condition_object_is_type_parameters {
   }
 }
 
+@c.class()
 export class s_condition_team_is_active_parameters {
-  @AutoMap(() => c_team_reference)
+  @c.field(team_reference_field())
   m_team = new c_team_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_team.decode(bitstream);
@@ -212,8 +234,9 @@ export class s_condition_team_is_active_parameters {
   }
 }
 
+@c.class()
 export class s_condition_object_out_of_bounds_parameters {
-  @AutoMap(() => c_object_reference)
+  @c.field(object_reference_field())
   m_object = new c_object_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
@@ -223,8 +246,9 @@ export class s_condition_object_out_of_bounds_parameters {
   }
 }
 
+@c.class()
 export class s_condition_player_is_fire_team_leader_parameters {
-  @AutoMap(() => c_player_reference)
+  @c.field(player_reference_field())
   m_player = new c_player_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_player.decode(bitstream);
@@ -234,10 +258,11 @@ export class s_condition_player_is_fire_team_leader_parameters {
   }
 }
 
+@c.class()
 export class s_condition_player_assisted_with_kill_parameters {
-  @AutoMap(() => c_player_reference)
+  @c.field(player_reference_field())
   m_player_1 = new c_player_reference();
-  @AutoMap(() => c_player_reference)
+  @c.field(player_reference_field())
   m_player_2 = new c_player_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_player_1.decode(bitstream);
@@ -249,10 +274,11 @@ export class s_condition_player_assisted_with_kill_parameters {
   }
 }
 
+@c.class()
 export class s_condition_object_matches_filter_parameters {
-  @AutoMap(() => c_object_reference)
+  @c.field(object_reference_field())
   m_object = new c_object_reference();
-  @AutoMap(() => Number)
+  @c.field(c.i32(), { padBefore: 1 })
   m_filter_index = 0;
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
@@ -264,8 +290,9 @@ export class s_condition_object_matches_filter_parameters {
   }
 }
 
+@c.class()
 export class s_condition_player_is_active_parameters {
-  @AutoMap(() => c_player_reference)
+  @c.field(player_reference_field())
   m_player = new c_player_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_player.decode(bitstream);
@@ -275,8 +302,9 @@ export class s_condition_player_is_active_parameters {
   }
 }
 
+@c.class()
 export class s_condition_equipment_is_active_parameters {
-  @AutoMap(() => c_object_reference)
+  @c.field(object_reference_field())
   m_object = new c_object_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_object.decode(bitstream);
@@ -286,8 +314,9 @@ export class s_condition_equipment_is_active_parameters {
   }
 }
 
+@c.class()
 export class s_condition_player_is_spartan_parameters {
-  @AutoMap(() => c_player_reference)
+  @c.field(player_reference_field())
   m_player = new c_player_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_player.decode(bitstream);
@@ -297,8 +326,9 @@ export class s_condition_player_is_spartan_parameters {
   }
 }
 
+@c.class()
 export class s_condition_player_is_elite_parameters {
-  @AutoMap(() => c_player_reference)
+  @c.field(player_reference_field())
   m_player = new c_player_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_player.decode(bitstream);
@@ -308,8 +338,9 @@ export class s_condition_player_is_elite_parameters {
   }
 }
 
+@c.class()
 export class s_condition_player_is_editor_parameters {
-  @AutoMap(() => c_player_reference)
+  @c.field(player_reference_field())
   m_player = new c_player_reference();
   decode(bitstream: c_bitstream_reader): void {
     this.m_player.decode(bitstream);
@@ -329,47 +360,26 @@ export class s_condition_game_is_forge_parameters {
 }
 
 export class c_condition {
-  @AutoMap(() => e_condition_type)
   m_type: e_condition_type = e_condition_type.none;
-  @AutoMap(() => Boolean)
   m_negated = false;
-  @AutoMap(() => Number)
   m_union_group = 0;
-  @AutoMap(() => Number)
   m_execute_before_action = 0;
-  @AutoMap(() => s_condition_if_parameters)
   m_if_parameters?: s_condition_if_parameters;
-  @AutoMap(() => s_condition_object_in_area_parameters)
   m_object_in_area_parameters?: s_condition_object_in_area_parameters;
-  @AutoMap(() => s_condition_player_died_parameters)
   m_player_died_parameters?: s_condition_player_died_parameters;
-  @AutoMap(() => s_condition_team_disposition_parameters)
   m_team_disposition_parameters?: s_condition_team_disposition_parameters;
-  @AutoMap(() => s_condition_timer_expired_parameters)
   m_timer_expired_parameters?: s_condition_timer_expired_parameters;
-  @AutoMap(() => s_condition_object_is_type_parameters)
   m_object_is_type_parameters?: s_condition_object_is_type_parameters;
-  @AutoMap(() => s_condition_team_is_active_parameters)
   m_team_is_active_parameters?: s_condition_team_is_active_parameters;
-  @AutoMap(() => s_condition_object_out_of_bounds_parameters)
   m_object_out_of_bounds_parameters?: s_condition_object_out_of_bounds_parameters;
-  @AutoMap(() => s_condition_player_is_fire_team_leader_parameters)
   m_player_is_fire_team_leader_parameters?: s_condition_player_is_fire_team_leader_parameters;
-  @AutoMap(() => s_condition_player_assisted_with_kill_parameters)
   m_player_assisted_with_kill_parameters?: s_condition_player_assisted_with_kill_parameters;
-  @AutoMap(() => s_condition_object_matches_filter_parameters)
   m_object_matches_filter_parameters?: s_condition_object_matches_filter_parameters;
-  @AutoMap(() => s_condition_player_is_active_parameters)
   m_player_is_active_parameters?: s_condition_player_is_active_parameters;
-  @AutoMap(() => s_condition_equipment_is_active_parameters)
   m_equipment_is_active_parameters?: s_condition_equipment_is_active_parameters;
-  @AutoMap(() => s_condition_player_is_spartan_parameters)
   m_player_is_spartan_parameters?: s_condition_player_is_spartan_parameters;
-  @AutoMap(() => s_condition_player_is_elite_parameters)
   m_player_is_elite_parameters?: s_condition_player_is_elite_parameters;
-  @AutoMap(() => s_condition_player_is_editor_parameters)
   m_player_is_editor_parameters?: s_condition_player_is_editor_parameters;
-  @AutoMap(() => s_condition_game_is_forge_parameters)
   m_game_is_forge_parameters?: s_condition_game_is_forge_parameters;
 
   decode(bitstream: c_bitstream_reader): void {
@@ -551,4 +561,131 @@ export class c_condition {
         break;
     }
   }
+}
+
+export function condition_field() {
+  return class_union(
+    () => new c_condition(),
+    16,
+    { property: "m_type", offset: 12, type: "u8" },
+    () => ({
+      [e_condition_type.if]: [
+        {
+          property: "m_if_parameters",
+          field: s_condition_if_parameters,
+          offset: 0,
+        },
+      ],
+      [e_condition_type.object_in_area]: [
+        {
+          property: "m_object_in_area_parameters",
+          field: s_condition_object_in_area_parameters,
+          offset: 0,
+        },
+      ],
+      [e_condition_type.player_died]: [
+        {
+          property: "m_player_died_parameters",
+          field: s_condition_player_died_parameters,
+          offset: 0,
+        },
+      ],
+      [e_condition_type.team_disposition]: [
+        {
+          property: "m_team_disposition_parameters",
+          field: s_condition_team_disposition_parameters,
+          offset: 0,
+        },
+      ],
+      [e_condition_type.timer_expired]: [
+        {
+          property: "m_timer_expired_parameters",
+          field: s_condition_timer_expired_parameters,
+          offset: 0,
+        },
+      ],
+      [e_condition_type.object_is_type]: [
+        {
+          property: "m_object_is_type_parameters",
+          field: s_condition_object_is_type_parameters,
+          offset: 0,
+        },
+      ],
+      [e_condition_type.team_is_active]: [
+        {
+          property: "m_team_is_active_parameters",
+          field: s_condition_team_is_active_parameters,
+          offset: 0,
+        },
+      ],
+      [e_condition_type.object_out_of_bounds]: [
+        {
+          property: "m_object_out_of_bounds_parameters",
+          field: s_condition_object_out_of_bounds_parameters,
+          offset: 0,
+        },
+      ],
+      [e_condition_type.player_is_fire_team_leader]: [
+        {
+          property: "m_player_is_fire_team_leader_parameters",
+          field: s_condition_player_is_fire_team_leader_parameters,
+          offset: 0,
+        },
+      ],
+      [e_condition_type.player_assisted_with_kill]: [
+        {
+          property: "m_player_assisted_with_kill_parameters",
+          field: s_condition_player_assisted_with_kill_parameters,
+          offset: 0,
+        },
+      ],
+      [e_condition_type.object_matches_filter]: [
+        {
+          property: "m_object_matches_filter_parameters",
+          field: s_condition_object_matches_filter_parameters,
+          offset: 0,
+        },
+      ],
+      [e_condition_type.player_is_active]: [
+        {
+          property: "m_player_is_active_parameters",
+          field: s_condition_player_is_active_parameters,
+          offset: 0,
+        },
+      ],
+      [e_condition_type.equipment_is_active]: [
+        {
+          property: "m_equipment_is_active_parameters",
+          field: s_condition_equipment_is_active_parameters,
+          offset: 0,
+        },
+      ],
+      [e_condition_type.player_is_spartan]: [
+        {
+          property: "m_player_is_spartan_parameters",
+          field: s_condition_player_is_spartan_parameters,
+          offset: 0,
+        },
+      ],
+      [e_condition_type.player_is_elite]: [
+        {
+          property: "m_player_is_elite_parameters",
+          field: s_condition_player_is_elite_parameters,
+          offset: 0,
+        },
+      ],
+      [e_condition_type.player_is_editor]: [
+        {
+          property: "m_player_is_editor_parameters",
+          field: s_condition_player_is_editor_parameters,
+          offset: 0,
+        },
+      ],
+    }),
+    [
+      { property: "m_negated", field: c.bool(), offset: 13 },
+      { property: "m_union_group", field: c.u8(), offset: 14 },
+      { property: "m_execute_before_action", field: c.u8(), offset: 15 },
+    ]
+  );
 }

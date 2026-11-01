@@ -2,7 +2,7 @@ import type {
   c_bitstream_reader,
   c_bitstream_writer,
 } from "../../../../bitstream";
-import { AutoMap } from "../../../../helpers/automap";
+
 import {
   c_game_engine_social_options,
   e_map_override_option_flags,
@@ -42,25 +42,15 @@ export {
 
 /** Matches blf_lib omaha_alpha `c_game_engine_map_override_options`. */
 export class c_game_engine_map_override_options {
-  @AutoMap(() => e_map_override_option_flags)
   m_flags = new e_map_override_option_flags();
-  @AutoMap(() => c_player_traits)
   m_base_player_traits = new c_player_traits();
-  @AutoMap(() => Number)
   m_weapon_set_absolute_index = 0;
-  @AutoMap(() => Number)
   m_vehicle_set_absolute_index = 0;
-  @AutoMap(() => c_player_traits)
   m_red_powerup_traits = new c_player_traits();
-  @AutoMap(() => c_player_traits)
   m_blue_powerup_traits = new c_player_traits();
-  @AutoMap(() => c_player_traits)
   m_yellow_powerup_traits = new c_player_traits();
-  @AutoMap(() => Number)
   m_red_powerup_duration_seconds = 0;
-  @AutoMap(() => Number)
   m_blue_powerup_duration_seconds = 0;
-  @AutoMap(() => Number)
   m_yellow_powerup_duration_seconds = 0;
   initialize(): void {
     this.m_flags = new e_map_override_option_flags();
@@ -130,28 +120,20 @@ export class c_game_engine_map_override_options {
  * Matches blf_lib omaha_alpha `c_game_engine_base_variant` (no loadout block).
  */
 export class c_game_engine_base_variant {
-  @AutoMap(() => s_content_item_metadata)
   m_metadata = (() => {
-    const metadata = new s_content_item_metadata();
-    metadata.general = new s_content_item_general_metadata();
-    metadata.display = new s_content_item_display_metadata();
-    metadata.creation_history = new s_content_item_history();
-    metadata.modification_history = new s_content_item_history();
+    const metadata = s_content_item_metadata.zero();
+    metadata.general = s_content_item_general_metadata.zero();
+    metadata.display = s_content_item_display_metadata.zero();
+    metadata.creation_history = s_content_item_history.zero();
+    metadata.modification_history = s_content_item_history.zero();
     return metadata;
   })();
-  @AutoMap(() => Boolean)
   m_built_in = false;
-  @AutoMap(() => c_game_engine_miscellaneous_options)
   m_miscellaneous_options = new c_game_engine_miscellaneous_options();
-  @AutoMap(() => c_game_engine_respawn_options)
   m_respawn_options = new c_game_engine_respawn_options();
-  @AutoMap(() => c_game_engine_social_options)
   m_social_options = new c_game_engine_social_options();
-  @AutoMap(() => c_game_engine_map_override_options)
   m_map_override_options = new c_game_engine_map_override_options();
-  @AutoMap(() => e_team_scoring_method)
   m_team_scoring_method: e_team_scoring_method = e_team_scoring_method.sum;
-  @AutoMap(() => c_game_engine_team_options)
   m_team_options = new c_game_engine_team_options();
   initialize(): void {
     content_item_metadata_set_defaults(this.m_metadata);

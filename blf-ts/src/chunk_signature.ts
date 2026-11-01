@@ -1,21 +1,13 @@
-import { c } from "@craftycodie/cstruct";
+import { CFieldType, type c } from "@craftycodie/cstruct";
 import { BlfError } from "./error";
 
 /** Fixed 4-byte BLF chunk signature; reverses byte order on little-endian. */
-export class ChunkSignature extends c.AdvancedType<string> {
-  readonly byteSize = 4;
+export class ChunkSignature extends CFieldType<string> {
+  getSize(): number {
+    return 4;
+  }
 
-  read(
-    bytes: Uint8Array,
-    offset: number,
-    endian: c.Endian,
-    _label: string
-  ): string {
-    if (offset + this.byteSize > bytes.length) {
-      throw new BlfError(
-        `Cannot read chunk signature: need ${this.byteSize} bytes at offset ${offset}, have ${bytes.length - offset}`
-      );
-    }
+  read(bytes: Uint8Array, offset: number, endian: c.Endian): string {
     const w0 = bytes[offset]!;
     const w1 = bytes[offset + 1]!;
     const w2 = bytes[offset + 2]!;
@@ -30,17 +22,11 @@ export class ChunkSignature extends c.AdvancedType<string> {
     bytes: Uint8Array,
     offset: number,
     value: string,
-    endian: c.Endian,
-    _label: string
+    endian: c.Endian
   ): void {
-    if (value.length !== this.byteSize) {
+    if (value.length !== 4) {
       throw new BlfError(
         `BLF chunk signature must be exactly 4 characters, got ${value.length}: "${value}"`
-      );
-    }
-    if (offset + this.byteSize > bytes.length) {
-      throw new BlfError(
-        `Cannot write chunk signature: need ${this.byteSize} bytes at offset ${offset}, have ${bytes.length - offset}`
       );
     }
     const a = value.charCodeAt(0);

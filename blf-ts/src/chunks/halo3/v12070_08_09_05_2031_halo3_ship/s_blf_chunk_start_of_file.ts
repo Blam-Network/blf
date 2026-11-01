@@ -9,14 +9,14 @@ export enum e_byte_order_mark {
 
 /** BLF start-of-file chunk (`_blf` 1.2). */
 @blf.chunk("_blf", 1.2)
-@c.struct()
-export class s_blf_chunk_start_of_file extends CStructBLFChunk {
-  @c.field(c.enum("u16", e_byte_order_mark))
-  byte_order_mark = e_byte_order_mark.little_endian;
-
-  @c.field(c.String(32), { pad_before: 2 })
-  name = "";
-
+export class s_blf_chunk_start_of_file extends CStructBLFChunk(
+  c.struct({
+    byte_order_mark: c
+      .enum(e_byte_order_mark, c.u16())
+      .default(e_byte_order_mark.little_endian),
+    name: c.string(32, "latin1").padAfter(2),
+  })
+) {
   static create(name: string): s_blf_chunk_start_of_file {
     const chunk = new s_blf_chunk_start_of_file();
     chunk.name = name;

@@ -12,7 +12,7 @@ describe("s_challenge_state", () => {
   it("is 28 bytes with -1 sentinels for unset overrides", () => {
     expect(c.sizeof(s_challenge_state)).toBe(28);
 
-    const challenge = new s_challenge_state();
+    const challenge = s_challenge_state.zero();
     challenge.category = e_challenge_category.firefight;
     challenge.challenge = 7;
     challenge.cookie_reward = 2250;
@@ -39,7 +39,7 @@ describe("s_blf_chunk_challenge_state", () => {
     expect(meta.signature).toBe("dcha");
     expect(meta.major).toBe(3);
     expect(meta.minor).toBe(1);
-    expect(c.sizeof(s_blf_chunk_challenge_state)).toBe(0x24a);
+    expect(c.sizeof(s_blf_chunk_challenge_state.schema)).toBe(0x24a);
   });
 
   it("round-trips challenge sets", () => {
@@ -71,6 +71,6 @@ describe("s_blf_chunk_challenge_progress", () => {
     const meta = getBlfChunkMeta(new s_blf_chunk_challenge_progress());
     expect(meta.signature).toBe("chpr");
     expect(meta.version).toBe(2.1);
-    expect(c.sizeof(s_blf_chunk_challenge_progress)).toBe(0x58);
+    expect(c.sizeof(s_blf_chunk_challenge_progress.schema)).toBe(0x58);
   });
 });

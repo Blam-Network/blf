@@ -2,6 +2,7 @@ import { c } from "@craftycodie/cstruct";
 import { describe, expect, it } from "vitest";
 import { s_online_file_summary_listing_entry } from "../../../blam/haloreach/v12065_11_08_24_1738_tu1actual/networking/online/files/online_file_summary_listing";
 import { search_for_chunk } from "../../../blf_chunk";
+
 import { write_blffile } from "../../../index";
 import { s_blf_chunk_end_of_file } from "../../halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_end_of_file";
 import { s_blf_chunk_start_of_file } from "../../halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_start_of_file";
@@ -15,14 +16,14 @@ function make_entry(
   map_variants: number,
   new_items: number
 ): s_online_file_summary_listing_entry {
-  const entry = new s_online_file_summary_listing_entry();
+  const entry = s_online_file_summary_listing_entry.zero();
   entry.share_id = share_id;
   entry.screenshots_count = screenshots;
   entry.films_count = films;
   entry.game_variants_count = game_variants;
   entry.map_variants_count = map_variants;
   entry.new_items_count = new_items;
-  entry.unknown1C = 0;
+  entry.last_modified_timestamp = 0;
   entry.unknown20 = 0;
   return entry;
 }

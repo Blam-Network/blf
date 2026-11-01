@@ -4,6 +4,7 @@ export * from "./game_engine_player_traits";
 export * from "./game_engine_sandbox";
 export * from "./game_engine_survival";
 export * from "./game_engine_traits";
+export * from "./game_results";
 export * from "./game_variant";
 export * from "./megalogamengine";
 export * from "./player_rewards";

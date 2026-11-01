@@ -2,7 +2,6 @@ import type {
   c_bitstream_reader,
   c_bitstream_writer,
 } from "../../../../bitstream";
-import { AutoMap } from "../../../../helpers/automap";
 import { type StaticArray, staticArray } from "../../../../types/static_array";
 import {
   e_game_engine_team_options_designator_switch_type,
@@ -17,26 +16,16 @@ import { c_string_table } from "../../v12065_11_08_24_1738_tu1actual/game/string
  * (no fireteam_count — that arrives later in TU1).
  */
 export class c_game_engine_team_options_team {
-  @AutoMap(() => Boolean)
   m_team_enabled = false;
-  @AutoMap(() => Boolean)
   m_override_color_armour = false;
-  @AutoMap(() => Boolean)
   m_override_color_ui_text = false;
-  @AutoMap(() => Boolean)
   m_override_color_ui_bitmap = false;
-  @AutoMap(() => c_string_table)
   m_name = new c_string_table(1, 32, 5, 6, 1);
-  @AutoMap(() => Number)
   m_team_initial_designator: e_multiplayer_team_designator =
     e_multiplayer_team_designator.none;
-  @AutoMap(() => Number)
   m_model_override: e_player_model_choice = e_player_model_choice.spartan;
-  @AutoMap(() => Number)
   m_team_color_override = 0;
-  @AutoMap(() => Number)
   m_team_ui_text_tint_color_override = 0;
-  @AutoMap(() => Number)
   m_team_ui_bitmap_tint_color_override = 0;
   initialize(team_index: number): void {
     this.m_team_enabled = true;
@@ -104,12 +93,9 @@ export class c_game_engine_team_options_team {
 }
 
 export class c_game_engine_team_options {
-  @AutoMap(() => Number)
   m_model_override = 0;
-  @AutoMap(() => e_game_engine_team_options_designator_switch_type)
   m_designator_switch_type: e_game_engine_team_options_designator_switch_type =
     e_game_engine_team_options_designator_switch_type.none;
-  @AutoMap(() => [c_game_engine_team_options_team])
   m_teams: StaticArray<
     c_game_engine_team_options_team,
     typeof k_game_variant_team_count

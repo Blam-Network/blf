@@ -1,6 +1,7 @@
 import { c } from "@craftycodie/cstruct";
 import { describe, expect, it } from "vitest";
 import { search_for_chunk } from "../../../blf_chunk";
+
 import {
   build_hopper_statistics_file,
   s_blf_chunk_matchmaking_hopper_statistics,
@@ -11,7 +12,7 @@ function make_hopper(
   hopper_identifier: number,
   player_count: number
 ): s_online_population_statistic {
-  const hopper = new s_online_population_statistic();
+  const hopper = s_online_population_statistic.zero();
   hopper.hopper_identifier = hopper_identifier;
   hopper.player_count = player_count;
   return hopper;

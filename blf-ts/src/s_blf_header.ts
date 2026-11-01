@@ -19,51 +19,39 @@ export function parse_blf_chunk_version(version: number | string) {
 
   return { major, minor };
 }
-@c.struct()
-export class s_blf_header {
-  @c.field(chunkSignature())
-  signature = "";
+export const s_blf_header = c.struct({
+  signature: chunkSignature(),
+  chunk_length: c.u32(),
+  major: c.u16(),
+  minor: c.u16(),
+});
+export type s_blf_header = c.infer<typeof s_blf_header>;
 
-  @c.field("u32")
-  chunk_length = 0;
-
-  @c.field("u16")
-  major = 0;
-
-  @c.field("u16")
-  minor = 0;
-
-  static create(
-    signature: string,
-    chunk_length: number,
-    major: number,
-    minor: number
-  ): s_blf_header {
-    if (signature.length !== 4) {
-      throw new BlfError(
-        `BLF chunk signature must be exactly 4 characters, got ${signature.length}: "${signature}"`
-      );
-    }
-    if (!Number.isInteger(chunk_length) || chunk_length < 0) {
-      throw new BlfError(
-        `BLF chunk length must be a non-negative integer, got ${chunk_length}`
-      );
-    }
-    const header = new s_blf_header();
-    header.signature = signature;
-    header.chunk_length = chunk_length;
-    header.major = major;
-    header.minor = minor;
-    return header;
+export function create_blf_header(
+  signature: string,
+  chunk_length: number,
+  major: number,
+  minor: number
+): s_blf_header {
+  if (signature.length !== 4) {
+    throw new BlfError(
+      `BLF chunk signature must be exactly 4 characters, got ${signature.length}: "${signature}"`
+    );
   }
-
-  /** Build from a `major.minor` float (e.g. `1.1`). */
-  static from_version_float(
-    signature: string,
-    chunk_length: number,
-    version: number
-  ): s_blf_header {
-    const { major, minor } = parse_blf_chunk_version(version);
-    return s_blf_header.create(signature, chunk_length, major, minor);
+  if (!Number.isInteger(chunk_length) || chunk_length < 0) {
+    throw new BlfError(
+      `BLF chunk length must be a non-negative integer, got ${chunk_length}`
+    );
   }
+  return { signature, chunk_length, major, minor };
+}
+
+/** Build from a `major.minor` float (e.g. `1.1`). */
+export function blf_header_from_version_float(
+  signature: string,
+  chunk_length: number,
+  version: number
+): s_blf_header {
+  const { major, minor } = parse_blf_chunk_version(version);
+  return create_blf_header(signature, chunk_length, major, minor);
 }

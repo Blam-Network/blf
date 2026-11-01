@@ -19,17 +19,14 @@ function bitstream_byte_order(endian: c.Endian): e_bitstream_byte_order {
 }
 
 /** Per-hopper population entry in `mmhs` 4.1 (`hopper_population`). */
-@c.struct()
-export class s_online_population_statistic {
-  @c.field("u8", { pad_after: 1 })
-  presence_type = 0;
-
-  @c.field("i16")
-  hopper_identifier = 0;
-
-  @c.field("u32")
-  player_count = 0;
-}
+export const s_online_population_statistic = c.struct({
+  presence_type: c.u8().padAfter(1),
+  hopper_identifier: c.i16(),
+  player_count: c.u32(),
+});
+export type s_online_population_statistic = c.infer<
+  typeof s_online_population_statistic
+>;
 
 /** Reach matchmaking hopper statistics (`mmhs` 4.1). */
 @blf.chunk("mmhs", 4.1)
@@ -100,7 +97,7 @@ export class s_blf_chunk_matchmaking_hopper_statistics extends BLFChunkBase {
 
     for (const hopper of this.hoppers) {
       bitstream.write_raw_data(
-        c.write(s_online_population_statistic, hopper, endian),
+        s_online_population_statistic.write(hopper, endian),
         entry_size * 8
       );
     }

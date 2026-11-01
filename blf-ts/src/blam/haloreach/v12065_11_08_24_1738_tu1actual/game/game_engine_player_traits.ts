@@ -1,8 +1,8 @@
+import { c } from "@craftycodie/cstruct";
 import type {
   c_bitstream_reader,
   c_bitstream_writer,
 } from "../../../../bitstream";
-import { AutoMap } from "../../../../helpers/automap";
 export enum e_grenade_count_setting {
   unchanged = 0,
   map_default = 1,
@@ -229,33 +229,34 @@ export enum e_motion_tracker_range_setting {
   meters_150 = 7,
 }
 
+@c.class()
 export class c_player_trait_shield_vitality {
-  @AutoMap(() => e_damage_resistance_percentage_setting)
+  @c.field(c.u8())
   m_damage_resistance_percentage_setting: e_damage_resistance_percentage_setting =
     e_damage_resistance_percentage_setting.unchanged;
-  @AutoMap(() => e_body_multiplier_setting)
+  @c.field(c.u8())
   m_body_multiplier: e_body_multiplier_setting =
     e_body_multiplier_setting.unchanged;
-  @AutoMap(() => e_recharge_rate_percentage_setting)
+  @c.field(c.u8())
   m_body_recharge_rate: e_recharge_rate_percentage_setting =
     e_recharge_rate_percentage_setting.unchanged;
-  @AutoMap(() => e_shield_multiplier_setting)
+  @c.field(c.u8())
   m_shield_multiplier: e_shield_multiplier_setting =
     e_shield_multiplier_setting.unchanged;
-  @AutoMap(() => e_recharge_rate_percentage_setting)
+  @c.field(c.u8())
   m_shield_recharge_rate: e_recharge_rate_percentage_setting =
     e_recharge_rate_percentage_setting.unchanged;
-  @AutoMap(() => e_recharge_rate_percentage_setting)
+  @c.field(c.u8())
   m_overshield_recharge_rate: e_recharge_rate_percentage_setting =
     e_recharge_rate_percentage_setting.unchanged;
-  @AutoMap(() => e_boolean_trait)
+  @c.field(c.u8())
   m_headshot_immunity_setting: e_boolean_trait = e_boolean_trait.unchanged;
-  @AutoMap(() => e_vampirism_percentage_setting)
+  @c.field(c.u8())
   m_vampirism_percentage_setting: e_vampirism_percentage_setting =
     e_vampirism_percentage_setting.unchanged;
-  @AutoMap(() => e_boolean_trait)
+  @c.field(c.u8())
   m_assasination_immunity: e_boolean_trait = e_boolean_trait.unchanged;
-  @AutoMap(() => e_boolean_trait)
+  @c.field(c.u8(), { padAfter: 2 })
   m_cannot_die_from_damage: e_boolean_trait = e_boolean_trait.unchanged;
   clear(): void {
     this.m_damage_resistance_percentage_setting =
@@ -273,36 +274,37 @@ export class c_player_trait_shield_vitality {
     this.m_cannot_die_from_damage = e_boolean_trait.unchanged;
   }
 }
+@c.class()
 export class c_player_trait_weapons {
-  @AutoMap(() => e_damage_modifier_percentage_setting)
+  @c.field(c.u8())
   m_damage_modifier_percentage_setting: e_damage_modifier_percentage_setting =
     e_damage_modifier_percentage_setting.unchanged;
-  @AutoMap(() => e_damage_modifier_percentage_setting)
+  @c.field(c.u8())
   m_melee_damage_modifier_percentage_setting: e_damage_modifier_percentage_setting =
     e_damage_modifier_percentage_setting.unchanged;
-  @AutoMap(() => Number)
-  m_initial_primary_weapon_absolute_index = -3;
-  @AutoMap(() => Number)
-  m_initial_secondary_weapon_absolute_index = -3;
-  @AutoMap(() => e_grenade_count_setting)
+  @c.field(c.u8())
+  m_recharging_grenades_setting: e_boolean_trait = e_boolean_trait.unchanged;
+  @c.field(c.u8())
+  m_weapon_pickup_setting: e_boolean_trait = e_boolean_trait.unchanged;
+  @c.field(c.u8())
   m_initial_grenade_count_setting: e_grenade_count_setting =
     e_grenade_count_setting.unchanged;
-  @AutoMap(() => e_infinite_ammo_setting)
+  @c.field(c.u8())
   m_infinite_ammo_setting: e_infinite_ammo_setting =
     e_infinite_ammo_setting.unchanged;
-  @AutoMap(() => e_boolean_trait)
-  m_recharging_grenades_setting: e_boolean_trait = e_boolean_trait.unchanged;
-  @AutoMap(() => e_boolean_trait)
-  m_weapon_pickup_setting: e_boolean_trait = e_boolean_trait.unchanged;
-  @AutoMap(() => e_equipment_usage_setting)
+  @c.field(c.u8())
   m_equipment_usage_setting: e_equipment_usage_setting =
     e_equipment_usage_setting.unchanged;
-  @AutoMap(() => e_boolean_trait)
+  @c.field(c.u8())
   m_equipment_drop_on_death_setting: e_boolean_trait =
     e_boolean_trait.unchanged;
-  @AutoMap(() => e_boolean_trait)
+  @c.field(c.u8())
   m_infinite_equipment_setting: e_boolean_trait = e_boolean_trait.unchanged;
-  @AutoMap(() => Number)
+  @c.field(c.i8())
+  m_initial_primary_weapon_absolute_index = -3;
+  @c.field(c.i8())
+  m_initial_secondary_weapon_absolute_index = -3;
+  @c.field(c.i8())
   m_initial_equipment_absolute_index = -3;
   clear(): void {
     this.m_damage_modifier_percentage_setting =
@@ -321,19 +323,20 @@ export class c_player_trait_weapons {
     this.m_initial_equipment_absolute_index = -3;
   }
 }
+@c.class()
 export class c_player_trait_movement {
-  @AutoMap(() => e_player_speed_setting)
+  @c.field(c.u8())
   m_speed_setting: e_player_speed_setting = e_player_speed_setting.unchanged;
-  @AutoMap(() => e_player_gravity_setting)
+  @c.field(c.u8())
   m_gravity_setting: e_player_gravity_setting =
     e_player_gravity_setting.unchanged;
-  @AutoMap(() => e_vehicle_usage_setting)
+  @c.field(c.u8())
   m_vehicle_usage_setting: e_vehicle_usage_setting =
     e_vehicle_usage_setting.unchanged;
-  @AutoMap(() => e_double_jump_setting)
+  @c.field(c.u8())
   m_double_jump_setting: e_double_jump_setting =
     e_double_jump_setting.unchanged;
-  @AutoMap(() => Number)
+  @c.field(c.i32())
   m_jump_modifier = -1;
   clear(): void {
     this.m_speed_setting = e_player_speed_setting.unchanged;
@@ -343,16 +346,17 @@ export class c_player_trait_movement {
     this.m_jump_modifier = -1;
   }
 }
+@c.class()
 export class c_player_trait_appearance {
-  @AutoMap(() => e_active_camo_setting)
+  @c.field(c.u8())
   m_active_camo_setting: e_active_camo_setting = e_active_camo_setting.off;
-  @AutoMap(() => e_waypoint_setting)
+  @c.field(c.u8())
   m_waypoint_setting: e_waypoint_setting = e_waypoint_setting.unchanged;
-  @AutoMap(() => e_waypoint_setting)
+  @c.field(c.u8())
   m_gamertag_setting: e_waypoint_setting = e_waypoint_setting.unchanged;
-  @AutoMap(() => e_aura_setting)
+  @c.field(c.u8())
   m_aura_setting: e_aura_setting = e_aura_setting.unchanged;
-  @AutoMap(() => e_forced_change_color_setting)
+  @c.field(c.u8(), { padAfter: 3 })
   m_forced_change_color_setting: e_forced_change_color_setting =
     e_forced_change_color_setting.unchanged;
   clear(): void {
@@ -364,14 +368,15 @@ export class c_player_trait_appearance {
       e_forced_change_color_setting.unchanged;
   }
 }
+@c.class()
 export class c_player_trait_sensors {
-  @AutoMap(() => e_motion_tracker_setting)
+  @c.field(c.u8())
   m_motion_tracker_setting: e_motion_tracker_setting =
     e_motion_tracker_setting.unchanged;
-  @AutoMap(() => e_motion_tracker_range_setting)
+  @c.field(c.u8())
   m_motion_tracker_range_setting: e_motion_tracker_range_setting =
     e_motion_tracker_range_setting.unchanged;
-  @AutoMap(() => e_boolean_trait)
+  @c.field(c.u8(), { padAfter: 1 })
   m_directional_damage_setting: e_boolean_trait = e_boolean_trait.unchanged;
   clear(): void {
     this.m_motion_tracker_setting = e_motion_tracker_setting.unchanged;
@@ -380,16 +385,17 @@ export class c_player_trait_sensors {
     this.m_directional_damage_setting = e_boolean_trait.unchanged;
   }
 }
+@c.class()
 export class c_player_traits {
-  @AutoMap(() => c_player_trait_shield_vitality)
+  @c.field(c_player_trait_shield_vitality)
   m_shield_vitality_traits = new c_player_trait_shield_vitality();
-  @AutoMap(() => c_player_trait_weapons)
+  @c.field(c_player_trait_weapons)
   m_weapon_traits = new c_player_trait_weapons();
-  @AutoMap(() => c_player_trait_movement)
+  @c.field(c_player_trait_movement)
   m_movement_traits = new c_player_trait_movement();
-  @AutoMap(() => c_player_trait_appearance)
+  @c.field(c_player_trait_appearance)
   m_appearance_traits = new c_player_trait_appearance();
-  @AutoMap(() => c_player_trait_sensors)
+  @c.field(c_player_trait_sensors)
   m_sensor_traits = new c_player_trait_sensors();
   clear(): void {
     this.m_shield_vitality_traits.clear();

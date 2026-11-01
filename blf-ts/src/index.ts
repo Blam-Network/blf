@@ -8,6 +8,7 @@ export {
   type BLFChunkInfo as BlfChunkInfo,
   blf,
   CStructBLFChunk,
+  type CStructBLFChunkConstructor,
   find_chunk,
   getBlfChunkMeta,
   type IBLFChunk,
@@ -15,4 +16,9 @@ export {
 } from "./blf_chunk";
 export { write_blffile } from "./blffile";
 export { BlfError } from "./error";
-export { s_blf_header } from "./s_blf_header";
+export { read_blffile } from "./read_blffile";
+export {
+  blf_header_from_version_float,
+  create_blf_header,
+  s_blf_header,
+} from "./s_blf_header";

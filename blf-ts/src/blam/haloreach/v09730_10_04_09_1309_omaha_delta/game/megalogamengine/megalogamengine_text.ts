@@ -3,7 +3,6 @@ import type {
   c_bitstream_writer,
 } from "../../../../../bitstream";
 import { BlfError } from "../../../../../error";
-import { AutoMap } from "../../../../../helpers/automap";
 import { e_player_filter_type } from "../../../v12065_11_08_24_1738_tu1actual/game/megalogamengine/megalogamengine_actions";
 import {
   c_custom_timer_reference,
@@ -21,11 +20,8 @@ function requireField<T>(value: T | undefined, message: string): T {
 }
 
 export class c_player_filter_modifier {
-  @AutoMap(() => e_player_filter_type)
   m_type: e_player_filter_type = e_player_filter_type.no_one;
-  @AutoMap(() => c_player_reference)
   m_player?: c_player_reference;
-  @AutoMap(() => c_custom_variable_reference)
   m_variable?: c_custom_variable_reference;
 
   decode(bitstream: c_bitstream_reader): void {
@@ -61,17 +57,11 @@ export enum e_replaceable_token_type {
 }
 
 export class c_replaceable_token {
-  @AutoMap(() => e_replaceable_token_type)
   m_type: e_replaceable_token_type = e_replaceable_token_type.player;
-  @AutoMap(() => c_player_reference)
   m_player?: c_player_reference;
-  @AutoMap(() => c_object_reference)
   m_object?: c_object_reference;
-  @AutoMap(() => c_team_reference)
   m_team?: c_team_reference;
-  @AutoMap(() => c_custom_timer_reference)
   m_custom_timer?: c_custom_timer_reference;
-  @AutoMap(() => c_custom_variable_reference)
   m_custom_variable?: c_custom_variable_reference;
 
   decode(bitstream: c_bitstream_reader): void {
@@ -153,9 +143,7 @@ export class c_replaceable_token {
 }
 
 export class c_dynamic_string {
-  @AutoMap(() => Number)
   m_string_index = 0;
-  @AutoMap(() => [c_replaceable_token])
   m_tokens: c_replaceable_token[] = [];
 
   decode(bitstream: c_bitstream_reader): void {

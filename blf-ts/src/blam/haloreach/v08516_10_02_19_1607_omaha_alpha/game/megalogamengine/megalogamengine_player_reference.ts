@@ -3,7 +3,6 @@ import type {
   c_bitstream_writer,
 } from "../../../../../bitstream";
 import { BlfError } from "../../../../../error";
-import { AutoMap } from "../../../../../helpers/automap";
 import {
   c_explicit_object,
   c_explicit_player,
@@ -19,15 +18,10 @@ export enum e_player_reference_type {
 }
 
 export class c_player_reference {
-  @AutoMap(() => e_player_reference_type)
   m_type: e_player_reference_type = e_player_reference_type.global_player;
-  @AutoMap(() => c_explicit_player)
   m_player?: c_explicit_player;
-  @AutoMap(() => c_explicit_object)
   m_object?: c_explicit_object;
-  @AutoMap(() => c_explicit_team)
   m_team?: c_explicit_team;
-  @AutoMap(() => Number)
   m_variable_index?: number;
 
   decode(bitstream: c_bitstream_reader): void {

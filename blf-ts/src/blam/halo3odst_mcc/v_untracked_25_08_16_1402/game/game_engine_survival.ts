@@ -7,7 +7,6 @@ import {
   bitfieldFromRawQword,
   bitfieldToRawQword,
 } from "../../../../bitstream";
-import { AutoMap } from "../../../../helpers/automap";
 import { c_game_engine_base_variant } from "./game_engine_default";
 import { c_player_traits } from "./game_engine_player_traits";
 
@@ -82,13 +81,9 @@ function writeGameSkulls(
 }
 
 export class s_survival_wave_properties {
-  @AutoMap(() => Number)
   m_wave_flags = 0;
-  @AutoMap(() => Number)
   m_wave_squad_advance_type = 0;
-  @AutoMap(() => Number)
   m_wave_squad_count = 0;
-  @AutoMap(() => [Number])
   m_squads: number[] = Array.from({ length: 5 }, () => -1);
 
   encode(bitstream: c_bitstream_writer): void {
@@ -125,13 +120,9 @@ export class s_survival_wave_properties {
 }
 
 export class s_survival_round_properties {
-  @AutoMap(() => Object)
   m_skulls: e_game_skulls = defaultGameSkulls();
-  @AutoMap(() => s_survival_wave_properties)
   m_initial_wave = new s_survival_wave_properties();
-  @AutoMap(() => s_survival_wave_properties)
   m_primary_wave = new s_survival_wave_properties();
-  @AutoMap(() => s_survival_wave_properties)
   m_boss_wave = new s_survival_wave_properties();
 
   encode(bitstream: c_bitstream_writer): void {
@@ -150,36 +141,23 @@ export class s_survival_round_properties {
 }
 
 export class c_game_engine_survival_variant {
-  @AutoMap(() => Number)
   m_encoding_version = 0;
-  @AutoMap(() => c_game_engine_base_variant)
   m_base_variant = new c_game_engine_base_variant();
-  @AutoMap(() => Number)
   m_flags = 0;
-  @AutoMap(() => Number)
   m_maximum_lives = 0;
-  @AutoMap(() => Number)
   m_set_count = 0;
-  @AutoMap(() => Number)
   m_shared_team_life_count = 0;
-  @AutoMap(() => Object)
   m_initial_skulls: e_game_skulls = defaultGameSkulls();
-  @AutoMap(() => c_player_traits)
   m_player_traits = new c_player_traits();
-  @AutoMap(() => [s_survival_round_properties])
   m_rounds: s_survival_round_properties[] = Array.from(
     { length: 3 },
     () => new s_survival_round_properties()
   );
-  @AutoMap(() => [Object])
   m_tier_skulls: e_game_skulls[] = Array.from({ length: 4 }, () =>
     defaultGameSkulls()
   );
-  @AutoMap(() => Number)
   m_bonus_duration_seconds = 0;
-  @AutoMap(() => Object)
   m_bonus_skulls: e_game_skulls = defaultGameSkulls();
-  @AutoMap(() => s_survival_wave_properties)
   m_bonus_wave = new s_survival_wave_properties();
 
   encode(bitstream: c_bitstream_writer): void {

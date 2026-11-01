@@ -41,7 +41,7 @@ Pass `"little"` when the payload is little-endian (for example Reach MCC hopper 
 
 ## Fileshare metadata (`_fsm`)
 
-MCC fileshare exports append a `_fsm` 1.1 chunk (464 bytes) with digests, a PlayFab-style item id, and an attestation blob. Use `search_for_chunk` when the buffer is a full BLF that ends with `_eof` then `_fsm`:
+MCC fileshare exports append a `_fsm` 1.1 chunk (464 bytes) with digests, a PlayFab-style item id, and a 256-byte file signature. Use `search_for_chunk` when the buffer is a full BLF that ends with `_eof` then `_fsm`:
 
 ```ts
 import { search_for_chunk } from "@blamnetwork/blf";
