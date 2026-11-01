@@ -1,9 +1,13 @@
 import { c } from "@craftycodie/cstruct";
 import { describe, expect, it } from "vitest";
+import {
+  find_file_chunk,
+  read_halo3_11637_blind_screenshot as read_11637_blind_screenshot,
+  read_halo3_blind_screenshot as read_blind_screenshot,
+  read_halo3_fileshare_screenshot as read_fileshare_screenshot,
+} from "../../../../tests/lib/blf_files";
 import { s_content_item_metadata } from "../../../blam/halo3/v12070_08_09_05_2031_halo3_ship/saved_games/saved_game_files";
 import { write_blffile } from "../../../blffile";
-import { read_blind_screenshot as read_11637_blind_screenshot } from "../v11637_07_08_02_2348_release/screenshot";
-import { read_content_header } from "./content_header";
 import { s_blf_chunk_compressed_data } from "./s_blf_chunk_compressed_data";
 import { s_blf_chunk_content_header } from "./s_blf_chunk_content_header";
 import { s_blf_chunk_end_of_file } from "./s_blf_chunk_end_of_file";
@@ -15,7 +19,9 @@ import {
 } from "./s_blf_chunk_screenshot_camera";
 import { s_blf_chunk_screenshot_data } from "./s_blf_chunk_screenshot_data";
 import { s_blf_chunk_start_of_file } from "./s_blf_chunk_start_of_file";
-import { read_blind_screenshot, read_fileshare_screenshot } from "./screenshot";
+
+const read_content_header = (buffer: Uint8Array) =>
+  find_file_chunk(buffer, new s_blf_chunk_content_header());
 
 const jpeg = new Uint8Array([0xff, 0xd8, 0xff, 0xe0, 1, 2, 3, 0xff, 0xd9]);
 const date = new Date("2024-07-07T13:23:11.000Z");

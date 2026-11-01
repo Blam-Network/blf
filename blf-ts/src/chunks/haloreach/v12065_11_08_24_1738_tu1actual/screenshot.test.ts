@@ -1,20 +1,25 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { reach_12065_oddball_fixture } from "../../../../tests/fixtures/paths";
+import {
+  find_file_chunk,
+  read_reach_09449_blind_screenshot as read_09449_blind_screenshot,
+  read_reach_09730_blind_screenshot as read_09730_blind_screenshot,
+  read_reach_blind_screenshot as read_blind_screenshot,
+} from "../../../../tests/lib/blf_files";
 import { search_for_chunk } from "../../../blf_chunk";
 import { write_blffile } from "../../../blffile";
 import { s_blf_chunk_compressed_data } from "../../halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_compressed_data";
 import { s_blf_chunk_end_of_file } from "../../halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_end_of_file";
 import { s_blf_chunk_screenshot_data as halo3_s_blf_chunk_screenshot_data } from "../../halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_screenshot_data";
 import { s_blf_chunk_start_of_file } from "../../halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_start_of_file";
-import { read_blind_screenshot as read_09449_blind_screenshot } from "../v09449_10_03_25_1545_omaha_beta/screenshot";
-import { read_blind_screenshot as read_09730_blind_screenshot } from "../v09730_10_04_09_1309_omaha_delta/screenshot";
-import { read_content_header } from "./content_header";
 import { s_blf_chunk_content_header } from "./s_blf_chunk_content_header";
 import { s_blf_chunk_screenshot_camera } from "./s_blf_chunk_screenshot_camera";
 import { s_blf_chunk_screenshot_data } from "./s_blf_chunk_screenshot_data";
 import { s_blf_chunk_server_signature } from "./s_blf_chunk_server_signature";
-import { read_blind_screenshot } from "./screenshot";
+
+const read_content_header = (buffer: Uint8Array) =>
+  find_file_chunk(buffer, new s_blf_chunk_content_header());
 
 const fixture = new Uint8Array(readFileSync(reach_12065_oddball_fixture));
 const jpeg = new Uint8Array([0xff, 0xd8, 0xff, 0xe0, 0xff, 0xd9]);

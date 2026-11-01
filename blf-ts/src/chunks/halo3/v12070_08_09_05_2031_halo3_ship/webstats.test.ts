@@ -1,5 +1,9 @@
 import { c } from "@craftycodie/cstruct";
 import { describe, expect, it } from "vitest";
+import {
+  read_halo3_campaign_pgcr as read_campaign_pgcr,
+  read_halo3_webstats as read_webstats,
+} from "../../../../tests/lib/blf_files";
 import { e_game_engine } from "../../../blam/halo3/v12070_08_09_05_2031_halo3_ship/game/game_engine_variant";
 import { game_options } from "../../../blam/halo3/v12070_08_09_05_2031_halo3_ship/game/game_options";
 import { c_map_variant } from "../../../blam/halo3/v12070_08_09_05_2031_halo3_ship/saved_games/scenario_map_variant";
@@ -24,7 +28,6 @@ import { s_blf_chunk_multiplayer_players } from "./s_blf_chunk_multiplayer_playe
 import { s_blf_chunk_multiplayer_statistics } from "./s_blf_chunk_multiplayer_statistics";
 import { s_blf_chunk_multiplayer_teams } from "./s_blf_chunk_multiplayer_teams";
 import { s_blf_chunk_start_of_file } from "./s_blf_chunk_start_of_file";
-import { read_campaign_pgcr, read_webstats } from "./webstats";
 
 /** Offset of the first chunk with `signature`'s payload in a BLF file. */
 function payloadOffset(bytes: Uint8Array, signature: string): number {

@@ -7,6 +7,5 @@ export * from "../../chunks/haloreach/v09730_10_04_09_1309_omaha_delta/s_blf_chu
 export * from "../../chunks/haloreach/v09730_10_04_09_1309_omaha_delta/s_blf_chunk_packed_game_variant";
 export { s_blf_chunk_packed_game_variant as s_blf_chunk_matchmaking_game_variant } from "../../chunks/haloreach/v09730_10_04_09_1309_omaha_delta/s_blf_chunk_packed_game_variant";
 export * from "../../chunks/haloreach/v09730_10_04_09_1309_omaha_delta/s_blf_chunk_rewards_persistance";
-export * from "../../chunks/haloreach/v09730_10_04_09_1309_omaha_delta/screenshot";
 export * from "../../chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_content_header";
 export * from "../../chunks/haloreach/v12065_11_08_24_1738_tu1actual/s_blf_chunk_screenshot_data";

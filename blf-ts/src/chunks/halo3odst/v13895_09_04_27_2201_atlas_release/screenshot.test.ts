@@ -1,16 +1,23 @@
 import { c } from "@craftycodie/cstruct";
 import { describe, expect, it } from "vitest";
+import {
+  find_file_chunk,
+  read_odst_blind_screenshot as read_blind_screenshot,
+  read_halo3_blind_screenshot,
+} from "../../../../tests/lib/blf_files";
 import { s_content_item_metadata } from "../../../blam/halo3odst/v13895_09_04_27_2201_atlas_release/saved_games/saved_game_files";
 import { write_blffile } from "../../../blffile";
-import { read_content_header as read_halo3_content_header } from "../../halo3/v12070_08_09_05_2031_halo3_ship/content_header";
+import { s_blf_chunk_content_header as halo3_s_blf_chunk_content_header } from "../../halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_content_header";
 import { s_blf_chunk_end_of_file } from "../../halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_end_of_file";
 import { s_blf_chunk_screenshot_camera } from "../../halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_screenshot_camera";
 import { s_blf_chunk_screenshot_data } from "../../halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_screenshot_data";
 import { s_blf_chunk_start_of_file } from "../../halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_start_of_file";
-import { read_blind_screenshot as read_halo3_blind_screenshot } from "../../halo3/v12070_08_09_05_2031_halo3_ship/screenshot";
-import { read_content_header } from "./content_header";
 import { s_blf_chunk_content_header } from "./s_blf_chunk_content_header";
-import { read_blind_screenshot } from "./screenshot";
+
+const read_content_header = (buffer: Uint8Array) =>
+  find_file_chunk(buffer, new s_blf_chunk_content_header());
+const read_halo3_content_header = (buffer: Uint8Array) =>
+  find_file_chunk(buffer, new halo3_s_blf_chunk_content_header());
 
 const jpeg = new Uint8Array([0xff, 0xd8, 0xff, 0xd9]);
 
