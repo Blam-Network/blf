@@ -1,4 +1,4 @@
-import { c, CFieldType } from "@craftycodie/cstruct";
+import { CFieldType, c } from "@craftycodie/cstruct";
 import type {
   c_bitstream_reader,
   c_bitstream_writer,

@@ -1,4 +1,4 @@
-import { type c, CFieldType } from "@craftycodie/cstruct";
+import { CFieldType, type c } from "@craftycodie/cstruct";
 import type {
   c_bitstream_reader,
   c_bitstream_writer,
@@ -150,12 +150,12 @@ export function s_variable_metadata_team(): s_variable_metadata {
 
 interface s_variable_metadata_layout {
   numeric_variables: number;
-  timer_variables: number;
+  object_variables: number;
+  player_variables: number;
+  team_variable_network_states_padding: number;
   team_variables: number;
   team_variables_padding: number;
-  player_variables: number;
-  object_variables: number;
-  team_variable_network_states_padding: number;
+  timer_variables: number;
 }
 
 export class CVariableMetadataField extends CFieldType<s_variable_metadata> {

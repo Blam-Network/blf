@@ -1,4 +1,4 @@
-import { c, CFieldType } from "@craftycodie/cstruct";
+import { CFieldType, c } from "@craftycodie/cstruct";
 import type {
   c_bitstream_reader,
   c_bitstream_writer,
@@ -831,21 +831,21 @@ type ExplicitKind = "player" | "object" | "team";
 interface ReferenceArm {
   explicit?: ExplicitKind;
   explicit_offset?: number;
-  variable?: number;
+  immediate?: number;
   option?: number;
   statistic?: number;
-  immediate?: number;
+  variable?: number;
 }
 
 interface ReferenceValue {
-  m_type: number;
-  m_player?: c_explicit_player;
-  m_object?: c_explicit_object;
-  m_team?: c_explicit_team;
-  m_variable_index?: number;
-  m_option_index?: number;
-  m_statistic_index?: number;
   m_immediate_value?: number;
+  m_object?: c_explicit_object;
+  m_option_index?: number;
+  m_player?: c_explicit_player;
+  m_statistic_index?: number;
+  m_team?: c_explicit_team;
+  m_type: number;
+  m_variable_index?: number;
 }
 
 export class CReferenceField<T extends ReferenceValue> extends CFieldType<T> {

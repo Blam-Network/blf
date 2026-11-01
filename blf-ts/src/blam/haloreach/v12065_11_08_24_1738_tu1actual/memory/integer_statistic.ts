@@ -1,8 +1,8 @@
-import { c, CFieldType } from "@craftycodie/cstruct";
+import { CFieldType, c } from "@craftycodie/cstruct";
 
 export interface s_integer_statistic {
-  value: number;
   changed: boolean;
+  value: number;
 }
 
 class CIntegerStatistic extends CFieldType<s_integer_statistic> {

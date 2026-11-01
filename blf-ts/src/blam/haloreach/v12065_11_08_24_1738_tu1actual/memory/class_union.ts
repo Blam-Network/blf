@@ -1,4 +1,4 @@
-import { c, CFieldType } from "@craftycodie/cstruct";
+import { CFieldType, c } from "@craftycodie/cstruct";
 
 export type UnionTagType = "u8" | "i8" | "i32";
 
@@ -7,9 +7,9 @@ export type UnionArms =
   | (() => Record<number, readonly UnionMember[]>);
 
 export interface UnionMember {
-  property: string;
   field: any;
   offset: number;
+  property: string;
 }
 
 function view_of(bytes: Uint8Array): DataView {
