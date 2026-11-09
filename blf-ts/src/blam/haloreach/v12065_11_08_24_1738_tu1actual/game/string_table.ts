@@ -39,7 +39,7 @@ function write_buffer_blob(
   bitstream.write_integer(buffer.length, buffer_size_bit_length);
   if (buffer.length >= k_string_buffer_compression_threshold) {
     const compressed = runtime_data_compress(buffer, true);
-    if (compressed.length < buffer.length) {
+    if (compressed.length <= buffer.length) {
       bitstream.write_bool(true);
       bitstream.write_integer(compressed.length, buffer_size_bit_length);
       bitstream.write_raw_data(compressed, compressed.length * 8);
