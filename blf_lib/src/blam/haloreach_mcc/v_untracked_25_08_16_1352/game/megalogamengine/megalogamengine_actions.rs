@@ -4127,6 +4127,41 @@ impl c_action {
                 begin_parameters.decode(bitstream)?;
                 self.m_begin_parameters = Some(begin_parameters);
             }
+            e_action_type::hs_function_call => {
+                let mut hs_function_call_parameters = s_action_hs_function_call_parameters::default();
+                hs_function_call_parameters.decode(bitstream)?;
+                self.m_hs_function_call_parameters = Some(hs_function_call_parameters);
+            }
+            e_action_type::get_button_time => {
+                let mut get_button_time_parameters = s_action_get_button_time_parameters::default();
+                get_button_time_parameters.decode(bitstream)?;
+                self.m_get_button_time_parameters = Some(get_button_time_parameters);
+            }
+            e_action_type::team_set_vehicle_spawning => {
+                let mut team_set_vehicle_spawning_parameters = s_action_team_set_vehicle_spawning_parameters::default();
+                team_set_vehicle_spawning_parameters.decode(bitstream)?;
+                self.m_team_set_vehicle_spawning_parameters = Some(team_set_vehicle_spawning_parameters);
+            }
+            e_action_type::player_set_vehicle_spawning => {
+                let mut player_set_vehicle_spawning_parameters = s_action_player_set_vehicle_spawning_parameters::default();
+                player_set_vehicle_spawning_parameters.decode(bitstream)?;
+                self.m_player_set_vehicle_spawning_parameters = Some(player_set_vehicle_spawning_parameters);
+            }
+            e_action_type::set_player_respawn_vehicle => {
+                let mut set_player_respawn_vehicle_parameters = s_action_set_player_respawn_vehicle_parameters::default();
+                set_player_respawn_vehicle_parameters.decode(bitstream)?;
+                self.m_set_player_respawn_vehicle_parameters = Some(set_player_respawn_vehicle_parameters);
+            }
+            e_action_type::set_team_respawn_vehicle => {
+                let mut set_team_respawn_vehicle_parameters = s_action_set_team_respawn_vehicle_parameters::default();
+                set_team_respawn_vehicle_parameters.decode(bitstream)?;
+                self.m_set_team_respawn_vehicle_parameters = Some(set_team_respawn_vehicle_parameters);
+            }
+            e_action_type::hide_object => {
+                let mut hide_object_parameters = s_action_hide_object_parameters::default();
+                hide_object_parameters.decode(bitstream)?;
+                self.m_hide_object_parameters = Some(hide_object_parameters);
+            }
             _ => {}
         }
 

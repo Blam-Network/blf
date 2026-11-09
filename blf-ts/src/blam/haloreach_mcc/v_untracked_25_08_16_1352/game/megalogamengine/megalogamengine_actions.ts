@@ -2800,6 +2800,58 @@ export class c_action {
         this.m_begin_parameters = begin_parameters;
         break;
       }
+      case e_action_type.hs_function_call: {
+        const hs_function_call_parameters =
+          new s_action_hs_function_call_parameters();
+        hs_function_call_parameters.decode(bitstream);
+        this.m_hs_function_call_parameters = hs_function_call_parameters;
+        break;
+      }
+      case e_action_type.get_button_time: {
+        const get_button_time_parameters =
+          new s_action_get_button_time_parameters();
+        get_button_time_parameters.decode(bitstream);
+        this.m_get_button_time_parameters = get_button_time_parameters;
+        break;
+      }
+      case e_action_type.team_set_vehicle_spawning: {
+        const team_set_vehicle_spawning_parameters =
+          new s_action_team_set_vehicle_spawning_parameters();
+        team_set_vehicle_spawning_parameters.decode(bitstream);
+        this.m_team_set_vehicle_spawning_parameters =
+          team_set_vehicle_spawning_parameters;
+        break;
+      }
+      case e_action_type.player_set_vehicle_spawning: {
+        const player_set_vehicle_spawning_parameters =
+          new s_action_player_set_vehicle_spawning_parameters();
+        player_set_vehicle_spawning_parameters.decode(bitstream);
+        this.m_player_set_vehicle_spawning_parameters =
+          player_set_vehicle_spawning_parameters;
+        break;
+      }
+      case e_action_type.set_player_respawn_vehicle: {
+        const set_player_respawn_vehicle_parameters =
+          new s_action_set_player_respawn_vehicle_parameters();
+        set_player_respawn_vehicle_parameters.decode(bitstream);
+        this.m_set_player_respawn_vehicle_parameters =
+          set_player_respawn_vehicle_parameters;
+        break;
+      }
+      case e_action_type.set_team_respawn_vehicle: {
+        const set_team_respawn_vehicle_parameters =
+          new s_action_set_team_respawn_vehicle_parameters();
+        set_team_respawn_vehicle_parameters.decode(bitstream);
+        this.m_set_team_respawn_vehicle_parameters =
+          set_team_respawn_vehicle_parameters;
+        break;
+      }
+      case e_action_type.hide_object: {
+        const hide_object_parameters = new s_action_hide_object_parameters();
+        hide_object_parameters.decode(bitstream);
+        this.m_hide_object_parameters = hide_object_parameters;
+        break;
+      }
     }
   }
   encode(bitstream: c_bitstream_writer): void {
