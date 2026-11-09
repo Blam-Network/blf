@@ -1,13 +1,10 @@
 ﻿use binrw::{BinRead, BinWrite};
-#[cfg(feature = "napi")]
-use napi_derive::napi;
 use num_derive::{FromPrimitive, ToPrimitive};
 use serde::{Deserialize, Serialize};
 use blf_lib::io::bitstream::{c_bitstream_reader, c_bitstream_writer};
 use blf_lib_derivable::result::BLFLibResult;
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 pub struct c_player_trait_weapons {
     pub m_initial_grenade_count_setting: u16,
     pub m_initial_primary_weapon_absolute_index: i8,
@@ -19,7 +16,6 @@ pub struct c_player_trait_weapons {
 }
 
 #[derive(BinRead, BinWrite, Serialize, Deserialize, Default, PartialEq, Debug, Copy, Clone, FromPrimitive, ToPrimitive)]
-#[cfg_attr(feature = "napi", napi(namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 #[brw(big, repr = u8)]
 pub enum e_damage_resistance_percentage_setting {
     #[default]
@@ -40,7 +36,6 @@ pub enum e_damage_resistance_percentage_setting {
 }
 
 #[derive(BinRead, BinWrite, Serialize, Deserialize, Default, PartialEq, Debug, Copy, Clone, FromPrimitive, ToPrimitive)]
-#[cfg_attr(feature = "napi", napi(namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 #[brw(big, repr = u8)]
 pub enum e_shield_recharge_rate_percentage_setting {
     #[default]
@@ -58,7 +53,6 @@ pub enum e_shield_recharge_rate_percentage_setting {
 }
 
 #[derive(BinRead, BinWrite, Serialize, Deserialize, Default, PartialEq, Debug, Copy, Clone, FromPrimitive, ToPrimitive)]
-#[cfg_attr(feature = "napi", napi(namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 #[brw(big, repr = u8)]
 pub enum e_vampirism_percentage_setting {
     _vampirism_percentage_setting_default = -1,
@@ -72,7 +66,6 @@ pub enum e_vampirism_percentage_setting {
 }
 
 #[derive(BinRead, BinWrite, Serialize, Deserialize, Default, PartialEq, Debug, Copy, Clone, FromPrimitive, ToPrimitive)]
-#[cfg_attr(feature = "napi", napi(namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 #[brw(big, repr = u8)]
 pub enum e_shield_multiplier_setting {
     #[default]
@@ -86,7 +79,6 @@ pub enum e_shield_multiplier_setting {
 }
 
 #[derive(BinRead, BinWrite, Serialize, Deserialize, Default, PartialEq, Debug, Copy, Clone, FromPrimitive, ToPrimitive)]
-#[cfg_attr(feature = "napi", napi(namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 #[brw(big, repr = u8)]
 pub enum e_damage_modifier_percentage_setting {
     #[default]
@@ -107,7 +99,6 @@ pub enum e_damage_modifier_percentage_setting {
 }
 
 #[derive(BinRead, BinWrite, Serialize, Deserialize, Default, PartialEq, Debug, Copy, Clone, FromPrimitive, ToPrimitive)]
-#[cfg_attr(feature = "napi", napi(namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 #[brw(big, repr = u8)]
 pub enum e_headshot_immunity_setting {
     #[default]
@@ -118,7 +109,6 @@ pub enum e_headshot_immunity_setting {
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 pub struct c_player_trait_shield_vitality {
     pub m_damage_resistance_percentage_setting: e_damage_resistance_percentage_setting,
     pub m_shield_recharge_rate_percentage_setting: e_shield_recharge_rate_percentage_setting,
@@ -129,7 +119,6 @@ pub struct c_player_trait_shield_vitality {
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 pub struct c_player_trait_movement {
     pub m_speed_setting: u8,
     pub m_gravity_setting: u8,
@@ -138,7 +127,6 @@ pub struct c_player_trait_movement {
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 pub struct c_player_trait_appearance {
     pub m_active_camo_setting: u8,
     pub m_waypoint_setting: u8,
@@ -147,14 +135,12 @@ pub struct c_player_trait_appearance {
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 pub struct c_player_trait_sensors {
     pub m_motion_tracker_setting: u16,
     pub m_motion_tracker_range_setting: u16,
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 pub struct c_player_traits {
     pub m_shield_vitality_traits: c_player_trait_shield_vitality,
     pub m_weapon_traits: c_player_trait_weapons,

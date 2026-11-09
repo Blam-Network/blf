@@ -1,7 +1,5 @@
 ﻿use std::u32;
 use binrw::{binrw, BinRead, BinWrite};
-#[cfg(feature = "napi")]
-use napi_derive::napi;
 use serde::{Deserialize, Serialize};
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
 use blf_lib_derive::BlfChunk;
@@ -14,7 +12,6 @@ use blf_lib::types::string::StaticWcharString;
 #[Header("osri", 2.0)]
 #[brw(big)]
 #[Size(0x60)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "halo3odst_13895_09_04_27_2201_atlas_release"))]
 pub struct s_blf_chunk_odst_service_record
 {
     pub player_name: StaticWcharString<16>, // Wide, 16 characters max
@@ -55,7 +52,6 @@ pub struct s_blf_chunk_odst_service_record
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, FromPrimitive)]
 #[brw(big, repr = u8)]
-#[cfg_attr(feature = "napi", napi(namespace = "halo3odst_13895_09_04_27_2201_atlas_release"))]
 #[repr(u8)]
 pub enum PlayerModel {
     #[default]
@@ -65,7 +61,6 @@ pub enum PlayerModel {
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, FromPrimitive)]
 #[brw(big, repr = u8)]
-#[cfg_attr(feature = "napi", napi(namespace = "halo3odst_13895_09_04_27_2201_atlas_release"))]
 #[repr(u8)]
 pub enum SpartanHelmet {
     #[default]
@@ -84,7 +79,6 @@ pub enum SpartanHelmet {
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, FromPrimitive)]
 #[brw(big, repr = u8)]
-#[cfg_attr(feature = "napi", napi(namespace = "halo3odst_13895_09_04_27_2201_atlas_release"))]
 #[repr(u8)]
 pub enum SpartanShoulder {
     #[default]
@@ -100,7 +94,6 @@ pub enum SpartanShoulder {
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, FromPrimitive)]
 #[brw(big, repr = u8)]
-#[cfg_attr(feature = "napi", napi(namespace = "halo3odst_13895_09_04_27_2201_atlas_release"))]
 #[repr(u8)]
 pub enum SpartanBody {
     #[default]
@@ -117,7 +110,6 @@ pub enum SpartanBody {
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, FromPrimitive)]
 #[brw(big, repr = u8)]
-#[cfg_attr(feature = "napi", napi(namespace = "halo3odst_13895_09_04_27_2201_atlas_release"))]
 #[repr(u8)]
 pub enum EliteArmour {
     #[default]
@@ -130,7 +122,6 @@ pub enum EliteArmour {
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, FromPrimitive)]
 #[brw(big, repr = u32)]
-#[cfg_attr(feature = "napi", napi(namespace = "halo3odst_13895_09_04_27_2201_atlas_release"))]
 #[repr(u32)]
 pub enum Rank {
     #[default]
@@ -152,7 +143,6 @@ pub enum Rank {
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, FromPrimitive)]
 #[brw(big, repr = u32)]
-#[cfg_attr(feature = "napi", napi(namespace = "halo3odst_13895_09_04_27_2201_atlas_release"))]
 #[repr(u32)]
 pub enum Grade {
     #[default]
@@ -164,7 +154,6 @@ pub enum Grade {
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, FromPrimitive)]
 #[brw(big, repr = u8)]
-#[cfg_attr(feature = "napi", napi(namespace = "halo3odst_13895_09_04_27_2201_atlas_release"))]
 #[repr(u8)]
 pub enum Color {
     #[default]

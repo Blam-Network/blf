@@ -1,8 +1,6 @@
 use crate::blf::chunks::BlfChunkHooks;
 use binrw::{binrw, BinRead, BinWrite};
 use crate::types::array::StaticArray;
-#[cfg(feature = "napi")]
-use napi_derive::napi;
 use crate::{BlfChunk, TestSize};
 use serde::{Deserialize, Serialize};
 use crate::types::bool::Bool;
@@ -16,7 +14,6 @@ use crate::types::u64::Unsigned64;
 #[Header("glcp", 1.1)]
 #[Size(0x2F04)]
 #[brw(little)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "ares_untracked"))]
 pub struct s_blf_chunk_game_local_players {
     #[brw(pad_before = 4)]
     pub players: StaticArray<s_blf_chunk_game_local_players_player, 4>,
@@ -27,7 +24,6 @@ impl BlfChunkHooks for s_blf_chunk_game_local_players {}
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default)]
 #[brw(repr = i32)]
 #[repr(i32)]
-#[cfg_attr(feature = "napi", napi(namespace = "ares_untracked"))]
 pub enum e_controller_index {
     #[default]
     _controller0 = 0x0,
@@ -39,7 +35,6 @@ pub enum e_controller_index {
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default)]
 #[brw(repr = i32)]
 #[repr(i32)]
-#[cfg_attr(feature = "napi", napi(namespace = "ares_untracked"))]
 pub enum e_button_presets {
     #[default]
     _button_preset_standard = 0x0,
@@ -58,7 +53,6 @@ pub enum e_button_presets {
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default)]
 #[brw(repr = i32)]
 #[repr(i32)]
-#[cfg_attr(feature = "napi", napi(namespace = "ares_untracked"))]
 pub enum e_joystick_presets {
     #[default]
     _joystick_preset_standard = 0x0,
@@ -70,7 +64,6 @@ pub enum e_joystick_presets {
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default)]
 #[brw(repr = i32)]
 #[repr(i32)]
-#[cfg_attr(feature = "napi", napi(namespace = "ares_untracked"))]
 pub enum e_look_sensitivity {
     #[default]
     _look_sensitivity0 = 0x0,
@@ -87,7 +80,6 @@ pub enum e_look_sensitivity {
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, TestSize)]
 #[Size(0xC)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "ares_untracked"))]
 pub struct c_player_profile_interface_controls {
     pub button_preset: e_button_presets,
     pub joystick_preset: e_joystick_presets,
@@ -97,7 +89,6 @@ pub struct c_player_profile_interface_controls {
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default)]
 #[brw(repr = i32)]
 #[repr(i32)]
-#[cfg_attr(feature = "napi", napi(namespace = "ares_untracked"))]
 pub enum e_keyboard_preset {
     #[default]
     _keyboard_preset_default = 0x0,
@@ -107,7 +98,6 @@ pub enum e_keyboard_preset {
 }
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "ares_untracked"))]
 pub struct s_game_input_custom_preset {
     pub control_to_keyboard_mapping: StaticArray<i32, 38>,
     pub control_to_mouse_mapping: StaticArray<i32, 34>,
@@ -115,7 +105,6 @@ pub struct s_game_input_custom_preset {
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, TestSize)]
 #[Size(0x124)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "ares_untracked"))]
 pub struct c_player_profile_interface_keyboard {
     pub preset: e_keyboard_preset,
     pub custom: s_game_input_custom_preset,
@@ -124,7 +113,6 @@ pub struct c_player_profile_interface_keyboard {
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default)]
 #[brw(repr = i32)]
 #[repr(i32)]
-#[cfg_attr(feature = "napi", napi(namespace = "ares_untracked"))]
 pub enum e_camera_attached_horizontal {
     #[default]
     _camera_attached_horizontal_normal = 0x0,
@@ -134,7 +122,6 @@ pub enum e_camera_attached_horizontal {
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default)]
 #[brw(repr = i32)]
 #[repr(i32)]
-#[cfg_attr(feature = "napi", napi(namespace = "ares_untracked"))]
 pub enum e_camera_panning {
     #[default]
     _camera_panning_hold_to_pan = 0x0,
@@ -144,7 +131,6 @@ pub enum e_camera_panning {
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default)]
 #[brw(repr = i32)]
 #[repr(i32)]
-#[cfg_attr(feature = "napi", napi(namespace = "ares_untracked"))]
 pub enum e_camera_look_sensitivity {
     #[default]
     _camera_look_sensitivity_slow = 0x0,
@@ -156,7 +142,6 @@ pub enum e_camera_look_sensitivity {
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default)]
 #[brw(repr = i32)]
 #[repr(i32)]
-#[cfg_attr(feature = "napi", napi(namespace = "ares_untracked"))]
 pub enum e_camera_flying_movement {
     #[default]
     _camera_flying_movement_slow = 0x0,
@@ -168,7 +153,6 @@ pub enum e_camera_flying_movement {
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default)]
 #[brw(repr = i32)]
 #[repr(i32)]
-#[cfg_attr(feature = "napi", napi(namespace = "ares_untracked"))]
 pub enum e_camera_flying_thrust {
     #[default]
     _camera_flying_thrust_slow = 0x0,
@@ -178,7 +162,6 @@ pub enum e_camera_flying_thrust {
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, TestSize)]
 #[Size(0x14)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "ares_untracked"))]
 pub struct c_player_profile_interface_camera {
     pub attached_horizontal: e_camera_attached_horizontal,
     pub panning: e_camera_panning,
@@ -190,7 +173,6 @@ pub struct c_player_profile_interface_camera {
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default)]
 #[brw(repr = i32)]
 #[repr(i32)]
-#[cfg_attr(feature = "napi", napi(namespace = "ares_untracked"))]
 pub enum e_campaign_difficulty_level {
     #[default]
     _campaign_difficulty_level_easy = 0x0,
@@ -201,7 +183,6 @@ pub enum e_campaign_difficulty_level {
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, TestSize)]
 #[Size(0x78)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "ares_untracked"))]
 pub struct c_player_profile_interface_campaign {
     pub current_difficulty: i32, //: e_campaign_difficulty_level,
     pub current_campaign_absolute_index: i16,
@@ -219,7 +200,6 @@ pub struct c_player_profile_interface_campaign {
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default)]
 #[brw(repr = i32)]
 #[repr(i32)]
-#[cfg_attr(feature = "napi", napi(namespace = "ares_untracked"))]
 pub enum e_experience_milestone {
     #[default]
     _experience_milestone_none = 0x0,
@@ -230,7 +210,6 @@ pub enum e_experience_milestone {
 }
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "ares_untracked"))]
 pub struct s_hopper_best_rank {
     pub hopper_id: i16,
     #[brw(pad_before = 2)]
@@ -239,7 +218,6 @@ pub struct s_hopper_best_rank {
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, TestSize)]
 #[Size(0x114)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "ares_untracked"))]
 pub struct c_player_profile_interface_multiplayer {
     pub last_hopper_identifier: i16,
     #[brw(pad_before = 2)]
@@ -253,7 +231,6 @@ pub struct c_player_profile_interface_multiplayer {
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default)]
 #[brw(repr = i32)]
 #[repr(i32)]
-#[cfg_attr(feature = "napi", napi(namespace = "ares_untracked"))]
 pub enum e_player_color_index {
     #[default]
     _player_color_00 = 0x0,
@@ -294,7 +271,6 @@ pub enum e_player_color_index {
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default)]
 #[brw(repr = i32)]
-#[cfg_attr(feature = "napi", napi(namespace = "ares_untracked"))]
 #[repr(i32)]
 pub enum e_player_model_choice {
     #[default]
@@ -303,7 +279,6 @@ pub enum e_player_model_choice {
 }
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "ares_untracked"))]
 pub struct s_emblem_info {
     pub foreground_emblem_index: u8,
     pub background_emblem_index: u8,
@@ -316,7 +291,6 @@ pub struct s_emblem_info {
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, TestSize)]
 #[Size(0x34)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "ares_untracked"))]
 pub struct c_player_profile_interface_appearance {
     pub primary_color: i32,
     pub secondary_color: i32,
@@ -334,7 +308,6 @@ pub struct c_player_profile_interface_appearance {
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default)]
 #[brw(repr = i32)]
 #[repr(i32)]
-#[cfg_attr(feature = "napi", napi(namespace = "ares_untracked"))]
 pub enum e_voice_mute_setting {
     #[default]
     _voice_mute_setting_off = 0x0,
@@ -344,7 +317,6 @@ pub enum e_voice_mute_setting {
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default)]
 #[brw(repr = i32)]
 #[repr(i32)]
-#[cfg_attr(feature = "napi", napi(namespace = "ares_untracked"))]
 pub enum e_voice_output_setting {
     #[default]
     _voice_output_setting_proximity_speakers_team_headset = 0x0,
@@ -354,7 +326,6 @@ pub enum e_voice_output_setting {
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default)]
 #[brw(repr = i32)]
 #[repr(i32)]
-#[cfg_attr(feature = "napi", napi(namespace = "ares_untracked"))]
 pub enum e_voice_matchmaking_setting {
     #[default]
     _voice_matchmaking_setting_everyone = 0x0,
@@ -365,7 +336,6 @@ pub enum e_voice_matchmaking_setting {
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default)]
 #[brw(repr = i32)]
 #[repr(i32)]
-#[cfg_attr(feature = "napi", napi(namespace = "ares_untracked"))]
 pub enum e_voice_mask {
     #[default]
     _voice_mask_none = 0x0,
@@ -375,7 +345,6 @@ pub enum e_voice_mask {
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default)]
 #[brw(repr = i32)]
 #[repr(i32)]
-#[cfg_attr(feature = "napi", napi(namespace = "ares_untracked"))]
 pub enum e_guide_voice_through_speakers {
     #[default]
     _guide_voice_through_speakers_off = 0x0,
@@ -385,7 +354,6 @@ pub enum e_guide_voice_through_speakers {
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, TestSize)]
 #[Size(0x18)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "ares_untracked"))]
 pub struct c_player_profile_interface_voice {
     pub mute_setting: e_voice_mute_setting,
     pub output_setting: e_voice_output_setting,
@@ -399,7 +367,6 @@ pub struct c_player_profile_interface_voice {
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default)]
 #[brw(repr = i32)]
 #[repr(i32)]
-#[cfg_attr(feature = "napi", napi(namespace = "ares_untracked"))]
 pub enum e_quality {
     #[default]
     _quality_good = 0x0,
@@ -408,7 +375,6 @@ pub enum e_quality {
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, TestSize)]
 #[Size(0x10)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "ares_untracked"))]
 pub struct c_player_profile_interface_video {
     pub resolution_width: u32,
     pub resolution_height: u32,
@@ -418,14 +384,12 @@ pub struct c_player_profile_interface_video {
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, TestSize)]
 #[Size(0x8)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "ares_untracked"))]
 pub struct c_player_profile_interface_online {
     pub last_shown_popup_message_index: StaticArray<i32, 2>,
 }
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, TestSize)]
 #[Size(0x20)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "ares_untracked"))]
 pub struct s_player_training_profile_data {
     pub training_blob_bitvector_low: StaticArray<i32, 2>,
     pub training_blob_bitvector_high: StaticArray<i32, 2>,
@@ -435,7 +399,6 @@ pub struct s_player_training_profile_data {
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default)]
 #[brw(repr = i32)]
 #[repr(i32)]
-#[cfg_attr(feature = "napi", napi(namespace = "ares_untracked"))]
 pub enum e_language {
     #[default]
     _language_english = 0x0,
@@ -455,7 +418,6 @@ pub enum e_language {
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, TestSize)]
 #[Size(0x830)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "ares_untracked"))]
 pub struct c_string_verify_task {
     // #[brw(pad_before=4)]
     #[serde(with = "SerHex::<StrictCap>")]
@@ -477,7 +439,6 @@ pub struct c_string_verify_task {
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default)]
 #[brw(repr = i32)]
 #[repr(i32)]
-#[cfg_attr(feature = "napi", napi(namespace = "ares_untracked"))]
 pub enum e_subtitle_setting {
     #[default]
     _subtitle_setting_automatic = 0x0,
@@ -487,7 +448,6 @@ pub enum e_subtitle_setting {
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, TestSize)]
 #[Size(0xBB0)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "ares_untracked"))]
 pub struct c_player_profile_interface {
     pub m_flags: i32,
     pub m_settings_read_retry_count: i32,
@@ -517,7 +477,6 @@ pub struct c_player_profile_interface {
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, TestSize)]
 #[Size(0xBC0)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "ares_untracked"))]
 pub struct s_blf_chunk_game_local_players_player {
     pub in_use: Bool,
     pub is_unsigned_in_user: Bool,

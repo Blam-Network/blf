@@ -1,7 +1,5 @@
 use binrw::{binrw, BinRead, BinWrite};
 use crate::types::array::StaticArray;
-#[cfg(feature = "napi")]
-use napi_derive::napi;
 use serde::{Deserialize, Serialize};
 use crate::blf::chunks::BlfChunkHooks;
 use crate::{BlfChunk, TestSize};
@@ -15,7 +13,6 @@ use crate::blam::halo3::v12070_08_09_05_2031_halo3_ship::game::players::{s_playe
 #[Header("mppl", 2.1)]
 #[Size(0x11E4)]
 #[brw(little)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "ares_untracked"))]
 pub struct s_blf_chunk_multiplayer_players {
     #[brw(pad_before = 4)]
     pub players: StaticArray<s_blf_chunk_multiplayer_players_player, 16>,
@@ -25,7 +22,6 @@ impl BlfChunkHooks for s_blf_chunk_multiplayer_players {}
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, TestSize)]
 #[Size(0x11E)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "ares_untracked"))]
 pub struct s_blf_chunk_multiplayer_players_player {
     pub player_exists: Bool,
     pub machine_index: i8,

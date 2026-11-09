@@ -1,7 +1,5 @@
 ﻿use std::cmp::min;
 use binrw::{binrw};
-#[cfg(feature = "napi")]
-use napi_derive::napi;
 use serde::{Deserialize, Serialize};
 use blf_lib_derivable::result::BLFLibResult;
 use blf_lib_derivable::blf::chunks::{BlfChunkHooks, TitleAndBuild};
@@ -13,7 +11,6 @@ use crate::types::string::StaticString;
 #[Header("athr", 1.2)]
 #[Size(60)]
 #[brw(big)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_06481_06_11_17_1330_alpha_release"))]
 pub struct s_blf_chunk_author {
     pub program_name: StaticString<16>, // eg GameData.Halo3
     pub build_number_sequence: u32,     // eg 1

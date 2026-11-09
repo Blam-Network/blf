@@ -1,6 +1,4 @@
 ﻿use binrw::{BinRead, BinWrite};
-#[cfg(feature = "napi")]
-use napi_derive::napi;
 use blf_lib::TestSize;
 use blf_lib::types::string::StaticWcharString;
 use serde::{Deserialize, Serialize};
@@ -8,7 +6,6 @@ use crate::types::array::StaticArray;
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, TestSize)]
 #[Size(20)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]
 pub struct s_queried_player_hopper_statistics {
     #[brw(pad_after = 1)]
     pub valid: i8,
@@ -21,7 +18,6 @@ pub struct s_queried_player_hopper_statistics {
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, TestSize)]
 #[Size(40)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]
 pub struct s_player_appearance {
     pub voice: i8,
     pub primary_color: i8,
@@ -44,7 +40,6 @@ pub struct s_player_appearance {
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, TestSize)]
 #[Size(30)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]
 pub struct s_queried_player_hopper_lsp_statistics {
     #[brw(pad_after = 1)]
     pub flags: i8,
@@ -61,7 +56,6 @@ pub struct s_queried_player_hopper_lsp_statistics {
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, TestSize)]
 #[Size(20)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]
 pub struct s_player_challenge_state {
     #[brw(pad_after = 3)]
     pub flags: u8,
@@ -73,7 +67,6 @@ pub struct s_player_challenge_state {
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, TestSize)]
 #[Size(184)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]
 pub struct s_player_configuration_from_client {
     pub desired_name: StaticWcharString<16>,
     pub xuid: i64,
@@ -104,7 +97,6 @@ pub struct s_player_configuration_from_client {
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, TestSize)]
 #[Size(48)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]
 pub struct s_player_configuration_from_host {
     pub player_name: StaticWcharString<16>,
     pub team: i8,

@@ -3,10 +3,6 @@ use binrw::{BinRead, BinWrite};
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use chrono::{DateTime, NaiveDateTime, TimeZone, Utc};
 
-#[cfg(feature = "napi")]
-use napi::bindgen_prelude::{FromNapiValue, ToNapiValue};
-#[cfg(feature = "napi")]
-use napi::sys::{napi_env, napi_value};
 use blf_lib::types::u64::Unsigned64;
 
 #[derive(Default, Clone, Debug, PartialEq, BinRead, BinWrite, Copy)]
@@ -190,44 +186,3 @@ impl From<u64> for filetime {
     }
 }
 
-#[cfg(feature = "napi")]
-impl ToNapiValue for time32_t {
-    unsafe fn to_napi_value(env: napi_env, val: Self) -> napi::Result<napi_value> {
-        NaiveDateTime::to_napi_value(env, val.into())
-    }
-}
-
-#[cfg(feature = "napi")]
-impl FromNapiValue for time32_t {
-    unsafe fn from_napi_value(env: napi_env, napi_val: napi_value) -> napi::Result<Self> {
-        Ok(Self(NaiveDateTime::from_napi_value(env, napi_val)?.and_utc().timestamp() as u32))
-    }
-}
-
-#[cfg(feature = "napi")]
-impl ToNapiValue for time64_t {
-    unsafe fn to_napi_value(env: napi_env, val: Self) -> napi::Result<napi_value> {
-        NaiveDateTime::to_napi_value(env, val.into())
-    }
-}
-
-#[cfg(feature = "napi")]
-impl FromNapiValue for time64_t {
-    unsafe fn from_napi_value(env: napi_env, napi_val: napi_value) -> napi::Result<Self> {
-        Ok(Self(NaiveDateTime::from_napi_value(env, napi_val)?.and_utc().timestamp() as u64))
-    }
-}
-
-#[cfg(feature = "napi")]
-impl ToNapiValue for filetime {
-    unsafe fn to_napi_value(env: napi_env, val: Self) -> napi::Result<napi_value> {
-        NaiveDateTime::to_napi_value(env, NaiveDateTime::from_timestamp(val.to_time_t() as i64, 0))
-    }
-}
-
-#[cfg(feature = "napi")]
-impl FromNapiValue for filetime {
-    unsafe fn from_napi_value(env: napi_env, napi_val: napi_value) -> napi::Result<Self> {
-        Ok(Self::from_time_t(NaiveDateTime::from_napi_value(env, napi_val)?.and_utc().timestamp() as u64))
-    }
-}

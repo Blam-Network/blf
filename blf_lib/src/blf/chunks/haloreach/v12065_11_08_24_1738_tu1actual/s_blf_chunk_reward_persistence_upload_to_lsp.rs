@@ -3,8 +3,6 @@ use blf_lib::blf::chunks::BlfChunkHooks;
 use blf_lib::{bitfield, BlfChunk};
 use serde::{Deserialize, Serialize};
 use blf_lib::types::array::StaticArray;
-#[cfg(feature = "napi")]
-use napi_derive::napi;
 use crate::types::time::time64_t;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::player_rewards::e_purchase_state;
 use blf_lib::blam::haloreach::v12065_11_08_24_1738_tu1actual::game::player_rewards::player_commendations::s_persistent_per_commendation_state;
@@ -14,7 +12,6 @@ use blf_lib::types::string::StaticString;
 #[derive(BlfChunk,PartialEq,Debug,Clone,Serialize,Deserialize,Default)]
 #[Header("rpul", 3.1)]
 #[brw(big)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]
 #[Size(0x778)]
 pub struct s_blf_chunk_reward_persistence_upload_to_lsp {
     pub alltime_cookie_count: u32,

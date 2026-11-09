@@ -6,12 +6,9 @@ use blf_lib_derive::BlfChunk;
 use blf_lib::types::array::StaticArray;
 use blf_lib::types::string::StaticWcharString;
 use blf_lib::types::u64::Unsigned64;
-#[cfg(feature = "napi")]
-use napi_derive::napi;
 
 #[binrw]
 #[derive(BlfChunk,Default,PartialEq,Debug,Clone,Serialize,Deserialize)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "ares_untracked"))]
 #[Header("filq", 1.0)]
 #[brw(little)]
 #[Size(0x280)]
@@ -21,7 +18,6 @@ pub struct s_blf_chunk_file_transfers
 }
 
 #[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "ares_untracked"))]
 #[brw(big)]
 pub struct s_files_user_auto_download_queue_item {
     pub share_id: Unsigned64,

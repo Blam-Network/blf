@@ -1,6 +1,4 @@
 use binrw::{BinRead, BinWrite};
-#[cfg(feature = "napi")]
-use napi_derive::napi;
 use serde::{Deserialize, Serialize};
 use blf_lib::blam::halo3::v12070_08_09_05_2031_halo3_ship::game::game_engine_player_traits::c_player_traits;
 use blf_lib::blam::halo3::v12070_08_09_05_2031_halo3_ship::game::game_engine_traits::{c_game_engine_miscellaneous_options, c_game_engine_respawn_options};
@@ -12,7 +10,6 @@ use blf_lib_derivable::result::BLFLibResult;
 pub const k_game_engine_type_count: usize = 11;
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 pub struct c_game_engine_social_options {
     pub m_flags: u16,
     pub m_team_changing: u16,
@@ -45,7 +42,6 @@ impl c_game_engine_social_options {
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 pub struct c_game_engine_map_override_options {
     pub m_flags: u32,
     pub m_base_player_traits: c_player_traits,
@@ -95,7 +91,6 @@ impl c_game_engine_map_override_options {
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 pub struct c_game_engine_base_variant {
     #[serde(skip_serializing,skip_deserializing)]
     pub m_checksum: u32,

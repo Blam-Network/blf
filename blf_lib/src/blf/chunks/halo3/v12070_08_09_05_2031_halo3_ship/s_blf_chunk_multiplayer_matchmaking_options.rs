@@ -1,6 +1,4 @@
 use binrw::binrw;
-#[cfg(feature = "napi")]
-use napi_derive::napi;
 use serde::{Deserialize, Serialize};
 use crate::blf::chunks::BlfChunkHooks;
 use crate::BlfChunk;
@@ -13,7 +11,6 @@ use crate::types::numbers::Float32;
 #[Header("mpmo", 2.1)]
 #[Size(0x5C)]
 #[brw(big)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 pub struct s_blf_chunk_multiplayer_matchmaking_options {
     pub hopper_identifier: i16,
     pub hopper_name: StaticWcharString<0x20>,

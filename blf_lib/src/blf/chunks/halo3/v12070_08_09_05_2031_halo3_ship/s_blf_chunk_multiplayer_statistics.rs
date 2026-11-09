@@ -1,7 +1,5 @@
 use std::io::{Read, Seek, Write};
 use binrw::{BinRead, BinResult, BinWrite, BinWriterExt, Endian};
-#[cfg(feature = "napi")]
-use napi_derive::napi;
 use serde::{Deserialize, Serialize};
 use crate::blf::chunks::BlfChunkHooks;
 use crate::BlfChunk;
@@ -11,7 +9,6 @@ use crate::blf::versions::halo3::v12070_08_09_05_2031_halo3_ship::{s_blf_chunk_m
 #[derive(BlfChunk,Default,PartialEq,Debug,Clone,Serialize,Deserialize)]
 #[Header("_par", 1.1)]
 #[Size(0x4C14)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 pub struct s_blf_chunk_multiplayer_statistics {
     pub mps1: s_blf_chunk_multiplayer_player_statistics,
     pub mps2: s_blf_chunk_multiplayer_player_vs_player_statistics,

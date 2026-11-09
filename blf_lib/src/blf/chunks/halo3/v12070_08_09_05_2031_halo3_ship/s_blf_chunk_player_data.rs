@@ -3,13 +3,10 @@ use serde::{Deserialize, Serialize};
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
 use blf_lib_derive::BlfChunk;
 use crate::types::string::StaticString;
-#[cfg(feature = "napi")]
-use napi_derive::napi;
 use num_derive::FromPrimitive;
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, FromPrimitive)]
 #[brw(big, repr = u32)]
-#[cfg_attr(feature = "napi", napi(namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 #[repr(u32)]
 pub enum e_bungienet_user_flags {
     #[default]
@@ -33,7 +30,6 @@ pub enum e_bungienet_user_flags {
 #[derive(BlfChunk,PartialEq,Debug,Clone,Serialize,Deserialize)]
 #[Header("fupd", 3.1)]
 #[brw(big)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 pub struct s_blf_chunk_player_data {
     pub hopper_access: u32,
     pub bungie_user_role: u32,

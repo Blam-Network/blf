@@ -14,14 +14,10 @@ use serde_hex::{SerHex, StrictCap};
 use crate::io::bitstream::c_bitstream_writer;
 use crate::OPTION_TO_RESULT;
 
-#[cfg(feature = "napi")]
-use napi_derive::napi;
-
 /// Halo 4 metadata `activity` is `e_network_game_type` (0..3), 2 bits.
 #[repr(u8)]
 #[derive(Debug, Clone, Copy, PartialEq, Eq, ToPrimitive, FromPrimitive, Default, Serialize, Deserialize, BinRead, BinWrite)]
 #[brw(repr = u8)]
-#[cfg_attr(feature = "napi", napi(namespace = "halo4_v20810_12_09_22_1647_main"))]
 pub enum e_network_game_type {
     #[default]
     none = 0,
@@ -37,7 +33,6 @@ pub type e_gui_game_mode = e_network_game_type;
 #[repr(u8)]
 #[derive(Debug, Clone, Copy, PartialEq, Eq, ToPrimitive, FromPrimitive, Default, Serialize, Deserialize, BinRead, BinWrite)]
 #[brw(repr = u8)]
-#[cfg_attr(feature = "napi", napi(namespace = "halo4_v20810_12_09_22_1647_main"))]
 pub enum e_game_mode {
     #[default]
     none = 0,
@@ -54,7 +49,6 @@ pub enum e_game_mode {
 #[repr(u8)]
 #[derive(Debug, Clone, Copy, PartialEq, Eq, ToPrimitive, FromPrimitive, Default, Serialize, Deserialize, BinRead, BinWrite)]
 #[brw(repr = u8)]
-#[cfg_attr(feature = "napi", napi(namespace = "halo4_v20810_12_09_22_1647_main"))]
 pub enum e_metadata_game_engine_type {
     #[default]
     none = 0,
@@ -66,28 +60,24 @@ pub enum e_metadata_game_engine_type {
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]
 pub struct s_content_item_film_metadata {
     #[brw(pad_after = 12)]
     pub seconds: i32,
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]
 pub struct s_content_item_game_variant_metadata {
     #[brw(pad_after = 15)]
     pub icon_index: i8,
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]
 pub struct s_content_item_matchmaking_metadata {
     #[brw(pad_after = 14)]
     pub hopper_identifier: u16,
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]
 pub struct s_content_item_campaign_metadata {
     pub campaign_id: i32,
     pub campaign_difficulty: i16,
@@ -98,7 +88,6 @@ pub struct s_content_item_campaign_metadata {
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "halo4_v20810_12_09_22_1647_main"))]
 pub struct s_content_item_firefight_metadata {
     pub firefight_difficulty: i16,
     /// Halo 4 encodes a single 32-bit skull flags field.
@@ -106,7 +95,6 @@ pub struct s_content_item_firefight_metadata {
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]
 pub struct s_content_item_history {
     pub timestamp: time64_t,
     #[serde(with = "SerHex::<StrictCap>")]
@@ -117,7 +105,6 @@ pub struct s_content_item_history {
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]
 pub struct s_content_item_general_metadata {
     #[brw(pad_after = 3)]
     pub file_type: i8,
@@ -134,14 +121,12 @@ pub struct s_content_item_general_metadata {
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]
 pub struct s_content_item_display_metadata {
     #[brw(pad_after = 7)]
     pub megalo_category_index: i8,
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]
 pub struct c_content_item_metadata {
     pub general: s_content_item_general_metadata,
     pub display: s_content_item_display_metadata,

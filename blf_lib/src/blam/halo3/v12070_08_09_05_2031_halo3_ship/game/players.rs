@@ -1,6 +1,4 @@
 ﻿use binrw::{BinRead, BinWrite};
-#[cfg(feature = "napi")]
-use napi_derive::napi;
 use blf_lib::TestSize;
 use blf_lib::types::bool::Bool;
 use blf_lib::types::string::StaticWcharString;
@@ -11,7 +9,6 @@ use crate::types::time::time32_t;
 use crate::types::u64::Unsigned64;
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 pub struct s_queried_player_global_statistics {
     #[brw(pad_after = 3)]
     pub valid: u8,
@@ -21,7 +18,6 @@ pub struct s_queried_player_global_statistics {
 }
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 pub struct s_queried_player_hopper_statistics {
     #[brw(pad_after = 1)]
     pub stats_valid: u8,
@@ -35,7 +31,6 @@ pub struct s_queried_player_hopper_statistics {
 }
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 pub struct s_queried_player_displayed_statistics {
     #[brw(pad_after = 3)]
     pub stats_valid: u8,
@@ -53,7 +48,6 @@ pub struct s_queried_player_displayed_statistics {
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, TestSize)]
 #[Size(88)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 pub struct s_queried_player_statistics {
     pub queried_player_global_statistics: s_queried_player_global_statistics,
     pub queried_player_displayed_statistics: s_queried_player_displayed_statistics,
@@ -62,7 +56,6 @@ pub struct s_queried_player_statistics {
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, TestSize)]
 #[Size(0x1E)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 pub struct s_player_appearance {
     pub appearance_flags: u8,
     pub primary_color: u8,
@@ -90,7 +83,6 @@ pub struct s_player_appearance {
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, TestSize)]
 #[Size(0xC8)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 pub struct s_player_configuration_from_client {
     pub player_name: StaticWcharString<16>,
     pub appearance: s_player_appearance, // correct
@@ -123,7 +115,6 @@ pub struct s_player_configuration_from_client {
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, TestSize)]
 #[Size(0x48)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 pub struct s_player_configuration_from_host {
     pub player_name: StaticWcharString<16>,
     pub player_team: i32,

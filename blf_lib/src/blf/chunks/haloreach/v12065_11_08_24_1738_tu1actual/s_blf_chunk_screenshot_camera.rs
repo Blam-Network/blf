@@ -8,11 +8,8 @@ use blf_lib::types::array::StaticArray;
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
 use blf_lib_derive::{BlfChunk, TestSize};
 use crate::types::numbers::Float32;
-#[cfg(feature = "napi")]
-use napi_derive::napi;
 
 #[binrw]
-#[cfg_attr(feature = "napi", napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]
 #[derive(BlfChunk,Default,PartialEq,Debug,Clone,Serialize,Deserialize)]
 #[Header("scnc", 4.1)]
 #[brw(big)]

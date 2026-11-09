@@ -1,7 +1,5 @@
 use binrw::{binrw, BinRead, BinWrite};
 use crate::types::net::Ipv4Addr;
-#[cfg(feature = "napi")]
-use napi_derive::napi;
 use serde::{Deserialize, Serialize};
 use crate::types::array::StaticArray;
 use crate::blf::chunks::BlfChunkHooks;
@@ -14,7 +12,6 @@ use crate::types::u64::Unsigned64;
 #[Header("mpma", 2.1)]
 #[Size(0x1744)]
 #[brw(big)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "ares_untracked"))]
 pub struct s_blf_chunk_multiplayer_machines {
     pub in_squad_session: Bool,
     pub in_group_session: Bool,
@@ -26,20 +23,17 @@ impl BlfChunkHooks for s_blf_chunk_multiplayer_machines {}
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, TestSize)]
 #[Size(0x174)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "ares_untracked"))]
 pub struct s_blf_chunk_multiplayer_machines_machine {
     pub machine_data: s_game_results_machine_data, // 21
     pub session_info: s_machine_session_info,
 }
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "ares_untracked"))]
 pub struct s_machine_identifier {
     pub identifier: StaticArray<u8, 6>,
 }
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "ares_untracked"))]
 pub struct s_game_results_machine_data {
     pub identifier: s_machine_identifier,
     pub exists: Bool,
@@ -52,14 +46,12 @@ pub struct s_game_results_machine_data {
 }
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "ares_untracked"))]
 pub struct s_transport_secure_address {
     pub data: StaticArray<u8, 320>,
 }
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default)]
 #[brw(repr = i32)]
-#[cfg_attr(feature = "napi", napi(namespace = "ares_untracked"))]
 #[repr(i32)]
 pub enum e_online_nat_type {
     #[default]
@@ -70,7 +62,6 @@ pub enum e_online_nat_type {
 }
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "ares_untracked"))]
 pub struct s_machine_session_info {
     pub exists: Bool,
     pub has_hard_drive: Bool,

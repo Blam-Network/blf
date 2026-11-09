@@ -1,6 +1,4 @@
 use binrw::{BinRead, BinWrite};
-#[cfg(feature = "napi")]
-use napi_derive::napi;
 use serde::{Deserialize, Serialize};
 use blf_lib::blam::halo3::v12070_08_09_05_2031_halo3_ship::game::game_engine_player_traits::c_player_traits;
 use blf_lib::io::bitstream::{c_bitstream_reader, c_bitstream_writer};
@@ -9,7 +7,6 @@ use blf_lib::SET_BIT;
 use crate::TEST_BIT;
 
 #[derive(Default, PartialEq, Debug, Clone, BinRead, BinWrite, Serialize, Deserialize)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 pub struct c_game_engine_infection_variant {
     pub m_variant_flags: u8,
     pub m_safe_havens: u8,

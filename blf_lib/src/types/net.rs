@@ -5,10 +5,6 @@ use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use shrinkwraprs::Shrinkwrap;
 use std::net::Ipv4Addr as WrappedIpv4Addr;
 use std::str::FromStr;
-#[cfg(feature = "napi")]
-use napi::bindgen_prelude::{FromNapiValue, ToNapiValue};
-#[cfg(feature = "napi")]
-use napi::sys::{napi_env, napi_value};
 
 #[derive(Debug, Clone, PartialEq, Copy, Shrinkwrap)]
 #[shrinkwrap(mutable)]
@@ -17,26 +13,6 @@ pub struct Ipv4Addr(pub WrappedIpv4Addr);
 impl Default for Ipv4Addr {
     fn default() -> Self {
         Self(WrappedIpv4Addr::new(0, 0, 0, 0))
-    }
-}
-
-#[cfg(feature = "napi")]
-impl FromNapiValue for Ipv4Addr {
-    unsafe fn from_napi_value(env: napi_env, napi_val: napi_value) -> napi::Result<Self> {
-        let ipStr: String = String::from_napi_value(env, napi_val)?;
-        let ip: WrappedIpv4Addr = WrappedIpv4Addr::from_str(&ipStr)
-            .map_err(|e| napi::Error::new(
-                napi::Status::InvalidArg,
-                e.to_string(),
-            ))?;
-        Ok(Ipv4Addr(ip))
-    }
-}
-
-#[cfg(feature = "napi")]
-impl ToNapiValue for Ipv4Addr {
-    unsafe fn to_napi_value(env: napi_env, val: Self) -> napi::Result<napi_value> {
-        String::to_napi_value(env, val.0.to_string())
     }
 }
 

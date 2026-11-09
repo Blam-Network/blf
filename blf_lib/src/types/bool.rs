@@ -5,11 +5,6 @@ use binrw::{BinRead, BinReaderExt, BinResult, BinWrite, Endian};
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use shrinkwraprs::Shrinkwrap;
 
-#[cfg(feature = "napi")]
-use napi::bindgen_prelude::{FromNapiValue, ToNapiValue};
-#[cfg(feature = "napi")]
-use napi::sys::{napi_env, napi_value};
-
 #[derive(Debug, Clone, PartialEq, Copy, Default, Shrinkwrap)]
 #[shrinkwrap(mutable)]
 pub struct Bool(pub bool);
@@ -117,16 +112,3 @@ impl Not for Bool {
     }
 }
 
-#[cfg(feature = "napi")]
-impl ToNapiValue for Bool {
-    unsafe fn to_napi_value(env: napi_env, val: Self) -> napi::Result<napi_value> {
-        bool::to_napi_value(env, val.0)
-    }
-}
-
-#[cfg(feature = "napi")]
-impl FromNapiValue for Bool {
-    unsafe fn from_napi_value(env: napi_env, napi_val: napi_value) -> napi::Result<Self> {
-        Ok(Self(bool::from_napi_value(env, napi_val)?))
-    }
-}

@@ -4,8 +4,6 @@ use blf_lib::blf::chunks::BlfChunkHooks;
 use blf_lib::{bitfield, BlfChunk};
 use serde::{Deserialize, Serialize};
 use blf_lib::types::array::StaticArray;
-#[cfg(feature = "napi")]
-use napi_derive::napi;
 use num_derive::{FromPrimitive, ToPrimitive};
 use crate::types::time::time64_t;
 
@@ -13,7 +11,6 @@ use crate::types::time::time64_t;
 #[derive(BlfChunk,PartialEq,Debug,Clone,Serialize,Deserialize,Default)]
 #[Header("dcha", 3.1)]
 #[brw(big)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]
 pub struct s_blf_chunk_challenge_state {
     pub active_challenge_set_1: u32,
     pub active_challenge_set_2: u32,
@@ -28,7 +25,6 @@ pub struct s_blf_chunk_challenge_state {
 // This is probably used in many other places, may want to move it in future.
 bitfield! {
     #[derive(Serialize,Deserialize)]
-    #[cfg_attr(feature = "napi", napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]
     pub struct e_challenge_skull_flags: u32 {
         iron,
         black_eye,
@@ -49,7 +45,6 @@ bitfield! {
 
 bitfield! {
     #[derive(Serialize,Deserialize)]
-    #[cfg_attr(feature = "napi", napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]
     pub struct e_challenge_difficulty_flags: u8 {
         easy,
         normal,
@@ -60,7 +55,6 @@ bitfield! {
 
 bitfield! {
     #[derive(Serialize,Deserialize)]
-    #[cfg_attr(feature = "napi", napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]
     pub struct e_challenge_activity_type_flags: u8 {
         custom,
         matchmaking
@@ -69,7 +63,6 @@ bitfield! {
 
 bitfield! {
     #[derive(Serialize,Deserialize)]
-    #[cfg_attr(feature = "napi", napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]
     pub struct e_challenge_player_count_flags: u8 {
         player_count_any,
         player_count_1,
@@ -80,7 +73,6 @@ bitfield! {
 
 bitfield! {
     #[derive(Serialize,Deserialize)]
-    #[cfg_attr(feature = "napi", napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]
     pub struct e_challenge_game_type_flags: u8 {
         campaign,
         firefight,
@@ -90,7 +82,6 @@ bitfield! {
 
 #[derive(BinRead, BinWrite, Serialize, Deserialize, Default, PartialEq, Debug, Copy, Clone, FromPrimitive, ToPrimitive)]
 #[brw(repr = u8)]
-#[cfg_attr(feature = "napi", napi(namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]
 #[repr(u8)]
 pub enum e_challenge_category {
     #[default]
@@ -102,7 +93,6 @@ pub enum e_challenge_category {
 }
 
 #[derive(PartialEq,Debug,Clone,Serialize,Deserialize,Default)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]
 pub struct s_challenge_state {
     pub category: e_challenge_category,
     pub challenge: u8,

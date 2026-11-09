@@ -1,7 +1,5 @@
 use std::io::{Read, Seek, Write};
 use binrw::{binrw, BinRead, BinResult, BinWrite, Endian};
-#[cfg(feature = "napi")]
-use napi_derive::napi;
 use serde::{Deserialize, Serialize};
 use blf_lib::blam::common::memory::secure_signature::s_network_http_request_hash;
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
@@ -15,7 +13,6 @@ use crate::types::array::StaticArray;
 #[derive(BlfChunk,Default,PartialEq,Debug,Clone,Serialize,Deserialize)]
 #[Header("_eof", 1.1)]
 #[Size(0x105)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 pub struct s_blf_chunk_end_of_file_with_rsa
 {
     pub file_size: u32,

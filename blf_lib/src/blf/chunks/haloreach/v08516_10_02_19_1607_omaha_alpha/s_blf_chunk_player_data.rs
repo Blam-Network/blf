@@ -1,6 +1,4 @@
 ﻿use binrw::{binrw, BinRead, BinWrite};
-#[cfg(feature = "napi")]
-use napi_derive::napi;
 use num_derive::FromPrimitive;
 use serde::{Deserialize, Serialize};
 use blf_lib::types::bool::Bool;
@@ -13,7 +11,6 @@ use crate::types::string::StaticString;
 #[derive(BlfChunk,PartialEq,Debug,Clone,Serialize,Deserialize)]
 #[Header("fupd", 6.0)]
 #[brw(big)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]
 pub struct s_blf_chunk_player_data {
     pub hopper_access: u32,
     pub bungie_user_role: u32,

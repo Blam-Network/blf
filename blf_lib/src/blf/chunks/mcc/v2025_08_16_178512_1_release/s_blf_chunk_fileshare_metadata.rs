@@ -5,12 +5,9 @@ use blf_lib::types::string::StaticString;
 use blf_lib::types::u64::Unsigned64;
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
 use blf_lib_derive::BlfChunk;
-#[cfg(feature = "napi")]
-use napi_derive::napi;
 
 /// MCC fileshare metadata (`_fsm` 1.1): digests, item id and a 256-byte file signature.
 #[binrw]
-#[cfg_attr(feature = "napi", napi(object, namespace = "mcc_v2025_08_16_178512_1_release"))]
 #[derive(BlfChunk, Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 #[Header("_fsm", 1.1)]
 #[brw(big)]

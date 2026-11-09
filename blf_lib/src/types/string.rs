@@ -8,14 +8,6 @@ use std::cmp::min;
 use std::error::Error;
 use binrw::{BinRead, BinWrite};
 
-#[cfg(feature = "napi")]
-use napi::sys::{napi_env, napi_env__, napi_value};
-#[cfg(feature = "napi")]
-use napi::bindgen_prelude::{FromNapiValue, ToNapiValue, TypeName, ValidateNapiValue};
-#[cfg(feature = "napi")]
-use napi::{Env, JsString, ValueType};
-#[cfg(feature = "napi")]
-use napi::JsValue;
 use blf_lib_derivable::result::BLFLibResult;
 use blf_lib::{SERDE_DESERIALIZE_RESULT, SERDE_SERIALIZE_RESULT};
 
@@ -63,24 +55,6 @@ pub struct StaticWcharString<const N: usize> {
 impl<const N: usize> Display for StaticWcharString<N> {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         self.get_string().fmt(f)
-    }
-}
-
-#[cfg(feature = "napi")]
-impl<const N: usize> ToNapiValue for StaticWcharString<N> {
-    unsafe fn to_napi_value(env: *mut napi_env__, val: Self) -> napi::Result<napi::sys::napi_value> {
-        let s = val.get_string();
-        Ok(Env::from_raw(env).create_string(&s)?.raw())
-    }
-}
-
-#[cfg(feature = "napi")]
-impl<const N: usize> FromNapiValue for StaticWcharString<N> {
-    unsafe fn from_napi_value(env: napi_env, napi_val: napi::sys::napi_value) -> napi::Result<Self> {
-        let js_string = JsString::from_napi_value(env, napi_val)?;
-        let rust_string = js_string.into_utf8()?.into_owned()?;
-        StaticWcharString::from_string(&rust_string)
-            .map_err(|e| napi::Error::from_reason(e.to_string()))
     }
 }
 
@@ -239,111 +213,12 @@ impl<'de, const N: usize> serde::Deserialize<'de> for StaticString<N> {
     }
 }
 
-#[cfg(feature = "napi")]
-impl<const N: usize> FromNapiValue for StaticString<N> {
-    unsafe fn from_napi_value(env: *mut napi_env__, napi_val: napi::sys::napi_value) -> napi::Result<Self> {
-        let js_string = JsString::from_napi_value(env, napi_val)?;
-        StaticString::from_string(
-            js_string
-                .into_utf8()?
-                .as_str()?)
-                .map_err(|e|napi::Error::from_reason(e.to_string()))
-    }
-}
-
-#[cfg(feature = "napi")]
-impl<const N: usize> ToNapiValue for StaticString<N> {
-    unsafe fn to_napi_value(env: napi_env, val: Self) -> napi::Result<napi_value> {
-        let s = val.get_string()
-            .map_err(|e|napi::Error::from_reason(e.to_string()))?;
-        Env::from_raw(env).create_string(&s)
-            .map(|js_str| js_str.raw())
-    }
-}
-
-#[cfg(feature = "napi")]
-impl<const N: usize> napi::bindgen_prelude::FromNapiMutRef for StaticString<N> {
-    unsafe fn from_napi_mut_ref(
-        env: napi::bindgen_prelude::sys::napi_env,
-        napi_val: napi::bindgen_prelude::sys::napi_value,
-    ) -> napi::bindgen_prelude::Result<&'static mut Self> {
-        let mut wrapped_val: *mut std::ffi::c_void = std::ptr::null_mut();
-        {
-            let c = napi::bindgen_prelude::sys::napi_unwrap(env, napi_val, &mut wrapped_val);
-            match c {
-                napi::sys::Status::napi_ok => Ok(()),
-                _ => Err(napi::Error::new(
-                    napi::Status::from(c),
-                    format!(
-                            "Failed to recover `{}` type from napi value",
-                            "StaticString",
-                   ),
-                )),
-            }
-        }?;
-        Ok(&mut *(wrapped_val as *mut StaticString<N>))
-    }
-}
-
-
-#[cfg(feature = "napi")]
-impl<const N: usize> ToNapiValue for &mut StaticString<N> {
-    unsafe fn to_napi_value(env: napi_env, val: Self) -> napi::Result<napi_value> {
-        let s = val.get_string()
-            .map_err(|e|napi::Error::from_reason(e.to_string()))?;
-        Env::from_raw(env).create_string(&s).map(|js_str| js_str.raw())
-    }
-}
 
 
 // TODO: Refactor
-#[cfg(feature = "napi")]
-impl<const N: usize> napi::bindgen_prelude::FromNapiMutRef for StaticWcharString<N> {
-    unsafe fn from_napi_mut_ref(
-        env: napi::bindgen_prelude::sys::napi_env,
-        napi_val: napi::bindgen_prelude::sys::napi_value,
-    ) -> napi::bindgen_prelude::Result<&'static mut Self> {
-        let mut wrapped_val: *mut std::ffi::c_void = std::ptr::null_mut();
-        {
-            let c = napi::bindgen_prelude::sys::napi_unwrap(env, napi_val, &mut wrapped_val);
-            match c {
-                napi::sys::Status::napi_ok => Ok(()),
-                _ => Err(napi::Error::new(
-                    napi::Status::from(c),
-                    format!(
-                        "Failed to recover `{}` type from napi value",
-                        "StaticString",
-                    ),
-                )),
-            }
-        }?;
-        Ok(&mut *(wrapped_val as *mut StaticWcharString<N>))
-    }
-}
 
-
-#[cfg(feature = "napi")]
-impl<const N: usize> ToNapiValue for &mut StaticWcharString<N> {
-    unsafe fn to_napi_value(env: napi_env, val: Self) -> napi::Result<napi_value> {
-        String::to_napi_value(env, val.get_string())
-    }
-}
 
 // TODO: Remove
-#[cfg(feature = "napi")]
-impl<const N: usize> TypeName for StaticString<N> {
-    fn type_name() -> &'static str {
-        todo!()
-    }
-
-    fn value_type() -> ValueType {
-        todo!()
-    }
-}
 
 // TODO: Remove?
-#[cfg(feature = "napi")]
-impl<const N: usize> ValidateNapiValue for StaticString<N> {
-
-}
 

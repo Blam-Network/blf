@@ -7,11 +7,8 @@ use crate::types::bool::Bool;
 use crate::types::numbers::Float32;
 use crate::types::u64::Unsigned64;
 use num_derive::{FromPrimitive, ToPrimitive};
-#[cfg(feature = "napi")]
-use napi_derive::napi;
 
 #[derive(BlfChunk,Default,PartialEq,Debug,Clone,Serialize,Deserialize,BinRead,BinWrite)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 #[Header("cmrp", 1.1)]
 #[Size(0x243C)]
 #[brw(big)]
@@ -24,7 +21,6 @@ pub struct s_blf_chunk_campaign_metagame_results {
 impl BlfChunkHooks for s_blf_chunk_campaign_metagame_results {}
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, TestSize)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 #[Size(0x2438)]
 #[brw(big)]
 pub struct s_campaign_metagame_runtime_globals {
@@ -38,7 +34,6 @@ pub struct s_campaign_metagame_runtime_globals {
 }
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, TestSize)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 #[Size(0x68)]
 #[brw(big)]
 pub struct s_campaign_metagame_runtime_globals_secondary {
@@ -49,7 +44,6 @@ pub struct s_campaign_metagame_runtime_globals_secondary {
 }
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 #[brw(big)]
 pub struct s_metagame_state_class_kill_counts {
     pub infantry: i32,
@@ -63,7 +57,6 @@ pub struct s_metagame_state_class_kill_counts {
 }
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 #[brw(big)]
 pub struct s_metagame_state_type_kill_counts {
     pub brute: s_metagame_state_class_kill_counts,
@@ -97,7 +90,6 @@ pub struct s_metagame_state_type_kill_counts {
 }
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, TestSize)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 #[Size(0x3F0)]
 #[brw(big)]
 pub struct s_metagame_state {
@@ -137,7 +129,6 @@ pub struct s_metagame_state {
 }
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 #[brw(big)]
 pub struct s_metagame_state_secondary {
     pub player_identifier: Unsigned64,
@@ -148,7 +139,6 @@ pub struct s_metagame_state_secondary {
 }
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, TestSize)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 #[Size(0x14)]
 #[brw(big)]
 pub struct s_campaign_metagame_damage_event {
@@ -160,7 +150,6 @@ pub struct s_campaign_metagame_damage_event {
 
 
 #[derive(BinRead, BinWrite, Serialize, Deserialize, Default, PartialEq, Debug, Copy, Clone, FromPrimitive, ToPrimitive)]
-#[cfg_attr(feature = "napi", napi(namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 #[brw(big, repr = i8)]
 pub enum e_campaign_metagame_bucket_type {
     #[default]
@@ -195,7 +184,6 @@ pub enum e_campaign_metagame_bucket_type {
 }
 
 #[derive(BinRead, BinWrite, Serialize, Deserialize, Default, PartialEq, Debug, Copy, Clone, FromPrimitive, ToPrimitive)]
-#[cfg_attr(feature = "napi", napi(namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 #[brw(big, repr = i8)]
 pub enum e_campaign_metagame_bucket_class {
     #[default]
@@ -209,7 +197,6 @@ pub enum e_campaign_metagame_bucket_class {
     standard_vehicle
 }
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, TestSize)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 #[Size(0x8)]
 #[brw(big)]
 pub struct s_campaign_metagame_bucket {

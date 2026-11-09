@@ -1,6 +1,4 @@
 use binrw::{BinRead, BinWrite};
-#[cfg(feature = "napi")]
-use napi_derive::napi;
 use serde::{Deserialize, Serialize};
 use blf_lib::io::bitstream::{c_bitstream_reader, c_bitstream_writer};
 use crate::types::string::StaticString;
@@ -31,7 +29,6 @@ pub const k_saved_game_file_type_count: u32 = 13;
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite, TestSize)]
 #[Size(0xF8)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 pub struct s_content_item_metadata {
     pub unique_id: Unsigned64,
     pub name: StaticWcharString<0x10>,

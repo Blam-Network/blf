@@ -3,12 +3,6 @@ use std::ops::{Index, IndexMut};
 use binrw::{BinRead, BinResult, BinWrite, Endian};
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 
-#[cfg(feature = "napi")]
-use napi::bindgen_prelude::{FromNapiValue, ToNapiValue};
-#[cfg(feature = "napi")]
-use napi::sys;
-#[cfg(feature = "napi")]
-use napi::sys::{napi_env};
 use blf_lib::result::BLFLibResult;
 use crate::SERDE_DESERIALIZE_RESULT;
 
@@ -157,17 +151,3 @@ impl<'a, E: 'static, const N: usize> IntoIterator for &'a mut StaticArray<E, N> 
     }
 }
 
-#[cfg(feature = "napi")]
-impl<E: ToNapiValue, const N: usize> ToNapiValue for StaticArray<E, N> {
-    unsafe fn to_napi_value(env: napi_env, val: Self) -> napi::Result<napi::sys::napi_value> {
-        let vec: Vec<E> = val._data;
-        <Vec<E>>::to_napi_value(env, vec)
-    }
-}
-
-#[cfg(feature = "napi")]
-impl<E: FromNapiValue + Default + Clone, const N: usize> FromNapiValue for StaticArray<E, N> {
-    unsafe fn from_napi_value(env: sys::napi_env, napi_val: sys::napi_value) -> napi::Result<Self> {
-        Self::from_vec(&Vec::<E>::from_napi_value(env, napi_val)?).map_err(|e| napi::Error::from_reason(e.to_string()))
-    }
-}

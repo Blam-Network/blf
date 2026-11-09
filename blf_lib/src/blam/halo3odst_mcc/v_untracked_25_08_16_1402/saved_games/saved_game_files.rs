@@ -1,6 +1,4 @@
 use binrw::{BinRead, BinWrite};
-#[cfg(feature = "napi")]
-use napi_derive::napi;
 use serde::{Deserialize, Serialize};
 use blf_lib::io::bitstream::{c_bitstream_reader, c_bitstream_writer};
 use crate::types::string::StaticString;
@@ -14,7 +12,6 @@ use crate::types::u64::Unsigned64;
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite, TestSize)]
 #[Size(0xF8)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "halo3odst_mcc_v_untracked_25_08_16_1402"))]
 pub struct s_content_item_metadata {
     pub unique_id: Unsigned64,
     pub name: StaticWcharString<0x10>,

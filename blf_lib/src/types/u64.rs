@@ -2,10 +2,6 @@ use std::fmt::{Display, Formatter, UpperHex};
 use std::io::{Read, Seek, Write};
 use std::ops::{Add, Div, Mul, Sub};
 use binrw::{BinRead, BinReaderExt, BinResult, BinWrite, Endian};
-#[cfg(feature = "napi")]
-use napi::bindgen_prelude::{BigInt, FromNapiValue, ToNapiValue};
-#[cfg(feature = "napi")]
-use napi::sys::{napi_env, napi_value};
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use serde_hex::{HexConf, SerHex};
 use shrinkwraprs::Shrinkwrap;
@@ -82,20 +78,6 @@ impl<C> SerHex<C> for Unsigned64 where C: HexConf,
 impl UpperHex for Unsigned64 {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         <u64 as UpperHex>::fmt(&self.0, f)
-    }
-}
-
-#[cfg(feature = "napi")]
-impl ToNapiValue for Unsigned64 {
-    unsafe fn to_napi_value(env: napi_env, val: Self) -> napi::Result<napi_value> {
-        BigInt::to_napi_value(env, BigInt::from(val.0))
-    }
-}
-
-#[cfg(feature = "napi")]
-impl FromNapiValue for Unsigned64 {
-    unsafe fn from_napi_value(env: napi_env, napi_val: napi_value) -> napi::Result<Self> {
-        BigInt::from_napi_value(env, napi_val).map(|val| Unsigned64(val.get_u64().1))
     }
 }
 

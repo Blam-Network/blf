@@ -6,11 +6,6 @@ use binrw::{BinRead, BinReaderExt, BinResult, BinWrite, Endian};
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use shrinkwraprs::Shrinkwrap;
 
-#[cfg(feature = "napi")]
-use napi::bindgen_prelude::{FromNapiValue, ToNapiValue};
-#[cfg(feature = "napi")]
-use napi::sys::{napi_env, napi_value};
-
 #[derive(Debug, Clone, PartialEq, Copy, Default, Shrinkwrap)]
 #[shrinkwrap(mutable)]
 pub struct Float32(pub f32);
@@ -154,20 +149,6 @@ impl MulAssign<f32> for Float32 {
     }
 }
 
-
-#[cfg(feature = "napi")]
-impl FromNapiValue for Float32 {
-    unsafe fn from_napi_value(env: napi_env, napi_val: napi_value) -> napi::Result<Self> {
-        f64::from_napi_value(env, napi_val).map(|val| Float32(val as f32))
-    }
-}
-
-#[cfg(feature = "napi")]
-impl ToNapiValue for Float32 {
-    unsafe fn to_napi_value(env: napi_env, val: Self) -> napi::Result<napi_value> {
-        f32::to_napi_value(env, val.0)
-    }
-}
 
 // Custom Serialize implementation
 impl Serialize for Float32 {

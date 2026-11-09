@@ -8,11 +8,8 @@ use blf_lib::types::array::StaticArray;
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
 use blf_lib_derive::{BlfChunk, TestSize};
 use crate::types::numbers::Float32;
-#[cfg(feature = "napi")]
-use napi_derive::napi;
 
 #[binrw]
-#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 #[derive(BlfChunk,Default,PartialEq,Debug,Clone,Serialize,Deserialize)]
 #[Header("scnc", 2.1)]
 #[brw(big)]
@@ -25,7 +22,6 @@ pub struct s_blf_chunk_screenshot_camera
     pub film_tick: u32,
 }
 
-#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 #[derive(Default,PartialEq,Debug,Clone,BinRead, BinWrite,Serialize,Deserialize,TestSize)]
 #[Size(0x158)]
 pub struct s_saved_camera
@@ -35,7 +31,6 @@ pub struct s_saved_camera
     pub projection: render_projection
 }
 
-#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, TestSize)]
 #[Size(0xC0)]
 pub struct render_projection {
@@ -47,7 +42,6 @@ pub struct render_projection {
 }
 
 
-#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, TestSize)]
 #[Size(0x88)]
 pub struct render_camera {

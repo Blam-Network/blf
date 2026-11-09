@@ -1,6 +1,4 @@
 use binrw::{BinRead, BinWrite};
-#[cfg(feature = "napi")]
-use napi_derive::napi;
 use serde::{Deserialize, Serialize};
 use blf_lib::bitfield;
 use blf_lib::blam::halo3::v12070_08_09_05_2031_halo3_ship::game::game_engine_player_traits::c_player_traits;
@@ -11,7 +9,6 @@ use crate::blam::halo3odst_mcc::v_untracked_25_08_16_1402::game::game_engine_def
 
 bitfield! {
     #[derive(Serialize, Deserialize)]
-    #[cfg_attr(feature = "napi", napi(object, namespace = "halo3odst_mcc_v_untracked_25_08_16_1402"))]
     pub struct e_game_skulls: u64 {
         // primary (0–8)
         iron,
@@ -67,7 +64,6 @@ bitfield! {
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "halo3odst_mcc_v_untracked_25_08_16_1402"))]
 pub struct s_survival_wave_properties {
     pub m_wave_flags: u8,
     pub m_wave_squad_advance_type: u8,
@@ -108,7 +104,6 @@ impl s_survival_wave_properties {
 }
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, BinRead, BinWrite)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "halo3odst_mcc_v_untracked_25_08_16_1402"))]
 pub struct s_survival_round_properties {
     pub m_skulls: e_game_skulls,
     pub m_initial_wave: s_survival_wave_properties,
@@ -139,7 +134,6 @@ impl s_survival_round_properties {
 /// Packed layout after the 4-bit engine index:
 /// `encoding-version` (8) → base variant → survival fields.
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "halo3odst_mcc_v_untracked_25_08_16_1402"))]
 pub struct c_game_engine_survival_variant {
     pub m_encoding_version: u8,
     pub m_base_variant: c_game_engine_base_variant,

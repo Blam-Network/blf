@@ -1,6 +1,4 @@
 use binrw::{BinRead, BinWrite};
-#[cfg(feature = "napi")]
-use napi_derive::napi;
 use blf_lib::TestSize;
 use blf_lib::types::array::StaticArray;
 use blf_lib::types::u64::Unsigned64;
@@ -12,7 +10,6 @@ pub use crate::blam::haloreach::v12065_11_08_24_1738_tu1actual::networking::onli
 /// 9 bytes — `s_static_array<...,16>` stride in Reach TU1.
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, TestSize)]
 #[Size(9)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]
 pub struct s_network_lsp_heartbeat_session_player_data {
     pub unknown0: StaticArray<u8, 8>,
     pub team: u8,
@@ -21,7 +18,6 @@ pub struct s_network_lsp_heartbeat_session_player_data {
 /// 201 bytes — host session block inside the heartbeat payload.
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, TestSize)]
 #[Size(201)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]
 pub struct s_network_lsp_heartbeat_session_data {
     pub gui_game_mode: u8,
     pub session_game_mode: u8,
@@ -39,7 +35,6 @@ pub struct s_network_lsp_heartbeat_session_data {
 /// 56 bytes — local profile slots in the heartbeat payload.
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, TestSize)]
 #[Size(56)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]
 pub struct s_network_lsp_heartbeat_player_data {
     pub player_xuid: Unsigned64,
     pub flags: i16,
@@ -53,7 +48,6 @@ pub struct s_network_lsp_heartbeat_player_data {
 /// 443-byte LSP presence heartbeat core (`phbt` 5.1 body; prefix of `phbt` 6.0).
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, TestSize)]
 #[Size(0x1BB)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]
 pub struct s_network_lsp_heartbeat_data {
     pub has_players: u8,
     pub local_player_count: u8,
@@ -66,7 +60,6 @@ pub struct s_network_lsp_heartbeat_data {
 /// 0x93-byte LSP presence heartbeat response body (`phbr` chunk payload).
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, TestSize)]
 #[Size(0x93)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]
 pub struct s_network_lsp_heartbeat_response_data {
     pub machine_file_requires_download: i8,
     pub flags: i8,

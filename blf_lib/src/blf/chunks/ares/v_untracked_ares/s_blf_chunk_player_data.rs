@@ -3,14 +3,11 @@ use serde::{Deserialize, Serialize};
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
 use blf_lib_derive::BlfChunk;
 use crate::types::string::StaticString;
-#[cfg(feature = "napi")]
-use napi_derive::napi;
 
 #[binrw]
 #[derive(BlfChunk,PartialEq,Debug,Clone,Serialize,Deserialize)]
 #[Header("fupd", 3.1)]
 #[brw(little)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "ares_untracked"))]
 pub struct s_blf_chunk_player_data {
     pub hopper_access: u32,
     pub bungie_user_role: u32,

@@ -10,11 +10,8 @@ use crate::types::bool::Bool;
 use crate::types::string::{StaticString, StaticWcharString};
 use crate::blam::halo3::v12070_08_09_05_2031_halo3_ship::game::players::{s_player_configuration_from_client, s_player_configuration_from_host};
 use crate::blf::versions::halo3::v12070_08_09_05_2031_halo3_ship::s_machine_identifier;
-#[cfg(feature = "napi")]
-use napi_derive::napi;
 
 #[derive(BlfChunk,Default,PartialEq,Debug,Clone,Serialize,Deserialize,BinRead,BinWrite)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 #[Header("gmop", 1.1)]
 #[Size(0xF814)]
 #[brw(big)]

@@ -1,7 +1,5 @@
 use std::io::{Cursor, Read, Seek};
 use binrw::{binrw, BinRead, BinReaderExt, BinResult, BinWrite};
-#[cfg(feature = "napi")]
-use napi_derive::napi;
 use serde::{Deserialize, Serialize};
 use crate::blf::chunks::BlfChunkHooks;
 use crate::{BlfChunk, TEST_BIT};
@@ -16,7 +14,6 @@ use serde_hex::{SerHex, StrictCap};
 #[Header("mpgd", 2.1)]
 #[Size(0x174)]
 #[brw(little)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "ares_untracked"))]
 pub struct s_blf_chunk_multiplayer_game_description {
     pub team_game: Bool,
     #[serde(with = "SerHex::<StrictCap>")]
@@ -46,7 +43,6 @@ impl BlfChunkHooks for s_blf_chunk_multiplayer_game_description { }
 // This type just handles DLC paths which aren't UTF-8, but we want them to be.
 #[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinWrite)]
 #[brw(big)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "ares_untracked"))]
 pub struct s_scenario_path {
     #[brw(ignore)]
     pub is_dlc: bool,

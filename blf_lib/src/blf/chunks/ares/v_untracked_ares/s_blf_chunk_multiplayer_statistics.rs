@@ -1,7 +1,5 @@
 use std::io::{Read, Seek, Write};
 use binrw::{BinRead, BinResult, BinWrite, BinWriterExt, Endian};
-#[cfg(feature = "napi")]
-use napi_derive::napi;
 use serde::{Deserialize, Serialize};
 use crate::blf::chunks::BlfChunkHooks;
 use crate::BlfChunk;
@@ -11,7 +9,6 @@ use crate::blf::versions::ares::v_untracked_ares::{s_blf_chunk_multiplayer_playe
 #[derive(BlfChunk,Default,PartialEq,Debug,Clone,Serialize,Deserialize)]
 #[Header("_par", 1.1)]
 #[Size(0x4EF4)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "ares_untracked"))]
 pub struct s_blf_chunk_multiplayer_statistics {
     pub mps1: s_blf_chunk_multiplayer_player_statistics,
     pub mps2: s_blf_chunk_multiplayer_player_vs_player_statistics,

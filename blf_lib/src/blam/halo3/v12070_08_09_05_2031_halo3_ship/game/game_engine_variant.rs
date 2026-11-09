@@ -1,8 +1,6 @@
 ﻿use std::fmt::{Debug};
 use std::io::{Read, Seek, SeekFrom, Write};
 use binrw::{BinRead, BinReaderExt, BinResult, BinWrite, BinWriterExt, Endian};
-#[cfg(feature = "napi")]
-use napi_derive::napi;
 use num_derive::{FromPrimitive, ToPrimitive};
 use serde::{Deserialize, Serialize};
 use blf_lib::blam::halo3::v12070_08_09_05_2031_halo3_ship::game::game_engine_default::c_game_engine_base_variant;
@@ -23,7 +21,6 @@ use blf_lib_derive::TestSize;
 
 #[derive(BinRead, BinWrite, Serialize, Deserialize, Default, PartialEq, Debug, Copy, Clone, FromPrimitive, ToPrimitive)]
 #[brw(repr = u32)]
-#[cfg_attr(feature = "napi", napi(namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 #[repr(u32)]
 pub enum e_game_engine {
     #[default]
@@ -42,7 +39,6 @@ pub enum e_game_engine {
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize, TestSize)]
 #[Size(0x264)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 pub struct c_game_variant {
     pub m_game_engine: e_game_engine,
     pub m_base_variant: c_game_engine_base_variant,

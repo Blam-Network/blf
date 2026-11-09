@@ -1,7 +1,5 @@
 use binrw::{binrw, BinRead, BinWrite};
 use crate::types::array::StaticArray;
-#[cfg(feature = "napi")]
-use napi_derive::napi;
 use serde::{Deserialize, Serialize};
 use crate::blf::chunks::BlfChunkHooks;
 use crate::BlfChunk;
@@ -11,7 +9,6 @@ use crate::BlfChunk;
 #[Header("mps1", 2.1)]
 #[Size(0x4184)]
 #[brw(big)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 pub struct s_blf_chunk_multiplayer_player_statistics {
     #[brw(pad_before = 4)]
     pub players: StaticArray<s_game_results_player_statistics, 16>,
@@ -20,7 +17,6 @@ pub struct s_blf_chunk_multiplayer_player_statistics {
 impl BlfChunkHooks for s_blf_chunk_multiplayer_player_statistics {}
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 pub struct s_game_results_statistics {
     #[br(map = |x: i16| x >> 1)]
     pub games_played: i16,
@@ -127,7 +123,6 @@ pub struct s_game_results_statistics {
 }
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 pub struct s_game_results_player_statistics_medals {
     #[br(map = |x: i16| x >> 1)]
     pub extermination: i16,
@@ -248,7 +243,6 @@ pub struct s_game_results_player_statistics_medals {
 }
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 pub struct s_game_results_player_statistics_achievements {
     #[br(map = |x: i16| x >> 1)]
     pub landfall: i16,
@@ -351,7 +345,6 @@ pub struct s_game_results_player_statistics_achievements {
 }
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 pub struct s_game_results_damage_statistics {
     pub valid: i8,
     #[brw(pad_before = 1)]
@@ -368,7 +361,6 @@ pub struct s_game_results_damage_statistics {
 }
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 pub struct s_game_results_player_damage_source_statistics {
     pub unknown: s_game_results_damage_statistics,
     pub falling_damage: s_game_results_damage_statistics,
@@ -434,7 +426,6 @@ pub struct s_game_results_player_damage_source_statistics {
 }
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 pub struct s_game_results_player_statistics {
     pub statistics: s_game_results_statistics,
     pub medals: s_game_results_player_statistics_medals,

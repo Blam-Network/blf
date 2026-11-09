@@ -1,6 +1,4 @@
 use binrw::binrw;
-#[cfg(feature = "napi")]
-use napi_derive::napi;
 use blf_lib::blf::chunks::BlfChunkHooks;
 use blf_lib::types::array::StaticArray;
 use blf_lib::types::u64::Unsigned64;
@@ -15,7 +13,6 @@ pub use crate::blam::haloreach::v12065_11_08_24_1738_tu1actual::networking::logi
 #[Header("phbr", 2.1)]
 #[Size(0x93)]
 #[brw(big)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]
 pub struct s_blf_chunk_player_heartbeat_response {
     pub machine_file_requires_download: i8,
     pub flags: i8,

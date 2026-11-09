@@ -3,12 +3,9 @@ use serde::{Deserialize, Serialize};
 use blf_lib::types::array::StaticArray;
 use blf_lib_derivable::blf::chunks::BlfChunkHooks;
 use blf_lib_derive::{BlfChunk, TestSize};
-#[cfg(feature = "napi")]
-use napi_derive::napi;
 use blf_lib::types::u64::Unsigned64;
 
 #[binrw]
-#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 #[derive(BlfChunk,PartialEq,Debug,Clone,Serialize,Deserialize,Default)]
 #[Header("funs", 1.1)]
 #[Size(0xC0)]
@@ -20,7 +17,6 @@ pub struct s_blf_chunk_user_network_statistics {
     pub bandwidth_data: s_network_bandwidth_persistent_data,
 }
 
-#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 #[derive(Default,PartialEq,Debug,Clone,Serialize,Deserialize,BinRead,BinWrite,TestSize)]
 #[Size(0x20)]
 pub struct s_network_quality_session_statistics {
@@ -28,7 +24,6 @@ pub struct s_network_quality_session_statistics {
     pub host_badness_history: StaticArray<Unsigned64, 2>,
 }
 
-#[cfg_attr(feature = "napi", napi(object, namespace = "halo3_12070_08_09_05_2031_halo3_ship"))]
 #[derive(Default,PartialEq,Debug,Clone,Serialize,Deserialize,BinRead,BinWrite,TestSize)]
 #[Size(0x6C)]
 pub struct s_network_bandwidth_persistent_data {

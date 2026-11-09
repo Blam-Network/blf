@@ -1,6 +1,4 @@
 ﻿use binrw::{binrw, BinRead, BinWrite};
-#[cfg(feature = "napi")]
-use napi_derive::napi;
 use num_derive::FromPrimitive;
 use serde::{Deserialize, Serialize};
 use blf_lib::types::bool::Bool;
@@ -14,7 +12,6 @@ use crate::types::string::StaticString;
 #[Header("fupd", 7.0)]
 #[brw(big)]
 #[Size(0x45)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]
 pub struct s_blf_chunk_player_data {
     #[brw(pad_after = 1)]
     pub hopper_access: u8,
@@ -26,7 +23,6 @@ pub struct s_blf_chunk_player_data {
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, FromPrimitive)]
 #[brw(big, repr = u16)]
-#[cfg_attr(feature = "napi", napi(namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]
 #[repr(u16)]
 pub enum e_bungienet_user_flags {
     #[default]

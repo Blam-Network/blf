@@ -1,7 +1,5 @@
 use std::io::{Read, Seek, Write};
 use binrw::{binrw, BinRead, BinResult, BinWrite, Endian};
-#[cfg(feature = "napi")]
-use napi_derive::napi;
 use num_derive::FromPrimitive;
 use num_traits::FromPrimitive;
 use serde::{Deserialize, Serialize};
@@ -16,7 +14,6 @@ use crate::types::array::StaticArray;
 #[Header("mpev", 2.1)]
 #[Size(0x8CA4)]
 #[brw(little)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "ares_untracked"))]
 pub struct s_blf_chunk_multiplayer_events {
     #[brw(pad_before = 4)]
     pub events: StaticArray<s_game_results_event, 1000>,
@@ -26,7 +23,6 @@ impl BlfChunkHooks for s_blf_chunk_multiplayer_events {}
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, TestSize)]
 #[Size(0x1C)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "ares_untracked"))]
 pub struct s_game_results_data_kill {
     pub killer_position: real_point3d,
     pub dead_position: real_point3d,
@@ -35,7 +31,6 @@ pub struct s_game_results_data_kill {
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, TestSize)]
 #[Size(0x1C)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "ares_untracked"))]
 pub struct s_game_results_data_carry {
     pub position: real_point3d,
     pub weapon_index: i32,
@@ -45,7 +40,6 @@ pub struct s_game_results_data_carry {
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, TestSize)]
 #[Size(0x1C)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "ares_untracked"))]
 pub struct s_game_results_data_score {
     pub position: real_point3d,
     pub weapon_index: i32,
@@ -56,7 +50,6 @@ pub struct s_game_results_data_score {
 #[binrw]
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, Default, TestSize)]
 #[Size(0x1C)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "ares_untracked"))]
 pub struct s_game_results_data_none {
     #[bw(calc = 0, pad_after = 27)]
     pad: u8,
@@ -65,7 +58,6 @@ pub struct s_game_results_data_none {
 #[derive(Debug, Serialize, Deserialize, Clone, BinRead, BinWrite, FromPrimitive, Display, Default, PartialEq)]
 #[brw(repr = u8)]
 #[repr(u8)]
-#[cfg_attr(feature = "napi", napi(namespace = "ares_untracked"))]
 pub enum e_game_results_data_type {
     #[default]
     _no_data = 0,
@@ -76,7 +68,6 @@ pub enum e_game_results_data_type {
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, Default, TestSize)]
 #[Size(0x24)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "ares_untracked"))]
 pub struct s_game_results_event {
     pub type_: e_game_results_data_type,
     pub player_references: StaticArray<i8, 2>,

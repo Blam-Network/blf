@@ -1,6 +1,4 @@
 ﻿use binrw::{binrw, BinRead, BinWrite};
-#[cfg(feature = "napi")]
-use napi_derive::napi;
 use num_derive::FromPrimitive;
 use serde::{Deserialize, Serialize};
 use blf_lib::types::bool::Bool;
@@ -16,7 +14,6 @@ use crate::types::string::StaticString;
 #[Header("umsg", 1.0)]
 #[brw(big)]
 #[Size(0xC)]
-#[cfg_attr(feature = "napi", napi(object, namespace = "haloreach_12065_11_08_24_1738_tu1actual"))]
 pub struct s_blf_chunk_user_messaging_data {
     pub message_index: u32,
     pub expires_at: time64_t,
