@@ -35,6 +35,21 @@ pub use halo3::v12070_08_09_05_2031_halo3_ship::s_blf_chunk_file_transfers::*;
 pub use halo3::v12070_08_09_05_2031_halo3_ship::s_blf_chunk_matchmaking_hopper_statistics::*;
 pub use halo3::v12070_08_09_05_2031_halo3_ship::s_blf_chunk_map_image::*;
 pub use halo3::v12070_08_09_05_2031_halo3_ship::s_blf_chunk_saved_film_header::*;
+pub use halo3::v12070_08_09_05_2031_halo3_ship::s_blf_chunk_campaign_metagame_results::*;
+pub use halo3::v12070_08_09_05_2031_halo3_ship::s_blf_chunk_campaign_metagame_results_secondary::*;
+pub use halo3::v12070_08_09_05_2031_halo3_ship::s_blf_chunk_multiplayer_events::*;
+pub use halo3::v12070_08_09_05_2031_halo3_ship::s_blf_chunk_multiplayer_game_description::*;
+pub use halo3::v12070_08_09_05_2031_halo3_ship::s_blf_chunk_game_options::*;
+pub use halo3::v12070_08_09_05_2031_halo3_ship::s_blf_chunk_local_info::*;
+pub use halo3::v12070_08_09_05_2031_halo3_ship::s_blf_chunk_matchmaking_quality_data::*;
+pub use halo3::v12070_08_09_05_2031_halo3_ship::s_blf_chunk_multiplayer_machines::*;
+pub use halo3::v12070_08_09_05_2031_halo3_ship::s_blf_chunk_multiplayer_matchmaking_options::*;
+pub use halo3::v12070_08_09_05_2031_halo3_ship::s_blf_chunk_multiplayer_teams::*;
+pub use halo3::v12070_08_09_05_2031_halo3_ship::s_blf_chunk_multiplayer_team_statistics::*;
+pub use halo3::v12070_08_09_05_2031_halo3_ship::s_blf_chunk_multiplayer_players::*;
+pub use halo3::v12070_08_09_05_2031_halo3_ship::s_blf_chunk_multiplayer_player_vs_player_statistics::*;
+pub use halo3::v12070_08_09_05_2031_halo3_ship::s_blf_chunk_multiplayer_statistics::*;
+pub use halo3::v12070_08_09_05_2031_halo3_ship::s_blf_chunk_multiplayer_player_statistics::*;
 
 #[derive(TitleAndBuild)]
 #[Title("Halo 3")]
