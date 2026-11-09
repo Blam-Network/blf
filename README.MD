@@ -13,17 +13,6 @@ This binary crate is a a very simple command-line-interface (CLI) for interactin
 ### [blf-ts](./blf-ts/)
 A TypeScript implementation of blf_lib for use on web browsers and node servers. Structures here are not exhaustive, blf_lib is considered the source-of-truth.
 
-### [blf_bnet](./blf_bnet/README.MD) <kbd>Deprecated</kbd>
-**Deprecated**: Please use blf-ts instead.
-This crate contains BLF functions used by the client-side TypeScript code of [blam.network](https://www.blam.network/). It is compiled to [WebAssembly](https://webassembly.org/) using [wasm-pack](https://github.com/rustwasm/wasm-pack).
-
-### blf_lib-private <kbd>Private</kbd>
-A closed-source counterpart to blf_lib held in the blf_private workspace. This package currently is only used for handling game data relating to online services.
-
-### blf_lsp <kbd>Private</kbd> <kbd>Deprecated</kbd>
-This crate contains BLF functions used by the server-side Typescript code of Blam Network's web-APIs. It is compiled via [napi-rs](https://github.com/napi-rs/napi-rs) and uses the Node.js [Node-API (napi)](https://nodejs.org/api/n-api.html)
-
-
 ## What is a BLF?
 BLF is a [chunk-based format](https://en.wikipedia.org/wiki/File_format#Chunk-based_formats), similar to Material Exchange Format (MXF). These files consist of **blf chunks**, which are regions of data labelled with a 12-byte header including the chunk name, version and length, allowing readers to seek through the file until they find the chunk they're looking for. 
 Generally, BLF files include a `_blf` start-of-file chunk and a `_eof` end-of-file chunk, some readers will check/assert that these chunks are present, though the format is still readable without them.
