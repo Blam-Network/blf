@@ -142,7 +142,7 @@ export class c_string_table {
   }
   /**
    * Sets one string, reusing an identical string already in the buffer. Strings this replaces
-   * stay in the buffer; assign {@link strings} to repack.
+   * stay in the buffer; assign {@link strings} to repack in MegaloEdit's layout.
    */
   set_string(language: number, index: number, value: string | null): void {
     if (index >= this.max_string_count) {
@@ -167,7 +167,10 @@ export class c_string_table {
       )
     );
   }
-  /** Repacks the buffer from these strings, storing each distinct string once. */
+  /**
+   * Repacks the buffer in MegaloEdit's layout: strings in index then language order, a string
+   * that's the same in every language stored once, any other string stored once per language.
+   */
   set strings(value: readonly (readonly (string | null)[])[]) {
     const count = value[0]?.length ?? 0;
     if (count > this.max_string_count) {
@@ -178,10 +181,22 @@ export class c_string_table {
     this.m_buffer = new Uint8Array(0);
     this.m_offsets = Array.from({ length: k_language_count }, () => []);
     for (let index = 0; index < count; index++) {
-      for (let language = 0; language < k_language_count; language++) {
-        const string = value[language]?.[index] ?? null;
+      const row = Array.from(
+        { length: k_language_count },
+        (_, language) => value[language]?.[index] ?? null
+      );
+      const shared =
+        row[0] !== null && row.every((string) => string === row[0]);
+      if (shared) {
+        const offset = this.append(row[0]!);
+        for (const offsets of this.m_offsets) {
+          offsets.push(offset);
+        }
+        continue;
+      }
+      for (const [language, string] of row.entries()) {
         this.m_offsets[language]!.push(
-          string === null ? -1 : this.store(string)
+          string === null ? -1 : this.append(string)
         );
       }
     }
@@ -198,6 +213,9 @@ export class c_string_table {
         }
       }
     }
+    return this.append(value);
+  }
+  private append(value: string): number {
     const encoded = new TextEncoder().encode(value);
     const offset = this.m_buffer.length;
     if (offset + encoded.length + 1 > this.max_string_length) {

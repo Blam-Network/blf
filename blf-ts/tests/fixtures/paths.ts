@@ -24,6 +24,12 @@ export const reach_11860_hot_potato_fixture = join(
   "reach_11860_hot_potato.bin"
 );
 
+/** Reach MCC gametype built by HREK MegaloEdit (`.mglo` custom-variant bitstream). */
+export const megaloedit_speedpile_fixture = join(
+  import.meta.dirname,
+  "megaloedit_speedpile.mglo"
+);
+
 /** Reach MCC hopper map variant (Forge World). */
 export const reach_mcc_skeeball_court_xtreme_fixture = join(
   import.meta.dirname,

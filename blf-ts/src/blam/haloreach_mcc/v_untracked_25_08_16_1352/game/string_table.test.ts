@@ -148,3 +148,55 @@ describe("c_string_table", () => {
     expect(roundtrip.strings[0]![0]).toBe("Pre-Game");
   });
 });
+
+describe("c_string_table MegaloEdit packing", () => {
+  function packed(strings: (string | null)[][]): c_string_table {
+    const table = new c_string_table(4, 64, 15, 15, 3);
+    table.strings = strings;
+    return table;
+  }
+
+  function buffer_text(table: c_string_table): string {
+    return new TextDecoder().decode(table.m_buffer);
+  }
+
+  it("stores a string shared by every language once", () => {
+    const table = packed(Array.from({ length: k_language_count }, () => ["a"]));
+    expect(buffer_text(table)).toBe("a\0");
+    expect(table.m_offsets).toEqual(
+      Array.from({ length: k_language_count }, () => [0])
+    );
+  });
+
+  it("stores the same text at two indices twice", () => {
+    const table = packed(
+      Array.from({ length: k_language_count }, () => ["a", "a"])
+    );
+    expect(buffer_text(table)).toBe("a\0a\0");
+    expect(table.m_offsets).toEqual(
+      Array.from({ length: k_language_count }, () => [0, 2])
+    );
+  });
+
+  it("stores each language separately when only some match", () => {
+    const strings = [...new Array<string>(10).fill("a"), "b", null];
+    const table = packed(strings.map((string) => [string]));
+    expect(buffer_text(table)).toBe(`${"a\0".repeat(10)}b\0`);
+    expect(table.m_offsets).toEqual([
+      ...Array.from({ length: 11 }, (_, language) => [language * 2]),
+      [-1],
+    ]);
+  });
+
+  it("appends in index order, then language order", () => {
+    const table = packed(
+      Array.from({ length: k_language_count }, (_, language) => [
+        language === 0 ? "x" : "y",
+        "z",
+      ])
+    );
+    expect(buffer_text(table)).toBe(`x\0${"y\0".repeat(11)}z\0`);
+    expect(table.m_offsets[0]).toEqual([0, 24]);
+    expect(table.m_offsets[11]).toEqual([22, 24]);
+  });
+});

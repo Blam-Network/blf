@@ -196,7 +196,7 @@ c_string_table<
     }
 
     /// Sets one string, reusing an identical string already in the buffer. Strings this replaces
-    /// stay in the buffer; `set_strings` repacks.
+    /// stay in the buffer; `set_strings` repacks in MegaloEdit's layout.
     pub fn set_string(&mut self, language: usize, index: usize, value: Option<&str>) -> BLFLibResult {
         assert_ok!(index < max_string_count);
         for language_index in 0..k_language_count {
@@ -222,17 +222,28 @@ c_string_table<
         Ok(strings)
     }
 
-    /// Repacks the buffer from these strings, storing each distinct string once.
+    /// Repacks the buffer in MegaloEdit's layout: strings in index then language order, a string
+    /// that's the same in every language stored once, any other string stored once per language.
     pub fn set_strings(&mut self, strings: &StaticArray<Vec<Option<String>>, k_language_count>) -> BLFLibResult {
         let count = strings[0].len();
         assert_ok!(count <= max_string_count);
         self.m_offsets = StaticArray::default();
         self.m_buffer = Vec::new();
         for index in 0..count {
-            for language in 0..k_language_count {
-                let offset = match strings[language].get(index).cloned().flatten() {
+            let row: Vec<Option<&str>> = (0..k_language_count)
+                .map(|language| strings[language].get(index).and_then(|string| string.as_deref()))
+                .collect();
+            if row[0].is_some() && row.iter().all(|string| *string == row[0]) {
+                let offset = self.append(row[0].unwrap())?;
+                for language in 0..k_language_count {
+                    self.m_offsets[language].push(offset);
+                }
+                continue;
+            }
+            for (language, string) in row.into_iter().enumerate() {
+                let offset = match string {
                     None => -1,
-                    Some(string) => self.store(&string)?,
+                    Some(string) => self.append(string)?,
                 };
                 self.m_offsets[language].push(offset);
             }
@@ -249,6 +260,10 @@ c_string_table<
                 }
             }
         }
+        self.append(value)
+    }
+
+    fn append(&mut self, value: &str) -> BLFLibResult<i32> {
         let offset = self.m_buffer.len();
         if offset + value.len() + 1 > max_string_length {
             return Err(format!(
