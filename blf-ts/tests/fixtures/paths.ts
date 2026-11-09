@@ -18,6 +18,12 @@ export const reach_mcc_3nvasion_dlc_fixture = join(
   "3nvasion_dlc_054.bin"
 );
 
+/** Reach release (11860) Hot Potato gametype from the Bungie system fileshare (`_cmp` of `mpvr`). */
+export const reach_11860_hot_potato_fixture = join(
+  import.meta.dirname,
+  "reach_11860_hot_potato.bin"
+);
+
 /** Reach MCC hopper map variant (Forge World). */
 export const reach_mcc_skeeball_court_xtreme_fixture = join(
   import.meta.dirname,

@@ -296,10 +296,11 @@ impl s_action_set_boundary_parameters {
             (e_boundary_shape::sphere, Some(radius), None, None, None) => {
                 radius.encode(bitstream)?;
             }
-            (e_boundary_shape::cylinder, Some(variable1), Some(variable2), Some(variable3), None) => {
+            // A cylinder uses slots 1, 3 and 4, as the game does.
+            (e_boundary_shape::cylinder, Some(variable1), None, Some(variable3), Some(variable4)) => {
                 variable1.encode(bitstream)?;
-                variable2.encode(bitstream)?;
                 variable3.encode(bitstream)?;
+                variable4.encode(bitstream)?;
             }
             (e_boundary_shape::r#box, Some(variable1), Some(variable2), Some(variable3), Some(variable4)) => {
                 variable1.encode(bitstream)?;
@@ -325,14 +326,14 @@ impl s_action_set_boundary_parameters {
             }
             e_boundary_shape::cylinder => {
                 let mut variable1 = c_custom_variable_reference::default();
-                let mut variable2 = c_custom_variable_reference::default();
                 let mut variable3 = c_custom_variable_reference::default();
+                let mut variable4 = c_custom_variable_reference::default();
                 variable1.decode(bitstream)?;
-                variable2.decode(bitstream)?;
                 variable3.decode(bitstream)?;
+                variable4.decode(bitstream)?;
                 self.m_variable_1 = Some(variable1);
-                self.m_variable_2 = Some(variable2);
                 self.m_variable_3 = Some(variable3);
+                self.m_variable_4 = Some(variable4);
             }
             e_boundary_shape::r#box => {
                 let mut variable1 = c_custom_variable_reference::default();
@@ -974,11 +975,11 @@ impl s_action_player_get_weapon_parameters {
 
 #[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct s_action_create_tunnel_parameters {
-    pub m_object_1: c_player_reference,
-    pub m_object_2: c_player_reference,
-    pub m_object_type: c_object_reference,
+    pub m_object_1: c_object_reference,
+    pub m_object_2: c_object_reference,
+    pub m_object_type: c_object_type_reference,
     pub m_variable: c_custom_variable_reference,
-    pub m_object_3: c_player_reference,
+    pub m_object_3: c_object_reference,
 }
 
 impl s_action_create_tunnel_parameters {

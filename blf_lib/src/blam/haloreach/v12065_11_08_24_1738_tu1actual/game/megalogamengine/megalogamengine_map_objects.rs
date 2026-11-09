@@ -31,9 +31,9 @@ bitfield! {
     }
 }
 
-#[derive(Default, PartialEq, Debug, Clone, Serialize, Deserialize)]
+#[derive(PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct c_object_filter {
-    pub m_label_string_index: u8, // 7 bits
+    pub m_label_string_index: i32, // -1 for none; written + 1 in 7 bits
     pub m_valid_parameters: e_filter_parameters, // 3 bits
     #[serde(skip_serializing_if = "Option::is_none")]
     pub m_object_type: Option<c_object_type_reference>,
@@ -44,9 +44,22 @@ pub struct c_object_filter {
     pub m_min: u8,
 }
 
+impl Default for c_object_filter {
+    fn default() -> Self {
+        Self {
+            m_label_string_index: -1,
+            m_valid_parameters: e_filter_parameters::default(),
+            m_object_type: None,
+            m_team: None,
+            m_user_data: None,
+            m_min: 0,
+        }
+    }
+}
+
 impl c_object_filter {
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
-        bitstream.write_integer(self.m_label_string_index, 7)?;
+        bitstream.write_index::<112>(self.m_label_string_index, 7)?;
         bitstream.write_integer(self.m_valid_parameters.to_raw(), 3)?;
         if self.m_valid_parameters.object_type {
             self.m_object_type.as_ref()
@@ -72,7 +85,7 @@ impl c_object_filter {
     }
 
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
-        self.m_label_string_index = bitstream.read_integer("label-string-index", 7)?;
+        self.m_label_string_index = bitstream.read_index::<112>("label-string-index", 7)?;
         self.m_valid_parameters =
             e_filter_parameters::from_raw(bitstream.read_integer("valid-parameters", 3)?);
         if self.m_valid_parameters.object_type {

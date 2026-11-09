@@ -1,6 +1,8 @@
 use std::io::{Cursor, Seek, SeekFrom};
 use binrw::{BinRead, BinWrite, NullString};
-use serde::{Deserialize, Serialize};
+use serde::{Deserialize, Deserializer, Serialize, Serializer};
+use serde::de::Error as _;
+use serde::ser::Error as _;
 use blf_lib::blam::halo3::v12070_08_09_05_2031_halo3_ship::cseries::language::k_language_count;
 use blf_lib::types::array::StaticArray;
 use blf_lib_derivable::result::BLFLibResult;
@@ -144,7 +146,11 @@ c_single_language_string_table<
 }
 
 
-#[derive(Default, Clone, Debug, PartialEq, Serialize, Deserialize)]
+/// Reach's localized string table, held as the game holds it: each language's byte offset into
+/// one shared buffer of NUL-terminated UTF-8 strings. Files keep whatever packing they were
+/// written with, so tables round-trip byte for byte. `strings()` / `set_strings()` read and
+/// repack them; JSON uses the strings.
+#[derive(Default, Clone, Debug, PartialEq)]
 pub struct c_string_table<
     const max_string_count: usize,
     const max_string_length: usize,
@@ -153,6 +159,13 @@ pub struct c_string_table<
     const buffer_size_bit_length: usize,
     const count_bit_length: usize,
 > {
+    /// Per language, each string's byte offset into `m_buffer`, or -1 when it has none.
+    pub m_offsets: StaticArray<Vec<i32>, k_language_count>,
+    pub m_buffer: Vec<u8>,
+}
+
+#[derive(Serialize, Deserialize)]
+struct c_string_table_json {
     strings: StaticArray<Vec<Option<String>>, k_language_count>,
 }
 
@@ -171,29 +184,107 @@ c_string_table<
     count_bit_length,
 >
 {
+    pub fn string_count(&self) -> usize {
+        self.m_offsets[0].len()
+    }
+
+    pub fn get_string(&self, language: usize, index: usize) -> BLFLibResult<Option<String>> {
+        match self.m_offsets[language].get(index) {
+            Some(&offset) if offset >= 0 => Ok(Some(read_null_terminated_utf8(&self.m_buffer, offset as u64)?)),
+            _ => Ok(None),
+        }
+    }
+
+    /// Sets one string, reusing an identical string already in the buffer. Strings this replaces
+    /// stay in the buffer; `set_strings` repacks.
+    pub fn set_string(&mut self, language: usize, index: usize, value: Option<&str>) -> BLFLibResult {
+        assert_ok!(index < max_string_count);
+        for language_index in 0..k_language_count {
+            if self.m_offsets[language_index].len() <= index {
+                self.m_offsets[language_index].resize(index + 1, -1);
+            }
+        }
+        let offset = match value {
+            None => -1,
+            Some(value) => self.store(value)?,
+        };
+        self.m_offsets[language][index] = offset;
+        Ok(())
+    }
+
+    pub fn strings(&self) -> BLFLibResult<StaticArray<Vec<Option<String>>, k_language_count>> {
+        let mut strings = StaticArray::<Vec<Option<String>>, k_language_count>::default();
+        for language in 0..k_language_count {
+            for index in 0..self.m_offsets[language].len() {
+                strings[language].push(self.get_string(language, index)?);
+            }
+        }
+        Ok(strings)
+    }
+
+    /// Repacks the buffer from these strings, storing each distinct string once.
+    pub fn set_strings(&mut self, strings: &StaticArray<Vec<Option<String>>, k_language_count>) -> BLFLibResult {
+        let count = strings[0].len();
+        assert_ok!(count <= max_string_count);
+        self.m_offsets = StaticArray::default();
+        self.m_buffer = Vec::new();
+        for index in 0..count {
+            for language in 0..k_language_count {
+                let offset = match strings[language].get(index).cloned().flatten() {
+                    None => -1,
+                    Some(string) => self.store(&string)?,
+                };
+                self.m_offsets[language].push(offset);
+            }
+        }
+        Ok(())
+    }
+
+    // The offset of `value` in the buffer, appending it unless it's already there.
+    fn store(&mut self, value: &str) -> BLFLibResult<i32> {
+        for language in 0..k_language_count {
+            for &offset in &self.m_offsets[language] {
+                if offset >= 0 && read_null_terminated_utf8(&self.m_buffer, offset as u64)? == value {
+                    return Ok(offset);
+                }
+            }
+        }
+        let offset = self.m_buffer.len();
+        if offset + value.len() + 1 > max_string_length {
+            return Err(format!(
+                "string table buffer holds {max_string_length} bytes, can't add {} more to {offset}",
+                value.len() + 1
+            ).into());
+        }
+        self.m_buffer.extend_from_slice(value.as_bytes());
+        self.m_buffer.push(0);
+        Ok(offset as i32)
+    }
+
     pub fn decode(&mut self, bitstream: &mut c_bitstream_reader) -> BLFLibResult {
+        self.m_offsets = StaticArray::default();
+        self.m_buffer = Vec::new();
         let string_count: usize = bitstream.read_integer("string-count", count_bit_length)?;
 
         if string_count == 0 {
             return Ok(());
         }
 
-        let mut offsets = vec![vec![0i16; string_count]; k_language_count];
-        for j in 0..string_count {
-            for i in 0..k_language_count {
-                if bitstream.read_bool("exists")? {
-                    offsets[i][j] = bitstream.read_integer("index", offset_bit_length)?;
-                }
-                else {
-                    offsets[i][j] = -1;
-                }
+        for _ in 0..string_count {
+            for language in 0..k_language_count {
+                let offset = if bitstream.read_bool("exists")? {
+                    bitstream.read_integer("index", offset_bit_length)?
+                } else {
+                    -1
+                };
+                self.m_offsets[language].push(offset);
             }
         }
 
         let buffer_size: usize = bitstream.read_integer("size", buffer_size_bit_length)?;
 
-        let string_data = if bitstream.read_bool("compressed")? {
-            let mut compressed_length: usize = bitstream.read_integer("compressed-buffer-size", buffer_size_bit_length)?;
+        self.m_buffer = if bitstream.read_bool("compressed")? {
+            let compressed_length: usize = bitstream.read_integer("compressed-buffer-size", buffer_size_bit_length)?;
             let compressed_data = bitstream.read_raw_data(compressed_length * 8)?;
             let mut decompressed_data = Vec::with_capacity(buffer_size);
 
@@ -203,86 +294,73 @@ c_string_table<
             bitstream.read_raw_data(buffer_size * 8)?
         };
 
-        for (language_index, language_offsets) in offsets.iter().enumerate() {
-            for &offset in language_offsets {
-                if offset == -1 {
-                    self.strings[language_index].push(None);
-                    continue;
-                }
-                assert_ok!(offset >= 0);
-
-                self.strings[language_index].push(Some(read_null_terminated_utf8(
-                    &string_data,
-                    offset as u64,
-                )?));
-            }
-        }
-
         Ok(())
     }
 
     pub fn encode(&self, bitstream: &mut c_bitstream_writer) -> BLFLibResult {
-        assert_ok!(self.strings[0].len() <= max_string_count);
-        bitstream.write_integer(self.strings[0].len() as u32, count_bit_length)?;
+        let string_count = self.string_count();
+        assert_ok!(string_count <= max_string_count);
+        bitstream.write_integer(string_count as u32, count_bit_length)?;
 
-        if self.strings[0].len() == 0 {
+        if string_count == 0 {
             return Ok(());
         }
 
-        let mut string_writer = c_bitstream_writer::new(
-            k_language_count * max_string_count * max_string_length,
-            _bitstream_byte_order_big_endian
-        );
-        let mut offset = 0u16;
-        string_writer.begin_writing();
-        for i in 0..self.strings[0].len() {
-            // If the string is the same in every language, we consider it non-localized
-            // and only write it once.
-            // This is how Bungie handles duplicates.
-            let mut deduplicate = true;
-            let string = self.strings[0][i].clone();
-
-            if string.is_none() {
-                deduplicate = false;
-            }
-
-            for language_index in 1..k_language_count {
-                if string != self.strings[language_index][i] {
-                    deduplicate = false;
-                    break;
+        for index in 0..string_count {
+            for language in 0..k_language_count {
+                let offset = self.m_offsets[language].get(index).copied().unwrap_or(-1);
+                bitstream.write_bool(offset >= 0)?;
+                if offset >= 0 {
+                    bitstream.write_integer(offset as u32, offset_bit_length)?;
                 }
-            }
-
-            for language_index in 0..k_language_count {
-                let string = &self.strings[language_index][i];
-                match string {
-                    None => {
-                        bitstream.write_bool(false)?;
-                        continue;
-                    }
-                    Some(string) => {
-                        bitstream.write_bool(true)?;
-                        bitstream.write_integer(offset, offset_bit_length)?;
-
-                        if !deduplicate {
-                            string_writer.write_string_utf8(string, max_string_length as u32)?;
-                            offset += string.len() as u16 + 1;
-                        }
-                    }
-                }
-            }
-
-            if deduplicate {
-                let string = string.unwrap();
-                string_writer.write_string_utf8(&string, max_string_length as u32)?;
-                offset += string.len() as u16 + 1;
             }
         }
 
-        string_writer.finish_writing();
-        let buffer = string_writer.get_data()?;
-        write_string_buffer_blob(bitstream, &buffer, buffer_size_bit_length)?;
+        write_string_buffer_blob(bitstream, &self.m_buffer, buffer_size_bit_length)?;
 
         Ok(())
+    }
+}
+
+impl<
+    const max_string_count: usize,
+    const max_string_length: usize,
+    const offset_bit_length: usize,
+    const buffer_size_bit_length: usize,
+    const count_bit_length: usize,
+> Serialize for c_string_table<
+    max_string_count,
+    max_string_length,
+    offset_bit_length,
+    buffer_size_bit_length,
+    count_bit_length,
+>
+{
+    fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+        let strings = self.strings().map_err(S::Error::custom)?;
+        c_string_table_json { strings }.serialize(serializer)
+    }
+}
+
+impl<
+    'de,
+    const max_string_count: usize,
+    const max_string_length: usize,
+    const offset_bit_length: usize,
+    const buffer_size_bit_length: usize,
+    const count_bit_length: usize,
+> Deserialize<'de> for c_string_table<
+    max_string_count,
+    max_string_length,
+    offset_bit_length,
+    buffer_size_bit_length,
+    count_bit_length,
+>
+{
+    fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        let json = c_string_table_json::deserialize(deserializer)?;
+        let mut table = Self::default();
+        table.set_strings(&json.strings).map_err(D::Error::custom)?;
+        Ok(table)
     }
 }

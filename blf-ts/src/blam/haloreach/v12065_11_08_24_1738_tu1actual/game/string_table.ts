@@ -2,7 +2,6 @@ import { CFieldType, type c } from "@craftycodie/cstruct";
 import {
   type c_bitstream_reader,
   c_bitstream_writer,
-  e_bitstream_byte_order,
 } from "../../../../bitstream";
 import {
   runtime_data_compress,
@@ -121,11 +120,15 @@ export class c_single_language_string_table {
     write_buffer_blob(bitstream, buffer, this.buffer_size_bit_length);
   }
 }
+/**
+ * Reach's localized string table, held as the game holds it: each language's byte offset into
+ * one shared buffer of NUL-terminated UTF-8 strings. Files and memory keep whatever packing they
+ * were written with, so these round-trip byte for byte. `strings` reads and repacks them.
+ */
 export class c_string_table {
-  strings: (string | null)[][] = Array.from(
-    { length: k_language_count },
-    () => []
-  );
+  /** Per language, each string's byte offset into {@link m_buffer}, or -1 when it has none. */
+  m_offsets: number[][] = Array.from({ length: k_language_count }, () => []);
+  m_buffer: Uint8Array = new Uint8Array(0);
   m_buffer_is_compressed = true;
   constructor(
     readonly max_string_count: number,
@@ -134,8 +137,89 @@ export class c_string_table {
     readonly buffer_size_bit_length: number,
     readonly count_bit_length: number
   ) {}
+  get string_count(): number {
+    return this.m_offsets[0]?.length ?? 0;
+  }
+  get_string(language: number, index: number): string | null {
+    const offset = this.m_offsets[language]?.[index] ?? -1;
+    return offset < 0
+      ? null
+      : read_null_terminated_string(this.m_buffer, offset);
+  }
+  /**
+   * Sets one string, reusing an identical string already in the buffer. Strings this replaces
+   * stay in the buffer; assign {@link strings} to repack.
+   */
+  set_string(language: number, index: number, value: string | null): void {
+    if (index >= this.max_string_count) {
+      throw new RangeError(
+        `string table holds ${this.max_string_count} strings, can't set string ${index}`
+      );
+    }
+    for (const offsets of this.m_offsets) {
+      while (offsets.length <= index) {
+        offsets.push(-1);
+      }
+    }
+    this.m_offsets[language]![index] = value === null ? -1 : this.store(value);
+  }
+  /** Every language's strings, read from the buffer. Frozen: assign a new array to change them. */
+  get strings(): readonly (readonly (string | null)[])[] {
+    return Object.freeze(
+      this.m_offsets.map((offsets, language) =>
+        Object.freeze(
+          offsets.map((_, index) => this.get_string(language, index))
+        )
+      )
+    );
+  }
+  /** Repacks the buffer from these strings, storing each distinct string once. */
+  set strings(value: readonly (readonly (string | null)[])[]) {
+    const count = value[0]?.length ?? 0;
+    if (count > this.max_string_count) {
+      throw new RangeError(
+        `string table holds ${this.max_string_count} strings, got ${count}`
+      );
+    }
+    this.m_buffer = new Uint8Array(0);
+    this.m_offsets = Array.from({ length: k_language_count }, () => []);
+    for (let index = 0; index < count; index++) {
+      for (let language = 0; language < k_language_count; language++) {
+        const string = value[language]?.[index] ?? null;
+        this.m_offsets[language]!.push(
+          string === null ? -1 : this.store(string)
+        );
+      }
+    }
+  }
+  // The offset of `value` in the buffer, appending it unless it's already there.
+  private store(value: string): number {
+    for (const offsets of this.m_offsets) {
+      for (const offset of offsets) {
+        if (
+          offset >= 0 &&
+          read_null_terminated_string(this.m_buffer, offset) === value
+        ) {
+          return offset;
+        }
+      }
+    }
+    const encoded = new TextEncoder().encode(value);
+    const offset = this.m_buffer.length;
+    if (offset + encoded.length + 1 > this.max_string_length) {
+      throw new RangeError(
+        `string table buffer holds ${this.max_string_length} bytes, can't add ${encoded.length + 1} more to ${offset}`
+      );
+    }
+    const buffer = new Uint8Array(offset + encoded.length + 1);
+    buffer.set(this.m_buffer);
+    buffer.set(encoded, offset);
+    this.m_buffer = buffer;
+    return offset;
+  }
   decode(bitstream: c_bitstream_reader): void {
-    this.strings = Array.from({ length: k_language_count }, () => []);
+    this.m_offsets = Array.from({ length: k_language_count }, () => []);
+    this.m_buffer = new Uint8Array(0);
     const string_count = bitstream.read_integer(
       "string-count",
       this.count_bit_length
@@ -143,17 +227,13 @@ export class c_string_table {
     if (string_count === 0) {
       return;
     }
-    const offsets: number[][] = Array.from({ length: k_language_count }, () =>
-      Array.from({ length: string_count }, () => -1)
-    );
     for (let j = 0; j < string_count; j++) {
       for (let i = 0; i < k_language_count; i++) {
-        if (bitstream.read_bool("exists")) {
-          offsets[i]![j] = bitstream.read_integer(
-            "index",
-            this.offset_bit_length
-          );
-        }
+        this.m_offsets[i]!.push(
+          bitstream.read_bool("exists")
+            ? bitstream.read_integer("index", this.offset_bit_length)
+            : -1
+        );
       }
     }
     const buffer_size = bitstream.read_integer(
@@ -161,7 +241,7 @@ export class c_string_table {
       this.buffer_size_bit_length
     );
     this.m_buffer_is_compressed = bitstream.read_bool("compressed");
-    const string_data = this.m_buffer_is_compressed
+    this.m_buffer = this.m_buffer_is_compressed
       ? runtime_data_decompress(
           bitstream.read_raw_data(
             bitstream.read_integer(
@@ -171,73 +251,23 @@ export class c_string_table {
           )
         )
       : bitstream.read_raw_data(buffer_size * 8);
-    for (let i = 0; i < k_language_count; i++) {
-      for (let j = 0; j < string_count; j++) {
-        const offset = offsets[i]![j]!;
-        if (offset < 0) {
-          this.strings[i]!.push(null);
-        } else {
-          this.strings[i]!.push(
-            read_null_terminated_string(string_data, offset)
-          );
-        }
-      }
-    }
   }
   encode(bitstream: c_bitstream_writer): void {
-    const string_count = this.strings[0]?.length ?? 0;
+    const string_count = this.string_count;
     bitstream.write_integer(string_count, this.count_bit_length);
     if (string_count === 0) {
       return;
     }
-    const string_writer = c_bitstream_writer.new(
-      k_language_count * this.max_string_count * this.max_string_length,
-      e_bitstream_byte_order._bitstream_byte_order_big_endian
-    );
-    string_writer.begin_writing();
-    let offset = 0;
     for (let j = 0; j < string_count; j++) {
-      let deduplicate = true;
-      const reference = this.strings[0]?.[j] ?? null;
-      if (reference === null) {
-        deduplicate = false;
-      } else {
-        for (let i = 1; i < k_language_count; i++) {
-          if (this.strings[i]?.[j] !== reference) {
-            deduplicate = false;
-            break;
-          }
-        }
-      }
       for (let i = 0; i < k_language_count; i++) {
-        const string = this.strings[i]?.[j] ?? null;
-        if (string === null) {
-          bitstream.write_bool(false);
-          continue;
+        const offset = this.m_offsets[i]?.[j] ?? -1;
+        bitstream.write_bool(offset >= 0);
+        if (offset >= 0) {
+          bitstream.write_integer(offset, this.offset_bit_length);
         }
-        bitstream.write_bool(true);
-        bitstream.write_integer(offset, this.offset_bit_length);
-        if (!deduplicate) {
-          write_null_terminated_string(
-            string_writer,
-            string,
-            this.max_string_length
-          );
-          offset += string_byte_length(string) + 1;
-        }
-      }
-      if (deduplicate && reference !== null) {
-        write_null_terminated_string(
-          string_writer,
-          reference,
-          this.max_string_length
-        );
-        offset += string_byte_length(reference) + 1;
       }
     }
-    string_writer.finish_writing();
-    const buffer = string_writer.get_data();
-    write_buffer_blob(bitstream, buffer, this.buffer_size_bit_length);
+    write_buffer_blob(bitstream, this.m_buffer, this.buffer_size_bit_length);
   }
 }
 
@@ -259,11 +289,10 @@ export class CStringTableField extends CFieldType<c_string_table> {
   read(bytes: Uint8Array, offset: number, endian: c.Endian): c_string_table {
     const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
     const little = endian === "little";
-    const offsets_size = this.string_capacity * k_language_count * 2;
-    const buffer_offset = offset + offsets_size;
-    const buffer = bytes.subarray(
-      buffer_offset,
-      buffer_offset + this.buffer_capacity
+    const buffer_offset = offset + this.string_capacity * k_language_count * 2;
+    const buffer_size = Math.min(
+      this.buffer_capacity,
+      view.getUint32(buffer_offset + this.buffer_capacity, little)
     );
     const string_count = Math.min(
       this.string_capacity,
@@ -273,20 +302,15 @@ export class CStringTableField extends CFieldType<c_string_table> {
       )
     );
     const table = this.create();
-    table.strings = Array.from({ length: k_language_count }, () => []);
-    for (let language = 0; language < k_language_count; language++) {
-      for (let index = 0; index < string_count; index++) {
-        const string_offset = view.getInt16(
+    table.m_offsets = Array.from({ length: k_language_count }, (_, language) =>
+      Array.from({ length: string_count }, (_, index) =>
+        view.getInt16(
           offset + (language * this.string_capacity + index) * 2,
           little
-        );
-        table.strings[language]!.push(
-          string_offset < 0
-            ? null
-            : read_null_terminated_string(buffer, string_offset)
-        );
-      }
-    }
+        )
+      )
+    );
+    table.m_buffer = bytes.slice(buffer_offset, buffer_offset + buffer_size);
     return table;
   }
 
@@ -298,49 +322,35 @@ export class CStringTableField extends CFieldType<c_string_table> {
   ): void {
     const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
     const little = endian === "little";
-    const offsets_size = this.string_capacity * k_language_count * 2;
-    const buffer_offset = offset + offsets_size;
-    const string_count = Math.min(
-      this.string_capacity,
-      value.strings[0]?.length ?? 0
-    );
-    const encoder = new TextEncoder();
-    let used = 0;
-    for (let index = 0; index < this.string_capacity; index++) {
-      const reference = value.strings[0]?.[index] ?? null;
-      const shared =
-        index < string_count &&
-        reference !== null &&
-        value.strings.every((language) => language[index] === reference);
-      let shared_offset = -1;
-      for (let language = 0; language < k_language_count; language++) {
-        const string =
-          index < string_count
-            ? (value.strings[language]?.[index] ?? null)
-            : null;
-        let string_offset = -1;
-        if (string !== null) {
-          if (shared && shared_offset >= 0) {
-            string_offset = shared_offset;
-          } else {
-            const encoded = encoder.encode(string);
-            string_offset = used;
-            bytes.set(
-              encoded.subarray(0, this.buffer_capacity - used - 1),
-              buffer_offset + used
-            );
-            used = Math.min(this.buffer_capacity, used + encoded.length + 1);
-            shared_offset = string_offset;
-          }
-        }
+    const buffer_offset = offset + this.string_capacity * k_language_count * 2;
+    const string_count = value.string_count;
+    if (string_count > this.string_capacity) {
+      throw new RangeError(
+        `string table holds ${this.string_capacity} strings, got ${string_count}`
+      );
+    }
+    if (value.m_buffer.length > this.buffer_capacity) {
+      throw new RangeError(
+        `string table buffer holds ${this.buffer_capacity} bytes, got ${value.m_buffer.length}`
+      );
+    }
+    for (let language = 0; language < k_language_count; language++) {
+      for (let index = 0; index < this.string_capacity; index++) {
         view.setInt16(
           offset + (language * this.string_capacity + index) * 2,
-          string_offset,
+          index < string_count
+            ? (value.m_offsets[language]?.[index] ?? -1)
+            : -1,
           little
         );
       }
     }
-    view.setUint32(buffer_offset + this.buffer_capacity, used, little);
+    bytes.set(value.m_buffer, buffer_offset);
+    view.setUint32(
+      buffer_offset + this.buffer_capacity,
+      value.m_buffer.length,
+      little
+    );
     view.setInt32(
       buffer_offset + this.buffer_capacity + 4,
       string_count,

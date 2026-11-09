@@ -1,4 +1,3 @@
-import { readFileSync } from "node:fs";
 import { c } from "@craftycodie/cstruct";
 import { describe, expect, it } from "vitest";
 
@@ -8,9 +7,6 @@ import {
   s_game_hopper_custom_category,
   s_hopper_query_configuration,
 } from "./s_blf_chunk_hopper_configuration_table";
-
-const MATCHMAKING_HOPPER_FIXTURE =
-  "C:/Users/codie/Projects/Blam-Title-Storage/fixtures/reach/matchmaking_hopper_027.bin";
 
 describe("hopper configuration structs", () => {
   it("matches blf_lib layout sizes", () => {
@@ -59,37 +55,5 @@ describe("s_blf_chunk_hopper_configuration_table", () => {
     expect(parsed.hopper_configurations[0]!.hopper_name).toBe("Arena Slayer");
     expect(parsed.hopper_configurations[0]!.identifier).toBe(101);
     expect(parsed.hopper_configurations[0]!.minimum_player_count).toBe(8);
-  });
-
-  it("parses a title-storage hopper fixture when present", () => {
-    let file: Uint8Array;
-    try {
-      file = new Uint8Array(readFileSync(MATCHMAKING_HOPPER_FIXTURE));
-    } catch {
-      return;
-    }
-
-    const chunk = new s_blf_chunk_hopper_configuration_table();
-    chunk.read(file, "big");
-
-    expect(chunk.hopper_configurations.length).toBeGreaterThan(0);
-    expect(chunk.hopper_categories.length).toBeGreaterThan(0);
-    expect(chunk.hopper_configurations[0]!.hopper_name.length).toBeGreaterThan(
-      0
-    );
-
-    const roundTrip = chunk.write("big");
-    const reparsed = new s_blf_chunk_hopper_configuration_table();
-    reparsed.read(roundTrip, "big");
-
-    expect(reparsed.hopper_configurations.length).toBe(
-      chunk.hopper_configurations.length
-    );
-    expect(reparsed.hopper_categories.length).toBe(
-      chunk.hopper_categories.length
-    );
-    expect(reparsed.hopper_configurations[0]!.identifier).toBe(
-      chunk.hopper_configurations[0]!.identifier
-    );
   });
 });

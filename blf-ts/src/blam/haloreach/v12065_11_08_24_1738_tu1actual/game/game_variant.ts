@@ -1540,13 +1540,13 @@ export class c_game_engine_custom_variant_tu1_settings {
   @c.field(c.f32())
   m_precision_bloom = 1;
   @c.field(c.f32())
-  m_armor_lock_damage_drain = 0;
+  m_armor_lock_damage_drain = 0.2;
   @c.field(c.f32())
-  m_armor_lock_damage_drain_limit = 0;
+  m_armor_lock_damage_drain_limit = 0.7;
   @c.field(c.f32())
-  m_active_camo_energy_curve_max = 0.02;
+  m_active_camo_energy_curve_min = 0;
   @c.field(c.f32())
-  m_active_camo_energy_curve_min = 0.07;
+  m_active_camo_energy_curve_max = 0;
   @c.field(c.f32())
   m_magnum_damage = 1;
   @c.field(c.f32())
@@ -1580,14 +1580,14 @@ export class c_game_engine_custom_variant_tu1_settings {
       false,
       true
     );
-    this.m_active_camo_energy_curve_max = bitstream.read_quantized_real(
+    this.m_active_camo_energy_curve_min = bitstream.read_quantized_real(
       0,
       2,
       8,
       false,
       true
     );
-    this.m_active_camo_energy_curve_min = bitstream.read_quantized_real(
+    this.m_active_camo_energy_curve_max = bitstream.read_quantized_real(
       0,
       2,
       8,
@@ -1633,7 +1633,7 @@ export class c_game_engine_custom_variant_tu1_settings {
       true
     );
     bitstream.write_quantized_real(
-      this.m_active_camo_energy_curve_max,
+      this.m_active_camo_energy_curve_min,
       0,
       2,
       8,
@@ -1641,7 +1641,7 @@ export class c_game_engine_custom_variant_tu1_settings {
       true
     );
     bitstream.write_quantized_real(
-      this.m_active_camo_energy_curve_min,
+      this.m_active_camo_energy_curve_max,
       0,
       2,
       8,
