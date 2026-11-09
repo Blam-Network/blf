@@ -71,7 +71,7 @@ function constant_reference(value: number): c_custom_variable_reference {
 
 function make_action(
   type: e_action_type,
-  assign: (action: c_action) => void,
+  assign: (action: c_action) => void
 ): c_action {
   const action = new c_action();
   action.m_type = type;
