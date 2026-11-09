@@ -53,7 +53,7 @@ export const s_queried_player_hopper_lsp_statistics = c.struct({
     .Bitfield(e_queried_player_hopper_lsp_statistics_flags, c.u8())
     .padAfter(1),
   hopper_identifier: c.u16(),
-  hopper_day: c.i16(),
+  hopper_day: c.i16().padAfter(2),
   qualified_games_played_today: c.u32(),
   qualifying_days_this_season: c.u32(),
   required_qualifying_daily_games_for_rating: c.u32(),
@@ -161,7 +161,7 @@ export const s_player_configuration_from_client = c.struct({
   global_stats_valid: c.i8().padAfter(3),
   matchmade_games_played: c.u32(),
   hopper_stats: s_queried_player_hopper_statistics,
-  lsp_stats: s_queried_player_hopper_lsp_statistics.padAfter(2),
+  lsp_stats: s_queried_player_hopper_lsp_statistics,
   challenge_state: s_player_challenge_state.padAfter(4),
 });
 export type s_player_configuration_from_client = c.infer<

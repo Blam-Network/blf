@@ -39,11 +39,12 @@ pub struct s_player_appearance {
 }
 
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize, BinRead, BinWrite, Default, TestSize)]
-#[Size(30)]
+#[Size(32)]
 pub struct s_queried_player_hopper_lsp_statistics {
     #[brw(pad_after = 1)]
     pub flags: i8,
     pub hopper_identifier: u16,
+    #[brw(pad_after = 2)]
     pub hopper_day: i16,
     pub qualified_games_played_today: u32,
     pub qualifying_days_this_season: u32,
@@ -81,15 +82,14 @@ pub struct s_player_configuration_from_client {
     #[brw(pad_after = 1)]
     pub sub_grade: i8,
     pub bnet_flags: u16,
-    pub cheat_flags: i8,
     #[brw(pad_after = 1)]
+    pub cheat_flags: i8,
     pub ban_flags: u16,
     pub repeated_play_coefficient: i32,
-    #[brw(pad_after = 1)]
+    #[brw(pad_after = 3)]
     pub global_stats_valid: i8,
     pub matchmade_games_played: u32,
     pub hopper_stats: s_queried_player_hopper_statistics,
-    #[brw(pad_after = 4)]
     pub lsp_stats: s_queried_player_hopper_lsp_statistics,
     #[brw(pad_after = 4)]
     pub challenge_state: s_player_challenge_state,
@@ -102,8 +102,8 @@ pub struct s_player_configuration_from_host {
     pub team: i8,
     #[brw(pad_after = 2)]
     pub assigned_team: i8,
-    pub hopper_stats_valid: u8,
     #[brw(pad_after = 3)]
+    pub hopper_stats_valid: u8,
     pub hopper_skill: u32,
     pub hopper_weight: u32,
 }
