@@ -46,6 +46,7 @@ pub use haloreach::v12065_11_08_24_1738_tu1actual::s_blf_chunk_xuid_list::*;
 pub use haloreach::v12065_11_08_24_1738_tu1actual::s_blf_chunk_online_file_listing::*;
 pub use haloreach::v12065_11_08_24_1738_tu1actual::s_blf_chunk_online_file_summary::*;
 pub use haloreach::v12065_11_08_24_1738_tu1actual::s_blf_chunk_file_transfers::*;
+pub use haloreach::v12065_11_08_24_1738_tu1actual::s_blf_chunk_multiplayer_players::*;
 
 #[derive(TitleAndBuild)]
 #[Title("Halo: Reach")]

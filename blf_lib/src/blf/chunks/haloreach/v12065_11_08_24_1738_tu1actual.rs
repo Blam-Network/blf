@@ -28,3 +28,4 @@ pub mod s_blf_chunk_xuid_list;
 pub mod s_blf_chunk_online_file_listing;
 pub mod s_blf_chunk_online_file_summary;
 pub mod s_blf_chunk_file_transfers;
+pub mod s_blf_chunk_multiplayer_players;
