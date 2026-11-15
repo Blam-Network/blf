@@ -132,6 +132,12 @@
           "version": "1.0"
         },
         {
+          "name": "s_blf_chunk_saved_film_header",
+          "source": "src/chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_saved_film_header.ts",
+          "signature": "flmh",
+          "version": "10.1"
+        },
+        {
           "name": "s_blf_chunk_user_network_statistics",
           "source": "src/chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_user_network_statistics.ts",
           "signature": "funs",
@@ -160,6 +166,12 @@
           "source": "src/chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_game_options.ts",
           "signature": "gmop",
           "version": "1.1"
+        },
+        {
+          "name": "s_blf_chunk_map_variant",
+          "source": "src/chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_map_variant.ts",
+          "signature": "mapv",
+          "version": "12.1"
         },
         {
           "name": "s_blf_chunk_matchmaking_hopper_statistics",
