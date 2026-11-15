@@ -9,6 +9,24 @@ describe("s_blf_chunk_saved_film_header", () => {
     expect(s_blf_chunk_map_variant.schema.getSize()).toBe(0xe098);
   });
 
+  it("keeps a DLC map's scenario path flag", () => {
+    const original = new s_blf_chunk_saved_film_header();
+    original.options.scenario_path = {
+      is_dlc: true,
+      path: "A625E0D7ED51ADDA217AD5F150C843988717E9BD4D:\\warehouse",
+    };
+
+    const bytes = original.write("big");
+    // 12-byte chunk header, 0x10C bytes of film header, 0x24 bytes of game options.
+    expect(bytes[12 + 0x10c + 0x24]).toBe(0xc1);
+
+    const parsed = new s_blf_chunk_saved_film_header();
+    parsed.read(bytes, "big");
+    expect(parsed.options.scenario_path).toEqual(
+      original.options.scenario_path
+    );
+  });
+
   it("round-trips the film's variants", () => {
     const original = new s_blf_chunk_saved_film_header();
     original.build_number = "12070.08.09.05.2031.halo3_ship";

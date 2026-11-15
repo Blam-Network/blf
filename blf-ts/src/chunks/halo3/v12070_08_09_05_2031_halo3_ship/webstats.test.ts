@@ -281,7 +281,10 @@ describe("Halo 3 campaign carnage report", () => {
     gmop.options.map_id = 3010;
     gmop.options.game_tick_rate = 30;
     gmop.options.campaign_difficulty = 3;
-    gmop.options.scenario_path = "scenarios\\solo\\010_jungle\\010_jungle";
+    gmop.options.scenario_path = {
+      is_dlc: false,
+      path: "scenarios\\solo\\010_jungle\\010_jungle",
+    };
     gmop.options.players[0].valid = true;
     gmop.options.players[0].configuration.client.player_name = "Chief";
     gmop.options.map_variant.m_metadata.name = "Sierra 117";
@@ -311,9 +314,10 @@ describe("Halo 3 campaign carnage report", () => {
     const campaign = read_campaign_pgcr(bytes);
     expect(campaign).not.toBeNull();
     expect(campaign?.gmop.options.map_id).toBe(3010);
-    expect(campaign?.gmop.options.scenario_path).toBe(
-      "scenarios\\solo\\010_jungle\\010_jungle"
-    );
+    expect(campaign?.gmop.options.scenario_path).toEqual({
+      is_dlc: false,
+      path: "scenarios\\solo\\010_jungle\\010_jungle",
+    });
     expect(
       campaign?.gmop.options.players[0].configuration.client.player_name
     ).toBe("Chief");

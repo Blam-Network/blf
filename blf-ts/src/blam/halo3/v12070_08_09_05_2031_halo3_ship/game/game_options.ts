@@ -8,6 +8,50 @@ export const k_maximum_machines = 16;
 export const k_maximum_teams = 16;
 export const k_maximum_campaign_players = 4;
 
+const k_scenario_path_length = 260;
+
+/**
+ * A `char[260]` scenario path whose first byte's top bit marks a DLC map
+ * (DLC paths aren't otherwise valid text). The bit is cleared from `path`.
+ */
+export interface s_scenario_path {
+  is_dlc: boolean;
+  path: string;
+}
+
+const utf8_decoder = new TextDecoder("utf-8");
+const utf8_encoder = new TextEncoder();
+
+export const s_scenario_path = () =>
+  c.bytes(k_scenario_path_length).transform(
+    (raw): s_scenario_path => {
+      const bytes = Uint8Array.from(raw);
+      const is_dlc = (bytes[0] & 0x80) !== 0;
+      bytes[0] &= 0x7f;
+      const end = bytes.indexOf(0);
+      return {
+        is_dlc,
+        path: utf8_decoder.decode(
+          bytes.subarray(0, end === -1 ? bytes.length : end)
+        ),
+      };
+    },
+    (value: s_scenario_path) => {
+      const encoded = utf8_encoder.encode(value.path);
+      if (encoded.length > k_scenario_path_length) {
+        throw new Error(
+          `Scenario path is too long (${encoded.length} > ${k_scenario_path_length} bytes)`
+        );
+      }
+      const bytes = new Uint8Array(k_scenario_path_length);
+      bytes.set(encoded);
+      if (value.is_dlc) {
+        bytes[0] |= 0x80;
+      }
+      return bytes;
+    }
+  );
+
 export const s_campaign_armaments_weapon = c.struct({
   damage_reporting_type: c.u16(),
   rounds_inventory: c.u16(),
@@ -97,7 +141,7 @@ export const game_options = c.struct({
   determinism_version: c.i32(),
   campaign_id: c.i32(),
   map_id: c.i32(),
-  scenario_path: c.string(260, "utf8"),
+  scenario_path: s_scenario_path(),
   initial_zone_set_index: c.i16(),
   load_level_only: c.bool(),
   dump_machine_index: c.u8(),
