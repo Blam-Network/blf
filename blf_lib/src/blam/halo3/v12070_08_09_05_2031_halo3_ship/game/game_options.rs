@@ -1,4 +1,5 @@
-﻿use binrw::{BinRead, BinWrite};
+﻿use std::io::{Cursor, Read, Seek, Write};
+use binrw::{BinRead, BinReaderExt, BinResult, BinWrite};
 use serde::{Deserialize, Serialize};
 use blf_lib_derive::TestSize;
 use crate::blam::halo3::v12070_08_09_05_2031_halo3_ship::game::game_engine_variant::c_game_variant;
@@ -9,6 +10,7 @@ use crate::types::bool::Bool;
 use crate::types::string::{StaticString, StaticWcharString};
 use crate::types::numbers::Float32;
 use crate::types::u64::Unsigned64;
+use crate::TEST_BIT;
 
 #[derive(TestSize,BinRead,BinWrite,PartialEq,Debug,Default,Clone,Serialize,Deserialize)]
 #[Size(0xF810)]
@@ -24,7 +26,7 @@ pub struct game_options {
     pub determinism_version: i32,
     pub campaign_id: i32,
     pub map_id: i32,
-    pub scenario_path: StaticString<260>,
+    pub scenario_path: s_scenario_path,
     pub initial_zone_set_index: i16,
     pub load_level_only: Bool,
     pub dump_machine_index: u8,
@@ -135,4 +137,66 @@ pub struct s_game_matchmaking_options {
     pub tau: Float32,
     pub experience_base_increment: i32,
     pub experience_penalty_decrement: i32,
+}
+
+// DLC scenario paths set the top bit of the first byte, which isn't valid UTF-8.
+// It's kept in `is_dlc` and cleared from `path`.
+#[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize)]
+pub struct s_scenario_path {
+    pub is_dlc: bool,
+    pub path: StaticString<260>,
+}
+
+impl BinRead for s_scenario_path {
+    type Args<'a> = ();
+
+    fn read_options<R: Read + Seek>(reader: &mut R, endian: binrw::Endian, _args: Self::Args<'_>) -> BinResult<Self> {
+        let mut buffer = vec![0u8; 260];
+        reader.read_exact(&mut buffer)?;
+
+        let is_dlc = TEST_BIT!(buffer[0], 7);
+        buffer[0] &= 0b0111_1111;
+
+        let path: StaticString<260> = Cursor::new(buffer).read_type(endian)?;
+
+        Ok(s_scenario_path { path, is_dlc })
+    }
+}
+
+impl BinWrite for s_scenario_path {
+    type Args<'a> = ();
+
+    fn write_options<W: Write + Seek>(&self, writer: &mut W, endian: binrw::Endian, _args: Self::Args<'_>) -> BinResult<()> {
+        let mut buffer = Cursor::new(Vec::with_capacity(260));
+        self.path.write_options(&mut buffer, endian, ())?;
+        let mut buffer = buffer.into_inner();
+
+        if self.is_dlc {
+            buffer[0] |= 0b1000_0000;
+        }
+
+        writer.write_all(&buffer)?;
+        Ok(())
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn scenario_path_round_trips_dlc_bit() {
+        let mut bytes = vec![0u8; 260];
+        let path = b"A625E0D7ED51ADDA217AD5F150C843988717E9BD4D:\warehouse";
+        bytes[..path.len()].copy_from_slice(path);
+        bytes[0] |= 0b1000_0000;
+
+        let scenario_path: s_scenario_path = Cursor::new(&bytes).read_be().unwrap();
+        assert!(scenario_path.is_dlc);
+        assert_eq!(scenario_path.path.get_string().unwrap(), "A625E0D7ED51ADDA217AD5F150C843988717E9BD4D:\warehouse");
+
+        let mut written = Cursor::new(Vec::new());
+        scenario_path.write_be(&mut written).unwrap();
+        assert_eq!(written.into_inner(), bytes);
+    }
 }

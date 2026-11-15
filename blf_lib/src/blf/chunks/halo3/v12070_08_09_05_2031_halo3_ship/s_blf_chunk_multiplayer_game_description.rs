@@ -1,13 +1,13 @@
-use std::io::{Cursor, Read, Seek};
-use binrw::{binrw, BinRead, BinReaderExt, BinResult, BinWrite};
+use binrw::binrw;
 use serde::{Deserialize, Serialize};
 use crate::blf::chunks::BlfChunkHooks;
-use crate::{BlfChunk, TEST_BIT};
+use crate::BlfChunk;
 use crate::types::bool::Bool;
-use crate::types::string::{StaticString, StaticWcharString};
+use crate::types::string::StaticWcharString;
 use crate::types::time::time32_t;
 use crate::types::u64::Unsigned64;
 use serde_hex::{SerHex, StrictCap};
+pub use crate::blam::halo3::v12070_08_09_05_2031_halo3_ship::game::game_options::s_scenario_path;
 
 #[binrw]
 #[derive(BlfChunk,Default,PartialEq,Debug,Clone,Serialize,Deserialize)]
@@ -36,32 +36,3 @@ pub struct s_blf_chunk_multiplayer_game_description {
 }
 
 impl BlfChunkHooks for s_blf_chunk_multiplayer_game_description { }
-
-// This type just handles DLC paths which aren't UTF-8, but we want them to be.
-#[derive(Clone, Default, PartialEq, Debug, Serialize, Deserialize, BinWrite)]
-#[brw(big)]
-pub struct s_scenario_path {
-    #[brw(ignore)]
-    pub is_dlc: bool,
-    pub path: StaticString<260>,
-}
-
-impl BinRead for s_scenario_path {
-    type Args<'a> = ();
-
-    fn read_options<R: Read + Seek>(reader: &mut R, endian: binrw::Endian, _args: Self::Args<'_>) -> BinResult<Self> {
-        // Read the `StaticString` field, ignoring the first bit
-        let mut buffer = vec![0u8; 260];
-        reader.read_exact(&mut buffer)?;
-
-        // Ignore the first bit of the first byte
-        let is_dlc = TEST_BIT!(buffer[0], 7);
-        buffer[0] &= 0b0111_1111;
-        let mut cursor = Cursor::new(buffer);
-
-        // Convert the buffer to a StaticString
-        let path: StaticString<260> = cursor.read_type(endian)?;
-
-        Ok(s_scenario_path { path, is_dlc })
-    }
-}
