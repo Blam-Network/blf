@@ -187,13 +187,13 @@ mod tests {
     #[test]
     fn scenario_path_round_trips_dlc_bit() {
         let mut bytes = vec![0u8; 260];
-        let path = b"A625E0D7ED51ADDA217AD5F150C843988717E9BD4D:\warehouse";
+        let path = br"A625E0D7ED51ADDA217AD5F150C843988717E9BD4D:\warehouse";
         bytes[..path.len()].copy_from_slice(path);
         bytes[0] |= 0b1000_0000;
 
         let scenario_path: s_scenario_path = Cursor::new(&bytes).read_be().unwrap();
         assert!(scenario_path.is_dlc);
-        assert_eq!(scenario_path.path.get_string().unwrap(), "A625E0D7ED51ADDA217AD5F150C843988717E9BD4D:\warehouse");
+        assert_eq!(scenario_path.path.get_string().unwrap(), r"A625E0D7ED51ADDA217AD5F150C843988717E9BD4D:\warehouse");
 
         let mut written = Cursor::new(Vec::new());
         scenario_path.write_be(&mut written).unwrap();
