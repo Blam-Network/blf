@@ -33,5 +33,3 @@ Struct layouts are built with [@craftycodie/cstruct](https://www.npmjs.com/packa
 ## Get started
 
 See [Install & quick start](/guide/quick-start).
-
-Release history: [Changelog](/changelog).

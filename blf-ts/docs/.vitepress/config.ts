@@ -66,7 +66,6 @@ export default defineConfig({
     nav: [
       { text: "Blam Network", link: "https://blam.network" },
       { text: "Guide", link: "/guide/quick-start" },
-      { text: "Changelog", link: "/changelog" },
       {
         text: "npm",
         link: "https://www.npmjs.com/package/@blamnetwork/blf",
@@ -99,10 +98,6 @@ export default defineConfig({
       {
         text: "Contributing",
         items: [{ text: "Development", link: "/guide/development" }],
-      },
-      {
-        text: "Reference",
-        items: [{ text: "Changelog", link: "/changelog" }],
       },
     ],
     socialLinks: [

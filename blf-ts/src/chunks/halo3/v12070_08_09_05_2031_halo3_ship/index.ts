@@ -12,6 +12,7 @@ export * from "./s_blf_chunk_game_local_players";
 export * from "./s_blf_chunk_game_options";
 export * from "./s_blf_chunk_game_variant";
 export * from "./s_blf_chunk_local_info";
+export { s_blf_chunk_map_variant } from "./s_blf_chunk_map_variant";
 export {
   build_hopper_statistics_file,
   hopper_population,
@@ -32,6 +33,7 @@ export {
   e_bungienet_user_flags,
   s_blf_chunk_player_data,
 } from "./s_blf_chunk_player_data";
+export { s_blf_chunk_saved_film_header } from "./s_blf_chunk_saved_film_header";
 export {
   render_camera,
   render_projection,

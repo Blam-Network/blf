@@ -31,6 +31,7 @@ export * from "../../chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_ga
 export * from "../../chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_game_options";
 export * from "../../chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_game_variant";
 export * from "../../chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_local_info";
+export * from "../../chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_map_variant";
 export * from "../../chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_matchmaking_hopper_statistics";
 export * from "../../chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_multiplayer_events";
 export * from "../../chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_multiplayer_game_description";
@@ -43,6 +44,7 @@ export * from "../../chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_mu
 export * from "../../chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_multiplayer_team_statistics";
 export * from "../../chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_multiplayer_teams";
 export * from "../../chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_player_data";
+export * from "../../chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_saved_film_header";
 export * from "../../chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_screenshot_camera";
 export * from "../../chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_screenshot_data";
 export * from "../../chunks/halo3/v12070_08_09_05_2031_halo3_ship/s_blf_chunk_service_record";

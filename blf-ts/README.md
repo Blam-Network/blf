@@ -75,7 +75,7 @@ Version import paths: [docs](https://blam-network.github.io/blf/guide/versions/)
 
 ## Documentation
 
-Full guide, changelog, and API notes: **[blam-network.github.io/blf](https://blam-network.github.io/blf/)**
+Full guide and API notes: **[blam-network.github.io/blf](https://blam-network.github.io/blf/)**
 
 From `blf-ts/`: `npm run docs` (dev), `npm run docs:build`.
 
