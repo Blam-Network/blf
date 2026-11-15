@@ -3,7 +3,6 @@ use std::path::Path;
 use filesize::PathExt;
 use blf_lib::blf::chunks::DynTitleAndBuild;
 use blf_lib::result::{BLFLibError, BLFLibResult};
-use crate::title_storage::ares::v_untracked_ares::v_untracked_ares;
 use crate::title_storage::halo3::v06481_06_11_17_1330_alpha_release::v06481_06_11_17_1330_alpha_release;
 use crate::title_storage::halo3::v08117_07_03_07_1702_delta::v08117_07_03_07_1702_delta;
 use crate::title_storage::halo3::v08172_07_03_08_2240_delta::v08172_07_03_08_2240_delta;
@@ -13,7 +12,6 @@ use crate::title_storage::halo3::v11729_07_08_10_0021_main::v11729_07_08_10_0021
 use crate::title_storage::halo3::v11856_07_08_20_2332_release::v11856_07_08_20_2332_release;
 use crate::title_storage::halo3::v12070_08_09_05_2031_halo3_ship::v12070_08_09_05_2031_halo3_ship;
 use crate::title_storage::halo3odst::v13895_09_04_27_2201_atlas_release::v13895_09_04_27_2201_atlas_release;
-use crate::title_storage::haloonline::v1_106708_cert_ms23___release::v1_106708_cert_ms23___release;
 use crate::title_storage::haloreach::v09449_10_03_25_1545_omaha_beta::v09449_10_03_25_1545_omaha_beta;
 use crate::title_storage::haloreach::v09730_10_04_09_1309_omaha_delta::v09730_10_04_09_1309_omaha_delta;
 use crate::title_storage::haloreach::v12065_11_08_24_1738_tu1actual::v12065_11_08_24_1738_tu1actual;
@@ -23,8 +21,6 @@ use crate::title_storage::haloreach::v08516_10_02_19_1607_omaha_alpha::v08516_10
 pub mod halo3;
 pub mod halo3odst;
 pub mod haloreach;
-pub mod ares;
-pub mod haloonline;
 
 pub trait TitleConverter: DynTitleAndBuild {
     fn build_blfs(&mut self, config_path: &String, blfs_path: &String);
@@ -59,10 +55,6 @@ fn get_title_converters() -> Vec<Box<dyn TitleConverter>> {
         Box::new(v09730_10_04_09_1309_omaha_delta::default()),      // Halo: Reach (Public Beta)
         Box::new(v09449_10_03_25_1545_omaha_beta::default()),       // Halo: Reach (Private Beta)
         Box::new(v08516_10_02_19_1607_omaha_alpha::default()),      // Halo: Reach (Private Alpha)
-
-        // Mods & Others
-        Box::new(v_untracked_ares::default()),                      //
-        Box::new(v1_106708_cert_ms23___release::default()),         // Halo: Online (ms23)
     ]
 }
 
